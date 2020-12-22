@@ -1,0 +1,260 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans">
+
+<head>
+    
+    
+    <title>愚人节，一切小心行事--归零幻想的博客</title>
+    <meta charset="UTF-8">
+    <!--移动设备不缩放-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="alternate" type="application/rss+xml" title="归零幻想" href="https://ntutn.top/rss.xml" />
+    <!--github的markdown样式-->
+    <link rel="stylesheet" href="/res/css/github-markdown.css">
+    <!--一个基于bootstrap的样式-->
+    <link rel="stylesheet" href="/res/css/main.css">
+
+    <script src="/res/js/jquery.min.js"></script>
+    <script src="/res/js/popper.min.js"></script>
+    <script src="/res/js/bootstrap.min.js"></script>
+
+    <style>
+        /*图片缩放*/
+        .imageWrapper {
+            max-width: 500px;
+            max-height: 100%;
+            display: block;
+            margin: 0 auto;
+        }
+
+        /*背景图片*/
+        body {
+            background: url(https://unsplash.it/1600/900?random);
+            background-attachment: fixed;
+            background-position: bottom center;
+            background-size: cover;
+        }
+    </style>
+    <script src="/res/js/zoomify.min.js"></script>
+    <link href="/res/css/zoomify.min.css" rel="stylesheet">
+
+    <script>
+        $(document).ready(function () {
+            $(".markdown-body img").each(function () {
+                divImageWrapper = $(this).after("<div class='imageWrapper'></div>")
+                $(this).appendTo($(this).next())
+            })
+            $(".markdown-body img").zoomify()
+        })
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <nav id="nav" class="navbar navbar-expand-lg navbar-light bg-light">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
+                aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="/"><img src="/res/logo.png" width="70" height="40"
+                    class="d-inline-block align-top" alt="">
+                <span>归零幻想的博客</span></a>
+
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                    <li id="n_home" class="nav-item">
+                        <a class="nav-link" href="/">主页</a>
+                    </li>
+                    <!-- <li id="n_tags" class="nav-item">
+                        <a class="nav-link" href="/tags">标签</a>
+                    </li> -->
+                    <li id="n_about" class="nav-item">
+                        <a class="nav-link" href="/about.html">关于</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/rss.xml">RSS</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <nav class="mt-3" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+
+                <li class="breadcrumb-item active" aria-current="page">愚人节，一切小心行事</li>
+            </ol>
+        </nav>
+        <div class="card mt-3 mb-3">
+            <div class="card-body markdown-body">
+                <h1 class="card-title text-center realtitle">愚人节，一切小心行事</h1>
+                <!--TODO 时间-->
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2019-03-31</span>&nbsp;
+                    修改时间：<span>2019-03-31</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <br>
+                <div class="card-text"><p>马上就到愚人节了，所以当我QQ空间里面有人提到关于浏览器拦截无限弹窗的问题，我就知道，这小子肯定是打算使坏……</p>
+<h2 id="vb">VB</h2>
+<p>VB是我学习的第一门编程语言，它可视化的界面设计以及非常接近自然语言的语法大大降低了学习的难度，可以说我的学习编程的兴趣就是VB培养的。</p>
+<p>然而最初学习编程时我会的东西很少，不可能做出有多少实际意义的东西，也就是恶作剧类的比较好写，也比较有意思……</p>
+<ol>
+<li>关不了的弹窗</li>
+</ol>
+<p>只是让窗口关不了还是很简单的，在用户关闭时自己取消掉就行了。</p>
+<pre><code class="language-VB">Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
+Cancel = True
+End Sub
+</code></pre>
+<p>当然你还可以加个<code>MsgBox&quot;就喜欢你看我不爽又干不掉我的样子^_^&quot;</code>皮一下。</p>
+<p>如果你想让关闭按钮直接变成灰的，就要去调系统的api了：</p>
+<pre><code class="language-VB">Private Declare Function GetSystemMenu Lib &quot;user32&quot; (ByVal hwnd As Long, ByVal bRevert As Long) As Long 
+Private Declare Function RemoveMenu Lib &quot;user32&quot; (ByVal hMenu As Long, ByVal nPosition As Long, ByVal wFlags As Long) As Long 
+Private Const MF_REMOVE = &amp;H1000 
+Private Const SC_CLOSE = &amp;HF060 
+
+Function Disabled(ChWnd As Long) 
+Dim hMenu, hendMenu As Long 
+Dim c As Long 
+hMenu = GetSystemMenu(ChWnd, 0) 
+RemoveMenu hMenu, SC_CLOSE, MF_REMOVE 
+End Function 
+
+'然后在Sub Form_Load()中加入Disabled Me.hwnd即可： 
+Private Sub Form_Load() 
+Disabled Me.hwnd 
+End Sub 
+</code></pre>
+<p>当然，这两种方法都可以顺利被任务管理器干掉的。要解决这一问题，可以弄个守护进程，互相启动，甚至禁用任务管理器等，当然这就比较复杂了，这里不提。</p>
+<ol start="2">
+<li>大量弹窗</li>
+</ol>
+<p>其实，让窗口不能关闭有点舍近求远了，只要你打开窗口的速度比用户关的快，不就好了……</p>
+<pre><code class="language-VB">Sub Main()
+    Shell App.Path &amp;&quot;\&quot; &amp;App.ExeName &amp;&quot;.exe&quot;
+    MsgBox&quot;Hello，沙雕！&quot;
+End Sub
+</code></pre>
+<p>接下来就享受弹窗的海洋吧。</p>
+<p>当然，如果你把弹窗替换成一个死循环，比如<code>1 goto 1</code>，那么威力会更加恐怖。嗯，非常恐怖。~~如果再加个开机启动……~~好吧，过分了。</p>
+<ol start="3">
+<li>锁定鼠标指针</li>
+</ol>
+<p>首先，了解一个Win32api：</p>
+<pre><code class="language-VB">    Public Declare Function SetCursorPos Lib &quot;user32&quot; (ByVal Z As Integer, ByRef X As Integer) As Integer
+</code></pre>
+<p>设置鼠标指针所在的位置。再配合VB中的Timer，想想都刺激……</p>
+<ol start="4">
+<li>假装电脑死机/蓝屏</li>
+</ol>
+<p>VB的窗口有一个属性叫<code>BorderStyle</code>，设置为0后就可以让窗口变成无标题的，而<code>WindowState</code>属性决定窗口的状态，最大化的无标题窗口就是全屏。</p>
+<p>有了全屏的窗口，接下来事情就简单了，只要把窗口的背景图片换成一张蓝屏的图片就行了。</p>
+<p>记得QQ当年有个会员魔法表情，就是类似的效果。</p>
+<ol start="5">
+<li>etc.</li>
+</ol>
+<p>其实还有好多的，比如我当年搞的半透明穿透窗口，让屏幕感觉有一层遮罩一样，但好多年（无误）没搞VB了，当年的代码也找不到了，电脑里也没有VB的环境了，就暂时到这里吧。</p>
+<h2 id="控制台">控制台</h2>
+<p>相对VB来说，cmd脚本的最大好处就是不用去搞环境，也能实现相当多的功能。</p>
+<ol>
+<li>死机</li>
+</ol>
+<pre><code class="language-cmd">0%|0%
+</code></pre>
+<p>用记事本输入以上内容，并保存后缀<code>.cmd</code>。</p>
+<ol start="2">
+<li>桌面崩溃</li>
+</ol>
+<pre><code class="language-cmd">taskkill -f -im explorer.exe
+</code></pre>
+<p>干掉<code>explorer.exe</code>，电脑的桌面自然就崩溃了。不过对于现在的电脑基本无效了，因为Windows会自动重启资源管理器。这点很是可惜，想当年直接用ntsd干掉winlogin就能让电脑蓝屏的……现如今，电脑里没ntsd了，而且就算有，这种命令也会被UAC拦下来。</p>
+<ol start="3">
+<li>格式化</li>
+</ol>
+<p>过分了啊！自己去网上找去，我是不会助纣为虐的！</p>
+<ol start="4">
+<li>关机</li>
+</ol>
+<pre><code class="language-cmd">shutdown -s -t 10
+</code></pre>
+<p><code>-s</code>表示关机命令，<code>-t 10</code>表示十秒后。</p>
+<p>常用的还有：</p>
+<ul>
+<li><code>-a</code>取消</li>
+<li><code>-r</code>重启</li>
+</ul>
+<ol start="5">
+<li>销毁</li>
+</ol>
+<p>干完坏事赶紧跑才是正道。执行这条命令可以实现自我删除：</p>
+<pre><code class="language-cmd">del 0%
+</code></pre>
+<h2 id="vbscript">VBScript</h2>
+<p>cmd功能还是太少了，有时还是希望有些比较复杂的功能的，于是就可以借助VBScript。</p>
+<ol>
+<li>弹窗</li>
+</ol>
+<p>与VB中语法一样，<code>MsgBox</code>和<code>InputBox</code>。说到这里就不得不提一下一个非常经典的故事：</p>
+<pre><code class="language-vbs">Do While True
+    Msgbox&quot;从前有座山，&quot;
+    Msgbox&quot;山上有个庙，&quot;
+    Msgbox&quot;庙里有两个和尚，&quot;
+    Msgbox&quot;老和尚在给小和尚讲故事，，&quot;
+    Msgbox&quot;他讲的是：&quot;
+Loop
+</code></pre>
+<p>用记事本保存，并保存后缀<code>.vbs</code>。</p>
+<p>来段比较损的：</p>
+<pre><code class="language-vbs">'不叫爸爸就循环直到输入爸爸为止
+do while a &lt;&gt; &quot;爸爸&quot; 
+    a=inputbox(&quot;叫爸爸&quot;)
+loop 
+
+</code></pre>
+<p>就算没学过VB的人大概也能看出这是什么意思吧……
+2. 运行程序</p>
+<pre><code class="language-vbs">CreateObject(&quot;wscript.shell&quot;).run&quot;notepad.exe&quot;
+</code></pre>
+<p>结合关机的命令……</p>
+<pre><code class="language-vbs">''不叫爸爸就关机
+CreateObject(&quot;wscript.shell&quot;).run&quot;shutdown.exe -s -t 180&quot;
+do while a &lt;&gt; &quot;爸爸&quot; 
+    a=inputbox(&quot;赶紧叫爸爸，不然就关机。&quot;)
+loop
+CreateObject(&quot;wscript.shell&quot;).run&quot;shutdown.exe -a&quot;
+</code></pre>
+<ol start="3">
+<li>调用系统的语音朗读</li>
+</ol>
+<pre><code class="language-vbs">CreateObject(&quot;sapi.spvoice&quot;).speak&quot;Good Morning.&quot;
+</code></pre>
+<p>要求电脑内有SAPI对应的组件。比如一般XP及以前的电脑是不能说中文的。</p>
+<ol start="4">
+<li>发送按键</li>
+</ol>
+<pre><code class="language-vbs">set ws=createobject(&quot;wscript.shell&quot;) 
+do 
+    ws.sendkeys &quot;{f5}&quot; 
+loop 
+</code></pre>
+<h2 id="网页">网页</h2>
+<p>现在的浏览器都支持js，而vbs中可以搞的，js中都行……</p>
+<p>js中的弹窗命令是<code>alert</code>，其他的自己找资料自由发挥吧。因为当年玩这个的太多了，现在浏览器都是从第二个弹窗开始就有全部屏蔽的选项……</p>
+<p>不过可以搞的还是不少的，比如屏蔽掉浏览器后退，让手机不断震动……等等，这就是某些垃圾网站宣传广告的手段。</p>
+<p>不想搞了，也许真的老了……</p>
+<h2 id="简单的开机启动实现方法">简单的开机启动实现方法</h2>
+<p>将文件或其快捷方式放到开始菜单的<code>启动</code>文件夹下。</p>
+</div>
+            </div>
+            <script src="https://utteranc.es/client.js" repo="zerofancy/zerofancy.github.io" issue-term="愚人节，一切小心行事"
+                theme="github-light" crossorigin="anonymous" async>
+                </script>
+        </div>
+        <!-- 页脚 -->
+        <footer class="navbar navbar-light bg-light">
+            <p>版权所有：归零幻想 ┊ 备案号：<a href="http://beian.miit.gov.cn/">暂无</a>┊ Powered by：归零幻想</p>
+        </footer>
+    </div>
+</body>
+
+</html>

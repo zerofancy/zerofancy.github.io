@@ -1,0 +1,153 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="zh-Hans">
+
+<head>
+    <!--/*@thymesVar id="title" type="java.lang.String"*/-->
+    <!--/*@thymesVar id="sitename" type="java.lang.String"*/-->
+    <title th:text="${title+'--'+sitename}">标题</title>
+    <meta charset="UTF-8">
+    <!--移动设备不缩放-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="alternate" type="application/rss+xml" title="归零幻想" th:href="${siteurl}+'/'+'rss.xml'" />
+    <!--github的markdown样式-->
+    <link rel="stylesheet" href="/res/css/github-markdown.css">
+    <!--一个基于bootstrap的样式-->
+    <link rel="stylesheet" href="/res/css/main.css">
+
+    <script src="/res/js/jquery.min.js"></script>
+    <script src="/res/js/popper.min.js"></script>
+    <script src="/res/js/bootstrap.min.js"></script>
+
+    <style>
+        /*图片缩放*/
+        .imageWrapper {
+            max-width: 500px;
+            max-height: 100%;
+            display: block;
+            margin: 0 auto;
+        }
+
+        /*背景图片*/
+        body {
+            background: url(https://unsplash.it/1600/900?random);
+            background-attachment: fixed;
+            background-position: bottom center;
+            background-size: cover;
+        }
+    </style>
+    <script src="/res/js/zoomify.min.js"></script>
+    <link href="/res/css/zoomify.min.css" rel="stylesheet">
+
+    <script>
+        $(document).ready(function () {
+            $(".markdown-body img").each(function () {
+                divImageWrapper = $(this).after("<div class='imageWrapper'></div>")
+                $(this).appendTo($(this).next())
+            })
+            $(".markdown-body img").zoomify()
+        })
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <nav id="nav" class="navbar navbar-expand-lg navbar-light bg-light">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
+                aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="/"><img src="/res/logo.png" width="70" height="40"
+                    class="d-inline-block align-top" alt="">
+                <span th:text="${sitename}">归零幻想</span></a>
+
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                    <li id="n_home" class="nav-item">
+                        <a class="nav-link" href="/">主页</a>
+                    </li>
+                    <!-- <li id="n_tags" class="nav-item">
+                        <a class="nav-link" href="/tags">标签</a>
+                    </li> -->
+                    <li id="n_about" class="nav-item">
+                        <a class="nav-link" href="/about.html">关于</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/rss.xml">RSS</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <nav class="mt-3" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+
+                <li class="breadcrumb-item active" aria-current="page" th:text="${title}">Windows安装Open JDK</li>
+            </ol>
+        </nav>
+        <div class="card mt-3 mb-3">
+            <div class="card-body markdown-body">
+                <h1 class="card-title text-center realtitle" th:text="${title}">Windows安装Open JDK</h1>
+                <!--TODO 时间-->
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span th:text="${publishDate}">2019-10-31</span>&nbsp;
+                    修改时间：<span th:text="${editDate}">2019-10-31</span>&nbsp;
+                    作者：<span th:text="${author}">归零幻想</span>
+                </h6>
+                <br>
+                <div class="card-text" th:utext="${html}">
+                    <h1 id="windows-open-jdk">Windows安装Open JDK</h1>
+                    <h2 id="-open-jdk">什么是Open JDK</h2>
+                    <p>Oracle JDK与OpenJDK里的JVM都是HotSpot VM。从源码层面说，两者基本上是同一个东西。从JDK7开始，Oracle JDK里的HotSpot
+                        VM，在研发的时候其实就是用放在<a href="/link?http://openjdk.java.net">http://openjdk.java.net</a>
+                        上OpenJDK的Mercurial代码库。也就是说跟大家从外部能实时看到的OpenJDK用的是同一个代码库。HotSpot
+                        VM只有非常非常少量的功能没有在OpenJDK里，那部分在Oracle内部的代码库里。这些私有部分都不涉及JVM的核心功能。</p>
+                    <p>作者：RednaxelaFX<br>链接：<a
+                            href="/link?https://www.zhihu.com/question/19882320/answer/36068407">https://www.zhihu.com/question/19882320/answer/36068407</a><br>来源：知乎
+                    </p>
+                    <p>选择Open JDK还有一个主要原因，就是 <strong>Oracle JDK是商用收费的</strong> ，虽然个人开发没问题，但如果你搞顺手了搞到公司业务上，有吃官司的风险。</p>
+                    <h2 id="-">下载</h2>
+                    <p>网上关于Open JDK在Windows下安装教程少的一个主要原因是，在 <a href="/link?http://openjdk.java.net/">Open JDK官网</a>
+                        找了半天也没找到在哪里下载。没错，这是官网的界面：</p>
+                    <p><img src="/file/down/1572435575730.png" alt="图片"></p>
+                    <p>网上少数的教程是自己编译安装的。啥？我一个Java还没写Hello World的初学者你告诉我要自己去编译Open JDK？我看你是在难为我胖虎。</p>
+                    <p>本来我也就是这样放弃了，但前些日子我找到Red Hat好像有提供Windows版本的openjdk下载，还是直接打好msi包的那种。</p>
+                    <p><a
+                            href="/link?https://developers.redhat.com/products/openjdk/download">https://developers.redhat.com/products/openjdk/download</a>
+                    </p>
+                    <p><em>9.5 KB/s - 572 KB/236 MB，剩余 7 小时, 2019年10月30日</em>
+                        ，这个下载地址不太稳定，我用浏览器和aria2下载工具均下载失败，但Linux下的wget命令下载比较稳定。</p>
+                    <h2 id="-">安装</h2>
+                    <p><img src="/file/down/1572480034573.png" alt="图片"></p>
+                    <p>一路下一步就可以。openjdk会帮你设置环境变量。</p>
+                    <p><img src="/file/down/1572480098490.png" alt="图片"></p>
+                    <h2 id="-">测试</h2>
+                    <p>Hello World是一种仪式，无论学习什么语言教程入门的第一课都是Hello World。没有Hello World的编程教程是没有灵魂的。</p>
+                    <pre><code class="lang-java">/**
+ * Hello
+ */
+public class Hello {
+
+    public static void main(String[] args) {
+        System.out.println(&quot;Hello World!&quot;);
+    }
+}
+</code></pre>
+                    <pre><code>PS C:\Users\14406\Desktop&gt; javac Hello.java
+PS C:\Users\14406\Desktop&gt; java Hello
+Hello World!
+PS C:\Users\14406\Desktop&gt;
+</code></pre>
+                </div>
+            </div>
+            <script src="https://utteranc.es/client.js" repo="zerofancy/zerofancy.github.io" th:issue-term="${title}"
+                theme="github-light" crossorigin="anonymous" async>
+                </script>
+        </div>
+        <!-- 页脚 -->
+        <footer class="navbar navbar-light bg-light">
+            <p>版权所有：归零幻想 ┊ 备案号：<a href="http://beian.miit.gov.cn/" th:text="${beian}">暂无</a>┊ Powered by：归零幻想</p>
+        </footer>
+    </div>
+</body>
+
+</html>

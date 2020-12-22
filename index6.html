@@ -1,0 +1,372 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans">
+
+<head>
+    
+    <title>归零幻想的博客</title>
+    <meta charset="UTF-8">
+    <!--移动设备不缩放-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="alternate" type="application/rss+xml" title="归零幻想" href="https://ntutn.top/rss.xml" />
+    <!--github的markdown样式-->
+    <link rel="stylesheet" href="/res/css/github-markdown.css">
+    <!--一个基于bootstrap的样式-->
+    <link rel="stylesheet" href="/res/css/main.css">
+
+    <script src="/res/js/jquery.min.js"></script>
+    <script src="/res/js/popper.min.js"></script>
+    <script src="/res/js/bootstrap.min.js"></script>
+    <script src="/res/js/sweetalert.min.js"></script>
+    <script>
+        function chkPage() {
+            var in_page = Number($("#in_page").val());
+            if (in_page <= 0 || in_page > Number($("#pagecount").val())) {
+                return false;
+            }
+            return true;
+        }
+        $(document).ready(function () {
+            $("#btn_go").click(function () {
+                if (chkPage()) {
+                    location.href = "/index" + ($("#in_page").val() == "1" ? "" : $("#in_page").val()) + ".html";
+                } else {
+                    swal(
+                        {
+                            title: "Tip",
+                            text: "您输入的页码超出范围！",
+                            type: "warning"
+                        }
+                    );
+                }
+            });
+            $(".card-text img").addClass("img-fluid");
+            $("#n_home").addClass("active");
+            //一言
+            $.get("https://v1.hitokoto.cn/", function (data, status) {
+                $("#hitokoto").text(data.hitokoto);
+                $("#from").text("——" + data.from);
+            });
+            // ajax
+            $(".btn-read-all").click(function(){
+                const url=$(this).attr("value")
+                $(this).parent().parent().find(".card-text").load(url+" .card-text")
+                $(this).hide()
+                return false
+            })
+        });
+    </script>
+    <style>
+        /*背景图片*/
+        body {
+            background: url(https://unsplash.it/1600/900?random);
+            background-attachment: fixed;
+            background-position: bottom center;
+            background-size: cover;
+        }
+    </style>
+</head>
+
+<body>
+    <input id="pagecount" type="hidden" value="6">
+    <div class="container">
+        <nav id="nav" class="navbar navbar-expand-lg navbar-light bg-light">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
+                aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="/"><img src="/res/logo.png" width="70" height="40"
+                    class="d-inline-block align-top" alt="">
+                <span>归零幻想的博客</span></a>
+
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                    <li id="n_home" class="nav-item">
+                        <a class="nav-link" href="/">主页</a>
+                    </li>
+                    <!-- <li id="n_tags" class="nav-item">
+                    <a class="nav-link" href="/tags">标签</a>
+                </li> -->
+                    <li id="n_about" class="nav-item">
+                        <a class="nav-link" href="/about.html">关于</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/rss.xml">RSS</a>
+                    </li>
+                </ul>
+                <!-- <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0 disabled popover-dismiss" type="submit"
+                    data-toggle="popover" data-trigger="focus" title="未完成的功能"
+                    data-content="搜索功能暂时还没有完成。">Search</button>
+            </form> -->
+            </div>
+        </nav>
+        <nav class="mt-3" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+            </ol>
+        </nav>
+        <div class="card text-black bg-light">
+            <div class="card-body">
+                <blockquote class="card-blockquote">
+                    <p id="hitokoto">溺死在零梦里吧。</p>
+                    <footer id="from" class="text-right">Someone famous in
+                        <cite title="Source Title">归零幻想</cite>
+                    </footer>
+                </blockquote>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
+                    <a href="archieved/old/使用映像劫持技术屏蔽电脑中的广告进程.html">使用映像劫持技术屏蔽电脑中的广告进程</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2019-03-28</span>&nbsp;
+                    修改时间：<span>2019-03-28</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><blockquote>
+<p>映像劫持（Image File Execution Options），简单的说法，就是当你打开的是程序A，而运行的确是程序B。映像劫持其实是Windows内设的用来调试程序的功能，但是现在却往往被病毒恶意利用。当用户双击对应的程序后，操作系统就会给外壳程序（例如“explorer.exe”）发布相应的指令，其中包含有执行程序的路径和文件名，然后由外壳程序来执行该程序。事实上在该过程中，Windows还会在注册表的上述路径中查询所有的映像劫持子键，如果存在和该程序名称完全相同的子键，就查询对应子健中包含的“dubugger”键值名，并用其指定的程序路径来代替原始的程序，之后执行的是遭到“劫持”的虚假程序。</p>
+</blockquote>
+<p>国内很多软件都有重度广告，“资讯”、“新闻”、“弹窗”，不胜其烦。直接找到广告进程删除掉，结果一自动更新，又回来了。</p>
+<p>于是，我想到了“映像劫持”：</p>
+<pre><code class="language-ini">Windows Registry Editor Version 5.00
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SLBService.exe]
+&quot;Debugger&quot;=&quot;winlogon&quot;
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\TsService.exe]
+&quot;Debugger&quot;=&quot;winlogon&quot;
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\FoxitDesktopAd.exe]
+&quot;Debugger&quot;=&quot;winlogon&quot;
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\FoxitProtect.exe]
+&quot;Debugger&quot;=&quot;winlogon&quot;
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\LCServer.exe]
+&quot;Debugger&quot;=&quot;winlogon&quot;
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\LRServer.exe]
+&quot;Debugger&quot;=&quot;winlogon&quot;
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\2345MiniPage.exe]
+&quot;Debugger&quot;=&quot;winlogon&quot;
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SohuNews.exe]
+&quot;Debugger&quot;=&quot;winlogon&quot;
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\PinyinUp.exe]
+&quot;Debugger&quot;=&quot;winlogon&quot;
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SGDownload.exe]
+&quot;Debugger&quot;=&quot;winlogon&quot;
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SGMedalLoader.exe]
+&quot;Debugger&quot;=&quot;winlogon&quot;
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SogouCloud.exe]
+&quot;Debugger&quot;=&quot;winlogon&quot;
+
+</code></pre>
+<p>保存为<code>.reg</code>文件，导入注册表即可。</p>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/old/使用映像劫持技术屏蔽电脑中的广告进程.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
+                    <a href="archieved/old/直.html">直</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2019-03-27</span>&nbsp;
+                    修改时间：<span>2019-03-27</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><h1 id="直">直</h1>
+<p>发现了自己初中写的作文，我当年这么中二的吗……</p>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/old/直.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
+                    <a href="archieved/old/autoit控制台置顶工具.html">autoit控制台置顶工具</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2019-03-26</span>&nbsp;
+                    修改时间：<span>2019-03-26</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><p>我们学校C语言在线评测系统是bs的，在浏览器中展示要求，文本框中写代码提交评测。</p>
+<p>由于本人水平有限，做不到记事本写代码0BUG，所以需要在IDE中写代码然后粘贴到里面。而做题时一边检查代码一边到浏览器里查看要求太费劲了。于是我用autoit写了这个小程序。</p>
+<p>置顶所有的C语言控制台窗口，这样调试无疑会方便一些。</p>
+<p>用Code Blocks运行的控制台窗口标题会显示文件路径，所以里面肯定带有<code>.exe</code>，所以可以利用这一特性：</p>
+<pre><code class="language-autoit">#Region ;**** 参数创建于 ACNWrapper_GUI ****
+#AutoIt3Wrapper_icon=C:\Windows\System32\SHELL32.dll|-94
+#AutoIt3Wrapper_UseX64=n
+#EndRegion ;**** 参数创建于 ACNWrapper_GUI ****
+While 1
+$var = WinList()
+
+For $i = 1 To $var[0][0]
+  ; 只显示带有标题的可见窗口
+    If $var[$i][0] &lt;&gt; &quot;&quot; And IsVisible($var[$i][1]) Then
+		If StringInStr($var[$i][0],&quot;.exe&quot;)Then
+			WinSetOnTop($var[$i][0],&quot;&quot;,1)
+		EndIf
+        ;MsgBox(0, &quot;详细信息&quot;, &quot;标题=&quot; &amp; $var[$i][0] &amp; @LF &amp; &quot;句柄=&quot; &amp; $var[$i][1])
+    EndIf
+Next
+Sleep(100)
+WEnd
+
+Func IsVisible($handle)
+    If BitAND(WinGetState($handle), 2) Then
+        Return 1
+    Else
+        Return 0
+    EndIf
+
+EndFunc   ;==&gt;IsVisible
+</code></pre>
+<p>让这个脚本在后台运行，所有控制台窗口直接置顶，然后去浏览器复制测试数据就方便的多。</p>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/old/autoit控制台置顶工具.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
+                    <a href="archieved/old/零梦.html">零梦</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2019-03-24</span>&nbsp;
+                    修改时间：<span>2019-03-24</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><p>做了一个有点意思的梦，细思极恐，所以特地记录一下。</p>
+<h2 id="d1">D1</h2>
+<p>我是一名初中生，一个学习非常好的中学生，我们国家有一项政策，就是学习非常好的初三学生不必在初中浪费时间，可以提前去上高中，只要到时候回来象征性参加中考就行了，而我这就是准备回家参加中考。我给家里打电话说让放心，然后打开手机地图搜索路线。</p>
+<p>雾很大，公交一辆一辆开过，我发现可以坐火车，坐火车是最快的。只要坐524，就能直接到达。我从入口走进，路过卖各种东西的，猪肉、水果以及其他。只有一条路，只有一个车厢，我走进，里面有一个人，正在抽烟。我问对方是不是524，对方说不知道，自己还有一站下车，这时火车开动了，而我也猛然发现车上写着522。</p>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/old/零梦.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
+                    <a href="archieved/old/我的理想——我的一篇日记.html">我的理想——我的一篇日记</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2019-03-24</span>&nbsp;
+                    修改时间：<span>2019-03-24</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><h1 id="我的理想我的一篇日记">我的理想——我的一篇日记</h1>
+<p>一不小心翻到了以前初中写的一篇日记，为了装X还是用英文写的，羞耻度爆表……</p>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/old/我的理想——我的一篇日记.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
+                    <a href="archieved/old/日期相关的计算.html">日期相关的计算</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2018-09-16</span>&nbsp;
+                    修改时间：<span>2018-09-16</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><blockquote>
+<p>今天（Sun, 16 Sep 2018 06:34:57 +0000）帮同学写一个日期相关的c++题，竟然耗费了很多时间，不得不感叹自己真是老了。
+首先定义类用年月日(yy,mm,dd)存储日期
+日期±天数，直接加减到“天”上，然后“多退少补”。
+两日期之间相差天数。我是先计算两日前距元年元月元日的天数，然后直接相减。但我这么算，老是差几天，调试了好久，甚至我都一度打算放弃，直接调用上面做的日期加天数一天一天往上累加（可以预料到这会用多长时间）。
+最后才检查出，竟然是判断闰年出错了，我把取余弄成了整除，闰年哭晕在厕所。
+老了，真的老了。</p>
+</blockquote>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/old/日期相关的计算.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
+                    <a href="archieved/old/梦——2018年8月19日.html">梦——2018年8月19日</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2018-08-19</span>&nbsp;
+                    修改时间：<span>2018-08-19</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><blockquote>
+<p>有点意思的梦。</p>
+</blockquote>
+<p>据说人每天都做梦，很多人说自己不做梦是因为在醒后的一分钟内就忘记了梦的内容，也忘记了自己忘记过什么。这也解释了，人记住的梦大多是噩梦的现象，因为做好梦刺激不够，这一分钟不能形成足够清冽的印象。</p>
+<p>So，我是盗梦空间看多了吗？为啥做个梦就非得这么惊心动魄？</p>
+<hr />
+<p>2018年8月19日</p>
+<p>做了个梦，梦里有个非常牛逼的人，他通过一些细节发现了世界逻辑上不能自洽的问题，于是他认为自己身陷梦境，决定破解这个梦境回到真实世界。</p>
+<p><strong>他成功了。</strong></p>
+<p><strong>我失眠了……</strong></p>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/old/梦——2018年8月19日.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <!--页码-->
+        <nav aria-label="Page navigation row">
+            <ul class="pagination mt-3 justify-content-center">
+                <li class="page-item"><a class="page-link" href="/">First</a>
+                </li>
+                <li class="page-item">
+                    
+                    <a class="page-link" href="/index5.html">5</a>
+                </li>
+                <li class="page-item active">
+                    <span class="page-link">6</span>
+                </li>
+                
+                <li class="page-item"></li>
+                <li class="page-item"></li>
+                <li class="page-item disabled"><a class="page-link"
+                        href="/index6.html">Last</a></li>
+                <input id="in_page" type="text" class="form-control col-2 xs-offset-1 d-none d-lg-block offset-1"
+                    placeholder="输入页码" onkeyup="this.value=this.value.replace(/\D/g,'')"
+                    onafterpaste="this.value=this.value.replace(/\D/g,'')">
+                <button id="btn_go" class="btn btn-primary">Go</button>
+            </ul>
+        </nav>
+        <!-- 页脚 -->
+        <footer class="navbar navbar-light bg-light">
+            <p>版权所有：归零幻想 ┊ 备案号：<a href="http://beian.miit.gov.cn/">暂无</a>┊ Powered by：归零幻想</p>
+        </footer>
+    </div>
+</body>
+
+</html>

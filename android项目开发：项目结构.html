@@ -1,0 +1,213 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans">
+
+<head>
+    
+    
+    <title>android项目开发：项目结构--归零幻想的博客</title>
+    <meta charset="UTF-8">
+    <!--移动设备不缩放-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="alternate" type="application/rss+xml" title="归零幻想" href="https://ntutn.top/rss.xml" />
+    <!--github的markdown样式-->
+    <link rel="stylesheet" href="/res/css/github-markdown.css">
+    <!--一个基于bootstrap的样式-->
+    <link rel="stylesheet" href="/res/css/main.css">
+
+    <script src="/res/js/jquery.min.js"></script>
+    <script src="/res/js/popper.min.js"></script>
+    <script src="/res/js/bootstrap.min.js"></script>
+
+    <style>
+        /*图片缩放*/
+        .imageWrapper {
+            max-width: 500px;
+            max-height: 100%;
+            display: block;
+            margin: 0 auto;
+        }
+
+        /*背景图片*/
+        body {
+            background: url(https://unsplash.it/1600/900?random);
+            background-attachment: fixed;
+            background-position: bottom center;
+            background-size: cover;
+        }
+    </style>
+    <script src="/res/js/zoomify.min.js"></script>
+    <link href="/res/css/zoomify.min.css" rel="stylesheet">
+
+    <script>
+        $(document).ready(function () {
+            $(".markdown-body img").each(function () {
+                divImageWrapper = $(this).after("<div class='imageWrapper'></div>")
+                $(this).appendTo($(this).next())
+            })
+            $(".markdown-body img").zoomify()
+        })
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <nav id="nav" class="navbar navbar-expand-lg navbar-light bg-light">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
+                aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="/"><img src="/res/logo.png" width="70" height="40"
+                    class="d-inline-block align-top" alt="">
+                <span>归零幻想的博客</span></a>
+
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                    <li id="n_home" class="nav-item">
+                        <a class="nav-link" href="/">主页</a>
+                    </li>
+                    <!-- <li id="n_tags" class="nav-item">
+                        <a class="nav-link" href="/tags">标签</a>
+                    </li> -->
+                    <li id="n_about" class="nav-item">
+                        <a class="nav-link" href="/about.html">关于</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/rss.xml">RSS</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <nav class="mt-3" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+
+                <li class="breadcrumb-item active" aria-current="page">android项目开发：项目结构</li>
+            </ol>
+        </nav>
+        <div class="card mt-3 mb-3">
+            <div class="card-body markdown-body">
+                <h1 class="card-title text-center realtitle">android项目开发：项目结构</h1>
+                <!--TODO 时间-->
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2020-12-08</span>&nbsp;
+                    修改时间：<span>2020-12-08</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <br>
+                <div class="card-text"><p>虽然已经在字节实习并拿到转正offer，但实际我自己感受我现在对安卓基础知识掌握的程度还差很多，感觉写业务代码本身并不能带来多少提升。</p>
+<p>恰逢前两天看到黄正楠那里有一本看上去不错的书<sup id="fnref-1"><a class="footnote-ref" href="#fn-1">1</a></sup>，而在淘宝也在打折，就买了一本。</p>
+<p>那么从Hello Wrold开始，先看看安卓项目的项目结构。</p>
+<div class="toc">
+<h2>Table of Contents</h2>
+<ul>
+<li><a href="#gradle和idea">.gradle和.idea</a></li>
+<li><a href="#app">app</a>
+<ul>
+<li><a href="#build">build</a></li>
+<li><a href="#libs">libs</a></li>
+<li><a href="#src">src</a>
+<ul>
+<li><a href="#androidtest">androidTest</a></li>
+<li><a href="#test">test</a></li>
+<li><a href="#main">main</a>
+<ul>
+<li><a href="#java">java</a></li>
+<li><a href="#res">res</a></li>
+<li><a href="#androidmanifestxml">AndroidManifest.xml</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#gitignore">.gitignore</a></li>
+<li><a href="#buildgradle">build.gradle</a></li>
+<li><a href="#proguard-rulespro">proguard-rules.pro</a></li>
+</ul>
+</li>
+<li><a href="#build-1">build</a></li>
+<li><a href="#gradle">gradle</a></li>
+<li><a href="#gitignore-1">.gitignore</a></li>
+<li><a href="#buildgradle-1">build.gradle</a></li>
+<li><a href="#gradleproperties">gradle.properties</a></li>
+<li><a href="#gradlew和gradlewbat">gradlew和gradlew.bat</a></li>
+<li><a href="#localproperties">local.properties</a></li>
+<li><a href="#settingsgradle">settings.gradle</a></li>
+</ul>
+</div>
+<h2 id="gradle和idea">.gradle和.idea</h2>
+<p>Android Studio自动生成的文件，无需关心。</p>
+<h2 id="app">app</h2>
+<p>项目中的代码、资源等内容。</p>
+<h3 id="build">build</h3>
+<p>编译时自动生成的文件，不需要关心。</p>
+<h3 id="libs">libs</h3>
+<p>存放项目中的第三方jar包，这个目录下的jar包会自动添加到项目的构建路径下。</p>
+<h3 id="src">src</h3>
+<h4 id="androidtest">androidTest</h4>
+<p>Android Test测试用例，可以对项目进行一些自动化测试。</p>
+<blockquote>
+<p>实际上在公司里发现基本不写测试用例，全靠QA瞎几把点。</p>
+</blockquote>
+<h4 id="test">test</h4>
+<p>用来编写单元测试用例，对项目进行自动化测试。</p>
+<blockquote>
+<p>这里的测试用例是不依赖安卓框架的。</p>
+</blockquote>
+<h4 id="main">main</h4>
+<h5 id="java">java</h5>
+<p>存放所有java代码（和Kotlin代码）的地方。</p>
+<h5 id="res">res</h5>
+<p>项目的资源文件夹，项目中使用到的所有图片、布局、字符串等资源都存在这个目录下。</p>
+<p>图片存放在<code>drawable</code>目录下，布局存放在<code>layout</code>目录下，字符串存放在<code>values</code>目录下。</p>
+<p><code>mipmap</code>存放图标，之所以有很多<code>mipmap</code>目录是为了适配各种设备。若只有一份图片，那么放在<code>xxhdpi</code>下就可以了。</p>
+<h5 id="androidmanifestxml">AndroidManifest.xml</h5>
+<p>整个Android项目的配置文件，程序中定义的四大组件都需要在这个文件中注册。此外，还可以在这个文件中添加应用程序的权限声明。</p>
+<h3 id="gitignore">.gitignore</h3>
+<p>类似外层的<code>.gitignore</code>，用来在版本控制系统中排除app模块中的指定文件。</p>
+<h3 id="buildgradle">build.gradle</h3>
+<p>app模块的gradle构建脚本，指定很多项目构建相关的配置。</p>
+<p>插件<code>com.android.application</code>用于应用程序模块，<code>com.android.library</code>表示库模块。前者可以直接运行，后者只能作为代码库依附于应用程序模块运行。</p>
+<h3 id="proguard-rulespro">proguard-rules.pro</h3>
+<p>指定项目代码的混淆方式。</p>
+<h2 id="build-1">build</h2>
+<p>编译时自动生成的内容。</p>
+<h2 id="gradle">gradle</h2>
+<p>gradle wrapper的配置文件。Android Studio会根据本地的缓存i去=情况决定是否需要联网下载gradle。</p>
+<h2 id="gitignore-1">.gitignore</h2>
+<p>排除文件或文件夹的git版本控制。</p>
+<blockquote>
+<p>对于所有项目都会用到的<code>.gitignore</code>条目，不妨加入<code>~/.gitignore</code>全局配置。</p>
+</blockquote>
+<h2 id="buildgradle-1">build.gradle</h2>
+<p>项目全局的构建脚本。</p>
+<p>repositories中，<code>google()</code>对应谷歌自家代码仓库依赖，<code>jcenter()</code>中则是很多第三方开源库。</p>
+<h2 id="gradleproperties">gradle.properties</h2>
+<p>全局gradle的配置文件。</p>
+<h2 id="gradlew和gradlewbat">gradlew和gradlew.bat</h2>
+<p>这两个文件是用来在命令行界面执行gradle命令的，其中<code>gradlew</code>是在Linux或Mac系统中使用的，<code>gradlew.bat</code>是在Windows系统中使用的。</p>
+<h2 id="localproperties">local.properties</h2>
+<p>用于指定本机中的Android SDK路径。</p>
+<h2 id="settingsgradle">settings.gradle</h2>
+<p>用来指定项目中所有引入的模块。</p>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn-1">
+<p>《第一行代码》</p>
+<a href="#fnref-1" class="footnote-backref">&#8617;</a>
+</li>
+</ol>
+</div>
+</div>
+            </div>
+            <script src="https://utteranc.es/client.js" repo="zerofancy/zerofancy.github.io" issue-term="android项目开发：项目结构"
+                theme="github-light" crossorigin="anonymous" async>
+                </script>
+        </div>
+        <!-- 页脚 -->
+        <footer class="navbar navbar-light bg-light">
+            <p>版权所有：归零幻想 ┊ 备案号：<a href="http://beian.miit.gov.cn/">暂无</a>┊ Powered by：归零幻想</p>
+        </footer>
+    </div>
+</body>
+
+</html>

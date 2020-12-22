@@ -1,0 +1,416 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans">
+
+<head>
+    
+    <title>归零幻想的博客</title>
+    <meta charset="UTF-8">
+    <!--移动设备不缩放-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="alternate" type="application/rss+xml" title="归零幻想" href="https://ntutn.top/rss.xml" />
+    <!--github的markdown样式-->
+    <link rel="stylesheet" href="/res/css/github-markdown.css">
+    <!--一个基于bootstrap的样式-->
+    <link rel="stylesheet" href="/res/css/main.css">
+
+    <script src="/res/js/jquery.min.js"></script>
+    <script src="/res/js/popper.min.js"></script>
+    <script src="/res/js/bootstrap.min.js"></script>
+    <script src="/res/js/sweetalert.min.js"></script>
+    <script>
+        function chkPage() {
+            var in_page = Number($("#in_page").val());
+            if (in_page <= 0 || in_page > Number($("#pagecount").val())) {
+                return false;
+            }
+            return true;
+        }
+        $(document).ready(function () {
+            $("#btn_go").click(function () {
+                if (chkPage()) {
+                    location.href = "/index" + ($("#in_page").val() == "1" ? "" : $("#in_page").val()) + ".html";
+                } else {
+                    swal(
+                        {
+                            title: "Tip",
+                            text: "您输入的页码超出范围！",
+                            type: "warning"
+                        }
+                    );
+                }
+            });
+            $(".card-text img").addClass("img-fluid");
+            $("#n_home").addClass("active");
+            //一言
+            $.get("https://v1.hitokoto.cn/", function (data, status) {
+                $("#hitokoto").text(data.hitokoto);
+                $("#from").text("——" + data.from);
+            });
+            // ajax
+            $(".btn-read-all").click(function(){
+                const url=$(this).attr("value")
+                $(this).parent().parent().find(".card-text").load(url+" .card-text")
+                $(this).hide()
+                return false
+            })
+        });
+    </script>
+    <style>
+        /*背景图片*/
+        body {
+            background: url(https://unsplash.it/1600/900?random);
+            background-attachment: fixed;
+            background-position: bottom center;
+            background-size: cover;
+        }
+    </style>
+</head>
+
+<body>
+    <input id="pagecount" type="hidden" value="6">
+    <div class="container">
+        <nav id="nav" class="navbar navbar-expand-lg navbar-light bg-light">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
+                aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="/"><img src="/res/logo.png" width="70" height="40"
+                    class="d-inline-block align-top" alt="">
+                <span>归零幻想的博客</span></a>
+
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                    <li id="n_home" class="nav-item">
+                        <a class="nav-link" href="/">主页</a>
+                    </li>
+                    <!-- <li id="n_tags" class="nav-item">
+                    <a class="nav-link" href="/tags">标签</a>
+                </li> -->
+                    <li id="n_about" class="nav-item">
+                        <a class="nav-link" href="/about.html">关于</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/rss.xml">RSS</a>
+                    </li>
+                </ul>
+                <!-- <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0 disabled popover-dismiss" type="submit"
+                    data-toggle="popover" data-trigger="focus" title="未完成的功能"
+                    data-content="搜索功能暂时还没有完成。">Search</button>
+            </form> -->
+            </div>
+        </nav>
+        <nav class="mt-3" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+            </ol>
+        </nav>
+        <div class="card text-black bg-light">
+            <div class="card-body">
+                <blockquote class="card-blockquote">
+                    <p id="hitokoto">溺死在零梦里吧。</p>
+                    <footer id="from" class="text-right">Someone famous in
+                        <cite title="Source Title">归零幻想</cite>
+                    </footer>
+                </blockquote>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
+                    <a href="archieved/old/线性表ADT的实现.html">线性表ADT的实现</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2019-05-13</span>&nbsp;
+                    修改时间：<span>2019-05-13</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><h1 id="线性表adt的实现">线性表ADT的实现</h1>
+<p>数据结构平时测试的题目开放了，这次平时测试睡过了，全宿舍都睡过了。现在回头做做题目，还是有坑点的。</p>
+<h2 id="question">Question</h2>
+<p>假设线性表ADT的数据元素类型为正整数，采用带头结点的单链式存储结构。线性表ADT实现的大部分代码已经给出，请补充写出类的两个成员函数<code>insert</code>和<code>reverse</code>。  注意：<strong>只需提交需要补充的函数代码，其他代码不能自己重写和修改。</strong></p>
+<p><code>insert</code>函数：在元素值从小到大有序的线性表中插入一个元素，仍然保持有序。</p>
+<p><code>reverse</code>函数：实现线性表元素的倒置，即将线性表中数据元素的顺序反转。</p>
+<p>线性表元素输入时，以 <code>endTag</code> 作为结束标志。</p>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/old/线性表ADT的实现.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
+                    <a href="archieved/old/活动安排问题.html">活动安排问题</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2019-05-13</span>&nbsp;
+                    修改时间：<span>2019-05-13</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><p>经典的贪心问题。</p>
+<h2 id="question">Question</h2>
+<p>假设有n个活动的集合<code>E={a1,a2,...,an}</code>，其每个活动都要求使用同一资源（如某个设备、教室、场地等），而在同一时间内只允许一个活动使用这一资源。</p>
+<p>每个活动都有一个要求使用该资源的起止时间<code>si</code>,<code>fi</code>，且<code>si&lt;fi</code>。如果选择了活动ai，则它在半开的时间区间<code>[si,fi)</code>内占有资源。两个活动<code>ai</code>,<code>aj</code>称为是相容的，当且仅当它们的时间区间<code>[si,fi)</code>和<code>[sj,fj)</code>不相交，即<code>si&gt;=fj</code> 或 <code>sj &gt;=fi</code>。现要求在所给定的活动集中选出最大的相容活动子集。</p>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/old/活动安排问题.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
+                    <a href="archieved/old/稀疏矩阵的压缩存储.html">稀疏矩阵的压缩存储</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2019-05-06</span>&nbsp;
+                    修改时间：<span>2019-05-06</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><p>特殊矩阵在采用二维数组存储时，尽管矩阵操作的算法都很简单，但是其空间的利用率很低。 系数矩阵就是一种应用很广泛的特殊的矩阵。现要求稀疏矩阵采用“压缩”存储，实现矩阵的常用操作，如输出、转置、求和等。</p>
+<h2 id="question">Question</h2>
+<p>矩阵采用“压缩”存储，实现矩阵的常用操作，如输出、转置、求和等。</p>
+<p>矩阵的输入：有多行，第1行包括三个整数，分别是矩阵的大小m,n及非零元素的个数r。后面r行分别输入各个非零元素的 行、列、值</p>
+<p>矩阵的输出：按人们习惯的矩阵格式输出，即输出一个<code>m*n</code>的矩阵，是零元素的输出0，非零元素输出元素值。</p>
+<p>例如：输入如下：</p>
+<pre><code>100 90 5 //矩阵的行数为100，列数为90，共5个非零元素。
+1 10 100 //a(1,10)=100
+50 60 200//a(50,60)=200
+50 80 100//a(50,80)=100
+60 60 200//a(60,60)=200
+99 89 10//a(99,89)=10
+100 90 4 //矩阵b的行数为100，列数为90，共4个非零元素。
+1 1 10 //b(1,1)=10
+50 60 -200//b(50,60)=-200
+50 80 100 //b(50,80)=100
+70 70 10 //b(70,70)=10
+</code></pre>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/old/稀疏矩阵的压缩存储.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
+                    <a href="archieved/old/数据结构 栈应用2 表达式求值.html">数据结构 栈应用2 表达式求值</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2019-04-25</span>&nbsp;
+                    修改时间：<span>2019-04-25</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><blockquote>
+<p>表达式求值是程序设计语言编译中的一个最基本问题，它的实现是栈应用的一个典型例子。</p>
+</blockquote>
+<h2 id="question">Question</h2>
+<p>表达式求值是进行数据处理的最基本操作。请编写程序完成一个简单算术表达式的求值。要求如下：</p>
+<ol>
+<li>运算符包括：<code>+、-、*、-、^(乘方)、括号</code></li>
+<li>运算量为数值常量，根据自己的能力可以对运算量做不同的约束，例如1位整数、多位整数、实数等（会有不同的测试用例）；</li>
+</ol>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/old/数据结构 栈应用2 表达式求值.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
+                    <a href="archieved/old/数据结构 栈应用 1 括号匹配.html">数据结构 栈应用 1 括号匹配</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2019-04-25</span>&nbsp;
+                    修改时间：<span>2019-04-25</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><blockquote>
+<p>大概是一道栈的应用的水题吧。
+输入一行符号,以#结束，判断其中的括号是否匹配。
+遇到左括号入栈，遇到右括号出栈。如果字符串结束栈不空，输出栈内左括号对应右括号。</p>
+</blockquote>
+<h2 id="question">Question</h2>
+<p>用栈实现：输入一行符号,以#结束，判断其中的括号是否匹配。括号包括：</p>
+<pre><code>{ } 、 [ ] 、 ( )、  &lt; &gt;
+</code></pre>
+<p>如果匹配，输出 <code>right</code></p>
+<p>如果不匹配，给出错误提示。包括：</p>
+<p>第几个符号处理时出现错误；哪几个符号失配等</p>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/old/数据结构 栈应用 1 括号匹配.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
+                    <a href="archieved/old/图书管理系统.html">图书管理系统</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2019-04-13</span>&nbsp;
+                    修改时间：<span>2019-04-13</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><p>翻出了以前写的C++作业，图书管理系统，虽然挺简单的，但留下纪念下吧。</p>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/old/图书管理系统.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
+                    <a href="archieved/old/学生管理系统.html">学生管理系统</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2019-04-13</span>&nbsp;
+                    修改时间：<span>2019-04-13</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><blockquote>
+<p>翻出了以前C语言C实验的大作业，当时搞了好多奇技淫巧，最终拿到99分。</p>
+</blockquote>
+<h2 id="介绍">介绍</h2>
+<p>学生成绩管理系统v6.0是由软件工程1702刘海鑫设计的一款用于学生成绩管理的软件。</p>
+<h2 id="文件列表">文件列表</h2>
+<ul>
+<li>Stuv6.0.exe	主体程序，用于实现整体功能。</li>
+<li>main.dat	程序的数据文件，用于存储学生信息。</li>
+<li>goodbye.bmp	程序退出时加载的图片。</li>
+<li>desktop.ini	修改程序所在文件夹的图标。</li>
+<li>consoletest.exe	编译的au3程序，用于辅助输入中文。</li>
+</ul>
+<p>代码：</p>
+<pre><code class="language-autoit">$re=InputBox(&quot;Input&quot;,&quot;You can input your massage now.(支持中文)&quot;)
+ConsoleWrite($re)
+</code></pre>
+<ul>
+<li>code.dat	密码存储文件。该文件存储的是xor算法加密的账号密码。</li>
+<li>black.bmp	一张纯黑的图片，用于清除控制台加载图片的痕迹。2018年1月20日使用了image /d清除图片，本文件不再使用。</li>
+<li>background.bmp	程序启动时加载的图片。</li>
+<li>about.rtf	程序的说明文档。</li>
+<li>scaned.txt	存储用户输入的临时文件，一般会自动清除。</li>
+<li>subjects.dat	存储科目的名称，每行一个，最多允许50个，可用记事本直接打开编辑。</li>
+<li>image.exe	外部程序，用于加载图片。</li>
+</ul>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/old/学生管理系统.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
+                    <a href="archieved/old/连续正整数.html">连续正整数</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2019-04-06</span>&nbsp;
+                    修改时间：<span>2019-04-06</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><blockquote>
+<p>还是数据结构的网上作业，将一个整数分解为连续正整数之和，找对方向倒是也不算难……</p>
+</blockquote>
+<p>有些正整数可以表示为 n (n&gt;1) 个连续正整数的和，如：</p>
+<pre><code>15=1+2+3+4+5
+    =4+5+6
+    =7+8
+</code></pre>
+<p>给定一个正整数 N，判断其是否可以表示为一组连续正整数的和，输出符合条件的解的组数。</p>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/old/连续正整数.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
+                    <a href="archieved/old/愚人节，一切小心行事.html">愚人节，一切小心行事</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2019-03-31</span>&nbsp;
+                    修改时间：<span>2019-03-31</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><p>马上就到愚人节了，所以当我QQ空间里面有人提到关于浏览器拦截无限弹窗的问题，我就知道，这小子肯定是打算使坏……</p>
+<h2 id="vb">VB</h2>
+<p>VB是我学习的第一门编程语言，它可视化的界面设计以及非常接近自然语言的语法大大降低了学习的难度，可以说我的学习编程的兴趣就是VB培养的。</p>
+<p>然而最初学习编程时我会的东西很少，不可能做出有多少实际意义的东西，也就是恶作剧类的比较好写，也比较有意思……</p>
+<ol>
+<li>关不了的弹窗</li>
+</ol>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/old/愚人节，一切小心行事.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
+                    <a href="archieved/old/数据结构与算法 C++编程能力评估.html">数据结构与算法 C++编程能力评估</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2019-03-28</span>&nbsp;
+                    修改时间：<span>2019-03-28</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><h2 id="题目1">题目1</h2>
+<p>向类SeqList中插入数据，请根据main函数中的调用，完成Insert和output函数。</p>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/old/数据结构与算法 C++编程能力评估.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <!--页码-->
+        <nav aria-label="Page navigation row">
+            <ul class="pagination mt-3 justify-content-center">
+                <li class="page-item"><a class="page-link" href="/">First</a>
+                </li>
+                <li class="page-item">
+                    
+                    <a class="page-link" href="/index4.html">4</a>
+                </li>
+                <li class="page-item active">
+                    <span class="page-link">5</span>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="/index6.html">6</a>
+                </li>
+                <li class="page-item"></li>
+                <li class="page-item"></li>
+                <li class="page-item"><a class="page-link"
+                        href="/index6.html">Last</a></li>
+                <input id="in_page" type="text" class="form-control col-2 xs-offset-1 d-none d-lg-block offset-1"
+                    placeholder="输入页码" onkeyup="this.value=this.value.replace(/\D/g,'')"
+                    onafterpaste="this.value=this.value.replace(/\D/g,'')">
+                <button id="btn_go" class="btn btn-primary">Go</button>
+            </ul>
+        </nav>
+        <!-- 页脚 -->
+        <footer class="navbar navbar-light bg-light">
+            <p>版权所有：归零幻想 ┊ 备案号：<a href="http://beian.miit.gov.cn/">暂无</a>┊ Powered by：归零幻想</p>
+        </footer>
+    </div>
+</body>
+
+</html>

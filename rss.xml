@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+    <channel>
+        <title>归零幻想的博客</title>
+        <description>一枚准程序猿。</description>
+        <link>https://ntutn.top</link>
+        <item>
+            <title>禁用macOS的窗口标签</title>
+            <description>&lt;p&gt;作为一个对更新相对激进的用户，我当然是第一时间升级了最新的macOS Big Sur。说实在的，这名字给我的第一印象并不好，因为被我看成了『Big Bug』。&lt;/p&gt;
+&lt;p&gt;圆角变大了，还有我一开始比较喜欢的功能，姑且称之为窗口标签。在BigSur中，当你打开两个全屏的Android Studio，它们将出现在同一个窗口，窗口上方出现不同的标签页，和浏览器一样。&lt;/p&gt;
+&lt;p&gt;好景不长，这个功能表现很不稳定，我不得不考虑干掉这个功能。如果只是没有成功触发也就算了，大不了当没升级用，但它常常会把一些弹出窗口也搞成和原窗口并列的标签。比如当你rename一个文件时，弹出的窗口有时就会并列到标签上，然后Android Studio就卡死了。&lt;/p&gt;
+&lt;p&gt;好吧，既然它开始影响我的工作效率了，我就找了找禁用的方法&lt;sup id=&quot;fnref-1&quot;&gt;&lt;a class=&quot;footnote-ref&quot; href=&quot;#fn-1&quot;&gt;1&lt;/a&gt;&lt;/sup&gt;。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
+defaults write com.google.android.studio AppleWindowTabbingMode manual
+&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&quot;footnotes&quot;&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li id=&quot;fn-1&quot;&gt;
+&lt;p&gt;来自&lt;a href=&quot;https://www.reddit.com/r/androiddev/comments/jtbl4m/has_anyone_updated_to_macos_big_sur_and_is/&quot;&gt;https://www.reddit.com/r/androiddev/comments/jtbl4m/has_anyone_updated_to_macos_big_sur_and_is/&lt;/a&gt;&lt;/p&gt;
+&lt;a href=&quot;#fnref-1&quot; class=&quot;footnote-backref&quot;&gt;&amp;#8617;&lt;/a&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+</description>
+            <author>归零幻想</author>
+            <pubDate>Tue, 22 Dec 2020 00:00:00 CST</pubDate>
+            <link>https://ntutn.top/禁用macOS的窗口标签.html</link>
+        </item><item>
+            <title>android项目开发：Broadcast</title>
+            <description>&lt;p&gt;仍然是《第一行代码》的学习笔记，安卓内置广播机制。&lt;/p&gt;
+&lt;p&gt;Android中每个应用程序都可以对自己感兴趣的广播进行注册，包括来自系统的，和其他应用程序的。&lt;/p&gt;
+&lt;p&gt;广播分为标准广播和有序广播。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;标准广播异步执行，所有BroadcastReceiver几乎同时收到广播的消息。&lt;/li&gt;
+&lt;li&gt;有序广播 同步执行，只有前一个Receiver逻辑执行完后才会传递给下一个，且可以将广播截断。&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+            <author>归零幻想</author>
+            <pubDate>Tue, 22 Dec 2020 00:00:00 CST</pubDate>
+            <link>https://ntutn.top/android项目开发：Broadcast.html</link>
+        </item><item>
+            <title>android项目开发：UI设计</title>
+            <description>&lt;p&gt;仍然是《第一行代码》的学习笔记，这里记录的东西相对少一点，UI上的东西还是更多在实际项目中感受到。比如我想没有必要写TextView的介绍吧。&lt;/p&gt;
+&lt;h2 id=&quot;控件的使用方法&quot;&gt;控件的使用方法&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;dp&lt;/code&gt;是一种屏幕密度无关的尺寸单位，可以保证在不同分辨率的手机上显示效果尽可能一致。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;match_parent&lt;/code&gt;表示让当前控件大小和父布局的大小一致。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;wrap_content&lt;/code&gt;表示让当前控件的大小能正好包裹里面的内容。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;android:gravity&lt;/code&gt;指定控件内的内容对齐方式，有&lt;code&gt;top&lt;/code&gt;、&lt;code&gt;bottom&lt;/code&gt;、&lt;code&gt;start&lt;/code&gt;、&lt;code&gt;end&lt;/code&gt;、&lt;code&gt;center&lt;/code&gt;等可选，可以用&lt;code&gt;|&lt;/code&gt;指定多个值。比如&lt;code&gt;center&lt;/code&gt;等价于&lt;code&gt;center_vertical|center_horizonal&lt;/code&gt;。&lt;/p&gt;
+&lt;h2 id=&quot;基本布局&quot;&gt;基本布局&lt;/h2&gt;
+&lt;h3 id=&quot;linearlayout&quot;&gt;LinearLayout&lt;/h3&gt;
+&lt;p&gt;线性布局，通过&lt;code&gt;android:orientation&lt;/code&gt;指定方向。&lt;/p&gt;
+&lt;p&gt;有一个重要属性：&lt;code&gt;android:layout_weight&lt;/code&gt;，它将控件已经占用的空间减掉后按照比重分给各个控件。一般我们直接指定&lt;code&gt;android:layout_width&lt;/code&gt;为0dp，而给它指定一个比重，这样控件的尺寸将占满剩余空间。&lt;/p&gt;
+</description>
+            <author>归零幻想</author>
+            <pubDate>Mon, 21 Dec 2020 00:00:00 CST</pubDate>
+            <link>https://ntutn.top/android项目开发：UI设计.html</link>
+        </item><item>
+            <title>android项目开发：Fragment</title>
+            <description>&lt;h1 id=&quot;fragment&quot;&gt;Fragment&lt;/h1&gt;
+&lt;h2 id=&quot;fragment的使用方式&quot;&gt;Fragment的使用方式&lt;/h2&gt;
+&lt;h3 id=&quot;静态添加fragment&quot;&gt;静态添加Fragment&lt;/h3&gt;
+&lt;p&gt;Fragment的写法&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-xml&quot;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;utf-8&amp;quot;?&amp;gt;
+&amp;lt;LinearLayout xmlns:android=&amp;quot;http://schemas.android.com/apk/res/android&amp;quot;
+              android:orientation=&amp;quot;vertical&amp;quot; android:layout_width=&amp;quot;match_parent&amp;quot;
+              android:layout_height=&amp;quot;match_parent&amp;quot;&amp;gt;
+
+    &amp;lt;Button
+            android:id=&amp;quot;@+id/button&amp;quot;
+            android:layout_width=&amp;quot;wrap_content&amp;quot;
+            android:layout_height=&amp;quot;wrap_content&amp;quot;
+            android:text=&amp;quot;button&amp;quot;
+            android:layout_gravity=&amp;quot;center_horizontal&amp;quot;/&amp;gt;
+
+&amp;lt;/LinearLayout&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&quot;language-kotlin&quot;&gt;package top.ntutn.fragmenttest
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+
+class LeftFragment : Fragment() {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.left_fragment, container, false)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;静态添加Fragment&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-xml&quot;&gt;
+&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;utf-8&amp;quot;?&amp;gt;
+&amp;lt;LinearLayout xmlns:android=&amp;quot;http://schemas.android.com/apk/res/android&amp;quot;
+              xmlns:tools=&amp;quot;http://schemas.android.com/tools&amp;quot;
+              android:layout_width=&amp;quot;match_parent&amp;quot;
+              android:layout_height=&amp;quot;match_parent&amp;quot;
+              android:orientation=&amp;quot;horizontal&amp;quot;
+              tools:context=&amp;quot;.MainActivity&amp;quot;&amp;gt;
+
+    &amp;lt;fragment
+            android:id=&amp;quot;@+id/leftFragment&amp;quot;
+            android:name=&amp;quot;top.ntutn.fragmenttest.LeftFragment&amp;quot;
+            android:layout_width=&amp;quot;0dp&amp;quot;
+            android:layout_height=&amp;quot;match_parent&amp;quot;
+            android:layout_weight=&amp;quot;1&amp;quot;/&amp;gt;
+
+    &amp;lt;fragment
+            android:id=&amp;quot;@+id/rightFragment&amp;quot;
+            android:name=&amp;quot;top.ntutn.fragmenttest.RightFragment&amp;quot;
+            android:layout_width=&amp;quot;0dp&amp;quot;
+            android:layout_height=&amp;quot;match_parent&amp;quot;
+            android:layout_weight=&amp;quot;1&amp;quot;/&amp;gt;
+
+&amp;lt;/LinearLayout&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+</description>
+            <author>归零幻想</author>
+            <pubDate>Mon, 21 Dec 2020 00:00:00 CST</pubDate>
+            <link>https://ntutn.top/android项目开发：Fragment.html</link>
+        </item><item>
+            <title>android项目开发：Activity</title>
+            <description>&lt;blockquote&gt;
+&lt;p&gt;仍然是《第一行代码》的读书笔记，可能引用原书的定义和描述，或代码案例。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id=&quot;activity&quot;&gt;Activity&lt;/h1&gt;
+&lt;h2 id=&quot;activity基本用法&quot;&gt;Activity基本用法&lt;/h2&gt;
+&lt;p&gt;Android讲究设计逻辑与视图分离，一般Activity都会对应一个布局文件（XML文件）。&lt;/p&gt;
+&lt;p&gt;所有的Activity都要在AndroidManifest中注册才生效。&lt;/p&gt;
+&lt;p&gt;Activity可以创建菜单。首先在&lt;code&gt;res/menu&lt;/code&gt;下创建一个xml文件（Android Studio中也提供了可视化编辑的方法）：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-xml&quot;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;utf-8&amp;quot;?&amp;gt;
+&amp;lt;menu xmlns:app=&amp;quot;http://schemas.android.com/apk/res-auto&amp;quot;
+      xmlns:android=&amp;quot;http://schemas.android.com/apk/res/android&amp;quot;&amp;gt;
+
+    &amp;lt;item
+            android:id=&amp;quot;@+id/add_item&amp;quot;
+            android:title=&amp;quot;Add&amp;quot;/&amp;gt;
+    &amp;lt;item
+            android:id=&amp;quot;@+id/remove_item&amp;quot;
+            android:title=&amp;quot;Remove&amp;quot;/&amp;gt;
+&amp;lt;/menu&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;重写两个方法&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-kotlin&quot;&gt;    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    menuInflater.inflate(R.menu.main, menu)
+    return true
+}
+
+override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    when (item.itemId) {
+        R.id.add_item -&amp;gt; Toast.makeText(this, &amp;quot;Add a book.&amp;quot;, Toast.LENGTH_LONG).show()
+        R.id.remove_item -&amp;gt; Toast.makeText(this, &amp;quot;Remove a book.&amp;quot;, Toast.LENGTH_LONG).show()
+    }
+    return true
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;&lt;img src=&quot;https://i.loli.net/2020/12/10/a6wOcTFrHLhS4il.jpg&quot; alt=&quot;photo_2020-12-10_21-00-32.jpg&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;用&lt;code&gt;finish()&lt;/code&gt;方法可以关闭一个Activity。&lt;/p&gt;
+</description>
+            <author>归零幻想</author>
+            <pubDate>Tue, 15 Dec 2020 00:00:00 CST</pubDate>
+            <link>https://ntutn.top/android项目开发：Activity.html</link>
+        </item><item>
+            <title>作为一名男性，你愿意和丁真互换人生吗</title>
+            <description>&lt;p&gt;忘记是哪一天了，一个叫『丁真』的人突然刷屏，热搜十条有6条都是他。但我见怪不怪了，微博热搜本来就是个笑话。&lt;/p&gt;
+&lt;p&gt;然后看看贴吧，知乎……全是他。&lt;/p&gt;
+&lt;p&gt;那就看看，这回是谁，为啥火了。一个放牛小伙，正巧被摄影师拍了，眼睛澄澈，笑容阳光，剩下的全是营销。&lt;/p&gt;
+&lt;p&gt;『为何贴吧男性普遍仇视辱骂丁真？』我玩贴吧，但对丁真没啥恶感，只是对这一堆热搜有恶感：**明明这两天有更值得关注的事情的。**好吧，咱也不知道，咱也不敢问，你们知道有几条热搜被盖过去了就行了。&lt;/p&gt;
+&lt;p&gt;『作为一名男性，你愿意和丁真互换人生吗？』好么，没完没了了，还不惜故意挑起性别对立。我就引用某个网友&lt;sup id=&quot;fnref-1&quot;&gt;&lt;a class=&quot;footnote-ref&quot; href=&quot;#fn-1&quot;&gt;1&lt;/a&gt;&lt;/sup&gt;的回答&lt;/p&gt;
+&lt;div class=&quot;footnotes&quot;&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li id=&quot;fn-1&quot;&gt;
+&lt;p&gt;&lt;a href=&quot;https://www.zhihu.com/people/geng-liang-jia&quot;&gt;@在下头不是很铁了&lt;/a&gt;，原回答在&lt;a href=&quot;https://www.zhihu.com/question/433944124/answer/1620271267&quot;&gt;某回答&lt;/a&gt;的回复里，但无法直接通过链接打开，大概是被限流了。转载已获授权。&lt;/p&gt;
+&lt;a href=&quot;#fnref-1&quot; class=&quot;footnote-backref&quot;&gt;&amp;#8617;&lt;/a&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+</description>
+            <author>归零幻想</author>
+            <pubDate>Fri, 11 Dec 2020 00:00:00 CST</pubDate>
+            <link>https://ntutn.top/作为一名男性，你愿意和丁真互换人生吗.html</link>
+        </item><item>
+            <title>android项目开发：Kotlin</title>
+            <description>&lt;h1 id=&quot;kotlin&quot;&gt;Kotlin&lt;/h1&gt;
+&lt;h2 id=&quot;变量和函数&quot;&gt;变量和函数&lt;/h2&gt;
+&lt;h3 id=&quot;变量&quot;&gt;变量&lt;/h3&gt;
+&lt;p&gt;用&lt;code&gt;var&lt;/code&gt;和&lt;code&gt;val&lt;/code&gt;定义变量，并有类型自动推导的支持。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;val&lt;/code&gt;用来声明一个不可变的变量，&lt;code&gt;var&lt;/code&gt;用来声明一个可变的变量。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-kotlin&quot;&gt;val a = 10
+var b: Int = 12
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Kotlin完全抛弃了java中的基本数据类型，完全使用对象数据类型。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;&lt;th&gt;java基本数据类型&lt;/th&gt;&lt;th&gt;Kotlin对象数据类型&lt;/th&gt;&lt;th&gt;数据类型说明&lt;/th&gt;&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;&lt;td&gt;int&lt;/td&gt;&lt;td&gt;Int&lt;/td&gt;&lt;td&gt;整型&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;long&lt;/td&gt;&lt;td&gt;Long&lt;/td&gt;&lt;td&gt;长整型&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;short&lt;/td&gt;&lt;td&gt;Short&lt;/td&gt;&lt;td&gt;短整型&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;float&lt;/td&gt;&lt;td&gt;Float&lt;/td&gt;&lt;td&gt;单精度浮点型&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;double&lt;/td&gt;&lt;td&gt;Double&lt;/td&gt;&lt;td&gt;双精度浮点型&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;boolean&lt;/td&gt;&lt;td&gt;Boolean&lt;/td&gt;&lt;td&gt;布尔型&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;char&lt;/td&gt;&lt;td&gt;Char&lt;/td&gt;&lt;td&gt;字符型&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;byte&lt;/td&gt;&lt;td&gt;Byte&lt;/td&gt;&lt;td&gt;字节型&lt;/td&gt;&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&quot;函数&quot;&gt;函数&lt;/h3&gt;
+&lt;p&gt;语法：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-kotlin&quot;&gt;fun main(args: Array&amp;lt;String&amp;gt;) {
+    println(&amp;quot;Hello World!&amp;quot;)
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Kotlin中的函数在无必要时可以省略很多东西：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-kotlin&quot;&gt;import kotlin.math.max
+
+fun largerNumber(a: Int, b: Int) = max(a, b)
+
+fun main(args: Array&amp;lt;String&amp;gt;) {
+    val a = 3
+    val b = 5
+    println(&amp;quot;The larger number of a and b is ${largerNumber(a, b)}&amp;quot;)
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;程序的逻辑控制&quot;&gt;程序的逻辑控制&lt;/h2&gt;
+&lt;h3 id=&quot;if&quot;&gt;if&lt;/h3&gt;
+&lt;p&gt;与java中的if语句相比，Kotlin中的if是可以有返回值的。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-kotlin&quot;&gt;fun judge(score: Int) = if (score &amp;gt;= 60) &amp;quot;你及格了&amp;quot; else &amp;quot;你还需要多努力&amp;quot;
+
+fun main() {
+    println(judge(55))
+    println(judge(66))
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;与此同时，Kotlin不再有java中的三元运算符&lt;sup id=&quot;fnref-1&quot;&gt;&lt;a class=&quot;footnote-ref&quot; href=&quot;#fn-1&quot;&gt;1&lt;/a&gt;&lt;/sup&gt;，语义上清晰了很多。&lt;/p&gt;
+&lt;h3 id=&quot;when条件语句&quot;&gt;when条件语句&lt;/h3&gt;
+&lt;p&gt;类似于java中的switch语句，根据变量的值执行不同的逻辑。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-kotlin&quot;&gt;fun judge(score: Int) = if (score &amp;gt;= 60) &amp;quot;你及格了&amp;quot; else &amp;quot;你还需要多努力&amp;quot;
+
+fun getScore(name: String) = when (name) {
+    &amp;quot;Tom&amp;quot; -&amp;gt; 78
+    &amp;quot;Jack&amp;quot; -&amp;gt; 35
+    &amp;quot;Jerry&amp;quot; -&amp;gt; 84
+    &amp;quot;Lee&amp;quot; -&amp;gt; 57
+    else -&amp;gt; 0
+}
+
+fun main() {
+    println(judge(getScore(&amp;quot;Tom&amp;quot;)))
+    println(judge(getScore(&amp;quot;Jack&amp;quot;)))
+    println(judge(getScore(&amp;quot;Bill&amp;quot;)))
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;对我来说，最令人振奋的是再也不需要在每个分支里面都写个break了。其次when也是有返回值的，这和其他特性组合写出来的代码非常简洁优雅。&lt;/p&gt;
+&lt;p&gt;写个小demo吧。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-kotlin&quot;&gt;interface Speakable {
+    fun speak()
+}
+
+class Dog : Speakable {
+    override fun speak() {
+        println(&amp;quot;汪汪汪&amp;quot;)
+    }
+}
+
+class Cat : Speakable {
+    override fun speak() {
+        println(&amp;quot;喵喵喵&amp;quot;)
+    }
+
+    fun climb() {
+        println(&amp;quot;小猫会爬树&amp;quot;)
+    }
+}
+
+fun generateAnimal(): Speakable? = when ((1..3).random()) {
+    1 -&amp;gt; Dog()
+    2 -&amp;gt; Cat()
+    else -&amp;gt; null
+}
+
+fun main() {
+    when (val animal = generateAnimal()) {
+        is Dog -&amp;gt; {
+            println(&amp;quot;生成的动物是小狗&amp;quot;)
+            animal.speak()
+        }
+        is Cat -&amp;gt; {
+            println(&amp;quot;生成的动物是小猫&amp;quot;)
+            animal.speak()
+            animal.climb()
+        }
+        else -&amp;gt; println(&amp;quot;生成动物时出现问题&amp;quot;)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;循环语句&quot;&gt;循环语句&lt;/h3&gt;
+&lt;p&gt;Kotlin中有两类循环，其中&lt;code&gt;while&lt;/code&gt;循环与java学过的while循环非常相似，只说下有差异的&lt;code&gt;for&lt;/code&gt;循环吧。&lt;/p&gt;
+&lt;p&gt;Kotlin的for循环只有for..in式的了，如&lt;code&gt;for(i in list)&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;但有时对数组下标进行遍历还是有必要的。于是我们要先了解下Kotlin的&lt;code&gt;区间&lt;/code&gt;的概念。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-kotlin&quot;&gt;val range = 1..10
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;这表示&lt;code&gt;[1,10]&lt;/code&gt;。但很多时候，我们需要左开右闭区间，比如数组有三个元素，我们需要&lt;code&gt;[0,3)&lt;/code&gt;表示数组的下标。此时可以使用&lt;code&gt;util&lt;/code&gt;关键字。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-kotlin&quot;&gt;val indexRange = 0 util 3
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;有了range再和前面的for配合就完全可以替代之前java里面的for的作用了：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-kotlin&quot;&gt;val array = arrayOf(&amp;quot;Bob&amp;quot;, &amp;quot;John&amp;quot;, &amp;quot;Jackson&amp;quot;)
+for (i in 0 util array.size) {
+    println(&amp;quot;$i:${array[i]}&amp;quot;)
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;此外，还可以用&lt;code&gt;step&lt;/code&gt;指定步长值，实现”隔几个输出一次“的效果：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-kotlin&quot;&gt;for (i in 0 util 10 step 2) {
+    println(i)
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;如果需要10循环到1,则需要&lt;code&gt;downTo&lt;/code&gt;关键字，&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-kotlin&quot;&gt;for (i in 10 downTo 1) {
+    println(i)
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;div class=&quot;footnotes&quot;&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li id=&quot;fn-1&quot;&gt;
+&lt;p&gt;参考&lt;a href=&quot;https://www.w3cschool.cn/java/java-ternary-operator.html&quot;&gt;Java中的三元运算符&lt;/a&gt;&lt;/p&gt;
+&lt;a href=&quot;#fnref-1&quot; class=&quot;footnote-backref&quot;&gt;&amp;#8617;&lt;/a&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+</description>
+            <author>归零幻想</author>
+            <pubDate>Wed, 9 Dec 2020 00:00:00 CST</pubDate>
+            <link>https://ntutn.top/android项目开发：Kotlin.html</link>
+        </item><item>
+            <title>关于</title>
+            <description>&lt;h2 id=&quot;归零幻想&quot;&gt;归零幻想&lt;/h2&gt;
+&lt;img alt=&quot;归零幻想&quot; src=&quot;/res/img/avatar.jpg&quot; width=&quot;200px&quot;&gt;
+&lt;hr /&gt;
+&lt;p&gt;归零幻想是本人的网名啦，这里是我的博客小站。本人在其他地方帐号大多也叫这个名字。&lt;/p&gt;
+&lt;p&gt;博客系统至今我写过三个版本[^1]，毕竟写出个CRUD就可以厚着脸皮说自己是个博客了。当前版本最初是个Kotlin练手项目，源代码发布在&lt;a href=&quot;https://github.com/zerofancy/kmdblog&quot;&gt;github&lt;/a&gt;。不过也就自用罢了，不会有人对我的代码感兴趣吧……&lt;/p&gt;
+</description>
+            <author>归零幻想</author>
+            <pubDate>Wed, 9 Dec 2020 00:00:00 CST</pubDate>
+            <link>https://ntutn.top/about.html</link>
+        </item><item>
+            <title>android项目开发：项目结构</title>
+            <description>&lt;p&gt;虽然已经在字节实习并拿到转正offer，但实际我自己感受我现在对安卓基础知识掌握的程度还差很多，感觉写业务代码本身并不能带来多少提升。&lt;/p&gt;
+&lt;p&gt;恰逢前两天看到黄正楠那里有一本看上去不错的书&lt;sup id=&quot;fnref-1&quot;&gt;&lt;a class=&quot;footnote-ref&quot; href=&quot;#fn-1&quot;&gt;1&lt;/a&gt;&lt;/sup&gt;，而在淘宝也在打折，就买了一本。&lt;/p&gt;
+&lt;p&gt;那么从Hello Wrold开始，先看看安卓项目的项目结构。&lt;/p&gt;
+&lt;div class=&quot;footnotes&quot;&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li id=&quot;fn-1&quot;&gt;
+&lt;p&gt;《第一行代码》&lt;/p&gt;
+&lt;a href=&quot;#fnref-1&quot; class=&quot;footnote-backref&quot;&gt;&amp;#8617;&lt;/a&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+</description>
+            <author>归零幻想</author>
+            <pubDate>Tue, 8 Dec 2020 00:00:00 CST</pubDate>
+            <link>https://ntutn.top/android项目开发：项目结构.html</link>
+        </item><item>
+            <title>从QBASIC开始</title>
+            <description>&lt;p&gt;前两天看到一个知乎问题，拍了一张数学课本的截图，里面是一段程序，问如何才能运行这种程序。&lt;sup id=&quot;fnref-1&quot;&gt;&lt;a class=&quot;footnote-ref&quot; href=&quot;#fn-1&quot;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;看到这熟悉的语法有些感慨，毕竟这门语言就是我编程入门学习的第一门语言了。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://i.loli.net/2020/12/02/gBcqkFoL39u1Xdw.png&quot; alt=&quot;2020-12-02_08-46.png&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;记得那时没有什么娱乐手段，只能翻翻我姐的旧书——当然多数看不懂。少数能看懂的，就包括一本&lt;code&gt;QBASIC&lt;/code&gt;的编程入门教程。&lt;/p&gt;
+&lt;p&gt;单词不认识，字母总还是认识的。于是我学的Hello World其实是P-R-I-N-T-&amp;quot;H-E-L-L-O-W-O-R-L-D&amp;quot;。看着都觉得累…… &lt;em&gt;没有电脑，就直接在脑袋里推演，在纸上执行程序。家里人还以为我在学英语～&lt;/em&gt;&lt;/p&gt;
+&lt;div class=&quot;footnotes&quot;&gt;
+&lt;hr /&gt;
+&lt;ol&gt;
+&lt;li id=&quot;fn-1&quot;&gt;
+&lt;p&gt;&lt;a href=&quot;https://www.zhihu.com/question/432443510&quot;&gt;请问像这种程序可以用什么软件操作? - 知乎&lt;/a&gt;&lt;/p&gt;
+&lt;a href=&quot;#fnref-1&quot; class=&quot;footnote-backref&quot;&gt;&amp;#8617;&lt;/a&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+</description>
+            <author>归零幻想</author>
+            <pubDate>Wed, 2 Dec 2020 00:00:00 CST</pubDate>
+            <link>https://ntutn.top/QBASIC.html</link>
+        </item>
+    </channel>
+</rss>

@@ -1,0 +1,267 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans">
+
+<head>
+    
+    
+    <title>Kotlin中的单例模式--归零幻想的博客</title>
+    <meta charset="UTF-8">
+    <!--移动设备不缩放-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="alternate" type="application/rss+xml" title="归零幻想" href="https://ntutn.top/rss.xml" />
+    <!--github的markdown样式-->
+    <link rel="stylesheet" href="/res/css/github-markdown.css">
+    <!--一个基于bootstrap的样式-->
+    <link rel="stylesheet" href="/res/css/main.css">
+
+    <script src="/res/js/jquery.min.js"></script>
+    <script src="/res/js/popper.min.js"></script>
+    <script src="/res/js/bootstrap.min.js"></script>
+
+    <style>
+        /*图片缩放*/
+        .imageWrapper {
+            max-width: 500px;
+            max-height: 100%;
+            display: block;
+            margin: 0 auto;
+        }
+
+        /*背景图片*/
+        body {
+            background: url(https://unsplash.it/1600/900?random);
+            background-attachment: fixed;
+            background-position: bottom center;
+            background-size: cover;
+        }
+    </style>
+    <script src="/res/js/zoomify.min.js"></script>
+    <link href="/res/css/zoomify.min.css" rel="stylesheet">
+
+    <script>
+        $(document).ready(function () {
+            $(".markdown-body img").each(function () {
+                divImageWrapper = $(this).after("<div class='imageWrapper'></div>")
+                $(this).appendTo($(this).next())
+            })
+            $(".markdown-body img").zoomify()
+        })
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <nav id="nav" class="navbar navbar-expand-lg navbar-light bg-light">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
+                aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="/"><img src="/res/logo.png" width="70" height="40"
+                    class="d-inline-block align-top" alt="">
+                <span>归零幻想的博客</span></a>
+
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                    <li id="n_home" class="nav-item">
+                        <a class="nav-link" href="/">主页</a>
+                    </li>
+                    <!-- <li id="n_tags" class="nav-item">
+                        <a class="nav-link" href="/tags">标签</a>
+                    </li> -->
+                    <li id="n_about" class="nav-item">
+                        <a class="nav-link" href="/about.html">关于</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/rss.xml">RSS</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <nav class="mt-3" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+
+                <li class="breadcrumb-item active" aria-current="page">Kotlin中的单例模式</li>
+            </ol>
+        </nav>
+        <div class="card mt-3 mb-3">
+            <div class="card-body markdown-body">
+                <h1 class="card-title text-center realtitle">Kotlin中的单例模式</h1>
+                <!--TODO 时间-->
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2020-08-07</span>&nbsp;
+                    修改时间：<span>2020-08-14</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <br>
+                <div class="card-text"><p>这两天要学习埋点相关的知识，做抖音某页面跳转的埋点，于是就去看下单例模式在<code>Kotlin</code>的实现。</p>
+<h2 id="单例模式">单例模式</h2>
+<p>单例模式是一种常用的软件设计模式，属于创建型模式的一种。许多时候整个系统只需要拥有某个类的一个全局对象，用于协调系统整体的行为。比如我正打算做的这个埋点，这段计时的逻辑就比较适合用单例模式。</p>
+<p>单例模式创建的对象会长期存在，所以一般比较关注它的内存占用问题，希望只有方法被调用才创建对象。这样就在多线程的场景会遇到一些问题，即当两个线程同时调用<code>getInstance()</code>时，都检测到<code>instance</code>为<code>null</code>并各自创建对象，这样就有两个实例被创建，违背了单例模式的原则。</p>
+<h2 id="java中的单例模式">java中的单例模式</h2>
+<p>单例模式有所谓『懒汉式』和『饿汉式』之分，java中最典型的线程安全的两种单例模式大概如此：</p>
+<h3 id="饿汉式">饿汉式</h3>
+<p>饿汉式指没有懒加载，在类加载时就创建实例的单例模式。由于利用了类加载机制，天生线程安全。</p>
+<pre><code class="language-java">/**
+ * 饿汉式
+ */
+public final class SingletoneJava {
+    public static final SingletoneJava INSTANCE;
+
+    private SingletoneJava() {
+    }
+
+    static {
+        System.out.println(&quot;创建实例！&quot;);
+        INSTANCE = new SingletoneJava();
+    }
+
+    public void test() {
+        System.out.println(&quot;测试方法执行！&quot;);
+    }
+}
+</code></pre>
+<h3 id="懒汉式">懒汉式</h3>
+<p>首先贴出代码</p>
+<pre><code class="language-java">/**
+ * 懒汉式
+ */
+public class SingletoneJavaLazy {
+    private volatile static SingletoneJavaLazy instance;
+
+    private SingletoneJavaLazy() {
+    }
+
+    private static SingletoneJavaLazy getInstance() {
+        if (instance == null) {
+            synchronized (SingletoneJavaLazy.class) {
+                if (instance == null) {
+                    instance = new SingletoneJavaLazy();
+                }
+            }
+        }
+        return instance;
+    }
+
+    public void test() {
+        System.out.println(&quot;Hello World by java &quot; + getClass().getSimpleName());
+    }
+}
+</code></pre>
+<p>首先我们注意到的是这里有两次<code>instance</code>为<code>null</code>的判断。内层的判断很简单，<code>instance</code>不存在创建实例，加锁解决线程安全。但加锁的开销不可忽略，为了避免每次<code>getInstance()</code>都加锁，我们只需要在<code>instance</code>为<code>null</code>时加锁就可以了。</p>
+<p>然后注意到这里有一个<code>volatile</code>关键字。搜索相关资料得知这是因为<code>instance = new SingletoneJavaLazy()</code>不是原子操作，执行时有三步操作</p>
+<ol>
+<li><code>instance</code>分配内存</li>
+<li>调用构造函数</li>
+<li>将<code>instance</code>指向内存区域</li>
+</ol>
+<p>jvm可能会进行指令重排导致<code>instance</code>不是<code>null</code>但没有初始化的情况，导致空指针。<code>volatile</code>禁止了指令重新排序，并做了一些底层工作保证可见性。</p>
+<h2 id="kotlin中的通常做法">Kotlin中的通常做法</h2>
+<h3 id="object">object</h3>
+<p><code>Kotlin</code>引入了一个叫做<code>object</code>的类型，实现单例模式就非常简单。</p>
+<pre><code class="language-kotlin">object SingletoneKotlin {
+    fun test(){
+        println(&quot;Kotlin测试！&quot;)
+    }
+}
+</code></pre>
+<p>那么它是『懒汉式』的，还是『饿汉式』的？我们可以用idea提供的工具将他转换为java的实现。</p>
+<ol>
+<li>Tools -&gt; Kotlin -&gt; Show Kotlin Bytecode</li>
+<li>Decompile</li>
+</ol>
+<pre><code class="language-java">public final class SingletoneKotlin {
+   public static final SingletoneKotlin INSTANCE;
+
+   public final void test() {
+      String var1 = &quot;Kotlin测试！&quot;;
+      boolean var2 = false;
+      System.out.println(var1);
+   }
+
+   private SingletoneKotlin() {
+   }
+
+   static {
+      SingletoneKotlin var0 = new SingletoneKotlin();
+      INSTANCE = var0;
+   }
+}
+</code></pre>
+<p>一个标准的饿汉式嘛。</p>
+<h3 id="懒汉式实现">懒汉式实现？</h3>
+<p>我们可以参考java中的实现写出<code>Kotlin</code>的单例模式懒汉式实现。</p>
+<pre><code class="language-kotlin">/**
+ * 懒汉式
+ */
+class SingletoneKotlinLazy private constructor() {
+    fun test() {
+        println(&quot;Hello World by Kotlin ${javaClass.simpleName}&quot;)
+    }
+
+    companion object {
+        @Volatile
+        private var instance: SingletoneKotlinLazy? = null
+
+        fun getInstance(): SingletoneKotlinLazy {
+            return instance?: synchronized(SingletoneKotlinLazy::class.java){
+                return instance?:SingletoneKotlinLazy()
+            }
+        }
+    }
+}
+</code></pre>
+<p>不过还有更简单的实现。</p>
+<pre><code class="language-kotlin">class SingletoneKotlinLazy {
+    companion object {
+        val instance by lazy {
+            SingletoneKotlinLazy()
+        }
+    }
+
+    fun test(){
+        println(&quot;Hello World by Kotlin ${javaClass.simpleName}&quot;)
+    }
+}
+</code></pre>
+<p><code>lazy()</code>是接受一个lambda返回一个<code>Lazy&lt;T&gt;</code>的函数，默认参数内部实现正是双重检测的机制。所以，起飞！</p>
+<h2 id="懒汉式与饿汉式差别有多大">懒汉式与饿汉式差别有多大</h2>
+<p><del>饿汉式创建实例在类加载时</del>，那么jvm在何时进行类加载呢？我们调用下看看。</p>
+<blockquote>
+<p>查资料并<a href="https://github.com/zerofancy/singletone">写demo</a>验证得知static代码块执行并不是在类加载时，而是在初始化时。<strong>所以懒汉式那还有啥用？我现在很疑惑。</strong></p>
+</blockquote>
+<pre><code class="language-kotlin">fun main(){
+    println(&quot;Hello World!&quot;)
+    SingletoneJava.INSTANCE.test()
+    SingletoneKotlin.test()
+}
+</code></pre>
+<p>输出结果：</p>
+<pre><code>Hello World!
+创建实例！
+测试方法执行！
+Kotlin测试！
+
+</code></pre>
+<p>好像……也是在实际执行方法时创建的实例？那么和懒汉式也没区别啊。</p>
+<p>事实上，jvm并没有强制的规范规定何时进行类加载，这取决于jvm的具体实现。</p>
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://zh.wikipedia.org/wiki/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F">单例模式 - 维基百科</a></li>
+<li><a href="https://blog.csdn.net/bjweimengshu/article/details/78716839">漫画：什么是单例模式？（整合版）</a></li>
+<li><a href="https://lotabout.me/2019/Java-volatile-keyword/">理解 Java volatile 关键字</a></li>
+</ul>
+</div>
+            </div>
+            <script src="https://utteranc.es/client.js" repo="zerofancy/zerofancy.github.io" issue-term="Kotlin中的单例模式"
+                theme="github-light" crossorigin="anonymous" async>
+                </script>
+        </div>
+        <!-- 页脚 -->
+        <footer class="navbar navbar-light bg-light">
+            <p>版权所有：归零幻想 ┊ 备案号：<a href="http://beian.miit.gov.cn/">暂无</a>┊ Powered by：归零幻想</p>
+        </footer>
+    </div>
+</body>
+
+</html>

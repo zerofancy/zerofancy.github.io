@@ -1,0 +1,243 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans">
+
+<head>
+    
+    
+    <title>线性表ADT的实现--归零幻想的博客</title>
+    <meta charset="UTF-8">
+    <!--移动设备不缩放-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="alternate" type="application/rss+xml" title="归零幻想" href="https://ntutn.top/rss.xml" />
+    <!--github的markdown样式-->
+    <link rel="stylesheet" href="/res/css/github-markdown.css">
+    <!--一个基于bootstrap的样式-->
+    <link rel="stylesheet" href="/res/css/main.css">
+
+    <script src="/res/js/jquery.min.js"></script>
+    <script src="/res/js/popper.min.js"></script>
+    <script src="/res/js/bootstrap.min.js"></script>
+
+    <style>
+        /*图片缩放*/
+        .imageWrapper {
+            max-width: 500px;
+            max-height: 100%;
+            display: block;
+            margin: 0 auto;
+        }
+
+        /*背景图片*/
+        body {
+            background: url(https://unsplash.it/1600/900?random);
+            background-attachment: fixed;
+            background-position: bottom center;
+            background-size: cover;
+        }
+    </style>
+    <script src="/res/js/zoomify.min.js"></script>
+    <link href="/res/css/zoomify.min.css" rel="stylesheet">
+
+    <script>
+        $(document).ready(function () {
+            $(".markdown-body img").each(function () {
+                divImageWrapper = $(this).after("<div class='imageWrapper'></div>")
+                $(this).appendTo($(this).next())
+            })
+            $(".markdown-body img").zoomify()
+        })
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <nav id="nav" class="navbar navbar-expand-lg navbar-light bg-light">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
+                aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="/"><img src="/res/logo.png" width="70" height="40"
+                    class="d-inline-block align-top" alt="">
+                <span>归零幻想的博客</span></a>
+
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                    <li id="n_home" class="nav-item">
+                        <a class="nav-link" href="/">主页</a>
+                    </li>
+                    <!-- <li id="n_tags" class="nav-item">
+                        <a class="nav-link" href="/tags">标签</a>
+                    </li> -->
+                    <li id="n_about" class="nav-item">
+                        <a class="nav-link" href="/about.html">关于</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/rss.xml">RSS</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <nav class="mt-3" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+
+                <li class="breadcrumb-item active" aria-current="page">线性表ADT的实现</li>
+            </ol>
+        </nav>
+        <div class="card mt-3 mb-3">
+            <div class="card-body markdown-body">
+                <h1 class="card-title text-center realtitle">线性表ADT的实现</h1>
+                <!--TODO 时间-->
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2019-05-13</span>&nbsp;
+                    修改时间：<span>2019-05-13</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <br>
+                <div class="card-text"><h1 id="线性表adt的实现">线性表ADT的实现</h1>
+<p>数据结构平时测试的题目开放了，这次平时测试睡过了，全宿舍都睡过了。现在回头做做题目，还是有坑点的。</p>
+<h2 id="question">Question</h2>
+<p>假设线性表ADT的数据元素类型为正整数，采用带头结点的单链式存储结构。线性表ADT实现的大部分代码已经给出，请补充写出类的两个成员函数<code>insert</code>和<code>reverse</code>。  注意：<strong>只需提交需要补充的函数代码，其他代码不能自己重写和修改。</strong></p>
+<p><code>insert</code>函数：在元素值从小到大有序的线性表中插入一个元素，仍然保持有序。</p>
+<p><code>reverse</code>函数：实现线性表元素的倒置，即将线性表中数据元素的顺序反转。</p>
+<p>线性表元素输入时，以 <code>endTag</code> 作为结束标志。</p>
+<p>例如输入：</p>
+<pre><code>3 8 7 2 4 9 1 6 5 0
+</code></pre>
+<p>则输出：</p>
+<pre><code>9 8 7 6 5 4 3 2 1
+</code></pre>
+<p>预置代码如下： （其中/*   */ 部分是要补充的<code>insert</code>和<code>reverse</code>函数）</p>
+<pre><code class="language-cpp">#include&lt;iostream&gt;
+#include&lt;stdlib.h&gt;
+using namespace std;
+typedef int ElemType;  //数据元素类型
+class List; //前视定义,否则友元无法定义
+//结点类定义
+class LinkNode
+{  friend  class List; 
+   private: 
+     LinkNode *link; 
+     ElemType data;  
+   public: 
+     LinkNode (LinkNode *ptr = NULL)    {link=ptr;}
+     LinkNode(const ElemType &amp; item, LinkNode *ptr = NULL){  data=item;link=ptr;} 
+     ~LinkNode(){}; 
+}; 
+//单链表类定义 
+class List   
+{  private:    
+     LinkNode *first; //指向链表头结点的指针          
+   public:
+     List (ElemType x) { first = new LinkNode (x);}   // 带头结点
+     ~List (){ MakeEmpty();}         //析构函数
+     void MakeEmpty ( );      //线性表置空    
+     void insert(ElemType val);   //在有序线性表中插入元素val
+     void reverse();   //线性表的倒置
+     void output();    //线性表的输出               
+}; 
+void List:: MakeEmpty ( )
+ { LinkNode *q;
+   while (  first-&gt;link != NULL ) 
+	{ q = first-&gt;link;  //指向别摘下结点 
+      first-&gt;link = q-&gt;link;//从链中摘下结点
+      delete q;        //释放摘下的结点 
+    }
+};	
+void List ::output ( )
+{  LinkNode  *p=first-&gt;link; 
+   while(p!=NULL)
+   { if(p==first-&gt;link) cout&lt;&lt;p-&gt;data;
+     else  cout&lt;&lt;&quot; &quot;&lt;&lt;p-&gt;data;
+     p=p-&gt;link;
+   }
+   cout&lt;&lt;endl;
+}
+/*
+**************************************************
+请写出 insert 成员函数
+**************************************************
+**************************************************
+请写出 reverse 成员函数
+**************************************************
+*/
+int  main()
+{   List list(0);
+    ElemType endTag=0;
+    ElemType val;
+    //下面通过不断读入元素，插入到有序单链表中，建立从小到大的有序单链表
+    cin&gt;&gt;val;
+    while(val!=endTag) 
+     {  list.insert(val);     //在有序表中插入一个元素
+        cin&gt;&gt;val;  
+      }
+    list.reverse ();   //线性表倒置
+    cout&lt;&lt;&quot;The result is:&quot;&lt;&lt;endl;
+    list.output ();
+    return 0;
+}
+</code></pre>
+<h2 id="分析">分析</h2>
+<p>基础题，注意边界的判断和特例的处理。</p>
+<h2 id="answer">Answer</h2>
+<pre><code class="language-cpp">/*
+
+**************************************************
+
+请写出 insert 成员函数
+
+**************************************************
+*/
+void List::insert(ElemType val){
+    LinkNode*pNew=new LinkNode(val);
+    LinkNode*pPointer=first;
+    while(pPointer-&gt;link!=NULL){
+        if(val&lt;pPointer-&gt;link-&gt;data){
+            pNew-&gt;link=pPointer-&gt;link;
+            pPointer-&gt;link=pNew;
+            return;
+        }
+        pPointer=pPointer-&gt;link;
+    }
+    pPointer-&gt;link=pNew;
+}
+/*
+**************************************************
+
+请写出 reverse 成员函数
+
+**************************************************
+
+*/
+
+void List::reverse(){
+    if(first-&gt;link==NULL||first-&gt;link-&gt;link==NULL){
+        return;
+    }
+    LinkNode*pParent=first-&gt;link;
+    LinkNode*pChild=first-&gt;link-&gt;link;
+    first-&gt;link-&gt;link=NULL;
+    while(pChild!=NULL){
+        LinkNode*pTemp=pChild-&gt;link;
+        pChild-&gt;link=pParent;
+        pParent=pChild;
+        pChild=pTemp;
+    }
+    first-&gt;link=pParent;
+}
+
+</code></pre>
+</div>
+            </div>
+            <script src="https://utteranc.es/client.js" repo="zerofancy/zerofancy.github.io" issue-term="线性表ADT的实现"
+                theme="github-light" crossorigin="anonymous" async>
+                </script>
+        </div>
+        <!-- 页脚 -->
+        <footer class="navbar navbar-light bg-light">
+            <p>版权所有：归零幻想 ┊ 备案号：<a href="http://beian.miit.gov.cn/">暂无</a>┊ Powered by：归零幻想</p>
+        </footer>
+    </div>
+</body>
+
+</html>

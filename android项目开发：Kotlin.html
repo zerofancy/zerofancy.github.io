@@ -1,0 +1,584 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans">
+
+<head>
+    
+    
+    <title>android项目开发：Kotlin--归零幻想的博客</title>
+    <meta charset="UTF-8">
+    <!--移动设备不缩放-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="alternate" type="application/rss+xml" title="归零幻想" href="https://ntutn.top/rss.xml" />
+    <!--github的markdown样式-->
+    <link rel="stylesheet" href="/res/css/github-markdown.css">
+    <!--一个基于bootstrap的样式-->
+    <link rel="stylesheet" href="/res/css/main.css">
+
+    <script src="/res/js/jquery.min.js"></script>
+    <script src="/res/js/popper.min.js"></script>
+    <script src="/res/js/bootstrap.min.js"></script>
+
+    <style>
+        /*图片缩放*/
+        .imageWrapper {
+            max-width: 500px;
+            max-height: 100%;
+            display: block;
+            margin: 0 auto;
+        }
+
+        /*背景图片*/
+        body {
+            background: url(https://unsplash.it/1600/900?random);
+            background-attachment: fixed;
+            background-position: bottom center;
+            background-size: cover;
+        }
+    </style>
+    <script src="/res/js/zoomify.min.js"></script>
+    <link href="/res/css/zoomify.min.css" rel="stylesheet">
+
+    <script>
+        $(document).ready(function () {
+            $(".markdown-body img").each(function () {
+                divImageWrapper = $(this).after("<div class='imageWrapper'></div>")
+                $(this).appendTo($(this).next())
+            })
+            $(".markdown-body img").zoomify()
+        })
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <nav id="nav" class="navbar navbar-expand-lg navbar-light bg-light">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
+                aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="/"><img src="/res/logo.png" width="70" height="40"
+                    class="d-inline-block align-top" alt="">
+                <span>归零幻想的博客</span></a>
+
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                    <li id="n_home" class="nav-item">
+                        <a class="nav-link" href="/">主页</a>
+                    </li>
+                    <!-- <li id="n_tags" class="nav-item">
+                        <a class="nav-link" href="/tags">标签</a>
+                    </li> -->
+                    <li id="n_about" class="nav-item">
+                        <a class="nav-link" href="/about.html">关于</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/rss.xml">RSS</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <nav class="mt-3" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+
+                <li class="breadcrumb-item active" aria-current="page">android项目开发：Kotlin</li>
+            </ol>
+        </nav>
+        <div class="card mt-3 mb-3">
+            <div class="card-body markdown-body">
+                <h1 class="card-title text-center realtitle">android项目开发：Kotlin</h1>
+                <!--TODO 时间-->
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2020-12-09</span>&nbsp;
+                    修改时间：<span>2020-12-09</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <br>
+                <div class="card-text"><h1 id="kotlin">Kotlin</h1>
+<h2 id="变量和函数">变量和函数</h2>
+<h3 id="变量">变量</h3>
+<p>用<code>var</code>和<code>val</code>定义变量，并有类型自动推导的支持。</p>
+<p><code>val</code>用来声明一个不可变的变量，<code>var</code>用来声明一个可变的变量。</p>
+<pre><code class="language-kotlin">val a = 10
+var b: Int = 12
+</code></pre>
+<p>Kotlin完全抛弃了java中的基本数据类型，完全使用对象数据类型。</p>
+<table>
+<thead>
+<tr><th>java基本数据类型</th><th>Kotlin对象数据类型</th><th>数据类型说明</th></tr>
+</thead>
+<tbody>
+<tr><td>int</td><td>Int</td><td>整型</td></tr>
+<tr><td>long</td><td>Long</td><td>长整型</td></tr>
+<tr><td>short</td><td>Short</td><td>短整型</td></tr>
+<tr><td>float</td><td>Float</td><td>单精度浮点型</td></tr>
+<tr><td>double</td><td>Double</td><td>双精度浮点型</td></tr>
+<tr><td>boolean</td><td>Boolean</td><td>布尔型</td></tr>
+<tr><td>char</td><td>Char</td><td>字符型</td></tr>
+<tr><td>byte</td><td>Byte</td><td>字节型</td></tr>
+</tbody>
+</table>
+<h3 id="函数">函数</h3>
+<p>语法：</p>
+<pre><code class="language-kotlin">fun main(args: Array&lt;String&gt;) {
+    println(&quot;Hello World!&quot;)
+}
+</code></pre>
+<p>Kotlin中的函数在无必要时可以省略很多东西：</p>
+<pre><code class="language-kotlin">import kotlin.math.max
+
+fun largerNumber(a: Int, b: Int) = max(a, b)
+
+fun main(args: Array&lt;String&gt;) {
+    val a = 3
+    val b = 5
+    println(&quot;The larger number of a and b is ${largerNumber(a, b)}&quot;)
+}
+</code></pre>
+<h2 id="程序的逻辑控制">程序的逻辑控制</h2>
+<h3 id="if">if</h3>
+<p>与java中的if语句相比，Kotlin中的if是可以有返回值的。</p>
+<pre><code class="language-kotlin">fun judge(score: Int) = if (score &gt;= 60) &quot;你及格了&quot; else &quot;你还需要多努力&quot;
+
+fun main() {
+    println(judge(55))
+    println(judge(66))
+}
+</code></pre>
+<p>与此同时，Kotlin不再有java中的三元运算符<sup id="fnref-1"><a class="footnote-ref" href="#fn-1">1</a></sup>，语义上清晰了很多。</p>
+<h3 id="when条件语句">when条件语句</h3>
+<p>类似于java中的switch语句，根据变量的值执行不同的逻辑。</p>
+<pre><code class="language-kotlin">fun judge(score: Int) = if (score &gt;= 60) &quot;你及格了&quot; else &quot;你还需要多努力&quot;
+
+fun getScore(name: String) = when (name) {
+    &quot;Tom&quot; -&gt; 78
+    &quot;Jack&quot; -&gt; 35
+    &quot;Jerry&quot; -&gt; 84
+    &quot;Lee&quot; -&gt; 57
+    else -&gt; 0
+}
+
+fun main() {
+    println(judge(getScore(&quot;Tom&quot;)))
+    println(judge(getScore(&quot;Jack&quot;)))
+    println(judge(getScore(&quot;Bill&quot;)))
+}
+</code></pre>
+<p>对我来说，最令人振奋的是再也不需要在每个分支里面都写个break了。其次when也是有返回值的，这和其他特性组合写出来的代码非常简洁优雅。</p>
+<p>写个小demo吧。</p>
+<pre><code class="language-kotlin">interface Speakable {
+    fun speak()
+}
+
+class Dog : Speakable {
+    override fun speak() {
+        println(&quot;汪汪汪&quot;)
+    }
+}
+
+class Cat : Speakable {
+    override fun speak() {
+        println(&quot;喵喵喵&quot;)
+    }
+
+    fun climb() {
+        println(&quot;小猫会爬树&quot;)
+    }
+}
+
+fun generateAnimal(): Speakable? = when ((1..3).random()) {
+    1 -&gt; Dog()
+    2 -&gt; Cat()
+    else -&gt; null
+}
+
+fun main() {
+    when (val animal = generateAnimal()) {
+        is Dog -&gt; {
+            println(&quot;生成的动物是小狗&quot;)
+            animal.speak()
+        }
+        is Cat -&gt; {
+            println(&quot;生成的动物是小猫&quot;)
+            animal.speak()
+            animal.climb()
+        }
+        else -&gt; println(&quot;生成动物时出现问题&quot;)
+    }
+}
+</code></pre>
+<h3 id="循环语句">循环语句</h3>
+<p>Kotlin中有两类循环，其中<code>while</code>循环与java学过的while循环非常相似，只说下有差异的<code>for</code>循环吧。</p>
+<p>Kotlin的for循环只有for..in式的了，如<code>for(i in list)</code>。</p>
+<p>但有时对数组下标进行遍历还是有必要的。于是我们要先了解下Kotlin的<code>区间</code>的概念。</p>
+<pre><code class="language-kotlin">val range = 1..10
+</code></pre>
+<p>这表示<code>[1,10]</code>。但很多时候，我们需要左开右闭区间，比如数组有三个元素，我们需要<code>[0,3)</code>表示数组的下标。此时可以使用<code>util</code>关键字。</p>
+<pre><code class="language-kotlin">val indexRange = 0 util 3
+</code></pre>
+<p>有了range再和前面的for配合就完全可以替代之前java里面的for的作用了：</p>
+<pre><code class="language-kotlin">val array = arrayOf(&quot;Bob&quot;, &quot;John&quot;, &quot;Jackson&quot;)
+for (i in 0 util array.size) {
+    println(&quot;$i:${array[i]}&quot;)
+}
+</code></pre>
+<p>此外，还可以用<code>step</code>指定步长值，实现”隔几个输出一次“的效果：</p>
+<pre><code class="language-kotlin">for (i in 0 util 10 step 2) {
+    println(i)
+}
+</code></pre>
+<p>如果需要10循环到1,则需要<code>downTo</code>关键字，</p>
+<pre><code class="language-kotlin">for (i in 10 downTo 1) {
+    println(i)
+}
+</code></pre>
+<h2 id="面向对象编程">面向对象编程</h2>
+<h3 id="类与对象">类与对象</h3>
+<p>与java的class相比Kotlin的class看上去没有多少改变，但创建对象不用new了。</p>
+<pre><code class="language-kotlin">class Person(val name: String) {
+    fun speak() = &quot;$name is speaking.&quot;
+}
+
+fun main() {
+    Person(&quot;Jack&quot;).speak()
+}
+</code></pre>
+<h3 id="继承与构造函数">继承与构造函数</h3>
+<p>与java类似，Kotlin仍然是单继承，可以继承一个类实现多个接口。但继承的写法与java略有不同。</p>
+<pre><code class="language-kotlin">open class Animal//非抽象类只有带了open才可以继承
+
+interface Speakable {
+    fun speak()
+}
+
+class Dog : Animal(), Speakable {
+    override fun speak() {
+        println(&quot;汪汪汪&quot;)
+    }
+}
+
+class Cat : Animal(), Speakable {
+    override fun speak() {
+        println(&quot;喵喵喵&quot;)
+    }
+
+    fun climb() {
+        println(&quot;小猫会爬树&quot;)
+    }
+}
+</code></pre>
+<p>Kotlin中的构造函数分为主构造函数和次构造函数。如：</p>
+<pre><code class="language-kotlin">class Student(val sno: String, val grade: Int, name: String, age: Int) {
+    constructor(name: String, age: Int) : this(&quot;&quot;, 0, name, age)
+
+    constructor() : this(&quot;&quot;, 0)
+
+    init {
+        println(&quot;$age 的 $name 被初始化了。&quot;)
+    }
+}
+</code></pre>
+<p>次构造函数必须调用主构造函数（如果有），继承一个类必须调用他的构造函数（这也是为什么常常继承的类后面带着个括号）。</p>
+<blockquote>
+<p>Kotlin函数的参数可以有默认值的，大多数情况根本不需要使用多个构造函数。</p>
+</blockquote>
+<p>主构造函数中<code>val</code>和<code>var</code>标记的变量将直接成为类的属性，没有这个标记的变量则只能在init block中访问。</p>
+<h3 id="接口">接口</h3>
+<p>接口与java的接口是类似的。</p>
+<pre><code class="language-kotlin">interface Study {
+    fun readBooks()
+
+    fun doHomework() {
+        println(&quot;Do homework default implementation&quot;)
+    }
+}
+</code></pre>
+<p>java与Kotlin中的可见性修饰略有不同。</p>
+<table>
+<thead>
+<tr><th>修饰符</th><th>java</th><th>Kotlin</th></tr>
+</thead>
+<tbody>
+<tr><td>public</td><td>所有类可见</td><td>所有类可见（默认）</td></tr>
+<tr><td>private</td><td>当前类可见</td><td>当前类可见</td></tr>
+<tr><td>protected</td><td>当前类、子类、同一包路径下的类可见</td><td>当前类、子类可见</td></tr>
+<tr><td>default</td><td>同一包路径下的类可见</td><td>无</td></tr>
+<tr><td>internal</td><td>无</td><td>同一模块中的类可见</td></tr>
+</tbody>
+</table>
+<h3 id="数据类与单例类">数据类与单例类</h3>
+<p>数据类在当今的系统设计中占据了重要的地位，他们格式非常固定，一般实现各种构造函数、getter和setter，重写<code>equals()</code>、<code>hashCode()</code>、<code>toString()</code>
+这几个方法，真的写腻了。很多ide都提供了一键生成这些样板代码的方法，更有项目Lombok添加个注解在编译时生成这些方法<sup id="fnref-2"><a class="footnote-ref" href="#fn-2">2</a></sup>。</p>
+<p>而Kotlin中对于数据类有了专门的支持。</p>
+<pre><code class="language-kotlin">data class Student(val sno: String, val name: String, var age: Int)
+</code></pre>
+<p>idea对于Kotlin有很好的支持。我们用下面的步骤将上面的代码转换为java形式：</p>
+<ol>
+<li>Tools-&gt;Kotlin-&gt;Show Kotlin ByteCode</li>
+<li>Decompile</li>
+</ol>
+<p>得到的代码如下：</p>
+<pre><code class="language-java">import kotlin.Metadata;
+import kotlin.jvm.internal.Intrinsics;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+@Metadata(
+        mv = {1, 4, 0},
+        bv = {1, 0, 3},
+        k = 1,
+        d1 = {&quot;\u0000\&quot;\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0000\n\u0002\u0010\u000e\n\u0002\b\u0002\n\u0002\u0010\b\n\u0002\b\r\n\u0002\u0010\u000b\n\u0002\b\u0004\b\u0086\b\u0018\u00002\u00020\u0001B\u001d\u0012\u0006\u0010\u0002\u001a\u00020\u0003\u0012\u0006\u0010\u0004\u001a\u00020\u0003\u0012\u0006\u0010\u0005\u001a\u00020\u0006¢\u0006\u0002\u0010\u0007J\t\u0010\u000f\u001a\u00020\u0003HÆ\u0003J\t\u0010\u0010\u001a\u00020\u0003HÆ\u0003J\t\u0010\u0011\u001a\u00020\u0006HÆ\u0003J'\u0010\u0012\u001a\u00020\u00002\b\b\u0002\u0010\u0002\u001a\u00020\u00032\b\b\u0002\u0010\u0004\u001a\u00020\u00032\b\b\u0002\u0010\u0005\u001a\u00020\u0006HÆ\u0001J\u0013\u0010\u0013\u001a\u00020\u00142\b\u0010\u0015\u001a\u0004\u0018\u00010\u0001HÖ\u0003J\t\u0010\u0016\u001a\u00020\u0006HÖ\u0001J\t\u0010\u0017\u001a\u00020\u0003HÖ\u0001R\u001a\u0010\u0005\u001a\u00020\u0006X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b\b\u0010\t\&quot;\u0004\b\n\u0010\u000bR\u0011\u0010\u0004\u001a\u00020\u0003¢\u0006\b\n\u0000\u001a\u0004\b\f\u0010\rR\u0011\u0010\u0002\u001a\u00020\u0003¢\u0006\b\n\u0000\u001a\u0004\b\u000e\u0010\r¨\u0006\u0018&quot;},
+        d2 = {&quot;LStudent;&quot;, &quot;&quot;, &quot;sno&quot;, &quot;&quot;, &quot;name&quot;, &quot;age&quot;, &quot;&quot;, &quot;(Ljava/lang/String;Ljava/lang/String;I)V&quot;, &quot;getAge&quot;, &quot;()I&quot;, &quot;setAge&quot;, &quot;(I)V&quot;, &quot;getName&quot;, &quot;()Ljava/lang/String;&quot;, &quot;getSno&quot;, &quot;component1&quot;, &quot;component2&quot;, &quot;component3&quot;, &quot;copy&quot;, &quot;equals&quot;, &quot;&quot;, &quot;other&quot;, &quot;hashCode&quot;, &quot;toString&quot;, &quot;kotlin-learning.main&quot;}
+)
+public final class Student {
+    @NotNull
+    private final String sno;
+    @NotNull
+    private final String name;
+    private int age;
+
+    @NotNull
+    public final String getSno() {
+        return this.sno;
+    }
+
+    @NotNull
+    public final String getName() {
+        return this.name;
+    }
+
+    public final int getAge() {
+        return this.age;
+    }
+
+    public final void setAge(int var1) {
+        this.age = var1;
+    }
+
+    public Student(@NotNull String sno, @NotNull String name, int age) {
+        Intrinsics.checkNotNullParameter(sno, &quot;sno&quot;);
+        Intrinsics.checkNotNullParameter(name, &quot;name&quot;);
+        super();
+        this.sno = sno;
+        this.name = name;
+        this.age = age;
+    }
+
+    @NotNull
+    public final String component1() {
+        return this.sno;
+    }
+
+    @NotNull
+    public final String component2() {
+        return this.name;
+    }
+
+    public final int component3() {
+        return this.age;
+    }
+
+    @NotNull
+    public final Student copy(@NotNull String sno, @NotNull String name, int age) {
+        Intrinsics.checkNotNullParameter(sno, &quot;sno&quot;);
+        Intrinsics.checkNotNullParameter(name, &quot;name&quot;);
+        return new Student(sno, name, age);
+    }
+
+    // $FF: synthetic method
+    public static Student copy$default(Student var0, String var1, String var2, int var3, int var4, Object var5) {
+        if ((var4 &amp; 1) != 0) {
+            var1 = var0.sno;
+        }
+
+        if ((var4 &amp; 2) != 0) {
+            var2 = var0.name;
+        }
+
+        if ((var4 &amp; 4) != 0) {
+            var3 = var0.age;
+        }
+
+        return var0.copy(var1, var2, var3);
+    }
+
+    @NotNull
+    public String toString() {
+        return &quot;Student(sno=&quot; + this.sno + &quot;, name=&quot; + this.name + &quot;, age=&quot; + this.age + &quot;)&quot;;
+    }
+
+    public int hashCode() {
+        String var10000 = this.sno;
+        int var1 = (var10000 != null ? var10000.hashCode() : 0) * 31;
+        String var10001 = this.name;
+        return (var1 + (var10001 != null ? var10001.hashCode() : 0)) * 31 + this.age;
+    }
+
+    public boolean equals(@Nullable Object var1) {
+        if (this != var1) {
+            if (var1 instanceof Student) {
+                Student var2 = (Student) var1;
+                if (Intrinsics.areEqual(this.sno, var2.sno) &amp;&amp; Intrinsics.areEqual(this.name, var2.name) &amp;&amp; this.age == var2.age) {
+                    return true;
+                }
+            }
+
+            return false;
+        } else {
+            return true;
+        }
+    }
+}
+
+</code></pre>
+<p>孰优孰劣，一目了然。</p>
+<p>类似的，Kotlin也对单例类提供了支持。如：</p>
+<pre><code class="language-kotlin">object Singleton {
+    fun singletonTest() {
+        println(&quot;Singleton test is called.&quot;)
+    }
+}
+</code></pre>
+<p>这和你费了半天劲写出来的java代码作用是一样的：</p>
+<pre><code class="language-java">import kotlin.Metadata;
+
+@Metadata(
+        mv = {1, 4, 0},
+        bv = {1, 0, 3},
+        k = 1,
+        d1 = {&quot;\u0000\u0012\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0002\b\u0002\n\u0002\u0010\u0002\n\u0000\bÆ\u0002\u0018\u00002\u00020\u0001B\u0007\b\u0002¢\u0006\u0002\u0010\u0002J\u0006\u0010\u0003\u001a\u00020\u0004¨\u0006\u0005&quot;},
+        d2 = {&quot;LSingleton;&quot;, &quot;&quot;, &quot;()V&quot;, &quot;singletonTest&quot;, &quot;&quot;, &quot;kotlin-learning.main&quot;}
+)
+public final class Singleton {
+    public static final Singleton INSTANCE;
+
+    public final void singletonTest() {
+        String var1 = &quot;Singleton test is called.&quot;;
+        boolean var2 = false;
+        System.out.println(var1);
+    }
+
+    private Singleton() {
+    }
+
+    static {
+        Singleton var0 = new Singleton();
+        INSTANCE = var0;
+    }
+}
+
+</code></pre>
+<h2 id="lambda编程">Lambda编程</h2>
+<pre><code class="language-kotlin">fun main() {
+    val map = mapOf(&quot;Apple&quot; to 1, &quot;Banana&quot; to 2, &quot;Orange&quot; to 3, &quot;Pear&quot; to 4, &quot;Grape&quot; to 5)
+    for ((fruit, number) in map) {
+        println(&quot;fruit is $fruit, number is $number&quot;)
+    }
+}
+</code></pre>
+<h3 id="函数式api">函数式API</h3>
+<h4 id="maxby">maxBy</h4>
+<p>集合中最长的字符串。</p>
+<h3 id="map">map</h3>
+<p>将集合中每个元素都映射到另一个元素。</p>
+<h4 id="filter">filter</h4>
+<p>过滤集合中的数据。</p>
+<h4 id="any">any</h4>
+<p>至少有一个元素满足条件。</p>
+<h4 id="all">all</h4>
+<p>所有元素都满足条件。</p>
+<h3 id="java函数式api">Java函数式API</h3>
+<p>对于java中的单抽象方法可使用函数式API。</p>
+<pre><code class="language-kotlin">Thread {
+    println(&quot;Thread is running&quot;)
+}.start()
+</code></pre>
+<h2 id="空指针检查">空指针检查</h2>
+<p>写java时最常见的错误就是<code>java.lang.NullPointerException</code>了吧。在Kotlin中，情况有一些改善。</p>
+<p>与java不同，Kotlin中的变量默认是不可空的。</p>
+<pre><code class="language-kotlin">fun doStudy(study: Study) {
+    study.readBooks()
+    study.doHomework()
+}
+</code></pre>
+<p>如果你给这个函数传一个可能为null的值，在编译期间就会得到错误提示。</p>
+<p>当然，很多情况我们还是需要让我们的函数接受一个可空的值的，则可以用这样的写法：</p>
+<pre><code class="language-kotlin">fun doStudy(study: Study?) {
+    if (study != null) {
+        study.readBooks()
+        study.doHomework()
+    }
+}
+</code></pre>
+<p>但在Kotlin中还有更好的方法：</p>
+<pre><code class="language-kotlin">fun doStudy(study: Study?) {
+    study?.readBooks()
+    study?.doHomework()
+}
+</code></pre>
+<p>用上<code>let</code>我们还可以写得更优雅：</p>
+<pre><code class="language-kotlin">fun doStudy(study: Study?) {
+    study?.let {
+        it.readBooks()
+        it.doHomework()
+    }
+}
+</code></pre>
+<p><code>?.</code>表示只有不为空时才正常调用。</p>
+<p>有时我们需要这样的逻辑：</p>
+<pre><code class="language-kotlin">fun getTextLength(text: String?): Int {
+    if (text != null) {
+        return text.length
+    }
+    return 0
+}
+</code></pre>
+<p>Kotlin也有个方便的操作符：</p>
+<pre><code class="language-kotlin">fun getTextLength(text: String?) = text?.length ?: 0
+</code></pre>
+<p><code>?:</code>表示前面为空时返回后面的值。</p>
+<p>当然，有些业务逻辑中Kotlin不一定能正确推断出你的变量是否可能为空，这时Kotlin也提供了让你自己操纵它的机会：</p>
+<pre><code class="language-kotlin">var content: String? = null
+
+fun initContent() {
+    content = &quot;https://ntutn.top&quot;
+}
+
+fun main() {
+    initContent()
+    if (content != null) {
+        printContent()
+    }
+}
+
+fun printContent() {
+    println(content!!)
+}
+</code></pre>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn-1">
+<p>参考<a href="https://www.w3cschool.cn/java/java-ternary-operator.html">Java中的三元运算符</a></p>
+<a href="#fnref-1" class="footnote-backref">&#8617;</a>
+</li>
+<li id="fn-2">
+<p><a href="https://projectlombok.org/">Lombok</a>，用注解的方式简化java代码，但要求使用的ide必须安装lombok插件才能正确识别lombok生成的代码，有人认为这是在”强奸队友“。另外lombok的实现调用了jdk未公开的方法也引发争议。</p>
+<a href="#fnref-2" class="footnote-backref">&#8617;</a>
+</li>
+</ol>
+</div>
+</div>
+            </div>
+            <script src="https://utteranc.es/client.js" repo="zerofancy/zerofancy.github.io" issue-term="android项目开发：Kotlin"
+                theme="github-light" crossorigin="anonymous" async>
+                </script>
+        </div>
+        <!-- 页脚 -->
+        <footer class="navbar navbar-light bg-light">
+            <p>版权所有：归零幻想 ┊ 备案号：<a href="http://beian.miit.gov.cn/">暂无</a>┊ Powered by：归零幻想</p>
+        </footer>
+    </div>
+</body>
+
+</html>

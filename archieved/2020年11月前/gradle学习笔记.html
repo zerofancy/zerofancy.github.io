@@ -1,0 +1,431 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans">
+
+<head>
+    
+    
+    <title>gradle学习笔记--归零幻想的博客</title>
+    <meta charset="UTF-8">
+    <!--移动设备不缩放-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="alternate" type="application/rss+xml" title="归零幻想" href="https://ntutn.top/rss.xml" />
+    <!--github的markdown样式-->
+    <link rel="stylesheet" href="/res/css/github-markdown.css">
+    <!--一个基于bootstrap的样式-->
+    <link rel="stylesheet" href="/res/css/main.css">
+
+    <script src="/res/js/jquery.min.js"></script>
+    <script src="/res/js/popper.min.js"></script>
+    <script src="/res/js/bootstrap.min.js"></script>
+
+    <style>
+        /*图片缩放*/
+        .imageWrapper {
+            max-width: 500px;
+            max-height: 100%;
+            display: block;
+            margin: 0 auto;
+        }
+
+        /*背景图片*/
+        body {
+            background: url(https://unsplash.it/1600/900?random);
+            background-attachment: fixed;
+            background-position: bottom center;
+            background-size: cover;
+        }
+    </style>
+    <script src="/res/js/zoomify.min.js"></script>
+    <link href="/res/css/zoomify.min.css" rel="stylesheet">
+
+    <script>
+        $(document).ready(function () {
+            $(".markdown-body img").each(function () {
+                divImageWrapper = $(this).after("<div class='imageWrapper'></div>")
+                $(this).appendTo($(this).next())
+            })
+            $(".markdown-body img").zoomify()
+        })
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <nav id="nav" class="navbar navbar-expand-lg navbar-light bg-light">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
+                aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="/"><img src="/res/logo.png" width="70" height="40"
+                    class="d-inline-block align-top" alt="">
+                <span>归零幻想的博客</span></a>
+
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                    <li id="n_home" class="nav-item">
+                        <a class="nav-link" href="/">主页</a>
+                    </li>
+                    <!-- <li id="n_tags" class="nav-item">
+                        <a class="nav-link" href="/tags">标签</a>
+                    </li> -->
+                    <li id="n_about" class="nav-item">
+                        <a class="nav-link" href="/about.html">关于</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/rss.xml">RSS</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <nav class="mt-3" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+
+                <li class="breadcrumb-item active" aria-current="page">gradle学习笔记</li>
+            </ol>
+        </nav>
+        <div class="card mt-3 mb-3">
+            <div class="card-body markdown-body">
+                <h1 class="card-title text-center realtitle">gradle学习笔记</h1>
+                <!--TODO 时间-->
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2020-11-13</span>&nbsp;
+                    修改时间：<span>2020-11-15</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <br>
+                <div class="card-text"><p>新建一个安卓项目，<code>Android Studio</code>已经为我们生成的模板中，<code>build.gradle</code>总是很显眼。我也终于下定决心来了解下这个构建整合工具。</p>
+<p>gradle脚本使用<code>groovy</code>编写，最近也开始支持用<code>Kotlin</code>编写。Kotlin大法好，但我暂时只找到了groovy的教程<sup id="fnref-3"><a class="footnote-ref" href="#fn-3">3</a></sup>，暂时不想去啃英文，先将就学着。</p>
+<h2 id="gradle安装">gradle安装</h2>
+<h3 id="命令">命令</h3>
+<p>对于OSX用户来说，<code>brew install gradle</code>就可以搞定这个步骤了。但是这里有个问题，就是这样会把openjdk当做依赖装上。也不算很大的问题，也能将就用。</p>
+<h3 id="gradle-wrapper">gradle wrapper</h3>
+<p>gradle有一个很方便的命令，<code>gradle wrapper</code>，使用后会创建如下的目录结构</p>
+<pre><code>.
+├── build.gradle
+├── gradle
+│   └── wrapper
+│       ├── gradle-wrapper.jar
+│       └── gradle-wrapper.properties
+├── gradlew
+└── gradlew.bat
+</code></pre>
+<p>此时即使你没有安装gradle，仍然可以使用<code>./gradlew</code>代替<code>gradle</code>执行命令。如<code>./gradlew clean install</code>。在实际的项目中，这种方式使用比较普遍，因为gradle脚本很多特性受版本影响比较大，一般gradle的版本也会在项目中指定。</p>
+<h2 id="task">task</h2>
+<h3 id="基本使用">基本使用</h3>
+<p>task即构建任务，一个最简单的构建任务如下</p>
+<pre><code class="language-groovy">task hello {
+    doLast {
+        println 'Hello world!'
+    }
+}
+</code></pre>
+<p>此时输入<code>gradle -q hello</code>就可以看到输出了。<code>-q</code>指<code>quiet</code>，会忽略一些gradle自身的输出。</p>
+<blockquote>
+<p>教程中还写了一种更简洁的写法<sup id="fnref-1"><a class="footnote-ref" href="#fn-1">1</a></sup>，但我发现这种写法已经被废弃<sup id="fnref-2"><a class="footnote-ref" href="#fn-2">2</a></sup>，不再写出。</p>
+</blockquote>
+<h3 id="任务依赖">任务依赖</h3>
+<p>声明任务间的依赖关系。</p>
+<pre><code class="language-groovy">task taskY {
+	doLast {
+		println 'taskY'
+	}
+}
+task taskX(dependsOn: taskY) {
+	doLast {
+		println 'taskX'
+	}
+}
+</code></pre>
+<p>或</p>
+<pre><code class="language-groovy">task taskX(dependsOn: 'taskY') { //因为taskY还未定义，只能这样使用
+	doLast {
+		println 'taskX'
+	}
+}
+task taskY {
+	doLast {
+		println 'taskY'
+	}
+}
+</code></pre>
+<pre><code>➜  task gradle -q taskX
+taskY
+taskX
+➜  task
+</code></pre>
+<h3 id="动态任务">动态任务</h3>
+<p>可以动态创建任务，使用已经存在的任务。</p>
+<pre><code class="language-groovy">4.times { counter -&gt;
+    task &quot;task$counter&quot; {
+		doLast{
+			println &quot;I'm task number $counter&quot;
+		}
+	}
+}
+task0.dependsOn task2, task3
+</code></pre>
+<pre><code>➜  task gradle -q task0
+I'm task number 2
+I'm task number 3
+I'm task number 0
+➜  task 
+</code></pre>
+<h3 id="自定义属性">自定义属性</h3>
+<p>自定义属性和默认任务</p>
+<pre><code class="language-groovy">defaultTasks 'information','hello'
+
+task information {
+	doLast {
+		println 'I use this script to learn gradle.'
+	}
+}
+
+task hello {
+	ext {
+		computer = 'IF'
+		user = 'Haidee'
+	}
+
+	doLast {
+		println 'Hello Susan'
+	}	
+	
+	doFirst {
+		println 'Hello Zero'
+	}
+
+	doLast {
+		println &quot;There are also $hello.computer and $hello.user in our organization.&quot;
+	}
+}
+</code></pre>
+<pre><code>➜  task gradle -q
+I use this script to learn gradle.
+Hello Zero
+Hello Susan
+There are also IF and Haidee in our organization.
+➜  task 
+</code></pre>
+<h3 id="判断发布任务是否在要被执行的任务中">判断发布任务是否在要被执行的任务中</h3>
+<pre><code class="language-groovy">task distribution &lt;&lt; {
+    println &quot;We build the zip with version=$version&quot;
+}
+
+task release(dependsOn: 'distribution') &lt;&lt; {
+    println 'We release now'
+}
+
+gradle.taskGraph.whenReady {taskGraph -&gt;
+    if (taskGraph.hasTask(release)) {
+        version = '1.0'
+    } else {
+        version = '1.0-SNAPSHOT'
+    }
+}
+</code></pre>
+<pre><code>➜  task gradle -q distribution
+We build the zip with version=1.0-SNAPSHOT
+➜  task gradle -q release
+We build the zip with version=1.0
+We release now
+➜  task 
+</code></pre>
+<blockquote>
+<p>使用<code>gradle tasks --all</code>可以列出当前项目所有构建任务。</p>
+</blockquote>
+<h2 id="java构建">java构建</h2>
+<h3 id="基础java项目">基础java项目</h3>
+<pre><code class="language-sh">mkdir javaproject
+cd javaproject
+mkdir -p src/main/java
+mkdir -p src/test/java
+echo &quot;apply plugin: 'java'&quot; &gt; build.gradle
+</code></pre>
+<pre><code>.
+├── build.gradle
+└── src
+    ├── main
+    │   └── java
+    └── test
+        └── java
+
+5 directories, 1 file
+</code></pre>
+<h4 id="添加依赖">添加依赖</h4>
+<pre><code class="language-groovy">repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation group: 'commons-collections', name: 'commons-collections', version: '3.2'
+    testImplementation group: 'junit', name: 'junit', version: '4.+'
+}
+</code></pre>
+<h4 id="定制-manifestmf-文件">定制 MANIFEST.MF 文件</h4>
+<pre><code class="language-groovy">sourceCompatibility = 1.8
+version = '1.0'
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'Gradle Quickstart', 'Implementation-Version': version
+    }
+}
+</code></pre>
+<h4 id="发布jar文件">发布jar文件</h4>
+<pre><code class="language-groovy">uploadArchives {
+    repositories {
+       flatDir {
+           dirs 'repos'
+       }
+    }
+}
+</code></pre>
+<h3 id="多项目java构建">多项目java构建</h3>
+<pre><code class="language-sh">mkdir multiproject
+cd multiproject
+mkdir api
+mkdir -p services/webservice
+mkdir shared
+</code></pre>
+<h4 id="项目结构">项目结构</h4>
+<pre><code>.
+├── api
+│   ├── build
+│   └── build.gradle
+├── build.gradle
+├── services
+│   └── webservice
+│       └── build.gradle
+├── settings.gradle
+└── shared
+    └── build.gradle
+</code></pre>
+<p><code>settings.gradle</code>指定要包括哪个项目。</p>
+<pre><code class="language-groovy">include &quot;shared&quot;, &quot;api&quot;, &quot;services:webservice&quot;, &quot;services:shared&quot;
+</code></pre>
+<h4 id="通用配置">通用配置</h4>
+<p>根项目的<code>build.gradle</code>中</p>
+<pre><code class="language-groovy">subprojects {
+    apply plugin: 'java'
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        testImplementation 'junit:junit:4.11'
+    }
+
+    version = '1.0'
+
+    jar {
+        manifest.attributes provider: 'gradle'
+    }
+}
+</code></pre>
+<h4 id="项目之间的依赖">项目之间的依赖</h4>
+<p>api/build.gradle</p>
+<pre><code class="language-groovy">dependencies {
+    compile project(':shared')
+}
+</code></pre>
+<h2 id="依赖管理基础知识">依赖管理基础知识</h2>
+<blockquote>
+<p>依赖类型，待整理，当前找到的资料有点乱。</p>
+</blockquote>
+<p>引用外部依赖需要<code>group</code>、<code>name</code>和<code>version</code>属性。</p>
+<p>仓库（未完全验证）。</p>
+<pre><code class="language-groovy">repositories {
+    mavenCentral()
+    maven {
+        url &quot;http://repo.mycompany.com/maven2&quot;
+    }
+    ivy {
+        url &quot;http://repo.mycompany.com/repo&quot;
+    }
+    ivy {
+        // URL can refer to a local directory
+        url &quot;../local-repo&quot;
+    }
+}
+</code></pre>
+<h2 id="groovy快速入门">groovy快速入门</h2>
+<p>就一个例子，入门入了个寂寞。</p>
+<pre><code class="language-groovy">apply plugin: 'groovy'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.codehaus.groovy:groovy-all:2.3.3'
+    testImplementation 'junit:junit:4.11'
+}
+</code></pre>
+<h2 id="编写构建脚本">编写构建脚本</h2>
+<h3 id="标准项目属性">标准项目属性</h3>
+<p>project对象提供了一些标准属性，可以在对象中很方便地使用。</p>
+<table>
+<thead>
+<tr><th>Name</th><th>Type</th><th>Default Value</th></tr>
+</thead>
+<tbody>
+<tr><td>project</td><td>Project</td><td>Project 实例对象</td></tr>
+<tr><td>name</td><td>String</td><td>项目目录的名称</td></tr>
+<tr><td>path</td><td>String</td><td>项目的绝对路径</td></tr>
+<tr><td>description</td><td>String</td><td>项目描述</td></tr>
+<tr><td>projectDir</td><td>File</td><td>包含构建脚本的目录</td></tr>
+<tr><td>build</td><td>File</td><td>projectDir/build</td></tr>
+<tr><td>group</td><td>Object</td><td>未具体说明</td></tr>
+<tr><td>version</td><td>Object</td><td>未具体说明</td></tr>
+<tr><td>ant</td><td>AntBuilder</td><td>Ant实例对象</td></tr>
+</tbody>
+</table>
+<blockquote>
+<p>来自Gradle User Guide<sup id="fnref-3-1"><a class="footnote-ref" href="#fn-3">3</a></sup>，未验证。</p>
+</blockquote>
+<h3 id="变量">变量</h3>
+<p>声明变量</p>
+<pre><code class="language-groovy">def dest = &quot;dest&quot;
+</code></pre>
+<p>拓展属性</p>
+<pre><code class="language-groovy">ext {
+    springVersion = &quot;3.1.0.RELEASE&quot;
+    emailNotification = &quot;build@master.org&quot;
+}
+</code></pre>
+<h3 id="方法">方法</h3>
+<p>圆括号可选。</p>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn-1">
+<p><a href="https://wiki.jikexueyuan.com/project/GradleUserGuide-Wiki/build_script_basics/a_shortcut_task_definition.html">https://wiki.jikexueyuan.com/project/GradleUserGuide-Wiki/build_script_basics/a_shortcut_task_definition.html</a></p>
+<a href="#fnref-1" class="footnote-backref">&#8617;</a>
+</li>
+<li id="fn-2">
+<p><a href="https://www.cnblogs.com/yuanchaoyong/p/11421595.html">https://www.cnblogs.com/yuanchaoyong/p/11421595.html</a></p>
+<a href="#fnref-2" class="footnote-backref">&#8617;</a>
+</li>
+<li id="fn-3">
+<p><a href="https://wiki.jikexueyuan.com/project/GradleUserGuide-Wiki/">Gradle User Guide 中文版</a></p>
+<a href="#fnref-3" class="footnote-backref">&#8617;</a>
+<a href="#fnref-3-1" class="footnote-backref">&#8617;</a>
+</li>
+</ol>
+</div>
+</div>
+            </div>
+            <script src="https://utteranc.es/client.js" repo="zerofancy/zerofancy.github.io" issue-term="gradle学习笔记"
+                theme="github-light" crossorigin="anonymous" async>
+                </script>
+        </div>
+        <!-- 页脚 -->
+        <footer class="navbar navbar-light bg-light">
+            <p>版权所有：归零幻想 ┊ 备案号：<a href="http://beian.miit.gov.cn/">暂无</a>┊ Powered by：归零幻想</p>
+        </footer>
+    </div>
+</body>
+
+</html>

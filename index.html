@@ -1,0 +1,641 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans">
+
+<head>
+    
+    <title>归零幻想的博客</title>
+    <meta charset="UTF-8">
+    <!--移动设备不缩放-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="alternate" type="application/rss+xml" title="归零幻想" href="https://ntutn.top/rss.xml" />
+    <!--github的markdown样式-->
+    <link rel="stylesheet" href="/res/css/github-markdown.css">
+    <!--一个基于bootstrap的样式-->
+    <link rel="stylesheet" href="/res/css/main.css">
+
+    <script src="/res/js/jquery.min.js"></script>
+    <script src="/res/js/popper.min.js"></script>
+    <script src="/res/js/bootstrap.min.js"></script>
+    <script src="/res/js/sweetalert.min.js"></script>
+    <script>
+        function chkPage() {
+            var in_page = Number($("#in_page").val());
+            if (in_page <= 0 || in_page > Number($("#pagecount").val())) {
+                return false;
+            }
+            return true;
+        }
+        $(document).ready(function () {
+            $("#btn_go").click(function () {
+                if (chkPage()) {
+                    location.href = "/index" + ($("#in_page").val() == "1" ? "" : $("#in_page").val()) + ".html";
+                } else {
+                    swal(
+                        {
+                            title: "Tip",
+                            text: "您输入的页码超出范围！",
+                            type: "warning"
+                        }
+                    );
+                }
+            });
+            $(".card-text img").addClass("img-fluid");
+            $("#n_home").addClass("active");
+            //一言
+            $.get("https://v1.hitokoto.cn/", function (data, status) {
+                $("#hitokoto").text(data.hitokoto);
+                $("#from").text("——" + data.from);
+            });
+            // ajax
+            $(".btn-read-all").click(function(){
+                const url=$(this).attr("value")
+                $(this).parent().parent().find(".card-text").load(url+" .card-text")
+                $(this).hide()
+                return false
+            })
+        });
+    </script>
+    <style>
+        /*背景图片*/
+        body {
+            background: url(https://unsplash.it/1600/900?random);
+            background-attachment: fixed;
+            background-position: bottom center;
+            background-size: cover;
+        }
+    </style>
+</head>
+
+<body>
+    <input id="pagecount" type="hidden" value="6">
+    <div class="container">
+        <nav id="nav" class="navbar navbar-expand-lg navbar-light bg-light">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
+                aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="/"><img src="/res/logo.png" width="70" height="40"
+                    class="d-inline-block align-top" alt="">
+                <span>归零幻想的博客</span></a>
+
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                    <li id="n_home" class="nav-item">
+                        <a class="nav-link" href="/">主页</a>
+                    </li>
+                    <!-- <li id="n_tags" class="nav-item">
+                    <a class="nav-link" href="/tags">标签</a>
+                </li> -->
+                    <li id="n_about" class="nav-item">
+                        <a class="nav-link" href="/about.html">关于</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/rss.xml">RSS</a>
+                    </li>
+                </ul>
+                <!-- <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0 disabled popover-dismiss" type="submit"
+                    data-toggle="popover" data-trigger="focus" title="未完成的功能"
+                    data-content="搜索功能暂时还没有完成。">Search</button>
+            </form> -->
+            </div>
+        </nav>
+        <nav class="mt-3" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+            </ol>
+        </nav>
+        <div class="card text-black bg-light">
+            <div class="card-body">
+                <blockquote class="card-blockquote">
+                    <p id="hitokoto">溺死在零梦里吧。</p>
+                    <footer id="from" class="text-right">Someone famous in
+                        <cite title="Source Title">归零幻想</cite>
+                    </footer>
+                </blockquote>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
+                    <a href="禁用macOS的窗口标签.html">禁用macOS的窗口标签</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2020-12-22</span>&nbsp;
+                    修改时间：<span>2020-12-22</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><p>作为一个对更新相对激进的用户，我当然是第一时间升级了最新的macOS Big Sur。说实在的，这名字给我的第一印象并不好，因为被我看成了『Big Bug』。</p>
+<p>圆角变大了，还有我一开始比较喜欢的功能，姑且称之为窗口标签。在BigSur中，当你打开两个全屏的Android Studio，它们将出现在同一个窗口，窗口上方出现不同的标签页，和浏览器一样。</p>
+<p>好景不长，这个功能表现很不稳定，我不得不考虑干掉这个功能。如果只是没有成功触发也就算了，大不了当没升级用，但它常常会把一些弹出窗口也搞成和原窗口并列的标签。比如当你rename一个文件时，弹出的窗口有时就会并列到标签上，然后Android Studio就卡死了。</p>
+<p>好吧，既然它开始影响我的工作效率了，我就找了找禁用的方法<sup id="fnref-1"><a class="footnote-ref" href="#fn-1">1</a></sup>。</p>
+<pre><code class="language-bash">
+defaults write com.google.android.studio AppleWindowTabbingMode manual
+</code></pre>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn-1">
+<p>来自<a href="https://www.reddit.com/r/androiddev/comments/jtbl4m/has_anyone_updated_to_macos_big_sur_and_is/">https://www.reddit.com/r/androiddev/comments/jtbl4m/has_anyone_updated_to_macos_big_sur_and_is/</a></p>
+<a href="#fnref-1" class="footnote-backref">&#8617;</a>
+</li>
+</ol>
+</div>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="禁用macOS的窗口标签.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
+                    <a href="android项目开发：Broadcast.html">android项目开发：Broadcast</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2020-12-22</span>&nbsp;
+                    修改时间：<span>2020-12-22</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><p>仍然是《第一行代码》的学习笔记，安卓内置广播机制。</p>
+<p>Android中每个应用程序都可以对自己感兴趣的广播进行注册，包括来自系统的，和其他应用程序的。</p>
+<p>广播分为标准广播和有序广播。</p>
+<ul>
+<li>标准广播异步执行，所有BroadcastReceiver几乎同时收到广播的消息。</li>
+<li>有序广播 同步执行，只有前一个Receiver逻辑执行完后才会传递给下一个，且可以将广播截断。</li>
+</ul>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="android项目开发：Broadcast.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
+                    <a href="android项目开发：UI设计.html">android项目开发：UI设计</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2020-12-21</span>&nbsp;
+                    修改时间：<span>2020-12-21</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><p>仍然是《第一行代码》的学习笔记，这里记录的东西相对少一点，UI上的东西还是更多在实际项目中感受到。比如我想没有必要写TextView的介绍吧。</p>
+<h2 id="控件的使用方法">控件的使用方法</h2>
+<p><code>dp</code>是一种屏幕密度无关的尺寸单位，可以保证在不同分辨率的手机上显示效果尽可能一致。</p>
+<p><code>match_parent</code>表示让当前控件大小和父布局的大小一致。</p>
+<p><code>wrap_content</code>表示让当前控件的大小能正好包裹里面的内容。</p>
+<p><code>android:gravity</code>指定控件内的内容对齐方式，有<code>top</code>、<code>bottom</code>、<code>start</code>、<code>end</code>、<code>center</code>等可选，可以用<code>|</code>指定多个值。比如<code>center</code>等价于<code>center_vertical|center_horizonal</code>。</p>
+<h2 id="基本布局">基本布局</h2>
+<h3 id="linearlayout">LinearLayout</h3>
+<p>线性布局，通过<code>android:orientation</code>指定方向。</p>
+<p>有一个重要属性：<code>android:layout_weight</code>，它将控件已经占用的空间减掉后按照比重分给各个控件。一般我们直接指定<code>android:layout_width</code>为0dp，而给它指定一个比重，这样控件的尺寸将占满剩余空间。</p>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="android项目开发：UI设计.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
+                    <a href="android项目开发：Fragment.html">android项目开发：Fragment</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2020-12-21</span>&nbsp;
+                    修改时间：<span>2020-12-21</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><h1 id="fragment">Fragment</h1>
+<h2 id="fragment的使用方式">Fragment的使用方式</h2>
+<h3 id="静态添加fragment">静态添加Fragment</h3>
+<p>Fragment的写法</p>
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+              android:orientation=&quot;vertical&quot; android:layout_width=&quot;match_parent&quot;
+              android:layout_height=&quot;match_parent&quot;&gt;
+
+    &lt;Button
+            android:id=&quot;@+id/button&quot;
+            android:layout_width=&quot;wrap_content&quot;
+            android:layout_height=&quot;wrap_content&quot;
+            android:text=&quot;button&quot;
+            android:layout_gravity=&quot;center_horizontal&quot;/&gt;
+
+&lt;/LinearLayout&gt;
+</code></pre>
+<pre><code class="language-kotlin">package top.ntutn.fragmenttest
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+
+class LeftFragment : Fragment() {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.left_fragment, container, false)
+    }
+}
+</code></pre>
+<p>静态添加Fragment</p>
+<pre><code class="language-xml">
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+              xmlns:tools=&quot;http://schemas.android.com/tools&quot;
+              android:layout_width=&quot;match_parent&quot;
+              android:layout_height=&quot;match_parent&quot;
+              android:orientation=&quot;horizontal&quot;
+              tools:context=&quot;.MainActivity&quot;&gt;
+
+    &lt;fragment
+            android:id=&quot;@+id/leftFragment&quot;
+            android:name=&quot;top.ntutn.fragmenttest.LeftFragment&quot;
+            android:layout_width=&quot;0dp&quot;
+            android:layout_height=&quot;match_parent&quot;
+            android:layout_weight=&quot;1&quot;/&gt;
+
+    &lt;fragment
+            android:id=&quot;@+id/rightFragment&quot;
+            android:name=&quot;top.ntutn.fragmenttest.RightFragment&quot;
+            android:layout_width=&quot;0dp&quot;
+            android:layout_height=&quot;match_parent&quot;
+            android:layout_weight=&quot;1&quot;/&gt;
+
+&lt;/LinearLayout&gt;
+</code></pre>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="android项目开发：Fragment.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
+                    <a href="android项目开发：Activity.html">android项目开发：Activity</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2020-12-15</span>&nbsp;
+                    修改时间：<span>2020-12-15</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><blockquote>
+<p>仍然是《第一行代码》的读书笔记，可能引用原书的定义和描述，或代码案例。</p>
+</blockquote>
+<h1 id="activity">Activity</h1>
+<h2 id="activity基本用法">Activity基本用法</h2>
+<p>Android讲究设计逻辑与视图分离，一般Activity都会对应一个布局文件（XML文件）。</p>
+<p>所有的Activity都要在AndroidManifest中注册才生效。</p>
+<p>Activity可以创建菜单。首先在<code>res/menu</code>下创建一个xml文件（Android Studio中也提供了可视化编辑的方法）：</p>
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;menu xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+      xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&gt;
+
+    &lt;item
+            android:id=&quot;@+id/add_item&quot;
+            android:title=&quot;Add&quot;/&gt;
+    &lt;item
+            android:id=&quot;@+id/remove_item&quot;
+            android:title=&quot;Remove&quot;/&gt;
+&lt;/menu&gt;
+</code></pre>
+<p>重写两个方法</p>
+<pre><code class="language-kotlin">    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    menuInflater.inflate(R.menu.main, menu)
+    return true
+}
+
+override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    when (item.itemId) {
+        R.id.add_item -&gt; Toast.makeText(this, &quot;Add a book.&quot;, Toast.LENGTH_LONG).show()
+        R.id.remove_item -&gt; Toast.makeText(this, &quot;Remove a book.&quot;, Toast.LENGTH_LONG).show()
+    }
+    return true
+}
+</code></pre>
+<p><img src="https://i.loli.net/2020/12/10/a6wOcTFrHLhS4il.jpg" alt="photo_2020-12-10_21-00-32.jpg" /></p>
+<p>用<code>finish()</code>方法可以关闭一个Activity。</p>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="android项目开发：Activity.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
+                    <a href="作为一名男性，你愿意和丁真互换人生吗.html">作为一名男性，你愿意和丁真互换人生吗</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2020-12-11</span>&nbsp;
+                    修改时间：<span>2020-12-11</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><p>忘记是哪一天了，一个叫『丁真』的人突然刷屏，热搜十条有6条都是他。但我见怪不怪了，微博热搜本来就是个笑话。</p>
+<p>然后看看贴吧，知乎……全是他。</p>
+<p>那就看看，这回是谁，为啥火了。一个放牛小伙，正巧被摄影师拍了，眼睛澄澈，笑容阳光，剩下的全是营销。</p>
+<p>『为何贴吧男性普遍仇视辱骂丁真？』我玩贴吧，但对丁真没啥恶感，只是对这一堆热搜有恶感：**明明这两天有更值得关注的事情的。**好吧，咱也不知道，咱也不敢问，你们知道有几条热搜被盖过去了就行了。</p>
+<p>『作为一名男性，你愿意和丁真互换人生吗？』好么，没完没了了，还不惜故意挑起性别对立。我就引用某个网友<sup id="fnref-1"><a class="footnote-ref" href="#fn-1">1</a></sup>的回答</p>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn-1">
+<p><a href="https://www.zhihu.com/people/geng-liang-jia">@在下头不是很铁了</a>，原回答在<a href="https://www.zhihu.com/question/433944124/answer/1620271267">某回答</a>的回复里，但无法直接通过链接打开，大概是被限流了。转载已获授权。</p>
+<a href="#fnref-1" class="footnote-backref">&#8617;</a>
+</li>
+</ol>
+</div>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="作为一名男性，你愿意和丁真互换人生吗.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
+                    <a href="android项目开发：Kotlin.html">android项目开发：Kotlin</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2020-12-09</span>&nbsp;
+                    修改时间：<span>2020-12-09</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><h1 id="kotlin">Kotlin</h1>
+<h2 id="变量和函数">变量和函数</h2>
+<h3 id="变量">变量</h3>
+<p>用<code>var</code>和<code>val</code>定义变量，并有类型自动推导的支持。</p>
+<p><code>val</code>用来声明一个不可变的变量，<code>var</code>用来声明一个可变的变量。</p>
+<pre><code class="language-kotlin">val a = 10
+var b: Int = 12
+</code></pre>
+<p>Kotlin完全抛弃了java中的基本数据类型，完全使用对象数据类型。</p>
+<table>
+<thead>
+<tr><th>java基本数据类型</th><th>Kotlin对象数据类型</th><th>数据类型说明</th></tr>
+</thead>
+<tbody>
+<tr><td>int</td><td>Int</td><td>整型</td></tr>
+<tr><td>long</td><td>Long</td><td>长整型</td></tr>
+<tr><td>short</td><td>Short</td><td>短整型</td></tr>
+<tr><td>float</td><td>Float</td><td>单精度浮点型</td></tr>
+<tr><td>double</td><td>Double</td><td>双精度浮点型</td></tr>
+<tr><td>boolean</td><td>Boolean</td><td>布尔型</td></tr>
+<tr><td>char</td><td>Char</td><td>字符型</td></tr>
+<tr><td>byte</td><td>Byte</td><td>字节型</td></tr>
+</tbody>
+</table>
+<h3 id="函数">函数</h3>
+<p>语法：</p>
+<pre><code class="language-kotlin">fun main(args: Array&lt;String&gt;) {
+    println(&quot;Hello World!&quot;)
+}
+</code></pre>
+<p>Kotlin中的函数在无必要时可以省略很多东西：</p>
+<pre><code class="language-kotlin">import kotlin.math.max
+
+fun largerNumber(a: Int, b: Int) = max(a, b)
+
+fun main(args: Array&lt;String&gt;) {
+    val a = 3
+    val b = 5
+    println(&quot;The larger number of a and b is ${largerNumber(a, b)}&quot;)
+}
+</code></pre>
+<h2 id="程序的逻辑控制">程序的逻辑控制</h2>
+<h3 id="if">if</h3>
+<p>与java中的if语句相比，Kotlin中的if是可以有返回值的。</p>
+<pre><code class="language-kotlin">fun judge(score: Int) = if (score &gt;= 60) &quot;你及格了&quot; else &quot;你还需要多努力&quot;
+
+fun main() {
+    println(judge(55))
+    println(judge(66))
+}
+</code></pre>
+<p>与此同时，Kotlin不再有java中的三元运算符<sup id="fnref-1"><a class="footnote-ref" href="#fn-1">1</a></sup>，语义上清晰了很多。</p>
+<h3 id="when条件语句">when条件语句</h3>
+<p>类似于java中的switch语句，根据变量的值执行不同的逻辑。</p>
+<pre><code class="language-kotlin">fun judge(score: Int) = if (score &gt;= 60) &quot;你及格了&quot; else &quot;你还需要多努力&quot;
+
+fun getScore(name: String) = when (name) {
+    &quot;Tom&quot; -&gt; 78
+    &quot;Jack&quot; -&gt; 35
+    &quot;Jerry&quot; -&gt; 84
+    &quot;Lee&quot; -&gt; 57
+    else -&gt; 0
+}
+
+fun main() {
+    println(judge(getScore(&quot;Tom&quot;)))
+    println(judge(getScore(&quot;Jack&quot;)))
+    println(judge(getScore(&quot;Bill&quot;)))
+}
+</code></pre>
+<p>对我来说，最令人振奋的是再也不需要在每个分支里面都写个break了。其次when也是有返回值的，这和其他特性组合写出来的代码非常简洁优雅。</p>
+<p>写个小demo吧。</p>
+<pre><code class="language-kotlin">interface Speakable {
+    fun speak()
+}
+
+class Dog : Speakable {
+    override fun speak() {
+        println(&quot;汪汪汪&quot;)
+    }
+}
+
+class Cat : Speakable {
+    override fun speak() {
+        println(&quot;喵喵喵&quot;)
+    }
+
+    fun climb() {
+        println(&quot;小猫会爬树&quot;)
+    }
+}
+
+fun generateAnimal(): Speakable? = when ((1..3).random()) {
+    1 -&gt; Dog()
+    2 -&gt; Cat()
+    else -&gt; null
+}
+
+fun main() {
+    when (val animal = generateAnimal()) {
+        is Dog -&gt; {
+            println(&quot;生成的动物是小狗&quot;)
+            animal.speak()
+        }
+        is Cat -&gt; {
+            println(&quot;生成的动物是小猫&quot;)
+            animal.speak()
+            animal.climb()
+        }
+        else -&gt; println(&quot;生成动物时出现问题&quot;)
+    }
+}
+</code></pre>
+<h3 id="循环语句">循环语句</h3>
+<p>Kotlin中有两类循环，其中<code>while</code>循环与java学过的while循环非常相似，只说下有差异的<code>for</code>循环吧。</p>
+<p>Kotlin的for循环只有for..in式的了，如<code>for(i in list)</code>。</p>
+<p>但有时对数组下标进行遍历还是有必要的。于是我们要先了解下Kotlin的<code>区间</code>的概念。</p>
+<pre><code class="language-kotlin">val range = 1..10
+</code></pre>
+<p>这表示<code>[1,10]</code>。但很多时候，我们需要左开右闭区间，比如数组有三个元素，我们需要<code>[0,3)</code>表示数组的下标。此时可以使用<code>util</code>关键字。</p>
+<pre><code class="language-kotlin">val indexRange = 0 util 3
+</code></pre>
+<p>有了range再和前面的for配合就完全可以替代之前java里面的for的作用了：</p>
+<pre><code class="language-kotlin">val array = arrayOf(&quot;Bob&quot;, &quot;John&quot;, &quot;Jackson&quot;)
+for (i in 0 util array.size) {
+    println(&quot;$i:${array[i]}&quot;)
+}
+</code></pre>
+<p>此外，还可以用<code>step</code>指定步长值，实现”隔几个输出一次“的效果：</p>
+<pre><code class="language-kotlin">for (i in 0 util 10 step 2) {
+    println(i)
+}
+</code></pre>
+<p>如果需要10循环到1,则需要<code>downTo</code>关键字，</p>
+<pre><code class="language-kotlin">for (i in 10 downTo 1) {
+    println(i)
+}
+</code></pre>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn-1">
+<p>参考<a href="https://www.w3cschool.cn/java/java-ternary-operator.html">Java中的三元运算符</a></p>
+<a href="#fnref-1" class="footnote-backref">&#8617;</a>
+</li>
+</ol>
+</div>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="android项目开发：Kotlin.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
+                    <a href="about.html">关于</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2020-07-25</span>&nbsp;
+                    修改时间：<span>2020-12-09</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><h2 id="归零幻想">归零幻想</h2>
+<img alt="归零幻想" src="/res/img/avatar.jpg" width="200px">
+<hr />
+<p>归零幻想是本人的网名啦，这里是我的博客小站。本人在其他地方帐号大多也叫这个名字。</p>
+<p>博客系统至今我写过三个版本[^1]，毕竟写出个CRUD就可以厚着脸皮说自己是个博客了。当前版本最初是个Kotlin练手项目，源代码发布在<a href="https://github.com/zerofancy/kmdblog">github</a>。不过也就自用罢了，不会有人对我的代码感兴趣吧……</p>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="about.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
+                    <a href="android项目开发：项目结构.html">android项目开发：项目结构</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2020-12-08</span>&nbsp;
+                    修改时间：<span>2020-12-08</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><p>虽然已经在字节实习并拿到转正offer，但实际我自己感受我现在对安卓基础知识掌握的程度还差很多，感觉写业务代码本身并不能带来多少提升。</p>
+<p>恰逢前两天看到黄正楠那里有一本看上去不错的书<sup id="fnref-1"><a class="footnote-ref" href="#fn-1">1</a></sup>，而在淘宝也在打折，就买了一本。</p>
+<p>那么从Hello Wrold开始，先看看安卓项目的项目结构。</p>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn-1">
+<p>《第一行代码》</p>
+<a href="#fnref-1" class="footnote-backref">&#8617;</a>
+</li>
+</ol>
+</div>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="android项目开发：项目结构.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
+                    <a href="QBASIC.html">从QBASIC开始</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2020-12-02</span>&nbsp;
+                    修改时间：<span>2020-12-02</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><p>前两天看到一个知乎问题，拍了一张数学课本的截图，里面是一段程序，问如何才能运行这种程序。<sup id="fnref-1"><a class="footnote-ref" href="#fn-1">1</a></sup></p>
+<p>看到这熟悉的语法有些感慨，毕竟这门语言就是我编程入门学习的第一门语言了。</p>
+<p><img src="https://i.loli.net/2020/12/02/gBcqkFoL39u1Xdw.png" alt="2020-12-02_08-46.png" /></p>
+<p>记得那时没有什么娱乐手段，只能翻翻我姐的旧书——当然多数看不懂。少数能看懂的，就包括一本<code>QBASIC</code>的编程入门教程。</p>
+<p>单词不认识，字母总还是认识的。于是我学的Hello World其实是P-R-I-N-T-&quot;H-E-L-L-O-W-O-R-L-D&quot;。看着都觉得累…… <em>没有电脑，就直接在脑袋里推演，在纸上执行程序。家里人还以为我在学英语～</em></p>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn-1">
+<p><a href="https://www.zhihu.com/question/432443510">请问像这种程序可以用什么软件操作? - 知乎</a></p>
+<a href="#fnref-1" class="footnote-backref">&#8617;</a>
+</li>
+</ol>
+</div>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="QBASIC.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <!--页码-->
+        <nav aria-label="Page navigation row">
+            <ul class="pagination mt-3 justify-content-center">
+                <li class="page-item disabled"><a class="page-link" href="/">First</a>
+                </li>
+                
+                <li class="page-item active">
+                    <span class="page-link">1</span>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="/index2.html">2</a>
+                </li>
+                <li class="page-item"></li>
+                <li class="page-item"></li>
+                <li class="page-item"><a class="page-link"
+                        href="/index6.html">Last</a></li>
+                <input id="in_page" type="text" class="form-control col-2 xs-offset-1 d-none d-lg-block offset-1"
+                    placeholder="输入页码" onkeyup="this.value=this.value.replace(/\D/g,'')"
+                    onafterpaste="this.value=this.value.replace(/\D/g,'')">
+                <button id="btn_go" class="btn btn-primary">Go</button>
+            </ul>
+        </nav>
+        <!-- 页脚 -->
+        <footer class="navbar navbar-light bg-light">
+            <p>版权所有：归零幻想 ┊ 备案号：<a href="http://beian.miit.gov.cn/">暂无</a>┊ Powered by：归零幻想</p>
+        </footer>
+    </div>
+</body>
+
+</html>

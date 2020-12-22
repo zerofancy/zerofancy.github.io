@@ -1,0 +1,157 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans">
+
+<head>
+    
+    
+    <title>三门问题--归零幻想的博客</title>
+    <meta charset="UTF-8">
+    <!--移动设备不缩放-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="alternate" type="application/rss+xml" title="归零幻想" href="https://ntutn.top/rss.xml" />
+    <!--github的markdown样式-->
+    <link rel="stylesheet" href="/res/css/github-markdown.css">
+    <!--一个基于bootstrap的样式-->
+    <link rel="stylesheet" href="/res/css/main.css">
+
+    <script src="/res/js/jquery.min.js"></script>
+    <script src="/res/js/popper.min.js"></script>
+    <script src="/res/js/bootstrap.min.js"></script>
+
+    <style>
+        /*图片缩放*/
+        .imageWrapper {
+            max-width: 500px;
+            max-height: 100%;
+            display: block;
+            margin: 0 auto;
+        }
+
+        /*背景图片*/
+        body {
+            background: url(https://unsplash.it/1600/900?random);
+            background-attachment: fixed;
+            background-position: bottom center;
+            background-size: cover;
+        }
+    </style>
+    <script src="/res/js/zoomify.min.js"></script>
+    <link href="/res/css/zoomify.min.css" rel="stylesheet">
+
+    <script>
+        $(document).ready(function () {
+            $(".markdown-body img").each(function () {
+                divImageWrapper = $(this).after("<div class='imageWrapper'></div>")
+                $(this).appendTo($(this).next())
+            })
+            $(".markdown-body img").zoomify()
+        })
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <nav id="nav" class="navbar navbar-expand-lg navbar-light bg-light">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
+                aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="/"><img src="/res/logo.png" width="70" height="40"
+                    class="d-inline-block align-top" alt="">
+                <span>归零幻想的博客</span></a>
+
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                    <li id="n_home" class="nav-item">
+                        <a class="nav-link" href="/">主页</a>
+                    </li>
+                    <!-- <li id="n_tags" class="nav-item">
+                        <a class="nav-link" href="/tags">标签</a>
+                    </li> -->
+                    <li id="n_about" class="nav-item">
+                        <a class="nav-link" href="/about.html">关于</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/rss.xml">RSS</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <nav class="mt-3" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+
+                <li class="breadcrumb-item active" aria-current="page">三门问题</li>
+            </ol>
+        </nav>
+        <div class="card mt-3 mb-3">
+            <div class="card-body markdown-body">
+                <h1 class="card-title text-center realtitle">三门问题</h1>
+                <!--TODO 时间-->
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2019-09-16</span>&nbsp;
+                    修改时间：<span>2019-09-16</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <br>
+                <div class="card-text"><blockquote>
+<p>参赛者面前有三扇关闭着的门，其中一扇的后面是一辆汽车，选中后面有车的那扇门就可以赢得该汽车，
+而另外两扇门后面则各藏有一只山羊。当参赛者选定了一扇门，但未去开启它的时候，主持人会开启剩
+下两扇门中的一扇，露出其中一只山羊。主持人其后会问参赛者要不要更换选择，选另一扇仍然关着的门。</p>
+<blockquote>
+<p>那么，应不应该更换呢？</p>
+</blockquote>
+</blockquote>
+<p><img src="https://i.loli.net/2020/08/20/eWcOG6t1FpUD5mC.png" alt="1560925478346.png" /></p>
+<h2 id="分析">分析</h2>
+<p>假如你选择了A，那你中奖概率应为1/3.</p>
+<p>主持人在B、C中选了个没奖的，这与你的选择其实没影响，因为你没选的肯定有个没奖的。</p>
+<p>换与不换其实就相当于问你选A还是不选A。</p>
+<h2 id="程序模拟">程序模拟</h2>
+<p>有点绕，咱学软件的，就干脆让电脑跑一跑。</p>
+<h3 id="代码">代码</h3>
+<pre><code class="language-java">import java.util.Random;
+
+class Test{
+    public static void main(String[] args) {
+        Random ran=new Random();
+        int c1=0,c2=0;
+        for(int i=0;i&lt;1e6;i++){
+            boolean boxes[]={false,false,false};
+            boxes[ran.nextInt(boxes.length)]=true;//某个门后有奖
+            int sel=ran.nextInt(boxes.length);//随便选择一扇门
+            int p=0;
+            while(p==sel||boxes[p]){//主持人选择一扇没奖的门（且不与参与者选同一扇）
+                p=ran.nextInt(boxes.length);
+            }
+            if(boxes[sel]){//不更换中奖
+                c1++;
+            }
+            if(boxes[0+1+2-sel-p]){//更换中奖
+                c2++;
+            }
+        }
+        System.out.println(c1/1e6);
+        System.out.println(c2/1e6);
+    }
+}
+</code></pre>
+<h3 id="运行结果">运行结果</h3>
+<pre><code>0.332419
+0.667581
+</code></pre>
+<p>看来是更换比较好了。</p>
+</div>
+            </div>
+            <script src="https://utteranc.es/client.js" repo="zerofancy/zerofancy.github.io" issue-term="三门问题"
+                theme="github-light" crossorigin="anonymous" async>
+                </script>
+        </div>
+        <!-- 页脚 -->
+        <footer class="navbar navbar-light bg-light">
+            <p>版权所有：归零幻想 ┊ 备案号：<a href="http://beian.miit.gov.cn/">暂无</a>┊ Powered by：归零幻想</p>
+        </footer>
+    </div>
+</body>
+
+</html>

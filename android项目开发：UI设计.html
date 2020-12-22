@@ -1,0 +1,242 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans">
+
+<head>
+    
+    
+    <title>android项目开发：UI设计--归零幻想的博客</title>
+    <meta charset="UTF-8">
+    <!--移动设备不缩放-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="alternate" type="application/rss+xml" title="归零幻想" href="https://ntutn.top/rss.xml" />
+    <!--github的markdown样式-->
+    <link rel="stylesheet" href="/res/css/github-markdown.css">
+    <!--一个基于bootstrap的样式-->
+    <link rel="stylesheet" href="/res/css/main.css">
+
+    <script src="/res/js/jquery.min.js"></script>
+    <script src="/res/js/popper.min.js"></script>
+    <script src="/res/js/bootstrap.min.js"></script>
+
+    <style>
+        /*图片缩放*/
+        .imageWrapper {
+            max-width: 500px;
+            max-height: 100%;
+            display: block;
+            margin: 0 auto;
+        }
+
+        /*背景图片*/
+        body {
+            background: url(https://unsplash.it/1600/900?random);
+            background-attachment: fixed;
+            background-position: bottom center;
+            background-size: cover;
+        }
+    </style>
+    <script src="/res/js/zoomify.min.js"></script>
+    <link href="/res/css/zoomify.min.css" rel="stylesheet">
+
+    <script>
+        $(document).ready(function () {
+            $(".markdown-body img").each(function () {
+                divImageWrapper = $(this).after("<div class='imageWrapper'></div>")
+                $(this).appendTo($(this).next())
+            })
+            $(".markdown-body img").zoomify()
+        })
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <nav id="nav" class="navbar navbar-expand-lg navbar-light bg-light">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
+                aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="/"><img src="/res/logo.png" width="70" height="40"
+                    class="d-inline-block align-top" alt="">
+                <span>归零幻想的博客</span></a>
+
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                    <li id="n_home" class="nav-item">
+                        <a class="nav-link" href="/">主页</a>
+                    </li>
+                    <!-- <li id="n_tags" class="nav-item">
+                        <a class="nav-link" href="/tags">标签</a>
+                    </li> -->
+                    <li id="n_about" class="nav-item">
+                        <a class="nav-link" href="/about.html">关于</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/rss.xml">RSS</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <nav class="mt-3" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+
+                <li class="breadcrumb-item active" aria-current="page">android项目开发：UI设计</li>
+            </ol>
+        </nav>
+        <div class="card mt-3 mb-3">
+            <div class="card-body markdown-body">
+                <h1 class="card-title text-center realtitle">android项目开发：UI设计</h1>
+                <!--TODO 时间-->
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2020-12-21</span>&nbsp;
+                    修改时间：<span>2020-12-21</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <br>
+                <div class="card-text"><p>仍然是《第一行代码》的学习笔记，这里记录的东西相对少一点，UI上的东西还是更多在实际项目中感受到。比如我想没有必要写TextView的介绍吧。</p>
+<h2 id="控件的使用方法">控件的使用方法</h2>
+<p><code>dp</code>是一种屏幕密度无关的尺寸单位，可以保证在不同分辨率的手机上显示效果尽可能一致。</p>
+<p><code>match_parent</code>表示让当前控件大小和父布局的大小一致。</p>
+<p><code>wrap_content</code>表示让当前控件的大小能正好包裹里面的内容。</p>
+<p><code>android:gravity</code>指定控件内的内容对齐方式，有<code>top</code>、<code>bottom</code>、<code>start</code>、<code>end</code>、<code>center</code>等可选，可以用<code>|</code>指定多个值。比如<code>center</code>等价于<code>center_vertical|center_horizonal</code>。</p>
+<h2 id="基本布局">基本布局</h2>
+<h3 id="linearlayout">LinearLayout</h3>
+<p>线性布局，通过<code>android:orientation</code>指定方向。</p>
+<p>有一个重要属性：<code>android:layout_weight</code>，它将控件已经占用的空间减掉后按照比重分给各个控件。一般我们直接指定<code>android:layout_width</code>为0dp，而给它指定一个比重，这样控件的尺寸将占满剩余空间。</p>
+<h3 id="relativelayout">RelativeLayout</h3>
+<p>相对布局，复杂，但有迹可循。</p>
+<pre><code>
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;RelativeLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    xmlns:tools=&quot;http://schemas.android.com/tools&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot;
+    tools:context=&quot;.MainActivity&quot;&gt;
+
+    &lt;Button
+        android:id=&quot;@+id/button1&quot;
+        android:layout_width=&quot;wrap_content&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:layout_alignParentLeft=&quot;true&quot;
+        android:layout_alignParentTop=&quot;true&quot;
+        android:text=&quot;Button1&quot; /&gt;
+
+    &lt;Button
+        android:id=&quot;@+id/button2&quot;
+        android:layout_width=&quot;wrap_content&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:layout_alignParentTop=&quot;true&quot;
+        android:layout_alignParentRight=&quot;true&quot;
+        android:text=&quot;Button2&quot; /&gt;
+
+    &lt;Button
+        android:id=&quot;@+id/button3&quot;
+        android:layout_width=&quot;wrap_content&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:layout_centerInParent=&quot;true&quot;
+        android:text=&quot;Button3&quot; /&gt;
+
+    &lt;Button
+        android:id=&quot;@+id/button4&quot;
+        android:layout_width=&quot;wrap_content&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:layout_alignParentLeft=&quot;true&quot;
+        android:layout_alignParentBottom=&quot;true&quot;
+        android:text=&quot;Button4&quot; /&gt;
+
+    &lt;Button
+        android:id=&quot;@+id/button5&quot;
+        android:layout_width=&quot;wrap_content&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:layout_alignParentRight=&quot;true&quot;
+        android:layout_alignParentBottom=&quot;true&quot;
+        android:text=&quot;Button5&quot; /&gt;
+&lt;/RelativeLayout&gt;
+</code></pre>
+<p>以上这段布局文件描述的就是一个相对布局，共有5个按钮，分别在父布局的左上、右上、中间、左下、右下位置。</p>
+<p>相对布局不仅可以相对于父布局，也可以相对于控件。以下描述了button3在中间，左上button1，右上button2，左下button4，右下button5的布局场景。</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;RelativeLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    xmlns:tools=&quot;http://schemas.android.com/tools&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot;
+    tools:context=&quot;.MainActivity&quot;&gt;
+
+    &lt;Button
+        android:id=&quot;@+id/button3&quot;
+        android:layout_width=&quot;wrap_content&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:layout_centerInParent=&quot;true&quot;
+        android:text=&quot;Button3&quot; /&gt;
+
+    &lt;Button
+        android:id=&quot;@+id/button1&quot;
+        android:layout_width=&quot;wrap_content&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:layout_above=&quot;@id/button3&quot;
+        android:layout_toLeftOf=&quot;@id/button3&quot;
+        android:text=&quot;Button1&quot; /&gt;
+
+    &lt;Button
+        android:id=&quot;@+id/button2&quot;
+        android:layout_width=&quot;wrap_content&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:layout_above=&quot;@id/button3&quot;
+        android:layout_toRightOf=&quot;@id/button3&quot;
+        android:text=&quot;Button2&quot; /&gt;
+
+    &lt;Button
+        android:id=&quot;@+id/button4&quot;
+        android:layout_width=&quot;wrap_content&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:layout_below=&quot;@id/button3&quot;
+        android:layout_toLeftOf=&quot;@id/button3&quot;
+        android:text=&quot;Button4&quot; /&gt;
+
+    &lt;Button
+        android:id=&quot;@+id/button5&quot;
+        android:layout_width=&quot;wrap_content&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:layout_below=&quot;@id/button3&quot;
+        android:layout_toRightOf=&quot;@id/button3&quot;
+        android:text=&quot;Button5&quot; /&gt;
+&lt;/RelativeLayout&gt;
+</code></pre>
+<h3 id="framelayout">FrameLayout</h3>
+<p>帧布局，其内部组件将按顺序层叠到左上角。</p>
+<blockquote>
+<p>FrameLayout一直有foreground属性，而View在后续版本才支持，在一些需要做半透明效果的地方可以用FrameLayout的属性实现，减少控件层叠层数，保证兼容性。</p>
+</blockquote>
+<h2 id="自定义控件">自定义控件</h2>
+<p>安卓中所有的控件都是直接或间接继承自View的，而所有的布局都是继承自ViewGroup的。</p>
+<p>View是安卓中最基本的一种UI组件，可以在屏幕上绘制一块矩形区域，并响应这块区域的各种事件。</p>
+<p>ViewGroup是一种特殊的View，可以包含很多子View和子ViewGroup。</p>
+<h2 id="recyclerview">RecyclerView</h2>
+<p>基本用法：</p>
+<ol>
+<li>导入<code>androidx.recyclerview:recyclerview</code>，</li>
+<li>定义类继承RecyclerView.Adapter和RecyclerView.ViewHolder。</li>
+<li>实现。</li>
+</ol>
+<p>使用DiffUtil可以简化数据更新的写法。</p>
+<p>参考<a href="https://github.com/zerofancy/ipviewer">我的一个demo项目</a></p>
+<p>常用布局管理器LinearLayoutManager（线性），此外还有GridLayoutManager（网格）和StaggeredGridLayoutManager（瀑布流）。</p>
+<blockquote>
+<p>LinearLayoutManager和PagerSnapHelper配合可以实现类似抖音的刷视频的效果。
+在引入<code>kotlin-android-extensions</code>之后可以比较方便地在<code>onBindViewHolder</code>方法中给具体的view赋值。</p>
+</blockquote>
+</div>
+            </div>
+            <script src="https://utteranc.es/client.js" repo="zerofancy/zerofancy.github.io" issue-term="android项目开发：UI设计"
+                theme="github-light" crossorigin="anonymous" async>
+                </script>
+        </div>
+        <!-- 页脚 -->
+        <footer class="navbar navbar-light bg-light">
+            <p>版权所有：归零幻想 ┊ 备案号：<a href="http://beian.miit.gov.cn/">暂无</a>┊ Powered by：归零幻想</p>
+        </footer>
+    </div>
+</body>
+
+</html>

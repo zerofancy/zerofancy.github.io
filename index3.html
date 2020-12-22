@@ -1,0 +1,386 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans">
+
+<head>
+    
+    <title>归零幻想的博客</title>
+    <meta charset="UTF-8">
+    <!--移动设备不缩放-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="alternate" type="application/rss+xml" title="归零幻想" href="https://ntutn.top/rss.xml" />
+    <!--github的markdown样式-->
+    <link rel="stylesheet" href="/res/css/github-markdown.css">
+    <!--一个基于bootstrap的样式-->
+    <link rel="stylesheet" href="/res/css/main.css">
+
+    <script src="/res/js/jquery.min.js"></script>
+    <script src="/res/js/popper.min.js"></script>
+    <script src="/res/js/bootstrap.min.js"></script>
+    <script src="/res/js/sweetalert.min.js"></script>
+    <script>
+        function chkPage() {
+            var in_page = Number($("#in_page").val());
+            if (in_page <= 0 || in_page > Number($("#pagecount").val())) {
+                return false;
+            }
+            return true;
+        }
+        $(document).ready(function () {
+            $("#btn_go").click(function () {
+                if (chkPage()) {
+                    location.href = "/index" + ($("#in_page").val() == "1" ? "" : $("#in_page").val()) + ".html";
+                } else {
+                    swal(
+                        {
+                            title: "Tip",
+                            text: "您输入的页码超出范围！",
+                            type: "warning"
+                        }
+                    );
+                }
+            });
+            $(".card-text img").addClass("img-fluid");
+            $("#n_home").addClass("active");
+            //一言
+            $.get("https://v1.hitokoto.cn/", function (data, status) {
+                $("#hitokoto").text(data.hitokoto);
+                $("#from").text("——" + data.from);
+            });
+            // ajax
+            $(".btn-read-all").click(function(){
+                const url=$(this).attr("value")
+                $(this).parent().parent().find(".card-text").load(url+" .card-text")
+                $(this).hide()
+                return false
+            })
+        });
+    </script>
+    <style>
+        /*背景图片*/
+        body {
+            background: url(https://unsplash.it/1600/900?random);
+            background-attachment: fixed;
+            background-position: bottom center;
+            background-size: cover;
+        }
+    </style>
+</head>
+
+<body>
+    <input id="pagecount" type="hidden" value="6">
+    <div class="container">
+        <nav id="nav" class="navbar navbar-expand-lg navbar-light bg-light">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
+                aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="/"><img src="/res/logo.png" width="70" height="40"
+                    class="d-inline-block align-top" alt="">
+                <span>归零幻想的博客</span></a>
+
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                    <li id="n_home" class="nav-item">
+                        <a class="nav-link" href="/">主页</a>
+                    </li>
+                    <!-- <li id="n_tags" class="nav-item">
+                    <a class="nav-link" href="/tags">标签</a>
+                </li> -->
+                    <li id="n_about" class="nav-item">
+                        <a class="nav-link" href="/about.html">关于</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/rss.xml">RSS</a>
+                    </li>
+                </ul>
+                <!-- <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0 disabled popover-dismiss" type="submit"
+                    data-toggle="popover" data-trigger="focus" title="未完成的功能"
+                    data-content="搜索功能暂时还没有完成。">Search</button>
+            </form> -->
+            </div>
+        </nav>
+        <nav class="mt-3" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+            </ol>
+        </nav>
+        <div class="card text-black bg-light">
+            <div class="card-body">
+                <blockquote class="card-blockquote">
+                    <p id="hitokoto">溺死在零梦里吧。</p>
+                    <footer id="from" class="text-right">Someone famous in
+                        <cite title="Source Title">归零幻想</cite>
+                    </footer>
+                </blockquote>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
+                    <a href="archieved/2020年11月前/kmdblog，又一个博客系统.html">kmdblog，又一个博客系统</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2020-08-21</span>&nbsp;
+                    修改时间：<span>2020-08-21</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><p>博客系统至今为止我做过3个版本了，毕竟只要写出CRUD就可以厚着脸皮说自己是个博客，是新手练手的良好选择。当前这个版本是Kotlin练手项目，与之前不同的是，当前版本是一个生成静态网页的系统。类似hexo，在本地编辑好<code>md</code>文件，再执行程序生成<code>html</code>，发布静态网页即可。</p>
+<h2 id="背景">背景</h2>
+<ol>
+<li>主要是练手的考虑。今年暑假在字节跳动实习，在安卓这边，第一次接触<code>Kotlin</code>，于是想到写点什么练手。</li>
+<li>服务器要花钱的，学生优惠一个月￥10左右，而我博客使用频率较低，不想出这钱了……</li>
+</ol>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/2020年11月前/kmdblog，又一个博客系统.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
+                    <a href="archieved/2020年11月前/在github pages部署你的博客.html">在github pages部署你的博客</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2020-08-21</span>&nbsp;
+                    修改时间：<span>2020-08-21</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><p>废话不多说，直接开搞。</p>
+<h2 id="部署">部署</h2>
+<ol>
+<li>在github创建一个仓库，名为<code>[uzername].github.io</code>，如<code>zerofancy.github.io</code></li>
+<li>将你的网页提交到这个仓库。</li>
+<li>直接访问<code>[username].github.io</code></li>
+</ol>
+<h2 id="绑定域名">绑定域名</h2>
+<ol>
+<li>将你的域名@和www以CNAME方式绑定到<code>[username].github.io</code></li>
+<li>在你的仓库根目录提交一个<code>CNAME</code>文件，内容为你的域名，如<code>ntutn.top</code></li>
+<li>在仓库的设置中找到<code>Custom domain</code>，填入并保存。如果下面的<code>Enforce HTTPS</code>不可用，清除`Custom domain保存并重新设置一次试试。</li>
+</ol>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/2020年11月前/在github pages部署你的博客.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
+                    <a href="archieved/old/重装机兵.html">重装机兵</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2019-03-25</span>&nbsp;
+                    修改时间：<span>2020-08-17</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><h2 id="拉多梦的起点">拉多：梦的起点</h2>
+<p>主角，一个满脑子都是不切实际的想法的负气出走的小毛孩，开始了他伟大的征途。这里就按照后面作品的称号吧。</p>
+<p>首先回家，箱子里面有5G，聊胜于无吧。去买几个参丸，准备，走。</p>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/old/重装机兵.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
+                    <a href="archieved/2020年11月前/Kotlin中的单例模式.html">Kotlin中的单例模式</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2020-08-07</span>&nbsp;
+                    修改时间：<span>2020-08-14</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><p>这两天要学习埋点相关的知识，做抖音某页面跳转的埋点，于是就去看下单例模式在<code>Kotlin</code>的实现。</p>
+<h2 id="单例模式">单例模式</h2>
+<p>单例模式是一种常用的软件设计模式，属于创建型模式的一种。许多时候整个系统只需要拥有某个类的一个全局对象，用于协调系统整体的行为。比如我正打算做的这个埋点，这段计时的逻辑就比较适合用单例模式。</p>
+<p>单例模式创建的对象会长期存在，所以一般比较关注它的内存占用问题，希望只有方法被调用才创建对象。这样就在多线程的场景会遇到一些问题，即当两个线程同时调用<code>getInstance()</code>时，都检测到<code>instance</code>为<code>null</code>并各自创建对象，这样就有两个实例被创建，违背了单例模式的原则。</p>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/2020年11月前/Kotlin中的单例模式.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
+                    <a href="archieved/old/掉坑的日常：springboot的json属性名大小写问题.html">掉坑的日常：springboot的json属性名大小写问题</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2020-03-24</span>&nbsp;
+                    修改时间：<span>2020-03-24</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><p>这两天想给自己小组的项目添加一个自动升级功能。这事听着复杂，但毕竟是个很常见的功能，github上的轮子很多。经过考虑，我决定选择<a href="https://github.com/xuexiangjys/XUpdate">这个组件</a>，然后自己写后端。反正后端就返回一个json的事。然后就掉了坑。</p>
+<h2 id="起因">起因</h2>
+<p>案发现场没什么好说的，就是我发现自己设置的不能实现升级，在客户端调试半天发现用官方的json能升级。然后我就找我的json和官方的json有什么区别，看ContentType也没设置错，仔细比对发现属性大小写竟然不对。我当时还挺惊讶的，毕竟是直接复制的。</p>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/old/掉坑的日常：springboot的json属性名大小写问题.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
+                    <a href="archieved/old/Java自动装箱自动拆箱踩坑.html">Java自动装箱自动拆箱踩坑</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2020-03-17</span>&nbsp;
+                    修改时间：<span>2020-03-17</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><p>int和Integer有什么区别？前者是基础数据类型，后者是封装的Java对象。但在有<code>Autoboxing</code>和<code>Unboxing</code>的情况下我们常常就把两者等同看待，无非后者能放<code>null</code>。</p>
+<p>事情要首先从一道力扣题目说起：</p>
+<h2 id="删除排序数组中的重复项-ii">删除排序数组中的重复项 II</h2>
+<p>给定一个排序数组，你需要在原地删除重复出现的元素，使得每个元素最多出现两次，返回移除后数组的新长度。</p>
+<p>不要使用额外的数组空间，你必须在原地修改输入数组并在使用 O(1) 额外空间的条件下完成。</p>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/old/Java自动装箱自动拆箱踩坑.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
+                    <a href="archieved/old/Typora+git自动同步你的笔记.html">Typora+git自动同步你的笔记</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2020-03-02</span>&nbsp;
+                    修改时间：<span>2020-03-02</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><p>这两天看了群里某个大佬的笔记，突然觉得自己用VSCode记笔记的方案不香了。VSCode虽然对<code>markdown</code>的支持不错，但毕竟本职工作不是这个，直接拿来做笔记还是不够方便，太笨重了。于是我终于想起之前同学给我安利的<code>markdown</code>编辑器：Typora。</p>
+<h2 id="dalao的笔记">dalao的笔记</h2>
+<p>首先看看大佬的笔记：</p>
+<p><img src="https://i.loli.net/2020/08/20/1Lr3BfMvSw8haYy.png" alt="1.png" /></p>
+<p>好想去偷他的笔记。不过话说他这笔记软件也不错啊，看起来简约清晰，我也有试一试的想法了。</p>
+<p>他用的笔记软件：<a href="https://github.com/tsujan/FeatherNotes">https://github.com/tsujan/FeatherNotes</a></p>
+<p>然后就被编译安装劝退了。一个是不太想这么折腾，另一个是这个软件没有提供编译好的包，感觉还是不够放心啊，毕竟如果以后开发者不维护了要再折腾一遍会非常麻烦。</p>
+<h2 id="typora同学安利的markdown编辑工具">Typora，同学安利的markdown编辑工具</h2>
+<p>与多数markdown编辑工具不同，Typora是所见即所得的markdown编辑工具。为什么程序员偏爱markdown？就是因为markdown可以让我们写作的时候只关注内容本身，而不用太在意排版的问题。而Typora又改变了传统的左右分栏或者点击切换预览的传统markdown编辑模式，用起来就更舒服了。</p>
+<p><img src="https://i.loli.net/2020/08/20/V7LzFNRXyT1hUbj.png" alt="2.png" /></p>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/old/Typora+git自动同步你的笔记.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
+                    <a href="archieved/old/记Lenovo V310 15 IKB的第n次死机.html">记Lenovo V310 15 IKB的第n次死机</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2020-01-28</span>&nbsp;
+                    修改时间：<span>2020-01-28</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><p>今天我的电脑又死机了，首先切一下<strong>tty进不去</strong>，然后试下<strong>SysRq键没反应</strong>，熟练地按住电源10秒，松开两秒，再按一下，拿出手机刷会空间。</p>
+<p>这电脑刚买的时候给我的印象其实是不错的，虽然外壳线条有点<del>丑</del>粗犷，但整体性能比我预期要好很多。i5的CPU，1T机械硬盘，入门级Radeon独显，毕竟价格摆在那里。</p>
+<p>因为没有固态硬盘，这电脑慢的很，但我安慰自己<strong>反正我也不怎么打游戏</strong>。日常尽量不用UWP应用，开机刷会手机，佛系一点也没什么不好。谁说学软件就一定要用好电脑？Code Blocks不香吗？eclipse有几个电脑带不动？实在偶尔想配置安卓开发环境的时候就连自己安卓手机做测试，至于VS就不用想了，虽然号称世界上最好用的IDE，但比较新的版本<strong>没有固态硬盘反应跟不上打字</strong>……</p>
+<p>本来也就这样了，一分钱一分货的事。但直到某次电脑毫无征兆死机……</p>
+<p>死机是正常现象，没什么好怕的。我这样告诉自己。我当时正在浏览网页<del>不要多想，不是那种满屏都是澳门首家线上赌场广告的网页</del>，毫无征兆就死机了。一般来说，所谓死机多是资源占用过高系统失去响应的原因，根据自己的经验，按组合键尝试调出任务管理器尝试结束进程，然后没有成功。貌似死机很彻底，任务管理器根本无法调出，甚至鼠标都不能动。我放下电脑，看了集哆啦A梦，回头看电脑屏幕没有要变化的征兆。没办法，按住电源键强制关机吧。后面很久这个事情都没有再出现，我也就渐渐忘了。</p>
+<p>直到又有一天，在我玩《狂野飙车8：极速凌云》正高兴的时候，画面突然不动了。这扫兴的事让我没了继续玩的兴致，而后几天又死机几次，我觉得事情没有那么简单，在网上搜索时，我发现我这不是个例。</p>
+<p>之后我加固态硬盘装双系统，死机就跟着我到了ubuntu。一般来说，ubuntu死机多是指gnome卡死，直接Alt+F2输入r就能重启，不这样做也可以切tty进入命令操作，直到某次放歌的时候死机了，歌声都停了，别说tty了，连SysRq键都没能正常工作，这表明连linux内核都死掉了。好吧，现在有足够证据表明死机不是Windows的锅。</p>
+<p>想把电脑送去修，但很麻烦的是，这个问题复现很困难，死机是不定期的，似乎跟资源占用无关，跟电脑温度无关。先不考虑电脑店能不能找到原因，就算电脑店说修好了，我也没办法验证。我觉得就这样送去修最大可能就算店家给你重装了下系统，清了下灰，升级了下BIOS，这些我都试过了没有用。</p>
+<p><strong>后来一直没有解决这件事，只是我养成了随手Ctrl+S的习惯。</strong></p>
+<p>不管怎样，今天偶发性的连续死机两次惹恼我了，联想会进我的黑名单。</p>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/old/记Lenovo V310 15 IKB的第n次死机.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
+                    <a href="archieved/old/人工智能知识点整理.html">人工智能知识点整理</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2020-01-10</span>&nbsp;
+                    修改时间：<span>2020-01-10</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><blockquote>
+<p>人工智能考试前整理的，很详细，虽然实际考试还是有好些想不起来，但总归起了一些作用的。</p>
+</blockquote>
+<h2 id="第1章绪论">第1章绪论</h2>
+<h3 id="人工智能的起源">人工智能的起源</h3>
+<p>现代人工智能的起源是<strong>1956年的达特茅斯会议</strong>。</p>
+<p>参加者：<strong>麦卡锡、明斯基</strong>、香农、罗切斯特、纽厄尔、西蒙、萨缪尔、伯恩斯坦、摩尔、所罗门诺夫。</p>
+<p>会议的主要成就就是让人工智能成了一个独立的研究学科。</p>
+<p>定下来人工智能的英文名称是“Artificial Intelligence”</p>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/old/人工智能知识点整理.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
+                    <a href="archieved/old/计算机操作系统原理笔记.html">计算机操作系统原理笔记</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2019-12-15</span>&nbsp;
+                    修改时间：<span>2019-12-15</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><h1 id="计算机操作系统原理笔记">计算机操作系统原理笔记</h1>
+<p>操作系统快考试了，我觉得自己过应该还是没问题的吧，毕竟也有认真听课。虽然对某些部分流程记忆有点发憷。</p>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/old/计算机操作系统原理笔记.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <!--页码-->
+        <nav aria-label="Page navigation row">
+            <ul class="pagination mt-3 justify-content-center">
+                <li class="page-item"><a class="page-link" href="/">First</a>
+                </li>
+                <li class="page-item">
+                    
+                    <a class="page-link" href="/index2.html">2</a>
+                </li>
+                <li class="page-item active">
+                    <span class="page-link">3</span>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="/index4.html">4</a>
+                </li>
+                <li class="page-item"></li>
+                <li class="page-item"></li>
+                <li class="page-item"><a class="page-link"
+                        href="/index6.html">Last</a></li>
+                <input id="in_page" type="text" class="form-control col-2 xs-offset-1 d-none d-lg-block offset-1"
+                    placeholder="输入页码" onkeyup="this.value=this.value.replace(/\D/g,'')"
+                    onafterpaste="this.value=this.value.replace(/\D/g,'')">
+                <button id="btn_go" class="btn btn-primary">Go</button>
+            </ul>
+        </nav>
+        <!-- 页脚 -->
+        <footer class="navbar navbar-light bg-light">
+            <p>版权所有：归零幻想 ┊ 备案号：<a href="http://beian.miit.gov.cn/">暂无</a>┊ Powered by：归零幻想</p>
+        </footer>
+    </div>
+</body>
+
+</html>
