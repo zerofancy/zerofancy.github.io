@@ -5,6 +5,70 @@
         <description>一枚准程序猿。</description>
         <link>https://ntutn.top</link>
         <item>
+            <title>android项目开发：持久化</title>
+            <description>&lt;p&gt;《第一行代码》阅读记录，有关数据持久化存储，略过了数据库的方式。&lt;/p&gt;
+&lt;h1 id=&quot;持久化&quot;&gt;持久化&lt;/h1&gt;
+&lt;h2 id=&quot;文件存储&quot;&gt;文件存储&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&quot;language-kotlin&quot;&gt;
+    private fun saveText(inputText: String) {
+        try {
+            val output = openFileOutput(&amp;quot;data&amp;quot;, Context.MODE_PRIVATE)
+            val writer = BufferedWriter(OutputStreamWriter(output))
+            writer.use {
+                it.write(inputText)
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun loadText(): String {
+        val content = StringBuilder()
+        try {
+            val input = openFileInput(&amp;quot;data&amp;quot;)
+            val reader = BufferedReader(InputStreamReader(input))
+            reader.use { r -&amp;gt;
+                r.forEachLine {
+                    content.appendLine(it)
+                }
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        return content.toString()
+    }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;sharedpreference&quot;&gt;SharedPreference&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&quot;language-kotlin&quot;&gt;
+            saveButton.setOnClickListener {
+                getSharedPreferences(&amp;quot;data&amp;quot;, Context.MODE_PRIVATE).edit {
+                    putString(&amp;quot;name&amp;quot;, &amp;quot;Tom&amp;quot;)
+                    putInt(&amp;quot;age&amp;quot;, 28)
+                    putBoolean(&amp;quot;married&amp;quot;, false)
+                }
+            }
+
+            restoreButton.setOnClickListener {
+                getSharedPreferences(&amp;quot;data&amp;quot;, Context.MODE_PRIVATE).apply {
+                    val name = getString(&amp;quot;name&amp;quot;, &amp;quot;苏珊&amp;quot;)
+                    val age = getInt(&amp;quot;age&amp;quot;, 15)
+                    val isMarried = getBoolean(&amp;quot;married&amp;quot;, false)
+                    Toast.makeText(
+                        this@MainActivity,
+                        &amp;quot;${name}年龄${age}岁${if (isMarried) &amp;quot;已婚&amp;quot; else &amp;quot;未婚&amp;quot;}&amp;quot;,
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;数据库&quot;&gt;数据库&lt;/h2&gt;
+&lt;p&gt;略过。等有使用需求的时候再看。&lt;/p&gt;
+</description>
+            <author>归零幻想</author>
+            <pubDate>Thu, 24 Dec 2020 00:00:00 CST</pubDate>
+            <link>https://ntutn.top/android项目开发：持久化.html</link>
+        </item><item>
             <title>禁用macOS的窗口标签</title>
             <description>&lt;p&gt;作为一个对更新相对激进的用户，我当然是第一时间升级了最新的macOS Big Sur。说实在的，这名字给我的第一印象并不好，因为被我看成了『Big Bug』。&lt;/p&gt;
 &lt;p&gt;圆角变大了，还有我一开始比较喜欢的功能，姑且称之为窗口标签。在BigSur中，当你打开两个全屏的Android Studio，它们将出现在同一个窗口，窗口上方出现不同的标签页，和浏览器一样。&lt;/p&gt;
@@ -367,26 +431,6 @@ for (i in 0 util array.size) {
             <author>归零幻想</author>
             <pubDate>Tue, 8 Dec 2020 00:00:00 CST</pubDate>
             <link>https://ntutn.top/android项目开发：项目结构.html</link>
-        </item><item>
-            <title>从QBASIC开始</title>
-            <description>&lt;p&gt;前两天看到一个知乎问题，拍了一张数学课本的截图，里面是一段程序，问如何才能运行这种程序。&lt;sup id=&quot;fnref-1&quot;&gt;&lt;a class=&quot;footnote-ref&quot; href=&quot;#fn-1&quot;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
-&lt;p&gt;看到这熟悉的语法有些感慨，毕竟这门语言就是我编程入门学习的第一门语言了。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;https://i.loli.net/2020/12/02/gBcqkFoL39u1Xdw.png&quot; alt=&quot;2020-12-02_08-46.png&quot; /&gt;&lt;/p&gt;
-&lt;p&gt;记得那时没有什么娱乐手段，只能翻翻我姐的旧书——当然多数看不懂。少数能看懂的，就包括一本&lt;code&gt;QBASIC&lt;/code&gt;的编程入门教程。&lt;/p&gt;
-&lt;p&gt;单词不认识，字母总还是认识的。于是我学的Hello World其实是P-R-I-N-T-&amp;quot;H-E-L-L-O-W-O-R-L-D&amp;quot;。看着都觉得累…… &lt;em&gt;没有电脑，就直接在脑袋里推演，在纸上执行程序。家里人还以为我在学英语～&lt;/em&gt;&lt;/p&gt;
-&lt;div class=&quot;footnotes&quot;&gt;
-&lt;hr /&gt;
-&lt;ol&gt;
-&lt;li id=&quot;fn-1&quot;&gt;
-&lt;p&gt;&lt;a href=&quot;https://www.zhihu.com/question/432443510&quot;&gt;请问像这种程序可以用什么软件操作? - 知乎&lt;/a&gt;&lt;/p&gt;
-&lt;a href=&quot;#fnref-1&quot; class=&quot;footnote-backref&quot;&gt;&amp;#8617;&lt;/a&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/div&gt;
-</description>
-            <author>归零幻想</author>
-            <pubDate>Wed, 2 Dec 2020 00:00:00 CST</pubDate>
-            <link>https://ntutn.top/QBASIC.html</link>
         </item>
     </channel>
 </rss>

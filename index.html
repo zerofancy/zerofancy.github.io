@@ -119,6 +119,81 @@
         <div class="card mt-3">
             <div class="card-body">
                 <h2 class="card-title text-center">
+                    <a href="android项目开发：持久化.html">android项目开发：持久化</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2020-12-24</span>&nbsp;
+                    修改时间：<span>2020-12-24</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><p>《第一行代码》阅读记录，有关数据持久化存储，略过了数据库的方式。</p>
+<h1 id="持久化">持久化</h1>
+<h2 id="文件存储">文件存储</h2>
+<pre><code class="language-kotlin">
+    private fun saveText(inputText: String) {
+        try {
+            val output = openFileOutput(&quot;data&quot;, Context.MODE_PRIVATE)
+            val writer = BufferedWriter(OutputStreamWriter(output))
+            writer.use {
+                it.write(inputText)
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun loadText(): String {
+        val content = StringBuilder()
+        try {
+            val input = openFileInput(&quot;data&quot;)
+            val reader = BufferedReader(InputStreamReader(input))
+            reader.use { r -&gt;
+                r.forEachLine {
+                    content.appendLine(it)
+                }
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        return content.toString()
+    }
+</code></pre>
+<h2 id="sharedpreference">SharedPreference</h2>
+<pre><code class="language-kotlin">
+            saveButton.setOnClickListener {
+                getSharedPreferences(&quot;data&quot;, Context.MODE_PRIVATE).edit {
+                    putString(&quot;name&quot;, &quot;Tom&quot;)
+                    putInt(&quot;age&quot;, 28)
+                    putBoolean(&quot;married&quot;, false)
+                }
+            }
+
+            restoreButton.setOnClickListener {
+                getSharedPreferences(&quot;data&quot;, Context.MODE_PRIVATE).apply {
+                    val name = getString(&quot;name&quot;, &quot;苏珊&quot;)
+                    val age = getInt(&quot;age&quot;, 15)
+                    val isMarried = getBoolean(&quot;married&quot;, false)
+                    Toast.makeText(
+                        this@MainActivity,
+                        &quot;${name}年龄${age}岁${if (isMarried) &quot;已婚&quot; else &quot;未婚&quot;}&quot;,
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+
+</code></pre>
+<h2 id="数据库">数据库</h2>
+<p>略过。等有使用需求的时候再看。</p>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="android项目开发：持久化.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
                     <a href="禁用macOS的窗口标签.html">禁用macOS的窗口标签</a>
                 </h2>
                 <h6 class="card-subtitle mb-2 text-muted text-center">
@@ -575,37 +650,6 @@ for (i in 0 util array.size) {
 </div>
                 <div class="row mt-3">
                     <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="android项目开发：项目结构.html">阅读全文 ▼</div>
-                </div>
-            </div>
-        </div>
-        <div class="card mt-3">
-            <div class="card-body">
-                <h2 class="card-title text-center">
-                    <a href="QBASIC.html">从QBASIC开始</a>
-                </h2>
-                <h6 class="card-subtitle mb-2 text-muted text-center">
-                    发布时间：<span>2020-12-02</span>&nbsp;
-                    修改时间：<span>2020-12-02</span>&nbsp;
-                    作者：<span>归零幻想</span>
-                </h6>
-                <hr>
-                <div class="card-text markdown-body"><p>前两天看到一个知乎问题，拍了一张数学课本的截图，里面是一段程序，问如何才能运行这种程序。<sup id="fnref-1"><a class="footnote-ref" href="#fn-1">1</a></sup></p>
-<p>看到这熟悉的语法有些感慨，毕竟这门语言就是我编程入门学习的第一门语言了。</p>
-<p><img src="https://i.loli.net/2020/12/02/gBcqkFoL39u1Xdw.png" alt="2020-12-02_08-46.png" /></p>
-<p>记得那时没有什么娱乐手段，只能翻翻我姐的旧书——当然多数看不懂。少数能看懂的，就包括一本<code>QBASIC</code>的编程入门教程。</p>
-<p>单词不认识，字母总还是认识的。于是我学的Hello World其实是P-R-I-N-T-&quot;H-E-L-L-O-W-O-R-L-D&quot;。看着都觉得累…… <em>没有电脑，就直接在脑袋里推演，在纸上执行程序。家里人还以为我在学英语～</em></p>
-<div class="footnotes">
-<hr />
-<ol>
-<li id="fn-1">
-<p><a href="https://www.zhihu.com/question/432443510">请问像这种程序可以用什么软件操作? - 知乎</a></p>
-<a href="#fnref-1" class="footnote-backref">&#8617;</a>
-</li>
-</ol>
-</div>
-</div>
-                <div class="row mt-3">
-                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="QBASIC.html">阅读全文 ▼</div>
                 </div>
             </div>
         </div>
