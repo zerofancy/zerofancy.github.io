@@ -9,6 +9,7 @@
             <description>&lt;p&gt;《第一行代码》阅读记录，有关数据持久化存储，略过了数据库的方式。&lt;/p&gt;
 &lt;h1 id=&quot;持久化&quot;&gt;持久化&lt;/h1&gt;
 &lt;h2 id=&quot;文件存储&quot;&gt;文件存储&lt;/h2&gt;
+&lt;p&gt;先暂时只是写了个demo，有需要再深入看。&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;language-kotlin&quot;&gt;
     private fun saveText(inputText: String) {
         try {
@@ -63,10 +64,149 @@
 
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h2 id=&quot;数据库&quot;&gt;数据库&lt;/h2&gt;
-&lt;p&gt;略过。等有使用需求的时候再看。&lt;/p&gt;
+&lt;p&gt;基本用法demo&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-kotlin&quot;&gt;
+package top.ntutn.databasetest
+
+import android.content.ContentValues
+import android.content.Context
+import android.database.Cursor
+import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
+import android.widget.Toast
+
+class MyDatabaseHelper(val context: Context, name: String, version: Int) :
+    SQLiteOpenHelper(context, name, null, version) {
+    private val createBook = &amp;quot;&amp;quot;&amp;quot;
+        create table Book (
+            id integer primary key autoincrement,
+            author text,
+            price real,
+            pages integer,
+            name text
+        )
+    &amp;quot;&amp;quot;&amp;quot;.trimIndent()
+    private val createCategory = &amp;quot;&amp;quot;&amp;quot;
+        create table Category (
+            id integer primary key autoincrement,
+            category_name text,
+            category_code integer
+        )
+    &amp;quot;&amp;quot;&amp;quot;.trimIndent()
+
+    override fun onCreate(db: SQLiteDatabase) {
+        db.execSQL(createBook)
+        db.execSQL(createCategory)
+        Toast.makeText(context, &amp;quot;建立数据库完成&amp;quot;, Toast.LENGTH_LONG).show()
+    }
+
+    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+        if (oldVersion == newVersion) return
+        Log.d(javaClass.simpleName, &amp;quot;旧版是${oldVersion}，新版是${newVersion}，数据库升级开始&amp;quot;)
+        db.execSQL(&amp;quot;drop table if exists Book&amp;quot;)
+        db.execSQL(&amp;quot;drop table if exists Category&amp;quot;)
+        onCreate(db)
+    }
+}
+
+fun cvOf(vararg pairs: Pair&amp;lt;String, Any?&amp;gt;): ContentValues {
+    val cv = ContentValues()
+    for (pair in pairs) {
+        val key = pair.first
+        when (val value = pair.second) {
+            is Int -&amp;gt; cv.put(key, value)
+            is Long -&amp;gt; cv.put(key, value)
+            is Short -&amp;gt; cv.put(key, value)
+            is Float -&amp;gt; cv.put(key, value)
+            is Double -&amp;gt; cv.put(key, value)
+            is Boolean -&amp;gt; cv.put(key, value)
+            is String -&amp;gt; cv.put(key, value)
+            is Byte -&amp;gt; cv.put(key, value)
+            is ByteArray -&amp;gt; cv.put(key, value)
+            null -&amp;gt; cv.putNull(key)
+            else -&amp;gt; throw IllegalArgumentException(&amp;quot;不支持的cv类型&amp;quot;)
+        }
+    }
+    return cv
+}
+
+fun Cursor.getString(name: String): String = getString(getColumnIndex(name))
+
+fun Cursor.getInt(name: String): Int = getInt(getColumnIndex(name))
+
+fun Cursor.getDouble(name: String): Double = getDouble(getColumnIndex(name))
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&quot;language-kotlin&quot;&gt;
+package top.ntutn.databasetest
+
+import android.os.Bundle
+import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
+import top.ntutn.databasetest.databinding.ActivityMainBinding
+
+class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        val dbHelper = MyDatabaseHelper(this, &amp;quot;BookStore.db&amp;quot;, 6)
+
+        binding.createDatabaseButton.setOnClickListener {
+            dbHelper.writableDatabase
+        }
+        binding.addDataButton.setOnClickListener {
+            val db = dbHelper.writableDatabase
+            val values1 = cvOf(
+                &amp;quot;name&amp;quot; to &amp;quot;The Da Vinci Code&amp;quot;,
+                &amp;quot;author&amp;quot; to &amp;quot;Dan Brown&amp;quot;,
+                &amp;quot;pages&amp;quot; to 454,
+                &amp;quot;price&amp;quot; to 16.96
+            )
+            db.insert(&amp;quot;Book&amp;quot;, null, values1)
+            val values2 = cvOf(
+                &amp;quot;name&amp;quot; to &amp;quot;The Lost Symbol&amp;quot;,
+                &amp;quot;author&amp;quot; to &amp;quot;Dan Brown&amp;quot;,
+                &amp;quot;pages&amp;quot; to 510,
+                &amp;quot;price&amp;quot; to 19.95
+            )
+            db.insert(&amp;quot;Book&amp;quot;, null, values2)
+        }
+        binding.updateDataButton.setOnClickListener {
+            val db = dbHelper.writableDatabase
+            val values = cvOf(&amp;quot;price&amp;quot; to 10.99)
+            db.update(&amp;quot;Book&amp;quot;, values, &amp;quot;name=?&amp;quot;, arrayOf(&amp;quot;The Da Vinci Code&amp;quot;))
+        }
+        binding.deleteDataButton.setOnClickListener {
+            val db = dbHelper.writableDatabase
+            db.delete(&amp;quot;Book&amp;quot;, &amp;quot;pages &amp;gt; ?&amp;quot;, arrayOf(&amp;quot;500&amp;quot;))
+        }
+        binding.queryDataButton.setOnClickListener {
+            val db = dbHelper.writableDatabase
+            val cursor = db.query(&amp;quot;Book&amp;quot;, null, null, null, null, null, null)
+            if (cursor.moveToFirst()) {
+                do {
+                    val name = cursor.getString(&amp;quot;name&amp;quot;)
+                    val author = cursor.getString(&amp;quot;author&amp;quot;)
+                    val pages = cursor.getInt(&amp;quot;pages&amp;quot;)
+                    val price = cursor.getDouble(&amp;quot;price&amp;quot;)
+                    Log.d(
+                        javaClass.simpleName,
+                        &amp;quot;name: $name, author: $author, pages: $pages, price: $price&amp;quot;
+                    )
+                } while (cursor.moveToNext())
+            }
+            cursor.close()
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
 </description>
             <author>归零幻想</author>
-            <pubDate>Thu, 24 Dec 2020 00:00:00 CST</pubDate>
+            <pubDate>Mon, 28 Dec 2020 00:00:00 CST</pubDate>
             <link>https://ntutn.top/android项目开发：持久化.html</link>
         </item><item>
             <title>禁用macOS的窗口标签</title>
