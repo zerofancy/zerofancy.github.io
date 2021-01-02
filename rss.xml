@@ -5,6 +5,18 @@
         <description>一枚准程序猿。</description>
         <link>https://ntutn.top</link>
         <item>
+            <title>android项目开发：通知</title>
+            <description>&lt;p&gt;仍然是第一行代码的笔记，这篇是有关通知的，最基本的用法。&lt;/p&gt;
+&lt;h2 id=&quot;通知的相关知识&quot;&gt;通知的相关知识&lt;/h2&gt;
+&lt;p&gt;通知是什么不再赘述，这里只记录些重要但没接触的概念。&lt;/p&gt;
+&lt;p&gt;通知渠道在8.0（O）引入。要求APP将通知分类，通过不同&lt;em&gt;渠道&lt;/em&gt;进行分发，用户可以选择性禁用某个渠道的通知，或者调整优先等级。&lt;/p&gt;
+&lt;p&gt;通知可以有不同的重要等级，有四种：&lt;code&gt;IMPORTANCE_HIGH&lt;/code&gt;、&lt;code&gt;IMPORTANCE_DEFAULT&lt;/code&gt;、&lt;code&gt;IMPORTANCE_LOW&lt;/code&gt;、&lt;code&gt;IMPORTANCE_MIN&lt;/code&gt;。根据重要等级不同，通知可能有不同的展现策略，比如在前台提示甚至播放声音。&lt;/p&gt;
+&lt;p&gt;在通知渠道创建时通知的重要等级也就确定了，之后不能再被APP修改。&lt;/p&gt;
+</description>
+            <author>归零幻想</author>
+            <pubDate>Sun, 3 Jan 2021 00:00:00 CST</pubDate>
+            <link>https://ntutn.top/android项目开发：通知.html</link>
+        </item><item>
             <title>android项目开发：持久化</title>
             <description>&lt;p&gt;《第一行代码》阅读记录，有关数据持久化存储，略过了数据库的方式。&lt;/p&gt;
 &lt;h1 id=&quot;持久化&quot;&gt;持久化&lt;/h1&gt;
@@ -209,6 +221,19 @@ class MainActivity : AppCompatActivity() {
             <pubDate>Mon, 28 Dec 2020 00:00:00 CST</pubDate>
             <link>https://ntutn.top/android项目开发：持久化.html</link>
         </item><item>
+            <title>android项目开发：Broadcast</title>
+            <description>&lt;p&gt;仍然是《第一行代码》的学习笔记，安卓内置广播机制。&lt;/p&gt;
+&lt;p&gt;Android中每个应用程序都可以对自己感兴趣的广播进行注册，包括来自系统的，和其他应用程序的。&lt;/p&gt;
+&lt;p&gt;广播分为标准广播和有序广播。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;标准广播异步执行，所有BroadcastReceiver几乎同时收到广播的消息。&lt;/li&gt;
+&lt;li&gt;有序广播 同步执行，只有前一个Receiver逻辑执行完后才会传递给下一个，且可以将广播截断。&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+            <author>归零幻想</author>
+            <pubDate>Tue, 22 Dec 2020 00:00:00 CST</pubDate>
+            <link>https://ntutn.top/android项目开发：Broadcast.html</link>
+        </item><item>
             <title>禁用macOS的窗口标签</title>
             <description>&lt;p&gt;作为一个对更新相对激进的用户，我当然是第一时间升级了最新的macOS Big Sur。说实在的，这名字给我的第一印象并不好，因为被我看成了『Big Bug』。&lt;/p&gt;
 &lt;p&gt;圆角变大了，还有我一开始比较喜欢的功能，姑且称之为窗口标签。在BigSur中，当你打开两个全屏的Android Studio，它们将出现在同一个窗口，窗口上方出现不同的标签页，和浏览器一样。&lt;/p&gt;
@@ -230,35 +255,6 @@ defaults write com.google.android.studio AppleWindowTabbingMode manual
             <author>归零幻想</author>
             <pubDate>Tue, 22 Dec 2020 00:00:00 CST</pubDate>
             <link>https://ntutn.top/禁用macOS的窗口标签.html</link>
-        </item><item>
-            <title>android项目开发：Broadcast</title>
-            <description>&lt;p&gt;仍然是《第一行代码》的学习笔记，安卓内置广播机制。&lt;/p&gt;
-&lt;p&gt;Android中每个应用程序都可以对自己感兴趣的广播进行注册，包括来自系统的，和其他应用程序的。&lt;/p&gt;
-&lt;p&gt;广播分为标准广播和有序广播。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;标准广播异步执行，所有BroadcastReceiver几乎同时收到广播的消息。&lt;/li&gt;
-&lt;li&gt;有序广播 同步执行，只有前一个Receiver逻辑执行完后才会传递给下一个，且可以将广播截断。&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-            <author>归零幻想</author>
-            <pubDate>Tue, 22 Dec 2020 00:00:00 CST</pubDate>
-            <link>https://ntutn.top/android项目开发：Broadcast.html</link>
-        </item><item>
-            <title>android项目开发：UI设计</title>
-            <description>&lt;p&gt;仍然是《第一行代码》的学习笔记，这里记录的东西相对少一点，UI上的东西还是更多在实际项目中感受到。比如我想没有必要写TextView的介绍吧。&lt;/p&gt;
-&lt;h2 id=&quot;控件的使用方法&quot;&gt;控件的使用方法&lt;/h2&gt;
-&lt;p&gt;&lt;code&gt;dp&lt;/code&gt;是一种屏幕密度无关的尺寸单位，可以保证在不同分辨率的手机上显示效果尽可能一致。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;match_parent&lt;/code&gt;表示让当前控件大小和父布局的大小一致。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;wrap_content&lt;/code&gt;表示让当前控件的大小能正好包裹里面的内容。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;android:gravity&lt;/code&gt;指定控件内的内容对齐方式，有&lt;code&gt;top&lt;/code&gt;、&lt;code&gt;bottom&lt;/code&gt;、&lt;code&gt;start&lt;/code&gt;、&lt;code&gt;end&lt;/code&gt;、&lt;code&gt;center&lt;/code&gt;等可选，可以用&lt;code&gt;|&lt;/code&gt;指定多个值。比如&lt;code&gt;center&lt;/code&gt;等价于&lt;code&gt;center_vertical|center_horizonal&lt;/code&gt;。&lt;/p&gt;
-&lt;h2 id=&quot;基本布局&quot;&gt;基本布局&lt;/h2&gt;
-&lt;h3 id=&quot;linearlayout&quot;&gt;LinearLayout&lt;/h3&gt;
-&lt;p&gt;线性布局，通过&lt;code&gt;android:orientation&lt;/code&gt;指定方向。&lt;/p&gt;
-&lt;p&gt;有一个重要属性：&lt;code&gt;android:layout_weight&lt;/code&gt;，它将控件已经占用的空间减掉后按照比重分给各个控件。一般我们直接指定&lt;code&gt;android:layout_width&lt;/code&gt;为0dp，而给它指定一个比重，这样控件的尺寸将占满剩余空间。&lt;/p&gt;
-</description>
-            <author>归零幻想</author>
-            <pubDate>Mon, 21 Dec 2020 00:00:00 CST</pubDate>
-            <link>https://ntutn.top/android项目开发：UI设计.html</link>
         </item><item>
             <title>android项目开发：Fragment</title>
             <description>&lt;h1 id=&quot;fragment&quot;&gt;Fragment&lt;/h1&gt;
@@ -328,6 +324,22 @@ class LeftFragment : Fragment() {
             <pubDate>Mon, 21 Dec 2020 00:00:00 CST</pubDate>
             <link>https://ntutn.top/android项目开发：Fragment.html</link>
         </item><item>
+            <title>android项目开发：UI设计</title>
+            <description>&lt;p&gt;仍然是《第一行代码》的学习笔记，这里记录的东西相对少一点，UI上的东西还是更多在实际项目中感受到。比如我想没有必要写TextView的介绍吧。&lt;/p&gt;
+&lt;h2 id=&quot;控件的使用方法&quot;&gt;控件的使用方法&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;dp&lt;/code&gt;是一种屏幕密度无关的尺寸单位，可以保证在不同分辨率的手机上显示效果尽可能一致。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;match_parent&lt;/code&gt;表示让当前控件大小和父布局的大小一致。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;wrap_content&lt;/code&gt;表示让当前控件的大小能正好包裹里面的内容。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;android:gravity&lt;/code&gt;指定控件内的内容对齐方式，有&lt;code&gt;top&lt;/code&gt;、&lt;code&gt;bottom&lt;/code&gt;、&lt;code&gt;start&lt;/code&gt;、&lt;code&gt;end&lt;/code&gt;、&lt;code&gt;center&lt;/code&gt;等可选，可以用&lt;code&gt;|&lt;/code&gt;指定多个值。比如&lt;code&gt;center&lt;/code&gt;等价于&lt;code&gt;center_vertical|center_horizonal&lt;/code&gt;。&lt;/p&gt;
+&lt;h2 id=&quot;基本布局&quot;&gt;基本布局&lt;/h2&gt;
+&lt;h3 id=&quot;linearlayout&quot;&gt;LinearLayout&lt;/h3&gt;
+&lt;p&gt;线性布局，通过&lt;code&gt;android:orientation&lt;/code&gt;指定方向。&lt;/p&gt;
+&lt;p&gt;有一个重要属性：&lt;code&gt;android:layout_weight&lt;/code&gt;，它将控件已经占用的空间减掉后按照比重分给各个控件。一般我们直接指定&lt;code&gt;android:layout_width&lt;/code&gt;为0dp，而给它指定一个比重，这样控件的尺寸将占满剩余空间。&lt;/p&gt;
+</description>
+            <author>归零幻想</author>
+            <pubDate>Mon, 21 Dec 2020 00:00:00 CST</pubDate>
+            <link>https://ntutn.top/android项目开发：UI设计.html</link>
+        </item><item>
             <title>android项目开发：Activity</title>
             <description>&lt;blockquote&gt;
 &lt;p&gt;仍然是《第一行代码》的读书笔记，可能引用原书的定义和描述，或代码案例。&lt;/p&gt;
@@ -389,6 +401,17 @@ override fun onOptionsItemSelected(item: MenuItem): Boolean {
             <author>归零幻想</author>
             <pubDate>Fri, 11 Dec 2020 00:00:00 CST</pubDate>
             <link>https://ntutn.top/作为一名男性，你愿意和丁真互换人生吗.html</link>
+        </item><item>
+            <title>关于</title>
+            <description>&lt;h2 id=&quot;归零幻想&quot;&gt;归零幻想&lt;/h2&gt;
+&lt;img alt=&quot;归零幻想&quot; src=&quot;/res/img/avatar.jpg&quot; width=&quot;200px&quot;&gt;
+&lt;hr /&gt;
+&lt;p&gt;归零幻想是本人的网名啦，这里是我的博客小站。本人在其他地方帐号大多也叫这个名字。&lt;/p&gt;
+&lt;p&gt;博客系统至今我写过三个版本[^1]，毕竟写出个CRUD就可以厚着脸皮说自己是个博客了。当前版本最初是个Kotlin练手项目，源代码发布在&lt;a href=&quot;https://github.com/zerofancy/kmdblog&quot;&gt;github&lt;/a&gt;。不过也就自用罢了，不会有人对我的代码感兴趣吧……&lt;/p&gt;
+</description>
+            <author>归零幻想</author>
+            <pubDate>Wed, 9 Dec 2020 00:00:00 CST</pubDate>
+            <link>https://ntutn.top/about.html</link>
         </item><item>
             <title>android项目开发：Kotlin</title>
             <description>&lt;h1 id=&quot;kotlin&quot;&gt;Kotlin&lt;/h1&gt;
@@ -542,35 +565,6 @@ for (i in 0 util array.size) {
             <author>归零幻想</author>
             <pubDate>Wed, 9 Dec 2020 00:00:00 CST</pubDate>
             <link>https://ntutn.top/android项目开发：Kotlin.html</link>
-        </item><item>
-            <title>关于</title>
-            <description>&lt;h2 id=&quot;归零幻想&quot;&gt;归零幻想&lt;/h2&gt;
-&lt;img alt=&quot;归零幻想&quot; src=&quot;/res/img/avatar.jpg&quot; width=&quot;200px&quot;&gt;
-&lt;hr /&gt;
-&lt;p&gt;归零幻想是本人的网名啦，这里是我的博客小站。本人在其他地方帐号大多也叫这个名字。&lt;/p&gt;
-&lt;p&gt;博客系统至今我写过三个版本[^1]，毕竟写出个CRUD就可以厚着脸皮说自己是个博客了。当前版本最初是个Kotlin练手项目，源代码发布在&lt;a href=&quot;https://github.com/zerofancy/kmdblog&quot;&gt;github&lt;/a&gt;。不过也就自用罢了，不会有人对我的代码感兴趣吧……&lt;/p&gt;
-</description>
-            <author>归零幻想</author>
-            <pubDate>Wed, 9 Dec 2020 00:00:00 CST</pubDate>
-            <link>https://ntutn.top/about.html</link>
-        </item><item>
-            <title>android项目开发：项目结构</title>
-            <description>&lt;p&gt;虽然已经在字节实习并拿到转正offer，但实际我自己感受我现在对安卓基础知识掌握的程度还差很多，感觉写业务代码本身并不能带来多少提升。&lt;/p&gt;
-&lt;p&gt;恰逢前两天看到黄正楠那里有一本看上去不错的书&lt;sup id=&quot;fnref-1&quot;&gt;&lt;a class=&quot;footnote-ref&quot; href=&quot;#fn-1&quot;&gt;1&lt;/a&gt;&lt;/sup&gt;，而在淘宝也在打折，就买了一本。&lt;/p&gt;
-&lt;p&gt;那么从Hello Wrold开始，先看看安卓项目的项目结构。&lt;/p&gt;
-&lt;div class=&quot;footnotes&quot;&gt;
-&lt;hr /&gt;
-&lt;ol&gt;
-&lt;li id=&quot;fn-1&quot;&gt;
-&lt;p&gt;《第一行代码》&lt;/p&gt;
-&lt;a href=&quot;#fnref-1&quot; class=&quot;footnote-backref&quot;&gt;&amp;#8617;&lt;/a&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/div&gt;
-</description>
-            <author>归零幻想</author>
-            <pubDate>Tue, 8 Dec 2020 00:00:00 CST</pubDate>
-            <link>https://ntutn.top/android项目开发：项目结构.html</link>
         </item>
     </channel>
 </rss>
