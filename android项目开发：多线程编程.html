@@ -1,0 +1,289 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans">
+
+<head>
+    
+    
+    <title>android项目开发：多线程编程--归零幻想的博客</title>
+    <meta charset="UTF-8">
+    <!--移动设备不缩放-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="alternate" type="application/rss+xml" title="归零幻想" href="https://ntutn.top/rss.xml" />
+    <!--github的markdown样式-->
+    <link rel="stylesheet" href="/res/css/github-markdown.css">
+    <!--一个基于bootstrap的样式-->
+    <link rel="stylesheet" href="/res/css/main.css">
+
+    <script src="/res/js/jquery.min.js"></script>
+    <script src="/res/js/popper.min.js"></script>
+    <script src="/res/js/bootstrap.min.js"></script>
+
+    <style>
+        /*图片缩放*/
+        .imageWrapper {
+            max-width: 500px;
+            max-height: 100%;
+            display: block;
+            margin: 0 auto;
+        }
+
+        /*背景图片*/
+        body {
+            background: url(https://unsplash.it/1600/900?random);
+            background-attachment: fixed;
+            background-position: bottom center;
+            background-size: cover;
+        }
+    </style>
+    <script src="/res/js/zoomify.min.js"></script>
+    <link href="/res/css/zoomify.min.css" rel="stylesheet">
+
+    <script>
+        $(document).ready(function () {
+            $(".markdown-body img").each(function () {
+                divImageWrapper = $(this).after("<div class='imageWrapper'></div>")
+                $(this).appendTo($(this).next())
+            })
+            $(".markdown-body img").zoomify()
+        })
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <nav id="nav" class="navbar navbar-expand-lg navbar-light bg-light">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
+                aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="/"><img src="/res/logo.png" width="70" height="40"
+                    class="d-inline-block align-top" alt="">
+                <span>归零幻想的博客</span></a>
+
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                    <li id="n_home" class="nav-item">
+                        <a class="nav-link" href="/">主页</a>
+                    </li>
+                    <!-- <li id="n_tags" class="nav-item">
+                        <a class="nav-link" href="/tags">标签</a>
+                    </li> -->
+                    <li id="n_about" class="nav-item">
+                        <a class="nav-link" href="/about.html">关于</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/rss.xml">RSS</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <nav class="mt-3" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+
+                <li class="breadcrumb-item active" aria-current="page">android项目开发：多线程编程</li>
+            </ol>
+        </nav>
+        <div class="card mt-3 mb-3">
+            <div class="card-body markdown-body">
+                <h1 class="card-title text-center realtitle">android项目开发：多线程编程</h1>
+                <!--TODO 时间-->
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2021-01-06</span>&nbsp;
+                    修改时间：<span>2021-01-06</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <br>
+                <div class="card-text"><p>仍然是《第一行代码》的笔记，不过略过了deprated的内容，并探究了下Handler的工作机制。</p>
+<blockquote>
+<p>上班了，果然没有那么多大块时间写博客了。</p>
+</blockquote>
+<h2 id="handler">Handler</h2>
+<p>主线程不能进行耗时处理，子线程不能访问UI，所以我们需要异步消息处理机制。</p>
+<h3 id="使用">使用</h3>
+<pre><code class="language-kotlin">
+class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
+
+    private val handler = object : Handler(Looper.getMainLooper()) {
+        override fun handleMessage(msg: Message) {
+            when(msg.what){
+                MSG_UPDATE_TEXT -&gt; binding.textView.text = &quot;Nice to meet you. &quot;
+            }
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        initView()
+    }
+
+    private fun initView() {
+        binding.apply {
+            changeTextButton.setOnClickListener {
+                thread {
+                    val msg = Message()
+                    msg.what = MSG_UPDATE_TEXT
+                    handler.sendMessage(msg)
+                }
+            }
+        }
+    }
+
+    companion object {
+        private const val MSG_UPDATE_TEXT = 1
+    }
+}
+</code></pre>
+<h3 id="原理">原理</h3>
+<p>图片有点多，懒得一张张转移了，去我整理的文档看吧：</p>
+<p><a href="https://bytedance.feishu.cn/docs/doccnRaxHFiTJDYLBuYMzpSSJAd">安卓Handler异步消息处理机制</a></p>
+<h2 id="service">Service</h2>
+<p>三个回调：</p>
+<ol>
+<li><code>onCreate()</code> 在Service创建时调用</li>
+<li><code>onStartCommand()</code>在Service每次启动时被调用</li>
+<li><code>onDestory()</code>在Service销毁时调用</li>
+</ol>
+<p>通过<code>startService(intent)</code>和<code>stopService(intent)</code>的方式启动和停止Service。</p>
+<p>Binder用于和View绑定通信。Binder和前台Service具体参见下面例子。</p>
+<pre><code class="language-kotlin">
+package top.ntutn.servicetest
+
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.app.Service
+import android.content.Context
+import android.content.Intent
+import android.graphics.BitmapFactory
+import android.os.Binder
+import android.os.Build
+import android.util.Log
+import androidx.core.app.NotificationCompat
+
+class MyService : Service() {
+    private val mBinder = DownloadBinder()
+
+    class DownloadBinder : Binder() {
+        fun startDownload() {
+            Log.d(javaClass.simpleName, &quot;startDownload() executed&quot;)
+        }
+
+        fun getProcess(): Int {
+            Log.d(javaClass.simpleName, &quot;getProcess() executed&quot;)
+            return 0
+        }
+    }
+
+    override fun onBind(intent: Intent) = mBinder
+
+    override fun onCreate() {
+        super.onCreate()
+        Log.d(javaClass.simpleName, &quot;onCreate() executed&quot;)
+        val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        if (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(
+                &quot;my_service&quot;,
+                &quot;前台Service通知&quot;,
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+            manager.createNotificationChannel(channel)
+        }
+        val intent = Intent(this, MainActivity::class.java)
+        val pi = PendingIntent.getActivity(this, REQ_MY_SERVICE, intent, 0)
+        val notification = NotificationCompat.Builder(this, &quot;my_service&quot;)
+            .setContentTitle(&quot;This is content title&quot;)
+            .setContentText(&quot;This is content text. &quot;)
+            .setContentIntent(pi)
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setLargeIcon(BitmapFactory.decodeResource(resources,R.drawable.ic_launcher_foreground))
+            .build()
+        startForeground(1, notification)
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        Log.d(javaClass.simpleName, &quot;onStartCommand() executed&quot;)
+        return super.onStartCommand(intent, flags, startId)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.d(javaClass.simpleName, &quot;onDestroy() executed&quot;)
+    }
+
+    companion object {
+        private const val REQ_MY_SERVICE = 0
+    }
+}
+</code></pre>
+<pre><code class="language-kotlin">
+package top.ntutn.servicetest
+
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
+import android.os.Bundle
+import android.os.IBinder
+import androidx.appcompat.app.AppCompatActivity
+import top.ntutn.servicetest.databinding.ActivityMainBinding
+
+class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var downloadBinder: MyService.DownloadBinder
+
+    private val connection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName, service: IBinder) {
+            downloadBinder = service as MyService.DownloadBinder
+            downloadBinder.startDownload()
+            downloadBinder.getProcess()
+        }
+
+        override fun onServiceDisconnected(name: ComponentName?) = Unit
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        initView()
+    }
+
+    private fun initView() {
+        binding.apply {
+            startServiceButton.setOnClickListener {
+                val intent = Intent(this@MainActivity, MyService::class.java)
+                startService(intent)
+            }
+            stopServiceButton.setOnClickListener {
+                val intent = Intent(this@MainActivity, MyService::class.java)
+                stopService(intent)
+            }
+            bindServiceButton.setOnClickListener {
+                val intent = Intent(this@MainActivity, MyService::class.java)
+                bindService(intent, connection, Context.BIND_AUTO_CREATE)
+            }
+            unbindServiceButton.setOnClickListener {
+                unbindService(connection)
+            }
+        }
+    }
+}
+</code></pre>
+</div>
+            </div>
+            <script src="https://utteranc.es/client.js" repo="zerofancy/zerofancy.github.io" issue-term="android项目开发：多线程编程"
+                theme="github-light" crossorigin="anonymous" async>
+                </script>
+        </div>
+        <!-- 页脚 -->
+        <footer class="navbar navbar-light bg-light">
+            <p>版权所有：归零幻想 ┊ 备案号：<a href="http://beian.miit.gov.cn/">暂无</a>┊ Powered by：归零幻想</p>
+        </footer>
+    </div>
+</body>
+
+</html>

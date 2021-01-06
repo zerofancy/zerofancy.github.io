@@ -5,6 +5,58 @@
         <description>一枚准程序猿。</description>
         <link>https://ntutn.top</link>
         <item>
+            <title>android项目开发：多线程编程</title>
+            <description>&lt;p&gt;仍然是《第一行代码》的笔记，不过略过了deprated的内容，并探究了下Handler的工作机制。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;上班了，果然没有那么多大块时间写博客了。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;handler&quot;&gt;Handler&lt;/h2&gt;
+&lt;p&gt;主线程不能进行耗时处理，子线程不能访问UI，所以我们需要异步消息处理机制。&lt;/p&gt;
+&lt;h3 id=&quot;使用&quot;&gt;使用&lt;/h3&gt;
+&lt;pre&gt;&lt;code class=&quot;language-kotlin&quot;&gt;
+class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
+
+    private val handler = object : Handler(Looper.getMainLooper()) {
+        override fun handleMessage(msg: Message) {
+            when(msg.what){
+                MSG_UPDATE_TEXT -&amp;gt; binding.textView.text = &amp;quot;Nice to meet you. &amp;quot;
+            }
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        initView()
+    }
+
+    private fun initView() {
+        binding.apply {
+            changeTextButton.setOnClickListener {
+                thread {
+                    val msg = Message()
+                    msg.what = MSG_UPDATE_TEXT
+                    handler.sendMessage(msg)
+                }
+            }
+        }
+    }
+
+    companion object {
+        private const val MSG_UPDATE_TEXT = 1
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&quot;原理&quot;&gt;原理&lt;/h3&gt;
+&lt;p&gt;图片有点多，懒得一张张转移了，去我整理的文档看吧：&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://bytedance.feishu.cn/docs/doccnRaxHFiTJDYLBuYMzpSSJAd&quot;&gt;安卓Handler异步消息处理机制&lt;/a&gt;&lt;/p&gt;
+</description>
+            <author>归零幻想</author>
+            <pubDate>Wed, 6 Jan 2021 00:00:00 CST</pubDate>
+            <link>https://ntutn.top/android项目开发：多线程编程.html</link>
+        </item><item>
             <title>截图不可信,我们能信什么</title>
             <description>&lt;p&gt;这两天网上流传一件事，又有一个拼多多员工猝死了，而这名员工是&lt;strong&gt;98年出生的，年仅23岁&lt;/strong&gt;。&lt;/p&gt;
 &lt;p&gt;&lt;a href=&quot;https://www.zhihu.com/question/437702180&quot;&gt;如何看待网传拼多多员工加班后猝死一事？拼多多需要承担哪些责任？ - 知乎&lt;/a&gt;&lt;/p&gt;
@@ -415,159 +467,6 @@ override fun onOptionsItemSelected(item: MenuItem): Boolean {
             <author>归零幻想</author>
             <pubDate>Fri, 11 Dec 2020 00:00:00 CST</pubDate>
             <link>https://ntutn.top/作为一名男性，你愿意和丁真互换人生吗.html</link>
-        </item><item>
-            <title>android项目开发：Kotlin</title>
-            <description>&lt;h1 id=&quot;kotlin&quot;&gt;Kotlin&lt;/h1&gt;
-&lt;h2 id=&quot;变量和函数&quot;&gt;变量和函数&lt;/h2&gt;
-&lt;h3 id=&quot;变量&quot;&gt;变量&lt;/h3&gt;
-&lt;p&gt;用&lt;code&gt;var&lt;/code&gt;和&lt;code&gt;val&lt;/code&gt;定义变量，并有类型自动推导的支持。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;val&lt;/code&gt;用来声明一个不可变的变量，&lt;code&gt;var&lt;/code&gt;用来声明一个可变的变量。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-kotlin&quot;&gt;val a = 10
-var b: Int = 12
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Kotlin完全抛弃了java中的基本数据类型，完全使用对象数据类型。&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;&lt;th&gt;java基本数据类型&lt;/th&gt;&lt;th&gt;Kotlin对象数据类型&lt;/th&gt;&lt;th&gt;数据类型说明&lt;/th&gt;&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;&lt;td&gt;int&lt;/td&gt;&lt;td&gt;Int&lt;/td&gt;&lt;td&gt;整型&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;long&lt;/td&gt;&lt;td&gt;Long&lt;/td&gt;&lt;td&gt;长整型&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;short&lt;/td&gt;&lt;td&gt;Short&lt;/td&gt;&lt;td&gt;短整型&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;float&lt;/td&gt;&lt;td&gt;Float&lt;/td&gt;&lt;td&gt;单精度浮点型&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;double&lt;/td&gt;&lt;td&gt;Double&lt;/td&gt;&lt;td&gt;双精度浮点型&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;boolean&lt;/td&gt;&lt;td&gt;Boolean&lt;/td&gt;&lt;td&gt;布尔型&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;char&lt;/td&gt;&lt;td&gt;Char&lt;/td&gt;&lt;td&gt;字符型&lt;/td&gt;&lt;/tr&gt;
-&lt;tr&gt;&lt;td&gt;byte&lt;/td&gt;&lt;td&gt;Byte&lt;/td&gt;&lt;td&gt;字节型&lt;/td&gt;&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h3 id=&quot;函数&quot;&gt;函数&lt;/h3&gt;
-&lt;p&gt;语法：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-kotlin&quot;&gt;fun main(args: Array&amp;lt;String&amp;gt;) {
-    println(&amp;quot;Hello World!&amp;quot;)
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;Kotlin中的函数在无必要时可以省略很多东西：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-kotlin&quot;&gt;import kotlin.math.max
-
-fun largerNumber(a: Int, b: Int) = max(a, b)
-
-fun main(args: Array&amp;lt;String&amp;gt;) {
-    val a = 3
-    val b = 5
-    println(&amp;quot;The larger number of a and b is ${largerNumber(a, b)}&amp;quot;)
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&quot;程序的逻辑控制&quot;&gt;程序的逻辑控制&lt;/h2&gt;
-&lt;h3 id=&quot;if&quot;&gt;if&lt;/h3&gt;
-&lt;p&gt;与java中的if语句相比，Kotlin中的if是可以有返回值的。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-kotlin&quot;&gt;fun judge(score: Int) = if (score &amp;gt;= 60) &amp;quot;你及格了&amp;quot; else &amp;quot;你还需要多努力&amp;quot;
-
-fun main() {
-    println(judge(55))
-    println(judge(66))
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;与此同时，Kotlin不再有java中的三元运算符&lt;sup id=&quot;fnref-1&quot;&gt;&lt;a class=&quot;footnote-ref&quot; href=&quot;#fn-1&quot;&gt;1&lt;/a&gt;&lt;/sup&gt;，语义上清晰了很多。&lt;/p&gt;
-&lt;h3 id=&quot;when条件语句&quot;&gt;when条件语句&lt;/h3&gt;
-&lt;p&gt;类似于java中的switch语句，根据变量的值执行不同的逻辑。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-kotlin&quot;&gt;fun judge(score: Int) = if (score &amp;gt;= 60) &amp;quot;你及格了&amp;quot; else &amp;quot;你还需要多努力&amp;quot;
-
-fun getScore(name: String) = when (name) {
-    &amp;quot;Tom&amp;quot; -&amp;gt; 78
-    &amp;quot;Jack&amp;quot; -&amp;gt; 35
-    &amp;quot;Jerry&amp;quot; -&amp;gt; 84
-    &amp;quot;Lee&amp;quot; -&amp;gt; 57
-    else -&amp;gt; 0
-}
-
-fun main() {
-    println(judge(getScore(&amp;quot;Tom&amp;quot;)))
-    println(judge(getScore(&amp;quot;Jack&amp;quot;)))
-    println(judge(getScore(&amp;quot;Bill&amp;quot;)))
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;对我来说，最令人振奋的是再也不需要在每个分支里面都写个break了。其次when也是有返回值的，这和其他特性组合写出来的代码非常简洁优雅。&lt;/p&gt;
-&lt;p&gt;写个小demo吧。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-kotlin&quot;&gt;interface Speakable {
-    fun speak()
-}
-
-class Dog : Speakable {
-    override fun speak() {
-        println(&amp;quot;汪汪汪&amp;quot;)
-    }
-}
-
-class Cat : Speakable {
-    override fun speak() {
-        println(&amp;quot;喵喵喵&amp;quot;)
-    }
-
-    fun climb() {
-        println(&amp;quot;小猫会爬树&amp;quot;)
-    }
-}
-
-fun generateAnimal(): Speakable? = when ((1..3).random()) {
-    1 -&amp;gt; Dog()
-    2 -&amp;gt; Cat()
-    else -&amp;gt; null
-}
-
-fun main() {
-    when (val animal = generateAnimal()) {
-        is Dog -&amp;gt; {
-            println(&amp;quot;生成的动物是小狗&amp;quot;)
-            animal.speak()
-        }
-        is Cat -&amp;gt; {
-            println(&amp;quot;生成的动物是小猫&amp;quot;)
-            animal.speak()
-            animal.climb()
-        }
-        else -&amp;gt; println(&amp;quot;生成动物时出现问题&amp;quot;)
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&quot;循环语句&quot;&gt;循环语句&lt;/h3&gt;
-&lt;p&gt;Kotlin中有两类循环，其中&lt;code&gt;while&lt;/code&gt;循环与java学过的while循环非常相似，只说下有差异的&lt;code&gt;for&lt;/code&gt;循环吧。&lt;/p&gt;
-&lt;p&gt;Kotlin的for循环只有for..in式的了，如&lt;code&gt;for(i in list)&lt;/code&gt;。&lt;/p&gt;
-&lt;p&gt;但有时对数组下标进行遍历还是有必要的。于是我们要先了解下Kotlin的&lt;code&gt;区间&lt;/code&gt;的概念。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-kotlin&quot;&gt;val range = 1..10
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;这表示&lt;code&gt;[1,10]&lt;/code&gt;。但很多时候，我们需要左开右闭区间，比如数组有三个元素，我们需要&lt;code&gt;[0,3)&lt;/code&gt;表示数组的下标。此时可以使用&lt;code&gt;util&lt;/code&gt;关键字。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-kotlin&quot;&gt;val indexRange = 0 util 3
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;有了range再和前面的for配合就完全可以替代之前java里面的for的作用了：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-kotlin&quot;&gt;val array = arrayOf(&amp;quot;Bob&amp;quot;, &amp;quot;John&amp;quot;, &amp;quot;Jackson&amp;quot;)
-for (i in 0 util array.size) {
-    println(&amp;quot;$i:${array[i]}&amp;quot;)
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;此外，还可以用&lt;code&gt;step&lt;/code&gt;指定步长值，实现”隔几个输出一次“的效果：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-kotlin&quot;&gt;for (i in 0 util 10 step 2) {
-    println(i)
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;如果需要10循环到1,则需要&lt;code&gt;downTo&lt;/code&gt;关键字，&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-kotlin&quot;&gt;for (i in 10 downTo 1) {
-    println(i)
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;div class=&quot;footnotes&quot;&gt;
-&lt;hr /&gt;
-&lt;ol&gt;
-&lt;li id=&quot;fn-1&quot;&gt;
-&lt;p&gt;参考&lt;a href=&quot;https://www.w3cschool.cn/java/java-ternary-operator.html&quot;&gt;Java中的三元运算符&lt;/a&gt;&lt;/p&gt;
-&lt;a href=&quot;#fnref-1&quot; class=&quot;footnote-backref&quot;&gt;&amp;#8617;&lt;/a&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/div&gt;
-</description>
-            <author>归零幻想</author>
-            <pubDate>Wed, 9 Dec 2020 00:00:00 CST</pubDate>
-            <link>https://ntutn.top/android项目开发：Kotlin.html</link>
         </item>
     </channel>
 </rss>
