@@ -119,6 +119,59 @@
         <div class="card mt-3">
             <div class="card-body">
                 <h2 class="card-title text-center">
+                    <a href="archieved/android项目开发/Activity.html">android项目开发：Activity</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2020-12-15</span>&nbsp;
+                    修改时间：<span>2020-12-15</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><blockquote>
+<p>仍然是《第一行代码》的读书笔记，可能引用原书的定义和描述，或代码案例。</p>
+</blockquote>
+<h1 id="activity">Activity</h1>
+<h2 id="activity基本用法">Activity基本用法</h2>
+<p>Android讲究设计逻辑与视图分离，一般Activity都会对应一个布局文件（XML文件）。</p>
+<p>所有的Activity都要在AndroidManifest中注册才生效。</p>
+<p>Activity可以创建菜单。首先在<code>res/menu</code>下创建一个xml文件（Android Studio中也提供了可视化编辑的方法）：</p>
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;menu xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+      xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&gt;
+
+    &lt;item
+            android:id=&quot;@+id/add_item&quot;
+            android:title=&quot;Add&quot;/&gt;
+    &lt;item
+            android:id=&quot;@+id/remove_item&quot;
+            android:title=&quot;Remove&quot;/&gt;
+&lt;/menu&gt;
+</code></pre>
+<p>重写两个方法</p>
+<pre><code class="language-kotlin">    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    menuInflater.inflate(R.menu.main, menu)
+    return true
+}
+
+override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    when (item.itemId) {
+        R.id.add_item -&gt; Toast.makeText(this, &quot;Add a book.&quot;, Toast.LENGTH_LONG).show()
+        R.id.remove_item -&gt; Toast.makeText(this, &quot;Remove a book.&quot;, Toast.LENGTH_LONG).show()
+    }
+    return true
+}
+</code></pre>
+<p><img src="https://i.loli.net/2020/12/10/a6wOcTFrHLhS4il.jpg" alt="photo_2020-12-10_21-00-32.jpg" /></p>
+<p>用<code>finish()</code>方法可以关闭一个Activity。</p>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/android项目开发/Activity.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
                     <a href="作为一名男性，你愿意和丁真互换人生吗.html">作为一名男性，你愿意和丁真互换人生吗</a>
                 </h2>
                 <h6 class="card-subtitle mb-2 text-muted text-center">
@@ -513,25 +566,6 @@ for (i in 0 util array.size) {
 </div>
                 <div class="row mt-3">
                     <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/2020年11月前/404公益.html">阅读全文 ▼</div>
-                </div>
-            </div>
-        </div>
-        <div class="card mt-3">
-            <div class="card-body">
-                <h2 class="card-title text-center">
-                    <a href="archieved/2020年11月前/自定义控件的尝试：MySwitch.html">自定义控件的尝试：MySwitch</a>
-                </h2>
-                <h6 class="card-subtitle mb-2 text-muted text-center">
-                    发布时间：<span>2020-09-27</span>&nbsp;
-                    修改时间：<span>2020-09-27</span>&nbsp;
-                    作者：<span>归零幻想</span>
-                </h6>
-                <hr>
-                <div class="card-text markdown-body"><p>第一次尝试自定义控件，柿子挑软的捏，我决定做一个Switch。</p>
-<p>所以首先确定目标是：实现一个Switch，它有三种状态：<code>ON</code>、<code>OFF</code>和<code>DISABLED</code>。</p>
-</div>
-                <div class="row mt-3">
-                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/2020年11月前/自定义控件的尝试：MySwitch.html">阅读全文 ▼</div>
                 </div>
             </div>
         </div>

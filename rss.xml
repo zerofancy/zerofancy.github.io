@@ -5,6 +5,34 @@
         <description>一枚准程序猿。</description>
         <link>https://ntutn.top</link>
         <item>
+            <title>【译】用BuildSrc和Kotlin_DSL管理Gradle依赖</title>
+            <description>&lt;p&gt;&lt;img src=&quot;https://miro.medium.com/max/1400/1*ZKNUGwUmBjukpnTrHCeGJA.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;多模块工程中一个更好的引入依赖的方法&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;翻译自&lt;a href=&quot;https://medium.com/better-programming/gradle-dependency-management-with-buildsrc-and-kotlin-dsl-1de958eab166&quot;&gt;Gradle Dependency Management With BuildSrc and Kotlin DSL&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;第一次尝试翻译英文文章……&lt;/p&gt;
+&lt;h2 id=&quot;要点&quot;&gt;要点&lt;/h2&gt;
+&lt;p&gt;主要集中在如何用&lt;code&gt;buildSrc&lt;/code&gt;目录和Kotlin DSL脚本构建一个Gradle依赖管理系统，你也会学到这样做相对使用传统Groovy代码的好处。&lt;/p&gt;
+&lt;p&gt;如果你倾向于通过视频来看这篇博客，文末附有一个Youtube视频。&lt;/p&gt;
+&lt;h2 id=&quot;问题&quot;&gt;问题&lt;/h2&gt;
+&lt;p&gt;众所周知在一个快速发展的项目中维护依赖是一个乏味的工作，而传统的Groovy脚本没有code navigation、自动补全，再加上性能问题和运行时错误让这一切变得更糟糕。&lt;/p&gt;
+&lt;p&gt;更重要的是，多数安卓开发者不懂Groovy，甚至我也不知道我之前在用Groovy做啥。&lt;/p&gt;
+&lt;p&gt;感谢Gradle团队和社区的工作提供了一个顺畅安全的构建流程，他们提出的最棒的主意之一就是用Kotlin DSL脚本写buildSrc目录。&lt;/p&gt;
+&lt;h1 id=&quot;解决&quot;&gt;解决&lt;/h1&gt;
+&lt;p&gt;依赖库引入和自定义task不应该放到构建脚本中，它们应该被声明到一个独立文件中再被构建脚本使用。在这个实现的早期，开发者习惯于创建一个Gradle文件来声明所有库并在构建脚本中使用。&lt;/p&gt;
+&lt;p&gt;这确实在一定程度上解决了问题，你可以在&lt;a href=&quot;https://medium.com/@sgkantamani/next-level-of-dependencies-declaration-with-kotlin-dsl-scripits-48bfe1cb1f10&quot;&gt;这篇文章&lt;/a&gt;读到这种方法。但这个简单方案不能解决类似自动补全和code navigation的问题，这使得在长远上看这个方案不够可靠。在这之外，buildSrc似乎有希望解决这个问题。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;这个目录被当作一个&lt;a href=&quot;https://docs.gradle.org/current/userguide/composite_builds.html#composite_build_intro&quot;&gt;included build&lt;/a&gt;看待。在发现这个目录之后，Gradle自动编译和测试它的代码，并将编译结果放到你的构建脚本的class path中。在一个多模块的工程中只能有一个这样的目录，并且要放到工程的顶级目录中。应该优先通过&lt;a href=&quot;https://docs.gradle.org/current/userguide/plugins.html#sec:script_plugins&quot;&gt;script plugins&lt;/a&gt;因为这样更便于管理、重构和测试代码。
+——Gradle团队&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;创建buildsrc目录&quot;&gt;创建buildSrc目录&lt;/h2&gt;
+&lt;p&gt;使用Kotlin DSL脚本不但能解决构建脚本中的这些问题，还能得到先进的IDE支持，包括code navigation、编译时错误提示等。最重要的，我们再也不用使用Groovy了。&lt;/p&gt;
+</description>
+            <author>Siva Ganesh Kantamani</author>
+            <pubDate>Sun, 21 Feb 2021 00:00:00 CST</pubDate>
+            <link>https://ntutn.top/【译】用BuildSrc和Kotlin_DSL管理Gradle依赖.html</link>
+        </item><item>
             <title>我的黑历史被github埋到北极了</title>
             <description>&lt;p&gt;昨天整理自己的github仓库的时候发现自己的个人主页多了个徽章：&lt;code&gt;Arctic Code Vault Contributor&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;https://i.loli.net/2021/01/26/CJOcmPn12o734KQ.png&quot; alt=&quot;QQ20210126-143812@2x.png&quot; /&gt;&lt;/p&gt;
@@ -414,48 +442,6 @@ class LeftFragment : Fragment() {
             <author>归零幻想</author>
             <pubDate>Mon, 21 Dec 2020 00:00:00 CST</pubDate>
             <link>https://ntutn.top/archieved/android项目开发/Fragment.html</link>
-        </item><item>
-            <title>android项目开发：Activity</title>
-            <description>&lt;blockquote&gt;
-&lt;p&gt;仍然是《第一行代码》的读书笔记，可能引用原书的定义和描述，或代码案例。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h1 id=&quot;activity&quot;&gt;Activity&lt;/h1&gt;
-&lt;h2 id=&quot;activity基本用法&quot;&gt;Activity基本用法&lt;/h2&gt;
-&lt;p&gt;Android讲究设计逻辑与视图分离，一般Activity都会对应一个布局文件（XML文件）。&lt;/p&gt;
-&lt;p&gt;所有的Activity都要在AndroidManifest中注册才生效。&lt;/p&gt;
-&lt;p&gt;Activity可以创建菜单。首先在&lt;code&gt;res/menu&lt;/code&gt;下创建一个xml文件（Android Studio中也提供了可视化编辑的方法）：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-xml&quot;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;utf-8&amp;quot;?&amp;gt;
-&amp;lt;menu xmlns:app=&amp;quot;http://schemas.android.com/apk/res-auto&amp;quot;
-      xmlns:android=&amp;quot;http://schemas.android.com/apk/res/android&amp;quot;&amp;gt;
-
-    &amp;lt;item
-            android:id=&amp;quot;@+id/add_item&amp;quot;
-            android:title=&amp;quot;Add&amp;quot;/&amp;gt;
-    &amp;lt;item
-            android:id=&amp;quot;@+id/remove_item&amp;quot;
-            android:title=&amp;quot;Remove&amp;quot;/&amp;gt;
-&amp;lt;/menu&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;重写两个方法&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-kotlin&quot;&gt;    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-    menuInflater.inflate(R.menu.main, menu)
-    return true
-}
-
-override fun onOptionsItemSelected(item: MenuItem): Boolean {
-    when (item.itemId) {
-        R.id.add_item -&amp;gt; Toast.makeText(this, &amp;quot;Add a book.&amp;quot;, Toast.LENGTH_LONG).show()
-        R.id.remove_item -&amp;gt; Toast.makeText(this, &amp;quot;Remove a book.&amp;quot;, Toast.LENGTH_LONG).show()
-    }
-    return true
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&quot;https://i.loli.net/2020/12/10/a6wOcTFrHLhS4il.jpg&quot; alt=&quot;photo_2020-12-10_21-00-32.jpg&quot; /&gt;&lt;/p&gt;
-&lt;p&gt;用&lt;code&gt;finish()&lt;/code&gt;方法可以关闭一个Activity。&lt;/p&gt;
-</description>
-            <author>归零幻想</author>
-            <pubDate>Tue, 15 Dec 2020 00:00:00 CST</pubDate>
-            <link>https://ntutn.top/archieved/android项目开发/Activity.html</link>
         </item>
     </channel>
 </rss>
