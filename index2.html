@@ -119,6 +119,85 @@
         <div class="card mt-3">
             <div class="card-body">
                 <h2 class="card-title text-center">
+                    <a href="archieved/android项目开发/Fragment.html">android项目开发：Fragment</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2020-12-21</span>&nbsp;
+                    修改时间：<span>2020-12-21</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><h1 id="fragment">Fragment</h1>
+<h2 id="fragment的使用方式">Fragment的使用方式</h2>
+<h3 id="静态添加fragment">静态添加Fragment</h3>
+<p>Fragment的写法</p>
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+              android:orientation=&quot;vertical&quot; android:layout_width=&quot;match_parent&quot;
+              android:layout_height=&quot;match_parent&quot;&gt;
+
+    &lt;Button
+            android:id=&quot;@+id/button&quot;
+            android:layout_width=&quot;wrap_content&quot;
+            android:layout_height=&quot;wrap_content&quot;
+            android:text=&quot;button&quot;
+            android:layout_gravity=&quot;center_horizontal&quot;/&gt;
+
+&lt;/LinearLayout&gt;
+</code></pre>
+<pre><code class="language-kotlin">package top.ntutn.fragmenttest
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+
+class LeftFragment : Fragment() {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.left_fragment, container, false)
+    }
+}
+</code></pre>
+<p>静态添加Fragment</p>
+<pre><code class="language-xml">
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+              xmlns:tools=&quot;http://schemas.android.com/tools&quot;
+              android:layout_width=&quot;match_parent&quot;
+              android:layout_height=&quot;match_parent&quot;
+              android:orientation=&quot;horizontal&quot;
+              tools:context=&quot;.MainActivity&quot;&gt;
+
+    &lt;fragment
+            android:id=&quot;@+id/leftFragment&quot;
+            android:name=&quot;top.ntutn.fragmenttest.LeftFragment&quot;
+            android:layout_width=&quot;0dp&quot;
+            android:layout_height=&quot;match_parent&quot;
+            android:layout_weight=&quot;1&quot;/&gt;
+
+    &lt;fragment
+            android:id=&quot;@+id/rightFragment&quot;
+            android:name=&quot;top.ntutn.fragmenttest.RightFragment&quot;
+            android:layout_width=&quot;0dp&quot;
+            android:layout_height=&quot;match_parent&quot;
+            android:layout_weight=&quot;1&quot;/&gt;
+
+&lt;/LinearLayout&gt;
+</code></pre>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/android项目开发/Fragment.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
                     <a href="archieved/android项目开发/Activity.html">android项目开发：Activity</a>
                 </h2>
                 <h6 class="card-subtitle mb-2 text-muted text-center">
@@ -546,26 +625,6 @@ for (i in 0 util array.size) {
 </div>
                 <div class="row mt-3">
                     <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/2020年11月前/gradle学习笔记.html">阅读全文 ▼</div>
-                </div>
-            </div>
-        </div>
-        <div class="card mt-3">
-            <div class="card-body">
-                <h2 class="card-title text-center">
-                    <a href="archieved/2020年11月前/404公益.html">404公益</a>
-                </h2>
-                <h6 class="card-subtitle mb-2 text-muted text-center">
-                    发布时间：<span>2020-10-23</span>&nbsp;
-                    修改时间：<span>2020-10-23</span>&nbsp;
-                    作者：<span>归零幻想</span>
-                </h6>
-                <hr>
-                <div class="card-text markdown-body"><p>虽然效果有待商榷，但正如央视所说：</p>
-<p><strong>再小的力量，也是一种支持。</strong></p>
-<p><img src="https://i.loli.net/2020/10/23/qjalVdmQo9GJxEr.png" alt="banner_20150320.png" /></p>
-</div>
-                <div class="row mt-3">
-                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/2020年11月前/404公益.html">阅读全文 ▼</div>
                 </div>
             </div>
         </div>

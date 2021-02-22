@@ -5,6 +5,36 @@
         <description>一枚准程序猿。</description>
         <link>https://ntutn.top</link>
         <item>
+            <title>DebugEntrance和DebugConfig</title>
+            <description>&lt;p&gt;工欲善其事，必先利其器。毕设是一个相对复杂的项目了，我觉得要想顺利完成肯定是需要一些手段帮助我调试的。于是这里我准备了debug页面，主要功能就两个：提供某个功能的入口以及存储配置（最好能直接在手机上修改）&lt;/p&gt;
+&lt;h2 id=&quot;debugentrance&quot;&gt;DebugEntrance&lt;/h2&gt;
+&lt;p&gt;就是一个各种测试功能的入口。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://i.loli.net/2021/02/22/gOV6niTxoBfXbWv.jpg&quot; alt=&quot;1.jpg&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;这个一看实现就很简单，不细说了。&lt;/p&gt;
+&lt;h2 id=&quot;debugconfig&quot;&gt;DebugConfig&lt;/h2&gt;
+&lt;p&gt;因为字节自己的ABManager用着挺顺手，感觉自己项目调试时有类似这么个东西会比较舒服，于是搞了这么个东西。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://i.loli.net/2021/02/22/Mi8lCJdZBcjnYmO.jpg&quot; alt=&quot;2.jpg&quot; /&gt; &lt;img src=&quot;https://i.loli.net/2021/02/22/cEAfgMVPzrSXmuY.jpg&quot; alt=&quot;3.jpg&quot; /&gt;&lt;/p&gt;
+&lt;h3 id=&quot;使用&quot;&gt;使用&lt;/h3&gt;
+&lt;p&gt;先看使用：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-kotlin&quot;&gt;@ZeroConfig(key = &amp;quot;retrofit_config&amp;quot;, title = &amp;quot;Retrofit配置&amp;quot;, owner = &amp;quot;liuhaixin.zero&amp;quot;)
+data class RetrofitConfig(val baseUrl: String = RetrofitUtil.BASE_URL)
+
+private val retrofitConfig by zeroConfig&amp;lt;RetrofitConfig&amp;gt;()
+
+private val retrofit by lazy {
+    Retrofit.Builder()
+        .baseUrl(retrofitConfig?.baseUrl ?: BASE_URL)
+        .addConverterFactory(GsonConverterFactory.create())
+        .client(okHttpClient)
+        .build()
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;看上去还是有点让人心动的吧。&lt;/p&gt;
+</description>
+            <author>归零幻想</author>
+            <pubDate>Mon, 22 Feb 2021 00:00:00 CST</pubDate>
+            <link>https://ntutn.top/DebugEntrance和DebugConfig.html</link>
+        </item><item>
             <title>【译】用BuildSrc和Kotlin_DSL管理Gradle依赖</title>
             <description>&lt;p&gt;&lt;img src=&quot;https://miro.medium.com/max/1400/1*ZKNUGwUmBjukpnTrHCeGJA.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 &lt;blockquote&gt;
@@ -374,74 +404,6 @@ defaults write com.google.android.studio AppleWindowTabbingMode manual
             <author>归零幻想</author>
             <pubDate>Mon, 21 Dec 2020 00:00:00 CST</pubDate>
             <link>https://ntutn.top/archieved/android项目开发/UI设计.html</link>
-        </item><item>
-            <title>android项目开发：Fragment</title>
-            <description>&lt;h1 id=&quot;fragment&quot;&gt;Fragment&lt;/h1&gt;
-&lt;h2 id=&quot;fragment的使用方式&quot;&gt;Fragment的使用方式&lt;/h2&gt;
-&lt;h3 id=&quot;静态添加fragment&quot;&gt;静态添加Fragment&lt;/h3&gt;
-&lt;p&gt;Fragment的写法&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-xml&quot;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;utf-8&amp;quot;?&amp;gt;
-&amp;lt;LinearLayout xmlns:android=&amp;quot;http://schemas.android.com/apk/res/android&amp;quot;
-              android:orientation=&amp;quot;vertical&amp;quot; android:layout_width=&amp;quot;match_parent&amp;quot;
-              android:layout_height=&amp;quot;match_parent&amp;quot;&amp;gt;
-
-    &amp;lt;Button
-            android:id=&amp;quot;@+id/button&amp;quot;
-            android:layout_width=&amp;quot;wrap_content&amp;quot;
-            android:layout_height=&amp;quot;wrap_content&amp;quot;
-            android:text=&amp;quot;button&amp;quot;
-            android:layout_gravity=&amp;quot;center_horizontal&amp;quot;/&amp;gt;
-
-&amp;lt;/LinearLayout&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code class=&quot;language-kotlin&quot;&gt;package top.ntutn.fragmenttest
-
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-
-class LeftFragment : Fragment() {
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.left_fragment, container, false)
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;静态添加Fragment&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-xml&quot;&gt;
-&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;utf-8&amp;quot;?&amp;gt;
-&amp;lt;LinearLayout xmlns:android=&amp;quot;http://schemas.android.com/apk/res/android&amp;quot;
-              xmlns:tools=&amp;quot;http://schemas.android.com/tools&amp;quot;
-              android:layout_width=&amp;quot;match_parent&amp;quot;
-              android:layout_height=&amp;quot;match_parent&amp;quot;
-              android:orientation=&amp;quot;horizontal&amp;quot;
-              tools:context=&amp;quot;.MainActivity&amp;quot;&amp;gt;
-
-    &amp;lt;fragment
-            android:id=&amp;quot;@+id/leftFragment&amp;quot;
-            android:name=&amp;quot;top.ntutn.fragmenttest.LeftFragment&amp;quot;
-            android:layout_width=&amp;quot;0dp&amp;quot;
-            android:layout_height=&amp;quot;match_parent&amp;quot;
-            android:layout_weight=&amp;quot;1&amp;quot;/&amp;gt;
-
-    &amp;lt;fragment
-            android:id=&amp;quot;@+id/rightFragment&amp;quot;
-            android:name=&amp;quot;top.ntutn.fragmenttest.RightFragment&amp;quot;
-            android:layout_width=&amp;quot;0dp&amp;quot;
-            android:layout_height=&amp;quot;match_parent&amp;quot;
-            android:layout_weight=&amp;quot;1&amp;quot;/&amp;gt;
-
-&amp;lt;/LinearLayout&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-</description>
-            <author>归零幻想</author>
-            <pubDate>Mon, 21 Dec 2020 00:00:00 CST</pubDate>
-            <link>https://ntutn.top/archieved/android项目开发/Fragment.html</link>
         </item>
     </channel>
 </rss>
