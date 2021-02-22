@@ -5,6 +5,112 @@
         <description>一枚准程序猿。</description>
         <link>https://ntutn.top</link>
         <item>
+            <title>ViewBinding、ViewModel和LiveData</title>
+            <description>&lt;p&gt;毕设项目没有历史包袱，我可以尽量向best practice努力。&lt;/p&gt;
+&lt;h2 id=&quot;viewbinding&quot;&gt;ViewBinding&lt;/h2&gt;
+&lt;p&gt;无数人痛恨findViewById，并且为了干掉它做了许多尝试，比如ButterKnife、kotlin-android-extensions。&lt;/p&gt;
+&lt;p&gt;现在，有了ViewBinding，项目中真的可以不写findViewById了。至少目前为止我的毕设项目还没有一个findViewById。&lt;/p&gt;
+&lt;p&gt;其实与ViewBinding相似的，还有一个DataBinding，但我不太喜欢，感觉在xml里面写代码不是一个好主意。&lt;/p&gt;
+&lt;h3 id=&quot;使用&quot;&gt;使用&lt;/h3&gt;
+&lt;p&gt;首先在build.gradle（或build.gradle.kts）中的android块添加&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-groovy&quot;&gt;buildFeatures {
+    viewBinding = true
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;在xml中正常定义你的布局&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-xml&quot;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;utf-8&amp;quot;?&amp;gt;
+&amp;lt;LinearLayout xmlns:android=&amp;quot;http://schemas.android.com/apk/res/android&amp;quot;
+    xmlns:tools=&amp;quot;http://schemas.android.com/tools&amp;quot;
+    android:layout_width=&amp;quot;match_parent&amp;quot;
+    android:layout_height=&amp;quot;match_parent&amp;quot;
+    android:orientation=&amp;quot;vertical&amp;quot;
+    tools:context=&amp;quot;.MainActivity&amp;quot;&amp;gt;
+
+    &amp;lt;TextView
+        android:id=&amp;quot;@+id/text_view&amp;quot;
+        android:layout_width=&amp;quot;match_parent&amp;quot;
+        android:layout_height=&amp;quot;wrap_content&amp;quot;
+        android:text=&amp;quot;Hello World!&amp;quot; /&amp;gt;
+
+    &amp;lt;Button
+        android:id=&amp;quot;@+id/test_button&amp;quot;
+        android:layout_width=&amp;quot;match_parent&amp;quot;
+        android:layout_height=&amp;quot;wrap_content&amp;quot;
+        android:text=&amp;quot;toast&amp;quot; /&amp;gt;
+
+    &amp;lt;Button
+        android:id=&amp;quot;@+id/change_button&amp;quot;
+        android:layout_width=&amp;quot;match_parent&amp;quot;
+        android:layout_height=&amp;quot;wrap_content&amp;quot;
+        android:text=&amp;quot;change&amp;quot; /&amp;gt;
+&amp;lt;/LinearLayout&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;接下来就可以愉快使用了&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-kotlin&quot;&gt;package top.ntutn.viewmodeldemo
+
+import android.os.Bundle
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import top.ntutn.viewmodeldemo.databinding.ActivityMainBinding
+
+class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        initView()
+    }
+
+    private fun initView() {
+        binding.apply {
+            changeButton.setOnClickListener { textView.text = &amp;quot;Changed!&amp;quot; }
+            testButton.setOnClickListener {
+                Toast.makeText(
+                    this@MainActivity,
+                    &amp;quot;Test&amp;quot;,
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;我们在xml里面用下划线分隔的id在这里就直接变成了binding里面的字段，相当舒服。&lt;/p&gt;
+&lt;h3 id=&quot;在recyclerview中的使用&quot;&gt;在RecyclerView中的使用&lt;/h3&gt;
+&lt;p&gt;在RecyclerView中代码要稍微发生一点变化，因为我们是在onCreateViewHolder时反射创建布局的。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-kotlin&quot;&gt;package top.ntutn.viewmodeldemo
+
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import top.ntutn.viewmodeldemo.databinding.ItemTestBinding
+
+class MyAdapter : RecyclerView.Adapter&amp;lt;MyAdapter.ViewHolder&amp;gt;() {
+    class ViewHolder(val binding: ItemTestBinding) : RecyclerView.ViewHolder(binding.root)
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return ViewHolder(
+            ItemTestBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        )
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.binding.textView.text = TODO(&amp;quot;Not yet implemented&amp;quot;)
+    }
+
+    override fun getItemCount(): Int {
+        TODO(&amp;quot;Not yet implemented&amp;quot;)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;仍然不需要findViewById！&lt;/p&gt;
+</description>
+            <author>归零幻想</author>
+            <pubDate>Mon, 22 Feb 2021 00:00:00 CST</pubDate>
+            <link>https://ntutn.top/ViewBinding、ViewModel和LiveData.html</link>
+        </item><item>
             <title>DebugEntrance和DebugConfig</title>
             <description>&lt;p&gt;工欲善其事，必先利其器。毕设是一个相对复杂的项目了，我觉得要想顺利完成肯定是需要一些手段帮助我调试的。于是这里我准备了debug页面，主要功能就两个：提供某个功能的入口以及存储配置（最好能直接在手机上修改）&lt;/p&gt;
 &lt;h2 id=&quot;debugentrance&quot;&gt;DebugEntrance&lt;/h2&gt;
@@ -388,22 +494,6 @@ defaults write com.google.android.studio AppleWindowTabbingMode manual
             <author>归零幻想</author>
             <pubDate>Tue, 22 Dec 2020 00:00:00 CST</pubDate>
             <link>https://ntutn.top/archieved/android项目开发/Broadcast.html</link>
-        </item><item>
-            <title>android项目开发：UI设计</title>
-            <description>&lt;p&gt;仍然是《第一行代码》的学习笔记，这里记录的东西相对少一点，UI上的东西还是更多在实际项目中感受到。比如我想没有必要写TextView的介绍吧。&lt;/p&gt;
-&lt;h2 id=&quot;控件的使用方法&quot;&gt;控件的使用方法&lt;/h2&gt;
-&lt;p&gt;&lt;code&gt;dp&lt;/code&gt;是一种屏幕密度无关的尺寸单位，可以保证在不同分辨率的手机上显示效果尽可能一致。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;match_parent&lt;/code&gt;表示让当前控件大小和父布局的大小一致。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;wrap_content&lt;/code&gt;表示让当前控件的大小能正好包裹里面的内容。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;android:gravity&lt;/code&gt;指定控件内的内容对齐方式，有&lt;code&gt;top&lt;/code&gt;、&lt;code&gt;bottom&lt;/code&gt;、&lt;code&gt;start&lt;/code&gt;、&lt;code&gt;end&lt;/code&gt;、&lt;code&gt;center&lt;/code&gt;等可选，可以用&lt;code&gt;|&lt;/code&gt;指定多个值。比如&lt;code&gt;center&lt;/code&gt;等价于&lt;code&gt;center_vertical|center_horizonal&lt;/code&gt;。&lt;/p&gt;
-&lt;h2 id=&quot;基本布局&quot;&gt;基本布局&lt;/h2&gt;
-&lt;h3 id=&quot;linearlayout&quot;&gt;LinearLayout&lt;/h3&gt;
-&lt;p&gt;线性布局，通过&lt;code&gt;android:orientation&lt;/code&gt;指定方向。&lt;/p&gt;
-&lt;p&gt;有一个重要属性：&lt;code&gt;android:layout_weight&lt;/code&gt;，它将控件已经占用的空间减掉后按照比重分给各个控件。一般我们直接指定&lt;code&gt;android:layout_width&lt;/code&gt;为0dp，而给它指定一个比重，这样控件的尺寸将占满剩余空间。&lt;/p&gt;
-</description>
-            <author>归零幻想</author>
-            <pubDate>Mon, 21 Dec 2020 00:00:00 CST</pubDate>
-            <link>https://ntutn.top/archieved/android项目开发/UI设计.html</link>
         </item>
     </channel>
 </rss>

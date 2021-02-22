@@ -119,6 +119,123 @@
         <div class="card mt-3">
             <div class="card-body">
                 <h2 class="card-title text-center">
+                    <a href="ViewBinding、ViewModel和LiveData.html">ViewBinding、ViewModel和LiveData</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2021-02-22</span>&nbsp;
+                    修改时间：<span>2021-02-22</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><p>毕设项目没有历史包袱，我可以尽量向best practice努力。</p>
+<h2 id="viewbinding">ViewBinding</h2>
+<p>无数人痛恨findViewById，并且为了干掉它做了许多尝试，比如ButterKnife、kotlin-android-extensions。</p>
+<p>现在，有了ViewBinding，项目中真的可以不写findViewById了。至少目前为止我的毕设项目还没有一个findViewById。</p>
+<p>其实与ViewBinding相似的，还有一个DataBinding，但我不太喜欢，感觉在xml里面写代码不是一个好主意。</p>
+<h3 id="使用">使用</h3>
+<p>首先在build.gradle（或build.gradle.kts）中的android块添加</p>
+<pre><code class="language-groovy">buildFeatures {
+    viewBinding = true
+}
+</code></pre>
+<p>在xml中正常定义你的布局</p>
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+&lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    xmlns:tools=&quot;http://schemas.android.com/tools&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot;
+    android:orientation=&quot;vertical&quot;
+    tools:context=&quot;.MainActivity&quot;&gt;
+
+    &lt;TextView
+        android:id=&quot;@+id/text_view&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:text=&quot;Hello World!&quot; /&gt;
+
+    &lt;Button
+        android:id=&quot;@+id/test_button&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:text=&quot;toast&quot; /&gt;
+
+    &lt;Button
+        android:id=&quot;@+id/change_button&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:text=&quot;change&quot; /&gt;
+&lt;/LinearLayout&gt;
+</code></pre>
+<p>接下来就可以愉快使用了</p>
+<pre><code class="language-kotlin">package top.ntutn.viewmodeldemo
+
+import android.os.Bundle
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import top.ntutn.viewmodeldemo.databinding.ActivityMainBinding
+
+class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        initView()
+    }
+
+    private fun initView() {
+        binding.apply {
+            changeButton.setOnClickListener { textView.text = &quot;Changed!&quot; }
+            testButton.setOnClickListener {
+                Toast.makeText(
+                    this@MainActivity,
+                    &quot;Test&quot;,
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+    }
+}
+</code></pre>
+<p>我们在xml里面用下划线分隔的id在这里就直接变成了binding里面的字段，相当舒服。</p>
+<h3 id="在recyclerview中的使用">在RecyclerView中的使用</h3>
+<p>在RecyclerView中代码要稍微发生一点变化，因为我们是在onCreateViewHolder时反射创建布局的。</p>
+<pre><code class="language-kotlin">package top.ntutn.viewmodeldemo
+
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import top.ntutn.viewmodeldemo.databinding.ItemTestBinding
+
+class MyAdapter : RecyclerView.Adapter&lt;MyAdapter.ViewHolder&gt;() {
+    class ViewHolder(val binding: ItemTestBinding) : RecyclerView.ViewHolder(binding.root)
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return ViewHolder(
+            ItemTestBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        )
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.binding.textView.text = TODO(&quot;Not yet implemented&quot;)
+    }
+
+    override fun getItemCount(): Int {
+        TODO(&quot;Not yet implemented&quot;)
+    }
+}
+</code></pre>
+<p>仍然不需要findViewById！</p>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="ViewBinding、ViewModel和LiveData.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
                     <a href="DebugEntrance和DebugConfig.html">DebugEntrance和DebugConfig</a>
                 </h2>
                 <h6 class="card-subtitle mb-2 text-muted text-center">
@@ -596,33 +713,6 @@ defaults write com.google.android.studio AppleWindowTabbingMode manual
 </div>
                 <div class="row mt-3">
                     <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/android项目开发/Broadcast.html">阅读全文 ▼</div>
-                </div>
-            </div>
-        </div>
-        <div class="card mt-3">
-            <div class="card-body">
-                <h2 class="card-title text-center">
-                    <a href="archieved/android项目开发/UI设计.html">android项目开发：UI设计</a>
-                </h2>
-                <h6 class="card-subtitle mb-2 text-muted text-center">
-                    发布时间：<span>2020-12-21</span>&nbsp;
-                    修改时间：<span>2020-12-21</span>&nbsp;
-                    作者：<span>归零幻想</span>
-                </h6>
-                <hr>
-                <div class="card-text markdown-body"><p>仍然是《第一行代码》的学习笔记，这里记录的东西相对少一点，UI上的东西还是更多在实际项目中感受到。比如我想没有必要写TextView的介绍吧。</p>
-<h2 id="控件的使用方法">控件的使用方法</h2>
-<p><code>dp</code>是一种屏幕密度无关的尺寸单位，可以保证在不同分辨率的手机上显示效果尽可能一致。</p>
-<p><code>match_parent</code>表示让当前控件大小和父布局的大小一致。</p>
-<p><code>wrap_content</code>表示让当前控件的大小能正好包裹里面的内容。</p>
-<p><code>android:gravity</code>指定控件内的内容对齐方式，有<code>top</code>、<code>bottom</code>、<code>start</code>、<code>end</code>、<code>center</code>等可选，可以用<code>|</code>指定多个值。比如<code>center</code>等价于<code>center_vertical|center_horizonal</code>。</p>
-<h2 id="基本布局">基本布局</h2>
-<h3 id="linearlayout">LinearLayout</h3>
-<p>线性布局，通过<code>android:orientation</code>指定方向。</p>
-<p>有一个重要属性：<code>android:layout_weight</code>，它将控件已经占用的空间减掉后按照比重分给各个控件。一般我们直接指定<code>android:layout_width</code>为0dp，而给它指定一个比重，这样控件的尺寸将占满剩余空间。</p>
-</div>
-                <div class="row mt-3">
-                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/android项目开发/UI设计.html">阅读全文 ▼</div>
                 </div>
             </div>
         </div>

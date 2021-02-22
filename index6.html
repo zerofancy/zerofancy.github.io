@@ -119,6 +119,41 @@
         <div class="card mt-3">
             <div class="card-body">
                 <h2 class="card-title text-center">
+                    <a href="archieved/old/稀疏矩阵的压缩存储.html">稀疏矩阵的压缩存储</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2019-05-06</span>&nbsp;
+                    修改时间：<span>2019-05-06</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><p>特殊矩阵在采用二维数组存储时，尽管矩阵操作的算法都很简单，但是其空间的利用率很低。 系数矩阵就是一种应用很广泛的特殊的矩阵。现要求稀疏矩阵采用“压缩”存储，实现矩阵的常用操作，如输出、转置、求和等。</p>
+<h2 id="question">Question</h2>
+<p>矩阵采用“压缩”存储，实现矩阵的常用操作，如输出、转置、求和等。</p>
+<p>矩阵的输入：有多行，第1行包括三个整数，分别是矩阵的大小m,n及非零元素的个数r。后面r行分别输入各个非零元素的 行、列、值</p>
+<p>矩阵的输出：按人们习惯的矩阵格式输出，即输出一个<code>m*n</code>的矩阵，是零元素的输出0，非零元素输出元素值。</p>
+<p>例如：输入如下：</p>
+<pre><code>100 90 5 //矩阵的行数为100，列数为90，共5个非零元素。
+1 10 100 //a(1,10)=100
+50 60 200//a(50,60)=200
+50 80 100//a(50,80)=100
+60 60 200//a(60,60)=200
+99 89 10//a(99,89)=10
+100 90 4 //矩阵b的行数为100，列数为90，共4个非零元素。
+1 1 10 //b(1,1)=10
+50 60 -200//b(50,60)=-200
+50 80 100 //b(50,80)=100
+70 70 10 //b(70,70)=10
+</code></pre>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/old/稀疏矩阵的压缩存储.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
                     <a href="archieved/old/数据结构 栈应用2 表达式求值.html">数据结构 栈应用2 表达式求值</a>
                 </h2>
                 <h6 class="card-subtitle mb-2 text-muted text-center">
@@ -379,56 +414,6 @@ ConsoleWrite($re)
 </div>
                 <div class="row mt-3">
                     <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/old/直.html">阅读全文 ▼</div>
-                </div>
-            </div>
-        </div>
-        <div class="card mt-3">
-            <div class="card-body">
-                <h2 class="card-title text-center">
-                    <a href="archieved/old/autoit控制台置顶工具.html">autoit控制台置顶工具</a>
-                </h2>
-                <h6 class="card-subtitle mb-2 text-muted text-center">
-                    发布时间：<span>2019-03-26</span>&nbsp;
-                    修改时间：<span>2019-03-26</span>&nbsp;
-                    作者：<span>归零幻想</span>
-                </h6>
-                <hr>
-                <div class="card-text markdown-body"><p>我们学校C语言在线评测系统是bs的，在浏览器中展示要求，文本框中写代码提交评测。</p>
-<p>由于本人水平有限，做不到记事本写代码0BUG，所以需要在IDE中写代码然后粘贴到里面。而做题时一边检查代码一边到浏览器里查看要求太费劲了。于是我用autoit写了这个小程序。</p>
-<p>置顶所有的C语言控制台窗口，这样调试无疑会方便一些。</p>
-<p>用Code Blocks运行的控制台窗口标题会显示文件路径，所以里面肯定带有<code>.exe</code>，所以可以利用这一特性：</p>
-<pre><code class="language-autoit">#Region ;**** 参数创建于 ACNWrapper_GUI ****
-#AutoIt3Wrapper_icon=C:\Windows\System32\SHELL32.dll|-94
-#AutoIt3Wrapper_UseX64=n
-#EndRegion ;**** 参数创建于 ACNWrapper_GUI ****
-While 1
-$var = WinList()
-
-For $i = 1 To $var[0][0]
-  ; 只显示带有标题的可见窗口
-    If $var[$i][0] &lt;&gt; &quot;&quot; And IsVisible($var[$i][1]) Then
-		If StringInStr($var[$i][0],&quot;.exe&quot;)Then
-			WinSetOnTop($var[$i][0],&quot;&quot;,1)
-		EndIf
-        ;MsgBox(0, &quot;详细信息&quot;, &quot;标题=&quot; &amp; $var[$i][0] &amp; @LF &amp; &quot;句柄=&quot; &amp; $var[$i][1])
-    EndIf
-Next
-Sleep(100)
-WEnd
-
-Func IsVisible($handle)
-    If BitAND(WinGetState($handle), 2) Then
-        Return 1
-    Else
-        Return 0
-    EndIf
-
-EndFunc   ;==&gt;IsVisible
-</code></pre>
-<p>让这个脚本在后台运行，所有控制台窗口直接置顶，然后去浏览器复制测试数据就方便的多。</p>
-</div>
-                <div class="row mt-3">
-                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/old/autoit控制台置顶工具.html">阅读全文 ▼</div>
                 </div>
             </div>
         </div>
