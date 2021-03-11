@@ -22,12 +22,6 @@ tags: [博客, CMS]
 
 站点结构的设计上其实有一点小失误，就是文章比较多后根目录会比较乱，于是我把之前发布的文章*归档*到`archieved`文件夹中，于是文章链接还会改变一次，之前分享出去的/被搜索引擎爬的还会失效。
 
-## 我的朋友们
-
-- [色魔是色魔](https://blog.semesse.me/)
-- [XYX](http://www.xyx6.top/)
-- [菜树](http://upccaishu.top/)
-
 ## 联系方式
 
 - E-mail:[ntutn.top@gmail.com](mailto:ntutn.top@gmail.com)

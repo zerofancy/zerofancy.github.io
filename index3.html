@@ -47,9 +47,9 @@
                 $("#from").text("——" + data.from);
             });
             // ajax
-            $(".btn-read-all").click(function(){
-                const url=$(this).attr("value")
-                $(this).parent().parent().find(".card-text").load(url+" .card-text")
+            $(".btn-read-all").click(function () {
+                const url = $(this).attr("value")
+                $(this).parent().parent().find(".card-text").load(url + " .card-text")
                 $(this).hide()
                 return false
             })
@@ -86,6 +86,9 @@
                     <!-- <li id="n_tags" class="nav-item">
                     <a class="nav-link" href="/tags">标签</a>
                 </li> -->
+                    <li id="n_about" class="nav-item">
+                        <a class="nav-link" href="/friends.html">友链</a>
+                    </li>
                     <li id="n_about" class="nav-item">
                         <a class="nav-link" href="/about.html">关于</a>
                     </li>
@@ -156,6 +159,30 @@
 </div>
                 <div class="row mt-3">
                     <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/2020年11月前/gradle学习笔记.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
+                    <a href="archieved/2020年11月前/干掉macOS的OCSP.html">干掉macOS的OCSP</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2020-11-15</span>&nbsp;
+                    修改时间：<span>2020-11-15</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><p>苹果这两天摊上事了，有不少用户说自己的设备打开应用程序会卡好几分钟，然后分析发现是苹果的OCSP校验导致的。</p>
+<p>当启动一个新应用程序的时候，系统会把其hash发送到<code>ocsp.apple.com</code>用于校验，而这次是这个服务挂了但是能ping通……</p>
+<p>这个事情引起不小的讨论，主要集中在有关隐私的担忧上。本来我没有太在意，<strong>但测试发现这好像是我每次休眠恢复后触摸板卡几秒的元凶……</strong></p>
+<p>那对不起了。</p>
+<pre><code class="language-sh">echo &quot;127.0.0.1 ocsp.apple.com&quot; | sudo tee -a /etc/hosts
+</code></pre>
+<p>反正还有SEP把门呢。</p>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/2020年11月前/干掉macOS的OCSP.html">阅读全文 ▼</div>
                 </div>
             </div>
         </div>
@@ -314,29 +341,6 @@
 </div>
                 <div class="row mt-3">
                     <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/2020年11月前/EventBus初探.html">阅读全文 ▼</div>
-                </div>
-            </div>
-        </div>
-        <div class="card mt-3">
-            <div class="card-body">
-                <h2 class="card-title text-center">
-                    <a href="archieved/2020年11月前/kmdblog，又一个博客系统.html">kmdblog，又一个博客系统</a>
-                </h2>
-                <h6 class="card-subtitle mb-2 text-muted text-center">
-                    发布时间：<span>2020-08-21</span>&nbsp;
-                    修改时间：<span>2020-08-21</span>&nbsp;
-                    作者：<span>归零幻想</span>
-                </h6>
-                <hr>
-                <div class="card-text markdown-body"><p>博客系统至今为止我做过3个版本了，毕竟只要写出CRUD就可以厚着脸皮说自己是个博客，是新手练手的良好选择。当前这个版本是Kotlin练手项目，与之前不同的是，当前版本是一个生成静态网页的系统。类似hexo，在本地编辑好<code>md</code>文件，再执行程序生成<code>html</code>，发布静态网页即可。</p>
-<h2 id="背景">背景</h2>
-<ol>
-<li>主要是练手的考虑。今年暑假在字节跳动实习，在安卓这边，第一次接触<code>Kotlin</code>，于是想到写点什么练手。</li>
-<li>服务器要花钱的，学生优惠一个月￥10左右，而我博客使用频率较低，不想出这钱了……</li>
-</ol>
-</div>
-                <div class="row mt-3">
-                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/2020年11月前/kmdblog，又一个博客系统.html">阅读全文 ▼</div>
                 </div>
             </div>
         </div>

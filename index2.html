@@ -47,9 +47,9 @@
                 $("#from").text("——" + data.from);
             });
             // ajax
-            $(".btn-read-all").click(function(){
-                const url=$(this).attr("value")
-                $(this).parent().parent().find(".card-text").load(url+" .card-text")
+            $(".btn-read-all").click(function () {
+                const url = $(this).attr("value")
+                $(this).parent().parent().find(".card-text").load(url + " .card-text")
                 $(this).hide()
                 return false
             })
@@ -87,6 +87,9 @@
                     <a class="nav-link" href="/tags">标签</a>
                 </li> -->
                     <li id="n_about" class="nav-item">
+                        <a class="nav-link" href="/friends.html">友链</a>
+                    </li>
+                    <li id="n_about" class="nav-item">
                         <a class="nav-link" href="/about.html">关于</a>
                     </li>
                     <li class="nav-item">
@@ -114,6 +117,30 @@
                         <cite title="Source Title">归零幻想</cite>
                     </footer>
                 </blockquote>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
+                    <a href="archieved/android项目开发/Broadcast.html">android项目开发：Broadcast</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2020-12-22</span>&nbsp;
+                    修改时间：<span>2020-12-22</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><p>仍然是《第一行代码》的学习笔记，安卓内置广播机制。</p>
+<p>Android中每个应用程序都可以对自己感兴趣的广播进行注册，包括来自系统的，和其他应用程序的。</p>
+<p>广播分为标准广播和有序广播。</p>
+<ul>
+<li>标准广播异步执行，所有BroadcastReceiver几乎同时收到广播的消息。</li>
+<li>有序广播 同步执行，只有前一个Receiver逻辑执行完后才会传递给下一个，且可以将广播截断。</li>
+</ul>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/android项目开发/Broadcast.html">阅读全文 ▼</div>
+                </div>
             </div>
         </div>
         <div class="card mt-3">
@@ -585,30 +612,6 @@ for (i in 0 util array.size) {
 </div>
                 <div class="row mt-3">
                     <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/2020年11月前/B站的搬运机制和盗视频行为有区别吗.html">阅读全文 ▼</div>
-                </div>
-            </div>
-        </div>
-        <div class="card mt-3">
-            <div class="card-body">
-                <h2 class="card-title text-center">
-                    <a href="archieved/2020年11月前/干掉macOS的OCSP.html">干掉macOS的OCSP</a>
-                </h2>
-                <h6 class="card-subtitle mb-2 text-muted text-center">
-                    发布时间：<span>2020-11-15</span>&nbsp;
-                    修改时间：<span>2020-11-15</span>&nbsp;
-                    作者：<span>归零幻想</span>
-                </h6>
-                <hr>
-                <div class="card-text markdown-body"><p>苹果这两天摊上事了，有不少用户说自己的设备打开应用程序会卡好几分钟，然后分析发现是苹果的OCSP校验导致的。</p>
-<p>当启动一个新应用程序的时候，系统会把其hash发送到<code>ocsp.apple.com</code>用于校验，而这次是这个服务挂了但是能ping通……</p>
-<p>这个事情引起不小的讨论，主要集中在有关隐私的担忧上。本来我没有太在意，<strong>但测试发现这好像是我每次休眠恢复后触摸板卡几秒的元凶……</strong></p>
-<p>那对不起了。</p>
-<pre><code class="language-sh">echo &quot;127.0.0.1 ocsp.apple.com&quot; | sudo tee -a /etc/hosts
-</code></pre>
-<p>反正还有SEP把门呢。</p>
-</div>
-                <div class="row mt-3">
-                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/2020年11月前/干掉macOS的OCSP.html">阅读全文 ▼</div>
                 </div>
             </div>
         </div>
