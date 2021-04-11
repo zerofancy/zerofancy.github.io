@@ -1,0 +1,338 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans">
+
+<head>
+    
+    
+    <title>ClassLoader双亲委托机制探究--归零幻想的博客</title>
+    <meta charset="UTF-8">
+    <!--移动设备不缩放-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="alternate" type="application/rss+xml" title="归零幻想" href="https://ntutn.top/rss.xml" />
+    <!--github的markdown样式-->
+    <link rel="stylesheet" href="/res/css/github-markdown.css">
+    <!--一个基于bootstrap的样式-->
+    <link rel="stylesheet" href="/res/css/main.css">
+
+    <script src="/res/js/jquery.min.js"></script>
+    <script src="/res/js/popper.min.js"></script>
+    <script src="/res/js/bootstrap.min.js"></script>
+
+    <style>
+        /*图片缩放*/
+        .imageWrapper {
+            max-width: 500px;
+            max-height: 100%;
+            display: block;
+            margin: 0 auto;
+        }
+
+        /*背景图片*/
+        body {
+            background: url(https://unsplash.it/1600/900?random);
+            background-attachment: fixed;
+            background-position: bottom center;
+            background-size: cover;
+        }
+    </style>
+    <script src="/res/js/zoomify.min.js"></script>
+    <link href="/res/css/zoomify.min.css" rel="stylesheet">
+
+    <script>
+        $(document).ready(function () {
+            $(".markdown-body img").each(function () {
+                divImageWrapper = $(this).after("<div class='imageWrapper'></div>")
+                $(this).appendTo($(this).next())
+            })
+            $(".markdown-body img").zoomify()
+        })
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <nav id="nav" class="navbar navbar-expand-lg navbar-light bg-light">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
+                aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="/"><img src="/res/logo.png" width="70" height="40"
+                    class="d-inline-block align-top" alt="">
+                <span>归零幻想的博客</span></a>
+
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                    <li id="n_home" class="nav-item">
+                        <a class="nav-link" href="/">主页</a>
+                    </li>
+                    <!-- <li id="n_tags" class="nav-item">
+                        <a class="nav-link" href="/tags">标签</a>
+                    </li> -->
+                    <li id="n_about" class="nav-item">
+                        <a class="nav-link" href="/friends.html">友链</a>
+                    </li>
+                    <li id="n_about" class="nav-item">
+                        <a class="nav-link" href="/about.html">关于</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/rss.xml">RSS</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <nav class="mt-3" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+
+                <li class="breadcrumb-item active" aria-current="page">ClassLoader双亲委托机制探究</li>
+            </ol>
+        </nav>
+        <div class="card mt-3 mb-3">
+            <div class="card-body markdown-body">
+                <h1 class="card-title text-center realtitle">ClassLoader双亲委托机制探究</h1>
+                <!--TODO 时间-->
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2021-04-11</span>&nbsp;
+                    修改时间：<span>2021-04-11</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <br>
+                <div class="card-text"><p>最近在研究抖音进入热点内流的耗时问题，种种线索指向了类加载耗时上。为此，我研究了Java类加载的双亲委托机制，并尝试给出了优化建议。</p>
+<h2 id="双亲委托机制">双亲委托机制</h2>
+<p>双亲委托机制中最重要的是loadClass方法，让我们看看它是怎么实现的。</p>
+<pre><code class="language-java">    protected Class&lt;?&gt; loadClass(String name, boolean resolve)
+        throws ClassNotFoundException
+    {
+            // First, check if the class has already been loaded
+            Class&lt;?&gt; c = findLoadedClass(name); // 已加载过直接返回
+            if (c == null) {
+                try {
+                    if (parent != null) {
+                        c = parent.loadClass(name, false); //尝试让parent加载
+                    } else {
+                        c = findBootstrapClassOrNull(name); // bootstrap class loader是否加载过
+                    }
+                } catch (ClassNotFoundException e) {
+                    // ClassNotFoundException thrown if class not found
+                    // from the non-null parent class loader
+                }
+
+                if (c == null) {
+                    // If still not found, then invoke findClass in order
+                    // to find the class.
+                    c = findClass(name); // 自己加载（找不到会抛出异常）
+                }
+            }
+            return c;
+    }
+</code></pre>
+<p>findClass就是根据类名去加载具体类的方法，则整个加载机制就很清楚了。</p>
+<ol>
+<li>首先部分类会被BootstrapClassLoader加载，这部分是native实现。</li>
+<li>会先尝试让parent加载</li>
+<li>parent找不到时才会自己加载</li>
+</ol>
+<p>如果我们能创建一个ClassLoader，将它插入到PathClassLoader和BootstrapClassLoader之间，那么所有被PathClassLoader加载的类就都可以记录下来了。</p>
+<h2 id="pathclassloaderproxy实现">PathClassLoaderProxy实现</h2>
+<blockquote>
+<p>Talk is cheap, show me the code.</p>
+</blockquote>
+<pre><code class="language-kotlin">
+class ClassLoaderProxy : ClassLoader() {
+    override fun findClass(name: String?): Class&lt;*&gt; {
+        if (name != null &amp;&amp; recording) loadedClass.add(name)
+        throw ClassNotFoundException()
+    }
+
+    companion object {
+        private val loadedClass = mutableSetOf&lt;String&gt;()
+        private var recording = false
+        private var hooked = false
+
+        @JvmStatic
+        fun inject(context: Context): Boolean {
+            Log.w(ClassLoaderWrapper2::class.java.simpleName, &quot;Hook开始&quot;)
+            try {
+                val originClassLoader = context.classLoader
+                Log.d(&quot;ClassLoader类型&quot;, originClassLoader.javaClass.simpleName)
+                val delegateClassLoader = ClassLoaderWrapper2()
+                setParent(delegateClassLoader, originClassLoader.parent)
+                setParent(originClassLoader, delegateClassLoader)
+                Log.w(ClassLoaderWrapper2::class.java.simpleName, &quot;Hook成功&quot;)
+                hooked = true
+                return true
+            } catch (e: Throwable) {
+            }
+            Log.e(ClassLoaderWrapper2::class.java.simpleName, &quot;Hook没有成功&quot;)
+            return false
+        }
+
+        private fun setParent(classLoader: ClassLoader, newParent: ClassLoader) {
+            val parentField = ClassLoader::class.java.getDeclaredField(&quot;parent&quot;)
+            parentField.isAccessible = true
+            parentField.set(classLoader, newParent)
+        }
+
+        @Throws(IllegalStateException::class)
+        private fun checkHookState() {
+            if (!hooked) {
+                throw IllegalStateException(&quot;hookPackageClassLoader没有执行成功！&quot;)
+            }
+        }
+
+        @Throws(IllegalStateException::class, RuntimeException::class)
+        fun startRecord() {
+            checkHookState()
+            synchronized(recording) {
+                if (recording) {
+                    throw RuntimeException(&quot;已经存在正在监听的任务！&quot;)
+                }
+                loadedClass.clear()
+                recording = true
+            }
+        }
+
+        @Throws(IllegalStateException::class, RuntimeException::class)
+        fun endRecord(block: (Set&lt;String&gt;) -&gt; Unit) {
+            checkHookState()
+            synchronized(recording) {
+                if (!recording) {
+                    throw RuntimeException(&quot;当前没有在监听！&quot;)
+                }
+                recording = false
+                block.invoke(loadedClass)
+            }
+        }
+    }
+}
+</code></pre>
+<p>因为我们并不需要做实际的加载，只要抛出异常，加载还是交给我们儿子PathClassLoader就可以了。</p>
+<h2 id="记录加载时间">记录加载时间</h2>
+<pre><code class="language-kotlin">package top.ntutn.hookpackageclassloader
+
+import android.content.Context
+import android.util.Log
+
+class ClassLoaderWrapper(private val realClassLoader: ClassLoader) : ClassLoader() {
+
+    private val findClassMethod by lazy {
+        ClassLoader::class.java.getDeclaredMethod(&quot;findClass&quot;, String::class.java).apply {
+            isAccessible = true
+        }
+    }
+
+    override fun loadClass(name: String?, resolve: Boolean): Class&lt;*&gt; {
+        val startTime = System.currentTimeMillis()
+
+        // First, check if the class has already been loaded
+        var c: Class&lt;*&gt;? = null
+        try {
+            c = parent.loadClass(name)
+        } catch (e: ClassNotFoundException) {
+            // ClassNotFoundException thrown if class not found
+            // from the non-null parent class loader
+        }
+
+        if (c == null) {
+            c = findClassMethod.invoke(realClassLoader, name) as Class&lt;*&gt;?
+        }
+
+        Log.e(&quot;classloader&quot;, &quot;load class: $name&quot;)
+        loadedClasses.add(name.toString() to System.currentTimeMillis() - startTime)
+
+        return c!!
+    }
+
+    companion object {
+        private val loadedClasses = mutableSetOf&lt;Pair&lt;String, Long&gt;&gt;()
+        private var recording = false
+        private var hooked = false
+        private val preloadClasses = setOf(
+            &quot;kotlin.collections.CollectionsKt&quot;,
+            &quot;kotlin.Triple&quot;,
+            &quot;top.ntutn.hookpackageclassloader.ClassLoaderWrapper&quot;,
+            &quot;top.ntutn.hookpackageclassloader.ClassLoaderWrapper\$Companion&quot;
+        )
+
+        @JvmStatic
+        fun inject(context: Context): Boolean {
+            // 提前加载避免死循环
+            preloadClasses.forEach { Class.forName(it) }
+            try {
+                val originClassLoader = context.classLoader
+                val originParent = originClassLoader.parent
+                val applicationInfo = context.applicationInfo
+                applicationInfo.sourceDir
+
+                val delegateClassLoader = ClassLoaderWrapper3(originClassLoader)
+                setParent(delegateClassLoader, originParent)
+                setParent(originClassLoader, delegateClassLoader)
+                hooked = true
+                return true
+            } catch (e: Exception) {
+                Log.e(ClassLoaderWrapper3::class.simpleName, &quot;hook失败&quot;)
+            }
+            return false
+        }
+
+        private fun setParent(classLoader: ClassLoader, newParent: ClassLoader) {
+            val parentField = ClassLoader::class.java.getDeclaredField(&quot;parent&quot;)
+            parentField.isAccessible = true
+            parentField.set(classLoader, newParent)
+        }
+
+        @Throws(IllegalStateException::class)
+        private fun checkHookState() {
+            if (!hooked) {
+                throw IllegalStateException(&quot;hook没有执行成功！&quot;)
+            }
+        }
+
+        @Throws(IllegalStateException::class, RuntimeException::class)
+        fun startRecord() {
+            checkHookState()
+            synchronized(recording) {
+                if (recording) {
+                    throw RuntimeException(&quot;已经存在正在监听的任务！&quot;)
+                }
+                loadedClasses.clear()
+                recording = true
+            }
+        }
+
+        @Throws(IllegalStateException::class, RuntimeException::class)
+        fun endRecord(block: (Set&lt;Pair&lt;String, Long&gt;&gt;) -&gt; Unit) {
+            checkHookState()
+            synchronized(recording) {
+                if (!recording) {
+                    throw RuntimeException(&quot;当前没有在监听！&quot;)
+                }
+                recording = false
+                block.invoke(loadedClasses)
+            }
+        }
+    }
+}
+</code></pre>
+<p>相比前面方案来说，注意点就是不要搞出死循环来，另外就是Kotlin自己的类似乎并不会被BootstrapClassLoader加载，需要在计时前加载一下。</p>
+<h2 id="反射进行类加载">反射进行类加载</h2>
+<p>非常简单，就是用<code>Class.forName()</code>去加载了下这些类。</p>
+<p>既然用了反射，混淆问题怎么解决？</p>
+<p>幸运的是，对于一些简单的场景，ProGuard是可以帮我们处理的，其中就包括了直接使用<code>Class.forName(&quot;some class&quot;)</code>的情况。参见<a href="https://www.guardsquare.com/en/products/proguard/manual/introduction">ProGuard manual | Introduction | Guardsquare</a>。</p>
+<p>遗憾的是，当这个字符串穿上马夹（比如放到了某个变量里再传给这个函数）似乎ProGuard就不认识了。因而，我只好用笨方法生成一大堆Class.forName()了。</p>
+<p>在demo中，这个方法正常work了，但在抖音的release包多半类会反射失败，此法不可行。按照我的思路之后如果还想继续看就只好看下怎样设计一个gradle插件，编译时从生成的mapping.txt解析出这些Class混淆后的名字再打到抖音的包里。成本很高而且我目前大概没有能力完成。</p>
+<p>一次失败的尝试呢。但总归也算学到一些东西。</p>
+</div>
+            </div>
+            <script src="https://utteranc.es/client.js" repo="zerofancy/zerofancy.github.io" issue-term="ClassLoader双亲委托机制探究"
+                theme="github-light" crossorigin="anonymous" async>
+                </script>
+        </div>
+        <!-- 页脚 -->
+        <footer class="navbar navbar-light bg-light">
+            <p>版权所有：归零幻想 ┊ 备案号：<a href="http://beian.miit.gov.cn/">暂无</a>┊ Powered by：归零幻想</p>
+        </footer>
+    </div>
+</body>
+
+</html>

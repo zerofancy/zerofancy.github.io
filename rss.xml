@@ -5,6 +5,48 @@
         <description>一枚准程序猿。</description>
         <link>https://ntutn.top</link>
         <item>
+            <title>ClassLoader双亲委托机制探究</title>
+            <description>&lt;p&gt;最近在研究抖音进入热点内流的耗时问题，种种线索指向了类加载耗时上。为此，我研究了Java类加载的双亲委托机制，并尝试给出了优化建议。&lt;/p&gt;
+&lt;h2 id=&quot;双亲委托机制&quot;&gt;双亲委托机制&lt;/h2&gt;
+&lt;p&gt;双亲委托机制中最重要的是loadClass方法，让我们看看它是怎么实现的。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;    protected Class&amp;lt;?&amp;gt; loadClass(String name, boolean resolve)
+        throws ClassNotFoundException
+    {
+            // First, check if the class has already been loaded
+            Class&amp;lt;?&amp;gt; c = findLoadedClass(name); // 已加载过直接返回
+            if (c == null) {
+                try {
+                    if (parent != null) {
+                        c = parent.loadClass(name, false); //尝试让parent加载
+                    } else {
+                        c = findBootstrapClassOrNull(name); // bootstrap class loader是否加载过
+                    }
+                } catch (ClassNotFoundException e) {
+                    // ClassNotFoundException thrown if class not found
+                    // from the non-null parent class loader
+                }
+
+                if (c == null) {
+                    // If still not found, then invoke findClass in order
+                    // to find the class.
+                    c = findClass(name); // 自己加载（找不到会抛出异常）
+                }
+            }
+            return c;
+    }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;findClass就是根据类名去加载具体类的方法，则整个加载机制就很清楚了。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;首先部分类会被BootstrapClassLoader加载，这部分是native实现。&lt;/li&gt;
+&lt;li&gt;会先尝试让parent加载&lt;/li&gt;
+&lt;li&gt;parent找不到时才会自己加载&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;如果我们能创建一个ClassLoader，将它插入到PathClassLoader和BootstrapClassLoader之间，那么所有被PathClassLoader加载的类就都可以记录下来了。&lt;/p&gt;
+</description>
+            <author>归零幻想</author>
+            <pubDate>Sun, 11 Apr 2021 00:00:00 CST</pubDate>
+            <link>https://ntutn.top/ClassLoader双亲委托机制探究.html</link>
+        </item><item>
             <title>我的朋友们</title>
             <description>&lt;ul&gt;
 &lt;li&gt;&lt;a href=&quot;https://blog.semesse.me/&quot;&gt;色魔是色魔&lt;/a&gt;&lt;/li&gt;
@@ -470,28 +512,6 @@ class MainActivity : AppCompatActivity() {
             <author>归零幻想</author>
             <pubDate>Mon, 28 Dec 2020 00:00:00 CST</pubDate>
             <link>https://ntutn.top/archieved/android项目开发/持久化.html</link>
-        </item><item>
-            <title>禁用macOS的窗口标签</title>
-            <description>&lt;p&gt;作为一个对更新相对激进的用户，我当然是第一时间升级了最新的macOS Big Sur。说实在的，这名字给我的第一印象并不好，因为被我看成了『Big Bug』。&lt;/p&gt;
-&lt;p&gt;圆角变大了，还有我一开始比较喜欢的功能，姑且称之为窗口标签。在BigSur中，当你打开两个全屏的Android Studio，它们将出现在同一个窗口，窗口上方出现不同的标签页，和浏览器一样。&lt;/p&gt;
-&lt;p&gt;好景不长，这个功能表现很不稳定，我不得不考虑干掉这个功能。如果只是没有成功触发也就算了，大不了当没升级用，但它常常会把一些弹出窗口也搞成和原窗口并列的标签。比如当你rename一个文件时，弹出的窗口有时就会并列到标签上，然后Android Studio就卡死了。&lt;/p&gt;
-&lt;p&gt;好吧，既然它开始影响我的工作效率了，我就找了找禁用的方法&lt;sup id=&quot;fnref-1&quot;&gt;&lt;a class=&quot;footnote-ref&quot; href=&quot;#fn-1&quot;&gt;1&lt;/a&gt;&lt;/sup&gt;。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-bash&quot;&gt;
-defaults write com.google.android.studio AppleWindowTabbingMode manual
-&lt;/code&gt;&lt;/pre&gt;
-&lt;div class=&quot;footnotes&quot;&gt;
-&lt;hr /&gt;
-&lt;ol&gt;
-&lt;li id=&quot;fn-1&quot;&gt;
-&lt;p&gt;来自&lt;a href=&quot;https://www.reddit.com/r/androiddev/comments/jtbl4m/has_anyone_updated_to_macos_big_sur_and_is/&quot;&gt;https://www.reddit.com/r/androiddev/comments/jtbl4m/has_anyone_updated_to_macos_big_sur_and_is/&lt;/a&gt;&lt;/p&gt;
-&lt;a href=&quot;#fnref-1&quot; class=&quot;footnote-backref&quot;&gt;&amp;#8617;&lt;/a&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/div&gt;
-</description>
-            <author>归零幻想</author>
-            <pubDate>Tue, 22 Dec 2020 00:00:00 CST</pubDate>
-            <link>https://ntutn.top/禁用macOS的窗口标签.html</link>
         </item>
     </channel>
 </rss>
