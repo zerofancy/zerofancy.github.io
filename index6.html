@@ -125,6 +125,30 @@
         <div class="card mt-3">
             <div class="card-body">
                 <h2 class="card-title text-center">
+                    <a href="archieved/old/线性表ADT的实现.html">线性表ADT的实现</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2019-05-13</span>&nbsp;
+                    修改时间：<span>2019-05-13</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><h1 id="线性表adt的实现">线性表ADT的实现</h1>
+<p>数据结构平时测试的题目开放了，这次平时测试睡过了，全宿舍都睡过了。现在回头做做题目，还是有坑点的。</p>
+<h2 id="question">Question</h2>
+<p>假设线性表ADT的数据元素类型为正整数，采用带头结点的单链式存储结构。线性表ADT实现的大部分代码已经给出，请补充写出类的两个成员函数<code>insert</code>和<code>reverse</code>。  注意：<strong>只需提交需要补充的函数代码，其他代码不能自己重写和修改。</strong></p>
+<p><code>insert</code>函数：在元素值从小到大有序的线性表中插入一个元素，仍然保持有序。</p>
+<p><code>reverse</code>函数：实现线性表元素的倒置，即将线性表中数据元素的顺序反转。</p>
+<p>线性表元素输入时，以 <code>endTag</code> 作为结束标志。</p>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/old/线性表ADT的实现.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
                     <a href="archieved/old/堆栈ADT实现及应用.html">堆栈ADT实现及应用</a>
                 </h2>
                 <h6 class="card-subtitle mb-2 text-muted text-center">
@@ -381,68 +405,6 @@ ConsoleWrite($re)
 </div>
                 <div class="row mt-3">
                     <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/old/愚人节，一切小心行事.html">阅读全文 ▼</div>
-                </div>
-            </div>
-        </div>
-        <div class="card mt-3">
-            <div class="card-body">
-                <h2 class="card-title text-center">
-                    <a href="archieved/old/使用映像劫持技术屏蔽电脑中的广告进程.html">使用映像劫持技术屏蔽电脑中的广告进程</a>
-                </h2>
-                <h6 class="card-subtitle mb-2 text-muted text-center">
-                    发布时间：<span>2019-03-28</span>&nbsp;
-                    修改时间：<span>2019-03-28</span>&nbsp;
-                    作者：<span>归零幻想</span>
-                </h6>
-                <hr>
-                <div class="card-text markdown-body"><blockquote>
-<p>映像劫持（Image File Execution Options），简单的说法，就是当你打开的是程序A，而运行的确是程序B。映像劫持其实是Windows内设的用来调试程序的功能，但是现在却往往被病毒恶意利用。当用户双击对应的程序后，操作系统就会给外壳程序（例如“explorer.exe”）发布相应的指令，其中包含有执行程序的路径和文件名，然后由外壳程序来执行该程序。事实上在该过程中，Windows还会在注册表的上述路径中查询所有的映像劫持子键，如果存在和该程序名称完全相同的子键，就查询对应子健中包含的“dubugger”键值名，并用其指定的程序路径来代替原始的程序，之后执行的是遭到“劫持”的虚假程序。</p>
-</blockquote>
-<p>国内很多软件都有重度广告，“资讯”、“新闻”、“弹窗”，不胜其烦。直接找到广告进程删除掉，结果一自动更新，又回来了。</p>
-<p>于是，我想到了“映像劫持”：</p>
-<pre><code class="language-ini">Windows Registry Editor Version 5.00
-
-[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SLBService.exe]
-&quot;Debugger&quot;=&quot;winlogon&quot;
-
-[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\TsService.exe]
-&quot;Debugger&quot;=&quot;winlogon&quot;
-
-[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\FoxitDesktopAd.exe]
-&quot;Debugger&quot;=&quot;winlogon&quot;
-
-[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\FoxitProtect.exe]
-&quot;Debugger&quot;=&quot;winlogon&quot;
-
-[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\LCServer.exe]
-&quot;Debugger&quot;=&quot;winlogon&quot;
-
-[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\LRServer.exe]
-&quot;Debugger&quot;=&quot;winlogon&quot;
-
-[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\2345MiniPage.exe]
-&quot;Debugger&quot;=&quot;winlogon&quot;
-
-[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SohuNews.exe]
-&quot;Debugger&quot;=&quot;winlogon&quot;
-
-[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\PinyinUp.exe]
-&quot;Debugger&quot;=&quot;winlogon&quot;
-
-[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SGDownload.exe]
-&quot;Debugger&quot;=&quot;winlogon&quot;
-
-[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SGMedalLoader.exe]
-&quot;Debugger&quot;=&quot;winlogon&quot;
-
-[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SogouCloud.exe]
-&quot;Debugger&quot;=&quot;winlogon&quot;
-
-</code></pre>
-<p>保存为<code>.reg</code>文件，导入注册表即可。</p>
-</div>
-                <div class="row mt-3">
-                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/old/使用映像劫持技术屏蔽电脑中的广告进程.html">阅读全文 ▼</div>
                 </div>
             </div>
         </div>

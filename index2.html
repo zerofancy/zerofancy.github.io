@@ -125,6 +125,221 @@
         <div class="card mt-3">
             <div class="card-body">
                 <h2 class="card-title text-center">
+                    <a href="archieved/android项目开发/持久化.html">android项目开发：持久化</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2020-12-24</span>&nbsp;
+                    修改时间：<span>2020-12-28</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><p>《第一行代码》阅读记录，有关数据持久化存储，略过了数据库的方式。</p>
+<h1 id="持久化">持久化</h1>
+<h2 id="文件存储">文件存储</h2>
+<p>先暂时只是写了个demo，有需要再深入看。</p>
+<pre><code class="language-kotlin">
+    private fun saveText(inputText: String) {
+        try {
+            val output = openFileOutput(&quot;data&quot;, Context.MODE_PRIVATE)
+            val writer = BufferedWriter(OutputStreamWriter(output))
+            writer.use {
+                it.write(inputText)
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun loadText(): String {
+        val content = StringBuilder()
+        try {
+            val input = openFileInput(&quot;data&quot;)
+            val reader = BufferedReader(InputStreamReader(input))
+            reader.use { r -&gt;
+                r.forEachLine {
+                    content.appendLine(it)
+                }
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        return content.toString()
+    }
+</code></pre>
+<h2 id="sharedpreference">SharedPreference</h2>
+<pre><code class="language-kotlin">
+            saveButton.setOnClickListener {
+                getSharedPreferences(&quot;data&quot;, Context.MODE_PRIVATE).edit {
+                    putString(&quot;name&quot;, &quot;Tom&quot;)
+                    putInt(&quot;age&quot;, 28)
+                    putBoolean(&quot;married&quot;, false)
+                }
+            }
+
+            restoreButton.setOnClickListener {
+                getSharedPreferences(&quot;data&quot;, Context.MODE_PRIVATE).apply {
+                    val name = getString(&quot;name&quot;, &quot;苏珊&quot;)
+                    val age = getInt(&quot;age&quot;, 15)
+                    val isMarried = getBoolean(&quot;married&quot;, false)
+                    Toast.makeText(
+                        this@MainActivity,
+                        &quot;${name}年龄${age}岁${if (isMarried) &quot;已婚&quot; else &quot;未婚&quot;}&quot;,
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+
+</code></pre>
+<h2 id="数据库">数据库</h2>
+<p>基本用法demo</p>
+<pre><code class="language-kotlin">
+package top.ntutn.databasetest
+
+import android.content.ContentValues
+import android.content.Context
+import android.database.Cursor
+import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
+import android.widget.Toast
+
+class MyDatabaseHelper(val context: Context, name: String, version: Int) :
+    SQLiteOpenHelper(context, name, null, version) {
+    private val createBook = &quot;&quot;&quot;
+        create table Book (
+            id integer primary key autoincrement,
+            author text,
+            price real,
+            pages integer,
+            name text
+        )
+    &quot;&quot;&quot;.trimIndent()
+    private val createCategory = &quot;&quot;&quot;
+        create table Category (
+            id integer primary key autoincrement,
+            category_name text,
+            category_code integer
+        )
+    &quot;&quot;&quot;.trimIndent()
+
+    override fun onCreate(db: SQLiteDatabase) {
+        db.execSQL(createBook)
+        db.execSQL(createCategory)
+        Toast.makeText(context, &quot;建立数据库完成&quot;, Toast.LENGTH_LONG).show()
+    }
+
+    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+        if (oldVersion == newVersion) return
+        Log.d(javaClass.simpleName, &quot;旧版是${oldVersion}，新版是${newVersion}，数据库升级开始&quot;)
+        db.execSQL(&quot;drop table if exists Book&quot;)
+        db.execSQL(&quot;drop table if exists Category&quot;)
+        onCreate(db)
+    }
+}
+
+fun cvOf(vararg pairs: Pair&lt;String, Any?&gt;): ContentValues {
+    val cv = ContentValues()
+    for (pair in pairs) {
+        val key = pair.first
+        when (val value = pair.second) {
+            is Int -&gt; cv.put(key, value)
+            is Long -&gt; cv.put(key, value)
+            is Short -&gt; cv.put(key, value)
+            is Float -&gt; cv.put(key, value)
+            is Double -&gt; cv.put(key, value)
+            is Boolean -&gt; cv.put(key, value)
+            is String -&gt; cv.put(key, value)
+            is Byte -&gt; cv.put(key, value)
+            is ByteArray -&gt; cv.put(key, value)
+            null -&gt; cv.putNull(key)
+            else -&gt; throw IllegalArgumentException(&quot;不支持的cv类型&quot;)
+        }
+    }
+    return cv
+}
+
+fun Cursor.getString(name: String): String = getString(getColumnIndex(name))
+
+fun Cursor.getInt(name: String): Int = getInt(getColumnIndex(name))
+
+fun Cursor.getDouble(name: String): Double = getDouble(getColumnIndex(name))
+</code></pre>
+<pre><code class="language-kotlin">
+package top.ntutn.databasetest
+
+import android.os.Bundle
+import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
+import top.ntutn.databasetest.databinding.ActivityMainBinding
+
+class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        val dbHelper = MyDatabaseHelper(this, &quot;BookStore.db&quot;, 6)
+
+        binding.createDatabaseButton.setOnClickListener {
+            dbHelper.writableDatabase
+        }
+        binding.addDataButton.setOnClickListener {
+            val db = dbHelper.writableDatabase
+            val values1 = cvOf(
+                &quot;name&quot; to &quot;The Da Vinci Code&quot;,
+                &quot;author&quot; to &quot;Dan Brown&quot;,
+                &quot;pages&quot; to 454,
+                &quot;price&quot; to 16.96
+            )
+            db.insert(&quot;Book&quot;, null, values1)
+            val values2 = cvOf(
+                &quot;name&quot; to &quot;The Lost Symbol&quot;,
+                &quot;author&quot; to &quot;Dan Brown&quot;,
+                &quot;pages&quot; to 510,
+                &quot;price&quot; to 19.95
+            )
+            db.insert(&quot;Book&quot;, null, values2)
+        }
+        binding.updateDataButton.setOnClickListener {
+            val db = dbHelper.writableDatabase
+            val values = cvOf(&quot;price&quot; to 10.99)
+            db.update(&quot;Book&quot;, values, &quot;name=?&quot;, arrayOf(&quot;The Da Vinci Code&quot;))
+        }
+        binding.deleteDataButton.setOnClickListener {
+            val db = dbHelper.writableDatabase
+            db.delete(&quot;Book&quot;, &quot;pages &gt; ?&quot;, arrayOf(&quot;500&quot;))
+        }
+        binding.queryDataButton.setOnClickListener {
+            val db = dbHelper.writableDatabase
+            val cursor = db.query(&quot;Book&quot;, null, null, null, null, null, null)
+            if (cursor.moveToFirst()) {
+                do {
+                    val name = cursor.getString(&quot;name&quot;)
+                    val author = cursor.getString(&quot;author&quot;)
+                    val pages = cursor.getInt(&quot;pages&quot;)
+                    val price = cursor.getDouble(&quot;price&quot;)
+                    Log.d(
+                        javaClass.simpleName,
+                        &quot;name: $name, author: $author, pages: $pages, price: $price&quot;
+                    )
+                } while (cursor.moveToNext())
+            }
+            cursor.close()
+        }
+    }
+}
+</code></pre>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/android项目开发/持久化.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
                     <a href="禁用macOS的窗口标签.html">禁用macOS的窗口标签</a>
                 </h2>
                 <h6 class="card-subtitle mb-2 text-muted text-center">
@@ -581,37 +796,6 @@ for (i in 0 util array.size) {
 </div>
                 <div class="row mt-3">
                     <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/android项目开发/项目结构.html">阅读全文 ▼</div>
-                </div>
-            </div>
-        </div>
-        <div class="card mt-3">
-            <div class="card-body">
-                <h2 class="card-title text-center">
-                    <a href="QBASIC.html">从QBASIC开始</a>
-                </h2>
-                <h6 class="card-subtitle mb-2 text-muted text-center">
-                    发布时间：<span>2020-12-02</span>&nbsp;
-                    修改时间：<span>2020-12-02</span>&nbsp;
-                    作者：<span>归零幻想</span>
-                </h6>
-                <hr>
-                <div class="card-text markdown-body"><p>前两天看到一个知乎问题，拍了一张数学课本的截图，里面是一段程序，问如何才能运行这种程序。<sup id="fnref-1"><a class="footnote-ref" href="#fn-1">1</a></sup></p>
-<p>看到这熟悉的语法有些感慨，毕竟这门语言就是我编程入门学习的第一门语言了。</p>
-<p><img src="https://i.loli.net/2020/12/02/gBcqkFoL39u1Xdw.png" alt="2020-12-02_08-46.png" /></p>
-<p>记得那时没有什么娱乐手段，只能翻翻我姐的旧书——当然多数看不懂。少数能看懂的，就包括一本<code>QBASIC</code>的编程入门教程。</p>
-<p>单词不认识，字母总还是认识的。于是我学的Hello World其实是P-R-I-N-T-&quot;H-E-L-L-O-W-O-R-L-D&quot;。看着都觉得累…… <em>没有电脑，就直接在脑袋里推演，在纸上执行程序。家里人还以为我在学英语～</em></p>
-<div class="footnotes">
-<hr />
-<ol>
-<li id="fn-1">
-<p><a href="https://www.zhihu.com/question/432443510">请问像这种程序可以用什么软件操作? - 知乎</a></p>
-<a href="#fnref-1" class="footnote-backref">&#8617;</a>
-</li>
-</ol>
-</div>
-</div>
-                <div class="row mt-3">
-                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="QBASIC.html">阅读全文 ▼</div>
                 </div>
             </div>
         </div>
