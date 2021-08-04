@@ -41,6 +41,11 @@ public class PublishUtil {
         };
         Thread thread = new Thread(runnable);
         thread.start();
+        try {
+            thread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
 ```
