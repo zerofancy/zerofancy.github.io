@@ -5,6 +5,69 @@
         <description>一枚准程序猿。</description>
         <link>https://ntutn.top</link>
         <item>
+            <title>java默认修饰符问题</title>
+            <description>&lt;h2 id=&quot;问题描述&quot;&gt;问题描述&lt;/h2&gt;
+&lt;p&gt;和工具线配合完成某个需求，我这边的改动很少，但一鼓作气搞完后却遇到了奇怪的报错。已知工具线的代码大多是java的，而我这边自然是力推Kotlin。我们的代码参考如下：&lt;/p&gt;
+&lt;h3 id=&quot;代码参考&quot;&gt;代码参考&lt;/h3&gt;
+&lt;p&gt;工具线定义了一个接口用于callback&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;package a;
+
+interface IPublishCallback {
+    void onFinish();
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;工具线在执行完发布逻辑后无论成功还是失败都会调用我们的callback&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-java&quot;&gt;package a;
+
+public class PublishUtil {
+    public static void publishVideo(String videoName, IPublishCallback callback) {
+        Runnable runnable = () -&amp;gt; {
+            try {
+                System.out.println(&amp;quot;[&amp;quot; + videoName + &amp;quot;]开始执行耗时发布操作……&amp;quot;);
+                Thread.sleep(1000L);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            callback.onFinish();
+        };
+        Thread thread = new Thread(runnable);
+        thread.start();
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;我们这边的实现是Kotlin的，就是调用了下工具线的方法&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-kt&quot;&gt;package b
+
+import a.PublishUtil
+
+class ShareFromSdkImpl {
+    fun doShare() {
+        println(&amp;quot;系统分享功能测试&amp;quot;)
+        PublishUtil.publishVideo(&amp;quot;测试视频&amp;quot;) {
+            println(&amp;quot;发布视频完成回调&amp;quot;)
+        }
+        println(&amp;quot;完成系统分享方法&amp;quot;)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;主函数&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-kt&quot;&gt;import b.ShareFromSdkImpl
+
+fun main() {
+    ShareFromSdkImpl().doShare()
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&quot;问题&quot;&gt;问题&lt;/h2&gt;
+&lt;p&gt;上述代码有无问题，将会得到什么样的运行结果？&lt;/p&gt;
+&lt;p&gt;如果有问题，问题出现在哪里，是我的问题还是工具线的问题？&lt;/p&gt;
+&lt;h2 id=&quot;答案解析&quot;&gt;答案解析&lt;/h2&gt;
+&lt;p&gt;待补充，先占坑。&lt;/p&gt;
+</description>
+            <author>归零幻想</author>
+            <pubDate>Thu, 5 Aug 2021 00:00:00 CST</pubDate>
+            <link>https://ntutn.top/java默认修饰符问题.html</link>
+        </item><item>
             <title>装饰模式实现分享功能</title>
             <description>&lt;p&gt;在看业务代码时发现了一段代码，应用了装饰模式处理了分享功能的实现，非常巧妙，共赏。&lt;/p&gt;
 &lt;p&gt;&lt;img src=&quot;https://i.loli.net/2021/07/19/yiSRrDhZx4AT9GI.png&quot; alt=&quot;装饰模式.svg.png.lin.png&quot; /&gt;&lt;/p&gt;
@@ -304,18 +367,6 @@ class MainActivity : AppCompatActivity() {
             <author>归零幻想</author>
             <pubDate>Mon, 4 Jan 2021 00:00:00 CST</pubDate>
             <link>https://ntutn.top/截图不可信,我们能信什么.html</link>
-        </item><item>
-            <title>android项目开发：通知</title>
-            <description>&lt;p&gt;仍然是第一行代码的笔记，这篇是有关通知的，最基本的用法。&lt;/p&gt;
-&lt;h2 id=&quot;通知的相关知识&quot;&gt;通知的相关知识&lt;/h2&gt;
-&lt;p&gt;通知是什么不再赘述，这里只记录些重要但没接触的概念。&lt;/p&gt;
-&lt;p&gt;通知渠道在8.0（O）引入。要求APP将通知分类，通过不同&lt;em&gt;渠道&lt;/em&gt;进行分发，用户可以选择性禁用某个渠道的通知，或者调整优先等级。&lt;/p&gt;
-&lt;p&gt;通知可以有不同的重要等级，有四种：&lt;code&gt;IMPORTANCE_HIGH&lt;/code&gt;、&lt;code&gt;IMPORTANCE_DEFAULT&lt;/code&gt;、&lt;code&gt;IMPORTANCE_LOW&lt;/code&gt;、&lt;code&gt;IMPORTANCE_MIN&lt;/code&gt;。根据重要等级不同，通知可能有不同的展现策略，比如在前台提示甚至播放声音。&lt;/p&gt;
-&lt;p&gt;在通知渠道创建时通知的重要等级也就确定了，之后不能再被APP修改。&lt;/p&gt;
-</description>
-            <author>归零幻想</author>
-            <pubDate>Sun, 3 Jan 2021 00:00:00 CST</pubDate>
-            <link>https://ntutn.top/archieved/android项目开发/通知.html</link>
         </item>
     </channel>
 </rss>
