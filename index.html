@@ -129,7 +129,7 @@
                 </h2>
                 <h6 class="card-subtitle mb-2 text-muted text-center">
                     发布时间：<span>2021-08-05</span>&nbsp;
-                    修改时间：<span>2021-08-05</span>&nbsp;
+                    修改时间：<span>2021-08-06</span>&nbsp;
                     作者：<span>归零幻想</span>
                 </h6>
                 <hr>
@@ -191,10 +191,28 @@ fun main() {
 }
 </code></pre>
 <h2 id="问题">问题</h2>
-<p>上述代码有无问题，将会得到什么样的运行结果？</p>
-<p>如果有问题，问题出现在哪里，是我的问题还是工具线的问题？</p>
-<h2 id="答案解析">答案解析</h2>
-<p>待补充，先占坑。</p>
+<p>上述代码在执行后输出如下：</p>
+<pre><code class="language-plain">系统分享功能测试
+Exception in thread &quot;main&quot; java.lang.NoClassDefFoundError: a/IPublishCallback
+	at b.ShareFromSdkImpl.doShare(ShareFromSdkImpl.kt:8)
+	at MainKt.main(main.kt:4)
+	at MainKt.main(main.kt)
+Caused by: java.lang.ClassNotFoundException: a.IPublishCallback
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:581)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:178)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:522)
+	... 3 more
+
+Process finished with exit code 1
+
+</code></pre>
+<p>在安卓中略有不同，异常类型为</p>
+<p>java.lang.IllegalAccessError: Interface a.IPublishCallback implemented by class com.ss.android.ugc.aweme.plugin.xground.player……</p>
+<h2 id="排查">排查</h2>
+<p>注意报错中提到的<code>a/IPublishCallback</code>，是我们前面定义的回调接口。</p>
+<p>我们将lambda改为匿名内部类的写法，这才发现确实是找不到。</p>
+<p><img src="https://i.loli.net/2021/08/06/nrZt3QkqDLojcf5.png" alt="2021-08-06_01-33.png" /></p>
+<p>在使用Lambda形式实现回调时这个错误没有被编译器检查出来，运行时才报出来。</p>
 </div>
                 <div class="row mt-3">
                     <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="java默认修饰符问题.html">阅读全文 ▼</div>

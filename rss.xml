@@ -64,13 +64,31 @@ fun main() {
 }
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h2 id=&quot;问题&quot;&gt;问题&lt;/h2&gt;
-&lt;p&gt;上述代码有无问题，将会得到什么样的运行结果？&lt;/p&gt;
-&lt;p&gt;如果有问题，问题出现在哪里，是我的问题还是工具线的问题？&lt;/p&gt;
-&lt;h2 id=&quot;答案解析&quot;&gt;答案解析&lt;/h2&gt;
-&lt;p&gt;待补充，先占坑。&lt;/p&gt;
+&lt;p&gt;上述代码在执行后输出如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-plain&quot;&gt;系统分享功能测试
+Exception in thread &amp;quot;main&amp;quot; java.lang.NoClassDefFoundError: a/IPublishCallback
+	at b.ShareFromSdkImpl.doShare(ShareFromSdkImpl.kt:8)
+	at MainKt.main(main.kt:4)
+	at MainKt.main(main.kt)
+Caused by: java.lang.ClassNotFoundException: a.IPublishCallback
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:581)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:178)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:522)
+	... 3 more
+
+Process finished with exit code 1
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;在安卓中略有不同，异常类型为&lt;/p&gt;
+&lt;p&gt;java.lang.IllegalAccessError: Interface a.IPublishCallback implemented by class com.ss.android.ugc.aweme.plugin.xground.player……&lt;/p&gt;
+&lt;h2 id=&quot;排查&quot;&gt;排查&lt;/h2&gt;
+&lt;p&gt;注意报错中提到的&lt;code&gt;a/IPublishCallback&lt;/code&gt;，是我们前面定义的回调接口。&lt;/p&gt;
+&lt;p&gt;我们将lambda改为匿名内部类的写法，这才发现确实是找不到。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://i.loli.net/2021/08/06/nrZt3QkqDLojcf5.png&quot; alt=&quot;2021-08-06_01-33.png&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;在使用Lambda形式实现回调时这个错误没有被编译器检查出来，运行时才报出来。&lt;/p&gt;
 </description>
             <author>归零幻想</author>
-            <pubDate>Thu, 5 Aug 2021 00:00:00 CST</pubDate>
+            <pubDate>Fri, 6 Aug 2021 00:00:00 CST</pubDate>
             <link>https://ntutn.top/java默认修饰符问题.html</link>
         </item><item>
             <title>装饰模式实现分享功能</title>
