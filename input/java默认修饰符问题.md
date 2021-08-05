@@ -118,7 +118,9 @@ java.lang.IllegalAccessError: Interface a.IPublishCallback implemented by class 
 
 ## 类可访问性修饰符
 
-Java中，可以使用访问控制符来保护对类、变量、方法和构造方法的访问。Java 支持 4 种不同的访问权限。
+Java中，可以使用访问控制符来保护对类、变量、方法和构造方法的访问。Java 支持 4 种不同的访问权限。[^1]
+
+[^1]:[Java 修饰符](https://www.runoob.com/java/java-modifier-types.html)
 
 |级别|当前类|同一包中的其他类|同一包中的子孙类|不同包中的子孙类|不同包中的其他类|
 |---|---|---|---|---|---|
@@ -131,7 +133,9 @@ Java中，可以使用访问控制符来保护对类、变量、方法和构造�
 
 在这里我们就可以看出来了，前面`a.IPublishCallback`是package-private的，在b包下的`ShareFromSdkImpl`就访问不到它。因为写Kotlin多了（默认public），我一时间没有很快认识到这一点。
 
-Kotlin中的修饰符有四个级别：
+Kotlin中的修饰符有四个级别[^2]：
+
+[^2]:[可见性修饰符](https://www.kotlincn.net/docs/reference/visibility-modifiers.html)
 
 1. private 意味着只在这个类内部（包含其所有成员）可见；
 2. protected—— 和 private一样 + 在子类中可见。

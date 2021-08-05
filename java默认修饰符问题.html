@@ -182,7 +182,7 @@ Process finished with exit code 1
 <p>在使用Lambda形式实现回调时这个错误没有被编译器检查出来，运行时才报出来。</p>
 <p>那么它为什么会找不到呢？</p>
 <h2 id="类可访问性修饰符">类可访问性修饰符</h2>
-<p>Java中，可以使用访问控制符来保护对类、变量、方法和构造方法的访问。Java 支持 4 种不同的访问权限。</p>
+<p>Java中，可以使用访问控制符来保护对类、变量、方法和构造方法的访问。Java 支持 4 种不同的访问权限。<sup id="fnref-1"><a class="footnote-ref" href="#fn-1">1</a></sup></p>
 <table>
 <thead>
 <tr><th>级别</th><th>当前类</th><th>同一包中的其他类</th><th>同一包中的子孙类</th><th>不同包中的子孙类</th><th>不同包中的其他类</th></tr>
@@ -196,7 +196,7 @@ Process finished with exit code 1
 </table>
 <p>类、接口的默认级别为package-private，类中的方法和属性默认是package-private，接口中的为<code>public static final</code>。</p>
 <p>在这里我们就可以看出来了，前面<code>a.IPublishCallback</code>是package-private的，在b包下的<code>ShareFromSdkImpl</code>就访问不到它。因为写Kotlin多了（默认public），我一时间没有很快认识到这一点。</p>
-<p>Kotlin中的修饰符有四个级别：</p>
+<p>Kotlin中的修饰符有四个级别<sup id="fnref-2"><a class="footnote-ref" href="#fn-2">2</a></sup>：</p>
 <ol>
 <li>private 意味着只在这个类内部（包含其所有成员）可见；</li>
 <li>protected—— 和 private一样 + 在子类中可见。</li>
@@ -208,6 +208,19 @@ Process finished with exit code 1
 <h2 id="so">So？</h2>
 <p>所以问题就是工具线那边定义的时候忘记将回调接口设置成public了，我们与他们的类不在同一包下访问不到，但Kotlin的语法糖让我们用lambda写回调，很简单但却正好掩盖了这个问题。</p>
 <p>排查花了比较多的时间，其实还是基础知识没掌握牢。</p>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn-1">
+<p><a href="https://www.runoob.com/java/java-modifier-types.html">Java 修饰符</a></p>
+<a href="#fnref-1" class="footnote-backref">&#8617;</a>
+</li>
+<li id="fn-2">
+<p><a href="https://www.kotlincn.net/docs/reference/visibility-modifiers.html">可见性修饰符</a></p>
+<a href="#fnref-2" class="footnote-backref">&#8617;</a>
+</li>
+</ol>
+</div>
 </div>
             </div>
             <script src="https://utteranc.es/client.js" repo="zerofancy/zerofancy.github.io" issue-term="java默认修饰符问题" theme="github-light" crossorigin="anonymous" async>
