@@ -125,6 +125,170 @@
         <div class="card mt-3">
             <div class="card-body">
                 <h2 class="card-title text-center">
+                    <a href="archieved/android项目开发/Kotlin.html">android项目开发：Kotlin</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2020-12-09</span>&nbsp;
+                    修改时间：<span>2020-12-09</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><h1 id="kotlin">Kotlin</h1>
+<h2 id="变量和函数">变量和函数</h2>
+<h3 id="变量">变量</h3>
+<p>用<code>var</code>和<code>val</code>定义变量，并有类型自动推导的支持。</p>
+<p><code>val</code>用来声明一个不可变的变量，<code>var</code>用来声明一个可变的变量。</p>
+<pre><code class="language-kotlin">val a = 10
+var b: Int = 12
+</code></pre>
+<p>Kotlin完全抛弃了java中的基本数据类型，完全使用对象数据类型。</p>
+<table>
+<thead>
+<tr><th>java基本数据类型</th><th>Kotlin对象数据类型</th><th>数据类型说明</th></tr>
+</thead>
+<tbody>
+<tr><td>int</td><td>Int</td><td>整型</td></tr>
+<tr><td>long</td><td>Long</td><td>长整型</td></tr>
+<tr><td>short</td><td>Short</td><td>短整型</td></tr>
+<tr><td>float</td><td>Float</td><td>单精度浮点型</td></tr>
+<tr><td>double</td><td>Double</td><td>双精度浮点型</td></tr>
+<tr><td>boolean</td><td>Boolean</td><td>布尔型</td></tr>
+<tr><td>char</td><td>Char</td><td>字符型</td></tr>
+<tr><td>byte</td><td>Byte</td><td>字节型</td></tr>
+</tbody>
+</table>
+<h3 id="函数">函数</h3>
+<p>语法：</p>
+<pre><code class="language-kotlin">fun main(args: Array&lt;String&gt;) {
+    println(&quot;Hello World!&quot;)
+}
+</code></pre>
+<p>Kotlin中的函数在无必要时可以省略很多东西：</p>
+<pre><code class="language-kotlin">import kotlin.math.max
+
+fun largerNumber(a: Int, b: Int) = max(a, b)
+
+fun main(args: Array&lt;String&gt;) {
+    val a = 3
+    val b = 5
+    println(&quot;The larger number of a and b is ${largerNumber(a, b)}&quot;)
+}
+</code></pre>
+<h2 id="程序的逻辑控制">程序的逻辑控制</h2>
+<h3 id="if">if</h3>
+<p>与java中的if语句相比，Kotlin中的if是可以有返回值的。</p>
+<pre><code class="language-kotlin">fun judge(score: Int) = if (score &gt;= 60) &quot;你及格了&quot; else &quot;你还需要多努力&quot;
+
+fun main() {
+    println(judge(55))
+    println(judge(66))
+}
+</code></pre>
+<p>与此同时，Kotlin不再有java中的三元运算符<sup id="fnref-1"><a class="footnote-ref" href="#fn-1">1</a></sup>，语义上清晰了很多。</p>
+<h3 id="when条件语句">when条件语句</h3>
+<p>类似于java中的switch语句，根据变量的值执行不同的逻辑。</p>
+<pre><code class="language-kotlin">fun judge(score: Int) = if (score &gt;= 60) &quot;你及格了&quot; else &quot;你还需要多努力&quot;
+
+fun getScore(name: String) = when (name) {
+    &quot;Tom&quot; -&gt; 78
+    &quot;Jack&quot; -&gt; 35
+    &quot;Jerry&quot; -&gt; 84
+    &quot;Lee&quot; -&gt; 57
+    else -&gt; 0
+}
+
+fun main() {
+    println(judge(getScore(&quot;Tom&quot;)))
+    println(judge(getScore(&quot;Jack&quot;)))
+    println(judge(getScore(&quot;Bill&quot;)))
+}
+</code></pre>
+<p>对我来说，最令人振奋的是再也不需要在每个分支里面都写个break了。其次when也是有返回值的，这和其他特性组合写出来的代码非常简洁优雅。</p>
+<p>写个小demo吧。</p>
+<pre><code class="language-kotlin">interface Speakable {
+    fun speak()
+}
+
+class Dog : Speakable {
+    override fun speak() {
+        println(&quot;汪汪汪&quot;)
+    }
+}
+
+class Cat : Speakable {
+    override fun speak() {
+        println(&quot;喵喵喵&quot;)
+    }
+
+    fun climb() {
+        println(&quot;小猫会爬树&quot;)
+    }
+}
+
+fun generateAnimal(): Speakable? = when ((1..3).random()) {
+    1 -&gt; Dog()
+    2 -&gt; Cat()
+    else -&gt; null
+}
+
+fun main() {
+    when (val animal = generateAnimal()) {
+        is Dog -&gt; {
+            println(&quot;生成的动物是小狗&quot;)
+            animal.speak()
+        }
+        is Cat -&gt; {
+            println(&quot;生成的动物是小猫&quot;)
+            animal.speak()
+            animal.climb()
+        }
+        else -&gt; println(&quot;生成动物时出现问题&quot;)
+    }
+}
+</code></pre>
+<h3 id="循环语句">循环语句</h3>
+<p>Kotlin中有两类循环，其中<code>while</code>循环与java学过的while循环非常相似，只说下有差异的<code>for</code>循环吧。</p>
+<p>Kotlin的for循环只有for..in式的了，如<code>for(i in list)</code>。</p>
+<p>但有时对数组下标进行遍历还是有必要的。于是我们要先了解下Kotlin的<code>区间</code>的概念。</p>
+<pre><code class="language-kotlin">val range = 1..10
+</code></pre>
+<p>这表示<code>[1,10]</code>。但很多时候，我们需要左开右闭区间，比如数组有三个元素，我们需要<code>[0,3)</code>表示数组的下标。此时可以使用<code>util</code>关键字。</p>
+<pre><code class="language-kotlin">val indexRange = 0 util 3
+</code></pre>
+<p>有了range再和前面的for配合就完全可以替代之前java里面的for的作用了：</p>
+<pre><code class="language-kotlin">val array = arrayOf(&quot;Bob&quot;, &quot;John&quot;, &quot;Jackson&quot;)
+for (i in 0 util array.size) {
+    println(&quot;$i:${array[i]}&quot;)
+}
+</code></pre>
+<p>此外，还可以用<code>step</code>指定步长值，实现”隔几个输出一次“的效果：</p>
+<pre><code class="language-kotlin">for (i in 0 util 10 step 2) {
+    println(i)
+}
+</code></pre>
+<p>如果需要10循环到1,则需要<code>downTo</code>关键字，</p>
+<pre><code class="language-kotlin">for (i in 10 downTo 1) {
+    println(i)
+}
+</code></pre>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn-1">
+<p>参考<a href="https://www.w3cschool.cn/java/java-ternary-operator.html">Java中的三元运算符</a></p>
+<a href="#fnref-1" class="footnote-backref">&#8617;</a>
+</li>
+</ol>
+</div>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/android项目开发/Kotlin.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
                     <a href="archieved/android项目开发/项目结构.html">android项目开发：项目结构</a>
                 </h2>
                 <h6 class="card-subtitle mb-2 text-muted text-center">
@@ -378,26 +542,6 @@
 </div>
                 <div class="row mt-3">
                     <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/2020年11月前/给博客添加个RSS订阅功能.html">阅读全文 ▼</div>
-                </div>
-            </div>
-        </div>
-        <div class="card mt-3">
-            <div class="card-body">
-                <h2 class="card-title text-center">
-                    <a href="archieved/2020年11月前/博客图片居中点击缩放.html">博客图片居中点击缩放</a>
-                </h2>
-                <h6 class="card-subtitle mb-2 text-muted text-center">
-                    发布时间：<span>2020-09-09</span>&nbsp;
-                    修改时间：<span>2020-09-09</span>&nbsp;
-                    作者：<span>归零幻想</span>
-                </h6>
-                <hr>
-                <div class="card-text markdown-body"><p>一图胜千言，图片对于一篇文章来说还是很重要的。</p>
-<p><img src="https://indrimuska.github.io/zoomify/img/img-1.jpg" alt="zoomify" /></p>
-<p><em>上图来自zoomify的github仓库</em></p>
-</div>
-                <div class="row mt-3">
-                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/2020年11月前/博客图片居中点击缩放.html">阅读全文 ▼</div>
                 </div>
             </div>
         </div>
