@@ -38,13 +38,18 @@
     <script src="/res/js/zoomify.min.js"></script>
     <link href="/res/css/zoomify.min.css" rel="stylesheet">
 
+    <!---代码高亮-->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/highlight.min.js"></script>
+
     <script>
         $(document).ready(function () {
             $(".markdown-body img").each(function () {
                 divImageWrapper = $(this).after("<div class='imageWrapper'></div>")
                 $(this).appendTo($(this).next())
             })
-            $(".markdown-body img").zoomify()
+            $(".markdown-body img").zoomify() // 图片缩放
+            hljs.highlightAll() // 代码高亮
         })
     </script>
 </head>
