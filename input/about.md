@@ -1,7 +1,7 @@
 title: 关于
 author: 归零幻想
 publishDate: 2020-07-25
-editDate: 2020-12-09
+editDate: 2021-08-08
 tags: [博客, CMS]
 
 <!--config-->
@@ -44,6 +44,7 @@ tags: [博客, CMS]
 |github-markdown-css|仿githubmarkdown样式。|[github-markdown-css](https://github.com/sindresorhus/github-markdown-css)|
 |github pages|本站部署在Github Pages上。|[Github Pages](https://pages.github.com/)|
 |公益 404|公益404页面是由腾讯公司员工志愿者自主发起的互联网公益活动。|[公益 404](https://www.qq.com/404/)|
+|highlight.js|代码高亮。|[highlight.js](https://highlightjs.org/)|
 |Hitokoto|一言。|[Hitokoto](https://hitokoto.cn/)|
 |jQuery|&nbsp;|[jQuery](https://jquery.com/)|
 |Kotlin|Kotlin是一种在Java虚拟机上运行的静态类型编程语言，本站来自一个Kotlin练手项目。|[Kotlin](https://kotlinlang.org/)|

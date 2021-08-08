@@ -159,6 +159,69 @@
         <div class="card mt-3">
             <div class="card-body">
                 <h2 class="card-title text-center">
+                    <a href="archieved/android项目开发/多线程编程.html">android项目开发：多线程编程</a>
+                </h2>
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2021-01-06</span>&nbsp;
+                    修改时间：<span>2021-01-06</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <hr>
+                <div class="card-text markdown-body"><p>仍然是《第一行代码》的笔记，不过略过了deprated的内容，并探究了下Handler的工作机制。</p>
+<blockquote>
+<p>上班了，果然没有那么多大块时间写博客了。</p>
+</blockquote>
+<h2 id="handler">Handler</h2>
+<p>主线程不能进行耗时处理，子线程不能访问UI，所以我们需要异步消息处理机制。</p>
+<h3 id="使用">使用</h3>
+<pre><code class="language-kotlin">
+class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
+
+    private val handler = object : Handler(Looper.getMainLooper()) {
+        override fun handleMessage(msg: Message) {
+            when(msg.what){
+                MSG_UPDATE_TEXT -&gt; binding.textView.text = &quot;Nice to meet you. &quot;
+            }
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        initView()
+    }
+
+    private fun initView() {
+        binding.apply {
+            changeTextButton.setOnClickListener {
+                thread {
+                    val msg = Message()
+                    msg.what = MSG_UPDATE_TEXT
+                    handler.sendMessage(msg)
+                }
+            }
+        }
+    }
+
+    companion object {
+        private const val MSG_UPDATE_TEXT = 1
+    }
+}
+</code></pre>
+<h3 id="原理">原理</h3>
+<p>图片有点多，懒得一张张转移了，去我整理的文档看吧：</p>
+<p><a href="https://bytedance.feishu.cn/docs/doccnRaxHFiTJDYLBuYMzpSSJAd">安卓Handler异步消息处理机制</a></p>
+</div>
+                <div class="row mt-3">
+                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/android项目开发/多线程编程.html">阅读全文 ▼</div>
+                </div>
+            </div>
+        </div>
+        <div class="card mt-3">
+            <div class="card-body">
+                <h2 class="card-title text-center">
                     <a href="截图不可信,我们能信什么.html">截图不可信,我们能信什么</a>
                 </h2>
                 <h6 class="card-subtitle mb-2 text-muted text-center">
@@ -663,30 +726,6 @@ override fun onOptionsItemSelected(item: MenuItem): Boolean {
 </div>
                 <div class="row mt-3">
                     <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="作为一名男性，你愿意和丁真互换人生吗.html">阅读全文 ▼</div>
-                </div>
-            </div>
-        </div>
-        <div class="card mt-3">
-            <div class="card-body">
-                <h2 class="card-title text-center">
-                    <a href="about.html">关于</a>
-                </h2>
-                <h6 class="card-subtitle mb-2 text-muted text-center">
-                    发布时间：<span>2020-07-25</span>&nbsp;
-                    修改时间：<span>2020-12-09</span>&nbsp;
-                    作者：<span>归零幻想</span>
-                </h6>
-                <hr>
-                <div class="card-text markdown-body"><h2 id="归零幻想">归零幻想</h2>
-<img alt="归零幻想" src="/res/img/avatar.jpg" width="200px">
-<hr />
-<p>归零幻想是本人的网名啦，这里是我的博客小站。本人在其他地方帐号大多也叫这个名字。</p>
-<p>本人2021年本科毕业于中国石油大学（华东），现在人在抖音。</p>
-<p>博客系统至今我写过三个版本[^1]，毕竟写出个CRUD就可以厚着脸皮说自己是个博客了。当前版本最初是个Kotlin练手项目，源代码发布在<a href="https://github.com/zerofancy/kmdblog">github</a>。不过也就自用罢了，不会有人对我的代码感兴趣吧……</p>
-<p>博客系统作为学生时代练手作品，问题多多，但段时间没有重构或更新的计划。毕竟人在火星，信号延迟高，更新博客都比较少了。</p>
-</div>
-                <div class="row mt-3">
-                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="about.html">阅读全文 ▼</div>
                 </div>
             </div>
         </div>

@@ -5,6 +5,19 @@
         <description>一枚准程序猿。</description>
         <link>https://ntutn.top</link>
         <item>
+            <title>关于</title>
+            <description>&lt;h2 id=&quot;归零幻想&quot;&gt;归零幻想&lt;/h2&gt;
+&lt;img alt=&quot;归零幻想&quot; src=&quot;/res/img/avatar.jpg&quot; width=&quot;200px&quot;&gt;
+&lt;hr /&gt;
+&lt;p&gt;归零幻想是本人的网名啦，这里是我的博客小站。本人在其他地方帐号大多也叫这个名字。&lt;/p&gt;
+&lt;p&gt;本人2021年本科毕业于中国石油大学（华东），现在人在抖音。&lt;/p&gt;
+&lt;p&gt;博客系统至今我写过三个版本[^1]，毕竟写出个CRUD就可以厚着脸皮说自己是个博客了。当前版本最初是个Kotlin练手项目，源代码发布在&lt;a href=&quot;https://github.com/zerofancy/kmdblog&quot;&gt;github&lt;/a&gt;。不过也就自用罢了，不会有人对我的代码感兴趣吧……&lt;/p&gt;
+&lt;p&gt;博客系统作为学生时代练手作品，问题多多，但段时间没有重构或更新的计划。毕竟人在火星，信号延迟高，更新博客都比较少了。&lt;/p&gt;
+</description>
+            <author>归零幻想</author>
+            <pubDate>Sun, 8 Aug 2021 00:00:00 CST</pubDate>
+            <link>https://ntutn.top/about.html</link>
+        </item><item>
             <title>安卓连连看游戏设计</title>
             <description>&lt;p&gt;字节取消大小周了，于是周末时间多起来了。虽然想着到处去玩，但现在疫情形势又不好了，于是安心呆在家里当一个肥宅。除了补一补番剧，就是把之前就想过的连连看游戏做出来了。&lt;/p&gt;
 &lt;p&gt;连连看游戏规则简单，点击两个相同的元素，如果他们能在两次拐弯以内连接起来，那么就可以消除。消除后就会出现空位，可以连接的就更多了。在规定时间内连续操作，直到消除所有元素。&lt;/p&gt;
@@ -344,58 +357,6 @@ private val retrofit by lazy {
             <author>归零幻想</author>
             <pubDate>Tue, 26 Jan 2021 00:00:00 CST</pubDate>
             <link>https://ntutn.top/我的黑历史被github埋到北极了.html</link>
-        </item><item>
-            <title>android项目开发：多线程编程</title>
-            <description>&lt;p&gt;仍然是《第一行代码》的笔记，不过略过了deprated的内容，并探究了下Handler的工作机制。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;上班了，果然没有那么多大块时间写博客了。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&quot;handler&quot;&gt;Handler&lt;/h2&gt;
-&lt;p&gt;主线程不能进行耗时处理，子线程不能访问UI，所以我们需要异步消息处理机制。&lt;/p&gt;
-&lt;h3 id=&quot;使用&quot;&gt;使用&lt;/h3&gt;
-&lt;pre&gt;&lt;code class=&quot;language-kotlin&quot;&gt;
-class MainActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
-
-    private val handler = object : Handler(Looper.getMainLooper()) {
-        override fun handleMessage(msg: Message) {
-            when(msg.what){
-                MSG_UPDATE_TEXT -&amp;gt; binding.textView.text = &amp;quot;Nice to meet you. &amp;quot;
-            }
-        }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        initView()
-    }
-
-    private fun initView() {
-        binding.apply {
-            changeTextButton.setOnClickListener {
-                thread {
-                    val msg = Message()
-                    msg.what = MSG_UPDATE_TEXT
-                    handler.sendMessage(msg)
-                }
-            }
-        }
-    }
-
-    companion object {
-        private const val MSG_UPDATE_TEXT = 1
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&quot;原理&quot;&gt;原理&lt;/h3&gt;
-&lt;p&gt;图片有点多，懒得一张张转移了，去我整理的文档看吧：&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;https://bytedance.feishu.cn/docs/doccnRaxHFiTJDYLBuYMzpSSJAd&quot;&gt;安卓Handler异步消息处理机制&lt;/a&gt;&lt;/p&gt;
-</description>
-            <author>归零幻想</author>
-            <pubDate>Wed, 6 Jan 2021 00:00:00 CST</pubDate>
-            <link>https://ntutn.top/archieved/android项目开发/多线程编程.html</link>
         </item>
     </channel>
 </rss>
