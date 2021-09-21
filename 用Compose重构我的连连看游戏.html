@@ -1,0 +1,302 @@
+<!DOCTYPE HTML>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans">
+
+<head>
+    
+    
+    <title>用Jetpack Compose重构我的连连看游戏--归零幻想的博客</title>
+    <meta charset="UTF-8">
+    <!--移动设备不缩放-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="alternate" type="application/rss+xml" title="归零幻想" href="https://ntutn.top/rss.xml" />
+    <!--github的markdown样式-->
+    <link rel="stylesheet" href="/res/css/github-markdown.css">
+    <!--一个基于bootstrap的样式-->
+    <link rel="stylesheet" href="/res/css/main.css">
+
+    <script src="/res/js/jquery.min.js"></script>
+    <script src="/res/js/popper.min.js"></script>
+    <script src="/res/js/bootstrap.min.js"></script>
+
+    <style>
+        /*图片缩放*/
+        .imageWrapper {
+            max-width: 500px;
+            max-height: 100%;
+            display: block;
+            margin: 0 auto;
+        }
+
+        /*背景图片*/
+        body {
+            background: url(https://unsplash.it/1600/900?random);
+            background-attachment: fixed;
+            background-position: bottom center;
+            background-size: cover;
+        }
+    </style>
+    <script src="/res/js/zoomify.min.js"></script>
+    <link href="/res/css/zoomify.min.css" rel="stylesheet">
+
+    <!---代码高亮-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/idea.min.css" integrity="sha512-Rfc5zQIp95eozfMCdS3B4MItUxU8orNje/t1OEhf7XwIk0DTCuMH2LG0NIgP8UGYK9L39WfUNI1c4IsM5yY/PA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+           
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/highlight.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/apache.min.js" integrity="sha512-gE8KAQyFIzV1C9+GZ8TKJHZS2s+n7EjNtC+IMRn1l5+WYJTHOODUM6JSjZhFhqXmc7bG8Av6XXpckA4tYhflnw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/bash.min.js" integrity="sha512-FKvOrHUlsJ2pKk+pk8D25a1wTvD5ab+tudQ9g3lJqMH9YtrpqHEbMEiCeU6HA5URAawnGJC0JfZLesDWkXYLyw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/basic.min.js" integrity="sha512-e+l7CY07JEoomaYRN0aCm+Nkj6PSnUTKqfNQzbH4uBAxa86Nqx8j+k20Pu9j4+dBgpPNkupUdAQlvmXLnjs6fQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/c.min.js" integrity="sha512-6uPEB+tN2jnZQ8gHNkW4ZiJbXUa7gIL21dsIS3UPAJyzRfDCLmm1hFGJmZ/l8RwBPeCiKTOg9BNCB+Bp9btrmA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/cmake.min.js" integrity="sha512-rGz7I/XUUa81jEKbxXuZFbh2KTx8M7uWE6kq/IOJHNyZcQP9r3HafPVnqGg81xeKJK1sUUmk5BM5zFJj6XsSOA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/cpp.min.js" integrity="sha512-hZq4EJY8EMM7w6kWktRCsnhWehJs4Tq3V8bccoMuVgwigDj5oKiLlRi59NKUw4Q43wZKK8brlPZl5r0Yo58ZXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/csharp.min.js" integrity="sha512-X18ZEfQ3SPnexB5QRmg4fp9QjaFa/jEiw7J1TsWWPIJGgvVyLXrI8fdaZOqbbsfX5byF9/CovS++zG5QL8EZ+A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/css.min.js" integrity="sha512-yZeVBJRfVCykn6i7I3NXhR2cA5OWI/YM9GlV9bO/KjrXaPSEnSau0OCnOa1ad5hA2LSq/3YB3p0sJTCH+OL3fQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/dockerfile.min.js" integrity="sha512-1Ei4BsbZ/bYV5hmzxHa6uzwr7ftc8uysn0U2RK2rJe+aN2O8mXespb6z8Y3xrDf5R7t7rObrLIKA5o3VU3eJFA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/dos.min.js" integrity="sha512-UAaZyglZlxoUkWirdjgTiE6kzsqUn4ZfMxD99eeRBcUCsq8pbt5arQRlGR9bXS9VHzL38KN6Rw8ozg3AJBfa7w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/go.min.js" integrity="sha512-EWROca+bote+7Oaaar1F6y74iZj1r1F9rm/ly7o+/FwJopbBaWtsFDmaKoZDd3QiGU2pGacBirHJNivmGLYrow==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/gradle.min.js" integrity="sha512-wlBnLL4IT1i9CSixtdYtmBFTn3pVD8qQRj6Ba58mhMwaFy/UrkOmmV7RgX22p6rn7j8VtN0lto/JJyyTFs/g7A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/groovy.min.js" integrity="sha512-dETjs4xDxipeZKHG1N/9cju7iw5ldaFHQJ/XK75EDv9cPaNV+FuORBmfMuwg6V5IudAzLnSFzi9ALGZFH6r5NQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/ini.min.js" integrity="sha512-ECe50ffxXzZnLKoKCn+r9ULj27e/6h6AFa1uFBgnQz2WVrPOZEsbEmUbt8rsQTUVo4X2s7EO29Bv9bVOBETuqw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/java.min.js" integrity="sha512-xEnylOTeZvxUCvtK9Lw3FjOgfCwsMEhUbx6Hant1lPgy+PcynqCm8XfqhpRos6XNaTxeMuT4QyrWyo3U1NijHg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/javascript.min.js" integrity="sha512-Mhvr+xy2hvcm9g/wPUirdSNSQVWZ6gBVOky3SOfYEAiKsMry6FhotoB/yPE37lYP46igpLUOXZK7uPBkdMZedQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/kotlin.min.js" integrity="sha512-WP/R3IrzEd0v0jF+/QdNvecCp5LF8LY2g3XDyVwumU2Rl+TL+VgKxwiNlMmz0ks0m/zpfzrE4yoQ97KPsD0KAg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/latex.min.js" integrity="sha512-xdAZ0+yuywvfmEJBe+VOGM46gkP7orEAlqzh5QQRjqIt+wnLbKQsUGqU0aCNaCbncVH0CZK62HRFappBhkDtsA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/makefile.min.js" integrity="sha512-HhumF7+woGiAuk8LFmeLWrR6ZOmEVKfdZOuIAfbyKYIIagPDI+3PkHT5yHNuSbuXbdcSSuA9iOgyFw1QAyF5Sw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/php.min.js" integrity="sha512-/4bsm6nfQWNGd6957+2xA9pcl/1OwrHDrx/vug0V/rr4dG4pMMuESaseX15pj7+pmhvZB6O/dNT4qA6/NQSVNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/python.min.js" integrity="sha512-MbDu8Vk2zJLvSEzk4bOYrlcS+9WE39QPnxINj2aftAG63jxOhdP5p2/Ma6/D3C9IkT/xOjZTO8MtBCX8PI48BA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/shell.min.js" integrity="sha512-TBRe4v9USbfzECSiP8d6bQSSvqxHHbeMneQPNsU51SSVAaakOezeYI8sOBWdXh8GGc5vD28d1Sxzk+LgDM3dxA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/vbscript.min.js" integrity="sha512-MKguDuFJ+IM/Jm5SFVQsgy56sRCTjGOhuvvR94sGpYCXnO3Emu/egPCxtFprra3/gNpmIJKMp61VphygW7UCXQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/xml.min.js" integrity="sha512-42l52BYLobXrodiKIjvsxUSzwTMhnJww+Da1BZ771+rxtpWCeozwy4Mfca7DM+PRmfEQrGfyEI32kBi3b/0v/w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/yaml.min.js" integrity="sha512-28oDiQZGKUVN6wQ7PSLPNipOcmkCALXKwOi7bnkyFf8QiMZQxG9EQoy/iiNx6Zxj2cG2SbVa4dXKigQhu7GiFw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    
+    <script>
+        $(document).ready(function () {
+            $(".markdown-body img").each(function () {
+                divImageWrapper = $(this).after("<div class='imageWrapper'></div>")
+                $(this).appendTo($(this).next())
+            })
+            $(".markdown-body img").zoomify() // 图片缩放
+            hljs.highlightAll() // 代码高亮
+        })
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <nav id="nav" class="navbar navbar-expand-lg navbar-light bg-light">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
+                aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="/"><img src="/res/logo.png" width="70" height="40"
+                    class="d-inline-block align-top" alt="">
+                <span>归零幻想的博客</span></a>
+
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                    <li id="n_home" class="nav-item">
+                        <a class="nav-link" href="/">主页</a>
+                    </li>
+                    <!-- <li id="n_tags" class="nav-item">
+                        <a class="nav-link" href="/tags">标签</a>
+                    </li> -->
+                    <li id="n_about" class="nav-item">
+                        <a class="nav-link" href="https://channel.ntutn.workers.dev/" target="_blank">频道</a>
+                    </li>
+                    <li id="n_about" class="nav-item">
+                        <a class="nav-link" href="/friends.html">友链</a>
+                    </li>
+                    <li id="n_about" class="nav-item">
+                        <a class="nav-link" href="/about.html">关于</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/rss.xml">RSS</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <nav class="mt-3" aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+
+                <li class="breadcrumb-item active" aria-current="page">用Jetpack Compose重构我的连连看游戏</li>
+            </ol>
+        </nav>
+        <div class="card mt-3 mb-3">
+            <div class="card-body markdown-body">
+                <h1 class="card-title text-center realtitle">用Jetpack Compose重构我的连连看游戏</h1>
+                <!--TODO 时间-->
+                <h6 class="card-subtitle mb-2 text-muted text-center">
+                    发布时间：<span>2021-09-21</span>&nbsp;
+                    修改时间：<span>2021-09-21</span>&nbsp;
+                    作者：<span>归零幻想</span>
+                </h6>
+                <br>
+                <div class="card-text"><p>此前的文章中提到，我闲暇时写了个连连看游戏。因为比较闲，正好又对Jetpack Compose比较感兴趣，于是我想用Compose重构界面，学习下Compose的使用。
+然后没有花费太大力气就完成了。</p>
+<p><a href="https://github.com/zerofancy/match/blob/main/app/src/main/java/top/ntutn/match/GameViewModelCompose.kt">GameViewModelCompose.kt</a></p>
+<p>于是我想，既然用上Compose了，是不是可以直接迁移到桌面平台？</p>
+<p>这篇文章实际上没什么内容，就是对于折腾过程的一个简单记录，最后的成品在github，直接<a href="https://github.com/zerofancy/match-m">去看代码</a>就可以了。</p>
+<h2 id="依赖版本">依赖版本</h2>
+<p>虽然安卓上的Compose已经是正式发布了，甚至在公司里面某些业务线都在调研引入的可行性了，但桌面上的Compose目前（2021年9月20日）还在alpha3，很多API还是不稳定状态，依赖版本也有点混乱——我用idea创建的默认工程竟然不能在所有支持平台打出Hello World包！</p>
+<ol>
+<li>确定依赖版本。默认创建的工程不能直接跑起来，我花费了一些时间去查每个依赖最新版本是多少，稳定版本是多少，去StackOverflow查错误对应解决方案。</li>
+<li>删除有关自动测试的依赖。虽然大家都说自动测试很重要，但我们团队实际开发中是基本不写的，我暂时也没有学习的计划。当然更重要的原因是这个依赖留着会报错，我试了好久也没解决。</li>
+<li>最坑爹的是这东西限制JDK版本很死，不能低于15不能高于16。低于15会不能正常打包，高于16有些依赖会报错。</li>
+</ol>
+<h2 id="viewmodel移植">ViewModel移植</h2>
+<p>我此前的连连看游戏遵循了MVVM结构，只要将VM部分移植过来，那主要的游戏逻辑就移植过来了。</p>
+<p>然而我还是太天真了：ViewModel和LiveData都是安卓上的库，需要找个替代品。</p>
+<p>LiveData就是个被观察对象，特点是拥有生命周期感知能力，不用手动取消注册。说实话我们游戏界面比较简单，其实没有用到这个特性，完全可以手撸一个。不过我还是找到了比较好的替代品：<a href="https://developer.android.com/kotlin/flow/stateflow-and-sharedflow?hl=zh-cn">Flow</a>。</p>
+<p>基本用StateFlow完全替换掉LiveData即可。</p>
+<p>对于ViewModel，安卓上我仍然想androidx库中的ViewModel，为了和桌面上共用逻辑，需要定义接口IViewModel。</p>
+<pre><code class="language-kt">package top.ntutn.common
+
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+
+interface IViewModel {
+    var mahjongArea: Array&lt;Array&lt;MutableStateFlow&lt;MahjongType&gt;&gt;&gt;
+    val gameState: StateFlow&lt;GameState&gt;
+    val gameTime: StateFlow&lt;Int&gt;
+    val rows: StateFlow&lt;Int&gt;
+    val cols: StateFlow&lt;Int&gt;
+    fun init(
+        rows: Int,
+        cols: Int,
+        itemCount: Int,
+        maxGameTime: Int,
+        stepGameTime: Int,
+        selectableItemCount: Int = 0
+    )
+
+    fun start()
+    fun pause()
+    fun resume()
+    fun timeTick()
+    fun itemClick(row: Int, col: Int)
+
+    enum class GameState {
+        PENDING,
+        RUNNING,
+        PAUSE,
+        SUCCEEDED,
+        FAILED
+    }
+}
+</code></pre>
+<p>游戏逻辑实现在GameViewModel中，而给安卓用的VM就是个Wrapper，持有一个GameViewModel即可。当然有Kotlin的类委托代码可以写的更简单点：</p>
+<pre><code class="language-kt">package top.ntutn.common
+
+import androidx.lifecycle.ViewModel
+
+class AndroidGameViewModel : ViewModel(), IViewModel by GameViewModel()
+</code></pre>
+<p>这样安卓的VM仍然可以按照我们熟悉的方式管理。</p>
+<h2 id="ui界面移植">UI界面移植</h2>
+<p>桌面版的Compose和安卓版的实际上没有多大变化，但加载图片的方式显然是不同的。桌面上可没有通过<code>R.drawable.xxx</code>去加载资源的道理。因而根据id去绘图的代码需要抽离出来：</p>
+<pre><code class="language-kt">@Composable
+fun GamePage(time: Int, gameViewModel: IViewModel, getPainterById: @Composable (Int) -&gt; Painter) {
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Column {
+            Spacer(modifier = Modifier.height(48.dp))
+            TimerArea(
+                time = time
+            )
+        }
+
+        Surface(
+            modifier = Modifier
+                .align(Alignment.Center)
+                .padding(16.dp)
+        ) {
+            Board(gameViewModel, getPainterById)
+        }
+    }
+}
+</code></pre>
+<p>然后安卓版的绘图通过R文件</p>
+<pre><code class="language-kt">            Surface(color = MaterialTheme.colors.background) {
+                    GamePage(
+                        time = gameTimeState,
+                        gameViewModel
+                    ) {
+                        painterResource(MahjongAndroid.front[it])
+                    }
+                }
+            }
+</code></pre>
+<p>桌面版则去加载资源文件</p>
+<pre><code class="language-kt">                Surface(color = MaterialTheme.colors.background) {
+                    GamePage(
+                        time = gameTimeState,
+                        gameViewModel
+                    ) {
+                        BitmapPainter(imageFromResource(&quot;drawable/${MahjongDesktop.all[it]}.png&quot;))
+                    }
+                }
+</code></pre>
+<h2 id="计时逻辑变更">计时逻辑变更</h2>
+<p>桌面上计时不是通过Handler每秒去发送一次事件，不过大差不差</p>
+<pre><code class="language-kt">        Timer(1000, object : ActionListener {
+            override fun actionPerformed(e: ActionEvent?) {
+                gameViewModel.timeTick()
+            }
+        }).start()
+</code></pre>
+<h2 id="弹窗逻辑变更">弹窗逻辑变更</h2>
+<pre><code class="language-kt">        GlobalScope.launch {
+            gameViewModel.gameState.collect {
+                println(&quot;游戏状态：$it&quot;)
+                when (it) {
+                    IViewModel.GameState.SUCCEEDED -&gt; {
+                        EventQueue.invokeLater {
+                            val option = JOptionPane.showConfirmDialog(
+                                null,
+                                &quot;你赢了。是否再来一局？&quot;,
+                                &quot;你赢了&quot;,
+                                JOptionPane.OK_OPTION,
+                                JOptionPane.QUESTION_MESSAGE
+                            )
+                            if (option == JOptionPane.OK_OPTION) {
+                                startGame()
+                            } else {
+                                System.exit(0)
+                            }
+                        }
+                    }
+                    IViewModel.GameState.FAILED -&gt; {
+                        ...
+                    }
+                    ...
+                }
+            }
+        }
+</code></pre>
+<p>就是调用相关函数弹个窗而已。但这里我还是踩了俩坑的：</p>
+<ol>
+<li>不要阻塞事件分发线程，这货对应安卓的主线程。</li>
+<li>不要把弹窗相关代码写在Compose微件里。因为Compose函数可能相当频繁地重组，我们用的弹窗不是Compose封装过的特殊版本，重复执行显然不符合预期。</li>
+</ol>
+<h2 id="打包发布">打包发布</h2>
+<p>打包这里也有坑：</p>
+<ol>
+<li>JDK版本。打包是JDK15提供的特性，要换到JDK15。然而你换到15打包还会出错，说你用的JDK11。这个是Android Studio设置太混乱了，有好几处关于JDK版本的设置。项目的、gradle的，IDE自身的。你可以只设置下系统的环境变量，然后用命令打包./gradlew package。</li>
+<li>图标。经过测试不设置一个图标在macOS上无法完成打包。</li>
+<li>软件包名。目前经过测试，Windows对于这点容忍度反而是最高的，macOS和Linux上带了小数点打出的包不能运行。另外Linux上也不能用中文包名啥的。不知道具体规则，建议直接试试。</li>
+</ol>
+</div>
+            </div>
+            <script src="https://utteranc.es/client.js" repo="zerofancy/zerofancy.github.io" issue-term="用Jetpack Compose重构我的连连看游戏" theme="github-light" crossorigin="anonymous" async>
+                </script>
+        </div>
+        <!-- 页脚 -->
+        <footer class="navbar navbar-light bg-light">
+            <p>版权所有：归零幻想 ┊ 备案号：<a href="http://beian.miit.gov.cn/">暂无</a>┊ Powered by：归零幻想</p>
+        </footer>
+    </div>
+</body>
+
+</html>
