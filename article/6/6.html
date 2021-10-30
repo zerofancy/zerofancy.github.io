@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    <title>Hello, world!</title>
+</head>
+
+<body>
+    <nav class="container navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="/favicon.ico" alt="归零幻想" width="20px" height="20px">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/">Home</a>
+                    </li>
+                <!--
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Dropdown
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="#">Action</a></li>
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                    </li>
+                -->
+                </ul>
+                <!--
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+                -->
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-3">
+        <div class="row">
+            <div class="card col-md-4 d-none d-md-block me-md-3 text-center" style="width: 18rem;">
+                <img src="/favicon.ico" alt="avatar" class="mt-3">
+                <div class="card-body">
+                    <p class="card-text">
+                        归零幻想
+                    </p>
+                </div>
+            </div>
+    
+            <div class="card col">
+                <div class="card-body"><p>上次写的功能灰度报了几例crash，定位是我这里某个变量NPE了。</p>
+<p>说实话，在Java中NPE是我们最常打交道的异常了，但Kotlin提供的类型机制下，NPE很少了。而这里出现NPE，其实是因为我认定在当前这个流程中这个变量不会为空——你总是要先弹出菜单再点击菜单项吧，所以用了<code>data!!.id</code>的方式使用。</p>
+<p>这个变量被赋值的地方只有三处，不存在多线程问题，我想破脑袋也不知道哪里为空了。最后处理只得暂时加上判空，先不崩再说。</p>
+<p>请教同事，同事说我这是还没有分清 <strong>写产品和写demo的区别</strong> 。</p>
+<!--summary-->
+<p>写产品和写demo的区别？仔细一想，的确有道理。『写demo』只要能跑通就行了，而写产品你是要为自己写的每一行代码负责的。我之前写过不少代码，但他们大概都算『写demo』。作业只要演示的时候不崩就行了，考试只要通过样例就行了，练手的项目写起来更是随心，反正自己就是用户，啥时候崩了啥时候debug，方便的很……</p>
+<p>但『写产品』不同，你的程序不止要能完成需要的功能，还要在用户不按套路出牌的时候不出错。<em>今天你迟到一分钟，咱班四十个学生等你一分钟就是一节课，你浪费了大家一节课时间……</em> 虽然这么算不对，但也不能算全错。你的产品面向千千万万用户，任何小瑕疵都可能放大成一场事故。记得那个著名的ATM机的bug，就是因为用户选择了取消，然后插入了银行卡……</p>
+<p>回到我这个Issue，虽然从业务逻辑的角度看用户操作后这个变量是不会为null的，但仍然应该有判空，有兜底的逻辑，这样你的程序才会更加健壮。</p>
+<h2 id="kotlin的空安全">Kotlin的空安全</h2>
+<p>与Java不同，Kotlin的类型系统在设计时就考虑了变量是否可空<sup id="fnref-1"><a class="footnote-ref" href="#fn-1">1</a></sup>，其用一个?表示变量是否能为空。</p>
+<pre><code class="language-kt">var a: String = &quot;abc&quot; // 默认情况下，常规初始化意味着非空
+a = null // 编译错误
+</code></pre>
+<pre><code class="language-kt">var b: String? = &quot;abc&quot; // 可以设置为空
+b = null // ok
+print(b)
+</code></pre>
+<h3 id="判空">判空</h3>
+<p>Kotlin有一定的类型推断能力，判空后进行赋值操作前能识别出变量是非空的类型。</p>
+<pre><code class="language-kt">val b: String? = &quot;Kotlin&quot;
+if (b != null &amp;&amp; b.length &gt; 0) {
+    print(&quot;String of length ${b.length}&quot;)
+} else {
+    print(&quot;Empty string&quot;)
+}
+</code></pre>
+<h3 id="安全调用">安全调用</h3>
+<p>Kotlin中提供了<code>?.</code>来安全调用一个可能为空的变量。<code>b?.test()</code>相当于<code>if (b != null) b.test()</code>。</p>
+<p>值得注意的是，这个操作符是可以和赋值语句一起用的。如：</p>
+<pre><code class="language-kt">b?.name = &quot;ByteDance&quot;
+</code></pre>
+<p>换个形式可能更好理解：</p>
+<pre><code class="language-kt">if (b != null) b.setName(&quot;ByteDance&quot;)
+</code></pre>
+<p>这个操作符还可以与<code>.let</code>配合，达到非空时执行特定语句的目的。</p>
+<pre><code class="language-kt">b?.name?.let { println(it) }
+</code></pre>
+<h3 id="elvis-操作符">Elvis 操作符</h3>
+<p>在java中适当使用三元运算符也能让代码写起来更简洁一些：</p>
+<pre><code class="language-java">String title = article.title == null ? &quot;未命名&quot; : article.title;
+</code></pre>
+<p>在Kotlin中没有三元运算符了，但if和when语句可以有返回值了。于是可以写作</p>
+<pre><code class="language-kt">var title = if (article.title == null) &quot;未命名&quot; else article.title
+</code></pre>
+<p>不过还有更简单的表达方法：</p>
+<pre><code class="language-kt">var title = article.title ?: &quot;未命名&quot;
+</code></pre>
+<h3 id="操作符">!!操作符</h3>
+<p>终于说到我翻车的地方了。<code>!!</code>操作符表示“我保证这个变量不为空，否则就抛出NPE吧！”。尽管变量可能的确不会为空，两个感叹号上去IDE就不报错了……</p>
+<p>这是很不好的，所有Kotlin的书都告诉你要少用这个符号。这从这个符号的设计就看出来了，写起来就像在对编译器咆哮“我知道自己在做什么！！”。</p>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn-1">
+<p><a href="https://www.kotlincn.net/docs/reference/null-safety.html">空安全 - Kotlin 语言中文站</a></p>
+<a href="#fnref-1" class="footnote-backref">&#8617;</a>
+</li>
+</ol>
+</div>
+</div>
+            </div>
+    
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

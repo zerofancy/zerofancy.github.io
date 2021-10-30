@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    <title>Hello, world!</title>
+</head>
+
+<body>
+    <nav class="container navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="/favicon.ico" alt="归零幻想" width="20px" height="20px">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/">Home</a>
+                    </li>
+                <!--
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Dropdown
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="#">Action</a></li>
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                    </li>
+                -->
+                </ul>
+                <!--
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+                -->
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-3">
+        <div class="row">
+            <div class="card col-md-4 d-none d-md-block me-md-3 text-center" style="width: 18rem;">
+                <img src="/favicon.ico" alt="avatar" class="mt-3">
+                <div class="card-body">
+                    <p class="card-text">
+                        归零幻想
+                    </p>
+                </div>
+            </div>
+    
+            <div class="card col">
+                <div class="card-body"><p>经典的贪心问题。</p>
+<h2 id="question">Question</h2>
+<p>假设有n个活动的集合<code>E={a1,a2,...,an}</code>，其每个活动都要求使用同一资源（如某个设备、教室、场地等），而在同一时间内只允许一个活动使用这一资源。</p>
+<p>每个活动都有一个要求使用该资源的起止时间<code>si</code>,<code>fi</code>，且<code>si&lt;fi</code>。如果选择了活动ai，则它在半开的时间区间<code>[si,fi)</code>内占有资源。两个活动<code>ai</code>,<code>aj</code>称为是相容的，当且仅当它们的时间区间<code>[si,fi)</code>和<code>[sj,fj)</code>不相交，即<code>si&gt;=fj</code> 或 <code>sj &gt;=fi</code>。现要求在所给定的活动集中选出最大的相容活动子集。</p>
+<!--summary-->
+<p>请补充要求的函数代码。</p>
+<p><strong>提示：贪心策略</strong></p>
+<p>输入，有多行，第1行是活动的个数n，后面n行，每行3个整数，是每个活动的编号、占用资源的开始时间、结束时间。</p>
+<p>输出，选出的最大活动子集，即有多行，每行包括活动的编号、开始时间、结束时间。</p>
+<h2 id="example">Example</h2>
+<h3 id="input">Input</h3>
+<pre><code>11
+1 3 8
+2 2 13
+3 1 4
+4 5 7
+5 6 10
+6 8 11
+7 12 14
+8 5 9
+9 3 5
+10 0 6
+11 8 12
+</code></pre>
+<h3 id="output">Output</h3>
+<pre><code>3：1-4
+4：5-7
+6：8-11
+7：12-14
+</code></pre>
+<h2 id="分析">分析</h2>
+<p>经典的贪心问题，贪心策略为选择结束时间最早的活动，因为这样就可以给后面的活动留出更多的时间。</p>
+<blockquote>
+<p>掉坑：在选择活动时只处理了前24小时的活动，而事实证明我画蛇添足了。</p>
+</blockquote>
+<h2 id="answer">Answer</h2>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+using namespace std;
+//定义允许的最大活动数
+#define Maxn  100
+
+//定义活动的类型
+typedef  struct act_Node
+{  int Id;       //活动ID
+   int s_Time;   //活动开始时间
+   int f_Time;   //活动结束时间
+} ACND;
+
+
+//对活动按贪心准则排序
+void Sort(int n,ACND arr[])
+{
+    for(int i=0;i&lt;n;i++){
+        int tmp=i;
+        for(int j=i+1;j&lt;n;j++){
+            if(arr[j].f_Time&lt;arr[tmp].f_Time){
+                tmp=j;
+            }
+        }
+        ACND tmpSwap=arr[i];
+        arr[i]=arr[tmp];
+        arr[tmp]=tmpSwap;
+    }
+}
+
+//进行贪心选择，得到最大相容的活动集合输出
+void Select(int n,ACND arr[])
+{
+    int nTime=0;
+    ACND*p=arr;
+    while(p-arr&lt;n){
+        if(p-&gt;s_Time&gt;=nTime){
+            cout&lt;&lt;p-&gt;Id&lt;&lt;&quot;:&quot;&lt;&lt;p-&gt;s_Time&lt;&lt;&quot;-&quot;&lt;&lt;p-&gt;f_Time&lt;&lt;endl;
+            nTime=p-&gt;f_Time;
+        }
+        p++;
+    }
+}
+
+
+int main()
+{  ACND arr[Maxn];
+   int an,i;
+   cin&gt;&gt;an;           //读入活动个数
+   //读入各个活动的编号和占用资源的起止时间
+   for(i=0;i&lt;an;i++)
+     cin&gt;&gt;arr[i].Id&gt;&gt;arr[i].s_Time&gt;&gt;arr[i].f_Time;
+
+   //对活动按贪心准则进行排序
+   Sort(an,arr);
+
+   //进行贪心选择，获得最优解并输出
+   Select(an,arr);
+
+  return 0;
+}
+
+</code></pre>
+</div>
+            </div>
+    
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    <title>Hello, world!</title>
+</head>
+
+<body>
+    <nav class="container navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="/favicon.ico" alt="归零幻想" width="20px" height="20px">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/">Home</a>
+                    </li>
+                <!--
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Dropdown
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="#">Action</a></li>
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                    </li>
+                -->
+                </ul>
+                <!--
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+                -->
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-3">
+        <div class="row">
+            <div class="card col-md-4 d-none d-md-block me-md-3 text-center" style="width: 18rem;">
+                <img src="/favicon.ico" alt="avatar" class="mt-3">
+                <div class="card-body">
+                    <p class="card-text">
+                        归零幻想
+                    </p>
+                </div>
+            </div>
+    
+            <div class="card col">
+                <div class="card-body"><p>这两天想给自己小组的项目添加一个自动升级功能。这事听着复杂，但毕竟是个很常见的功能，github上的轮子很多。经过考虑，我决定选择<a href="https://github.com/xuexiangjys/XUpdate">这个组件</a>，然后自己写后端。反正后端就返回一个json的事。然后就掉了坑。</p>
+<h2 id="起因">起因</h2>
+<p>案发现场没什么好说的，就是我发现自己设置的不能实现升级，在客户端调试半天发现用官方的json能升级。然后我就找我的json和官方的json有什么区别，看ContentType也没设置错，仔细比对发现属性大小写竟然不对。我当时还挺惊讶的，毕竟是直接复制的。</p>
+<!--summary-->
+<p>springboot可以使用<code>@ResponseBody</code>返回对象自动转换json，而转换成的json属性名首字母会被转换成小写。</p>
+<h2 id="解决方案">解决方案</h2>
+<h3 id="引入fastjson">引入<code>fastjson</code></h3>
+<pre><code class="language-xml">		&lt;dependency&gt;
+			&lt;groupId&gt;com.alibaba&lt;/groupId&gt;
+			&lt;artifactId&gt;fastjson&lt;/artifactId&gt;
+			&lt;version&gt;1.2.66&lt;/version&gt;
+		&lt;/dependency&gt;
+</code></pre>
+<h3 id="注入bean">注入<code>bean</code></h3>
+<pre><code class="language-java">    @Bean
+    public HttpMessageConverters httpMessageConverters() {
+        FastJsonHttpMessageConverter fastJsonHttpMessageConverter = new FastJsonHttpMessageConverter(); // 添加fastJson的配置信息
+        FastJsonConfig fastJsonConfig = new FastJsonConfig();
+        fastJsonConfig.setSerializerFeatures(SerializerFeature.PrettyFormat); // 处理中文乱码问题
+        List&lt;MediaType&gt; fastMediaTypes = new ArrayList&lt;&gt;();
+        fastMediaTypes.add(MediaType.APPLICATION_JSON); // 在convert中添加配置信息.
+        fastJsonHttpMessageConverter.setSupportedMediaTypes(fastMediaTypes);
+        fastJsonHttpMessageConverter.setFastJsonConfig(fastJsonConfig);
+        HttpMessageConverter&lt;?&gt; converter = fastJsonHttpMessageConverter;
+        return new HttpMessageConverters(converter);
+    }
+</code></pre>
+<h3 id="在属性上加注解">在属性上加注解</h3>
+<pre><code class="language-java">package edu.upc.mishuserver.vo;
+
+import com.alibaba.fastjson.annotation.JSONField;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+/**
+ * UpdateInfo
+ */
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class UpdateInfo {
+
+    @JSONField(name=&quot;Code&quot;)
+    private Long code;
+    @JSONField(name = &quot;Msg&quot;)
+    private String msg;
+    @JSONField(name = &quot;UpdateStatus&quot;)
+    private Integer updateStatus;
+    @JSONField(name = &quot;VersionCode&quot;)
+    private Long versionCode;
+    @JSONField(name = &quot;VersionName&quot;)
+    private String versionName;
+    @JSONField(name = &quot;ModifyContent&quot;)
+    private String modifyContent;
+    @JSONField(name = &quot;DownloadUrl&quot;)
+    private String downloadUrl;
+    @JSONField(name = &quot;ApkSize&quot;)
+    private Long apkSize;
+    @JSONField(name = &quot;ApkMd5&quot;)
+    private String apkMd5;
+}
+</code></pre>
+</div>
+            </div>
+    
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

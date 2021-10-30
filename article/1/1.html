@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    <title>Hello, world!</title>
+</head>
+
+<body>
+    <nav class="container navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="/favicon.ico" alt="归零幻想" width="20px" height="20px">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/">Home</a>
+                    </li>
+                <!--
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Dropdown
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="#">Action</a></li>
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                    </li>
+                -->
+                </ul>
+                <!--
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+                -->
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-3">
+        <div class="row">
+            <div class="card col-md-4 d-none d-md-block me-md-3 text-center" style="width: 18rem;">
+                <img src="/favicon.ico" alt="avatar" class="mt-3">
+                <div class="card-body">
+                    <p class="card-text">
+                        归零幻想
+                    </p>
+                </div>
+            </div>
+    
+            <div class="card col">
+                <div class="card-body"><p><img src="https://miro.medium.com/max/1400/1*ZKNUGwUmBjukpnTrHCeGJA.png" alt="" /></p>
+<blockquote>
+<p>多模块工程中一个更好的引入依赖的方法</p>
+</blockquote>
+<p>翻译自<a href="https://medium.com/better-programming/gradle-dependency-management-with-buildsrc-and-kotlin-dsl-1de958eab166">Gradle Dependency Management With BuildSrc and Kotlin DSL</a></p>
+<p>第一次尝试翻译英文文章……</p>
+<h2 id="要点">要点</h2>
+<p>主要集中在如何用<code>buildSrc</code>目录和Kotlin DSL脚本构建一个Gradle依赖管理系统，你也会学到这样做相对使用传统Groovy代码的好处。</p>
+<p>如果你倾向于通过视频来看这篇博客，文末附有一个Youtube视频。</p>
+<h2 id="问题">问题</h2>
+<p>众所周知在一个快速发展的项目中维护依赖是一个乏味的工作，而传统的Groovy脚本没有code navigation、自动补全，再加上性能问题和运行时错误让这一切变得更糟糕。</p>
+<p>更重要的是，多数安卓开发者不懂Groovy，甚至我也不知道我之前在用Groovy做啥。</p>
+<p>感谢Gradle团队和社区的工作提供了一个顺畅安全的构建流程，他们提出的最棒的主意之一就是用Kotlin DSL脚本写buildSrc目录。</p>
+<h1 id="解决">解决</h1>
+<p>依赖库引入和自定义task不应该放到构建脚本中，它们应该被声明到一个独立文件中再被构建脚本使用。在这个实现的早期，开发者习惯于创建一个Gradle文件来声明所有库并在构建脚本中使用。</p>
+<p>这确实在一定程度上解决了问题，你可以在<a href="https://medium.com/@sgkantamani/next-level-of-dependencies-declaration-with-kotlin-dsl-scripits-48bfe1cb1f10">这篇文章</a>读到这种方法。但这个简单方案不能解决类似自动补全和code navigation的问题，这使得在长远上看这个方案不够可靠。在这之外，buildSrc似乎有希望解决这个问题。</p>
+<blockquote>
+<p>这个目录被当作一个<a href="https://docs.gradle.org/current/userguide/composite_builds.html#composite_build_intro">included build</a>看待。在发现这个目录之后，Gradle自动编译和测试它的代码，并将编译结果放到你的构建脚本的class path中。在一个多模块的工程中只能有一个这样的目录，并且要放到工程的顶级目录中。应该优先通过<a href="https://docs.gradle.org/current/userguide/plugins.html#sec:script_plugins">script plugins</a>因为这样更便于管理、重构和测试代码。
+——Gradle团队</p>
+</blockquote>
+<h2 id="创建buildsrc目录">创建buildSrc目录</h2>
+<p>使用Kotlin DSL脚本不但能解决构建脚本中的这些问题，还能得到先进的IDE支持，包括code navigation、编译时错误提示等。最重要的，我们再也不用使用Groovy了。</p>
+<!--summary-->
+<p>我们要做的第一件事是创建一个buildSrc目录：</p>
+<ul>
+<li>在工程上右键</li>
+<li>点击New并选择Directory</li>
+<li>把它命名为<code>buildSrc</code></li>
+</ul>
+<p>如果你仍然不懂怎么创建这个目录，请看这里：</p>
+<p><img src="https://miro.medium.com/max/1400/1*rDhflrwxcwwr4mcefTrQEg.gif" alt="" /></p>
+<p>然后我们需要在这个目录里创建一个叫做<code>build.gradle.kts</code>的文件，在这个文件里导入插件和存储库。</p>
+<pre><code class="language-kotlin">plugins{
+    `kotlin-dsl`
+}
+
+repositories {
+    jcenter()
+}
+</code></pre>
+<p>完成后你还需要点击gradle的“sync now”按钮，因为gradle把它当作了一个新建目录中的普通文件。现在你可以实现Kotlin DSL脚本了。</p>
+<p><img src="https://miro.medium.com/max/870/1*L1zYKShhvKrrgTyn07S3aw.png" alt="" /></p>
+<p>下一步是创建一个类似这样的目录结构<code>src&gt;main&gt;java</code>，完成后如上图所示。</p>
+<p>现在我们可以创建Kotlin文件来声明依赖库，管理版本或者实现自定义task。</p>
+<p>现在我们的目标是实现一个依赖管理系统，所以我们创建一个叫做<code>Dependencies.kt</code>的文件（你可以用你喜欢的任何名字）。</p>
+<p>完成后我们就可以通过Kotlin代码来声明依赖库和版本了。这里我们用object来声明特定的类型，例如版本号、AndroidX依赖库等。</p>
+<p>首先我们创建一个用来用Kotlin风格定义所有依赖库版本号的object。</p>
+<pre><code class="language-kotlin">object Versions{
+
+    val constraint_layout_version = &quot;1.1.3&quot;
+    val lifecycle_version = &quot;2.2.0&quot;
+    val coroutines_version = &quot;1.3.8&quot;
+    val kotlin_version = &quot;1.3.41&quot;
+  
+    val appcompat = &quot;1.1.0&quot;
+    val recycelerview_version = &quot;1.0.0&quot;
+    val material_design_version = &quot;1.2.0&quot;
+    val cardview_version = &quot;1.0.0&quot;
+    val viewpager2_version = &quot;1.0.0&quot;
+  
+    val play_core_version = &quot;1.8.0&quot;
+}
+</code></pre>
+<p>下一步我们创建各种依赖库类型的专属object文件，例如Kotlinlibraries、AndroidXLibraries和UiLibraries等。</p>
+<pre><code class="language-kotlin">object kotlinDependencies {
+    val kotlin = &quot;org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin_version}&quot;
+    val coroutines = &quot;org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines_version}&quot;
+}
+
+object androidxsupportDependencies{
+    val appcompat = &quot;androidx.appcompat:appcompat:${Versions.appcompat}&quot;
+    val cardview = &quot;androidx.cardview:cardview:${Versions.cardview_version}&quot;
+    val contraintLayout = &quot;androidx.constraintlayout:constraintlayout:${Versions.constraint_layout_version}&quot;
+    val recyclerview = &quot;androidx.recyclerview:recyclerview:${Versions.recycelerview_version}&quot;
+    val viewpager2 = &quot;androidx.viewpager2:viewpager2:${Versions.viewpager2_version}&quot;
+}
+
+object materialDesignDependencies{
+    val materialDesign = &quot;com.google.android.material:material:${Versions.material_design_version}&quot;
+}
+
+object playcoreDependencies{
+    val play_core =  &quot;com.google.android.play:core:${Versions.play_core_version}&quot;
+}
+</code></pre>
+<p>最后把完整代码片段放到这里</p>
+<pre><code class="language-kotlin">object Versions{
+
+    val constraint_layout_version = &quot;1.1.3&quot;
+    val lifecycle_version = &quot;2.2.0&quot;
+    val coroutines_version = &quot;1.3.8&quot;
+    val kotlin_version = &quot;1.3.41&quot;
+  
+    val appcompat = &quot;1.1.0&quot;
+    val recycelerview_version = &quot;1.0.0&quot;
+    val material_design_version = &quot;1.2.0&quot;
+    val cardview_version = &quot;1.0.0&quot;
+    val viewpager2_version = &quot;1.0.0&quot;
+  
+    val play_core_version = &quot;1.8.0&quot;
+}
+
+object kotlinDependencies {
+    val kotlin = &quot;org.jetbrains.kotlin:kotlin-stdlib-jdk7:${Versions.kotlin_version}&quot;
+    val coroutines = &quot;org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines_version}&quot;
+}
+
+object androidxsupportDependencies{
+    val appcompat = &quot;androidx.appcompat:appcompat:${Versions.appcompat}&quot;
+    val cardview = &quot;androidx.cardview:cardview:${Versions.cardview_version}&quot;
+    val contraintLayout = &quot;androidx.constraintlayout:constraintlayout:${Versions.constraint_layout_version}&quot;
+    val recyclerview = &quot;androidx.recyclerview:recyclerview:${Versions.recycelerview_version}&quot;
+    val viewpager2 = &quot;androidx.viewpager2:viewpager2:${Versions.viewpager2_version}&quot;
+}
+
+object materialDesignDependencies{
+    val materialDesign = &quot;com.google.android.material:material:${Versions.material_design_version}&quot;
+}
+
+object playcoreDependencies{
+    val play_core =  &quot;com.google.android.play:core:${Versions.play_core_version}&quot;
+}
+</code></pre>
+<p>最后一步就是在project、app和模块级的build.gradle文件中使用这些object了。这相当简单，只要object的name和成员变量的name就行了。</p>
+<pre><code class="language-kotlin">dependencies {
+    /** Kotlin */
+    implementation( kotlinDependencies.kotlin)
+
+    /** Coroutines */
+    implementation( coroutineDependencies.coroutines)
+    
+    /** support androidx ibraries */
+    implementation( androidxsupportDependencies.appcompat)
+    implementation( androidxsupportDependencies.contraintLayout)
+    implementation( androidxsupportDependencies.recyclerview)
+    implementation( androidxsupportDependencies.cardview)
+    implementation( androidxsupportDependencies.viewpager2)
+
+    /*** Material design */
+    implementation( materialDesignDependencies.materialDesign)
+    
+    /** Playcore */
+    implementation( playcoreDependencies.play_core)
+}
+</code></pre>
+<p>这种方法看上去简单，但拥有很多优点，比如code navigation、自动补全、运行时错误提示等。看下面的gif。（gif见原文）</p>
+<p>此外，我们可以在整个项目的所有模块中使用这些定义的依赖。</p>
+<h2 id="更多">更多</h2>
+<p>目前为止，我们实现了与依赖有关的所有东西，但我们确实可以在编译脚本中做更多事情，比如替换掉defaultConfig块，它看上去这样</p>
+<pre><code class="language-kotlin">compileSdkVersion(29)
+defaultConfig {
+    applicationId = &quot;com.example.app&quot;
+    minSdkVersion(16)
+    targetSdkVersion (29)
+    multiDexEnabled = true
+    versionCode = 1
+    versionName = &quot;1.0&quot;
+    testInstrumentationRunner = &quot;androidx.test.runner.AndroidJUnitRunner&quot;
+    vectorDrawables.useSupportLibrary = true
+}
+</code></pre>
+<p>如我所说，把常量移到编译脚本外更安全。所以我们可以在下面另外创建一个Kotlin文件，或者在Dependencies.kt文件中创建一个新的object。然后声明所有常量，比如min、编译SDK版本等。</p>
+<pre><code class="language-kotlin">object buildConfigVersions {
+    val compileSdkVersion = 29
+    val buildToolsVersion = &quot;29.0.3&quot;
+    val minSdkVersion = 16
+    val targetSdkVersion = 29
+    val versionCode = 6
+    val versionName = &quot;2.0&quot;
+}
+</code></pre>
+<p>现在我们可以在block中使用这个object了</p>
+<pre><code class="language-kotlin">compileSdkVersion(buildConfigVersions.compileSdkVersion)
+defaultConfig {
+    applicationId = &quot;com.example.app&quot;
+    minSdkVersion(buildConfigVersions.minSdkVersion)
+    targetSdkVersion (buildConfigVersions.targetSdkVersion)
+    multiDexEnabled = true
+    versionCode = buildConfigVersions.versionCode
+    versionName = buildConfigVersions.versionName
+    testInstrumentationRunner = &quot;androidx.test.runner.AndroidJUnitRunner&quot;
+    vectorDrawables.useSupportLibrary = true
+}
+</code></pre>
+<p>如果你的工程中有任何顶级字符串或常量需要维护，你可以创建一个单独的文件，而不是在编译脚本中写的一团糟。</p>
+<p>（Youtube视频见<a href="https://youtu.be/w5qCmvS9JGE">https://youtu.be/w5qCmvS9JGE</a>）</p>
+</div>
+            </div>
+    
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

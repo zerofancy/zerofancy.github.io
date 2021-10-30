@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    <title>Hello, world!</title>
+</head>
+
+<body>
+    <nav class="container navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="/favicon.ico" alt="归零幻想" width="20px" height="20px">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/">Home</a>
+                    </li>
+                <!--
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Dropdown
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="#">Action</a></li>
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                    </li>
+                -->
+                </ul>
+                <!--
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+                -->
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-3">
+        <div class="row">
+            <div class="card col-md-4 d-none d-md-block me-md-3 text-center" style="width: 18rem;">
+                <img src="/favicon.ico" alt="avatar" class="mt-3">
+                <div class="card-body">
+                    <p class="card-text">
+                        归零幻想
+                    </p>
+                </div>
+            </div>
+    
+            <div class="card col">
+                <div class="card-body"><h2 id="题目1">题目1</h2>
+<p>向类SeqList中插入数据，请根据main函数中的调用，完成Insert和output函数。</p>
+<!--summary-->
+<ul>
+<li>Input</li>
+</ul>
+<pre><code>    5
+    1 2 3 4 5
+    2 9
+</code></pre>
+<ul>
+<li>Output</li>
+</ul>
+<pre><code>1 2 3 4 5
+1 2 9 3 4 5
+</code></pre>
+<ul>
+<li>Answer</li>
+</ul>
+<pre><code class="language-cpp">#include&lt;iostream&gt;
+#include&lt;stdlib.h&gt;
+using namespace std;
+class SeqList
+{
+private:
+    int * data;
+    int last; // index of the last element
+public:
+    SeqList ( int sz );
+    ~SeqList ( )
+    {
+        delete [ ] data;
+    }
+    void input ();
+    void output() ;
+    void Insert   ( const int &amp;x, int i);
+}  ;
+SeqList::SeqList ( int sz )
+{
+    if ( sz &gt; 0 )
+    {
+        data = new int[sz];
+        last = -1;
+    }
+}
+void SeqList:: input()
+{
+    cin &gt;&gt;last;
+    for (int i=0; i&lt;last; i++)
+        cin&gt;&gt;data [i];
+    last--;
+}
+
+void SeqList::output()
+{
+    bool fi=false;
+    for(int i=0; i&lt;=last; i++)
+    {
+        if(!fi)
+        {
+            fi=!fi;
+            cout&lt;&lt;data[i];
+        }else{
+            cout&lt;&lt;' '&lt;&lt;data[i];
+        }
+    }
+    cout&lt;&lt;endl;
+}
+
+void SeqList::Insert(const int&amp; x, int i)
+{
+    for(int i1=last;i1&gt;=i;i1--){
+        data[i1+1]=data[i1];
+    }
+    data[i]=x;
+    last++;
+}
+
+int main()
+{
+    SeqList myList(50);
+    myList.input();
+    myList.output();
+    int where,value;
+    cin &gt;&gt;where;
+    cin &gt;&gt;value;
+    myList.Insert(value,where);
+    myList.output ();
+    return 1;
+}
+</code></pre>
+<h2 id="题目2">题目2</h2>
+<p>已知一块靶场大小为m*n（m行n列），每个点上都有一面旗子，我们的炮兵发射炮弹，炮弹一次只能炸掉一面旗子，每次炮弹的落点坐标都有记录，问你几炮过后，靶场还剩下几面旗子呢？</p>
+<ul>
+<li>Input</li>
+</ul>
+<p>有若干行，第一行为两个整数m,n，以空格分隔，都是整数，且1&lt;=m&lt;=n&lt;=100；</p>
+<p>接下来有若干行，每行有两个整数x,y，代表炮弹落点的坐标（行、列坐标，编号从0开始）。</p>
+<pre><code>3 3
+1 1
+1 1
+99 99
+</code></pre>
+<ul>
+<li>Output</li>
+</ul>
+<p>一个整数，代表最后靶场上剩余的旗子数。</p>
+<p>提示：炮弹可能打在同一个位置，也可能脱靶，但保证在100*100的范围内。</p>
+<pre><code>8
+</code></pre>
+<ul>
+<li>Answer</li>
+</ul>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+#define N 105
+
+using namespace std;
+
+int main()
+{
+    bool data[N][N];
+    for(int i=0;i&lt;N;i++){
+        for(int i2=0;i2&lt;N;i2++){
+            data[i][i2]=false;
+        }
+    }
+    int m,n;
+    cin&gt;&gt;m&gt;&gt;n;
+    int res=m*n;
+    int x,y;
+    while(cin&gt;&gt;x&gt;&gt;y){
+        data[x][y]=true;
+    }
+    for(int i=0;i&lt;m;i++){
+        for(int i2=0;i2&lt;n;i2++){
+            if(data[i][i2]){
+                res--;
+            }
+        }
+    }
+    cout&lt;&lt;res&lt;&lt;endl;
+    return 0;
+}
+
+</code></pre>
+<h2 id="题目3">题目3</h2>
+<p>买房面积不要求太大，环境不要求太好，只要单价够便宜就已经很满足啦~现在挑选了一些房源，请你帮忙选一选，哪个最适合呢？小本本上记录了房子的名称（字母和数字组成，无空格）、面积和总价，你来帮编个程序自动计算一下吧。</p>
+<ul>
+<li>Input</li>
+</ul>
+<p>第一行为一个整数N(1&lt;=N&lt;=100)，表示接下来有N套房源信息；</p>
+<p>接下来有N行，每行包括房源名称(不超过100个字符)、面积和总价（double类型，小数点后保留两位），以空格分隔。</p>
+<pre><code>3
+Tangdaowan0101 50 50
+Jiangshan1314 49 50
+Jinshatan1111 51 50
+</code></pre>
+<ul>
+<li>Output</li>
+</ul>
+<pre><code>Jinshatan1111 51.00 50.00
+</code></pre>
+<p>仅一行，为最适合的房源信息，以空格分隔，末尾换行。</p>
+<p>测试用例保证没有单价重复的情况。</p>
+<ul>
+<li>Answer</li>
+</ul>
+<pre><code class="language-cpp">#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#include&lt;limits.h&gt;
+typedef struct
+{
+    char name[101];
+    double area;
+    double sum;
+    double avg;
+} House;
+
+int Gethouse(House*h,int n){
+    double res=INT_MAX;
+    int res_num=0;
+    for(int i=0;i&lt;n;i++){
+        h[i].avg=h[i].sum/h[i].area;
+        if(h[i].avg&lt;res){
+            res=h[i].avg;
+            res_num=i;
+       }
+    }
+    return res_num;
+}
+
+int main()
+{
+    int n,i,flag = 0;//n有几行
+    scanf(&quot;%d&quot;,&amp;n);
+    House h[n];
+    for (i = 0; i &lt; n; i ++)
+      scanf(&quot;%s%lf%lf&quot;,h[i].name,&amp;h[i].area,&amp;h[i].sum);
+    flag= Gethouse(h,n);
+    printf(&quot;%s %.2f %.2f\n&quot;,h[flag].name, h[flag].area, h[flag].sum);
+    return 0;
+}
+
+</code></pre>
+<h2 id="题目4">题目4</h2>
+<p>实现链表的输入（已实现）、输出和删除成员函数。</p>
+<p>输入时，根据endtag确定是否结束输入；</p>
+<p>删除时，根据下标（从0开始）。</p>
+<p>注意，输入的顺序跟存放的顺序以及输出的顺序是相反的。</p>
+<ul>
+<li>Input</li>
+</ul>
+<pre><code>1 2 3 4 5 0
+2
+</code></pre>
+<ul>
+<li>Output</li>
+</ul>
+<pre><code>5 4 3 2 1
+5 4 2 1
+</code></pre>
+<ul>
+<li>Answer</li>
+</ul>
+<pre><code class="language-cpp">#include &quot;stdlib.h&quot;
+#include &quot;iostream&quot;
+#include&lt;cstdlib&gt;
+using namespace std ;
+
+class List; //前视定义,否则友元无法定义
+class LinkNode
+{
+    friend  List; //链表结点类的定义
+private:
+    LinkNode *link;
+    int data;
+public:
+    LinkNode(const int &amp; item, LinkNode *ptr = NULL)
+    {
+        data=item;
+        link=ptr;
+    }
+    LinkNode (LinkNode *ptr = NULL)
+    {
+        link=ptr;
+    }
+    ~LinkNode() {};
+
+};
+
+class List
+{
+    //单链表类的定义
+private:
+    LinkNode *first; //指向首结点的指针
+public:
+    List ()
+    {
+        first = new LinkNode ();   // 带头结点
+    }
+    ~List ()
+    {
+        MakeEmpty();   //析构函数
+    }
+    void MakeEmpty ( );      //链表置空
+    int Remove ( int i );
+    void input(int  endTag);
+    void output();
+};
+void List:: MakeEmpty ( )
+{
+    LinkNode *q;
+    while (  first-&gt;link != NULL )
+    {
+        q = first-&gt;link;
+        first-&gt;link = q-&gt;link;
+        delete q;
+    }
+};
+
+void List :: input (int endTag)
+{
+    LinkNode  *newnode;
+    int val;
+    cin&gt;&gt;val;
+    while(val!=endTag)
+    {
+        newnode=new LinkNode (val);
+        newnode-&gt;link=first-&gt;link;
+        first-&gt;link=newnode;
+        cin&gt;&gt;val;
+    }
+}
+
+int List::Remove(int i)
+{
+    LinkNode*tmp=first;
+    for(int i2=0;i2&lt;i;i2++){
+        tmp=tmp-&gt;link;
+    }
+    LinkNode*tmp1=tmp-&gt;link;
+    tmp-&gt;link=tmp-&gt;link-&gt;link;
+    delete(tmp1);
+}
+
+void List::output()
+{
+    int fi=0;
+    LinkNode*tmp=first-&gt;link;
+    while(tmp!=NULL)
+    {
+        if(fi++)
+        {
+            cout&lt;&lt;' '&lt;&lt;tmp-&gt;data;
+        }
+        else
+        {
+            cout&lt;&lt;tmp-&gt;data;
+        }
+        tmp=tmp-&gt;link;
+    }
+    cout&lt;&lt;endl;
+}
+
+int main()
+{
+    List l;
+    l.input(0); //0为输入的结束数字
+    l.output ();
+    int index;
+    cin&gt;&gt;index; //要删除的元素的下标，下标从0 开始
+    l.Remove(index);
+    l.output (); //删除后输出
+    return 0;
+}
+
+</code></pre>
+</div>
+            </div>
+    
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

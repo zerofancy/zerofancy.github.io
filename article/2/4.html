@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    <title>Hello, world!</title>
+</head>
+
+<body>
+    <nav class="container navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="/favicon.ico" alt="归零幻想" width="20px" height="20px">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/">Home</a>
+                    </li>
+                <!--
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Dropdown
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="#">Action</a></li>
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                    </li>
+                -->
+                </ul>
+                <!--
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+                -->
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-3">
+        <div class="row">
+            <div class="card col-md-4 d-none d-md-block me-md-3 text-center" style="width: 18rem;">
+                <img src="/favicon.ico" alt="avatar" class="mt-3">
+                <div class="card-body">
+                    <p class="card-text">
+                        归零幻想
+                    </p>
+                </div>
+            </div>
+    
+            <div class="card col">
+                <div class="card-body"><blockquote>
+<p>还是数据结构的网上作业，将一个整数分解为连续正整数之和，找对方向倒是也不算难……</p>
+</blockquote>
+<p>有些正整数可以表示为 n (n&gt;1) 个连续正整数的和，如：</p>
+<pre><code>15=1+2+3+4+5
+    =4+5+6
+    =7+8
+</code></pre>
+<p>给定一个正整数 N，判断其是否可以表示为一组连续正整数的和，输出符合条件的解的组数。</p>
+<!--summary-->
+<h2 id="input">Input</h2>
+<pre><code>输入有一行，包含一个正整数 n (3≤n≤1000000000)。
+</code></pre>
+<h2 id="output">Output</h2>
+<pre><code>输出有一行，正整数n的符合条件的解的组数。
+</code></pre>
+<h2 id="example">Example</h2>
+<table>
+<thead>
+<tr><th>Input</th><th>Output</th></tr>
+</thead>
+<tbody>
+<tr><td>15</td><td>3</td></tr>
+<tr><td>99</td><td>5</td></tr>
+<tr><td>6</td><td>1</td></tr>
+<tr><td>9</td><td>2</td></tr>
+</tbody>
+</table>
+<p><strong>单点时限: 2.0 sec</strong>
+<strong>内存限制: 256 MB</strong></p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+
+using namespace std;
+
+int main()
+{
+    int n;
+    cin&gt;&gt;n;
+    int counter=0;
+    for(int i=2; i&lt;(100000&lt;n?100000:n); i++) //n/i-i/2+1&gt;=1
+    {
+        if(n/i-i/2-i%2+1&gt;=1&amp;&amp;(n/i-i/2-i%2+1+n/i-i/2-i%2+1+i-1)*i==n*2)
+        {
+            counter++;
+        }
+        //cout&lt;&lt;&quot;test-&quot;&lt;&lt;i&lt;&lt;endl;
+    }
+    cout &lt;&lt; counter &lt;&lt; endl;
+    return 0;
+}
+
+</code></pre>
+<p>枚举就好了。需要根据分成的整数的个数i讨论，但为了显得更牛X我就写到一起了，上面的<code>n/i-i/2-i%2+1</code>无论在奇偶情况下都是拆分得到的整数的第一个<em>理应</em>是多少。</p>
+<p>判断的主要逻辑：</p>
+<ul>
+<li>第一个数字大于等于1</li>
+<li>所有数之和等于原数</li>
+</ul>
+<p>求和在这里就不必用循环了，用等差数列明显更高效。注意这里计算时为了防止整数除法运算截断的问题，将除法移动到了等式的右边。</p>
+</div>
+            </div>
+    
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

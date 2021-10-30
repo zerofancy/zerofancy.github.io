@@ -1,441 +1,52 @@
-<!DOCTYPE HTML>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans">
-
+<!DOCTYPE html>
+<html lang="zh-Hans">
 <head>
-    
-    <title>归零幻想的博客</title>
     <meta charset="UTF-8">
-    <!--移动设备不缩放-->
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="alternate" type="application/rss+xml" title="归零幻想" href="https://ntutn.top/rss.xml" />
-    <!--github的markdown样式-->
-    <link rel="stylesheet" href="/res/css/github-markdown.css">
-    <!--一个基于bootstrap的样式-->
-    <link rel="stylesheet" href="/res/css/main.css">
-
-    <script src="/res/js/jquery.min.js"></script>
-    <script src="/res/js/popper.min.js"></script>
-    <script src="/res/js/bootstrap.min.js"></script>
-    <script src="/res/js/sweetalert.min.js"></script>
-
-    <!---代码高亮-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/idea.min.css" integrity="sha512-Rfc5zQIp95eozfMCdS3B4MItUxU8orNje/t1OEhf7XwIk0DTCuMH2LG0NIgP8UGYK9L39WfUNI1c4IsM5yY/PA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-           
-    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/highlight.min.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/apache.min.js" integrity="sha512-gE8KAQyFIzV1C9+GZ8TKJHZS2s+n7EjNtC+IMRn1l5+WYJTHOODUM6JSjZhFhqXmc7bG8Av6XXpckA4tYhflnw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/bash.min.js" integrity="sha512-FKvOrHUlsJ2pKk+pk8D25a1wTvD5ab+tudQ9g3lJqMH9YtrpqHEbMEiCeU6HA5URAawnGJC0JfZLesDWkXYLyw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/basic.min.js" integrity="sha512-e+l7CY07JEoomaYRN0aCm+Nkj6PSnUTKqfNQzbH4uBAxa86Nqx8j+k20Pu9j4+dBgpPNkupUdAQlvmXLnjs6fQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/c.min.js" integrity="sha512-6uPEB+tN2jnZQ8gHNkW4ZiJbXUa7gIL21dsIS3UPAJyzRfDCLmm1hFGJmZ/l8RwBPeCiKTOg9BNCB+Bp9btrmA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/cmake.min.js" integrity="sha512-rGz7I/XUUa81jEKbxXuZFbh2KTx8M7uWE6kq/IOJHNyZcQP9r3HafPVnqGg81xeKJK1sUUmk5BM5zFJj6XsSOA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/cpp.min.js" integrity="sha512-hZq4EJY8EMM7w6kWktRCsnhWehJs4Tq3V8bccoMuVgwigDj5oKiLlRi59NKUw4Q43wZKK8brlPZl5r0Yo58ZXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/csharp.min.js" integrity="sha512-X18ZEfQ3SPnexB5QRmg4fp9QjaFa/jEiw7J1TsWWPIJGgvVyLXrI8fdaZOqbbsfX5byF9/CovS++zG5QL8EZ+A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/css.min.js" integrity="sha512-yZeVBJRfVCykn6i7I3NXhR2cA5OWI/YM9GlV9bO/KjrXaPSEnSau0OCnOa1ad5hA2LSq/3YB3p0sJTCH+OL3fQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/dockerfile.min.js" integrity="sha512-1Ei4BsbZ/bYV5hmzxHa6uzwr7ftc8uysn0U2RK2rJe+aN2O8mXespb6z8Y3xrDf5R7t7rObrLIKA5o3VU3eJFA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/dos.min.js" integrity="sha512-UAaZyglZlxoUkWirdjgTiE6kzsqUn4ZfMxD99eeRBcUCsq8pbt5arQRlGR9bXS9VHzL38KN6Rw8ozg3AJBfa7w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/go.min.js" integrity="sha512-EWROca+bote+7Oaaar1F6y74iZj1r1F9rm/ly7o+/FwJopbBaWtsFDmaKoZDd3QiGU2pGacBirHJNivmGLYrow==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/gradle.min.js" integrity="sha512-wlBnLL4IT1i9CSixtdYtmBFTn3pVD8qQRj6Ba58mhMwaFy/UrkOmmV7RgX22p6rn7j8VtN0lto/JJyyTFs/g7A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/groovy.min.js" integrity="sha512-dETjs4xDxipeZKHG1N/9cju7iw5ldaFHQJ/XK75EDv9cPaNV+FuORBmfMuwg6V5IudAzLnSFzi9ALGZFH6r5NQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/ini.min.js" integrity="sha512-ECe50ffxXzZnLKoKCn+r9ULj27e/6h6AFa1uFBgnQz2WVrPOZEsbEmUbt8rsQTUVo4X2s7EO29Bv9bVOBETuqw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/java.min.js" integrity="sha512-xEnylOTeZvxUCvtK9Lw3FjOgfCwsMEhUbx6Hant1lPgy+PcynqCm8XfqhpRos6XNaTxeMuT4QyrWyo3U1NijHg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/javascript.min.js" integrity="sha512-Mhvr+xy2hvcm9g/wPUirdSNSQVWZ6gBVOky3SOfYEAiKsMry6FhotoB/yPE37lYP46igpLUOXZK7uPBkdMZedQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/kotlin.min.js" integrity="sha512-WP/R3IrzEd0v0jF+/QdNvecCp5LF8LY2g3XDyVwumU2Rl+TL+VgKxwiNlMmz0ks0m/zpfzrE4yoQ97KPsD0KAg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/latex.min.js" integrity="sha512-xdAZ0+yuywvfmEJBe+VOGM46gkP7orEAlqzh5QQRjqIt+wnLbKQsUGqU0aCNaCbncVH0CZK62HRFappBhkDtsA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/makefile.min.js" integrity="sha512-HhumF7+woGiAuk8LFmeLWrR6ZOmEVKfdZOuIAfbyKYIIagPDI+3PkHT5yHNuSbuXbdcSSuA9iOgyFw1QAyF5Sw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/php.min.js" integrity="sha512-/4bsm6nfQWNGd6957+2xA9pcl/1OwrHDrx/vug0V/rr4dG4pMMuESaseX15pj7+pmhvZB6O/dNT4qA6/NQSVNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/python.min.js" integrity="sha512-MbDu8Vk2zJLvSEzk4bOYrlcS+9WE39QPnxINj2aftAG63jxOhdP5p2/Ma6/D3C9IkT/xOjZTO8MtBCX8PI48BA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/shell.min.js" integrity="sha512-TBRe4v9USbfzECSiP8d6bQSSvqxHHbeMneQPNsU51SSVAaakOezeYI8sOBWdXh8GGc5vD28d1Sxzk+LgDM3dxA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/vbscript.min.js" integrity="sha512-MKguDuFJ+IM/Jm5SFVQsgy56sRCTjGOhuvvR94sGpYCXnO3Emu/egPCxtFprra3/gNpmIJKMp61VphygW7UCXQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/xml.min.js" integrity="sha512-42l52BYLobXrodiKIjvsxUSzwTMhnJww+Da1BZ771+rxtpWCeozwy4Mfca7DM+PRmfEQrGfyEI32kBi3b/0v/w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/yaml.min.js" integrity="sha512-28oDiQZGKUVN6wQ7PSLPNipOcmkCALXKwOi7bnkyFf8QiMZQxG9EQoy/iiNx6Zxj2cG2SbVa4dXKigQhu7GiFw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-    <script>
-        function chkPage() {
-            var in_page = Number($("#in_page").val());
-            if (in_page <= 0 || in_page > Number($("#pagecount").val())) {
-                return false;
-            }
-            return true;
-        }
-        $(document).ready(function () {
-            $("#btn_go").click(function () {
-                if (chkPage()) {
-                    location.href = "/index" + ($("#in_page").val() == "1" ? "" : $("#in_page").val()) + ".html";
-                } else {
-                    swal(
-                        {
-                            title: "Tip",
-                            text: "您输入的页码超出范围！",
-                            type: "warning"
-                        }
-                    );
-                }
-            });
-            $(".card-text img").addClass("img-fluid");
-            $("#n_home").addClass("active");
-            //一言
-            $.get("https://v1.hitokoto.cn/", function (data, status) {
-                $("#hitokoto").text(data.hitokoto);
-                $("#from").text("——" + data.from);
-            });
-            // ajax
-            $(".btn-read-all").click(function () {
-                const url = $(this).attr("value")
-                $(this).parent().parent().find(".card-text").load(url + " .card-text")
-                $(this).hide()
-                return false
-            })
-            // 代码高亮
-            hljs.highlightAll() // 代码高亮
-        });
-    </script>
-    <style>
-        /*背景图片*/
-        body {
-            background: url(https://unsplash.it/1600/900?random);
-            background-attachment: fixed;
-            background-position: bottom center;
-            background-size: cover;
-        }
-    </style>
+    <title>归零幻想</title>
 </head>
-
 <body>
-    <input id="pagecount" type="hidden" value="8">
-    <div class="container">
-        <nav id="nav" class="navbar navbar-expand-lg navbar-light bg-light">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
-                aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <a class="navbar-brand" href="/"><img src="/res/logo.png" width="70" height="40"
-                    class="d-inline-block align-top" alt="">
-                <span>归零幻想的博客</span></a>
-
-            <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
-                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                    <li id="n_home" class="nav-item">
-                        <a class="nav-link" href="/">主页</a>
-                    </li>
-                    <!-- <li id="n_tags" class="nav-item">
-                    <a class="nav-link" href="/tags">标签</a>
-                </li> -->
-                    <li id="n_about" class="nav-item">
-                        <a class="nav-link" href="https://channel.ntutn.workers.dev/" target="_blank">频道</a>
-                    </li>
-                    <li id="n_about" class="nav-item">
-                        <a class="nav-link" href="/friends.html">友链</a>
-                    </li>
-                    <li id="n_about" class="nav-item">
-                        <a class="nav-link" href="/about.html">关于</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/rss.xml">RSS</a>
-                    </li>
-                </ul>
-                <!-- <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0 disabled popover-dismiss" type="submit"
-                    data-toggle="popover" data-trigger="focus" title="未完成的功能"
-                    data-content="搜索功能暂时还没有完成。">Search</button>
-            </form> -->
-            </div>
-        </nav>
-        <nav class="mt-3" aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/">Home</a></li>
-            </ol>
-        </nav>
-        <div class="card text-black bg-light">
-            <div class="card-body">
-                <blockquote class="card-blockquote">
-                    <p id="hitokoto">溺死在零梦里吧。</p>
-                    <footer id="from" class="text-right">Someone famous in
-                        <cite title="Source Title">归零幻想</cite>
-                    </footer>
-                </blockquote>
-            </div>
-        </div>
-        <div class="card mt-3">
-            <div class="card-body">
-                <h2 class="card-title text-center">
-                    <a href="archieved/old/Typora+git自动同步你的笔记.html">Typora+git自动同步你的笔记</a>
-                </h2>
-                <h6 class="card-subtitle mb-2 text-muted text-center">
-                    发布时间：<span>2020-03-02</span>&nbsp;
-                    修改时间：<span>2020-03-02</span>&nbsp;
-                    作者：<span>归零幻想</span>
-                </h6>
-                <hr>
-                <div class="card-text markdown-body"><p>这两天看了群里某个大佬的笔记，突然觉得自己用VSCode记笔记的方案不香了。VSCode虽然对<code>markdown</code>的支持不错，但毕竟本职工作不是这个，直接拿来做笔记还是不够方便，太笨重了。于是我终于想起之前同学给我安利的<code>markdown</code>编辑器：Typora。</p>
-<h2 id="dalao的笔记">dalao的笔记</h2>
-<p>首先看看大佬的笔记：</p>
-<p><img src="https://i.loli.net/2020/08/20/1Lr3BfMvSw8haYy.png" alt="1.png" /></p>
-<p>好想去偷他的笔记。不过话说他这笔记软件也不错啊，看起来简约清晰，我也有试一试的想法了。</p>
-<p>他用的笔记软件：<a href="https://github.com/tsujan/FeatherNotes">https://github.com/tsujan/FeatherNotes</a></p>
-<p>然后就被编译安装劝退了。一个是不太想这么折腾，另一个是这个软件没有提供编译好的包，感觉还是不够放心啊，毕竟如果以后开发者不维护了要再折腾一遍会非常麻烦。</p>
-<h2 id="typora同学安利的markdown编辑工具">Typora，同学安利的markdown编辑工具</h2>
-<p>与多数markdown编辑工具不同，Typora是所见即所得的markdown编辑工具。为什么程序员偏爱markdown？就是因为markdown可以让我们写作的时候只关注内容本身，而不用太在意排版的问题。而Typora又改变了传统的左右分栏或者点击切换预览的传统markdown编辑模式，用起来就更舒服了。</p>
-<p><img src="https://i.loli.net/2020/08/20/V7LzFNRXyT1hUbj.png" alt="2.png" /></p>
-</div>
-                <div class="row mt-3">
-                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/old/Typora+git自动同步你的笔记.html">阅读全文 ▼</div>
-                </div>
-            </div>
-        </div>
-        <div class="card mt-3">
-            <div class="card-body">
-                <h2 class="card-title text-center">
-                    <a href="archieved/old/记Lenovo V310 15 IKB的第n次死机.html">记Lenovo V310 15 IKB的第n次死机</a>
-                </h2>
-                <h6 class="card-subtitle mb-2 text-muted text-center">
-                    发布时间：<span>2020-01-28</span>&nbsp;
-                    修改时间：<span>2020-01-28</span>&nbsp;
-                    作者：<span>归零幻想</span>
-                </h6>
-                <hr>
-                <div class="card-text markdown-body"><p>今天我的电脑又死机了，首先切一下<strong>tty进不去</strong>，然后试下<strong>SysRq键没反应</strong>，熟练地按住电源10秒，松开两秒，再按一下，拿出手机刷会空间。</p>
-<p>这电脑刚买的时候给我的印象其实是不错的，虽然外壳线条有点<del>丑</del>粗犷，但整体性能比我预期要好很多。i5的CPU，1T机械硬盘，入门级Radeon独显，毕竟价格摆在那里。</p>
-<p>因为没有固态硬盘，这电脑慢的很，但我安慰自己<strong>反正我也不怎么打游戏</strong>。日常尽量不用UWP应用，开机刷会手机，佛系一点也没什么不好。谁说学软件就一定要用好电脑？Code Blocks不香吗？eclipse有几个电脑带不动？实在偶尔想配置安卓开发环境的时候就连自己安卓手机做测试，至于VS就不用想了，虽然号称世界上最好用的IDE，但比较新的版本<strong>没有固态硬盘反应跟不上打字</strong>……</p>
-<p>本来也就这样了，一分钱一分货的事。但直到某次电脑毫无征兆死机……</p>
-<p>死机是正常现象，没什么好怕的。我这样告诉自己。我当时正在浏览网页<del>不要多想，不是那种满屏都是澳门首家线上赌场广告的网页</del>，毫无征兆就死机了。一般来说，所谓死机多是资源占用过高系统失去响应的原因，根据自己的经验，按组合键尝试调出任务管理器尝试结束进程，然后没有成功。貌似死机很彻底，任务管理器根本无法调出，甚至鼠标都不能动。我放下电脑，看了集哆啦A梦，回头看电脑屏幕没有要变化的征兆。没办法，按住电源键强制关机吧。后面很久这个事情都没有再出现，我也就渐渐忘了。</p>
-<p>直到又有一天，在我玩《狂野飙车8：极速凌云》正高兴的时候，画面突然不动了。这扫兴的事让我没了继续玩的兴致，而后几天又死机几次，我觉得事情没有那么简单，在网上搜索时，我发现我这不是个例。</p>
-<p>之后我加固态硬盘装双系统，死机就跟着我到了ubuntu。一般来说，ubuntu死机多是指gnome卡死，直接Alt+F2输入r就能重启，不这样做也可以切tty进入命令操作，直到某次放歌的时候死机了，歌声都停了，别说tty了，连SysRq键都没能正常工作，这表明连linux内核都死掉了。好吧，现在有足够证据表明死机不是Windows的锅。</p>
-<p>想把电脑送去修，但很麻烦的是，这个问题复现很困难，死机是不定期的，似乎跟资源占用无关，跟电脑温度无关。先不考虑电脑店能不能找到原因，就算电脑店说修好了，我也没办法验证。我觉得就这样送去修最大可能就算店家给你重装了下系统，清了下灰，升级了下BIOS，这些我都试过了没有用。</p>
-<p><strong>后来一直没有解决这件事，只是我养成了随手Ctrl+S的习惯。</strong></p>
-<p>不管怎样，今天偶发性的连续死机两次惹恼我了，联想会进我的黑名单。</p>
-</div>
-                <div class="row mt-3">
-                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/old/记Lenovo V310 15 IKB的第n次死机.html">阅读全文 ▼</div>
-                </div>
-            </div>
-        </div>
-        <div class="card mt-3">
-            <div class="card-body">
-                <h2 class="card-title text-center">
-                    <a href="archieved/old/人工智能知识点整理.html">人工智能知识点整理</a>
-                </h2>
-                <h6 class="card-subtitle mb-2 text-muted text-center">
-                    发布时间：<span>2020-01-10</span>&nbsp;
-                    修改时间：<span>2020-01-10</span>&nbsp;
-                    作者：<span>归零幻想</span>
-                </h6>
-                <hr>
-                <div class="card-text markdown-body"><blockquote>
-<p>人工智能考试前整理的，很详细，虽然实际考试还是有好些想不起来，但总归起了一些作用的。</p>
-</blockquote>
-<h2 id="第1章绪论">第1章绪论</h2>
-<h3 id="人工智能的起源">人工智能的起源</h3>
-<p>现代人工智能的起源是<strong>1956年的达特茅斯会议</strong>。</p>
-<p>参加者：<strong>麦卡锡、明斯基</strong>、香农、罗切斯特、纽厄尔、西蒙、萨缪尔、伯恩斯坦、摩尔、所罗门诺夫。</p>
-<p>会议的主要成就就是让人工智能成了一个独立的研究学科。</p>
-<p>定下来人工智能的英文名称是“Artificial Intelligence”</p>
-</div>
-                <div class="row mt-3">
-                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/old/人工智能知识点整理.html">阅读全文 ▼</div>
-                </div>
-            </div>
-        </div>
-        <div class="card mt-3">
-            <div class="card-body">
-                <h2 class="card-title text-center">
-                    <a href="archieved/old/计算机操作系统原理笔记.html">计算机操作系统原理笔记</a>
-                </h2>
-                <h6 class="card-subtitle mb-2 text-muted text-center">
-                    发布时间：<span>2019-12-15</span>&nbsp;
-                    修改时间：<span>2019-12-15</span>&nbsp;
-                    作者：<span>归零幻想</span>
-                </h6>
-                <hr>
-                <div class="card-text markdown-body"><h1 id="计算机操作系统原理笔记">计算机操作系统原理笔记</h1>
-<p>操作系统快考试了，我觉得自己过应该还是没问题的吧，毕竟也有认真听课。虽然对某些部分流程记忆有点发憷。</p>
-</div>
-                <div class="row mt-3">
-                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/old/计算机操作系统原理笔记.html">阅读全文 ▼</div>
-                </div>
-            </div>
-        </div>
-        <div class="card mt-3">
-            <div class="card-body">
-                <h2 class="card-title text-center">
-                    <a href="archieved/old/我发现了齐鲁软件大赛系统的漏洞.html">我发现了齐鲁软件大赛系统的漏洞</a>
-                </h2>
-                <h6 class="card-subtitle mb-2 text-muted text-center">
-                    发布时间：<span>2019-09-22</span>&nbsp;
-                    修改时间：<span>2019-09-22</span>&nbsp;
-                    作者：<span>归零幻想</span>
-                </h6>
-                <hr>
-                <div class="card-text markdown-body"><p>事情起因是这样的：</p>
-<p>本来我计划今天处理齐软提交作品的事情，然而知乎真是好看……</p>
-<p>等我想起了这回事，提交信息后，先弹出修改成功提示，然后告诉我<strong>没有登录</strong>。</p>
-<p>what?没有登录但修改成功了？</p>
-</div>
-                <div class="row mt-3">
-                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/old/我发现了齐鲁软件大赛系统的漏洞.html">阅读全文 ▼</div>
-                </div>
-            </div>
-        </div>
-        <div class="card mt-3">
-            <div class="card-body">
-                <h2 class="card-title text-center">
-                    <a href="archieved/old/大型数组按行遍历与按列遍历的区别.html">大型数组按行遍历与按列遍历的区别</a>
-                </h2>
-                <h6 class="card-subtitle mb-2 text-muted text-center">
-                    发布时间：<span>2019-09-16</span>&nbsp;
-                    修改时间：<span>2019-09-16</span>&nbsp;
-                    作者：<span>归零幻想</span>
-                </h6>
-                <hr>
-                <div class="card-text markdown-body"><p>今天这学期开学第一天，上了《计算机操作系统原理》，老师提出个问题</p>
-<blockquote>
-<p>对于一个很大的数组（如<code>70000×70000</code>），按行遍历速度快还是按列遍历快，为什么？</p>
-</blockquote>
-<p>乍一看，程序时间复杂度一样，理论上不是应该一样快吗？难道老师在钓鱼？</p>
-<p>实践出真知，我们就写个程序跑一跑。</p>
-</div>
-                <div class="row mt-3">
-                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/old/大型数组按行遍历与按列遍历的区别.html">阅读全文 ▼</div>
-                </div>
-            </div>
-        </div>
-        <div class="card mt-3">
-            <div class="card-body">
-                <h2 class="card-title text-center">
-                    <a href="archieved/old/三门问题.html">三门问题</a>
-                </h2>
-                <h6 class="card-subtitle mb-2 text-muted text-center">
-                    发布时间：<span>2019-09-16</span>&nbsp;
-                    修改时间：<span>2019-09-16</span>&nbsp;
-                    作者：<span>归零幻想</span>
-                </h6>
-                <hr>
-                <div class="card-text markdown-body"><blockquote>
-<p>参赛者面前有三扇关闭着的门，其中一扇的后面是一辆汽车，选中后面有车的那扇门就可以赢得该汽车，
-而另外两扇门后面则各藏有一只山羊。当参赛者选定了一扇门，但未去开启它的时候，主持人会开启剩
-下两扇门中的一扇，露出其中一只山羊。主持人其后会问参赛者要不要更换选择，选另一扇仍然关着的门。</p>
-<blockquote>
-<p>那么，应不应该更换呢？</p>
-</blockquote>
-</blockquote>
-<p><img src="https://i.loli.net/2020/08/20/eWcOG6t1FpUD5mC.png" alt="1560925478346.png" /></p>
-</div>
-                <div class="row mt-3">
-                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/old/三门问题.html">阅读全文 ▼</div>
-                </div>
-            </div>
-        </div>
-        <div class="card mt-3">
-            <div class="card-body">
-                <h2 class="card-title text-center">
-                    <a href="archieved/old/闷声作大死：删除电脑内的空文件夹.html">闷声作大死：删除电脑内的空文件夹</a>
-                </h2>
-                <h6 class="card-subtitle mb-2 text-muted text-center">
-                    发布时间：<span>2019-06-11</span>&nbsp;
-                    修改时间：<span>2019-06-11</span>&nbsp;
-                    作者：<span>归零幻想</span>
-                </h6>
-                <hr>
-                <div class="card-text markdown-body"><p>电脑卸载软件时，卸载程序常常不会把程序对应的空文件夹删掉，一般这时候我都是手动去把他删掉。</p>
-<p>我觉得有点麻烦，又想到电脑内可能还有其他的空文件夹。于是在网上找了个脚本删除电脑内的空文件夹，然后就遇到了麻烦……</p>
-<p>也许本文标题应该是<strong>一个空文件夹引发的血案</strong>……</p>
-</div>
-                <div class="row mt-3">
-                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/old/闷声作大死：删除电脑内的空文件夹.html">阅读全文 ▼</div>
-                </div>
-            </div>
-        </div>
-        <div class="card mt-3">
-            <div class="card-body">
-                <h2 class="card-title text-center">
-                    <a href="archieved/old/在Windows10上安装血战上海滩.html">在Windows10上安装血战上海滩</a>
-                </h2>
-                <h6 class="card-subtitle mb-2 text-muted text-center">
-                    发布时间：<span>2019-06-01</span>&nbsp;
-                    修改时间：<span>2019-06-01</span>&nbsp;
-                    作者：<span>归零幻想</span>
-                </h6>
-                <hr>
-                <div class="card-text markdown-body"><p>《血战上海滩》是由北京欢乐亿派科技有限公司开发的单机FPS游戏，发行于2003年，是一个非常经典的老游戏了。
-近来我打算把这个游戏找出来再玩一遍，可是在Windows10上安装还是有些问题……</p>
-<p><img src="/res/img/shanghai1.png" alt="血战上海滩" title="血战上海滩" /></p>
-</div>
-                <div class="row mt-3">
-                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/old/在Windows10上安装血战上海滩.html">阅读全文 ▼</div>
-                </div>
-            </div>
-        </div>
-        <div class="card mt-3">
-            <div class="card-body">
-                <h2 class="card-title text-center">
-                    <a href="archieved/old/数据结构第三次测试.html">数据结构第三次测试</a>
-                </h2>
-                <h6 class="card-subtitle mb-2 text-muted text-center">
-                    发布时间：<span>2019-06-01</span>&nbsp;
-                    修改时间：<span>2019-06-01</span>&nbsp;
-                    作者：<span>归零幻想</span>
-                </h6>
-                <hr>
-                <div class="card-text markdown-body"><blockquote>
-<p>数据结构测试，树部分，水题</p>
-</blockquote>
-<h2 id="一">一</h2>
-<p>假设二叉树的数据元素为字符，采用二叉链式存储结构。二叉树ADT实现的大部分代码已经给出，其中采用完全前序序列创建二叉树。请补充写出下列两个操作函数。</p>
-<blockquote>
-<p>注意： 答案区只写出两个函数，其他代码不允许修改和重写、提交！</p>
-</blockquote>
-<ol>
-<li>计算以某结点为根的二叉树的高度；</li>
-<li>以前序顺序输出各个元素结点为根的子树的高度；</li>
-</ol>
-<p>例如：有如右图的二叉树   <img src="https://i.loli.net/2020/08/20/axyNCbMzRcpDtY7.jpg" alt="1559400741461.jpg" /></p>
-<h3 id="输入">输入</h3>
-<pre><code>ABD@@E@@C@F@@
-</code></pre>
-<h3 id="输出">输出</h3>
-<pre><code>Height(A)=3
-Height(B)=2
-Height(D)=1
-Height(E)=1
-Height(C)=2
-Height(F)=1
-</code></pre>
-</div>
-                <div class="row mt-3">
-                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/old/数据结构第三次测试.html">阅读全文 ▼</div>
-                </div>
-            </div>
-        </div>
-        <!--页码-->
-        <nav aria-label="Page navigation row">
-            <ul class="pagination mt-3 justify-content-center">
-                <li class="page-item"><a class="page-link" href="/">First</a>
-                </li>
-                <li class="page-item">
-                    
-                    <a class="page-link" href="/index4.html">4</a>
-                </li>
-                <li class="page-item active">
-                    <span class="page-link">5</span>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="/index6.html">6</a>
-                </li>
-                <li class="page-item"></li>
-                <li class="page-item"></li>
-                <li class="page-item"><a class="page-link"
-                        href="/index8.html">Last</a></li>
-                <input id="in_page" type="text" class="form-control col-2 xs-offset-1 d-none d-lg-block offset-1"
-                    placeholder="输入页码" onkeyup="this.value=this.value.replace(/\D/g,'')"
-                    onafterpaste="this.value=this.value.replace(/\D/g,'')">
-                <button id="btn_go" class="btn btn-primary">Go</button>
-            </ul>
-        </nav>
-        <!-- 页脚 -->
-        <footer class="navbar navbar-light bg-light">
-            <p>版权所有：归零幻想 ┊ 备案号：<a href="http://beian.miit.gov.cn/">暂无</a>┊ Powered by：归零幻想</p>
-        </footer>
+    <a>欢迎造访归零幻想的个人主页</a>
+    <hr>
+    <blockquote>
+        这人又在折腾自己的博客，刚折腾到一半，所以是这个鬼样子。
+    </blockquote>
+    <div>
+        <a href="article/3/9.html">人工智能知识点整理</a>
+    </div>
+    <div>
+        <a href="article/5/7.html">android项目开发：通知</a>
+    </div>
+    <div>
+        <a href="article/4/8.html">android项目开发：UI设计</a>
+    </div>
+    <div>
+        <a href="article/4/0.html">计算机操作系统原理笔记</a>
+    </div>
+    <div>
+        <a href="article/3/1.html">大型数组按行遍历与按列遍历的区别</a>
+    </div>
+    <div>
+        <a href="article/3/7.html">闷声作大死：删除电脑内的空文件夹</a>
+    </div>
+    <div>
+        <a href="article/4/3.html">数据结构第三次测试</a>
+    </div>
+    <div>
+        <a href="article/3/2.html">在Windows10上安装血战上海滩</a>
+    </div>
+    <div>
+        <a href="article/9/3.html">统计递归子问题个数</a>
+    </div>
+    <div>
+        <a href="article/3/0.html">二叉树ADT的实现</a>
+    </div>
+    <hr>
+    <div>
+        
+        <a href="/index4.html">上一页</a>
+    </div>
+    <div>
+        <a href="/index6.html">下一页</a>
     </div>
 </body>
-
 </html>

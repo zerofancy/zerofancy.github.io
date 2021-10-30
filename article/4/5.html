@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    <title>Hello, world!</title>
+</head>
+
+<body>
+    <nav class="container navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="/favicon.ico" alt="归零幻想" width="20px" height="20px">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/">Home</a>
+                    </li>
+                <!--
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Dropdown
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="#">Action</a></li>
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                    </li>
+                -->
+                </ul>
+                <!--
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+                -->
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-3">
+        <div class="row">
+            <div class="card col-md-4 d-none d-md-block me-md-3 text-center" style="width: 18rem;">
+                <img src="/favicon.ico" alt="avatar" class="mt-3">
+                <div class="card-body">
+                    <p class="card-text">
+                        归零幻想
+                    </p>
+                </div>
+            </div>
+    
+            <div class="card col">
+                <div class="card-body"><p>虽然已经在字节实习并拿到转正offer，但实际我自己感受我现在对安卓基础知识掌握的程度还差很多，感觉写业务代码本身并不能带来多少提升。</p>
+<p>恰逢前两天看到黄正楠那里有一本看上去不错的书<sup id="fnref-1"><a class="footnote-ref" href="#fn-1">1</a></sup>，而在淘宝也在打折，就买了一本。</p>
+<p>那么从Hello Wrold开始，先看看安卓项目的项目结构。</p>
+<!--summary-->
+<div class="toc">
+<h2>目录</h2>
+<ul>
+<li><a href="#gradle和idea">.gradle和.idea</a></li>
+<li><a href="#app">app</a>
+<ul>
+<li><a href="#build">build</a></li>
+<li><a href="#libs">libs</a></li>
+<li><a href="#src">src</a>
+<ul>
+<li><a href="#androidtest">androidTest</a></li>
+<li><a href="#test">test</a></li>
+<li><a href="#main">main</a>
+<ul>
+<li><a href="#java">java</a></li>
+<li><a href="#res">res</a></li>
+<li><a href="#androidmanifestxml">AndroidManifest.xml</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#gitignore">.gitignore</a></li>
+<li><a href="#buildgradle">build.gradle</a></li>
+<li><a href="#proguard-rulespro">proguard-rules.pro</a></li>
+</ul>
+</li>
+<li><a href="#build-1">build</a></li>
+<li><a href="#gradle">gradle</a></li>
+<li><a href="#gitignore-1">.gitignore</a></li>
+<li><a href="#buildgradle-1">build.gradle</a></li>
+<li><a href="#gradleproperties">gradle.properties</a></li>
+<li><a href="#gradlew和gradlewbat">gradlew和gradlew.bat</a></li>
+<li><a href="#localproperties">local.properties</a></li>
+<li><a href="#settingsgradle">settings.gradle</a></li>
+</ul>
+</div>
+<h2 id="gradle和idea">.gradle和.idea</h2>
+<p>Android Studio自动生成的文件，无需关心。</p>
+<h2 id="app">app</h2>
+<p>项目中的代码、资源等内容。</p>
+<h3 id="build">build</h3>
+<p>编译时自动生成的文件，不需要关心。</p>
+<h3 id="libs">libs</h3>
+<p>存放项目中的第三方jar包，这个目录下的jar包会自动添加到项目的构建路径下。</p>
+<h3 id="src">src</h3>
+<h4 id="androidtest">androidTest</h4>
+<p>Android Test测试用例，可以对项目进行一些自动化测试。</p>
+<blockquote>
+<p>实际上在公司里发现基本不写测试用例，全靠QA瞎几把点。</p>
+</blockquote>
+<h4 id="test">test</h4>
+<p>用来编写单元测试用例，对项目进行自动化测试。</p>
+<blockquote>
+<p>这里的测试用例是不依赖安卓框架的。</p>
+</blockquote>
+<h4 id="main">main</h4>
+<h5 id="java">java</h5>
+<p>存放所有java代码（和Kotlin代码）的地方。</p>
+<h5 id="res">res</h5>
+<p>项目的资源文件夹，项目中使用到的所有图片、布局、字符串等资源都存在这个目录下。</p>
+<p>图片存放在<code>drawable</code>目录下，布局存放在<code>layout</code>目录下，字符串存放在<code>values</code>目录下。</p>
+<p><code>mipmap</code>存放图标，之所以有很多<code>mipmap</code>目录是为了适配各种设备。若只有一份图片，那么放在<code>xxhdpi</code>下就可以了。</p>
+<h5 id="androidmanifestxml">AndroidManifest.xml</h5>
+<p>整个Android项目的配置文件，程序中定义的四大组件都需要在这个文件中注册。此外，还可以在这个文件中添加应用程序的权限声明。</p>
+<h3 id="gitignore">.gitignore</h3>
+<p>类似外层的<code>.gitignore</code>，用来在版本控制系统中排除app模块中的指定文件。</p>
+<h3 id="buildgradle">build.gradle</h3>
+<p>app模块的gradle构建脚本，指定很多项目构建相关的配置。</p>
+<p>插件<code>com.android.application</code>用于应用程序模块，<code>com.android.library</code>表示库模块。前者可以直接运行，后者只能作为代码库依附于应用程序模块运行。</p>
+<h3 id="proguard-rulespro">proguard-rules.pro</h3>
+<p>指定项目代码的混淆方式。</p>
+<h2 id="build-1">build</h2>
+<p>编译时自动生成的内容。</p>
+<h2 id="gradle">gradle</h2>
+<p>gradle wrapper的配置文件。Android Studio会根据本地的缓存i去=情况决定是否需要联网下载gradle。</p>
+<h2 id="gitignore-1">.gitignore</h2>
+<p>排除文件或文件夹的git版本控制。</p>
+<blockquote>
+<p>对于所有项目都会用到的<code>.gitignore</code>条目，不妨加入<code>~/.gitignore</code>全局配置。</p>
+</blockquote>
+<h2 id="buildgradle-1">build.gradle</h2>
+<p>项目全局的构建脚本。</p>
+<p>repositories中，<code>google()</code>对应谷歌自家代码仓库依赖，<code>jcenter()</code>中则是很多第三方开源库。</p>
+<h2 id="gradleproperties">gradle.properties</h2>
+<p>全局gradle的配置文件。</p>
+<h2 id="gradlew和gradlewbat">gradlew和gradlew.bat</h2>
+<p>这两个文件是用来在命令行界面执行gradle命令的，其中<code>gradlew</code>是在Linux或Mac系统中使用的，<code>gradlew.bat</code>是在Windows系统中使用的。</p>
+<h2 id="localproperties">local.properties</h2>
+<p>用于指定本机中的Android SDK路径。</p>
+<h2 id="settingsgradle">settings.gradle</h2>
+<p>用来指定项目中所有引入的模块。</p>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn-1">
+<p>《第一行代码》</p>
+<a href="#fnref-1" class="footnote-backref">&#8617;</a>
+</li>
+</ol>
+</div>
+</div>
+            </div>
+    
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

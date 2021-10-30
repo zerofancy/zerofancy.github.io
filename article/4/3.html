@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    <title>Hello, world!</title>
+</head>
+
+<body>
+    <nav class="container navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="/favicon.ico" alt="归零幻想" width="20px" height="20px">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/">Home</a>
+                    </li>
+                <!--
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Dropdown
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="#">Action</a></li>
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                    </li>
+                -->
+                </ul>
+                <!--
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+                -->
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-3">
+        <div class="row">
+            <div class="card col-md-4 d-none d-md-block me-md-3 text-center" style="width: 18rem;">
+                <img src="/favicon.ico" alt="avatar" class="mt-3">
+                <div class="card-body">
+                    <p class="card-text">
+                        归零幻想
+                    </p>
+                </div>
+            </div>
+    
+            <div class="card col">
+                <div class="card-body"><blockquote>
+<p>数据结构测试，树部分，水题</p>
+</blockquote>
+<h2 id="一">一</h2>
+<p>假设二叉树的数据元素为字符，采用二叉链式存储结构。二叉树ADT实现的大部分代码已经给出，其中采用完全前序序列创建二叉树。请补充写出下列两个操作函数。</p>
+<blockquote>
+<p>注意： 答案区只写出两个函数，其他代码不允许修改和重写、提交！</p>
+</blockquote>
+<ol>
+<li>计算以某结点为根的二叉树的高度；</li>
+<li>以前序顺序输出各个元素结点为根的子树的高度；</li>
+</ol>
+<p>例如：有如右图的二叉树   <img src="https://i.loli.net/2020/08/20/axyNCbMzRcpDtY7.jpg" alt="1559400741461.jpg" /></p>
+<h3 id="输入">输入</h3>
+<pre><code>ABD@@E@@C@F@@
+</code></pre>
+<h3 id="输出">输出</h3>
+<pre><code>Height(A)=3
+Height(B)=2
+Height(D)=1
+Height(E)=1
+Height(C)=2
+Height(F)=1
+</code></pre>
+<!--summary-->
+<p>已给出的代码如下：</p>
+<pre><code class="language-c++">#include &lt;iostream&gt;
+#include &lt;stdlib.h&gt;
+using namespace std;
+
+//数据元素类型
+typedef char ElemType;
+
+//二叉树结点定义
+typedef struct TreeNode
+{	ElemType data;
+	struct TreeNode *lson, *rson;
+} TreeNode;
+
+//二叉树类
+class BinaryTree
+{  private:
+	TreeNode *root;
+   public:
+	BinaryTree() { root = NULL; };
+	~BinaryTree() { MakeEmpty(root); }
+	void MakeEmpty(TreeNode *t);
+	void create( ) { root = cp_create(root); };  //完全前序建立二叉树，空指针用@表示
+	TreeNode *cp_create(TreeNode *t);
+	
+	//******  要补充的函数height ********
+	int height(TreeNode *t) ;    //求二叉树的高度
+
+	void output() { Pro_height(root); };
+	//******  要补充的函数 Pro_height **********
+	void Pro_height(TreeNode *t);  // 前序顺序输出各个元素结点为根的子树的高度      
+};
+
+//二叉树置空
+void BinaryTree::MakeEmpty(TreeNode *t)
+{	if (t != NULL)
+	{	MakeEmpty(t-&gt;lson);
+		MakeEmpty(t-&gt;rson);
+		delete t;
+	}
+}
+
+//完全前序序列创建二叉树，空指针用@表示
+TreeNode *BinaryTree::cp_create(TreeNode *t)
+{	ElemType v;
+	cin &gt;&gt; v;
+	if (v != '@')
+	{	t = new TreeNode;
+		t-&gt;data = v;
+		t-&gt;lson = cp_create(t-&gt;lson);
+		t-&gt;rson = cp_create(t-&gt;rson);
+	}
+	else t = NULL;
+	return t;
+}
+//********************  需要补充写出的两个函数  ****************************
+
+
+
+//*******************************************************************************
+
+//主函数
+int main()
+{	BinaryTree t;
+	t.create();
+	t.output();	
+	return 0;
+}
+</code></pre>
+<h3 id="answer">Answer</h3>
+<p>求树高度，递归。貌似没有必要判断lson和rson是否为空，不过凑合着吧……</p>
+<pre><code class="language-c++">int BinaryTree::height(TreeNode* t)
+{
+    if(t==NULL){
+        return 0;
+    }
+    int l=0,r=0;
+    if(t-&gt;lson!=NULL){
+        l=height(t-&gt;lson);
+    }
+    if(t-&gt;rson!=NULL){
+        r=height(t-&gt;rson);
+    }
+    return max(l,r)+1;
+}
+
+void BinaryTree::Pro_height(TreeNode* t)
+{
+    if(t==NULL){
+        return;
+    }
+    cout&lt;&lt;&quot;Height(&quot;&lt;&lt;t-&gt;data&lt;&lt;&quot;)=&quot;&lt;&lt;height(t)&lt;&lt;endl;
+    Pro_height(t-&gt;lson);
+    Pro_height(t-&gt;rson);
+}
+
+</code></pre>
+<h2 id="二">二</h2>
+<p>假设二叉树的数据元素为字符，采用二叉链式存储结构。二叉树ADT实现的大部分代码已经给出，其中二叉树采用完全前序序列创建。请补充一个二叉树的输出函数，要求按目录缩进的形式输出一棵二叉树，同时要输出目录的层次。层次占2位、元素占1位，间隔4个位置（即共占7个位置）。</p>
+<blockquote>
+<p>注意：答案区只写指定补充的函数代码，其他给定的代码不允许重写、修改和提交！</p>
+</blockquote>
+<p>例如：有如右图的二叉树   <img src="/file/down/1559400741461.jpg" alt="二叉树" title="二叉树" /></p>
+<h3 id="输入-1">输入</h3>
+<pre><code>ABD@@E@@C@F@@
+</code></pre>
+<h3 id="输出-1">输出：</h3>
+<pre><code> 1A
+          2B
+                   3D
+                   3E
+         2C
+                   3F
+</code></pre>
+<p>给出的代码如下：</p>
+<pre><code class="language-c++">#include &lt;iostream&gt;
+#include &lt;stdlib.h&gt;
+#include&lt;stdio.h&gt;
+using namespace std;
+
+//数据元素类型
+typedef char ElemType;
+
+//二叉树结点定义
+typedef struct TreeNode
+
+{	ElemType data;
+	struct TreeNode *lson, *rson;
+} TreeNode;
+
+//二叉树类
+class BinaryTree
+{ private:
+	TreeNode *root;
+  public:
+	BinaryTree() { root = NULL; };
+	~BinaryTree() { MakeEmpty(root); }
+	void MakeEmpty(TreeNode *t);
+	void create( ) { root = cp_create(root); };  //完全前序建立二叉树，空指针用@表示
+	TreeNode *cp_create(TreeNode *t);
+	void output( ) { Index_print(root,1); };
+	//*********** 下面是需要自己完成的函数 ******************   
+	void Index_print(TreeNode *t,int l);  //缩进目录形式输出二叉树      
+};
+
+//二叉树置空
+void BinaryTree::MakeEmpty(TreeNode *t)
+{	if (t != NULL)
+	{	MakeEmpty(t-&gt;lson);
+		MakeEmpty(t-&gt;rson);
+		delete t;
+	}
+}
+
+//完全前序序列创建二叉树，空指针用@表示
+TreeNode *BinaryTree::cp_create(TreeNode *t)
+{	ElemType v;
+	cin &gt;&gt; v;
+	if (v != '@')
+	{	t = new TreeNode;
+		t-&gt;data = v;
+		t-&gt;lson = cp_create(t-&gt;lson);
+		t-&gt;rson = cp_create(t-&gt;rson);
+	}
+	else t = NULL;
+	return t;
+}
+
+//*****下面是要补充的函数Index_print  *************
+
+//*************************************************
+
+//主函数
+
+int main()
+{	BinaryTree t;
+	t.create();      //创建二叉树
+	t.output();       //按规定格式输出二叉树
+	cout&lt;&lt; endl;
+	return 0;
+}
+</code></pre>
+<h3 id="answer-1">Answer</h3>
+<p>完全前序遍历，递归，注意输出格式。</p>
+<pre><code class="language-c++">void BinaryTree::Index_print(TreeNode* t, int l)
+{
+    if(t==NULL){
+        return;
+    }
+    cout&lt;&lt;' ';
+    for(int i=0;i&lt;l-1;i++){
+        cout&lt;&lt;&quot;       &quot;;
+    }
+    cout&lt;&lt;l&lt;&lt;t-&gt;data&lt;&lt;endl;
+    Index_print(t-&gt;lson,l+1);
+    Index_print(t-&gt;rson,l+1);
+}
+
+</code></pre>
+</div>
+            </div>
+    
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

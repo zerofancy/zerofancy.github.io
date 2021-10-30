@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    <title>Hello, world!</title>
+</head>
+
+<body>
+    <nav class="container navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="/favicon.ico" alt="归零幻想" width="20px" height="20px">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/">Home</a>
+                    </li>
+                <!--
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Dropdown
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="#">Action</a></li>
+                            <li><a class="dropdown-item" href="#">Another action</a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                    </li>
+                -->
+                </ul>
+                <!--
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+                -->
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-3">
+        <div class="row">
+            <div class="card col-md-4 d-none d-md-block me-md-3 text-center" style="width: 18rem;">
+                <img src="/favicon.ico" alt="avatar" class="mt-3">
+                <div class="card-body">
+                    <p class="card-text">
+                        归零幻想
+                    </p>
+                </div>
+            </div>
+    
+            <div class="card col">
+                <div class="card-body"><p>分治策略是算法设计的重要策略之一，该策略的基本思想是把问题进行分解成一些子问题，通过子问题的求解完成对原问题的求解。其关键是分解和合并，好的分解或合并方法才会产生高效的分治算法。</p>
+<p>分治策略设计出的算法最常见的就是递归算法。但是如果在分解时，分解出的子问题有很多是重复的，那么这样的分治（递归）算法求解问题的效率就非常低。例如斐波那契数问题，如果采用递归求解，算法效率非常低：O(2^n)。而如果采用递推求解(动态规划自底向上求解)，算法效率非常高：O(n)。</p>
+<h2 id="question">Question</h2>
+<p>现在请你编写程序，统计计算一个斐波那契数时分解出的各子问题的个数。</p>
+<p>斐波那契数的定义如下：</p>
+<pre><code>Fib(0)=0
+Fib(1)=1
+Fib(n)=Fib(n-1)+Fib(n-2)
+</code></pre>
+<p>输入：一个整数n，即计算<code>Fib(n)</code></p>
+<p>输出：n+1行，即各个子问题的值及该子问题的个数。</p>
+<!--summary-->
+<h2 id="example">Example</h2>
+<h3 id="input">Input</h3>
+<pre><code>5
+</code></pre>
+<h3 id="output">Output</h3>
+<pre><code>Fib(0)=0,spn=3
+Fib(1)=1,spn=5
+Fib(2)=1,spn=3
+Fib(3)=2,spn=2
+Fib(4)=3,spn=1
+Fib(5)=5,spn=1
+</code></pre>
+<h2 id="分析">分析</h2>
+<p>一大段分治思想的介绍，递归与递推的区别，我以为这题用递归会超时，要用递推求解，于是入坑……</p>
+<p>这题要统计子问题个数，递推或者递归加备忘录根本没重复的计算怎么统计……</p>
+<p>不死心的我又仔细研究递推子问题个数的规律，发现子问题个数正好是一个反着的斐波那契数列（结尾元素特殊处理），所以可以正向递推求数列，反向递推求子问题个数。</p>
+<p>不过特殊情况研究的有点头疼，暂时就不搞了，下面给出的是老老实实递归求解的程序。</p>
+<h2 id="answer">Answer</h2>
+<pre><code class="language-c++">#include &lt;iostream&gt;
+#include &lt;cstring&gt;
+
+using namespace std;
+
+int*spn;
+int*data;
+
+int fib(int n){
+    spn[n]++;
+    if(n==0){
+        data[0]=0;
+        return 0;
+    }
+    if(n==1){
+        data[1]=1;
+        return 1;
+    }
+    int res=fib(n-1)+fib(n-2);
+    data[n]=res;
+    return res;
+}
+
+int main()
+{
+    int n;
+    cin&gt;&gt;n;
+    spn=new int[n+1];
+    data=new int[n+1];
+    memset(spn,0,(n+1)*sizeof(int));
+
+    memset(data,-1,(n+1)*sizeof(int));
+    data[0]=0;
+    data[1]=1;
+    fib(n);
+
+    for(int i=0;i&lt;=n;i++){
+        cout&lt;&lt;&quot;Fib(&quot;&lt;&lt;i&lt;&lt;&quot;)=&quot;&lt;&lt;data[i]&lt;&lt;&quot;,spn=&quot;&lt;&lt;spn[i]&lt;&lt;endl;
+    }
+    return 0;
+}
+
+</code></pre>
+</div>
+            </div>
+    
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

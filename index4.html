@@ -1,416 +1,52 @@
-<!DOCTYPE HTML>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="zh-Hans">
-
+<!DOCTYPE html>
+<html lang="zh-Hans">
 <head>
-    
-    <title>归零幻想的博客</title>
     <meta charset="UTF-8">
-    <!--移动设备不缩放-->
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="alternate" type="application/rss+xml" title="归零幻想" href="https://ntutn.top/rss.xml" />
-    <!--github的markdown样式-->
-    <link rel="stylesheet" href="/res/css/github-markdown.css">
-    <!--一个基于bootstrap的样式-->
-    <link rel="stylesheet" href="/res/css/main.css">
-
-    <script src="/res/js/jquery.min.js"></script>
-    <script src="/res/js/popper.min.js"></script>
-    <script src="/res/js/bootstrap.min.js"></script>
-    <script src="/res/js/sweetalert.min.js"></script>
-
-    <!---代码高亮-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/idea.min.css" integrity="sha512-Rfc5zQIp95eozfMCdS3B4MItUxU8orNje/t1OEhf7XwIk0DTCuMH2LG0NIgP8UGYK9L39WfUNI1c4IsM5yY/PA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-           
-    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/highlight.min.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/apache.min.js" integrity="sha512-gE8KAQyFIzV1C9+GZ8TKJHZS2s+n7EjNtC+IMRn1l5+WYJTHOODUM6JSjZhFhqXmc7bG8Av6XXpckA4tYhflnw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/bash.min.js" integrity="sha512-FKvOrHUlsJ2pKk+pk8D25a1wTvD5ab+tudQ9g3lJqMH9YtrpqHEbMEiCeU6HA5URAawnGJC0JfZLesDWkXYLyw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/basic.min.js" integrity="sha512-e+l7CY07JEoomaYRN0aCm+Nkj6PSnUTKqfNQzbH4uBAxa86Nqx8j+k20Pu9j4+dBgpPNkupUdAQlvmXLnjs6fQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/c.min.js" integrity="sha512-6uPEB+tN2jnZQ8gHNkW4ZiJbXUa7gIL21dsIS3UPAJyzRfDCLmm1hFGJmZ/l8RwBPeCiKTOg9BNCB+Bp9btrmA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/cmake.min.js" integrity="sha512-rGz7I/XUUa81jEKbxXuZFbh2KTx8M7uWE6kq/IOJHNyZcQP9r3HafPVnqGg81xeKJK1sUUmk5BM5zFJj6XsSOA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/cpp.min.js" integrity="sha512-hZq4EJY8EMM7w6kWktRCsnhWehJs4Tq3V8bccoMuVgwigDj5oKiLlRi59NKUw4Q43wZKK8brlPZl5r0Yo58ZXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/csharp.min.js" integrity="sha512-X18ZEfQ3SPnexB5QRmg4fp9QjaFa/jEiw7J1TsWWPIJGgvVyLXrI8fdaZOqbbsfX5byF9/CovS++zG5QL8EZ+A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/css.min.js" integrity="sha512-yZeVBJRfVCykn6i7I3NXhR2cA5OWI/YM9GlV9bO/KjrXaPSEnSau0OCnOa1ad5hA2LSq/3YB3p0sJTCH+OL3fQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/dockerfile.min.js" integrity="sha512-1Ei4BsbZ/bYV5hmzxHa6uzwr7ftc8uysn0U2RK2rJe+aN2O8mXespb6z8Y3xrDf5R7t7rObrLIKA5o3VU3eJFA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/dos.min.js" integrity="sha512-UAaZyglZlxoUkWirdjgTiE6kzsqUn4ZfMxD99eeRBcUCsq8pbt5arQRlGR9bXS9VHzL38KN6Rw8ozg3AJBfa7w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/go.min.js" integrity="sha512-EWROca+bote+7Oaaar1F6y74iZj1r1F9rm/ly7o+/FwJopbBaWtsFDmaKoZDd3QiGU2pGacBirHJNivmGLYrow==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/gradle.min.js" integrity="sha512-wlBnLL4IT1i9CSixtdYtmBFTn3pVD8qQRj6Ba58mhMwaFy/UrkOmmV7RgX22p6rn7j8VtN0lto/JJyyTFs/g7A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/groovy.min.js" integrity="sha512-dETjs4xDxipeZKHG1N/9cju7iw5ldaFHQJ/XK75EDv9cPaNV+FuORBmfMuwg6V5IudAzLnSFzi9ALGZFH6r5NQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/ini.min.js" integrity="sha512-ECe50ffxXzZnLKoKCn+r9ULj27e/6h6AFa1uFBgnQz2WVrPOZEsbEmUbt8rsQTUVo4X2s7EO29Bv9bVOBETuqw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/java.min.js" integrity="sha512-xEnylOTeZvxUCvtK9Lw3FjOgfCwsMEhUbx6Hant1lPgy+PcynqCm8XfqhpRos6XNaTxeMuT4QyrWyo3U1NijHg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/javascript.min.js" integrity="sha512-Mhvr+xy2hvcm9g/wPUirdSNSQVWZ6gBVOky3SOfYEAiKsMry6FhotoB/yPE37lYP46igpLUOXZK7uPBkdMZedQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/kotlin.min.js" integrity="sha512-WP/R3IrzEd0v0jF+/QdNvecCp5LF8LY2g3XDyVwumU2Rl+TL+VgKxwiNlMmz0ks0m/zpfzrE4yoQ97KPsD0KAg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/latex.min.js" integrity="sha512-xdAZ0+yuywvfmEJBe+VOGM46gkP7orEAlqzh5QQRjqIt+wnLbKQsUGqU0aCNaCbncVH0CZK62HRFappBhkDtsA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/makefile.min.js" integrity="sha512-HhumF7+woGiAuk8LFmeLWrR6ZOmEVKfdZOuIAfbyKYIIagPDI+3PkHT5yHNuSbuXbdcSSuA9iOgyFw1QAyF5Sw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/php.min.js" integrity="sha512-/4bsm6nfQWNGd6957+2xA9pcl/1OwrHDrx/vug0V/rr4dG4pMMuESaseX15pj7+pmhvZB6O/dNT4qA6/NQSVNQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/python.min.js" integrity="sha512-MbDu8Vk2zJLvSEzk4bOYrlcS+9WE39QPnxINj2aftAG63jxOhdP5p2/Ma6/D3C9IkT/xOjZTO8MtBCX8PI48BA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/shell.min.js" integrity="sha512-TBRe4v9USbfzECSiP8d6bQSSvqxHHbeMneQPNsU51SSVAaakOezeYI8sOBWdXh8GGc5vD28d1Sxzk+LgDM3dxA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/vbscript.min.js" integrity="sha512-MKguDuFJ+IM/Jm5SFVQsgy56sRCTjGOhuvvR94sGpYCXnO3Emu/egPCxtFprra3/gNpmIJKMp61VphygW7UCXQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/xml.min.js" integrity="sha512-42l52BYLobXrodiKIjvsxUSzwTMhnJww+Da1BZ771+rxtpWCeozwy4Mfca7DM+PRmfEQrGfyEI32kBi3b/0v/w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/languages/yaml.min.js" integrity="sha512-28oDiQZGKUVN6wQ7PSLPNipOcmkCALXKwOi7bnkyFf8QiMZQxG9EQoy/iiNx6Zxj2cG2SbVa4dXKigQhu7GiFw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-    <script>
-        function chkPage() {
-            var in_page = Number($("#in_page").val());
-            if (in_page <= 0 || in_page > Number($("#pagecount").val())) {
-                return false;
-            }
-            return true;
-        }
-        $(document).ready(function () {
-            $("#btn_go").click(function () {
-                if (chkPage()) {
-                    location.href = "/index" + ($("#in_page").val() == "1" ? "" : $("#in_page").val()) + ".html";
-                } else {
-                    swal(
-                        {
-                            title: "Tip",
-                            text: "您输入的页码超出范围！",
-                            type: "warning"
-                        }
-                    );
-                }
-            });
-            $(".card-text img").addClass("img-fluid");
-            $("#n_home").addClass("active");
-            //一言
-            $.get("https://v1.hitokoto.cn/", function (data, status) {
-                $("#hitokoto").text(data.hitokoto);
-                $("#from").text("——" + data.from);
-            });
-            // ajax
-            $(".btn-read-all").click(function () {
-                const url = $(this).attr("value")
-                $(this).parent().parent().find(".card-text").load(url + " .card-text")
-                $(this).hide()
-                return false
-            })
-            // 代码高亮
-            hljs.highlightAll() // 代码高亮
-        });
-    </script>
-    <style>
-        /*背景图片*/
-        body {
-            background: url(https://unsplash.it/1600/900?random);
-            background-attachment: fixed;
-            background-position: bottom center;
-            background-size: cover;
-        }
-    </style>
+    <title>归零幻想</title>
 </head>
-
 <body>
-    <input id="pagecount" type="hidden" value="8">
-    <div class="container">
-        <nav id="nav" class="navbar navbar-expand-lg navbar-light bg-light">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03"
-                aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <a class="navbar-brand" href="/"><img src="/res/logo.png" width="70" height="40"
-                    class="d-inline-block align-top" alt="">
-                <span>归零幻想的博客</span></a>
-
-            <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
-                <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                    <li id="n_home" class="nav-item">
-                        <a class="nav-link" href="/">主页</a>
-                    </li>
-                    <!-- <li id="n_tags" class="nav-item">
-                    <a class="nav-link" href="/tags">标签</a>
-                </li> -->
-                    <li id="n_about" class="nav-item">
-                        <a class="nav-link" href="https://channel.ntutn.workers.dev/" target="_blank">频道</a>
-                    </li>
-                    <li id="n_about" class="nav-item">
-                        <a class="nav-link" href="/friends.html">友链</a>
-                    </li>
-                    <li id="n_about" class="nav-item">
-                        <a class="nav-link" href="/about.html">关于</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/rss.xml">RSS</a>
-                    </li>
-                </ul>
-                <!-- <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0 disabled popover-dismiss" type="submit"
-                    data-toggle="popover" data-trigger="focus" title="未完成的功能"
-                    data-content="搜索功能暂时还没有完成。">Search</button>
-            </form> -->
-            </div>
-        </nav>
-        <nav class="mt-3" aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/">Home</a></li>
-            </ol>
-        </nav>
-        <div class="card text-black bg-light">
-            <div class="card-body">
-                <blockquote class="card-blockquote">
-                    <p id="hitokoto">溺死在零梦里吧。</p>
-                    <footer id="from" class="text-right">Someone famous in
-                        <cite title="Source Title">归零幻想</cite>
-                    </footer>
-                </blockquote>
-            </div>
-        </div>
-        <div class="card mt-3">
-            <div class="card-body">
-                <h2 class="card-title text-center">
-                    <a href="archieved/2020年11月前/给博客添加个RSS订阅功能.html">给博客添加个RSS订阅功能</a>
-                </h2>
-                <h6 class="card-subtitle mb-2 text-muted text-center">
-                    发布时间：<span>2020-09-11</span>&nbsp;
-                    修改时间：<span>2020-09-11</span>&nbsp;
-                    作者：<span>归零幻想</span>
-                </h6>
-                <hr>
-                <div class="card-text markdown-body"><p>虽然RSS阅读器开始变得小众了，但我还是很喜欢的，这样我能划出每天固定的时间看我关注的博客有没有更新，看我关注的人有没有发知乎动态<sup id="fnref-1"><a class="footnote-ref" href="#fn-1">1</a></sup>，这两天想起来给自己博客也加上了RSS订阅功能，虽然不见得有人看就是了。</p>
-<div class="footnotes">
-<hr />
-<ol>
-<li id="fn-1">
-<p>这个实现起来要一些奇技淫巧……</p>
-<a href="#fnref-1" class="footnote-backref">&#8617;</a>
-</li>
-</ol>
-</div>
-</div>
-                <div class="row mt-3">
-                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/2020年11月前/给博客添加个RSS订阅功能.html">阅读全文 ▼</div>
-                </div>
-            </div>
-        </div>
-        <div class="card mt-3">
-            <div class="card-body">
-                <h2 class="card-title text-center">
-                    <a href="archieved/2020年11月前/博客图片居中点击缩放.html">博客图片居中点击缩放</a>
-                </h2>
-                <h6 class="card-subtitle mb-2 text-muted text-center">
-                    发布时间：<span>2020-09-09</span>&nbsp;
-                    修改时间：<span>2020-09-09</span>&nbsp;
-                    作者：<span>归零幻想</span>
-                </h6>
-                <hr>
-                <div class="card-text markdown-body"><p>一图胜千言，图片对于一篇文章来说还是很重要的。</p>
-<p><img src="https://indrimuska.github.io/zoomify/img/img-1.jpg" alt="zoomify" /></p>
-<p><em>上图来自zoomify的github仓库</em></p>
-</div>
-                <div class="row mt-3">
-                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/2020年11月前/博客图片居中点击缩放.html">阅读全文 ▼</div>
-                </div>
-            </div>
-        </div>
-        <div class="card mt-3">
-            <div class="card-body">
-                <h2 class="card-title text-center">
-                    <a href="archieved/2020年11月前/写产品和写demo的区别.html">写产品和写demo的区别</a>
-                </h2>
-                <h6 class="card-subtitle mb-2 text-muted text-center">
-                    发布时间：<span>2020-09-08</span>&nbsp;
-                    修改时间：<span>2020-09-08</span>&nbsp;
-                    作者：<span>归零幻想</span>
-                </h6>
-                <hr>
-                <div class="card-text markdown-body"><p>上次写的功能灰度报了几例crash，定位是我这里某个变量NPE了。</p>
-<p>说实话，在Java中NPE是我们最常打交道的异常了，但Kotlin提供的类型机制下，NPE很少了。而这里出现NPE，其实是因为我认定在当前这个流程中这个变量不会为空——你总是要先弹出菜单再点击菜单项吧，所以用了<code>data!!.id</code>的方式使用。</p>
-<p>这个变量被赋值的地方只有三处，不存在多线程问题，我想破脑袋也不知道哪里为空了。最后处理只得暂时加上判空，先不崩再说。</p>
-<p>请教同事，同事说我这是还没有分清 <strong>写产品和写demo的区别</strong> 。</p>
-</div>
-                <div class="row mt-3">
-                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/2020年11月前/写产品和写demo的区别.html">阅读全文 ▼</div>
-                </div>
-            </div>
-        </div>
-        <div class="card mt-3">
-            <div class="card-body">
-                <h2 class="card-title text-center">
-                    <a href="archieved/2020年11月前/EventBus初探.html">EventBus初探</a>
-                </h2>
-                <h6 class="card-subtitle mb-2 text-muted text-center">
-                    发布时间：<span>2020-09-08</span>&nbsp;
-                    修改时间：<span>2020-09-08</span>&nbsp;
-                    作者：<span>归零幻想</span>
-                </h6>
-                <hr>
-                <div class="card-text markdown-body"><p>抖音项目中大量运用了EventBus[^1]，这两天在做的需求相关的代码也用到了，于是还是要先去研究下这个EventBus是什么。</p>
-<p>EventBus，顾名思义，事件总线，是一个安卓上的事件管理平台。用事件驱动的机制来简化事件传递的逻辑。在这层意义上也许可以类比<code>Qt</code>的信号槽机制，或者安卓的广播。当你需要把一个事件传递给多个对象，EventBus就变得非常有用。</p>
-<p><img src="https://github.com/greenrobot/EventBus/raw/master/EventBus-Publish-Subscribe.png" alt="EventBus" /></p>
-<p><em>该图片来自EventBus的github仓库</em></p>
-</div>
-                <div class="row mt-3">
-                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/2020年11月前/EventBus初探.html">阅读全文 ▼</div>
-                </div>
-            </div>
-        </div>
-        <div class="card mt-3">
-            <div class="card-body">
-                <h2 class="card-title text-center">
-                    <a href="archieved/2020年11月前/在github pages部署你的博客.html">在github pages部署你的博客</a>
-                </h2>
-                <h6 class="card-subtitle mb-2 text-muted text-center">
-                    发布时间：<span>2020-08-21</span>&nbsp;
-                    修改时间：<span>2020-08-21</span>&nbsp;
-                    作者：<span>归零幻想</span>
-                </h6>
-                <hr>
-                <div class="card-text markdown-body"><p>废话不多说，直接开搞。</p>
-<h2 id="部署">部署</h2>
-<ol>
-<li>在github创建一个仓库，名为<code>[uzername].github.io</code>，如<code>zerofancy.github.io</code></li>
-<li>将你的网页提交到这个仓库。</li>
-<li>直接访问<code>[username].github.io</code></li>
-</ol>
-<h2 id="绑定域名">绑定域名</h2>
-<ol>
-<li>将你的域名@和www以CNAME方式绑定到<code>[username].github.io</code></li>
-<li>在你的仓库根目录提交一个<code>CNAME</code>文件，内容为你的域名，如<code>ntutn.top</code></li>
-<li>在仓库的设置中找到<code>Custom domain</code>，填入并保存。如果下面的<code>Enforce HTTPS</code>不可用，清除`Custom domain保存并重新设置一次试试。</li>
-</ol>
-</div>
-                <div class="row mt-3">
-                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/2020年11月前/在github pages部署你的博客.html">阅读全文 ▼</div>
-                </div>
-            </div>
-        </div>
-        <div class="card mt-3">
-            <div class="card-body">
-                <h2 class="card-title text-center">
-                    <a href="archieved/2020年11月前/kmdblog，又一个博客系统.html">kmdblog，又一个博客系统</a>
-                </h2>
-                <h6 class="card-subtitle mb-2 text-muted text-center">
-                    发布时间：<span>2020-08-21</span>&nbsp;
-                    修改时间：<span>2020-08-21</span>&nbsp;
-                    作者：<span>归零幻想</span>
-                </h6>
-                <hr>
-                <div class="card-text markdown-body"><p>博客系统至今为止我做过3个版本了，毕竟只要写出CRUD就可以厚着脸皮说自己是个博客，是新手练手的良好选择。当前这个版本是Kotlin练手项目，与之前不同的是，当前版本是一个生成静态网页的系统。类似hexo，在本地编辑好<code>md</code>文件，再执行程序生成<code>html</code>，发布静态网页即可。</p>
-<h2 id="背景">背景</h2>
-<ol>
-<li>主要是练手的考虑。今年暑假在字节跳动实习，在安卓这边，第一次接触<code>Kotlin</code>，于是想到写点什么练手。</li>
-<li>服务器要花钱的，学生优惠一个月￥10左右，而我博客使用频率较低，不想出这钱了……</li>
-</ol>
-</div>
-                <div class="row mt-3">
-                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/2020年11月前/kmdblog，又一个博客系统.html">阅读全文 ▼</div>
-                </div>
-            </div>
-        </div>
-        <div class="card mt-3">
-            <div class="card-body">
-                <h2 class="card-title text-center">
-                    <a href="archieved/old/重装机兵.html">重装机兵</a>
-                </h2>
-                <h6 class="card-subtitle mb-2 text-muted text-center">
-                    发布时间：<span>2019-03-25</span>&nbsp;
-                    修改时间：<span>2020-08-17</span>&nbsp;
-                    作者：<span>归零幻想</span>
-                </h6>
-                <hr>
-                <div class="card-text markdown-body"><h2 id="拉多梦的起点">拉多：梦的起点</h2>
-<p>主角，一个满脑子都是不切实际的想法的负气出走的小毛孩，开始了他伟大的征途。这里就按照后面作品的称号吧。</p>
-<p>首先回家，箱子里面有5G，聊胜于无吧。去买几个参丸，准备，走。</p>
-</div>
-                <div class="row mt-3">
-                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/old/重装机兵.html">阅读全文 ▼</div>
-                </div>
-            </div>
-        </div>
-        <div class="card mt-3">
-            <div class="card-body">
-                <h2 class="card-title text-center">
-                    <a href="archieved/2020年11月前/Kotlin中的单例模式.html">Kotlin中的单例模式</a>
-                </h2>
-                <h6 class="card-subtitle mb-2 text-muted text-center">
-                    发布时间：<span>2020-08-07</span>&nbsp;
-                    修改时间：<span>2020-08-14</span>&nbsp;
-                    作者：<span>归零幻想</span>
-                </h6>
-                <hr>
-                <div class="card-text markdown-body"><p>这两天要学习埋点相关的知识，做抖音某页面跳转的埋点，于是就去看下单例模式在<code>Kotlin</code>的实现。</p>
-<h2 id="单例模式">单例模式</h2>
-<p>单例模式是一种常用的软件设计模式，属于创建型模式的一种。许多时候整个系统只需要拥有某个类的一个全局对象，用于协调系统整体的行为。比如我正打算做的这个埋点，这段计时的逻辑就比较适合用单例模式。</p>
-<p>单例模式创建的对象会长期存在，所以一般比较关注它的内存占用问题，希望只有方法被调用才创建对象。这样就在多线程的场景会遇到一些问题，即当两个线程同时调用<code>getInstance()</code>时，都检测到<code>instance</code>为<code>null</code>并各自创建对象，这样就有两个实例被创建，违背了单例模式的原则。</p>
-</div>
-                <div class="row mt-3">
-                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/2020年11月前/Kotlin中的单例模式.html">阅读全文 ▼</div>
-                </div>
-            </div>
-        </div>
-        <div class="card mt-3">
-            <div class="card-body">
-                <h2 class="card-title text-center">
-                    <a href="archieved/old/掉坑的日常：springboot的json属性名大小写问题.html">掉坑的日常：springboot的json属性名大小写问题</a>
-                </h2>
-                <h6 class="card-subtitle mb-2 text-muted text-center">
-                    发布时间：<span>2020-03-24</span>&nbsp;
-                    修改时间：<span>2020-03-24</span>&nbsp;
-                    作者：<span>归零幻想</span>
-                </h6>
-                <hr>
-                <div class="card-text markdown-body"><p>这两天想给自己小组的项目添加一个自动升级功能。这事听着复杂，但毕竟是个很常见的功能，github上的轮子很多。经过考虑，我决定选择<a href="https://github.com/xuexiangjys/XUpdate">这个组件</a>，然后自己写后端。反正后端就返回一个json的事。然后就掉了坑。</p>
-<h2 id="起因">起因</h2>
-<p>案发现场没什么好说的，就是我发现自己设置的不能实现升级，在客户端调试半天发现用官方的json能升级。然后我就找我的json和官方的json有什么区别，看ContentType也没设置错，仔细比对发现属性大小写竟然不对。我当时还挺惊讶的，毕竟是直接复制的。</p>
-</div>
-                <div class="row mt-3">
-                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/old/掉坑的日常：springboot的json属性名大小写问题.html">阅读全文 ▼</div>
-                </div>
-            </div>
-        </div>
-        <div class="card mt-3">
-            <div class="card-body">
-                <h2 class="card-title text-center">
-                    <a href="archieved/old/Java自动装箱自动拆箱踩坑.html">Java自动装箱自动拆箱踩坑</a>
-                </h2>
-                <h6 class="card-subtitle mb-2 text-muted text-center">
-                    发布时间：<span>2020-03-17</span>&nbsp;
-                    修改时间：<span>2020-03-17</span>&nbsp;
-                    作者：<span>归零幻想</span>
-                </h6>
-                <hr>
-                <div class="card-text markdown-body"><p>int和Integer有什么区别？前者是基础数据类型，后者是封装的Java对象。但在有<code>Autoboxing</code>和<code>Unboxing</code>的情况下我们常常就把两者等同看待，无非后者能放<code>null</code>。</p>
-<p>事情要首先从一道力扣题目说起：</p>
-<h2 id="删除排序数组中的重复项-ii">删除排序数组中的重复项 II</h2>
-<p>给定一个排序数组，你需要在原地删除重复出现的元素，使得每个元素最多出现两次，返回移除后数组的新长度。</p>
-<p>不要使用额外的数组空间，你必须在原地修改输入数组并在使用 O(1) 额外空间的条件下完成。</p>
-</div>
-                <div class="row mt-3">
-                    <div class="btn btn-light col-md-2 offset-md-5 btn-read-all" value="archieved/old/Java自动装箱自动拆箱踩坑.html">阅读全文 ▼</div>
-                </div>
-            </div>
-        </div>
-        <!--页码-->
-        <nav aria-label="Page navigation row">
-            <ul class="pagination mt-3 justify-content-center">
-                <li class="page-item"><a class="page-link" href="/">First</a>
-                </li>
-                <li class="page-item">
-                    
-                    <a class="page-link" href="/index3.html">3</a>
-                </li>
-                <li class="page-item active">
-                    <span class="page-link">4</span>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="/index5.html">5</a>
-                </li>
-                <li class="page-item"></li>
-                <li class="page-item"></li>
-                <li class="page-item"><a class="page-link"
-                        href="/index8.html">Last</a></li>
-                <input id="in_page" type="text" class="form-control col-2 xs-offset-1 d-none d-lg-block offset-1"
-                    placeholder="输入页码" onkeyup="this.value=this.value.replace(/\D/g,'')"
-                    onafterpaste="this.value=this.value.replace(/\D/g,'')">
-                <button id="btn_go" class="btn btn-primary">Go</button>
-            </ul>
-        </nav>
-        <!-- 页脚 -->
-        <footer class="navbar navbar-light bg-light">
-            <p>版权所有：归零幻想 ┊ 备案号：<a href="http://beian.miit.gov.cn/">暂无</a>┊ Powered by：归零幻想</p>
-        </footer>
+    <a>欢迎造访归零幻想的个人主页</a>
+    <hr>
+    <blockquote>
+        这人又在折腾自己的博客，刚折腾到一半，所以是这个鬼样子。
+    </blockquote>
+    <div>
+        <a href="article/6/1.html">EventBus初探</a>
+    </div>
+    <div>
+        <a href="article/5/4.html">在github pages部署你的博客</a>
+    </div>
+    <div>
+        <a href="article/4/2.html">重装机兵</a>
+    </div>
+    <div>
+        <a href="article/5/2.html">Kotlin中的单例模式</a>
+    </div>
+    <div>
+        <a href="article/2/2.html">掉坑的日常：springboot的json属性名大小写问题</a>
+    </div>
+    <div>
+        <a href="article/2/7.html">Java自动装箱自动拆箱踩坑</a>
+    </div>
+    <div>
+        <a href="article/4/1.html">Typora+git自动同步你的笔记</a>
+    </div>
+    <div>
+        <a href="article/9.html">禁用macOS的窗口标签</a>
+    </div>
+    <div>
+        <a href="article/1/9.html">记Lenovo V310 15 IKB的第n次死机</a>
+    </div>
+    <div>
+        <a href="article/4/7.html">我发现了齐鲁软件大赛系统的漏洞</a>
+    </div>
+    <hr>
+    <div>
+        
+        <a href="/index3.html">上一页</a>
+    </div>
+    <div>
+        <a href="/index5.html">下一页</a>
     </div>
 </body>
-
 </html>
