@@ -7,19 +7,272 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Mon, 25 Apr 2022 17:40:05 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 21 Feb 2021 03:11:37 +0800</lastBuildDate>
     
         <atom:link href="https://ntutn.top/index.xml" rel="self" type="application/rss+xml" />
     
     
     
         <item>
-        <title>Hello World</title>
-        <link>https://ntutn.top/posts/first-post/</link>
-        <pubDate>Mon, 25 Apr 2022 17:40:05 +0800</pubDate>
+        <title>干掉macOS的OCSP</title>
+        <link>https://ntutn.top/posts/%E5%B9%B2%E6%8E%89macos%E7%9A%84ocsp/</link>
+        <pubDate>Sun, 21 Feb 2021 03:11:37 +0800</pubDate>
         
-        <guid>https://ntutn.top/posts/first-post/</guid>
-        <description>归零幻想 https://ntutn.top/posts/first-post/ -- https://ntutn.top/posts/first-post/ - CC BY-SA 4.0</description>
+        <guid>https://ntutn.top/posts/%E5%B9%B2%E6%8E%89macos%E7%9A%84ocsp/</guid>
+        <description>归零幻想 https://ntutn.top/posts/%E5%B9%B2%E6%8E%89macos%E7%9A%84ocsp/ -&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;苹果这两天摊上事了，有不少用户说自己的设备打开应用程序会卡好几分钟，然后分析发现是苹果的OCSP校验导致的。&lt;/p&gt;
+&lt;p&gt;当启动一个新应用程序的时候，系统会把其hash发送到&lt;code&gt;ocsp.apple.com&lt;/code&gt;用于校验，而这次是这个服务挂了但是能ping通……&lt;/p&gt;
+&lt;p&gt;这个事情引起不小的讨论，主要集中在有关隐私的担忧上。本来我没有太在意，&lt;strong&gt;但测试发现这好像是我每次休眠恢复后触摸板卡几秒的元凶……&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;那对不起了。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;color:#658b00&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;127.0.0.1 ocsp.apple.com&amp;#34;&lt;/span&gt; | sudo tee -a /etc/hosts
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;反正还有SEP把门呢。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+- https://ntutn.top/posts/%E5%B9%B2%E6%8E%89macos%E7%9A%84ocsp/ - CC BY-SA 4.0</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>写产品和写demo的区别</title>
+        <link>https://ntutn.top/posts/%E5%86%99%E4%BA%A7%E5%93%81%E5%92%8C%E5%86%99demo%E7%9A%84%E5%8C%BA%E5%88%AB/</link>
+        <pubDate>Tue, 15 Dec 2020 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/%E5%86%99%E4%BA%A7%E5%93%81%E5%92%8C%E5%86%99demo%E7%9A%84%E5%8C%BA%E5%88%AB/</guid>
+        <description>归零幻想 https://ntutn.top/posts/%E5%86%99%E4%BA%A7%E5%93%81%E5%92%8C%E5%86%99demo%E7%9A%84%E5%8C%BA%E5%88%AB/ -&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;上次写的功能灰度报了几例crash，定位是我这里某个变量NPE了。&lt;/p&gt;
+&lt;p&gt;说实话，在Java中NPE是我们最常打交道的异常了，但Kotlin提供的类型机制下，NPE很少了。而这里出现NPE，其实是因为我认定在当前这个流程中这个变量不会为空——你总是要先弹出菜单再点击菜单项吧，所以用了&lt;code&gt;data!!.id&lt;/code&gt;的方式使用。&lt;/p&gt;
+&lt;p&gt;这个变量被赋值的地方只有三处，不存在多线程问题，我想破脑袋也不知道哪里为空了。最后处理只得暂时加上判空，先不崩再说。&lt;/p&gt;
+&lt;p&gt;请教同事，同事说我这是还没有分清 &lt;strong&gt;写产品和写demo的区别&lt;/strong&gt; 。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;写产品和写demo的区别？仔细一想，的确有道理。『写demo』只要能跑通就行了，而写产品你是要为自己写的每一行代码负责的。我之前写过不少代码，但他们大概都算『写demo』。作业只要演示的时候不崩就行了，考试只要通过样例就行了，练手的项目写起来更是随心，反正自己就是用户，啥时候崩了啥时候debug，方便的很……&lt;/p&gt;
+&lt;p&gt;但『写产品』不同，你的程序不止要能完成需要的功能，还要在用户不按套路出牌的时候不出错。&lt;em&gt;今天你迟到一分钟，咱班四十个学生等你一分钟就是一节课，你浪费了大家一节课时间……&lt;/em&gt; 虽然这么算不对，但也不能算全错。你的产品面向千千万万用户，任何小瑕疵都可能放大成一场事故。记得那个著名的ATM机的bug，就是因为用户选择了取消，然后插入了银行卡……&lt;/p&gt;
+&lt;p&gt;回到我这个Issue，虽然从业务逻辑的角度看用户操作后这个变量是不会为null的，但仍然应该有判空，有兜底的逻辑，这样你的程序才会更加健壮。&lt;/p&gt;
+&lt;h2 id=&#34;kotlin的空安全&#34;&gt;Kotlin的空安全&lt;/h2&gt;
+&lt;p&gt;与Java不同，Kotlin的类型系统在设计时就考虑了变量是否可空&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;，其用一个?表示变量是否能为空。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; a: String = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;abc&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#228b22&#34;&gt;// 默认情况下，常规初始化意味着非空
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;a = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt; &lt;span style=&#34;color:#228b22&#34;&gt;// 编译错误
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; b: String? = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;abc&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#228b22&#34;&gt;// 可以设置为空
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;b = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt; &lt;span style=&#34;color:#228b22&#34;&gt;// ok
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;print(b)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;判空&#34;&gt;判空&lt;/h3&gt;
+&lt;p&gt;Kotlin有一定的类型推断能力，判空后进行赋值操作前能识别出变量是非空的类型。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; b: String? = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Kotlin&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (b != &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt; &amp;amp;&amp;amp; b.length &amp;gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;) {
+    print(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;String of length &lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${b.length}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;)
+} &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; {
+    print(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Empty string&amp;#34;&lt;/span&gt;)
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;安全调用&#34;&gt;安全调用&lt;/h3&gt;
+&lt;p&gt;Kotlin中提供了&lt;code&gt;?.&lt;/code&gt;来安全调用一个可能为空的变量。&lt;code&gt;b?.test()&lt;/code&gt;相当于&lt;code&gt;if (b != null) b.test()&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;值得注意的是，这个操作符是可以和赋值语句一起用的。如：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;b?.name = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;ByteDance&amp;#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;换个形式可能更好理解：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (b != &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;) b.setName(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;ByteDance&amp;#34;&lt;/span&gt;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这个操作符还可以与&lt;code&gt;.let&lt;/code&gt;配合，达到非空时执行特定语句的目的。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;b?.name?.let { println(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt;) }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;elvis-操作符&#34;&gt;Elvis 操作符&lt;/h3&gt;
+&lt;p&gt;在java中适当使用三元运算符也能让代码写起来更简洁一些：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;String title = article.&lt;span style=&#34;color:#658b00&#34;&gt;title&lt;/span&gt; == &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt; ? &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;未命名&amp;#34;&lt;/span&gt; : article.&lt;span style=&#34;color:#658b00&#34;&gt;title&lt;/span&gt;;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;在Kotlin中没有三元运算符了，但if和when语句可以有返回值了。于是可以写作&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; title = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (article.title == &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;) &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;未命名&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; article.title
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;不过还有更简单的表达方法：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; title = article.title ?: &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;未命名&amp;#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;操作符&#34;&gt;!!操作符&lt;/h3&gt;
+&lt;p&gt;终于说到我翻车的地方了。&lt;code&gt;!!&lt;/code&gt;操作符表示“我保证这个变量不为空，否则就抛出NPE吧！”。尽管变量可能的确不会为空，两个感叹号上去IDE就不报错了……&lt;/p&gt;
+&lt;p&gt;这是很不好的，所有Kotlin的书都告诉你要少用这个符号。这从这个符号的设计就看出来了，写起来就像在对编译器咆哮“我知道自己在做什么！！”。&lt;/p&gt;
+&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.kotlincn.net/docs/reference/null-safety.html&#34;&gt;空安全 - Kotlin 语言中文站&lt;/a&gt; &lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/section&gt;
+- https://ntutn.top/posts/%E5%86%99%E4%BA%A7%E5%93%81%E5%92%8C%E5%86%99demo%E7%9A%84%E5%8C%BA%E5%88%AB/ - CC BY-SA 4.0</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>B站的搬运机制和盗视频行为有区别吗</title>
+        <link>https://ntutn.top/posts/b%E7%AB%99%E7%9A%84%E6%90%AC%E8%BF%90%E6%9C%BA%E5%88%B6%E5%92%8C%E7%9B%97%E8%A7%86%E9%A2%91%E8%A1%8C%E4%B8%BA%E6%9C%89%E5%8C%BA%E5%88%AB%E5%90%97/</link>
+        <pubDate>Tue, 24 Nov 2020 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/b%E7%AB%99%E7%9A%84%E6%90%AC%E8%BF%90%E6%9C%BA%E5%88%B6%E5%92%8C%E7%9B%97%E8%A7%86%E9%A2%91%E8%A1%8C%E4%B8%BA%E6%9C%89%E5%8C%BA%E5%88%AB%E5%90%97/</guid>
+        <description>归零幻想 https://ntutn.top/posts/b%E7%AB%99%E7%9A%84%E6%90%AC%E8%BF%90%E6%9C%BA%E5%88%B6%E5%92%8C%E7%9B%97%E8%A7%86%E9%A2%91%E8%A1%8C%E4%B8%BA%E6%9C%89%E5%8C%BA%E5%88%AB%E5%90%97/ -&lt;p&gt;在知乎看到这样的问题&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;，写下我的观点，也同步写到这里。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;『搬运』同『转载』，『盗视频』特指『无授权转载视频』并隐含指『借此获得收益』。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;p&gt;b站用户被指责双标， &lt;strong&gt;最大的锅是b站而不是up主&lt;/strong&gt; 。&lt;/p&gt;
+&lt;p&gt;b站没有明显区分转载作品和原创作品，在我看来就是享受了转载内容带来的红利又想规避因此带来的舆论和法律问题。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;如何判断视频是转载的还是原创的？你看这里它只能投一个币这是搬运的。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;h2 id=&#34;收益&#34;&gt;收益&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;『搬运』视频是不能获得收益的。
+很大程度这与是否获得授权无关，甚至与界定是否『商业使用』无关。up主没有获得收益，但显而易见b站是有收益的。比如一篇文章，转载到我的个人博客大概可以算非商业使用，因为博客中 &lt;strong&gt;没有任何广告，没有打赏或捐赠选项，没有对任何产品的商业宣传。&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;当然这一点不是up主的锅，但至少 &lt;strong&gt;请收起『搬运是给你免费做宣传』的说辞。&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&#34;授权问题&#34;&gt;授权问题&lt;/h2&gt;
+&lt;p&gt;『转载』行为是应当获取授权的，退一步讲至少是应当标明出处的。b站自己产生的内容默认会标注『禁止转载』，但大多网站不会有明显标注，所以给转载者留下余地，有人认为未标注默认应该是允许转载。在我看来这一点是不成立的，至少 &lt;strong&gt;在github，如果一个项目没有任何LICENSE说明和文件，应该被理解为保留授权&lt;/strong&gt; ，即使大多数情况只是作者忘了。&lt;/p&gt;
+&lt;h2 id=&#34;标注出处&#34;&gt;标注出处&lt;/h2&gt;
+&lt;p&gt;转载应标注出处，如何才算『标注出处』呢？很多视频中一句『来自Youtube』就算标注了出处了，标题还是翻译后的，你根据这句话能找到来源？&lt;/p&gt;
+&lt;p&gt;即使标注了出处，基本上也只能写在视频的简介中。很多人不习惯看视频简介，尤其是b站还会默认折叠比较长的简介。 &lt;em&gt;还是b站的锅&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;我认为，合适的转载应该明显标出作品来源，并 &lt;strong&gt;至少要提供出足以找到来源作品的信息&lt;/strong&gt; 。书籍杂志没办法，但对于互联网的文章，提供来源链接才算诚意。当然有些平台带超链接会无法过审，那可以再做权衡。&lt;/p&gt;
+&lt;h2 id=&#34;倡议&#34;&gt;倡议&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;对于内容创作者，顺手标注是否允许转载，比如我在自己博客标注了『在未另行说明的情况下，本站内容遵守 &lt;a href=&#34;https://creativecommons.org/licenses/by-sa/4.0/deed.zh&#34;&gt;署名-相同方式共享 4.0 国际&lt;/a&gt; (CC BY-SA 4.0)』 ，这样非商业转载就无须另外询问我的意见了。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;对于转载内容的人，建议在来源未写明是否授权转载的情况下，主动向原作者申请授权。知乎曾经流行过『来自网络，侵删』式的标注，虽然也表达了态度，但实际上并不能规避因此带来的侵权法律风险。能找到作者情况下，申请授权才是正理。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;对于用户，自觉抵制不标注出处甚至不标注『转载』的转载内容。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.zhihu.com/question/379843948&#34;&gt;B站的搬运机制和盗视频行为有区别吗？ - 知乎&lt;/a&gt; &lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/section&gt;
+- https://ntutn.top/posts/b%E7%AB%99%E7%9A%84%E6%90%AC%E8%BF%90%E6%9C%BA%E5%88%B6%E5%92%8C%E7%9B%97%E8%A7%86%E9%A2%91%E8%A1%8C%E4%B8%BA%E6%9C%89%E5%8C%BA%E5%88%AB%E5%90%97/ - CC BY-SA 4.0</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>EventBus初探</title>
+        <link>https://ntutn.top/posts/eventbus%E5%88%9D%E6%8E%A2/</link>
+        <pubDate>Fri, 21 Aug 2020 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/eventbus%E5%88%9D%E6%8E%A2/</guid>
+        <description>归零幻想 https://ntutn.top/posts/eventbus%E5%88%9D%E6%8E%A2/ -&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;公司项目中大量运用了EventBus&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;，这两天在做的需求相关的代码也用到了，于是还是要先去研究下这个EventBus是什么。&lt;/p&gt;
+&lt;p&gt;EventBus，顾名思义，事件总线，是一个安卓上的事件管理平台。用事件驱动的机制来简化事件传递的逻辑。在这层意义上也许可以类比&lt;code&gt;Qt&lt;/code&gt;的信号槽机制，或者安卓的广播。当你需要把一个事件传递给多个对象，EventBus就变得非常有用。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://github.com/greenrobot/EventBus/raw/master/EventBus-Publish-Subscribe.png&#34; alt=&#34;EventBus&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;该图片来自EventBus的github仓库&lt;/em&gt;&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;h2 id=&#34;eventbus的使用&#34;&gt;EventBus的使用&lt;/h2&gt;
+&lt;p&gt;首先当然是添加依赖&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-groovy&#34; data-lang=&#34;groovy&#34;&gt;implementation &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;org.greenrobot:eventbus:3.2.0&amp;#39;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;写个demo展示下：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2020/09/08/CzpLZxPkrJiqaDm.jpg&#34; alt=&#34;photo_2020-09-08_15-58-48.jpg&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2020/09/08/SwM6ljRtPkgdGLT.jpg&#34; alt=&#34;photo_2020-09-08_15-59-12.jpg&#34;&gt;&lt;/p&gt;
+&lt;p&gt;点击按钮后，将两处文本的值修改为文本框中的值。注意：上面的那个红色的文本处于一个fragment中。&lt;/p&gt;
+&lt;p&gt;为此，我们先准备一个Event：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;data&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;ButtonEvent&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; text: String)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;点击按钮时，发送这个Event：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;        button.setOnClickListener {
+            EventBus.getDefault().post(ButtonEvent(editTextTextPersonName.text.toString()))
+        }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然后在需要接收这个请求的地方，比如我们在&lt;code&gt;MainActivity&lt;/code&gt;的&lt;code&gt;onCreate()&lt;/code&gt;中注册EventBus：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;EventBus.getDefault().register(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;在&lt;code&gt;onDestory()&lt;/code&gt;中解除&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;EventBus.getDefault().unregister(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然后就可以接收那个Event了。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;    &lt;span style=&#34;color:#707a7c&#34;&gt;@Subscribe&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onButtonEvent&lt;/span&gt;(buttonEvent: ButtonEvent){
+        textView.text=buttonEvent.text
+    }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;同样对于Fragment，我们只需要做同样的事情，就可以监听这个Event了。很明显，这对于一个事件有多个处理的场景是很方便的。&lt;/p&gt;
+&lt;h2 id=&#34;订阅者的threadmode&#34;&gt;订阅者的threadMode&lt;/h2&gt;
+&lt;p&gt;安卓应用启动时，系统会创建一个主线程，负责向UI组件分发事件&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;，所有对UI的操作应该放到主线程中。EventBus是一种重要的跨线程更新UI的方式。&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;@Subscribe&lt;/code&gt;注解有一个参数&lt;code&gt;threadMode&lt;/code&gt;，有以下取值：&lt;/p&gt;
+&lt;h3 id=&#34;threadmodeposting&#34;&gt;ThreadMode.POSTING&lt;/h3&gt;
+&lt;p&gt;默认值，在同一线程中调用，开销最小。&lt;/p&gt;
+&lt;h3 id=&#34;threadmodemain&#34;&gt;ThreadMode.MAIN&lt;/h3&gt;
+&lt;p&gt;在主线程中调用。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;如果发送事件的是主线程，则直接调用。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;threadmodemain_ordered&#34;&gt;ThreadMode.MAIN_ORDERED&lt;/h3&gt;
+&lt;p&gt;在主线程中调用，同步调用（排队）。&lt;/p&gt;
+&lt;h3 id=&#34;threadmodebackground&#34;&gt;ThreadMode.BACKGROUND&lt;/h3&gt;
+&lt;p&gt;在后台线程中调用。&lt;/p&gt;
+&lt;h3 id=&#34;threadmodeasync&#34;&gt;ThreadMode.ASYNC&lt;/h3&gt;
+&lt;p&gt;在单独线程中调用，用于耗时操作。&lt;/p&gt;
+&lt;p&gt;对于EventBus更新UI，我同样写了demo：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;com.example.eventbustimerdemo&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.os.Bundle&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;androidx.appcompat.app.AppCompatActivity&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;kotlinx.android.synthetic.main.activity_main.*&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;org.greenrobot.eventbus.EventBus&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;org.greenrobot.eventbus.Subscribe&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;org.greenrobot.eventbus.ThreadMode&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MainActivity&lt;/span&gt; : AppCompatActivity() {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onCreate&lt;/span&gt;(savedInstanceState: Bundle?) {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        btnStart.setOnClickListener {
+            Thread {
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt; (&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;) {
+                    Thread.sleep(&lt;span style=&#34;color:#b452cd&#34;&gt;1000&lt;/span&gt;)
+                    EventBus.getDefault().post(TickEvent())
+                }
+            }.start()
+            btnStart.isEnabled = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;
+        }
+        EventBus.getDefault().register(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;)
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onDestroy&lt;/span&gt;() {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onDestroy()
+        EventBus.getDefault().unregister(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;)
+    }
+    &lt;span style=&#34;color:#707a7c&#34;&gt;@Subscribe&lt;/span&gt;(threadMode = ThreadMode.MAIN)&lt;span style=&#34;color:#228b22&#34;&gt;//只有在UI线程中才能更新UI
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onTimeTick&lt;/span&gt;(event: TickEvent) {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; currentNum = tvTime.text.toString().toInt()
+        tvTime.text = (currentNum + &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;).toString()
+    }
+}
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;TickEvent&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;stickyevent&#34;&gt;StickyEvent&lt;/h2&gt;
+&lt;p&gt;『粘性事件』&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;，即在事件被广播后将长时间存在，新的订阅者仍然能收到。在一些场景下还是有用的，比如我们可能在一个详情页进行投票操作，在返回主页后才进行统计。这时粘性事件会带来帮助。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;        button.setOnClickListener {
+            EventBus.getDefault().postSticky(VoteEvent(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;))
+            finish()
+        }
+        button2.setOnClickListener {
+            EventBus.getDefault().postSticky(VoteEvent(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;))
+            finish()
+        }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onResume&lt;/span&gt;() {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onResume()
+        EventBus.getDefault().register(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;)
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onPause&lt;/span&gt;() {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onPause()
+        EventBus.getDefault().unregister(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;)
+    }
+    &lt;span style=&#34;color:#707a7c&#34;&gt;@Subscribe&lt;/span&gt;(threadMode = ThreadMode.MAIN,sticky = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;)
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onVoteEvent&lt;/span&gt;(event: VoteEvent) {
+        textView.text = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (event.result) &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;你投票赞同&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;你投票反对&amp;#34;&lt;/span&gt;
+        EventBus.getDefault().removeStickyEvent(event)
+    }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/greenrobot/EventBus&#34;&gt;EventBus&lt;/a&gt; &lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.jianshu.com/p/0f5ed338feeb&#34;&gt;Android UI线程和非UI线程 &lt;/a&gt; &lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:3&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://blog.csdn.net/haoyuegongzi/article/details/78406342&#34;&gt;Android开发中更新UI的几种常用方式 &lt;/a&gt; &lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:4&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://blog.csdn.net/IO_Field/article/details/52185717&#34;&gt;深入理解EventBus - ThreadMode、Sticky Event等&lt;/a&gt; &lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/section&gt;
+- https://ntutn.top/posts/eventbus%E5%88%9D%E6%8E%A2/ - CC BY-SA 4.0</description>
         </item>
     
     

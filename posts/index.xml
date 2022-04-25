@@ -7,14 +7,91 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Mon, 25 Apr 2022 17:40:05 +0800</lastBuildDate><atom:link href="https://ntutn.top/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 21 Feb 2021 03:11:37 +0800</lastBuildDate><atom:link href="https://ntutn.top/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Hello World</title>
-      <link>https://ntutn.top/posts/first-post/</link>
-      <pubDate>Mon, 25 Apr 2022 17:40:05 +0800</pubDate>
+      <title>干掉macOS的OCSP</title>
+      <link>https://ntutn.top/posts/%E5%B9%B2%E6%8E%89macos%E7%9A%84ocsp/</link>
+      <pubDate>Sun, 21 Feb 2021 03:11:37 +0800</pubDate>
       
-      <guid>https://ntutn.top/posts/first-post/</guid>
-      <description></description>
+      <guid>https://ntutn.top/posts/%E5%B9%B2%E6%8E%89macos%E7%9A%84ocsp/</guid>
+      <description>苹果这两天摊上事了，有不少用户说自己的设备打开应用程序会卡好几分钟，然后分析发现是苹果的OCSP校验导致的。
+当启动一个新应用程序的时候，系统会把其hash发送到ocsp.apple.com用于校验，而这次是这个服务挂了但是能ping通……
+这个事情引起不小的讨论，主要集中在有关隐私的担忧上。本来我没有太在意，但测试发现这好像是我每次休眠恢复后触摸板卡几秒的元凶……
+那对不起了。
+echo &amp;#34;127.0.0.1 ocsp.apple.com&amp;#34; | sudo tee -a /etc/hosts 反正还有SEP把门呢。</description>
+    </item>
+    
+    <item>
+      <title>写产品和写demo的区别</title>
+      <link>https://ntutn.top/posts/%E5%86%99%E4%BA%A7%E5%93%81%E5%92%8C%E5%86%99demo%E7%9A%84%E5%8C%BA%E5%88%AB/</link>
+      <pubDate>Tue, 15 Dec 2020 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E5%86%99%E4%BA%A7%E5%93%81%E5%92%8C%E5%86%99demo%E7%9A%84%E5%8C%BA%E5%88%AB/</guid>
+      <description>上次写的功能灰度报了几例crash，定位是我这里某个变量NPE了。
+说实话，在Java中NPE是我们最常打交道的异常了，但Kotlin提供的类型机制下，NPE很少了。而这里出现NPE，其实是因为我认定在当前这个流程中这个变量不会为空——你总是要先弹出菜单再点击菜单项吧，所以用了data!!.id的方式使用。
+这个变量被赋值的地方只有三处，不存在多线程问题，我想破脑袋也不知道哪里为空了。最后处理只得暂时加上判空，先不崩再说。
+请教同事，同事说我这是还没有分清 写产品和写demo的区别 。
+写产品和写demo的区别？仔细一想，的确有道理。『写demo』只要能跑通就行了，而写产品你是要为自己写的每一行代码负责的。我之前写过不少代码，但他们大概都算『写demo』。作业只要演示的时候不崩就行了，考试只要通过样例就行了，练手的项目写起来更是随心，反正自己就是用户，啥时候崩了啥时候debug，方便的很……
+但『写产品』不同，你的程序不止要能完成需要的功能，还要在用户不按套路出牌的时候不出错。今天你迟到一分钟，咱班四十个学生等你一分钟就是一节课，你浪费了大家一节课时间…… 虽然这么算不对，但也不能算全错。你的产品面向千千万万用户，任何小瑕疵都可能放大成一场事故。记得那个著名的ATM机的bug，就是因为用户选择了取消，然后插入了银行卡……
+回到我这个Issue，虽然从业务逻辑的角度看用户操作后这个变量是不会为null的，但仍然应该有判空，有兜底的逻辑，这样你的程序才会更加健壮。
+Kotlin的空安全 与Java不同，Kotlin的类型系统在设计时就考虑了变量是否可空1，其用一个?表示变量是否能为空。
+var a: String = &amp;#34;abc&amp;#34; // 默认情况下，常规初始化意味着非空 a = null // 编译错误 var b: String? = &amp;#34;abc&amp;#34; // 可以设置为空 b = null // ok print(b) 判空 Kotlin有一定的类型推断能力，判空后进行赋值操作前能识别出变量是非空的类型。
+val b: String? = &amp;#34;Kotlin&amp;#34; if (b != null &amp;amp;&amp;amp; b.length &amp;gt; 0) { print(&amp;#34;String of length ${b.length}&amp;#34;) } else { print(&amp;#34;Empty string&amp;#34;) } 安全调用 Kotlin中提供了?.来安全调用一个可能为空的变量。b?.test()相当于if (b != null) b.test()。
+值得注意的是，这个操作符是可以和赋值语句一起用的。如：</description>
+    </item>
+    
+    <item>
+      <title>B站的搬运机制和盗视频行为有区别吗</title>
+      <link>https://ntutn.top/posts/b%E7%AB%99%E7%9A%84%E6%90%AC%E8%BF%90%E6%9C%BA%E5%88%B6%E5%92%8C%E7%9B%97%E8%A7%86%E9%A2%91%E8%A1%8C%E4%B8%BA%E6%9C%89%E5%8C%BA%E5%88%AB%E5%90%97/</link>
+      <pubDate>Tue, 24 Nov 2020 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/b%E7%AB%99%E7%9A%84%E6%90%AC%E8%BF%90%E6%9C%BA%E5%88%B6%E5%92%8C%E7%9B%97%E8%A7%86%E9%A2%91%E8%A1%8C%E4%B8%BA%E6%9C%89%E5%8C%BA%E5%88%AB%E5%90%97/</guid>
+      <description>在知乎看到这样的问题1，写下我的观点，也同步写到这里。
+ 『搬运』同『转载』，『盗视频』特指『无授权转载视频』并隐含指『借此获得收益』。
+  b站用户被指责双标， 最大的锅是b站而不是up主 。
+b站没有明显区分转载作品和原创作品，在我看来就是享受了转载内容带来的红利又想规避因此带来的舆论和法律问题。
+ 如何判断视频是转载的还是原创的？你看这里它只能投一个币这是搬运的。
+ 收益  『搬运』视频是不能获得收益的。 很大程度这与是否获得授权无关，甚至与界定是否『商业使用』无关。up主没有获得收益，但显而易见b站是有收益的。比如一篇文章，转载到我的个人博客大概可以算非商业使用，因为博客中 没有任何广告，没有打赏或捐赠选项，没有对任何产品的商业宣传。
+ 当然这一点不是up主的锅，但至少 请收起『搬运是给你免费做宣传』的说辞。
+授权问题 『转载』行为是应当获取授权的，退一步讲至少是应当标明出处的。b站自己产生的内容默认会标注『禁止转载』，但大多网站不会有明显标注，所以给转载者留下余地，有人认为未标注默认应该是允许转载。在我看来这一点是不成立的，至少 在github，如果一个项目没有任何LICENSE说明和文件，应该被理解为保留授权 ，即使大多数情况只是作者忘了。
+标注出处 转载应标注出处，如何才算『标注出处』呢？很多视频中一句『来自Youtube』就算标注了出处了，标题还是翻译后的，你根据这句话能找到来源？
+即使标注了出处，基本上也只能写在视频的简介中。很多人不习惯看视频简介，尤其是b站还会默认折叠比较长的简介。 还是b站的锅
+我认为，合适的转载应该明显标出作品来源，并 至少要提供出足以找到来源作品的信息 。书籍杂志没办法，但对于互联网的文章，提供来源链接才算诚意。当然有些平台带超链接会无法过审，那可以再做权衡。
+倡议   对于内容创作者，顺手标注是否允许转载，比如我在自己博客标注了『在未另行说明的情况下，本站内容遵守 署名-相同方式共享 4.0 国际 (CC BY-SA 4.0)』 ，这样非商业转载就无须另外询问我的意见了。
+  对于转载内容的人，建议在来源未写明是否授权转载的情况下，主动向原作者申请授权。知乎曾经流行过『来自网络，侵删』式的标注，虽然也表达了态度，但实际上并不能规避因此带来的侵权法律风险。能找到作者情况下，申请授权才是正理。
+  对于用户，自觉抵制不标注出处甚至不标注『转载』的转载内容。
+    B站的搬运机制和盗视频行为有区别吗？ - 知乎 &amp;#x21a9;&amp;#xfe0e;
+   </description>
+    </item>
+    
+    <item>
+      <title>EventBus初探</title>
+      <link>https://ntutn.top/posts/eventbus%E5%88%9D%E6%8E%A2/</link>
+      <pubDate>Fri, 21 Aug 2020 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/eventbus%E5%88%9D%E6%8E%A2/</guid>
+      <description>公司项目中大量运用了EventBus1，这两天在做的需求相关的代码也用到了，于是还是要先去研究下这个EventBus是什么。
+EventBus，顾名思义，事件总线，是一个安卓上的事件管理平台。用事件驱动的机制来简化事件传递的逻辑。在这层意义上也许可以类比Qt的信号槽机制，或者安卓的广播。当你需要把一个事件传递给多个对象，EventBus就变得非常有用。
+该图片来自EventBus的github仓库
+EventBus的使用 首先当然是添加依赖
+implementation &amp;#39;org.greenrobot:eventbus:3.2.0&amp;#39; 写个demo展示下：
+点击按钮后，将两处文本的值修改为文本框中的值。注意：上面的那个红色的文本处于一个fragment中。
+为此，我们先准备一个Event：
+data class ButtonEvent(val text: String) 点击按钮时，发送这个Event：
+button.setOnClickListener { EventBus.getDefault().post(ButtonEvent(editTextTextPersonName.text.toString())) } 然后在需要接收这个请求的地方，比如我们在MainActivity的onCreate()中注册EventBus：
+EventBus.getDefault().register(this) 在onDestory()中解除
+EventBus.getDefault().unregister(this) 然后就可以接收那个Event了。
+@Subscribe fun onButtonEvent(buttonEvent: ButtonEvent){ textView.text=buttonEvent.text } 同样对于Fragment，我们只需要做同样的事情，就可以监听这个Event了。很明显，这对于一个事件有多个处理的场景是很方便的。
+订阅者的threadMode 安卓应用启动时，系统会创建一个主线程，负责向UI组件分发事件2，所有对UI的操作应该放到主线程中。EventBus是一种重要的跨线程更新UI的方式。3
+@Subscribe注解有一个参数threadMode，有以下取值：
+ThreadMode.POSTING 默认值，在同一线程中调用，开销最小。
+ThreadMode.MAIN 在主线程中调用。
+ 如果发送事件的是主线程，则直接调用。
+ ThreadMode.MAIN_ORDERED 在主线程中调用，同步调用（排队）。
+ThreadMode.BACKGROUND 在后台线程中调用。
+ThreadMode.ASYNC 在单独线程中调用，用于耗时操作。
+对于EventBus更新UI，我同样写了demo：
+package com.example.eventbustimerdemo import android.os.Bundle import androidx.appcompat.app.AppCompatActivity import kotlinx.android.synthetic.main.activity_main.* import org.greenrobot.eventbus.EventBus import org.greenrobot.eventbus.Subscribe import org.greenrobot.eventbus.ThreadMode class MainActivity : AppCompatActivity() { override fun onCreate(savedInstanceState: Bundle?</description>
     </item>
     
   </channel>
