@@ -1,0 +1,1592 @@
+<!DOCTYPE html>
+<html><head>
+<title>android项目开发：Activity</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="Activity">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+<meta property="og:title" content="android项目开发：Activity" />
+<meta property="og:description" content="Activity" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ntutn.top/posts/activity/" />
+<meta property="article:published_time" content="2020-12-15T03:11:37+08:00" />
+<meta property="article:modified_time" content="2020-12-15T03:11:37+08:00" /><meta property="og:site_name" content="归零幻想" />
+
+
+
+
+
+
+
+
+
+
+<link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+
+  
+
+
+
+
+<link rel="icon" href="//images.ntutn.top/favicon.ico">
+
+
+
+<link rel="stylesheet" href="https://ntutn.top/scss/journal.min.d8d9f81b896882733c41896750adbefbf9319ca02ccccefd461650898975c3af.css" integrity="sha256-2Nn4G4lognM8QYlnUK2&#43;&#43;/kxnKAszM79RhZQiYl1w68=" media="screen">
+
+
+
+<link rel="stylesheet" href="https://ntutn.top/scss/dark-mode.min.60f86847da9fc0724177ccfd0bf7c5997b0b41f1e58d5a293cfb3723c497c422.css" integrity="sha256-YPhoR9qfwHJBd8z9C/fFmXsLQfHljVopPPs3I8SXxCI=" media="screen">
+
+
+<script src="/vendor/js/loadCSS.js"></script>
+<script>
+  loadCSS("https://fonts.googleapis.com/css?family=Fira+Mono|Material+Icons");
+</script>
+
+
+
+<script defer
+	src='https://static.cloudflareinsights.com/beacon.min.js'
+	data-cf-beacon='{"token": 5a03d307f5214109a1e7c8b2cf306a3d'>
+</script>
+
+
+
+
+
+
+  <script src="/js/toc.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://ntutn.top/">
+    
+        <div class="nav-title">
+            归零幻想
+        </div>
+        
+        <div class="nav-subtitle">
+            零点还不算熬夜
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                Archive
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/index.xml">
+                RSS Feed
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	CC BY-SA 4.0
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    
+    
+    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#activity" onclick="onNavClick(`#activity-nav`)" id="activity-nav">
+									Activity
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#activity%e5%9f%ba%e6%9c%ac%e7%94%a8%e6%b3%95" onclick="onNavClick(`#activity基本用法-nav`)" id="activity基本用法-nav">
+									Activity基本用法
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%9c%a8activity%e4%b9%8b%e9%97%b4%e8%b7%b3%e8%bd%ac" onclick="onNavClick(`#在activity之间跳转-nav`)" id="在activity之间跳转-nav">
+									在Activity之间跳转
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%98%be%e5%bc%8fintent" onclick="onNavClick(`#显式intent-nav`)" id="显式intent-nav">
+									显式Intent
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e9%9a%90%e5%bc%8fintent" onclick="onNavClick(`#隐式intent-nav`)" id="隐式intent-nav">
+									隐式Intent
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%90%af%e5%8a%a8%e7%b3%bb%e7%bb%9f%e5%85%b6%e4%bb%96activity" onclick="onNavClick(`#启动系统其他activity-nav`)" id="启动系统其他activity-nav">
+									启动系统其他Activity
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%90%91%e4%b8%8b%e4%b8%80%e4%b8%aaactivity%e4%bc%a0%e9%80%92%e6%95%b0%e6%8d%ae" onclick="onNavClick(`#向下一个activity传递数据-nav`)" id="向下一个activity传递数据-nav">
+									向下一个Activity传递数据
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e8%bf%94%e5%9b%9e%e6%95%b0%e6%8d%ae%e7%bb%99%e4%b8%8a%e4%b8%80%e4%b8%aaactivity" onclick="onNavClick(`#返回数据给上一个activity-nav`)" id="返回数据给上一个activity-nav">
+									返回数据给上一个Activity
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#activity%e7%9a%84%e7%94%9f%e5%91%bd%e5%91%a8%e6%9c%9f" onclick="onNavClick(`#activity的生命周期-nav`)" id="activity的生命周期-nav">
+									Activity的生命周期
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e8%bf%94%e5%9b%9e%e6%a0%88" onclick="onNavClick(`#返回栈-nav`)" id="返回栈-nav">
+									返回栈
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#activity%e7%9a%84%e7%8a%b6%e6%80%81" onclick="onNavClick(`#activity的状态-nav`)" id="activity的状态-nav">
+									Activity的状态
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#activity%e7%9a%84%e7%94%9f%e5%ad%98%e6%9c%9f" onclick="onNavClick(`#activity的生存期-nav`)" id="activity的生存期-nav">
+									Activity的生存期
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#activity%e7%9a%84%e5%90%af%e5%8a%a8%e6%a8%a1%e5%bc%8f" onclick="onNavClick(`#activity的启动模式-nav`)" id="activity的启动模式-nav">
+									Activity的启动模式
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#standard" onclick="onNavClick(`#standard-nav`)" id="standard-nav">
+									standard
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#singletop" onclick="onNavClick(`#singletop-nav`)" id="singletop-nav">
+									singleTop
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#singletask" onclick="onNavClick(`#singletask-nav`)" id="singletask-nav">
+									singleTask
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#singleinstance" onclick="onNavClick(`#singleinstance-nav`)" id="singleinstance-nav">
+									singleInstance
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#activity%e6%9c%80%e4%bd%b3%e5%ae%9e%e8%b7%b5" onclick="onNavClick(`#activity最佳实践-nav`)" id="activity最佳实践-nav">
+									Activity最佳实践
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e7%9f%a5%e9%81%93%e5%bd%93%e5%89%8d%e5%9c%a8%e5%93%aa%e4%b8%aaactivity" onclick="onNavClick(`#知道当前在哪个activity-nav`)" id="知道当前在哪个activity-nav">
+									知道当前在哪个Activity
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e9%9a%8f%e6%97%b6%e9%9a%8f%e5%9c%b0%e9%80%80%e5%87%ba%e7%a8%8b%e5%ba%8f" onclick="onNavClick(`#随时随地退出程序-nav`)" id="随时随地退出程序-nav">
+									随时随地退出程序
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%90%af%e5%8a%a8activity%e7%9a%84%e6%9c%80%e4%bd%b3%e5%86%99%e6%b3%95" onclick="onNavClick(`#启动activity的最佳写法-nav`)" id="启动activity的最佳写法-nav">
+									启动Activity的最佳写法
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+    
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+<div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    Archive
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/categories">
+                    Categories
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/index.xml">
+                    RSS Feed
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#activity" onclick="onNavClick(`#activity-nav`)" id="activity-nav">
+									Activity
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#activity%e5%9f%ba%e6%9c%ac%e7%94%a8%e6%b3%95" onclick="onNavClick(`#activity基本用法-nav`)" id="activity基本用法-nav">
+									Activity基本用法
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%9c%a8activity%e4%b9%8b%e9%97%b4%e8%b7%b3%e8%bd%ac" onclick="onNavClick(`#在activity之间跳转-nav`)" id="在activity之间跳转-nav">
+									在Activity之间跳转
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%98%be%e5%bc%8fintent" onclick="onNavClick(`#显式intent-nav`)" id="显式intent-nav">
+									显式Intent
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e9%9a%90%e5%bc%8fintent" onclick="onNavClick(`#隐式intent-nav`)" id="隐式intent-nav">
+									隐式Intent
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%90%af%e5%8a%a8%e7%b3%bb%e7%bb%9f%e5%85%b6%e4%bb%96activity" onclick="onNavClick(`#启动系统其他activity-nav`)" id="启动系统其他activity-nav">
+									启动系统其他Activity
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%90%91%e4%b8%8b%e4%b8%80%e4%b8%aaactivity%e4%bc%a0%e9%80%92%e6%95%b0%e6%8d%ae" onclick="onNavClick(`#向下一个activity传递数据-nav`)" id="向下一个activity传递数据-nav">
+									向下一个Activity传递数据
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e8%bf%94%e5%9b%9e%e6%95%b0%e6%8d%ae%e7%bb%99%e4%b8%8a%e4%b8%80%e4%b8%aaactivity" onclick="onNavClick(`#返回数据给上一个activity-nav`)" id="返回数据给上一个activity-nav">
+									返回数据给上一个Activity
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#activity%e7%9a%84%e7%94%9f%e5%91%bd%e5%91%a8%e6%9c%9f" onclick="onNavClick(`#activity的生命周期-nav`)" id="activity的生命周期-nav">
+									Activity的生命周期
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e8%bf%94%e5%9b%9e%e6%a0%88" onclick="onNavClick(`#返回栈-nav`)" id="返回栈-nav">
+									返回栈
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#activity%e7%9a%84%e7%8a%b6%e6%80%81" onclick="onNavClick(`#activity的状态-nav`)" id="activity的状态-nav">
+									Activity的状态
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#activity%e7%9a%84%e7%94%9f%e5%ad%98%e6%9c%9f" onclick="onNavClick(`#activity的生存期-nav`)" id="activity的生存期-nav">
+									Activity的生存期
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#activity%e7%9a%84%e5%90%af%e5%8a%a8%e6%a8%a1%e5%bc%8f" onclick="onNavClick(`#activity的启动模式-nav`)" id="activity的启动模式-nav">
+									Activity的启动模式
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#standard" onclick="onNavClick(`#standard-nav`)" id="standard-nav">
+									standard
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#singletop" onclick="onNavClick(`#singletop-nav`)" id="singletop-nav">
+									singleTop
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#singletask" onclick="onNavClick(`#singletask-nav`)" id="singletask-nav">
+									singleTask
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#singleinstance" onclick="onNavClick(`#singleinstance-nav`)" id="singleinstance-nav">
+									singleInstance
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#activity%e6%9c%80%e4%bd%b3%e5%ae%9e%e8%b7%b5" onclick="onNavClick(`#activity最佳实践-nav`)" id="activity最佳实践-nav">
+									Activity最佳实践
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e7%9f%a5%e9%81%93%e5%bd%93%e5%89%8d%e5%9c%a8%e5%93%aa%e4%b8%aaactivity" onclick="onNavClick(`#知道当前在哪个activity-nav`)" id="知道当前在哪个activity-nav">
+									知道当前在哪个Activity
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e9%9a%8f%e6%97%b6%e9%9a%8f%e5%9c%b0%e9%80%80%e5%87%ba%e7%a8%8b%e5%ba%8f" onclick="onNavClick(`#随时随地退出程序-nav`)" id="随时随地退出程序-nav">
+									随时随地退出程序
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%90%af%e5%8a%a8activity%e7%9a%84%e6%9c%80%e4%bd%b3%e5%86%99%e6%b3%95" onclick="onNavClick(`#启动activity的最佳写法-nav`)" id="启动activity的最佳写法-nav">
+									启动Activity的最佳写法
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://ntutn.top/">
+            归零幻想
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://ntutn.top/">
+        <div class="single-column-header-title">归零幻想</div>
+        
+        <div class="single-column-header-subtitle">零点还不算熬夜</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+                
+            
+
+            <div class="post-head-wrapper"
+                
+                    
+                    
+                    style="background-image: url('https://i.loli.net/2020/12/10/K7pyaXDeSVzqc8Y.jpg')"
+                    
+                
+            >
+                <div class="post-title">
+                    android项目开发：Activity
+                    
+                    <div class="post-subtitle">
+                        Activity
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2020-12-15 03:11
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/%E7%BC%96%E7%A8%8B">编程</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/android">android</a>
+                                &nbsp;
+                            
+                                <a href="/tags/%E7%AC%AC%E4%B8%80%E8%A1%8C%E4%BB%A3%E7%A0%81">第一行代码</a>
+                                &nbsp;
+                            
+                                <a href="/tags/kotlin">Kotlin</a>
+                                &nbsp;
+                            
+                                <a href="/tags/activity">Activity</a>
+                                &nbsp;
+                            
+                        
+                        
+                            <i class="material-icons" style="">schedule</i>
+                            
+
+                            
+                            
+
+                            
+                            10 min
+                            
+                            9 s.
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <!-- raw HTML omitted -->
+<p>title: android项目开发：Activity
+author: 归零幻想
+publishDate: 2020-12-15
+editDate: 2020-12-15
+tags: [android, 第一行代码, Kotlin, Activity]</p>
+<!-- raw HTML omitted -->
+<blockquote>
+<p>仍然是《第一行代码》的读书笔记，可能引用原书的定义和描述，或代码案例。</p>
+</blockquote>
+<h1 id="activity">Activity</h1>
+<h2 id="activity基本用法">Activity基本用法</h2>
+<p>Android讲究设计逻辑与视图分离，一般Activity都会对应一个布局文件（XML文件）。</p>
+<p>所有的Activity都要在AndroidManifest中注册才生效。</p>
+<p>Activity可以创建菜单。首先在<code>res/menu</code>下创建一个xml文件（Android Studio中也提供了可视化编辑的方法）：</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#1e889b">&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;</span>
+<span style="color:#8b008b;font-weight:bold">&lt;menu</span> <span style="color:#658b00">xmlns:app=</span><span style="color:#cd5555">&#34;http://schemas.android.com/apk/res-auto&#34;</span>
+      <span style="color:#658b00">xmlns:android=</span><span style="color:#cd5555">&#34;http://schemas.android.com/apk/res/android&#34;</span><span style="color:#8b008b;font-weight:bold">&gt;</span>
+
+    <span style="color:#8b008b;font-weight:bold">&lt;item</span>
+            <span style="color:#658b00">android:id=</span><span style="color:#cd5555">&#34;@+id/add_item&#34;</span>
+            <span style="color:#658b00">android:title=</span><span style="color:#cd5555">&#34;Add&#34;</span><span style="color:#8b008b;font-weight:bold">/&gt;</span>
+    <span style="color:#8b008b;font-weight:bold">&lt;item</span>
+            <span style="color:#658b00">android:id=</span><span style="color:#cd5555">&#34;@+id/remove_item&#34;</span>
+            <span style="color:#658b00">android:title=</span><span style="color:#cd5555">&#34;Remove&#34;</span><span style="color:#8b008b;font-weight:bold">/&gt;</span>
+<span style="color:#8b008b;font-weight:bold">&lt;/menu&gt;</span>
+</code></pre></div><p>重写两个方法</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onCreateOptionsMenu</span>(menu: Menu?): Boolean {
+    menuInflater.inflate(R.menu.main, menu)
+    <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">true</span>
+}
+<span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onOptionsItemSelected</span>(item: MenuItem): Boolean {
+    <span style="color:#8b008b;font-weight:bold">when</span> (item.itemId) {
+        R.id.add_item -&gt; Toast.makeText(<span style="color:#8b008b;font-weight:bold">this</span>, <span style="color:#cd5555">&#34;Add a book.&#34;</span>, Toast.LENGTH_LONG).show()
+        R.id.remove_item -&gt; Toast.makeText(<span style="color:#8b008b;font-weight:bold">this</span>, <span style="color:#cd5555">&#34;Remove a book.&#34;</span>, Toast.LENGTH_LONG).show()
+    }
+    <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">true</span>
+}
+</code></pre></div><p><img src="https://i.loli.net/2020/12/10/a6wOcTFrHLhS4il.jpg" alt="photo_2020-12-10_21-00-32.jpg"></p>
+<p>用<code>finish()</code>方法可以关闭一个Activity。</p>
+<!-- raw HTML omitted -->
+<h2 id="在activity之间跳转">在Activity之间跳转</h2>
+<h3 id="显式intent">显式Intent</h3>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">jumpButton.setOnClickListener {
+    startActivity(Intent(<span style="color:#8b008b;font-weight:bold">this</span>, SecondActivity::<span style="color:#8b008b;font-weight:bold">class</span>.java))
+}
+</code></pre></div><h3 id="隐式intent">隐式Intent</h3>
+<p>首先在<code>AndroidManifest.xml</code>中注册</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml">
+<span style="color:#8b008b;font-weight:bold">&lt;activity</span> <span style="color:#658b00">android:name=</span><span style="color:#cd5555">&#34;.SecondActivity&#34;</span><span style="color:#8b008b;font-weight:bold">&gt;</span>
+    <span style="color:#8b008b;font-weight:bold">&lt;intent-filter&gt;</span>
+        <span style="color:#8b008b;font-weight:bold">&lt;action</span> <span style="color:#658b00">android:name=</span><span style="color:#cd5555">&#34;com.example.myapplication.ACTION_START&#34;</span><span style="color:#8b008b;font-weight:bold">/&gt;</span>
+        <span style="color:#8b008b;font-weight:bold">&lt;category</span> <span style="color:#658b00">android:name=</span><span style="color:#cd5555">&#34;android.intent.category.DEFAULT&#34;</span><span style="color:#8b008b;font-weight:bold">/&gt;</span>
+    <span style="color:#8b008b;font-weight:bold">&lt;/intent-filter&gt;</span>
+<span style="color:#8b008b;font-weight:bold">&lt;/activity&gt;</span>
+</code></pre></div><p>修改启动Activity的代码：</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">startActivity(Intent(<span style="color:#cd5555">&#34;com.example.myapplication.ACTION_START&#34;</span>))
+</code></pre></div><p>action是动作，category是一些附加信息。只有action和category完全匹配才能正确启动Activity。</p>
+<p>接下来我们修改上述代码验证这一点。</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml">
+<span style="color:#8b008b;font-weight:bold">&lt;activity</span> <span style="color:#658b00">android:name=</span><span style="color:#cd5555">&#34;.SecondActivity&#34;</span><span style="color:#8b008b;font-weight:bold">&gt;</span>
+    <span style="color:#8b008b;font-weight:bold">&lt;intent-filter&gt;</span>
+        <span style="color:#8b008b;font-weight:bold">&lt;action</span> <span style="color:#658b00">android:name=</span><span style="color:#cd5555">&#34;com.example.myapplication.ACTION_START&#34;</span><span style="color:#8b008b;font-weight:bold">/&gt;</span>
+        <span style="color:#8b008b;font-weight:bold">&lt;category</span> <span style="color:#658b00">android:name=</span><span style="color:#cd5555">&#34;android.intent.category.DEFAULT&#34;</span><span style="color:#8b008b;font-weight:bold">/&gt;</span>
+        <span style="color:#8b008b;font-weight:bold">&lt;category</span> <span style="color:#658b00">android:name=</span><span style="color:#cd5555">&#34;com.example.myapplication.MY_CATEGORY&#34;</span><span style="color:#8b008b;font-weight:bold">/&gt;</span>
+    <span style="color:#8b008b;font-weight:bold">&lt;/intent-filter&gt;</span>
+<span style="color:#8b008b;font-weight:bold">&lt;/activity&gt;</span>
+</code></pre></div><div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">val</span> myIntent = Intent(<span style="color:#cd5555">&#34;com.example.myapplication.ACTION_START&#34;</span>)
+myIntent.addCategory(<span style="color:#cd5555">&#34;com.example.myapplication.MY_CATEGORY&#34;</span>)
+startActivity(myIntent)
+</code></pre></div><h4 id="启动系统其他activity">启动系统其他Activity</h4>
+<p>可以通过这样的代码启动系统浏览器：</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">val</span> intent = Intent(Intent.ACTION_VIEW)
+intent.<span style="color:#8b008b;font-weight:bold">data</span> = Uri.parse(<span style="color:#cd5555">&#34;https://ntutn.top&#34;</span>)
+startActivity(intent)
+</code></pre></div><p><code>Intent.ACTION_VIEW</code>实际上是<code>android.intent.action.VIEW</code>，如果我们注册下这个action也能冒充系统浏览器。</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml">
+<span style="color:#8b008b;font-weight:bold">&lt;intent-filter&gt;</span>
+    <span style="color:#8b008b;font-weight:bold">&lt;action</span> <span style="color:#658b00">android:name=</span><span style="color:#cd5555">&#34;android.intent.action.VIEW&#34;</span><span style="color:#8b008b;font-weight:bold">/&gt;</span>
+    <span style="color:#8b008b;font-weight:bold">&lt;category</span> <span style="color:#658b00">android:name=</span><span style="color:#cd5555">&#34;android.intent.category.DEFAULT&#34;</span><span style="color:#8b008b;font-weight:bold">/&gt;</span>
+    <span style="color:#8b008b;font-weight:bold">&lt;data</span> <span style="color:#658b00">android:scheme=</span><span style="color:#cd5555">&#34;https&#34;</span><span style="color:#8b008b;font-weight:bold">/&gt;</span>
+<span style="color:#8b008b;font-weight:bold">&lt;/intent-filter&gt;</span>
+</code></pre></div><p><img src="https://i.loli.net/2020/12/10/K7pyaXDeSVzqc8Y.jpg" alt="photo_2020-12-10_23-21-57.jpg"></p>
+<h3 id="向下一个activity传递数据">向下一个Activity传递数据</h3>
+<p>通过Intent的putExtra方法。在第一个Activity中：</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">            intent.putExtra(<span style="color:#cd5555">&#34;extra_data&#34;</span>, <span style="color:#cd5555">&#34;I&#39;m IF. IF 3279. &#34;</span>)
+</code></pre></div><p>在第二个Activity中：</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">        Toast.makeText(<span style="color:#8b008b;font-weight:bold">this</span>, intent.getStringExtra(<span style="color:#cd5555">&#34;extra_data&#34;</span>), Toast.LENGTH_LONG).show()
+</code></pre></div><h3 id="返回数据给上一个activity">返回数据给上一个Activity</h3>
+<p>首先看看书上的方法。 第一个Activity中：</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">val</span> intent = Intent(<span style="color:#8b008b;font-weight:bold">this</span>, SecondActivity::<span style="color:#8b008b;font-weight:bold">class</span>.java)
+startActivityForResult(intent, REQ_1)
+</code></pre></div><p>然后重写一个方法接收结果</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onActivityResult</span>(requestCode: Int, resultCode: Int, <span style="color:#8b008b;font-weight:bold">data</span>: Intent?) {
+    <span style="color:#8b008b;font-weight:bold">super</span>.onActivityResult(requestCode, resultCode, <span style="color:#8b008b;font-weight:bold">data</span>)
+    <span style="color:#8b008b;font-weight:bold">when</span> (requestCode) {
+        REQ_1 -&gt; <span style="color:#8b008b;font-weight:bold">if</span> (resultCode == RESULT_OK) {
+            Toast.makeText(<span style="color:#8b008b;font-weight:bold">this</span>, <span style="color:#cd5555">&#34;点击按钮返回数据：</span><span style="color:#cd5555">${data?.getStringExtra(&#34;data_return&#34;)}</span><span style="color:#cd5555">。&#34;</span>, Toast.LENGTH_LONG).show()
+        }
+    }
+}
+</code></pre></div><p>用这样的方法在第二个Activity中返回数据</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">intent.putExtra(<span style="color:#cd5555">&#34;data_return&#34;</span>, <span style="color:#cd5555">&#34;Hello FirstActivity&#34;</span>)
+setResult(RESULT_OK, intent)
+finish()
+</code></pre></div><p>不过不得不说安卓迭代是真的快啊，现在AS已经提示我这种方法过时了。于是去找找现在最新的技术是啥。</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> testActivityResult =
+    registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        <span style="color:#8b008b;font-weight:bold">if</span> (<span style="color:#8b008b;font-weight:bold">it</span>.resultCode == Activity.RESULT_OK) {
+            Toast.makeText(
+                <span style="color:#8b008b;font-weight:bold">this</span>,
+                <span style="color:#cd5555">&#34;点击按钮返回数据：</span><span style="color:#cd5555">${it.data?.getStringExtra(&#34;data_return&#34;)}</span><span style="color:#cd5555">。&#34;</span>,
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+<span style="color:#228b22">//在需要启动另一个Activity的地方
+</span><span style="color:#228b22"></span>testActivityResult.launch(intent)
+</code></pre></div><h2 id="activity的生命周期">Activity的生命周期</h2>
+<h3 id="返回栈">返回栈</h3>
+<p>Activity可以层叠，每当启动一个Activity它将入栈，位于返回栈的栈顶。而如果销毁Activity，它将出栈，下一个栈顶的Activity则被显示给用户。</p>
+<h3 id="activity的状态">Activity的状态</h3>
+<table>
+<thead>
+<tr>
+<th>状态</th>
+<th>说明</th>
+<th>回收策略</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>运行状态</td>
+<td>Activity处于返回栈的栈顶</td>
+<td>最不倾向于被回收</td>
+</tr>
+<tr>
+<td>暂停状态</td>
+<td>不处于栈顶，但仍然可见<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></td>
+<td>只有在内存极低的情况下才会回收</td>
+</tr>
+<tr>
+<td>停止状态</td>
+<td>不处于栈顶，且完全不可见</td>
+<td>可能被回收</td>
+</tr>
+<tr>
+<td>销毁状态</td>
+<td>从返回栈移除后</td>
+<td>最倾向于被回收</td>
+</tr>
+</tbody>
+</table>
+<h3 id="activity的生存期">Activity的生存期</h3>
+<p><img src="https://i.loli.net/2020/12/14/dNqfoY4XOaFC2Es.jpg" alt="lifecycle.jpg"></p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>onCreate()</code></td>
+<td>Activity<strong>第一次</strong>被创建。应完成初始化操作，创建布局，绑定事件</td>
+</tr>
+<tr>
+<td><code>onStart()</code></td>
+<td>Activity由不可见变为可见。</td>
+</tr>
+<tr>
+<td><code>onResume()</code></td>
+<td>Activity准备好和用户交互。此时Activity处于<strong>运行状态</strong></td>
+</tr>
+<tr>
+<td><code>onPause()</code></td>
+<td>系统准备启动或恢复另一个Activity时。应释放资源，保存关键数据。</td>
+</tr>
+<tr>
+<td><code>onStop()</code></td>
+<td>Activity完全不可用时调用。</td>
+</tr>
+<tr>
+<td><code>onDestory()</code></td>
+<td>Activity被销毁前被调用。</td>
+</tr>
+<tr>
+<td><code>onRestart()</code></td>
+<td>停止状态变为运行状态前被调用。</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>完整生存期 <code>onCreate()</code>——<code>onDestory()</code></li>
+<li>可见生存期 <code>onStart()</code>——<code>onStop()</code></li>
+<li>前台生存期 <code>onResume()</code>——<code>onPause()</code></li>
+</ul>
+<h2 id="activity的启动模式">Activity的启动模式</h2>
+<p>在<code>AndroidManifest.xml</code>中指定activity标签的<code>android:launchMode</code>属性。</p>
+<h3 id="standard">standard</h3>
+<p>默认模式。总是创建一个新实例。</p>
+<h3 id="singletop">singleTop</h3>
+<p>若目标Activity已经在栈顶，则直接启动。</p>
+<h3 id="singletask">singleTask</h3>
+<p>若目标Activity已经在栈中，则将其上Activity出栈并启动。</p>
+<h3 id="singleinstance">singleInstance</h3>
+<p>启用一个新的返回栈管理Activity，一般用于多个程序共享Activity。</p>
+<h2 id="activity最佳实践">Activity最佳实践</h2>
+<h3 id="知道当前在哪个activity">知道当前在哪个Activity</h3>
+<p>准备一个<code>BaseActivity</code>，让其他所有Activity继承自它。</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.activcitylifecycletest</span>
+<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.os.Bundle</span>
+<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.util.Log</span>
+<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">androidx.appcompat.app.AppCompatActivity</span>
+<span style="color:#8b008b;font-weight:bold">open</span> <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">BaseActivity</span> : AppCompatActivity() {
+    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onCreate</span>(savedInstanceState: Bundle?) {
+        <span style="color:#8b008b;font-weight:bold">super</span>.onCreate(savedInstanceState)
+        Log.d(TAG, <span style="color:#cd5555">&#34;</span><span style="color:#cd5555">${javaClass.simpleName}</span><span style="color:#cd5555"> onCreate.&#34;</span>)
+    }
+    <span style="color:#8b008b;font-weight:bold">companion</span> <span style="color:#8b008b;font-weight:bold">object</span> {
+        <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#8b008b;font-weight:bold">val</span> TAG = <span style="color:#cd5555">&#34;BaseActivity&#34;</span>
+    }
+}
+</code></pre></div><h3 id="随时随地退出程序">随时随地退出程序</h3>
+<p>可以准备一个类将当前所有Activity管理起来。</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.activcitylifecycletest</span>
+<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.app.Activity</span>
+<span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#008b45;font-weight:bold">ActivityHelper</span> {
+    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> activities = arrayListOf&lt;Activity&gt;()
+    <span style="color:#228b22">/**
+</span><span style="color:#228b22">     * onCreate时
+</span><span style="color:#228b22">     */</span>
+    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">addActivity</span>(activity: Activity) {
+        activities.add(activity)
+    }
+    <span style="color:#228b22">/**
+</span><span style="color:#228b22">     * onDestory时
+</span><span style="color:#228b22">     */</span>
+    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">removeActivity</span>(activity: Activity) {
+        activities.remove(activity)
+    }
+    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">finishAll</span>() {
+        <span style="color:#8b008b;font-weight:bold">for</span> (activity <span style="color:#8b008b;font-weight:bold">in</span> activities) {
+            <span style="color:#8b008b;font-weight:bold">if</span> (!activity.isFinishing) {
+                activity.finish()
+            }
+        }
+    }
+}
+</code></pre></div><p>然后，在<code>BaseActivity</code>中将Activity注册到这里。</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onCreate</span>(savedInstanceState: Bundle?) {
+    <span style="color:#8b008b;font-weight:bold">super</span>.onCreate(savedInstanceState)
+    Log.d(TAG, <span style="color:#cd5555">&#34;</span><span style="color:#cd5555">${javaClass.simpleName}</span><span style="color:#cd5555"> onCreate.&#34;</span>)
+    ActivityHelper.addActivity(<span style="color:#8b008b;font-weight:bold">this</span>)
+}
+<span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onDestroy</span>() {
+    <span style="color:#8b008b;font-weight:bold">super</span>.onDestroy()
+    Log.d(TAG, <span style="color:#cd5555">&#34;</span><span style="color:#cd5555">${javaClass.simpleName}</span><span style="color:#cd5555"> onDestory&#34;</span>)
+    ActivityHelper.removeActivity(<span style="color:#8b008b;font-weight:bold">this</span>)
+}
+</code></pre></div><p>这样就可以随时使用<code>ActivityHelper.finishAll()</code>来关闭所有Activity了。</p>
+<h3 id="启动activity的最佳写法">启动Activity的最佳写法</h3>
+<blockquote>
+<p>作为一个成熟的Activity，你应该会自己启动自己了。
+建议Activity自己实现一个启动Activity的方法，这样外部调用时就能一目了然看出这个Activity需要什么参数。</p>
+</blockquote>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">companion</span> <span style="color:#8b008b;font-weight:bold">object</span> {
+    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">actionStart</span>(context: Context, title: String?, content: String?) {
+        <span style="color:#8b008b;font-weight:bold">val</span> intent = Intent(context, DialogActivity::<span style="color:#8b008b;font-weight:bold">class</span>.java)
+        intent.putExtra(<span style="color:#cd5555">&#34;title&#34;</span>, title)
+        intent.putExtra(<span style="color:#cd5555">&#34;content&#34;</span>, content)
+        context.startActivity(intent)
+    }
+}
+</code></pre></div><p>这样外部调用只需要</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">DialogActivity.actionStart(<span style="color:#8b008b;font-weight:bold">this</span>, <span style="color:#cd5555">&#34;MyDialog&#34;</span>, <span style="color:#cd5555">&#34;作为一个成熟的Activity，你应该会自己启动自己了。&#34;</span>)
+</code></pre></div><section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p>Activity不一定会占满整个屏幕，所以下方没有被激活但仍然可见。很多应用用一像素Activity保活就是利用了这一点。 <a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">最后修改于 2020-12-15</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts" href="https://ntutn.top/posts/broadcast/">
+			下回<br>android项目开发：Broadcast
+                </a>
+                
+                
+                
+                <a class="older-posts" href="https://ntutn.top/posts/%E5%86%99%E4%BA%A7%E5%93%81%E5%92%8C%E5%86%99demo%E7%9A%84%E5%8C%BA%E5%88%AB/">
+			上回<br>写产品和写demo的区别
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+<script src="https://utteranc.es/client.js"
+        repo="zerofancy/zerofancy.github.io"
+        issue-term="title"
+        label=""
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	CC BY-SA 4.0
+	
+</div>
+            </div>
+    
+    <script src="/js/journal.js"></script>
+    </body>
+</html>

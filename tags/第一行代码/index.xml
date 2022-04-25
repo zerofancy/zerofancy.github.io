@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>android on 归零幻想</title>
-    <link>https://ntutn.top/tags/android/</link>
-    <description>Recent content in android on 归零幻想</description>
+    <title>第一行代码 on 归零幻想</title>
+    <link>https://ntutn.top/tags/%E7%AC%AC%E4%B8%80%E8%A1%8C%E4%BB%A3%E7%A0%81/</link>
+    <description>Recent content in 第一行代码 on 归零幻想</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Thu, 24 Dec 2020 03:11:37 +0800</lastBuildDate><atom:link href="https://ntutn.top/tags/android/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 24 Dec 2020 03:11:37 +0800</lastBuildDate><atom:link href="https://ntutn.top/tags/%E7%AC%AC%E4%B8%80%E8%A1%8C%E4%BB%A3%E7%A0%81/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>android项目开发：Broadcast</title>
       <link>https://ntutn.top/posts/broadcast/</link>
@@ -34,36 +34,6 @@ Android中每个应用程序都可以对自己感兴趣的广播进行注册，�
 Activity可以创建菜单。首先在res/menu下创建一个xml文件（Android Studio中也提供了可视化编辑的方法）：
 &amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt; &amp;lt;menu xmlns:app=&amp;#34;http://schemas.android.com/apk/res-auto&amp;#34; xmlns:android=&amp;#34;http://schemas.android.com/apk/res/android&amp;#34;&amp;gt; &amp;lt;item android:id=&amp;#34;@+id/add_item&amp;#34; android:title=&amp;#34;Add&amp;#34;/&amp;gt; &amp;lt;item android:id=&amp;#34;@+id/remove_item&amp;#34; android:title=&amp;#34;Remove&amp;#34;/&amp;gt; &amp;lt;/menu&amp;gt; 重写两个方法
 override fun onCreateOptionsMenu(menu: Menu?): Boolean { menuInflater.inflate(R.menu.main, menu) return true } override fun onOptionsItemSelected(item: MenuItem): Boolean { when (item.itemId) { R.id.add_item -&amp;gt; Toast.makeText(this, &amp;#34;Add a book.&amp;#34;, Toast.LENGTH_LONG).show() R.id.remove_item -&amp;gt; Toast.makeText(this, &amp;#34;Remove a book.&amp;#34;, Toast.LENGTH_LONG).show() } return true } 用finish()方法可以关闭一个Activity。</description>
-    </item>
-    
-    <item>
-      <title>EventBus初探</title>
-      <link>https://ntutn.top/posts/eventbus%E5%88%9D%E6%8E%A2/</link>
-      <pubDate>Fri, 21 Aug 2020 03:11:37 +0800</pubDate>
-      
-      <guid>https://ntutn.top/posts/eventbus%E5%88%9D%E6%8E%A2/</guid>
-      <description>公司项目中大量运用了EventBus1，这两天在做的需求相关的代码也用到了，于是还是要先去研究下这个EventBus是什么。
-EventBus，顾名思义，事件总线，是一个安卓上的事件管理平台。用事件驱动的机制来简化事件传递的逻辑。在这层意义上也许可以类比Qt的信号槽机制，或者安卓的广播。当你需要把一个事件传递给多个对象，EventBus就变得非常有用。
-该图片来自EventBus的github仓库
-EventBus的使用 首先当然是添加依赖
-implementation &amp;#39;org.greenrobot:eventbus:3.2.0&amp;#39; 写个demo展示下：
-点击按钮后，将两处文本的值修改为文本框中的值。注意：上面的那个红色的文本处于一个fragment中。
-为此，我们先准备一个Event：
-data class ButtonEvent(val text: String) 点击按钮时，发送这个Event：
-button.setOnClickListener { EventBus.getDefault().post(ButtonEvent(editTextTextPersonName.text.toString())) } 然后在需要接收这个请求的地方，比如我们在MainActivity的onCreate()中注册EventBus：
-EventBus.getDefault().register(this) 在onDestory()中解除
-EventBus.getDefault().unregister(this) 然后就可以接收那个Event了。
-@Subscribe fun onButtonEvent(buttonEvent: ButtonEvent){ textView.text=buttonEvent.text } 同样对于Fragment，我们只需要做同样的事情，就可以监听这个Event了。很明显，这对于一个事件有多个处理的场景是很方便的。
-订阅者的threadMode 安卓应用启动时，系统会创建一个主线程，负责向UI组件分发事件2，所有对UI的操作应该放到主线程中。EventBus是一种重要的跨线程更新UI的方式。3
-@Subscribe注解有一个参数threadMode，有以下取值：
-ThreadMode.POSTING 默认值，在同一线程中调用，开销最小。
-ThreadMode.MAIN 在主线程中调用。
- 如果发送事件的是主线程，则直接调用。
- ThreadMode.MAIN_ORDERED 在主线程中调用，同步调用（排队）。
-ThreadMode.BACKGROUND 在后台线程中调用。
-ThreadMode.ASYNC 在单独线程中调用，用于耗时操作。
-对于EventBus更新UI，我同样写了demo：
-package com.example.eventbustimerdemo import android.os.Bundle import androidx.appcompat.app.AppCompatActivity import kotlinx.android.synthetic.main.activity_main.* import org.greenrobot.eventbus.EventBus import org.greenrobot.eventbus.Subscribe import org.greenrobot.eventbus.ThreadMode class MainActivity : AppCompatActivity() { override fun onCreate(savedInstanceState: Bundle?</description>
     </item>
     
   </channel>

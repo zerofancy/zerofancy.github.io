@@ -7,7 +7,35 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Tue, 15 Dec 2020 03:11:37 +0800</lastBuildDate><atom:link href="https://ntutn.top/tags/kotlin/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 24 Dec 2020 03:11:37 +0800</lastBuildDate><atom:link href="https://ntutn.top/tags/kotlin/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>android项目开发：Broadcast</title>
+      <link>https://ntutn.top/posts/broadcast/</link>
+      <pubDate>Thu, 24 Dec 2020 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/broadcast/</guid>
+      <description>仍然是《第一行代码》的学习笔记，安卓内置广播机制。
+Android中每个应用程序都可以对自己感兴趣的广播进行注册，包括来自系统的，和其他应用程序的。
+广播分为标准广播和有序广播。
+ 标准广播异步执行，所有BroadcastReceiver几乎同时收到广播的消息。 有序广播 同步执行，只有前一个Receiver逻辑执行完后才会传递给下一个，且可以将广播截断。  接收系统广播 BroadcastReceiver的onReceive()方法是在主线程调用的，不应执行耗时操作。但开一个新线程操作也是不可靠的1。
+监听时间变化（动态注册） class MainActivity : AppCompatActivity() { private val timeReceiver = object : BroadcastReceiver() { override fun onReceive(context: Context?, intent: Intent?) { text.text = Date(System.currentTimeMillis()).toString() } } override fun onCreate(savedInstanceState: Bundle?) { super.onCreate(savedInstanceState) setContentView(R.layout.activity_main) val intentFilter = IntentFilter() intentFilter.addAction(Intent.ACTION_TIME_TICK) registerReceiver(timeReceiver, intentFilter) } override fun onDestroy() { super.onDestroy() unregisterReceiver(timeReceiver) } } 开机启动（静态注册） &amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt; &amp;lt;manifest xmlns:android=&amp;#34;http://schemas.android.com/apk/res/android&amp;#34; package=&amp;#34;top.ntutn.broadcasttest&amp;#34;&amp;gt; &amp;lt;uses-permission android:name=&amp;#34;android.permission.RECEIVE_BOOT_COMPLETED&amp;#34; /&amp;gt; &amp;lt;application android:allowBackup=&amp;#34;true&amp;#34; android:icon=&amp;#34;@mipmap/ic_launcher&amp;#34; android:label=&amp;#34;@string/app_name&amp;#34; android:roundIcon=&amp;#34;@mipmap/ic_launcher_round&amp;#34; android:supportsRtl=&amp;#34;true&amp;#34; android:theme=&amp;#34;@style/Theme.</description>
+    </item>
+    
+    <item>
+      <title>android项目开发：Activity</title>
+      <link>https://ntutn.top/posts/activity/</link>
+      <pubDate>Tue, 15 Dec 2020 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/activity/</guid>
+      <description>title: android项目开发：Activity author: 归零幻想 publishDate: 2020-12-15 editDate: 2020-12-15 tags: [android, 第一行代码, Kotlin, Activity]
+ 仍然是《第一行代码》的读书笔记，可能引用原书的定义和描述，或代码案例。
+ Activity Activity基本用法 Android讲究设计逻辑与视图分离，一般Activity都会对应一个布局文件（XML文件）。
+所有的Activity都要在AndroidManifest中注册才生效。
+Activity可以创建菜单。首先在res/menu下创建一个xml文件（Android Studio中也提供了可视化编辑的方法）：
+&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt; &amp;lt;menu xmlns:app=&amp;#34;http://schemas.android.com/apk/res-auto&amp;#34; xmlns:android=&amp;#34;http://schemas.android.com/apk/res/android&amp;#34;&amp;gt; &amp;lt;item android:id=&amp;#34;@+id/add_item&amp;#34; android:title=&amp;#34;Add&amp;#34;/&amp;gt; &amp;lt;item android:id=&amp;#34;@+id/remove_item&amp;#34; android:title=&amp;#34;Remove&amp;#34;/&amp;gt; &amp;lt;/menu&amp;gt; 重写两个方法
+override fun onCreateOptionsMenu(menu: Menu?): Boolean { menuInflater.inflate(R.menu.main, menu) return true } override fun onOptionsItemSelected(item: MenuItem): Boolean { when (item.itemId) { R.id.add_item -&amp;gt; Toast.makeText(this, &amp;#34;Add a book.&amp;#34;, Toast.LENGTH_LONG).show() R.id.remove_item -&amp;gt; Toast.makeText(this, &amp;#34;Remove a book.&amp;#34;, Toast.LENGTH_LONG).show() } return true } 用finish()方法可以关闭一个Activity。</description>
+    </item>
+    
     <item>
       <title>写产品和写demo的区别</title>
       <link>https://ntutn.top/posts/%E5%86%99%E4%BA%A7%E5%93%81%E5%92%8C%E5%86%99demo%E7%9A%84%E5%8C%BA%E5%88%AB/</link>
