@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html><head>
+<title>android项目开发：项目结构</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="项目结构">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+<meta property="og:title" content="android项目开发：项目结构" />
+<meta property="og:description" content="项目结构" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ntutn.top/posts/%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/" />
+<meta property="article:published_time" content="2020-12-08T03:11:37+08:00" />
+<meta property="article:modified_time" content="2020-12-08T03:11:37+08:00" /><meta property="og:site_name" content="归零幻想" />
+
+
+
+
+
+
+
+
+
+
+<link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+
+  
+
+
+
+
+<link rel="icon" href="//images.ntutn.top/favicon.ico">
+
+
+
+<link rel="stylesheet" href="https://ntutn.top/scss/journal.min.d8d9f81b896882733c41896750adbefbf9319ca02ccccefd461650898975c3af.css" integrity="sha256-2Nn4G4lognM8QYlnUK2&#43;&#43;/kxnKAszM79RhZQiYl1w68=" media="screen">
+
+
+
+<link rel="stylesheet" href="https://ntutn.top/scss/dark-mode.min.60f86847da9fc0724177ccfd0bf7c5997b0b41f1e58d5a293cfb3723c497c422.css" integrity="sha256-YPhoR9qfwHJBd8z9C/fFmXsLQfHljVopPPs3I8SXxCI=" media="screen">
+
+
+<script src="/vendor/js/loadCSS.js"></script>
+<script>
+  loadCSS("https://fonts.googleapis.com/css?family=Fira+Mono|Material+Icons");
+</script>
+
+
+
+<script defer
+	src='https://static.cloudflareinsights.com/beacon.min.js'
+	data-cf-beacon='{"token": 5a03d307f5214109a1e7c8b2cf306a3d'>
+</script>
+
+
+
+
+
+
+  <script src="/js/toc.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://ntutn.top/">
+    
+        <div class="nav-title">
+            归零幻想
+        </div>
+        
+        <div class="nav-subtitle">
+            零点还不算熬夜
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                Archive
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/index.xml">
+                RSS Feed
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	CC BY-SA 4.0
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    
+    
+    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#gradle%e5%92%8cidea" onclick="onNavClick(`#gradle和idea-nav`)" id="gradle和idea-nav">
+									.gradle和.idea
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#app" onclick="onNavClick(`#app-nav`)" id="app-nav">
+									app
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#build" onclick="onNavClick(`#build-nav`)" id="build-nav">
+									build
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#libs" onclick="onNavClick(`#libs-nav`)" id="libs-nav">
+									libs
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#src" onclick="onNavClick(`#src-nav`)" id="src-nav">
+									src
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#androidtest" onclick="onNavClick(`#androidtest-nav`)" id="androidtest-nav">
+									androidTest
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#test" onclick="onNavClick(`#test-nav`)" id="test-nav">
+									test
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#main" onclick="onNavClick(`#main-nav`)" id="main-nav">
+									main
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#gitignore" onclick="onNavClick(`#gitignore-nav`)" id="gitignore-nav">
+									.gitignore
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#buildgradle" onclick="onNavClick(`#buildgradle-nav`)" id="buildgradle-nav">
+									build.gradle
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#proguard-rulespro" onclick="onNavClick(`#proguard-rulespro-nav`)" id="proguard-rulespro-nav">
+									proguard-rules.pro
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#build-1" onclick="onNavClick(`#build-1-nav`)" id="build-1-nav">
+									build
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#gradle" onclick="onNavClick(`#gradle-nav`)" id="gradle-nav">
+									gradle
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#gitignore-1" onclick="onNavClick(`#gitignore-1-nav`)" id="gitignore-1-nav">
+									.gitignore
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#buildgradle-1" onclick="onNavClick(`#buildgradle-1-nav`)" id="buildgradle-1-nav">
+									build.gradle
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#gradleproperties" onclick="onNavClick(`#gradleproperties-nav`)" id="gradleproperties-nav">
+									gradle.properties
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#gradlew%e5%92%8cgradlewbat" onclick="onNavClick(`#gradlew和gradlewbat-nav`)" id="gradlew和gradlewbat-nav">
+									gradlew和gradlew.bat
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#localproperties" onclick="onNavClick(`#localproperties-nav`)" id="localproperties-nav">
+									local.properties
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#settingsgradle" onclick="onNavClick(`#settingsgradle-nav`)" id="settingsgradle-nav">
+									settings.gradle
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+    
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+<div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    Archive
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/categories">
+                    Categories
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/index.xml">
+                    RSS Feed
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#gradle%e5%92%8cidea" onclick="onNavClick(`#gradle和idea-nav`)" id="gradle和idea-nav">
+									.gradle和.idea
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#app" onclick="onNavClick(`#app-nav`)" id="app-nav">
+									app
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#build" onclick="onNavClick(`#build-nav`)" id="build-nav">
+									build
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#libs" onclick="onNavClick(`#libs-nav`)" id="libs-nav">
+									libs
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#src" onclick="onNavClick(`#src-nav`)" id="src-nav">
+									src
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#androidtest" onclick="onNavClick(`#androidtest-nav`)" id="androidtest-nav">
+									androidTest
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#test" onclick="onNavClick(`#test-nav`)" id="test-nav">
+									test
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#main" onclick="onNavClick(`#main-nav`)" id="main-nav">
+									main
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#gitignore" onclick="onNavClick(`#gitignore-nav`)" id="gitignore-nav">
+									.gitignore
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#buildgradle" onclick="onNavClick(`#buildgradle-nav`)" id="buildgradle-nav">
+									build.gradle
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#proguard-rulespro" onclick="onNavClick(`#proguard-rulespro-nav`)" id="proguard-rulespro-nav">
+									proguard-rules.pro
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#build-1" onclick="onNavClick(`#build-1-nav`)" id="build-1-nav">
+									build
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#gradle" onclick="onNavClick(`#gradle-nav`)" id="gradle-nav">
+									gradle
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#gitignore-1" onclick="onNavClick(`#gitignore-1-nav`)" id="gitignore-1-nav">
+									.gitignore
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#buildgradle-1" onclick="onNavClick(`#buildgradle-1-nav`)" id="buildgradle-1-nav">
+									build.gradle
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#gradleproperties" onclick="onNavClick(`#gradleproperties-nav`)" id="gradleproperties-nav">
+									gradle.properties
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#gradlew%e5%92%8cgradlewbat" onclick="onNavClick(`#gradlew和gradlewbat-nav`)" id="gradlew和gradlewbat-nav">
+									gradlew和gradlew.bat
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#localproperties" onclick="onNavClick(`#localproperties-nav`)" id="localproperties-nav">
+									local.properties
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#settingsgradle" onclick="onNavClick(`#settingsgradle-nav`)" id="settingsgradle-nav">
+									settings.gradle
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://ntutn.top/">
+            归零幻想
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://ntutn.top/">
+        <div class="single-column-header-title">归零幻想</div>
+        
+        <div class="single-column-header-subtitle">零点还不算熬夜</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
+                    android项目开发：项目结构
+                    
+                    <div class="post-subtitle">
+                        项目结构
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2020-12-08 03:11
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/%E5%AD%A6%E4%B9%A0">学习</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/android">Android</a>
+                                &nbsp;
+                            
+                                <a href="/tags/%E7%AC%AC%E4%B8%80%E8%A1%8C%E4%BB%A3%E7%A0%81">第一行代码</a>
+                                &nbsp;
+                            
+                                <a href="/tags/kotlin">Kotlin</a>
+                                &nbsp;
+                            
+                        
+                        
+                            <i class="material-icons" style="">schedule</i>
+                            
+
+                            
+                            
+
+                            
+                            5 min
+                            
+                            2 s.
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <!-- raw HTML omitted -->
+<p>虽然已经在字节实习并拿到转正offer，但实际我自己感受我现在对安卓基础知识掌握的程度还差很多，感觉写业务代码本身并不能带来多少提升。</p>
+<p>恰逢前两天看到黄正楠那里有一本看上去不错的书<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>，而在淘宝也在打折，就买了一本。</p>
+<p>那么从Hello Wrold开始，先看看安卓项目的项目结构。</p>
+<!-- raw HTML omitted -->
+<p>[TOC]</p>
+<h2 id="gradle和idea">.gradle和.idea</h2>
+<p>Android Studio自动生成的文件，无需关心。</p>
+<h2 id="app">app</h2>
+<p>项目中的代码、资源等内容。</p>
+<h3 id="build">build</h3>
+<p>编译时自动生成的文件，不需要关心。</p>
+<h3 id="libs">libs</h3>
+<p>存放项目中的第三方jar包，这个目录下的jar包会自动添加到项目的构建路径下。</p>
+<h3 id="src">src</h3>
+<h4 id="androidtest">androidTest</h4>
+<p>Android Test测试用例，可以对项目进行一些自动化测试。</p>
+<blockquote>
+<p>实际上在公司里发现基本不写测试用例，全靠QA瞎几把点。</p>
+</blockquote>
+<h4 id="test">test</h4>
+<p>用来编写单元测试用例，对项目进行自动化测试。</p>
+<blockquote>
+<p>这里的测试用例是不依赖安卓框架的。</p>
+</blockquote>
+<h4 id="main">main</h4>
+<h5 id="java">java</h5>
+<p>存放所有java代码（和Kotlin代码）的地方。</p>
+<h5 id="res">res</h5>
+<p>项目的资源文件夹，项目中使用到的所有图片、布局、字符串等资源都存在这个目录下。</p>
+<p>图片存放在<code>drawable</code>目录下，布局存放在<code>layout</code>目录下，字符串存放在<code>values</code>目录下。</p>
+<p><code>mipmap</code>存放图标，之所以有很多<code>mipmap</code>目录是为了适配各种设备。若只有一份图片，那么放在<code>xxhdpi</code>下就可以了。</p>
+<h5 id="androidmanifestxml">AndroidManifest.xml</h5>
+<p>整个Android项目的配置文件，程序中定义的四大组件都需要在这个文件中注册。此外，还可以在这个文件中添加应用程序的权限声明。</p>
+<h3 id="gitignore">.gitignore</h3>
+<p>类似外层的<code>.gitignore</code>，用来在版本控制系统中排除app模块中的指定文件。</p>
+<h3 id="buildgradle">build.gradle</h3>
+<p>app模块的gradle构建脚本，指定很多项目构建相关的配置。</p>
+<p>插件<code>com.android.application</code>用于应用程序模块，<code>com.android.library</code>表示库模块。前者可以直接运行，后者只能作为代码库依附于应用程序模块运行。</p>
+<h3 id="proguard-rulespro">proguard-rules.pro</h3>
+<p>指定项目代码的混淆方式。</p>
+<h2 id="build-1">build</h2>
+<p>编译时自动生成的内容。</p>
+<h2 id="gradle">gradle</h2>
+<p>gradle wrapper的配置文件。Android Studio会根据本地的缓存i去=情况决定是否需要联网下载gradle。</p>
+<h2 id="gitignore-1">.gitignore</h2>
+<p>排除文件或文件夹的git版本控制。</p>
+<blockquote>
+<p>对于所有项目都会用到的<code>.gitignore</code>条目，不妨加入<code>~/.gitignore</code>全局配置。</p>
+</blockquote>
+<h2 id="buildgradle-1">build.gradle</h2>
+<p>项目全局的构建脚本。</p>
+<p>repositories中，<code>google()</code>对应谷歌自家代码仓库依赖，<code>jcenter()</code>中则是很多第三方开源库。</p>
+<h2 id="gradleproperties">gradle.properties</h2>
+<p>全局gradle的配置文件。</p>
+<h2 id="gradlew和gradlewbat">gradlew和gradlew.bat</h2>
+<p>这两个文件是用来在命令行界面执行gradle命令的，其中<code>gradlew</code>是在Linux或Mac系统中使用的，<code>gradlew.bat</code>是在Windows系统中使用的。</p>
+<h2 id="localproperties">local.properties</h2>
+<p>用于指定本机中的Android SDK路径。</p>
+<h2 id="settingsgradle">settings.gradle</h2>
+<p>用来指定项目中所有引入的模块。</p>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p>《第一行代码》 <a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">最后修改于 2020-12-08</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts" href="https://ntutn.top/posts/%E5%86%99%E4%BA%A7%E5%93%81%E5%92%8C%E5%86%99demo%E7%9A%84%E5%8C%BA%E5%88%AB/">
+			下回<br>写产品和写demo的区别
+                </a>
+                
+                
+                
+                <a class="older-posts" href="https://ntutn.top/posts/b%E7%AB%99%E7%9A%84%E6%90%AC%E8%BF%90%E6%9C%BA%E5%88%B6%E5%92%8C%E7%9B%97%E8%A7%86%E9%A2%91%E8%A1%8C%E4%B8%BA%E6%9C%89%E5%8C%BA%E5%88%AB%E5%90%97/">
+			上回<br>B站的搬运机制和盗视频行为有区别吗
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+<script src="https://utteranc.es/client.js"
+        repo="zerofancy/zerofancy.github.io"
+        issue-term="title"
+        label=""
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	CC BY-SA 4.0
+	
+</div>
+            </div>
+    
+    <script src="/js/journal.js"></script>
+    </body>
+</html>

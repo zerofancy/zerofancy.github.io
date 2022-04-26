@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>学习 on 归零幻想</title>
+    <link>https://ntutn.top/categories/%E5%AD%A6%E4%B9%A0/</link>
+    <description>Recent content in 学习 on 归零幻想</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <copyright>CC BY-SA 4.0</copyright>
+    <lastBuildDate>Sun, 24 Oct 2021 03:11:37 +0800</lastBuildDate><atom:link href="https://ntutn.top/categories/%E5%AD%A6%E4%B9%A0/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>android项目开发：持久化</title>
+      <link>https://ntutn.top/posts/%E6%8C%81%E4%B9%85%E5%8C%96/</link>
+      <pubDate>Sun, 24 Oct 2021 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E6%8C%81%E4%B9%85%E5%8C%96/</guid>
+      <description>《第一行代码》阅读记录，有关数据持久化存储，略过了数据库的方式。
+持久化 文件存储 先暂时只是写了个demo，有需要再深入看。
+private fun saveText(inputText: String) { try { val output = openFileOutput(&amp;#34;data&amp;#34;, Context.MODE_PRIVATE) val writer = BufferedWriter(OutputStreamWriter(output)) writer.use { it.write(inputText) } } catch (e: IOException) { e.printStackTrace() } } private fun loadText(): String { val content = StringBuilder() try { val input = openFileInput(&amp;#34;data&amp;#34;) val reader = BufferedReader(InputStreamReader(input)) reader.use { r -&amp;gt; r.forEachLine { content.appendLine(it) } } } catch (e: IOException) { e.printStackTrace() } return content.toString() } SharedPreference saveButton.</description>
+    </item>
+    
+    <item>
+      <title>android项目开发：Kotlin</title>
+      <link>https://ntutn.top/posts/kotlin/</link>
+      <pubDate>Tue, 12 Oct 2021 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/kotlin/</guid>
+      <description>Kotlin 变量和函数 变量 用var和val定义变量，并有类型自动推导的支持。
+val用来声明一个不可变的变量，var用来声明一个可变的变量。
+val a = 10 var b: Int = 12 Kotlin完全抛弃了java中的基本数据类型，完全使用对象数据类型。
+   java基本数据类型 Kotlin对象数据类型 数据类型说明     int Int 整型   long Long 长整型   short Short 短整型   float Float 单精度浮点型   double Double 双精度浮点型   boolean Boolean 布尔型   char Char 字符型   byte Byte 字节型    函数 语法：
+fun main(args: Array&amp;lt;String&amp;gt;) { println(&amp;#34;Hello World!</description>
+    </item>
+    
+    <item>
+      <title>android项目开发：通知</title>
+      <link>https://ntutn.top/posts/%E9%80%9A%E7%9F%A5/</link>
+      <pubDate>Tue, 12 Jan 2021 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E9%80%9A%E7%9F%A5/</guid>
+      <description>仍然是第一行代码的笔记，这篇是有关通知的，最基本的用法。
+通知的相关知识 通知是什么不再赘述，这里只记录些重要但没接触的概念。
+通知渠道在8.0（O）引入。要求APP将通知分类，通过不同渠道进行分发，用户可以选择性禁用某个渠道的通知，或者调整优先等级。
+通知可以有不同的重要等级，有四种：IMPORTANCE_HIGH、IMPORTANCE_DEFAULT、IMPORTANCE_LOW、IMPORTANCE_MIN。根据重要等级不同，通知可能有不同的展现策略，比如在前台提示甚至播放声音。
+在通知渠道创建时通知的重要等级也就确定了，之后不能再被APP修改。
+通知dmeo package top.ntutn.notificationtest import android.app.NotificationChannel import android.app.NotificationManager import android.app.PendingIntent import android.content.Context import android.content.Intent import android.graphics.BitmapFactory import android.os.Build import androidx.appcompat.app.AppCompatActivity import android.os.Bundle import androidx.core.app.NotificationCompat import top.ntutn.notificationtest.databinding.ActivityMainBinding class MainActivity : AppCompatActivity() { private lateinit var binding: ActivityMainBinding override fun onCreate(savedInstanceState: Bundle?) { super.onCreate(savedInstanceState) binding = ActivityMainBinding.inflate(layoutInflater) setContentView(binding.root) initView() } private fun initView(){ val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager if(Build.VERSION.SDK_INT &amp;gt;= Build.VERSION_CODES.O){ // 通知渠道  val channel = NotificationChannel(&amp;#34;normal&amp;#34;,&amp;#34;Normal&amp;#34;,NotificationManager.</description>
+    </item>
+    
+    <item>
+      <title>android项目开发：UI设计</title>
+      <link>https://ntutn.top/posts/ui%E8%AE%BE%E8%AE%A1/</link>
+      <pubDate>Mon, 21 Dec 2020 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/ui%E8%AE%BE%E8%AE%A1/</guid>
+      <description>仍然是《第一行代码》的学习笔记，这里记录的东西相对少一点，UI上的东西还是更多在实际项目中感受到。比如我想没有必要写TextView的介绍吧。
+控件的使用方法 dp是一种屏幕密度无关的尺寸单位，可以保证在不同分辨率的手机上显示效果尽可能一致。
+match_parent表示让当前控件大小和父布局的大小一致。
+wrap_content表示让当前控件的大小能正好包裹里面的内容。
+android:gravity指定控件内的内容对齐方式，有top、bottom、start、end、center等可选，可以用|指定多个值。比如center等价于center_vertical|center_horizonal。
+基本布局 LinearLayout 线性布局，通过android:orientation指定方向。
+有一个重要属性：android:layout_weight，它将控件已经占用的空间减掉后按照比重分给各个控件。一般我们直接指定android:layout_width为0dp，而给它指定一个比重，这样控件的尺寸将占满剩余空间。
+RelativeLayout 相对布局，复杂，但有迹可循。
+&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;utf-8&amp;quot;?&amp;gt; &amp;lt;RelativeLayout xmlns:android=&amp;quot;http://schemas.android.com/apk/res/android&amp;quot; xmlns:tools=&amp;quot;http://schemas.android.com/tools&amp;quot; android:layout_width=&amp;quot;match_parent&amp;quot; android:layout_height=&amp;quot;match_parent&amp;quot; tools:context=&amp;quot;.MainActivity&amp;quot;&amp;gt; &amp;lt;Button android:id=&amp;quot;@+id/button1&amp;quot; android:layout_width=&amp;quot;wrap_content&amp;quot; android:layout_height=&amp;quot;wrap_content&amp;quot; android:layout_alignParentLeft=&amp;quot;true&amp;quot; android:layout_alignParentTop=&amp;quot;true&amp;quot; android:text=&amp;quot;Button1&amp;quot; /&amp;gt; &amp;lt;Button android:id=&amp;quot;@+id/button2&amp;quot; android:layout_width=&amp;quot;wrap_content&amp;quot; android:layout_height=&amp;quot;wrap_content&amp;quot; android:layout_alignParentTop=&amp;quot;true&amp;quot; android:layout_alignParentRight=&amp;quot;true&amp;quot; android:text=&amp;quot;Button2&amp;quot; /&amp;gt; &amp;lt;Button android:id=&amp;quot;@+id/button3&amp;quot; android:layout_width=&amp;quot;wrap_content&amp;quot; android:layout_height=&amp;quot;wrap_content&amp;quot; android:layout_centerInParent=&amp;quot;true&amp;quot; android:text=&amp;quot;Button3&amp;quot; /&amp;gt; &amp;lt;Button android:id=&amp;quot;@+id/button4&amp;quot; android:layout_width=&amp;quot;wrap_content&amp;quot; android:layout_height=&amp;quot;wrap_content&amp;quot; android:layout_alignParentLeft=&amp;quot;true&amp;quot; android:layout_alignParentBottom=&amp;quot;true&amp;quot; android:text=&amp;quot;Button4&amp;quot; /&amp;gt; &amp;lt;Button android:id=&amp;quot;@+id/button5&amp;quot; android:layout_width=&amp;quot;wrap_content&amp;quot; android:layout_height=&amp;quot;wrap_content&amp;quot; android:layout_alignParentRight=&amp;quot;true&amp;quot; android:layout_alignParentBottom=&amp;quot;true&amp;quot; android:text=&amp;quot;Button5&amp;quot; /&amp;gt; &amp;lt;/RelativeLayout&amp;gt; 以上这段布局文件描述的就是一个相对布局，共有5个按钮，分别在父布局的左上、右上、中间、左下、右下位置。
+相对布局不仅可以相对于父布局，也可以相对于控件。以下描述了button3在中间，左上button1，右上button2，左下button4，右下button5的布局场景。
+&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;utf-8&amp;quot;?&amp;gt; &amp;lt;RelativeLayout xmlns:android=&amp;quot;http://schemas.android.com/apk/res/android&amp;quot; xmlns:tools=&amp;quot;http://schemas.android.com/tools&amp;quot; android:layout_width=&amp;quot;match_parent&amp;quot; android:layout_height=&amp;quot;match_parent&amp;quot; tools:context=&amp;quot;.</description>
+    </item>
+    
+    <item>
+      <title>android项目开发：项目结构</title>
+      <link>https://ntutn.top/posts/%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/</link>
+      <pubDate>Tue, 08 Dec 2020 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/</guid>
+      <description>虽然已经在字节实习并拿到转正offer，但实际我自己感受我现在对安卓基础知识掌握的程度还差很多，感觉写业务代码本身并不能带来多少提升。
+恰逢前两天看到黄正楠那里有一本看上去不错的书1，而在淘宝也在打折，就买了一本。
+那么从Hello Wrold开始，先看看安卓项目的项目结构。
+[TOC]
+.gradle和.idea Android Studio自动生成的文件，无需关心。
+app 项目中的代码、资源等内容。
+build 编译时自动生成的文件，不需要关心。
+libs 存放项目中的第三方jar包，这个目录下的jar包会自动添加到项目的构建路径下。
+src androidTest Android Test测试用例，可以对项目进行一些自动化测试。
+ 实际上在公司里发现基本不写测试用例，全靠QA瞎几把点。
+ test 用来编写单元测试用例，对项目进行自动化测试。
+ 这里的测试用例是不依赖安卓框架的。
+ main java 存放所有java代码（和Kotlin代码）的地方。
+res 项目的资源文件夹，项目中使用到的所有图片、布局、字符串等资源都存在这个目录下。
+图片存放在drawable目录下，布局存放在layout目录下，字符串存放在values目录下。
+mipmap存放图标，之所以有很多mipmap目录是为了适配各种设备。若只有一份图片，那么放在xxhdpi下就可以了。
+AndroidManifest.xml 整个Android项目的配置文件，程序中定义的四大组件都需要在这个文件中注册。此外，还可以在这个文件中添加应用程序的权限声明。
+.gitignore 类似外层的.gitignore，用来在版本控制系统中排除app模块中的指定文件。
+build.gradle app模块的gradle构建脚本，指定很多项目构建相关的配置。
+插件com.android.application用于应用程序模块，com.android.library表示库模块。前者可以直接运行，后者只能作为代码库依附于应用程序模块运行。
+proguard-rules.pro 指定项目代码的混淆方式。
+build 编译时自动生成的内容。
+gradle gradle wrapper的配置文件。Android Studio会根据本地的缓存i去=情况决定是否需要联网下载gradle。
+.gitignore 排除文件或文件夹的git版本控制。
+ 对于所有项目都会用到的.gitignore条目，不妨加入~/.gitignore全局配置。
+ build.gradle 项目全局的构建脚本。
+repositories中，google()对应谷歌自家代码仓库依赖，jcenter()中则是很多第三方开源库。
+gradle.properties 全局gradle的配置文件。
+gradlew和gradlew.bat 这两个文件是用来在命令行界面执行gradle命令的，其中gradlew是在Linux或Mac系统中使用的，gradlew.bat是在Windows系统中使用的。
+local.properties 用于指定本机中的Android SDK路径。
+settings.gradle 用来指定项目中所有引入的模块。
+  《第一行代码》 &amp;#x21a9;&amp;#xfe0e;
+   </description>
+    </item>
+    
+    <item>
+      <title>android项目开发：多线程编程</title>
+      <link>https://ntutn.top/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B/</link>
+      <pubDate>Fri, 21 Aug 2020 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B/</guid>
+      <description>仍然是《第一行代码》的笔记，不过略过了deprated的内容，并探究了下Handler的工作机制。
+ 上班了，果然没有那么多大块时间写博客了。
+ Handler 主线程不能进行耗时处理，子线程不能访问UI，所以我们需要异步消息处理机制。
+使用 class MainActivity : AppCompatActivity() { private lateinit var binding: ActivityMainBinding private val handler = object : Handler(Looper.getMainLooper()) { override fun handleMessage(msg: Message) { when(msg.what){ MSG_UPDATE_TEXT -&amp;gt; binding.textView.text = &amp;#34;Nice to meet you. &amp;#34; } } } override fun onCreate(savedInstanceState: Bundle?) { super.onCreate(savedInstanceState) binding = ActivityMainBinding.inflate(layoutInflater) setContentView(binding.root) initView() } private fun initView() { binding.apply { changeTextButton.setOnClickListener { thread { val msg = Message() msg.what = MSG_UPDATE_TEXT handler.</description>
+    </item>
+    
+  </channel>
+</rss>

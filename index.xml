@@ -7,9 +7,668 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Sun, 21 Feb 2021 03:11:37 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 24 Oct 2021 03:11:37 +0800</lastBuildDate>
     
         <atom:link href="https://ntutn.top/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>android项目开发：持久化</title>
+        <link>https://ntutn.top/posts/%E6%8C%81%E4%B9%85%E5%8C%96/</link>
+        <pubDate>Sun, 24 Oct 2021 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/%E6%8C%81%E4%B9%85%E5%8C%96/</guid>
+        <description>归零幻想 https://ntutn.top/posts/%E6%8C%81%E4%B9%85%E5%8C%96/ -&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;《第一行代码》阅读记录，有关数据持久化存储，略过了数据库的方式。&lt;/p&gt;
+&lt;h1 id=&#34;持久化&#34;&gt;持久化&lt;/h1&gt;
+&lt;h2 id=&#34;文件存储&#34;&gt;文件存储&lt;/h2&gt;
+&lt;p&gt;先暂时只是写了个demo，有需要再深入看。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;saveText&lt;/span&gt;(inputText: String) {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;try&lt;/span&gt; {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; output = openFileOutput(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;data&amp;#34;&lt;/span&gt;, Context.MODE_PRIVATE)
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; writer = BufferedWriter(OutputStreamWriter(output))
+            writer.use {
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt;.write(inputText)
+            }
+        } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;catch&lt;/span&gt; (e: IOException) {
+            e.printStackTrace()
+        }
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;loadText&lt;/span&gt;(): String {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; content = StringBuilder()
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;try&lt;/span&gt; {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; input = openFileInput(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;data&amp;#34;&lt;/span&gt;)
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; reader = BufferedReader(InputStreamReader(input))
+            reader.use { r -&amp;gt;
+                r.forEachLine {
+                    content.appendLine(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt;)
+                }
+            }
+        } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;catch&lt;/span&gt; (e: IOException) {
+            e.printStackTrace()
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; content.toString()
+    }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;sharedpreference&#34;&gt;SharedPreference&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;            saveButton.setOnClickListener {
+                getSharedPreferences(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;data&amp;#34;&lt;/span&gt;, Context.MODE_PRIVATE).edit {
+                    putString(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;name&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Tom&amp;#34;&lt;/span&gt;)
+                    putInt(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;age&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#b452cd&#34;&gt;28&lt;/span&gt;)
+                    putBoolean(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;married&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;)
+                }
+            }
+            restoreButton.setOnClickListener {
+                getSharedPreferences(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;data&amp;#34;&lt;/span&gt;, Context.MODE_PRIVATE).apply {
+                    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; name = getString(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;name&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;苏珊&amp;#34;&lt;/span&gt;)
+                    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; age = getInt(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;age&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#b452cd&#34;&gt;15&lt;/span&gt;)
+                    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; isMarried = getBoolean(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;married&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;)
+                    Toast.makeText(
+                        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;&lt;span style=&#34;color:#707a7c&#34;&gt;@MainActivity&lt;/span&gt;,
+                        &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${name}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;年龄&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${age}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;岁&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${if (isMarried) &amp;#34;已婚&amp;#34; else &amp;#34;未婚&amp;#34;}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;,
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;数据库&#34;&gt;数据库&lt;/h2&gt;
+&lt;p&gt;基本用法demo&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.databasetest&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.content.ContentValues&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.content.Context&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.database.Cursor&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.database.sqlite.SQLiteDatabase&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.database.sqlite.SQLiteOpenHelper&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.util.Log&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.widget.Toast&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MyDatabaseHelper&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; context: Context, name: String, version: Int) :
+    SQLiteOpenHelper(context, name, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;, version) {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; createBook = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&amp;#34;&amp;#34;
+&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;        create table Book (
+&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;            id integer primary key autoincrement,
+&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;            author text,
+&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;            price real,
+&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;            pages integer,
+&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;            name text
+&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;        )
+&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;    &amp;#34;&amp;#34;&amp;#34;&lt;/span&gt;.trimIndent()
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; createCategory = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&amp;#34;&amp;#34;
+&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;        create table Category (
+&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;            id integer primary key autoincrement,
+&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;            category_name text,
+&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;            category_code integer
+&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;        )
+&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;    &amp;#34;&amp;#34;&amp;#34;&lt;/span&gt;.trimIndent()
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onCreate&lt;/span&gt;(db: SQLiteDatabase) {
+        db.execSQL(createBook)
+        db.execSQL(createCategory)
+        Toast.makeText(context, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;建立数据库完成&amp;#34;&lt;/span&gt;, Toast.LENGTH_LONG).show()
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onUpgrade&lt;/span&gt;(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (oldVersion == newVersion) &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;
+        Log.d(javaClass.simpleName, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;旧版是&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${oldVersion}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;，新版是&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${newVersion}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;，数据库升级开始&amp;#34;&lt;/span&gt;)
+        db.execSQL(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;drop table if exists Book&amp;#34;&lt;/span&gt;)
+        db.execSQL(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;drop table if exists Category&amp;#34;&lt;/span&gt;)
+        onCreate(db)
+    }
+}
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;cvOf&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;vararg&lt;/span&gt; pairs: Pair&amp;lt;String, Any?&amp;gt;): ContentValues {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; cv = ContentValues()
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; (pair &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;in&lt;/span&gt; pairs) {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; key = pair.first
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;when&lt;/span&gt; (&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; value = pair.second) {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;is&lt;/span&gt; Int -&amp;gt; cv.put(key, value)
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;is&lt;/span&gt; Long -&amp;gt; cv.put(key, value)
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;is&lt;/span&gt; Short -&amp;gt; cv.put(key, value)
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;is&lt;/span&gt; Float -&amp;gt; cv.put(key, value)
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;is&lt;/span&gt; Double -&amp;gt; cv.put(key, value)
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;is&lt;/span&gt; Boolean -&amp;gt; cv.put(key, value)
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;is&lt;/span&gt; String -&amp;gt; cv.put(key, value)
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;is&lt;/span&gt; Byte -&amp;gt; cv.put(key, value)
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;is&lt;/span&gt; ByteArray -&amp;gt; cv.put(key, value)
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt; -&amp;gt; cv.putNull(key)
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; -&amp;gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;throw&lt;/span&gt; IllegalArgumentException(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;不支持的cv类型&amp;#34;&lt;/span&gt;)
+        }
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; cv
+}
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;Cursor&lt;/span&gt;.getString(name: String): String = getString(getColumnIndex(name))
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;Cursor&lt;/span&gt;.getInt(name: String): Int = getInt(getColumnIndex(name))
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;Cursor&lt;/span&gt;.getDouble(name: String): Double = getDouble(getColumnIndex(name))
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.databasetest&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.os.Bundle&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.util.Log&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;androidx.appcompat.app.AppCompatActivity&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.databasetest.databinding.ActivityMainBinding&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MainActivity&lt;/span&gt; : AppCompatActivity() {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;lateinit&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; binding: ActivityMainBinding
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onCreate&lt;/span&gt;(savedInstanceState: Bundle?) {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; dbHelper = MyDatabaseHelper(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;BookStore.db&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#b452cd&#34;&gt;6&lt;/span&gt;)
+        binding.createDatabaseButton.setOnClickListener {
+            dbHelper.writableDatabase
+        }
+        binding.addDataButton.setOnClickListener {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; db = dbHelper.writableDatabase
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; values1 = cvOf(
+                &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;name&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;The Da Vinci Code&amp;#34;&lt;/span&gt;,
+                &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;author&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Dan Brown&amp;#34;&lt;/span&gt;,
+                &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;pages&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#b452cd&#34;&gt;454&lt;/span&gt;,
+                &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;price&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#b452cd&#34;&gt;16.96&lt;/span&gt;
+            )
+            db.insert(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Book&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;, values1)
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; values2 = cvOf(
+                &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;name&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;The Lost Symbol&amp;#34;&lt;/span&gt;,
+                &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;author&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Dan Brown&amp;#34;&lt;/span&gt;,
+                &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;pages&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#b452cd&#34;&gt;510&lt;/span&gt;,
+                &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;price&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#b452cd&#34;&gt;19.95&lt;/span&gt;
+            )
+            db.insert(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Book&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;, values2)
+        }
+        binding.updateDataButton.setOnClickListener {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; db = dbHelper.writableDatabase
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; values = cvOf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;price&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#b452cd&#34;&gt;10.99&lt;/span&gt;)
+            db.update(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Book&amp;#34;&lt;/span&gt;, values, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;name=?&amp;#34;&lt;/span&gt;, arrayOf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;The Da Vinci Code&amp;#34;&lt;/span&gt;))
+        }
+        binding.deleteDataButton.setOnClickListener {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; db = dbHelper.writableDatabase
+            db.delete(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Book&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;pages &amp;gt; ?&amp;#34;&lt;/span&gt;, arrayOf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;500&amp;#34;&lt;/span&gt;))
+        }
+        binding.queryDataButton.setOnClickListener {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; db = dbHelper.writableDatabase
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; cursor = db.query(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Book&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;)
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (cursor.moveToFirst()) {
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;do&lt;/span&gt; {
+                    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; name = cursor.getString(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;name&amp;#34;&lt;/span&gt;)
+                    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; author = cursor.getString(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;author&amp;#34;&lt;/span&gt;)
+                    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; pages = cursor.getInt(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;pages&amp;#34;&lt;/span&gt;)
+                    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; price = cursor.getDouble(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;price&amp;#34;&lt;/span&gt;)
+                    Log.d(
+                        javaClass.simpleName,
+                        &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;name: &lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$name&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;, author: &lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$author&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;, pages: &lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$pages&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;, price: &lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$price&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;
+                    )
+                } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt; (cursor.moveToNext())
+            }
+            cursor.close()
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;!-- raw HTML omitted --&gt;
+- https://ntutn.top/posts/%E6%8C%81%E4%B9%85%E5%8C%96/ - CC BY-SA 4.0</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>android项目开发：Kotlin</title>
+        <link>https://ntutn.top/posts/kotlin/</link>
+        <pubDate>Tue, 12 Oct 2021 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/kotlin/</guid>
+        <description>归零幻想 https://ntutn.top/posts/kotlin/ -&lt;!-- raw HTML omitted --&gt;
+&lt;h1 id=&#34;kotlin&#34;&gt;Kotlin&lt;/h1&gt;
+&lt;h2 id=&#34;变量和函数&#34;&gt;变量和函数&lt;/h2&gt;
+&lt;h3 id=&#34;变量&#34;&gt;变量&lt;/h3&gt;
+&lt;p&gt;用&lt;code&gt;var&lt;/code&gt;和&lt;code&gt;val&lt;/code&gt;定义变量，并有类型自动推导的支持。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;val&lt;/code&gt;用来声明一个不可变的变量，&lt;code&gt;var&lt;/code&gt;用来声明一个可变的变量。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; a = &lt;span style=&#34;color:#b452cd&#34;&gt;10&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; b: Int = &lt;span style=&#34;color:#b452cd&#34;&gt;12&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Kotlin完全抛弃了java中的基本数据类型，完全使用对象数据类型。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;java基本数据类型&lt;/th&gt;
+&lt;th&gt;Kotlin对象数据类型&lt;/th&gt;
+&lt;th&gt;数据类型说明&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;int&lt;/td&gt;
+&lt;td&gt;Int&lt;/td&gt;
+&lt;td&gt;整型&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;long&lt;/td&gt;
+&lt;td&gt;Long&lt;/td&gt;
+&lt;td&gt;长整型&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;short&lt;/td&gt;
+&lt;td&gt;Short&lt;/td&gt;
+&lt;td&gt;短整型&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;float&lt;/td&gt;
+&lt;td&gt;Float&lt;/td&gt;
+&lt;td&gt;单精度浮点型&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;double&lt;/td&gt;
+&lt;td&gt;Double&lt;/td&gt;
+&lt;td&gt;双精度浮点型&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;boolean&lt;/td&gt;
+&lt;td&gt;Boolean&lt;/td&gt;
+&lt;td&gt;布尔型&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;char&lt;/td&gt;
+&lt;td&gt;Char&lt;/td&gt;
+&lt;td&gt;字符型&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;byte&lt;/td&gt;
+&lt;td&gt;Byte&lt;/td&gt;
+&lt;td&gt;字节型&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;函数&#34;&gt;函数&lt;/h3&gt;
+&lt;p&gt;语法：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;(args: Array&amp;lt;String&amp;gt;) {
+    println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Hello World!&amp;#34;&lt;/span&gt;)
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Kotlin中的函数在无必要时可以省略很多东西：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;kotlin.math.max&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;largerNumber&lt;/span&gt;(a: Int, b: Int) = max(a, b)
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;(args: Array&amp;lt;String&amp;gt;) {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; a = &lt;span style=&#34;color:#b452cd&#34;&gt;3&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; b = &lt;span style=&#34;color:#b452cd&#34;&gt;5&lt;/span&gt;
+    println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;The larger number of a and b is &lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${largerNumber(a, b)}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;)
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;程序的逻辑控制&#34;&gt;程序的逻辑控制&lt;/h2&gt;
+&lt;h3 id=&#34;if&#34;&gt;if&lt;/h3&gt;
+&lt;p&gt;与java中的if语句相比，Kotlin中的if是可以有返回值的。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;judge&lt;/span&gt;(score: Int) = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (score &amp;gt;= &lt;span style=&#34;color:#b452cd&#34;&gt;60&lt;/span&gt;) &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;你及格了&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;你还需要多努力&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;() {
+    println(judge(&lt;span style=&#34;color:#b452cd&#34;&gt;55&lt;/span&gt;))
+    println(judge(&lt;span style=&#34;color:#b452cd&#34;&gt;66&lt;/span&gt;))
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;与此同时，Kotlin不再有java中的三元运算符&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;，语义上清晰了很多。&lt;/p&gt;
+&lt;h3 id=&#34;when条件语句&#34;&gt;when条件语句&lt;/h3&gt;
+&lt;p&gt;类似于java中的switch语句，根据变量的值执行不同的逻辑。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;judge&lt;/span&gt;(score: Int) = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (score &amp;gt;= &lt;span style=&#34;color:#b452cd&#34;&gt;60&lt;/span&gt;) &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;你及格了&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;你还需要多努力&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;getScore&lt;/span&gt;(name: String) = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;when&lt;/span&gt; (name) {
+    &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Tom&amp;#34;&lt;/span&gt; -&amp;gt; &lt;span style=&#34;color:#b452cd&#34;&gt;78&lt;/span&gt;
+    &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Jack&amp;#34;&lt;/span&gt; -&amp;gt; &lt;span style=&#34;color:#b452cd&#34;&gt;35&lt;/span&gt;
+    &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Jerry&amp;#34;&lt;/span&gt; -&amp;gt; &lt;span style=&#34;color:#b452cd&#34;&gt;84&lt;/span&gt;
+    &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Lee&amp;#34;&lt;/span&gt; -&amp;gt; &lt;span style=&#34;color:#b452cd&#34;&gt;57&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; -&amp;gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;
+}
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;() {
+    println(judge(getScore(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Tom&amp;#34;&lt;/span&gt;)))
+    println(judge(getScore(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Jack&amp;#34;&lt;/span&gt;)))
+    println(judge(getScore(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Bill&amp;#34;&lt;/span&gt;)))
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;对我来说，最令人振奋的是再也不需要在每个分支里面都写个break了。其次when也是有返回值的，这和其他特性组合写出来的代码非常简洁优雅。&lt;/p&gt;
+&lt;p&gt;写个小demo吧。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;interface&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Speakable&lt;/span&gt; {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;speak&lt;/span&gt;()
+}
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Dog&lt;/span&gt; : Speakable {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;speak&lt;/span&gt;() {
+        println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;汪汪汪&amp;#34;&lt;/span&gt;)
+    }
+}
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Cat&lt;/span&gt; : Speakable {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;speak&lt;/span&gt;() {
+        println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;喵喵喵&amp;#34;&lt;/span&gt;)
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;climb&lt;/span&gt;() {
+        println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;小猫会爬树&amp;#34;&lt;/span&gt;)
+    }
+}
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;generateAnimal&lt;/span&gt;(): Speakable? = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;when&lt;/span&gt; ((&lt;span style=&#34;color:#b452cd&#34;&gt;1.&lt;/span&gt;.&lt;span style=&#34;color:#b452cd&#34;&gt;3&lt;/span&gt;).random()) {
+    &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt; -&amp;gt; Dog()
+    &lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt; -&amp;gt; Cat()
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; -&amp;gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;
+}
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;() {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;when&lt;/span&gt; (&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; animal = generateAnimal()) {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;is&lt;/span&gt; Dog -&amp;gt; {
+            println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;生成的动物是小狗&amp;#34;&lt;/span&gt;)
+            animal.speak()
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;is&lt;/span&gt; Cat -&amp;gt; {
+            println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;生成的动物是小猫&amp;#34;&lt;/span&gt;)
+            animal.speak()
+            animal.climb()
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; -&amp;gt; println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;生成动物时出现问题&amp;#34;&lt;/span&gt;)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;循环语句&#34;&gt;循环语句&lt;/h3&gt;
+&lt;p&gt;Kotlin中有两类循环，其中&lt;code&gt;while&lt;/code&gt;循环与java学过的while循环非常相似，只说下有差异的&lt;code&gt;for&lt;/code&gt;循环吧。&lt;/p&gt;
+&lt;p&gt;Kotlin的for循环只有for..in式的了，如&lt;code&gt;for(i in list)&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;但有时对数组下标进行遍历还是有必要的。于是我们要先了解下Kotlin的&lt;code&gt;区间&lt;/code&gt;的概念。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; range = &lt;span style=&#34;color:#b452cd&#34;&gt;1.&lt;/span&gt;.&lt;span style=&#34;color:#b452cd&#34;&gt;10&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这表示&lt;code&gt;[1,10]&lt;/code&gt;。但很多时候，我们需要左开右闭区间，比如数组有三个元素，我们需要&lt;code&gt;[0,3)&lt;/code&gt;表示数组的下标。此时可以使用&lt;code&gt;util&lt;/code&gt;关键字。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; indexRange = &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt; util &lt;span style=&#34;color:#b452cd&#34;&gt;3&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;有了range再和前面的for配合就完全可以替代之前java里面的for的作用了：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; array = arrayOf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Bob&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;John&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Jackson&amp;#34;&lt;/span&gt;)
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; (i &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt; util array.size) {
+    println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$i&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${array[i]}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;)
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;此外，还可以用&lt;code&gt;step&lt;/code&gt;指定步长值，实现”隔几个输出一次“的效果：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; (i &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt; util &lt;span style=&#34;color:#b452cd&#34;&gt;10&lt;/span&gt; step &lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;) {
+    println(i)
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果需要10循环到1,则需要&lt;code&gt;downTo&lt;/code&gt;关键字，&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; (i &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;10&lt;/span&gt; downTo &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;) {
+    println(i)
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;!-- raw HTML omitted --&gt;
+&lt;h2 id=&#34;面向对象编程&#34;&gt;面向对象编程&lt;/h2&gt;
+&lt;h3 id=&#34;类与对象&#34;&gt;类与对象&lt;/h3&gt;
+&lt;p&gt;与java的class相比Kotlin的class看上去没有多少改变，但创建对象不用new了。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Person&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; name: String) {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;speak&lt;/span&gt;() = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$name&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt; is speaking.&amp;#34;&lt;/span&gt;
+}
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;() {
+    Person(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Jack&amp;#34;&lt;/span&gt;).speak()
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;继承与构造函数&#34;&gt;继承与构造函数&lt;/h3&gt;
+&lt;p&gt;与java类似，Kotlin仍然是单继承，可以继承一个类实现多个接口。但继承的写法与java略有不同。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;open&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Animal&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;//非抽象类只有带了open才可以继承
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;interface&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Speakable&lt;/span&gt; {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;speak&lt;/span&gt;()
+}
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Dog&lt;/span&gt; : Animal(), Speakable {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;speak&lt;/span&gt;() {
+        println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;汪汪汪&amp;#34;&lt;/span&gt;)
+    }
+}
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Cat&lt;/span&gt; : Animal(), Speakable {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;speak&lt;/span&gt;() {
+        println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;喵喵喵&amp;#34;&lt;/span&gt;)
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;climb&lt;/span&gt;() {
+        println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;小猫会爬树&amp;#34;&lt;/span&gt;)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Kotlin中的构造函数分为主构造函数和次构造函数。如：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Student&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; sno: String, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; grade: Int, name: String, age: Int) {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;constructor&lt;/span&gt;(name: String, age: Int) : &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;, name, age)
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;constructor&lt;/span&gt;() : &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;)
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;init&lt;/span&gt; {
+        println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$age&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt; 的 &lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$name&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt; 被初始化了。&amp;#34;&lt;/span&gt;)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;次构造函数必须调用主构造函数（如果有），继承一个类必须调用他的构造函数（这也是为什么常常继承的类后面带着个括号）。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Kotlin函数的参数可以有默认值的，大多数情况根本不需要使用多个构造函数。
+主构造函数中&lt;code&gt;val&lt;/code&gt;和&lt;code&gt;var&lt;/code&gt;标记的变量将直接成为类的属性，没有这个标记的变量则只能在init block中访问。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;接口&#34;&gt;接口&lt;/h3&gt;
+&lt;p&gt;接口与java的接口是类似的。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;interface&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Study&lt;/span&gt; {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;readBooks&lt;/span&gt;()
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;doHomework&lt;/span&gt;() {
+        println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Do homework default implementation&amp;#34;&lt;/span&gt;)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;java与Kotlin中的可见性修饰略有不同。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;修饰符&lt;/th&gt;
+&lt;th&gt;java&lt;/th&gt;
+&lt;th&gt;Kotlin&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;public&lt;/td&gt;
+&lt;td&gt;所有类可见&lt;/td&gt;
+&lt;td&gt;所有类可见（默认）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;private&lt;/td&gt;
+&lt;td&gt;当前类可见&lt;/td&gt;
+&lt;td&gt;当前类可见&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;protected&lt;/td&gt;
+&lt;td&gt;当前类、子类、同一包路径下的类可见&lt;/td&gt;
+&lt;td&gt;当前类、子类可见&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;default&lt;/td&gt;
+&lt;td&gt;同一包路径下的类可见&lt;/td&gt;
+&lt;td&gt;无&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;internal&lt;/td&gt;
+&lt;td&gt;无&lt;/td&gt;
+&lt;td&gt;同一模块中的类可见&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;数据类与单例类&#34;&gt;数据类与单例类&lt;/h3&gt;
+&lt;p&gt;数据类在当今的系统设计中占据了重要的地位，他们格式非常固定，一般实现各种构造函数、getter和setter，重写&lt;code&gt;equals()&lt;/code&gt;、&lt;code&gt;hashCode()&lt;/code&gt;、&lt;code&gt;toString()&lt;/code&gt;
+这几个方法，真的写腻了。很多ide都提供了一键生成这些样板代码的方法，更有项目Lombok添加个注解在编译时生成这些方法&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;。&lt;/p&gt;
+&lt;p&gt;而Kotlin中对于数据类有了专门的支持。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;data&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Student&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; sno: String, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; name: String, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; age: Int)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;idea对于Kotlin有很好的支持。我们用下面的步骤将上面的代码转换为java形式：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Tools-&amp;gt;Kotlin-&amp;gt;Show Kotlin ByteCode&lt;/li&gt;
+&lt;li&gt;Decompile&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;得到的代码如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;kotlin.Metadata&lt;/span&gt;;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;kotlin.jvm.internal.Intrinsics&lt;/span&gt;;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;org.jetbrains.annotations.NotNull&lt;/span&gt;;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;org.jetbrains.annotations.Nullable&lt;/span&gt;;
+&lt;span style=&#34;color:#707a7c&#34;&gt;@Metadata&lt;/span&gt;(
+        mv = {1, 4, 0},
+        bv = {1, 0, 3},
+        k = 1,
+        d1 = {&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;\u0000\&amp;#34;\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0000\n\u0002\u0010\u000e\n\u0002\b\u0002\n\u0002\u0010\b\n\u0002\b\r\n\u0002\u0010\u000b\n\u0002\b\u0004\b\u0086\b\u0018\u00002\u00020\u0001B\u001d\u0012\u0006\u0010\u0002\u001a\u00020\u0003\u0012\u0006\u0010\u0004\u001a\u00020\u0003\u0012\u0006\u0010\u0005\u001a\u00020\u0006¢\u0006\u0002\u0010\u0007J\t\u0010\u000f\u001a\u00020\u0003HÆ\u0003J\t\u0010\u0010\u001a\u00020\u0003HÆ\u0003J\t\u0010\u0011\u001a\u00020\u0006HÆ\u0003J&amp;#39;\u0010\u0012\u001a\u00020\u00002\b\b\u0002\u0010\u0002\u001a\u00020\u00032\b\b\u0002\u0010\u0004\u001a\u00020\u00032\b\b\u0002\u0010\u0005\u001a\u00020\u0006HÆ\u0001J\u0013\u0010\u0013\u001a\u00020\u00142\b\u0010\u0015\u001a\u0004\u0018\u00010\u0001HÖ\u0003J\t\u0010\u0016\u001a\u00020\u0006HÖ\u0001J\t\u0010\u0017\u001a\u00020\u0003HÖ\u0001R\u001a\u0010\u0005\u001a\u00020\u0006X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b\b\u0010\t\&amp;#34;\u0004\b\n\u0010\u000bR\u0011\u0010\u0004\u001a\u00020\u0003¢\u0006\b\n\u0000\u001a\u0004\b\f\u0010\rR\u0011\u0010\u0002\u001a\u00020\u0003¢\u0006\b\n\u0000\u001a\u0004\b\u000e\u0010\r¨\u0006\u0018&amp;#34;&lt;/span&gt;},
+        d2 = {&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;LStudent;&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;sno&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;name&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;age&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;(Ljava/lang/String;Ljava/lang/String;I)V&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;getAge&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;()I&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;setAge&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;(I)V&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;getName&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;()Ljava/lang/String;&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;getSno&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;component1&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;component2&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;component3&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;copy&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;equals&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;other&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;hashCode&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;toString&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;kotlin-learning.main&amp;#34;&lt;/span&gt;}
+)
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;final&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Student&lt;/span&gt; {
+    &lt;span style=&#34;color:#707a7c&#34;&gt;@NotNull&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;final&lt;/span&gt; String sno;
+    &lt;span style=&#34;color:#707a7c&#34;&gt;@NotNull&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;final&lt;/span&gt; String name;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; age;
+    &lt;span style=&#34;color:#707a7c&#34;&gt;@NotNull&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;final&lt;/span&gt; String &lt;span style=&#34;color:#008b45&#34;&gt;getSno&lt;/span&gt;() {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;sno&lt;/span&gt;;
+    }
+    &lt;span style=&#34;color:#707a7c&#34;&gt;@NotNull&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;final&lt;/span&gt; String &lt;span style=&#34;color:#008b45&#34;&gt;getName&lt;/span&gt;() {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;name&lt;/span&gt;;
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;final&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;getAge&lt;/span&gt;() {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;age&lt;/span&gt;;
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;final&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;setAge&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; var1) {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;age&lt;/span&gt; = var1;
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;Student&lt;/span&gt;(&lt;span style=&#34;color:#707a7c&#34;&gt;@NotNull&lt;/span&gt; String sno, &lt;span style=&#34;color:#707a7c&#34;&gt;@NotNull&lt;/span&gt; String name, &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; age) {
+        Intrinsics.&lt;span style=&#34;color:#658b00&#34;&gt;checkNotNullParameter&lt;/span&gt;(sno, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;sno&amp;#34;&lt;/span&gt;);
+        Intrinsics.&lt;span style=&#34;color:#658b00&#34;&gt;checkNotNullParameter&lt;/span&gt;(name, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;name&amp;#34;&lt;/span&gt;);
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;();
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;sno&lt;/span&gt; = sno;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;name&lt;/span&gt; = name;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;age&lt;/span&gt; = age;
+    }
+    &lt;span style=&#34;color:#707a7c&#34;&gt;@NotNull&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;final&lt;/span&gt; String &lt;span style=&#34;color:#008b45&#34;&gt;component1&lt;/span&gt;() {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;sno&lt;/span&gt;;
+    }
+    &lt;span style=&#34;color:#707a7c&#34;&gt;@NotNull&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;final&lt;/span&gt; String &lt;span style=&#34;color:#008b45&#34;&gt;component2&lt;/span&gt;() {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;name&lt;/span&gt;;
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;final&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;component3&lt;/span&gt;() {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;age&lt;/span&gt;;
+    }
+    &lt;span style=&#34;color:#707a7c&#34;&gt;@NotNull&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;final&lt;/span&gt; Student &lt;span style=&#34;color:#008b45&#34;&gt;copy&lt;/span&gt;(&lt;span style=&#34;color:#707a7c&#34;&gt;@NotNull&lt;/span&gt; String sno, &lt;span style=&#34;color:#707a7c&#34;&gt;@NotNull&lt;/span&gt; String name, &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; age) {
+        Intrinsics.&lt;span style=&#34;color:#658b00&#34;&gt;checkNotNullParameter&lt;/span&gt;(sno, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;sno&amp;#34;&lt;/span&gt;);
+        Intrinsics.&lt;span style=&#34;color:#658b00&#34;&gt;checkNotNullParameter&lt;/span&gt;(name, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;name&amp;#34;&lt;/span&gt;);
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; Student(sno, name, age);
+    }
+    &lt;span style=&#34;color:#228b22&#34;&gt;// $FF: synthetic method
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;static&lt;/span&gt; Student &lt;span style=&#34;color:#008b45&#34;&gt;copy$default&lt;/span&gt;(Student var0, String var1, String var2, &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; var3, &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; var4, Object var5) {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; ((var4 &amp;amp; 1) != 0) {
+            var1 = var0.&lt;span style=&#34;color:#658b00&#34;&gt;sno&lt;/span&gt;;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; ((var4 &amp;amp; 2) != 0) {
+            var2 = var0.&lt;span style=&#34;color:#658b00&#34;&gt;name&lt;/span&gt;;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; ((var4 &amp;amp; 4) != 0) {
+            var3 = var0.&lt;span style=&#34;color:#658b00&#34;&gt;age&lt;/span&gt;;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; var0.&lt;span style=&#34;color:#658b00&#34;&gt;copy&lt;/span&gt;(var1, var2, var3);
+    }
+    &lt;span style=&#34;color:#707a7c&#34;&gt;@NotNull&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; String &lt;span style=&#34;color:#008b45&#34;&gt;toString&lt;/span&gt;() {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Student(sno=&amp;#34;&lt;/span&gt; + &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;sno&lt;/span&gt; + &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;, name=&amp;#34;&lt;/span&gt; + &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;name&lt;/span&gt; + &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;, age=&amp;#34;&lt;/span&gt; + &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;age&lt;/span&gt; + &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;)&amp;#34;&lt;/span&gt;;
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;hashCode&lt;/span&gt;() {
+        String var10000 = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;sno&lt;/span&gt;;
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; var1 = (var10000 != &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt; ? var10000.&lt;span style=&#34;color:#658b00&#34;&gt;hashCode&lt;/span&gt;() : 0) * 31;
+        String var10001 = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;name&lt;/span&gt;;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; (var1 + (var10001 != &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt; ? var10001.&lt;span style=&#34;color:#658b00&#34;&gt;hashCode&lt;/span&gt;() : 0)) * 31 + &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;age&lt;/span&gt;;
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;boolean&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;equals&lt;/span&gt;(&lt;span style=&#34;color:#707a7c&#34;&gt;@Nullable&lt;/span&gt; Object var1) {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt; != var1) {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (var1 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;instanceof&lt;/span&gt; Student) {
+                Student var2 = (Student) var1;
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (Intrinsics.&lt;span style=&#34;color:#658b00&#34;&gt;areEqual&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;sno&lt;/span&gt;, var2.&lt;span style=&#34;color:#658b00&#34;&gt;sno&lt;/span&gt;) &amp;amp;&amp;amp; Intrinsics.&lt;span style=&#34;color:#658b00&#34;&gt;areEqual&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;name&lt;/span&gt;, var2.&lt;span style=&#34;color:#658b00&#34;&gt;name&lt;/span&gt;) &amp;amp;&amp;amp; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;age&lt;/span&gt; == var2.&lt;span style=&#34;color:#658b00&#34;&gt;age&lt;/span&gt;) {
+                    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;;
+                }
+            }
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;;
+        } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;;
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;孰优孰劣，一目了然。&lt;/p&gt;
+&lt;p&gt;类似的，Kotlin也对单例类提供了支持。如：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Singleton&lt;/span&gt; {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;singletonTest&lt;/span&gt;() {
+        println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Singleton test is called.&amp;#34;&lt;/span&gt;)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这和你费了半天劲写出来的java代码作用是一样的：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;kotlin.Metadata&lt;/span&gt;;
+&lt;span style=&#34;color:#707a7c&#34;&gt;@Metadata&lt;/span&gt;(
+        mv = {1, 4, 0},
+        bv = {1, 0, 3},
+        k = 1,
+        d1 = {&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;\u0000\u0012\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0002\b\u0002\n\u0002\u0010\u0002\n\u0000\bÆ\u0002\u0018\u00002\u00020\u0001B\u0007\b\u0002¢\u0006\u0002\u0010\u0002J\u0006\u0010\u0003\u001a\u00020\u0004¨\u0006\u0005&amp;#34;&lt;/span&gt;},
+        d2 = {&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;LSingleton;&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;()V&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;singletonTest&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;kotlin-learning.main&amp;#34;&lt;/span&gt;}
+)
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;final&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Singleton&lt;/span&gt; {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;final&lt;/span&gt; Singleton INSTANCE;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;final&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;singletonTest&lt;/span&gt;() {
+        String var1 = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Singleton test is called.&amp;#34;&lt;/span&gt;;
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;boolean&lt;/span&gt; var2 = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;;
+        System.&lt;span style=&#34;color:#658b00&#34;&gt;out&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;println&lt;/span&gt;(var1);
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;Singleton&lt;/span&gt;() {
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;static&lt;/span&gt; {
+        Singleton var0 = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; Singleton();
+        INSTANCE = var0;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;lambda编程&#34;&gt;Lambda编程&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;() {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; map = mapOf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Apple&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Banana&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Orange&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#b452cd&#34;&gt;3&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Pear&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#b452cd&#34;&gt;4&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Grape&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#b452cd&#34;&gt;5&lt;/span&gt;)
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; ((fruit, number) &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;in&lt;/span&gt; map) {
+        println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;fruit is &lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$fruit&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;, number is &lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$number&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;函数式api&#34;&gt;函数式API&lt;/h3&gt;
+&lt;h4 id=&#34;maxby&#34;&gt;maxBy&lt;/h4&gt;
+&lt;p&gt;集合中最长的字符串。&lt;/p&gt;
+&lt;h3 id=&#34;map&#34;&gt;map&lt;/h3&gt;
+&lt;p&gt;将集合中每个元素都映射到另一个元素。&lt;/p&gt;
+&lt;h4 id=&#34;filter&#34;&gt;filter&lt;/h4&gt;
+&lt;p&gt;过滤集合中的数据。&lt;/p&gt;
+&lt;h4 id=&#34;any&#34;&gt;any&lt;/h4&gt;
+&lt;p&gt;至少有一个元素满足条件。&lt;/p&gt;
+&lt;h4 id=&#34;all&#34;&gt;all&lt;/h4&gt;
+&lt;p&gt;所有元素都满足条件。&lt;/p&gt;
+&lt;h3 id=&#34;java函数式api&#34;&gt;Java函数式API&lt;/h3&gt;
+&lt;p&gt;对于java中的单抽象方法可使用函数式API。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;Thread {
+    println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Thread is running&amp;#34;&lt;/span&gt;)
+}.start()
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;空指针检查&#34;&gt;空指针检查&lt;/h2&gt;
+&lt;p&gt;写java时最常见的错误就是&lt;code&gt;java.lang.NullPointerException&lt;/code&gt;了吧。在Kotlin中，情况有一些改善。&lt;/p&gt;
+&lt;p&gt;与java不同，Kotlin中的变量默认是不可空的。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;doStudy&lt;/span&gt;(study: Study) {
+    study.readBooks()
+    study.doHomework()
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果你给这个函数传一个可能为null的值，在编译期间就会得到错误提示。&lt;/p&gt;
+&lt;p&gt;当然，很多情况我们还是需要让我们的函数接受一个可空的值的，则可以用这样的写法：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;doStudy&lt;/span&gt;(study: Study?) {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (study != &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;) {
+        study.readBooks()
+        study.doHomework()
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;但在Kotlin中还有更好的方法：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;doStudy&lt;/span&gt;(study: Study?) {
+    study?.readBooks()
+    study?.doHomework()
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;用上&lt;code&gt;let&lt;/code&gt;我们还可以写得更优雅：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;doStudy&lt;/span&gt;(study: Study?) {
+    study?.let {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt;.readBooks()
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt;.doHomework()
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;?.&lt;/code&gt;表示只有不为空时才正常调用。&lt;/p&gt;
+&lt;p&gt;有时我们需要这样的逻辑：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;getTextLength&lt;/span&gt;(text: String?): Int {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (text != &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;) {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; text.length
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Kotlin也有个方便的操作符：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;getTextLength&lt;/span&gt;(text: String?) = text?.length ?: &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;?:&lt;/code&gt;表示前面为空时返回后面的值。&lt;/p&gt;
+&lt;p&gt;当然，有些业务逻辑中Kotlin不一定能正确推断出你的变量是否可能为空，这时Kotlin也提供了让你自己操纵它的机会：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; content: String? = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;initContent&lt;/span&gt;() {
+    content = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;https://ntutn.top&amp;#34;&lt;/span&gt;
+}
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;() {
+    initContent()
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (content != &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;) {
+        printContent()
+    }
+}
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;printContent&lt;/span&gt;() {
+    println(content!!)
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;参考&lt;a href=&#34;https://www.w3cschool.cn/java/java-ternary-operator.html&#34;&gt;Java中的三元运算符&lt;/a&gt; &lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://projectlombok.org/&#34;&gt;Lombok&lt;/a&gt;，用注解的方式简化java代码，但要求使用的ide必须安装lombok插件才能正确识别lombok生成的代码，有人认为这是在”强奸队友“。另外lombok的实现调用了jdk未公开的方法也引发争议。 &lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/section&gt;
+- https://ntutn.top/posts/kotlin/ - CC BY-SA 4.0</description>
+        </item>
     
     
     
@@ -28,6 +687,72 @@
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;反正还有SEP把门呢。&lt;/p&gt;
 &lt;!-- raw HTML omitted --&gt;
 - https://ntutn.top/posts/%E5%B9%B2%E6%8E%89macos%E7%9A%84ocsp/ - CC BY-SA 4.0</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>android项目开发：通知</title>
+        <link>https://ntutn.top/posts/%E9%80%9A%E7%9F%A5/</link>
+        <pubDate>Tue, 12 Jan 2021 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/%E9%80%9A%E7%9F%A5/</guid>
+        <description>归零幻想 https://ntutn.top/posts/%E9%80%9A%E7%9F%A5/ -&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;仍然是第一行代码的笔记，这篇是有关通知的，最基本的用法。&lt;/p&gt;
+&lt;h2 id=&#34;通知的相关知识&#34;&gt;通知的相关知识&lt;/h2&gt;
+&lt;p&gt;通知是什么不再赘述，这里只记录些重要但没接触的概念。&lt;/p&gt;
+&lt;p&gt;通知渠道在8.0（O）引入。要求APP将通知分类，通过不同&lt;em&gt;渠道&lt;/em&gt;进行分发，用户可以选择性禁用某个渠道的通知，或者调整优先等级。&lt;/p&gt;
+&lt;p&gt;通知可以有不同的重要等级，有四种：&lt;code&gt;IMPORTANCE_HIGH&lt;/code&gt;、&lt;code&gt;IMPORTANCE_DEFAULT&lt;/code&gt;、&lt;code&gt;IMPORTANCE_LOW&lt;/code&gt;、&lt;code&gt;IMPORTANCE_MIN&lt;/code&gt;。根据重要等级不同，通知可能有不同的展现策略，比如在前台提示甚至播放声音。&lt;/p&gt;
+&lt;p&gt;在通知渠道创建时通知的重要等级也就确定了，之后不能再被APP修改。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;h2 id=&#34;通知dmeo&#34;&gt;通知dmeo&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.notificationtest&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.app.NotificationChannel&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.app.NotificationManager&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.app.PendingIntent&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.content.Context&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.content.Intent&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.graphics.BitmapFactory&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.os.Build&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;androidx.appcompat.app.AppCompatActivity&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.os.Bundle&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;androidx.core.app.NotificationCompat&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.notificationtest.databinding.ActivityMainBinding&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MainActivity&lt;/span&gt; : AppCompatActivity() {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;lateinit&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; binding: ActivityMainBinding
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onCreate&lt;/span&gt;(savedInstanceState: Bundle?) {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        initView()
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;initView&lt;/span&gt;(){
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; manager = getSystemService(Context.NOTIFICATION_SERVICE) &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;as&lt;/span&gt; NotificationManager
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(Build.VERSION.SDK_INT &amp;gt;= Build.VERSION_CODES.O){
+            &lt;span style=&#34;color:#228b22&#34;&gt;// 通知渠道
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; channel = NotificationChannel(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;normal&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Normal&amp;#34;&lt;/span&gt;,NotificationManager.IMPORTANCE_DEFAULT)
+            manager.createNotificationChannel(channel)
+        }
+        binding.sendNotice.setOnClickListener {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; intent = Intent(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;,NotificationActivity::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;.java)
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; pi = PendingIntent.getActivity(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;,REQUEST_NOTIFICATION_ACTIVITY,intent,&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;)
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; notification = NotificationCompat.Builder(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;,&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;normal&amp;#34;&lt;/span&gt;)
+                    .setContentTitle(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;This is content title&amp;#34;&lt;/span&gt;)
+                    .setContentText(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;This is content text. &amp;#34;&lt;/span&gt;)
+                    .setSmallIcon(R.drawable.ic_launcher_foreground)
+                    .setLargeIcon(BitmapFactory.decodeResource(resources,R.drawable.ic_launcher_foreground))
+                    .setContentIntent(pi)
+                    .setAutoCancel(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;)
+                    .build()
+            manager.notify(CHANNEL,notification)
+        }
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;companion&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; CHANNEL = &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; REQUEST_NOTIFICATION_ACTIVITY = &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://ntutn.top/posts/%E9%80%9A%E7%9F%A5/ - CC BY-SA 4.0</description>
         </item>
     
     
@@ -138,6 +863,233 @@ sendOrderedBroadcast(intent, &lt;span style=&#34;color:#8b008b;font-weight:bold&
 &lt;/ol&gt;
 &lt;/section&gt;
 - https://ntutn.top/posts/broadcast/ - CC BY-SA 4.0</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>android项目开发：Fragment</title>
+        <link>https://ntutn.top/posts/fragment/</link>
+        <pubDate>Mon, 21 Dec 2020 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/fragment/</guid>
+        <description>归零幻想 https://ntutn.top/posts/fragment/ -&lt;!-- raw HTML omitted --&gt;
+&lt;h1 id=&#34;fragment&#34;&gt;Fragment&lt;/h1&gt;
+&lt;h2 id=&#34;fragment的使用方式&#34;&gt;Fragment的使用方式&lt;/h2&gt;
+&lt;h3 id=&#34;静态添加fragment&#34;&gt;静态添加Fragment&lt;/h3&gt;
+&lt;p&gt;Fragment的写法&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;LinearLayout&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;xmlns:android=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;http://schemas.android.com/apk/res/android&amp;#34;&lt;/span&gt;
+              &lt;span style=&#34;color:#658b00&#34;&gt;android:orientation=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;vertical&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_width=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;match_parent&amp;#34;&lt;/span&gt;
+              &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_height=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;match_parent&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;gt;&lt;/span&gt;
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;Button&lt;/span&gt;
+            &lt;span style=&#34;color:#658b00&#34;&gt;android:id=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;@+id/button&amp;#34;&lt;/span&gt;
+            &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_width=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;wrap_content&amp;#34;&lt;/span&gt;
+            &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_height=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;wrap_content&amp;#34;&lt;/span&gt;
+            &lt;span style=&#34;color:#658b00&#34;&gt;android:text=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;button&amp;#34;&lt;/span&gt;
+            &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_gravity=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;center_horizontal&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
+
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/LinearLayout&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.fragmenttest&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.os.Bundle&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.view.LayoutInflater&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.view.View&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.view.ViewGroup&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;androidx.fragment.app.Fragment&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;LeftFragment&lt;/span&gt; : Fragment() {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onCreateView&lt;/span&gt;(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; inflater.inflate(R.layout.left_fragment, container, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;静态添加Fragment&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;
+&lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;LinearLayout&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;xmlns:android=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;http://schemas.android.com/apk/res/android&amp;#34;&lt;/span&gt;
+              &lt;span style=&#34;color:#658b00&#34;&gt;xmlns:tools=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;http://schemas.android.com/tools&amp;#34;&lt;/span&gt;
+              &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_width=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;match_parent&amp;#34;&lt;/span&gt;
+              &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_height=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;match_parent&amp;#34;&lt;/span&gt;
+              &lt;span style=&#34;color:#658b00&#34;&gt;android:orientation=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;horizontal&amp;#34;&lt;/span&gt;
+              &lt;span style=&#34;color:#658b00&#34;&gt;tools:context=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;.MainActivity&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;gt;&lt;/span&gt;
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;fragment&lt;/span&gt;
+            &lt;span style=&#34;color:#658b00&#34;&gt;android:id=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;@+id/leftFragment&amp;#34;&lt;/span&gt;
+            &lt;span style=&#34;color:#658b00&#34;&gt;android:name=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;top.ntutn.fragmenttest.LeftFragment&amp;#34;&lt;/span&gt;
+            &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_width=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;0dp&amp;#34;&lt;/span&gt;
+            &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_height=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;match_parent&amp;#34;&lt;/span&gt;
+            &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_weight=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;fragment&lt;/span&gt;
+            &lt;span style=&#34;color:#658b00&#34;&gt;android:id=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;@+id/rightFragment&amp;#34;&lt;/span&gt;
+            &lt;span style=&#34;color:#658b00&#34;&gt;android:name=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;top.ntutn.fragmenttest.RightFragment&amp;#34;&lt;/span&gt;
+            &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_width=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;0dp&amp;#34;&lt;/span&gt;
+            &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_height=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;match_parent&amp;#34;&lt;/span&gt;
+            &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_weight=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
+
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/LinearLayout&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;!-- raw HTML omitted --&gt;
+&lt;h3 id=&#34;动态添加fragment&#34;&gt;动态添加Fragment&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; fragmentManager = supportFragmentManager
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; transaction = fragmentManager.beginTransaction()
+transaction.replace(R.id.rightLayout, fragment)
+transaction.commit()
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;在fragment中实现返回栈&#34;&gt;在Fragment中实现返回栈&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; fragmentManager = supportFragmentManager
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; transaction = fragmentManager.beginTransaction()
+transaction.replace(R.id.rightLayout, fragment)
+transaction.addToBackStack(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;)
+transaction.commit()
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;fragment与activity交互&#34;&gt;Fragment与Activity交互&lt;/h3&gt;
+&lt;p&gt;Activity中获取Fragment&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; fragment = supportFragmentManager.findFragmentById(R.id.leftFragment) &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;as&lt;/span&gt; LeftFragment
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;或使用&lt;code&gt;kotlin-android-extensions&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; fragment = leftFragment &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;as&lt;/span&gt; LeftFragment
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;fragment的生命周期&#34;&gt;Fragment的生命周期&lt;/h2&gt;
+&lt;p&gt;和Activity的生命周期类似，重点是几个方法：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;onAttach() 当Fragment和Activity建立关联的时候调用&lt;/li&gt;
+&lt;li&gt;onCreateView() 为Fragment创建视图时调用&lt;/li&gt;
+&lt;li&gt;onActivityCreated() 确保与Fragment相关联的Activity创建完毕时调用。&lt;/li&gt;
+&lt;li&gt;onDestroyView() 与Fragment关联的视图被移除时调用。&lt;/li&gt;
+&lt;li&gt;onDetach() 当Fragment与Activity解除关联时调用&lt;/li&gt;
+&lt;/ul&gt;
+- https://ntutn.top/posts/fragment/ - CC BY-SA 4.0</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>android项目开发：UI设计</title>
+        <link>https://ntutn.top/posts/ui%E8%AE%BE%E8%AE%A1/</link>
+        <pubDate>Mon, 21 Dec 2020 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/ui%E8%AE%BE%E8%AE%A1/</guid>
+        <description>归零幻想 https://ntutn.top/posts/ui%E8%AE%BE%E8%AE%A1/ -&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;仍然是《第一行代码》的学习笔记，这里记录的东西相对少一点，UI上的东西还是更多在实际项目中感受到。比如我想没有必要写TextView的介绍吧。&lt;/p&gt;
+&lt;h2 id=&#34;控件的使用方法&#34;&gt;控件的使用方法&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;dp&lt;/code&gt;是一种屏幕密度无关的尺寸单位，可以保证在不同分辨率的手机上显示效果尽可能一致。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;match_parent&lt;/code&gt;表示让当前控件大小和父布局的大小一致。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;wrap_content&lt;/code&gt;表示让当前控件的大小能正好包裹里面的内容。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;android:gravity&lt;/code&gt;指定控件内的内容对齐方式，有&lt;code&gt;top&lt;/code&gt;、&lt;code&gt;bottom&lt;/code&gt;、&lt;code&gt;start&lt;/code&gt;、&lt;code&gt;end&lt;/code&gt;、&lt;code&gt;center&lt;/code&gt;等可选，可以用&lt;code&gt;|&lt;/code&gt;指定多个值。比如&lt;code&gt;center&lt;/code&gt;等价于&lt;code&gt;center_vertical|center_horizonal&lt;/code&gt;。&lt;/p&gt;
+&lt;h2 id=&#34;基本布局&#34;&gt;基本布局&lt;/h2&gt;
+&lt;h3 id=&#34;linearlayout&#34;&gt;LinearLayout&lt;/h3&gt;
+&lt;p&gt;线性布局，通过&lt;code&gt;android:orientation&lt;/code&gt;指定方向。&lt;/p&gt;
+&lt;p&gt;有一个重要属性：&lt;code&gt;android:layout_weight&lt;/code&gt;，它将控件已经占用的空间减掉后按照比重分给各个控件。一般我们直接指定&lt;code&gt;android:layout_width&lt;/code&gt;为0dp，而给它指定一个比重，这样控件的尺寸将占满剩余空间。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;h3 id=&#34;relativelayout&#34;&gt;RelativeLayout&lt;/h3&gt;
+&lt;p&gt;相对布局，复杂，但有迹可循。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;utf-8&amp;quot;?&amp;gt;
+&amp;lt;RelativeLayout xmlns:android=&amp;quot;http://schemas.android.com/apk/res/android&amp;quot;
+    xmlns:tools=&amp;quot;http://schemas.android.com/tools&amp;quot;
+    android:layout_width=&amp;quot;match_parent&amp;quot;
+    android:layout_height=&amp;quot;match_parent&amp;quot;
+    tools:context=&amp;quot;.MainActivity&amp;quot;&amp;gt;
+    &amp;lt;Button
+        android:id=&amp;quot;@+id/button1&amp;quot;
+        android:layout_width=&amp;quot;wrap_content&amp;quot;
+        android:layout_height=&amp;quot;wrap_content&amp;quot;
+        android:layout_alignParentLeft=&amp;quot;true&amp;quot;
+        android:layout_alignParentTop=&amp;quot;true&amp;quot;
+        android:text=&amp;quot;Button1&amp;quot; /&amp;gt;
+    &amp;lt;Button
+        android:id=&amp;quot;@+id/button2&amp;quot;
+        android:layout_width=&amp;quot;wrap_content&amp;quot;
+        android:layout_height=&amp;quot;wrap_content&amp;quot;
+        android:layout_alignParentTop=&amp;quot;true&amp;quot;
+        android:layout_alignParentRight=&amp;quot;true&amp;quot;
+        android:text=&amp;quot;Button2&amp;quot; /&amp;gt;
+    &amp;lt;Button
+        android:id=&amp;quot;@+id/button3&amp;quot;
+        android:layout_width=&amp;quot;wrap_content&amp;quot;
+        android:layout_height=&amp;quot;wrap_content&amp;quot;
+        android:layout_centerInParent=&amp;quot;true&amp;quot;
+        android:text=&amp;quot;Button3&amp;quot; /&amp;gt;
+    &amp;lt;Button
+        android:id=&amp;quot;@+id/button4&amp;quot;
+        android:layout_width=&amp;quot;wrap_content&amp;quot;
+        android:layout_height=&amp;quot;wrap_content&amp;quot;
+        android:layout_alignParentLeft=&amp;quot;true&amp;quot;
+        android:layout_alignParentBottom=&amp;quot;true&amp;quot;
+        android:text=&amp;quot;Button4&amp;quot; /&amp;gt;
+    &amp;lt;Button
+        android:id=&amp;quot;@+id/button5&amp;quot;
+        android:layout_width=&amp;quot;wrap_content&amp;quot;
+        android:layout_height=&amp;quot;wrap_content&amp;quot;
+        android:layout_alignParentRight=&amp;quot;true&amp;quot;
+        android:layout_alignParentBottom=&amp;quot;true&amp;quot;
+        android:text=&amp;quot;Button5&amp;quot; /&amp;gt;
+&amp;lt;/RelativeLayout&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;以上这段布局文件描述的就是一个相对布局，共有5个按钮，分别在父布局的左上、右上、中间、左下、右下位置。&lt;/p&gt;
+&lt;p&gt;相对布局不仅可以相对于父布局，也可以相对于控件。以下描述了button3在中间，左上button1，右上button2，左下button4，右下button5的布局场景。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;utf-8&amp;quot;?&amp;gt;
+&amp;lt;RelativeLayout xmlns:android=&amp;quot;http://schemas.android.com/apk/res/android&amp;quot;
+    xmlns:tools=&amp;quot;http://schemas.android.com/tools&amp;quot;
+    android:layout_width=&amp;quot;match_parent&amp;quot;
+    android:layout_height=&amp;quot;match_parent&amp;quot;
+    tools:context=&amp;quot;.MainActivity&amp;quot;&amp;gt;
+    &amp;lt;Button
+        android:id=&amp;quot;@+id/button3&amp;quot;
+        android:layout_width=&amp;quot;wrap_content&amp;quot;
+        android:layout_height=&amp;quot;wrap_content&amp;quot;
+        android:layout_centerInParent=&amp;quot;true&amp;quot;
+        android:text=&amp;quot;Button3&amp;quot; /&amp;gt;
+    &amp;lt;Button
+        android:id=&amp;quot;@+id/button1&amp;quot;
+        android:layout_width=&amp;quot;wrap_content&amp;quot;
+        android:layout_height=&amp;quot;wrap_content&amp;quot;
+        android:layout_above=&amp;quot;@id/button3&amp;quot;
+        android:layout_toLeftOf=&amp;quot;@id/button3&amp;quot;
+        android:text=&amp;quot;Button1&amp;quot; /&amp;gt;
+    &amp;lt;Button
+        android:id=&amp;quot;@+id/button2&amp;quot;
+        android:layout_width=&amp;quot;wrap_content&amp;quot;
+        android:layout_height=&amp;quot;wrap_content&amp;quot;
+        android:layout_above=&amp;quot;@id/button3&amp;quot;
+        android:layout_toRightOf=&amp;quot;@id/button3&amp;quot;
+        android:text=&amp;quot;Button2&amp;quot; /&amp;gt;
+    &amp;lt;Button
+        android:id=&amp;quot;@+id/button4&amp;quot;
+        android:layout_width=&amp;quot;wrap_content&amp;quot;
+        android:layout_height=&amp;quot;wrap_content&amp;quot;
+        android:layout_below=&amp;quot;@id/button3&amp;quot;
+        android:layout_toLeftOf=&amp;quot;@id/button3&amp;quot;
+        android:text=&amp;quot;Button4&amp;quot; /&amp;gt;
+    &amp;lt;Button
+        android:id=&amp;quot;@+id/button5&amp;quot;
+        android:layout_width=&amp;quot;wrap_content&amp;quot;
+        android:layout_height=&amp;quot;wrap_content&amp;quot;
+        android:layout_below=&amp;quot;@id/button3&amp;quot;
+        android:layout_toRightOf=&amp;quot;@id/button3&amp;quot;
+        android:text=&amp;quot;Button5&amp;quot; /&amp;gt;
+&amp;lt;/RelativeLayout&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;framelayout&#34;&gt;FrameLayout&lt;/h3&gt;
+&lt;p&gt;帧布局，其内部组件将按顺序层叠到左上角。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;FrameLayout一直有foreground属性，而View在后续版本才支持，在一些需要做半透明效果的地方可以用FrameLayout的属性实现，减少控件层叠层数，保证兼容性。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;自定义控件&#34;&gt;自定义控件&lt;/h2&gt;
+&lt;p&gt;安卓中所有的控件都是直接或间接继承自View的，而所有的布局都是继承自ViewGroup的。&lt;/p&gt;
+&lt;p&gt;View是安卓中最基本的一种UI组件，可以在屏幕上绘制一块矩形区域，并响应这块区域的各种事件。&lt;/p&gt;
+&lt;p&gt;ViewGroup是一种特殊的View，可以包含很多子View和子ViewGroup。&lt;/p&gt;
+&lt;h2 id=&#34;recyclerview&#34;&gt;RecyclerView&lt;/h2&gt;
+&lt;p&gt;基本用法：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;导入&lt;code&gt;androidx.recyclerview:recyclerview&lt;/code&gt;，&lt;/li&gt;
+&lt;li&gt;定义类继承RecyclerView.Adapter和RecyclerView.ViewHolder。&lt;/li&gt;
+&lt;li&gt;实现。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;使用DiffUtil可以简化数据更新的写法。&lt;/p&gt;
+&lt;p&gt;参考&lt;a href=&#34;https://github.com/zerofancy/ipviewer&#34;&gt;我的一个demo项目&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;常用布局管理器LinearLayoutManager（线性），此外还有GridLayoutManager（网格）和StaggeredGridLayoutManager（瀑布流）。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;LinearLayoutManager和PagerSnapHelper配合可以实现类似抖音的刷视频的效果。
+在引入&lt;code&gt;kotlin-android-extensions&lt;/code&gt;之后可以比较方便地在&lt;code&gt;onBindViewHolder&lt;/code&gt;方法中给具体的view赋值。&lt;/p&gt;
+&lt;/blockquote&gt;
+- https://ntutn.top/posts/ui%E8%AE%BE%E8%AE%A1/ - CC BY-SA 4.0</description>
         </item>
     
     
@@ -500,185 +1452,81 @@ finish()
     
     
         <item>
-        <title>B站的搬运机制和盗视频行为有区别吗</title>
-        <link>https://ntutn.top/posts/b%E7%AB%99%E7%9A%84%E6%90%AC%E8%BF%90%E6%9C%BA%E5%88%B6%E5%92%8C%E7%9B%97%E8%A7%86%E9%A2%91%E8%A1%8C%E4%B8%BA%E6%9C%89%E5%8C%BA%E5%88%AB%E5%90%97/</link>
-        <pubDate>Tue, 24 Nov 2020 03:11:37 +0800</pubDate>
+        <title>android项目开发：项目结构</title>
+        <link>https://ntutn.top/posts/%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/</link>
+        <pubDate>Tue, 08 Dec 2020 03:11:37 +0800</pubDate>
         
-        <guid>https://ntutn.top/posts/b%E7%AB%99%E7%9A%84%E6%90%AC%E8%BF%90%E6%9C%BA%E5%88%B6%E5%92%8C%E7%9B%97%E8%A7%86%E9%A2%91%E8%A1%8C%E4%B8%BA%E6%9C%89%E5%8C%BA%E5%88%AB%E5%90%97/</guid>
-        <description>归零幻想 https://ntutn.top/posts/b%E7%AB%99%E7%9A%84%E6%90%AC%E8%BF%90%E6%9C%BA%E5%88%B6%E5%92%8C%E7%9B%97%E8%A7%86%E9%A2%91%E8%A1%8C%E4%B8%BA%E6%9C%89%E5%8C%BA%E5%88%AB%E5%90%97/ -&lt;p&gt;在知乎看到这样的问题&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;，写下我的观点，也同步写到这里。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;『搬运』同『转载』，『盗视频』特指『无授权转载视频』并隐含指『借此获得收益』。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;p&gt;b站用户被指责双标， &lt;strong&gt;最大的锅是b站而不是up主&lt;/strong&gt; 。&lt;/p&gt;
-&lt;p&gt;b站没有明显区分转载作品和原创作品，在我看来就是享受了转载内容带来的红利又想规避因此带来的舆论和法律问题。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;如何判断视频是转载的还是原创的？你看这里它只能投一个币这是搬运的。&lt;/p&gt;
-&lt;/blockquote&gt;
+        <guid>https://ntutn.top/posts/%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/</guid>
+        <description>归零幻想 https://ntutn.top/posts/%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/ -&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;虽然已经在字节实习并拿到转正offer，但实际我自己感受我现在对安卓基础知识掌握的程度还差很多，感觉写业务代码本身并不能带来多少提升。&lt;/p&gt;
+&lt;p&gt;恰逢前两天看到黄正楠那里有一本看上去不错的书&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;，而在淘宝也在打折，就买了一本。&lt;/p&gt;
+&lt;p&gt;那么从Hello Wrold开始，先看看安卓项目的项目结构。&lt;/p&gt;
 &lt;!-- raw HTML omitted --&gt;
-&lt;h2 id=&#34;收益&#34;&gt;收益&lt;/h2&gt;
+&lt;p&gt;[TOC]&lt;/p&gt;
+&lt;h2 id=&#34;gradle和idea&#34;&gt;.gradle和.idea&lt;/h2&gt;
+&lt;p&gt;Android Studio自动生成的文件，无需关心。&lt;/p&gt;
+&lt;h2 id=&#34;app&#34;&gt;app&lt;/h2&gt;
+&lt;p&gt;项目中的代码、资源等内容。&lt;/p&gt;
+&lt;h3 id=&#34;build&#34;&gt;build&lt;/h3&gt;
+&lt;p&gt;编译时自动生成的文件，不需要关心。&lt;/p&gt;
+&lt;h3 id=&#34;libs&#34;&gt;libs&lt;/h3&gt;
+&lt;p&gt;存放项目中的第三方jar包，这个目录下的jar包会自动添加到项目的构建路径下。&lt;/p&gt;
+&lt;h3 id=&#34;src&#34;&gt;src&lt;/h3&gt;
+&lt;h4 id=&#34;androidtest&#34;&gt;androidTest&lt;/h4&gt;
+&lt;p&gt;Android Test测试用例，可以对项目进行一些自动化测试。&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;『搬运』视频是不能获得收益的。
-很大程度这与是否获得授权无关，甚至与界定是否『商业使用』无关。up主没有获得收益，但显而易见b站是有收益的。比如一篇文章，转载到我的个人博客大概可以算非商业使用，因为博客中 &lt;strong&gt;没有任何广告，没有打赏或捐赠选项，没有对任何产品的商业宣传。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;实际上在公司里发现基本不写测试用例，全靠QA瞎几把点。&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;p&gt;当然这一点不是up主的锅，但至少 &lt;strong&gt;请收起『搬运是给你免费做宣传』的说辞。&lt;/strong&gt;&lt;/p&gt;
-&lt;h2 id=&#34;授权问题&#34;&gt;授权问题&lt;/h2&gt;
-&lt;p&gt;『转载』行为是应当获取授权的，退一步讲至少是应当标明出处的。b站自己产生的内容默认会标注『禁止转载』，但大多网站不会有明显标注，所以给转载者留下余地，有人认为未标注默认应该是允许转载。在我看来这一点是不成立的，至少 &lt;strong&gt;在github，如果一个项目没有任何LICENSE说明和文件，应该被理解为保留授权&lt;/strong&gt; ，即使大多数情况只是作者忘了。&lt;/p&gt;
-&lt;h2 id=&#34;标注出处&#34;&gt;标注出处&lt;/h2&gt;
-&lt;p&gt;转载应标注出处，如何才算『标注出处』呢？很多视频中一句『来自Youtube』就算标注了出处了，标题还是翻译后的，你根据这句话能找到来源？&lt;/p&gt;
-&lt;p&gt;即使标注了出处，基本上也只能写在视频的简介中。很多人不习惯看视频简介，尤其是b站还会默认折叠比较长的简介。 &lt;em&gt;还是b站的锅&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;我认为，合适的转载应该明显标出作品来源，并 &lt;strong&gt;至少要提供出足以找到来源作品的信息&lt;/strong&gt; 。书籍杂志没办法，但对于互联网的文章，提供来源链接才算诚意。当然有些平台带超链接会无法过审，那可以再做权衡。&lt;/p&gt;
-&lt;h2 id=&#34;倡议&#34;&gt;倡议&lt;/h2&gt;
-&lt;ol&gt;
-&lt;li&gt;
-&lt;p&gt;对于内容创作者，顺手标注是否允许转载，比如我在自己博客标注了『在未另行说明的情况下，本站内容遵守 &lt;a href=&#34;https://creativecommons.org/licenses/by-sa/4.0/deed.zh&#34;&gt;署名-相同方式共享 4.0 国际&lt;/a&gt; (CC BY-SA 4.0)』 ，这样非商业转载就无须另外询问我的意见了。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;对于转载内容的人，建议在来源未写明是否授权转载的情况下，主动向原作者申请授权。知乎曾经流行过『来自网络，侵删』式的标注，虽然也表达了态度，但实际上并不能规避因此带来的侵权法律风险。能找到作者情况下，申请授权才是正理。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;对于用户，自觉抵制不标注出处甚至不标注『转载』的转载内容。&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
+&lt;h4 id=&#34;test&#34;&gt;test&lt;/h4&gt;
+&lt;p&gt;用来编写单元测试用例，对项目进行自动化测试。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;这里的测试用例是不依赖安卓框架的。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4 id=&#34;main&#34;&gt;main&lt;/h4&gt;
+&lt;h5 id=&#34;java&#34;&gt;java&lt;/h5&gt;
+&lt;p&gt;存放所有java代码（和Kotlin代码）的地方。&lt;/p&gt;
+&lt;h5 id=&#34;res&#34;&gt;res&lt;/h5&gt;
+&lt;p&gt;项目的资源文件夹，项目中使用到的所有图片、布局、字符串等资源都存在这个目录下。&lt;/p&gt;
+&lt;p&gt;图片存放在&lt;code&gt;drawable&lt;/code&gt;目录下，布局存放在&lt;code&gt;layout&lt;/code&gt;目录下，字符串存放在&lt;code&gt;values&lt;/code&gt;目录下。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;mipmap&lt;/code&gt;存放图标，之所以有很多&lt;code&gt;mipmap&lt;/code&gt;目录是为了适配各种设备。若只有一份图片，那么放在&lt;code&gt;xxhdpi&lt;/code&gt;下就可以了。&lt;/p&gt;
+&lt;h5 id=&#34;androidmanifestxml&#34;&gt;AndroidManifest.xml&lt;/h5&gt;
+&lt;p&gt;整个Android项目的配置文件，程序中定义的四大组件都需要在这个文件中注册。此外，还可以在这个文件中添加应用程序的权限声明。&lt;/p&gt;
+&lt;h3 id=&#34;gitignore&#34;&gt;.gitignore&lt;/h3&gt;
+&lt;p&gt;类似外层的&lt;code&gt;.gitignore&lt;/code&gt;，用来在版本控制系统中排除app模块中的指定文件。&lt;/p&gt;
+&lt;h3 id=&#34;buildgradle&#34;&gt;build.gradle&lt;/h3&gt;
+&lt;p&gt;app模块的gradle构建脚本，指定很多项目构建相关的配置。&lt;/p&gt;
+&lt;p&gt;插件&lt;code&gt;com.android.application&lt;/code&gt;用于应用程序模块，&lt;code&gt;com.android.library&lt;/code&gt;表示库模块。前者可以直接运行，后者只能作为代码库依附于应用程序模块运行。&lt;/p&gt;
+&lt;h3 id=&#34;proguard-rulespro&#34;&gt;proguard-rules.pro&lt;/h3&gt;
+&lt;p&gt;指定项目代码的混淆方式。&lt;/p&gt;
+&lt;h2 id=&#34;build-1&#34;&gt;build&lt;/h2&gt;
+&lt;p&gt;编译时自动生成的内容。&lt;/p&gt;
+&lt;h2 id=&#34;gradle&#34;&gt;gradle&lt;/h2&gt;
+&lt;p&gt;gradle wrapper的配置文件。Android Studio会根据本地的缓存i去=情况决定是否需要联网下载gradle。&lt;/p&gt;
+&lt;h2 id=&#34;gitignore-1&#34;&gt;.gitignore&lt;/h2&gt;
+&lt;p&gt;排除文件或文件夹的git版本控制。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;对于所有项目都会用到的&lt;code&gt;.gitignore&lt;/code&gt;条目，不妨加入&lt;code&gt;~/.gitignore&lt;/code&gt;全局配置。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;buildgradle-1&#34;&gt;build.gradle&lt;/h2&gt;
+&lt;p&gt;项目全局的构建脚本。&lt;/p&gt;
+&lt;p&gt;repositories中，&lt;code&gt;google()&lt;/code&gt;对应谷歌自家代码仓库依赖，&lt;code&gt;jcenter()&lt;/code&gt;中则是很多第三方开源库。&lt;/p&gt;
+&lt;h2 id=&#34;gradleproperties&#34;&gt;gradle.properties&lt;/h2&gt;
+&lt;p&gt;全局gradle的配置文件。&lt;/p&gt;
+&lt;h2 id=&#34;gradlew和gradlewbat&#34;&gt;gradlew和gradlew.bat&lt;/h2&gt;
+&lt;p&gt;这两个文件是用来在命令行界面执行gradle命令的，其中&lt;code&gt;gradlew&lt;/code&gt;是在Linux或Mac系统中使用的，&lt;code&gt;gradlew.bat&lt;/code&gt;是在Windows系统中使用的。&lt;/p&gt;
+&lt;h2 id=&#34;localproperties&#34;&gt;local.properties&lt;/h2&gt;
+&lt;p&gt;用于指定本机中的Android SDK路径。&lt;/p&gt;
+&lt;h2 id=&#34;settingsgradle&#34;&gt;settings.gradle&lt;/h2&gt;
+&lt;p&gt;用来指定项目中所有引入的模块。&lt;/p&gt;
 &lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.zhihu.com/question/379843948&#34;&gt;B站的搬运机制和盗视频行为有区别吗？ - 知乎&lt;/a&gt; &lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;《第一行代码》 &lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/section&gt;
-- https://ntutn.top/posts/b%E7%AB%99%E7%9A%84%E6%90%AC%E8%BF%90%E6%9C%BA%E5%88%B6%E5%92%8C%E7%9B%97%E8%A7%86%E9%A2%91%E8%A1%8C%E4%B8%BA%E6%9C%89%E5%8C%BA%E5%88%AB%E5%90%97/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>EventBus初探</title>
-        <link>https://ntutn.top/posts/eventbus%E5%88%9D%E6%8E%A2/</link>
-        <pubDate>Fri, 21 Aug 2020 03:11:37 +0800</pubDate>
-        
-        <guid>https://ntutn.top/posts/eventbus%E5%88%9D%E6%8E%A2/</guid>
-        <description>归零幻想 https://ntutn.top/posts/eventbus%E5%88%9D%E6%8E%A2/ -&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;公司项目中大量运用了EventBus&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;，这两天在做的需求相关的代码也用到了，于是还是要先去研究下这个EventBus是什么。&lt;/p&gt;
-&lt;p&gt;EventBus，顾名思义，事件总线，是一个安卓上的事件管理平台。用事件驱动的机制来简化事件传递的逻辑。在这层意义上也许可以类比&lt;code&gt;Qt&lt;/code&gt;的信号槽机制，或者安卓的广播。当你需要把一个事件传递给多个对象，EventBus就变得非常有用。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://github.com/greenrobot/EventBus/raw/master/EventBus-Publish-Subscribe.png&#34; alt=&#34;EventBus&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;该图片来自EventBus的github仓库&lt;/em&gt;&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;h2 id=&#34;eventbus的使用&#34;&gt;EventBus的使用&lt;/h2&gt;
-&lt;p&gt;首先当然是添加依赖&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-groovy&#34; data-lang=&#34;groovy&#34;&gt;implementation &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;org.greenrobot:eventbus:3.2.0&amp;#39;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;写个demo展示下：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2020/09/08/CzpLZxPkrJiqaDm.jpg&#34; alt=&#34;photo_2020-09-08_15-58-48.jpg&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2020/09/08/SwM6ljRtPkgdGLT.jpg&#34; alt=&#34;photo_2020-09-08_15-59-12.jpg&#34;&gt;&lt;/p&gt;
-&lt;p&gt;点击按钮后，将两处文本的值修改为文本框中的值。注意：上面的那个红色的文本处于一个fragment中。&lt;/p&gt;
-&lt;p&gt;为此，我们先准备一个Event：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;data&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;ButtonEvent&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; text: String)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;点击按钮时，发送这个Event：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;        button.setOnClickListener {
-            EventBus.getDefault().post(ButtonEvent(editTextTextPersonName.text.toString()))
-        }
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然后在需要接收这个请求的地方，比如我们在&lt;code&gt;MainActivity&lt;/code&gt;的&lt;code&gt;onCreate()&lt;/code&gt;中注册EventBus：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;EventBus.getDefault().register(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;在&lt;code&gt;onDestory()&lt;/code&gt;中解除&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;EventBus.getDefault().unregister(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然后就可以接收那个Event了。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;    &lt;span style=&#34;color:#707a7c&#34;&gt;@Subscribe&lt;/span&gt;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onButtonEvent&lt;/span&gt;(buttonEvent: ButtonEvent){
-        textView.text=buttonEvent.text
-    }
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;同样对于Fragment，我们只需要做同样的事情，就可以监听这个Event了。很明显，这对于一个事件有多个处理的场景是很方便的。&lt;/p&gt;
-&lt;h2 id=&#34;订阅者的threadmode&#34;&gt;订阅者的threadMode&lt;/h2&gt;
-&lt;p&gt;安卓应用启动时，系统会创建一个主线程，负责向UI组件分发事件&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;，所有对UI的操作应该放到主线程中。EventBus是一种重要的跨线程更新UI的方式。&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;@Subscribe&lt;/code&gt;注解有一个参数&lt;code&gt;threadMode&lt;/code&gt;，有以下取值：&lt;/p&gt;
-&lt;h3 id=&#34;threadmodeposting&#34;&gt;ThreadMode.POSTING&lt;/h3&gt;
-&lt;p&gt;默认值，在同一线程中调用，开销最小。&lt;/p&gt;
-&lt;h3 id=&#34;threadmodemain&#34;&gt;ThreadMode.MAIN&lt;/h3&gt;
-&lt;p&gt;在主线程中调用。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;如果发送事件的是主线程，则直接调用。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h3 id=&#34;threadmodemain_ordered&#34;&gt;ThreadMode.MAIN_ORDERED&lt;/h3&gt;
-&lt;p&gt;在主线程中调用，同步调用（排队）。&lt;/p&gt;
-&lt;h3 id=&#34;threadmodebackground&#34;&gt;ThreadMode.BACKGROUND&lt;/h3&gt;
-&lt;p&gt;在后台线程中调用。&lt;/p&gt;
-&lt;h3 id=&#34;threadmodeasync&#34;&gt;ThreadMode.ASYNC&lt;/h3&gt;
-&lt;p&gt;在单独线程中调用，用于耗时操作。&lt;/p&gt;
-&lt;p&gt;对于EventBus更新UI，我同样写了demo：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;com.example.eventbustimerdemo&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.os.Bundle&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;androidx.appcompat.app.AppCompatActivity&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;kotlinx.android.synthetic.main.activity_main.*&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;org.greenrobot.eventbus.EventBus&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;org.greenrobot.eventbus.Subscribe&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;org.greenrobot.eventbus.ThreadMode&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MainActivity&lt;/span&gt; : AppCompatActivity() {
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onCreate&lt;/span&gt;(savedInstanceState: Bundle?) {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        btnStart.setOnClickListener {
-            Thread {
-                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt; (&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;) {
-                    Thread.sleep(&lt;span style=&#34;color:#b452cd&#34;&gt;1000&lt;/span&gt;)
-                    EventBus.getDefault().post(TickEvent())
-                }
-            }.start()
-            btnStart.isEnabled = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;
-        }
-        EventBus.getDefault().register(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;)
-    }
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onDestroy&lt;/span&gt;() {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onDestroy()
-        EventBus.getDefault().unregister(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;)
-    }
-    &lt;span style=&#34;color:#707a7c&#34;&gt;@Subscribe&lt;/span&gt;(threadMode = ThreadMode.MAIN)&lt;span style=&#34;color:#228b22&#34;&gt;//只有在UI线程中才能更新UI
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onTimeTick&lt;/span&gt;(event: TickEvent) {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; currentNum = tvTime.text.toString().toInt()
-        tvTime.text = (currentNum + &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;).toString()
-    }
-}
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;TickEvent&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;stickyevent&#34;&gt;StickyEvent&lt;/h2&gt;
-&lt;p&gt;『粘性事件』&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;，即在事件被广播后将长时间存在，新的订阅者仍然能收到。在一些场景下还是有用的，比如我们可能在一个详情页进行投票操作，在返回主页后才进行统计。这时粘性事件会带来帮助。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;        button.setOnClickListener {
-            EventBus.getDefault().postSticky(VoteEvent(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;))
-            finish()
-        }
-        button2.setOnClickListener {
-            EventBus.getDefault().postSticky(VoteEvent(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;))
-            finish()
-        }
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onResume&lt;/span&gt;() {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onResume()
-        EventBus.getDefault().register(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;)
-    }
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onPause&lt;/span&gt;() {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onPause()
-        EventBus.getDefault().unregister(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;)
-    }
-    &lt;span style=&#34;color:#707a7c&#34;&gt;@Subscribe&lt;/span&gt;(threadMode = ThreadMode.MAIN,sticky = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;)
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onVoteEvent&lt;/span&gt;(event: VoteEvent) {
-        textView.text = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (event.result) &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;你投票赞同&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;你投票反对&amp;#34;&lt;/span&gt;
-        EventBus.getDefault().removeStickyEvent(event)
-    }
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
-&lt;hr&gt;
-&lt;ol&gt;
-&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://github.com/greenrobot/EventBus&#34;&gt;EventBus&lt;/a&gt; &lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.jianshu.com/p/0f5ed338feeb&#34;&gt;Android UI线程和非UI线程 &lt;/a&gt; &lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:3&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://blog.csdn.net/haoyuegongzi/article/details/78406342&#34;&gt;Android开发中更新UI的几种常用方式 &lt;/a&gt; &lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:4&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://blog.csdn.net/IO_Field/article/details/52185717&#34;&gt;深入理解EventBus - ThreadMode、Sticky Event等&lt;/a&gt; &lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/section&gt;
-- https://ntutn.top/posts/eventbus%E5%88%9D%E6%8E%A2/ - CC BY-SA 4.0</description>
+- https://ntutn.top/posts/%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/ - CC BY-SA 4.0</description>
         </item>
     
     
