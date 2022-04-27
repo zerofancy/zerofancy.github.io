@@ -1,0 +1,1612 @@
+<!DOCTYPE html>
+<html><head>
+<title>学生管理系统</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="翻出了以前C语言C实验的大作业，当时搞了好多奇技淫巧，最终拿到99分。">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+<meta property="og:title" content="学生管理系统" />
+<meta property="og:description" content="翻出了以前C语言C实验的大作业，当时搞了好多奇技淫巧，最终拿到99分。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ntutn.top/posts/%E5%AD%A6%E7%94%9F%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/" />
+<meta property="article:published_time" content="2019-04-13T03:11:37+08:00" />
+<meta property="article:modified_time" content="2019-04-13T03:11:37+08:00" /><meta property="og:site_name" content="归零幻想" />
+
+
+
+
+
+
+
+
+
+
+<link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+
+  
+
+
+
+
+<link rel="icon" href="//images.ntutn.top/favicon.ico">
+
+
+
+<link rel="stylesheet" href="https://ntutn.top/scss/journal.min.d8d9f81b896882733c41896750adbefbf9319ca02ccccefd461650898975c3af.css" integrity="sha256-2Nn4G4lognM8QYlnUK2&#43;&#43;/kxnKAszM79RhZQiYl1w68=" media="screen">
+
+
+
+<link rel="stylesheet" href="https://ntutn.top/scss/dark-mode.min.60f86847da9fc0724177ccfd0bf7c5997b0b41f1e58d5a293cfb3723c497c422.css" integrity="sha256-YPhoR9qfwHJBd8z9C/fFmXsLQfHljVopPPs3I8SXxCI=" media="screen">
+
+
+<script src="/vendor/js/loadCSS.js"></script>
+<script>
+  loadCSS("https://fonts.googleapis.com/css?family=Fira+Mono|Material+Icons");
+</script>
+
+
+
+<script defer
+	src='https://static.cloudflareinsights.com/beacon.min.js'
+	data-cf-beacon='{"token": 5a03d307f5214109a1e7c8b2cf306a3d'>
+</script>
+
+
+
+
+
+
+  <script src="/js/toc.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://ntutn.top/">
+    
+        <div class="nav-title">
+            归零幻想
+        </div>
+        
+        <div class="nav-subtitle">
+            零点还不算熬夜
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                Archive
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/index.xml">
+                RSS Feed
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	CC BY-SA 4.0
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    
+    
+    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e4%bb%8b%e7%bb%8d" onclick="onNavClick(`#介绍-nav`)" id="介绍-nav">
+									介绍
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%96%87%e4%bb%b6%e5%88%97%e8%a1%a8" onclick="onNavClick(`#文件列表-nav`)" id="文件列表-nav">
+									文件列表
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e4%bd%bf%e7%94%a8%e8%af%b4%e6%98%8e" onclick="onNavClick(`#使用说明-nav`)" id="使用说明-nav">
+									使用说明
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%bc%80%e5%8f%91%e6%97%a5%e5%bf%97" onclick="onNavClick(`#开发日志-nav`)" id="开发日志-nav">
+									开发日志
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+    
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+<div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    Archive
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/categories">
+                    Categories
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/index.xml">
+                    RSS Feed
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e4%bb%8b%e7%bb%8d" onclick="onNavClick(`#介绍-nav`)" id="介绍-nav">
+									介绍
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%96%87%e4%bb%b6%e5%88%97%e8%a1%a8" onclick="onNavClick(`#文件列表-nav`)" id="文件列表-nav">
+									文件列表
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e4%bd%bf%e7%94%a8%e8%af%b4%e6%98%8e" onclick="onNavClick(`#使用说明-nav`)" id="使用说明-nav">
+									使用说明
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%bc%80%e5%8f%91%e6%97%a5%e5%bf%97" onclick="onNavClick(`#开发日志-nav`)" id="开发日志-nav">
+									开发日志
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://ntutn.top/">
+            归零幻想
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://ntutn.top/">
+        <div class="single-column-header-title">归零幻想</div>
+        
+        <div class="single-column-header-subtitle">零点还不算熬夜</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
+                    学生管理系统
+                    
+                    <div class="post-subtitle">
+                        翻出了以前C语言C实验的大作业，当时搞了好多奇技淫巧，最终拿到99分。
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2019-04-13 03:11
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/%E5%AD%A6%E4%B9%A0">学习</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/c%E8%AF%AD%E8%A8%80">C语言</a>
+                                &nbsp;
+                            
+                                <a href="/tags/%E4%BD%9C%E4%B8%9A">作业</a>
+                                &nbsp;
+                            
+                                <a href="/tags/%E7%BA%AA%E5%BF%B5">纪念</a>
+                                &nbsp;
+                            
+                        
+                        
+                            <i class="material-icons" style="">schedule</i>
+                            
+
+                            
+                            
+
+                            
+                            19 min
+                            
+                            8 s.
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <!-- raw HTML omitted -->
+<blockquote>
+<p>翻出了以前C语言C实验的大作业，当时搞了好多奇技淫巧，最终拿到99分。</p>
+</blockquote>
+<h2 id="介绍">介绍</h2>
+<p>学生成绩管理系统v6.0是由软件工程1702刘海鑫设计的一款用于学生成绩管理的软件。</p>
+<h2 id="文件列表">文件列表</h2>
+<ul>
+<li>Stuv6.0.exe	主体程序，用于实现整体功能。</li>
+<li>main.dat	程序的数据文件，用于存储学生信息。</li>
+<li>goodbye.bmp	程序退出时加载的图片。</li>
+<li>desktop.ini	修改程序所在文件夹的图标。</li>
+<li>consoletest.exe	编译的au3程序，用于辅助输入中文。</li>
+</ul>
+<p>代码：</p>
+<pre><code class="language-autoit" data-lang="autoit">$re=InputBox(&quot;Input&quot;,&quot;You can input your massage now.(支持中文)&quot;)
+ConsoleWrite($re)
+</code></pre><ul>
+<li>code.dat	密码存储文件。该文件存储的是xor算法加密的账号密码。</li>
+<li>black.bmp	一张纯黑的图片，用于清除控制台加载图片的痕迹。2018年1月20日使用了image /d清除图片，本文件不再使用。</li>
+<li>background.bmp	程序启动时加载的图片。</li>
+<li>about.rtf	程序的说明文档。</li>
+<li>scaned.txt	存储用户输入的临时文件，一般会自动清除。</li>
+<li>subjects.dat	存储科目的名称，每行一个，最多允许50个，可用记事本直接打开编辑。</li>
+<li>image.exe	外部程序，用于加载图片。</li>
+</ul>
+<!-- raw HTML omitted -->
+<h2 id="使用说明">使用说明</h2>
+<p>双击<code>stuv6.0.exe</code>，程序启动。</p>
+<p>待启动图片显示过后，出现密码输入框，回车确认输入。</p>
+<p>默认账号：<code>admin</code></p>
+<p>默认密码：<code>admin888</code></p>
+<p>输入密码时如果输入~符号，将弹出一个信息框提示输入。这是为了便于输入中文和特殊符号。</p>
+<p>本程序的密码存储是xor运算的结果，仅用于比对密码是否正确。</p>
+<p>接下来进入主菜单。菜单使用黄色为底色，红色标定选中项。你可以按上下键选择，或直接按项目对应数字，回车确认。</p>
+<h2 id="开发日志">开发日志</h2>
+<ul>
+<li>
+<p>2018年3月10日，加入了控制台窗口大小控制的代码。</p>
+</li>
+<li>
+<p>修改了exe文件的图标。</p>
+</li>
+<li>
+<p>改用外部程序image.exe加载图片，并修改gotoxy函数的使用，成功使代码兼容了gun gcc系列编译器。</p>
+</li>
+<li>
+<p>测试WIN7运行效果，图片加载错位，无法全屏，其他功能不受影响。</p>
+</li>
+<li>
+<p>在科目分析功能加入分层成绩展示，至此，程序主体开发完毕。</p>
+</li>
+<li>
+<p>加入查找功能，查找方式为遍历，依据为id或姓名。
+同理，加入按id排序、按姓名的字典顺序排序。
+数据排序功能，选择后弹出二级菜单，进行升序排序或降序排序。
+排序的结果不会保存。
+排序后将自动展示排序结果。</p>
+</li>
+<li>
+<p>加入了科目分析，统计各科总分平均分。</p>
+</li>
+<li>
+<p>删除学生功能准备完成。</p>
+</li>
+<li>
+<p>将修改密码部分移出主函数，便于管理。</p>
+</li>
+<li>
+<p>学生信息展示准备完成。</p>
+</li>
+<li>
+<p>添加学生功能准备完成，界面比较简陋。</p>
+</li>
+<li>
+<p>发现有点控制台用BitBlt画的图不会自动清除，于是找了一张全黑的图片将其覆盖。</p>
+</li>
+<li>
+<p>发现在WIN7等系统控制台加载图片会出现错位，暂时不打算解决。</p>
+</li>
+<li>
+<p>开始准备程序主体功能。</p>
+</li>
+<li>
+<p>记事本太单调，决定将about改为写字板，内容为本文件。</p>
+</li>
+<li>
+<p>发现了atexit函数，于是顺理成章地加入了程序退出图。</p>
+</li>
+<li>
+<p>找到一个取巧的方法。控制台也是一个窗口，获取了他的句柄就可以在上面用BitBlt直接画图了吧。</p>
+</li>
+<li>
+<p>决定加入加载启动退出图片功能。可是Windows环境下C语言直接调用GDI常常导致系统蓝屏。虽然直接用其他语言就可以轻松写出，但总是有点不甘心。</p>
+</li>
+<li>
+<p>加入了about，system(&ldquo;notepad.exe about.txt&rdquo;)实现。</p>
+</li>
+<li>
+<p>加入了密码修改功能。</p>
+</li>
+<li>
+<p>发现并修正了“窗口”覆盖时的一个BUG。</p>
+</li>
+<li>
+<p>成功实现菜单功能！上下键控制菜单移动，回车选择目标。亦可直接按选项对应数字移动菜单项。函数原型：int showMenu(char txt[][50],int n,int selected,int X,int Y)
+txt是各菜单的文本。
+n是菜单项总数目。
+selected为当前选中项。
+X,Y为菜单加载的坐标。
+函数返回值为用户最终选定项。</p>
+</li>
+<li>
+<p>发现getch对中文兼容不好。为了方便输入中文密码，用AU3写了控制台程序：</p>
+</li>
+<li>
+<p>在getch检测到用户输入~后即打开该程序输入数据。</p>
+</li>
+<li>
+<p>制作了密码登录界面，用户名用fgets扫描，password用getch检测。getch检测到后输出*。</p>
+</li>
+<li>
+<p>调用前面的函数实现了伪信息框（图左），虽然和系统的信息框（图右）没得比，但在控制台下做出这个水平我还是知足了。</p>
+</li>
+<li>
+<p>UE的控制台与程序兼容性实在不行，改用code blocks作为IDE，编译器使用gcc for windows。</p>
+</li>
+<li>
+<p>通过gotoxy和严格的坐标计算实现了绘制伪窗口功能。</p>
+</li>
+<li>
+<p>发现了函数gotoxy(x,y)，可以控制光标输出位置，但好像移植性不好，比如GUN系列编译器就是另一个函数。决定还是使用。</p>
+</li>
+<li>
+<p>最终暂时选定XOR算法，代码：</p>
+</li>
+<li>
+<p>准备用户登录验证方案，由经验打算采用XOR算法或MD5算法。</p>
+</li>
+<li>
+<p>找到了合理的颜色控制方案，但似乎并不是所有控制台都能使用（UltraEdit DOS Command就不能用），不过暂时就这样了。</p>
+</li>
+<li>
+<p>决定将界面制作得精美一些。查找资料。找到DOS命令color可以改控制台颜色方案，但只能同时更改整个控制台的颜色，怎么看都不舒服，放弃。</p>
+</li>
+<li>
+<p>找到DOS指令title可以直接修改控制台标题。控制台标题改为“学生成绩管理系统V6.0”。</p>
+</li>
+<li>
+<p>选定课题为学生成绩管理系统，总体难度不大，毕竟书上范例改一改就是标准答案了。但我决定还是挑战一下。</p>
+</li>
+</ul>
+<p><img src="/res/img/stu1.png" alt=""></p>
+<p><img src="/res/img/stu2.png" alt=""></p>
+<p><img src="/res/img/stu3.png" alt=""></p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&#34;stdio.h&#34;</span><span style="color:#1e889b">
+</span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&#34;stdlib.h&#34;</span><span style="color:#1e889b">
+</span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&#34;string.h&#34;</span><span style="color:#1e889b">
+</span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;windows.h&gt;</span><span style="color:#1e889b">
+</span><span style="color:#1e889b"></span><span style="color:#228b22">//#include &lt;conio.h&gt;
+</span><span style="color:#228b22"></span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&#34;math.h&#34;</span><span style="color:#1e889b">
+</span><span style="color:#1e889b"></span><span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">miniMessage</span>(<span style="color:#00688b;font-weight:bold">char</span>*msg);
+<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">showExitPic</span>();
+<span style="color:#228b22">/*
+</span><span style="color:#228b22">typedef HWND (WINAPI *PROCGETCONSOLEWINDOW)();//图片加载
+</span><span style="color:#228b22">PROCGETCONSOLEWINDOW GetConsoleWindow;
+</span><span style="color:#228b22">*/</span>
+<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">PrintChar</span>(<span style="color:#00688b;font-weight:bold">char</span> *ch,UINT count,UINT x,UINT y)  <span style="color:#228b22">//在坐标(x,y)处输出字符串ch,ch里有count个字符
+</span><span style="color:#228b22"></span>{
+    HANDLE h=GetStdHandle(STD_OUTPUT_HANDLE);
+    COORD pos;
+    ULONG unuse;
+    pos.X=x;
+    pos.Y=y;
+    CONSOLE_SCREEN_BUFFER_INFO bInfo; <span style="color:#228b22">// 窗口缓冲区信息
+</span><span style="color:#228b22"></span>    GetConsoleScreenBufferInfo(h, &amp;bInfo );
+    WriteConsoleOutputCharacterA(h,ch,count,pos,&amp;unuse);
+}
+<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">color</span>(<span style="color:#00688b;font-weight:bold">short</span> x) <span style="color:#228b22">//自定义函根据参数改变颜色
+</span><span style="color:#228b22"></span>{
+    <span style="color:#8b008b;font-weight:bold">if</span>(x&gt;=<span style="color:#b452cd">0</span> &amp;&amp; x&lt;=<span style="color:#b452cd">15</span>)<span style="color:#228b22">//参数在0-15的范围颜色
+</span><span style="color:#228b22"></span>        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), x);    <span style="color:#228b22">//只有一个参数，改变字体颜色
+</span><span style="color:#228b22"></span>    <span style="color:#8b008b;font-weight:bold">else</span><span style="color:#228b22">//默认的颜色白色
+</span><span style="color:#228b22"></span>        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), <span style="color:#b452cd">7</span>);
+    <span style="color:#228b22">/*
+</span><span style="color:#228b22">    颜色函数SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),前景色 | 背景色 | 前景加强 | 背景加强);
+</span><span style="color:#228b22">        前景色：数字0-15 或 FOREGROUND_XXX 表示  （其中XXX可用BLUE、RED、GREEN表示）
+</span><span style="color:#228b22">        前景加强：数字8 或 FOREGROUND_INTENSITY 表示
+</span><span style="color:#228b22">        背景色：数字16 32 64 或 BACKGROUND_XXX 三种颜色表示
+</span><span style="color:#228b22">        背景加强： 数字128 或 BACKGROUND_INTENSITY 表示
+</span><span style="color:#228b22">    主要应用：改变指定区域字体与背景的颜色
+</span><span style="color:#228b22">    前景颜色对应值：
+</span><span style="color:#228b22">    　　0=黑色                8=灰色　　
+</span><span style="color:#228b22">      　1=蓝色                9=淡蓝色        十六进制        　　
+</span><span style="color:#228b22">    　　2=绿色                10=淡绿色       0xa        　　
+</span><span style="color:#228b22">    　　3=湖蓝色              11=淡浅绿色     0xb　
+</span><span style="color:#228b22">    　　4=红色                12=淡红色       0xc　　
+</span><span style="color:#228b22">    　　5=紫色                13=淡紫色       0xd        　　
+</span><span style="color:#228b22">    　　6=黄色                14=淡黄色       0xe        　　
+</span><span style="color:#228b22">    　　7=白色                15=亮白色       0xf
+</span><span style="color:#228b22">    　　也可以把这些值设置成常量。
+</span><span style="color:#228b22">    */</span>
+}
+<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">gotoxy</span>(<span style="color:#00688b;font-weight:bold">unsigned</span> <span style="color:#00688b;font-weight:bold">char</span> x,<span style="color:#00688b;font-weight:bold">unsigned</span> <span style="color:#00688b;font-weight:bold">char</span> y)
+{
+    <span style="color:#228b22">//COORD是Windows API中定义的一种结构，表示一个字符在控制台屏幕上的坐标
+</span><span style="color:#228b22"></span>    COORD cor;
+    <span style="color:#228b22">//句柄
+</span><span style="color:#228b22"></span>    HANDLE hout;
+    <span style="color:#228b22">//设定我们要定位到的坐标
+</span><span style="color:#228b22"></span>    cor.X = x;
+    cor.Y = y;
+    <span style="color:#228b22">//GetStdHandle函数获取一个指向特定标准设备的句柄，包括标准输入，标准输出和标准错误。
+</span><span style="color:#228b22"></span>    <span style="color:#228b22">//STD_OUTPUT_HANDLE正是代表标准输出（也就是显示屏）的宏
+</span><span style="color:#228b22"></span>    hout = GetStdHandle(STD_OUTPUT_HANDLE);
+    <span style="color:#228b22">//SetConsoleCursorPosition函数用于设置控制台光标的位置
+</span><span style="color:#228b22"></span>    SetConsoleCursorPosition(hout, cor);
+}
+<span style="color:#8b008b;font-weight:bold">typedef</span> <span style="color:#8b008b;font-weight:bold">struct</span>
+{
+    <span style="color:#00688b;font-weight:bold">char</span> name[<span style="color:#b452cd">25</span>];
+    <span style="color:#00688b;font-weight:bold">char</span> sex;
+    <span style="color:#00688b;font-weight:bold">int</span> age;
+    <span style="color:#00688b;font-weight:bold">int</span> id;
+    <span style="color:#00688b;font-weight:bold">int</span> subjects[<span style="color:#b452cd">50</span>];
+    <span style="color:#00688b;font-weight:bold">int</span> sum;
+    <span style="color:#00688b;font-weight:bold">int</span> avg;
+} student;
+<span style="color:#00688b;font-weight:bold">char</span> sub_name[<span style="color:#b452cd">50</span>][<span style="color:#b452cd">25</span>];
+student stu_dat[<span style="color:#b452cd">10000</span>];
+<span style="color:#00688b;font-weight:bold">int</span> dat_count;
+<span style="color:#00688b;font-weight:bold">int</span> sub_count;
+<span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">Login</span>(<span style="color:#00688b;font-weight:bold">char</span>*c1,<span style="color:#00688b;font-weight:bold">char</span>*c2)
+{
+    FILE*fp;
+    <span style="color:#00688b;font-weight:bold">char</span>*p1;
+    <span style="color:#00688b;font-weight:bold">char</span>*p3;
+    <span style="color:#00688b;font-weight:bold">char</span>*p2;
+    <span style="color:#00688b;font-weight:bold">int</span> tmp;
+    fp=fopen(<span style="color:#cd5555">&#34;code.dat&#34;</span>,<span style="color:#cd5555">&#34;r&#34;</span>);
+    p1=c1;
+    p3=c2;
+    <span style="color:#8b008b;font-weight:bold">if</span>(strlen(c1)&gt;strlen(c2))
+    {
+        p2=p1;
+        p1=p3;
+        p3=p2;
+    }
+    <span style="color:#8b008b;font-weight:bold">for</span> (; *p3!=<span style="color:#cd5555">&#39;\0&#39;</span>; )
+    {
+        <span style="color:#8b008b;font-weight:bold">if</span>(*p1==<span style="color:#cd5555">&#39;\0&#39;</span>)
+        {
+            p1=c1;
+        }
+        tmp=fgetc(fp);
+        <span style="color:#8b008b;font-weight:bold">if</span>(((*p1)^(*p3))!=tmp)
+        {
+            <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>;
+        }
+        p1++;
+        p3++;
+    }
+    <span style="color:#8b008b;font-weight:bold">if</span>(strlen(c1)&lt;<span style="color:#b452cd">2</span>||strlen(c2)&lt;<span style="color:#b452cd">6</span>)
+    {
+        <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>;
+    }
+    <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">1</span>;
+    fclose(fp);
+}
+<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">savePwd</span>(<span style="color:#00688b;font-weight:bold">char</span>*c1,<span style="color:#00688b;font-weight:bold">char</span>*c2)
+{
+    FILE*fp;
+    fp=fopen(<span style="color:#cd5555">&#34;code.dat&#34;</span>,<span style="color:#cd5555">&#34;w&#34;</span>);
+    <span style="color:#00688b;font-weight:bold">char</span>*p1=c1;
+    <span style="color:#00688b;font-weight:bold">char</span>*p2=c2;
+    <span style="color:#00688b;font-weight:bold">char</span>*p3;
+    <span style="color:#8b008b;font-weight:bold">if</span>(strlen(c1)&gt;strlen(c2))
+    {
+        p3=p1;
+        p1=p2;
+        p2=p3;
+    }
+    <span style="color:#8b008b;font-weight:bold">for</span> (; *p2!=<span style="color:#cd5555">&#39;\0&#39;</span>; )
+    {
+        <span style="color:#8b008b;font-weight:bold">if</span>(*p1==<span style="color:#cd5555">&#39;\0&#39;</span>)
+        {
+            p1=c1;
+        }
+        fputc((*p1)^(*p2),fp);
+        p1++;
+        p2++;
+    }
+    fclose(fp);
+}
+<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">dat_add</span>(student*s1)
+{
+    FILE*fp;
+    s1-&gt;sum=<span style="color:#b452cd">0</span>;
+    <span style="color:#8b008b;font-weight:bold">for</span> (<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;sub_count; i++)
+    {
+        s1-&gt;sum+=s1-&gt;subjects[i];
+    }
+    s1-&gt;avg=s1-&gt;sum/=sub_count;
+    fp=fopen(<span style="color:#cd5555">&#34;main.dat&#34;</span>,<span style="color:#cd5555">&#34;ab&#34;</span>);
+    <span style="color:#8b008b;font-weight:bold">if</span>(fp==<span style="color:#658b00">NULL</span>)
+    {
+        fp=fopen(<span style="color:#cd5555">&#34;main.dat&#34;</span>,<span style="color:#cd5555">&#34;wb&#34;</span>);
+    }
+    fwrite(s1,<span style="color:#8b008b;font-weight:bold">sizeof</span>(student),<span style="color:#b452cd">1</span>,fp);
+    fclose(fp);
+}
+<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">sub_load</span>()
+{
+    FILE*fp;
+    fp=fopen(<span style="color:#cd5555">&#34;subjects.dat&#34;</span>,<span style="color:#cd5555">&#34;r&#34;</span>);
+    sub_count=<span style="color:#b452cd">0</span>;
+    <span style="color:#8b008b;font-weight:bold">for</span> (<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;<span style="color:#b452cd">50</span>; i++)
+    {
+        fgets(sub_name[i],<span style="color:#8b008b;font-weight:bold">sizeof</span>(sub_name),fp);
+        sub_name[i][strlen(sub_name[i])-<span style="color:#b452cd">1</span>]=<span style="color:#cd5555">&#39;\0&#39;</span>;
+        <span style="color:#8b008b;font-weight:bold">if</span>(strlen(sub_name[i])&gt;<span style="color:#b452cd">0</span>)
+        {
+            sub_count++;
+        }
+    }
+    fclose(fp);
+}
+<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">sub_print</span>()
+{
+    printf(<span style="color:#cd5555">&#34;学号</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">姓名</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">性别</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">年龄</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">&#34;</span>);
+    <span style="color:#8b008b;font-weight:bold">for</span> (<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;<span style="color:#b452cd">50</span>; i++)
+    {
+        <span style="color:#8b008b;font-weight:bold">if</span>(strlen(sub_name[i])==<span style="color:#b452cd">0</span>)
+        {
+            <span style="color:#8b008b;font-weight:bold">break</span>;
+        }
+        printf(<span style="color:#cd5555">&#34;%s</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">&#34;</span>,sub_name[i]);
+    }
+    printf(<span style="color:#cd5555">&#34;总分</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">平均分</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">排名</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">&#34;</span>);
+    putchar(<span style="color:#cd5555">&#39;\n&#39;</span>);
+}
+<span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">dat_load</span>()
+{
+    FILE*fp;
+    <span style="color:#00688b;font-weight:bold">int</span> i;
+    fp=fopen(<span style="color:#cd5555">&#34;main.dat&#34;</span>,<span style="color:#cd5555">&#34;rb&#34;</span>);
+    <span style="color:#8b008b;font-weight:bold">if</span>(fp==<span style="color:#658b00">NULL</span>)
+    {
+        puts(<span style="color:#cd5555">&#34;main.dat is lost!&#34;</span>);
+        exit(<span style="color:#b452cd">1</span>);
+    }
+    <span style="color:#8b008b;font-weight:bold">for</span> (i=<span style="color:#b452cd">0</span>; !feof(fp) ; i++)
+    {
+        fread(&amp;stu_dat[i],<span style="color:#8b008b;font-weight:bold">sizeof</span>(student),<span style="color:#b452cd">1</span>,fp);
+    }
+    fclose(fp);
+    <span style="color:#8b008b;font-weight:bold">return</span> i-<span style="color:#b452cd">1</span>;
+}
+<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">dat_show</span> (student s)
+{
+    printf(<span style="color:#cd5555">&#34;%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%s</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%c</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">&#34;</span>,s.id,s.name,s.sex,s.age);
+    <span style="color:#8b008b;font-weight:bold">for</span> (<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;sub_count; i++)
+    {
+        printf(<span style="color:#cd5555">&#34;%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">&#34;</span>,s.subjects[i]);
+    }
+    printf(<span style="color:#cd5555">&#34;%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">&#34;</span>,s.sum,s.avg);
+}
+<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">showMiniWindow</span>(<span style="color:#00688b;font-weight:bold">char</span>*title,<span style="color:#00688b;font-weight:bold">int</span> X,<span style="color:#00688b;font-weight:bold">int</span> Y,<span style="color:#00688b;font-weight:bold">int</span> height,<span style="color:#00688b;font-weight:bold">int</span> width)
+{
+    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;width; i++)
+    {
+        <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i2=<span style="color:#b452cd">0</span>; i2&lt;height; i2++)
+        {
+            gotoxy(X+i,Y+i2);
+            putchar(<span style="color:#cd5555">&#39; &#39;</span>);
+        }
+    }
+    color(<span style="color:#b452cd">3</span>);
+    gotoxy(X,Y);
+    putchar(<span style="color:#cd5555">&#39;X&#39;</span>);
+    gotoxy(X+width-<span style="color:#b452cd">1</span>,Y);
+    putchar(<span style="color:#cd5555">&#39;X&#39;</span>);
+    gotoxy(X,Y+height-<span style="color:#b452cd">1</span>);
+    putchar(<span style="color:#cd5555">&#39;X&#39;</span>);
+    gotoxy(X+width-<span style="color:#b452cd">1</span>,Y+height-<span style="color:#b452cd">1</span>);
+    putchar(<span style="color:#cd5555">&#39;X&#39;</span>);
+    color(<span style="color:#b452cd">5</span>);
+    <span style="color:#8b008b;font-weight:bold">for</span> (<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">2</span>; i&lt;width; i++)
+    {
+        gotoxy(X+i-<span style="color:#b452cd">1</span>,Y);
+        putchar(<span style="color:#cd5555">&#39;-&#39;</span>);
+        gotoxy(X+i-<span style="color:#b452cd">1</span>,Y+height-<span style="color:#b452cd">1</span>);
+        putchar(<span style="color:#cd5555">&#39;-&#39;</span>);
+    }
+    color(<span style="color:#b452cd">9</span>);
+    <span style="color:#8b008b;font-weight:bold">for</span> (<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">2</span>; i&lt;height; i++)
+    {
+        gotoxy(X,Y+i-<span style="color:#b452cd">1</span>);
+        putchar(<span style="color:#cd5555">&#39;|&#39;</span>);
+        gotoxy(X+width-<span style="color:#b452cd">1</span>,Y+i-<span style="color:#b452cd">1</span>);
+        putchar(<span style="color:#cd5555">&#39;|&#39;</span>);
+        PrintChar(<span style="color:#cd5555">&#34;|&#34;</span>,<span style="color:#b452cd">1</span>,X+width-<span style="color:#b452cd">1</span>,Y+i-<span style="color:#b452cd">1</span>);
+    }
+    color(<span style="color:#b452cd">12</span>);
+    gotoxy(X+width/<span style="color:#b452cd">2</span>-strlen(title)/<span style="color:#b452cd">2</span>,Y);
+    printf(<span style="color:#cd5555">&#34;%s&#34;</span>,title);
+    color(<span style="color:#b452cd">16</span>);
+    gotoxy(X+<span style="color:#b452cd">1</span>,Y+<span style="color:#b452cd">1</span>);
+}
+<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">miniLogin</span> ()
+{
+    <span style="color:#00688b;font-weight:bold">char</span> c1[<span style="color:#b452cd">25</span>],c2[<span style="color:#b452cd">25</span>];
+    <span style="color:#00688b;font-weight:bold">char</span> ch_tmp;
+    <span style="color:#00688b;font-weight:bold">char</span>*p=c2;
+    FILE*fp;
+    showMiniWindow(<span style="color:#cd5555">&#34;login&#34;</span>,<span style="color:#b452cd">6</span>,<span style="color:#b452cd">5</span>,<span style="color:#b452cd">4</span>,<span style="color:#b452cd">32</span>);
+    puts(<span style="color:#cd5555">&#34;User     ________________&#34;</span>);
+    gotoxy(<span style="color:#b452cd">7</span>,<span style="color:#b452cd">7</span>);
+    puts(<span style="color:#cd5555">&#34;password ________________&#34;</span>);
+    gotoxy(<span style="color:#b452cd">16</span>,<span style="color:#b452cd">6</span>);
+    fgets(c1,<span style="color:#8b008b;font-weight:bold">sizeof</span>(c1),stdin);
+    c1[strlen(c1)-<span style="color:#b452cd">1</span>]=<span style="color:#cd5555">&#39;\0&#39;</span>;
+    gotoxy(<span style="color:#b452cd">16</span>,<span style="color:#b452cd">7</span>);
+    <span style="color:#8b008b;font-weight:bold">while</span>(<span style="color:#b452cd">1</span>)
+    {
+        ch_tmp=getch();
+        <span style="color:#8b008b;font-weight:bold">if</span>(ch_tmp==<span style="color:#b452cd">13</span>)
+        {
+            *p=<span style="color:#cd5555">&#39;\0&#39;</span>;
+            <span style="color:#8b008b;font-weight:bold">break</span>;
+        }
+        <span style="color:#8b008b;font-weight:bold">else</span> <span style="color:#8b008b;font-weight:bold">if</span>(ch_tmp==<span style="color:#cd5555">&#39;~&#39;</span>)
+        {
+            system(<span style="color:#cd5555">&#34;consoletest.exe&gt;scaned.txt&#34;</span>);
+            fp=fopen(<span style="color:#cd5555">&#34;scaned.txt&#34;</span>,<span style="color:#cd5555">&#34;r&#34;</span>);
+            fgets(c2,<span style="color:#8b008b;font-weight:bold">sizeof</span>(c2),fp);
+            fclose(fp);
+            system(<span style="color:#cd5555">&#34;del scaned.txt&#34;</span>);
+            <span style="color:#8b008b;font-weight:bold">break</span>;
+        }
+        <span style="color:#8b008b;font-weight:bold">else</span>
+        {
+            *p=ch_tmp;
+            p++;
+            putchar(<span style="color:#cd5555">&#39;*&#39;</span>);
+        }
+    }
+    <span style="color:#8b008b;font-weight:bold">if</span>(Login(c1,c2))
+    {
+        miniMessage(<span style="color:#cd5555">&#34;登录成功，欢迎您的使用！&#34;</span>);
+    }
+    <span style="color:#8b008b;font-weight:bold">else</span>
+    {
+        miniMessage(<span style="color:#cd5555">&#34;用户名或密码错误！&#34;</span>);
+        Sleep(<span style="color:#b452cd">1000</span>);
+        showExitPic();
+        exit(<span style="color:#b452cd">1</span>);
+    }
+    Sleep(<span style="color:#b452cd">1000</span>);
+}
+<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">miniMessage</span>(<span style="color:#00688b;font-weight:bold">char</span>*msg)
+{
+    <span style="color:#00688b;font-weight:bold">int</span> n=strlen(msg);
+    <span style="color:#00688b;font-weight:bold">int</span> width=(<span style="color:#00688b;font-weight:bold">int</span>)sqrt(n)+<span style="color:#b452cd">10</span>;
+    <span style="color:#00688b;font-weight:bold">int</span> height=n/(width-<span style="color:#b452cd">2</span>)+<span style="color:#b452cd">4</span>;
+    <span style="color:#00688b;font-weight:bold">int</span> X=<span style="color:#b452cd">5</span>;
+    <span style="color:#00688b;font-weight:bold">int</span> Y=<span style="color:#b452cd">7</span>;
+    showMiniWindow(<span style="color:#cd5555">&#34;Message&#34;</span>,X,Y,height,width);
+    X++;
+    Y++;
+    <span style="color:#8b008b;font-weight:bold">for</span> (<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;n; i++)
+    {
+        putchar(msg[i]);
+        <span style="color:#8b008b;font-weight:bold">if</span>(i%(width-<span style="color:#b452cd">2</span>)==<span style="color:#b452cd">0</span>)
+        {
+            Y++;
+            gotoxy(X,Y);
+        }
+    }
+}
+<span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">showMenu</span>(<span style="color:#00688b;font-weight:bold">char</span> txt[][<span style="color:#b452cd">50</span>],<span style="color:#00688b;font-weight:bold">int</span> n,<span style="color:#00688b;font-weight:bold">int</span> selected,<span style="color:#00688b;font-weight:bold">int</span> X,<span style="color:#00688b;font-weight:bold">int</span> Y)
+{
+    <span style="color:#00688b;font-weight:bold">int</span> maxwidth=<span style="color:#b452cd">0</span>;
+    <span style="color:#00688b;font-weight:bold">int</span> tmp_width;
+    <span style="color:#00688b;font-weight:bold">char</span> tmp_press;
+    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;n; i++)
+    {
+        tmp_width=strlen(txt[i]);
+        <span style="color:#8b008b;font-weight:bold">if</span>(tmp_width&gt;maxwidth)
+        {
+            maxwidth=tmp_width;
+        }
+    }
+    showMiniWindow(<span style="color:#cd5555">&#34;MENU&#34;</span>,X,Y,n+<span style="color:#b452cd">2</span>,maxwidth+<span style="color:#b452cd">2</span>);
+    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;n; i++)
+    {
+        <span style="color:#8b008b;font-weight:bold">if</span>(i==selected)
+        {
+            color(<span style="color:#b452cd">4</span>);
+        }
+        <span style="color:#8b008b;font-weight:bold">else</span>
+        {
+            color(<span style="color:#b452cd">6</span>);
+        }
+        <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i2=<span style="color:#b452cd">0</span>; txt[i][i2]!=<span style="color:#cd5555">&#39;\0&#39;</span>; i2++)
+        {
+            gotoxy(X+i2+<span style="color:#b452cd">1</span>,Y+i+<span style="color:#b452cd">1</span>);
+            putchar(txt[i][i2]);
+        }
+    }
+    color(<span style="color:#b452cd">16</span>);
+    tmp_press=getch();
+    <span style="color:#8b008b;font-weight:bold">if</span>(tmp_press==<span style="color:#b452cd">13</span>)
+    {
+        <span style="color:#8b008b;font-weight:bold">return</span> selected;
+    }
+    <span style="color:#8b008b;font-weight:bold">else</span> <span style="color:#8b008b;font-weight:bold">if</span>(tmp_press==<span style="color:#b452cd">72</span>)
+    {
+        <span style="color:#8b008b;font-weight:bold">if</span>(selected&gt;<span style="color:#b452cd">0</span>)
+        {
+            selected--;
+        }
+        <span style="color:#8b008b;font-weight:bold">else</span>
+        {
+            putchar(<span style="color:#cd5555">&#39;\a&#39;</span>);
+        }
+    }
+    <span style="color:#8b008b;font-weight:bold">else</span> <span style="color:#8b008b;font-weight:bold">if</span>(tmp_press==<span style="color:#b452cd">80</span>)
+    {
+        <span style="color:#8b008b;font-weight:bold">if</span>(selected&lt;n-<span style="color:#b452cd">1</span>)
+        {
+            selected++;
+        }
+        <span style="color:#8b008b;font-weight:bold">else</span>
+        {
+            putchar(<span style="color:#cd5555">&#39;\a&#39;</span>);
+        }
+    }
+    <span style="color:#8b008b;font-weight:bold">else</span> <span style="color:#8b008b;font-weight:bold">if</span>(tmp_press-<span style="color:#cd5555">&#39;0&#39;</span>&gt;=<span style="color:#b452cd">0</span>&amp;&amp;tmp_press-<span style="color:#cd5555">&#39;0&#39;</span>&lt;n)
+    {
+        selected=tmp_press-<span style="color:#cd5555">&#39;0&#39;</span>;
+    }
+    <span style="color:#8b008b;font-weight:bold">return</span> showMenu(txt,n,selected,X,Y);
+}
+<span style="color:#228b22">/*
+</span><span style="color:#228b22">void picLoad(char*path)
+</span><span style="color:#228b22">{
+</span><span style="color:#228b22">    HMODULE hKernel32 = GetModuleHandle(&#34;kernel32&#34;);
+</span><span style="color:#228b22">    GetConsoleWindow= (PROCGETCONSOLEWINDOW)GetProcAddress(hKernel32,&#34;GetConsoleWindow&#34;);
+</span><span style="color:#228b22">    HWND cmd=GetConsoleWindow();
+</span><span style="color:#228b22">    HDC dc = GetDC(cmd);
+</span><span style="color:#228b22">    HBITMAP hBitmap;
+</span><span style="color:#228b22">    hBitmap=(HBITMAP)LoadImage            (NULL,path,IMAGE_BITMAP,0,0,LR_LOADFROMFILE|LR_CREATEDIBSECTION);
+</span><span style="color:#228b22">    HDC cmdmem = CreateCompatibleDC(dc);
+</span><span style="color:#228b22">    SelectObject(cmdmem, hBitmap);
+</span><span style="color:#228b22">    BitBlt(dc, 0, 0, 1300, 700, cmdmem, 0, 0, SRCCOPY);
+</span><span style="color:#228b22">    Sleep(3000);
+</span><span style="color:#228b22">    return ;
+</span><span style="color:#228b22">}*/</span>
+<span style="color:#228b22">/*
+</span><span style="color:#228b22">void loadBlack()
+</span><span style="color:#228b22">{
+</span><span style="color:#228b22">    HMODULE hKernel32 = GetModuleHandle(&#34;kernel32&#34;);
+</span><span style="color:#228b22">    GetConsoleWindow= (PROCGETCONSOLEWINDOW)GetProcAddress(hKernel32,&#34;GetConsoleWindow&#34;);
+</span><span style="color:#228b22">    HWND cmd=GetConsoleWindow();
+</span><span style="color:#228b22">    HDC dc = GetDC(cmd);
+</span><span style="color:#228b22">    HBITMAP hBitmap;
+</span><span style="color:#228b22">    hBitmap=(HBITMAP)LoadImage            (NULL,&#34;black.bmp&#34;,IMAGE_BITMAP,0,0,LR_LOADFROMFILE|LR_CREATEDIBSECTION);
+</span><span style="color:#228b22">    HDC cmdmem = CreateCompatibleDC(dc);
+</span><span style="color:#228b22">    SelectObject(cmdmem, hBitmap);
+</span><span style="color:#228b22">    BitBlt(dc, 0, 0, 1300, 700, cmdmem, 0, 0, SRCCOPY);
+</span><span style="color:#228b22">    return ;
+</span><span style="color:#228b22">}
+</span><span style="color:#228b22">*/</span>
+<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">showExitPic</span>()
+{
+    system(<span style="color:#cd5555">&#34;image goodbye.bmp 0 0&#34;</span>);
+    Sleep(<span style="color:#b452cd">3000</span>);
+    <span style="color:#228b22">//picLoad(&#34;goodbye.bmp&#34;);
+</span><span style="color:#228b22"></span>}
+<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">add_stu</span>()
+{
+    <span style="color:#00688b;font-weight:bold">char</span> tmp_sex[<span style="color:#b452cd">10</span>];
+    student tmp;
+    system(<span style="color:#cd5555">&#34;cls&#34;</span>);
+    printf(<span style="color:#cd5555">&#34;Please input the id number of the new student.</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
+    scanf(<span style="color:#cd5555">&#34;%d&#34;</span>,&amp;tmp.id);
+    printf(<span style="color:#cd5555">&#34;Please input the name of the student.</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
+    scanf(<span style="color:#cd5555">&#34;%s&#34;</span>,tmp.name);
+    printf(<span style="color:#cd5555">&#34;Please input the sex of the student.(F for Female,M for Male.)</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
+    scanf(<span style="color:#cd5555">&#34;%s&#34;</span>,tmp_sex);
+    <span style="color:#8b008b;font-weight:bold">if</span>(strcmp(tmp_sex,<span style="color:#cd5555">&#34;F&#34;</span>)==<span style="color:#b452cd">0</span>)
+    {
+        tmp.sex=<span style="color:#cd5555">&#39;F&#39;</span>;
+    }
+    <span style="color:#8b008b;font-weight:bold">else</span>
+    {
+        tmp.sex=<span style="color:#cd5555">&#39;M&#39;</span>;
+    }
+    printf(<span style="color:#cd5555">&#34;Please input the age of the student.</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
+    scanf(<span style="color:#cd5555">&#34;%d&#34;</span>,&amp;tmp.age);
+    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;sub_count; i++)
+    {
+        printf(<span style="color:#cd5555">&#34;Please input %s&#39;s %s score.</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>,tmp.name,sub_name[i]);
+        scanf(<span style="color:#cd5555">&#34;%d&#34;</span>,&amp;tmp.subjects[i]);
+    }
+    dat_add(&amp;tmp);
+    dat_count=dat_load();
+    printf(<span style="color:#cd5555">&#34;Data added successfully!</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
+    Sleep(<span style="color:#b452cd">3000</span>);
+}
+<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">showalldata</span>()
+{
+    system(<span style="color:#cd5555">&#34;cls&#34;</span>);
+    sub_print();
+    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;dat_count; i++)
+    {
+        printf(<span style="color:#cd5555">&#34;%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%s</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%c</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">&#34;</span>,stu_dat[i].id,stu_dat[i].name,stu_dat[i].sex,stu_dat[i].age);
+        <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i2=<span style="color:#b452cd">0</span>; i2&lt;sub_count; i2++)
+        {
+            printf(<span style="color:#cd5555">&#34;%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">&#34;</span>,stu_dat[i].subjects[i2]);
+        }
+        printf(<span style="color:#cd5555">&#34;%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t\n</span><span style="color:#cd5555">&#34;</span>,stu_dat[i].sum,stu_dat[i].avg,i+<span style="color:#b452cd">1</span>);
+    }
+    system(<span style="color:#cd5555">&#34;pause&#34;</span>);
+}
+<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">ed_password</span>()
+{
+    <span style="color:#00688b;font-weight:bold">char</span> us_name[<span style="color:#b452cd">50</span>];
+    <span style="color:#00688b;font-weight:bold">char</span> us_pwd[<span style="color:#b452cd">50</span>];
+    <span style="color:#00688b;font-weight:bold">char</span> us_pwd2[<span style="color:#b452cd">50</span>];
+    <span style="color:#00688b;font-weight:bold">char</span> us_pwd3[<span style="color:#b452cd">50</span>];
+    <span style="color:#00688b;font-weight:bold">char</span>*p;
+    FILE*fp;
+    system(<span style="color:#cd5555">&#34;cls&#34;</span>);
+    showMiniWindow(<span style="color:#cd5555">&#34;修改密码&#34;</span>,<span style="color:#b452cd">5</span>,<span style="color:#b452cd">7</span>,<span style="color:#b452cd">6</span>,<span style="color:#b452cd">36</span>);
+    puts(<span style="color:#cd5555">&#34;UserName&#34;</span>);
+    gotoxy(<span style="color:#b452cd">6</span>,<span style="color:#b452cd">9</span>);
+    puts(<span style="color:#cd5555">&#34;PassWord&#34;</span>);
+    gotoxy(<span style="color:#b452cd">6</span>,<span style="color:#b452cd">10</span>);
+    puts(<span style="color:#cd5555">&#34;NewPassWord&#34;</span>);
+    gotoxy(<span style="color:#b452cd">6</span>,<span style="color:#b452cd">11</span>);
+    puts(<span style="color:#cd5555">&#34;Again&#34;</span>);
+    gotoxy(<span style="color:#b452cd">18</span>,<span style="color:#b452cd">8</span>);
+    scanf(<span style="color:#cd5555">&#34;%s&#34;</span>,us_name);
+    gotoxy(<span style="color:#b452cd">18</span>,<span style="color:#b452cd">9</span>);
+    p=us_pwd;
+    <span style="color:#8b008b;font-weight:bold">while</span>(<span style="color:#b452cd">1</span>)
+    {
+        *p=getch();
+        <span style="color:#8b008b;font-weight:bold">if</span>(*p==<span style="color:#b452cd">13</span>)
+        {
+            p--;
+            <span style="color:#8b008b;font-weight:bold">break</span>;
+        }
+        <span style="color:#8b008b;font-weight:bold">else</span> <span style="color:#8b008b;font-weight:bold">if</span>(*p==<span style="color:#cd5555">&#39;~&#39;</span>)
+        {
+            system(<span style="color:#cd5555">&#34;consoletest.exe&gt;scaned.txt&#34;</span>);
+            fp=fopen(<span style="color:#cd5555">&#34;scaned.txt&#34;</span>,<span style="color:#cd5555">&#34;r&#34;</span>);
+            fgets(us_pwd,<span style="color:#8b008b;font-weight:bold">sizeof</span>(us_pwd),fp);
+            fclose(fp);
+            system(<span style="color:#cd5555">&#34;del scaned.txt&#34;</span>);
+            <span style="color:#8b008b;font-weight:bold">break</span>;
+        }
+        <span style="color:#8b008b;font-weight:bold">else</span>
+        {
+            putchar(<span style="color:#cd5555">&#39;*&#39;</span>);
+            p++;
+        }
+    }
+    gotoxy(<span style="color:#b452cd">18</span>,<span style="color:#b452cd">10</span>);
+    p=us_pwd2;
+    <span style="color:#8b008b;font-weight:bold">while</span>(<span style="color:#b452cd">1</span>)
+    {
+        *p=getch();
+        <span style="color:#8b008b;font-weight:bold">if</span>(*p==<span style="color:#b452cd">13</span>)
+        {
+            p--;
+            <span style="color:#8b008b;font-weight:bold">break</span>;
+        }
+        <span style="color:#8b008b;font-weight:bold">else</span> <span style="color:#8b008b;font-weight:bold">if</span>(*p==<span style="color:#cd5555">&#39;~&#39;</span>)
+        {
+            system(<span style="color:#cd5555">&#34;consoletest.exe&gt;scaned.txt&#34;</span>);
+            fp=fopen(<span style="color:#cd5555">&#34;scaned.txt&#34;</span>,<span style="color:#cd5555">&#34;r&#34;</span>);
+            fgets(us_pwd2,<span style="color:#8b008b;font-weight:bold">sizeof</span>(us_pwd2),fp);
+            fclose(fp);
+            system(<span style="color:#cd5555">&#34;del scaned.txt&#34;</span>);
+            <span style="color:#8b008b;font-weight:bold">break</span>;
+        }
+        <span style="color:#8b008b;font-weight:bold">else</span>
+        {
+            putchar(<span style="color:#cd5555">&#39;*&#39;</span>);
+            p++;
+        }
+    }
+    gotoxy(<span style="color:#b452cd">18</span>,<span style="color:#b452cd">11</span>);
+    p=us_pwd3;
+    <span style="color:#8b008b;font-weight:bold">while</span>(<span style="color:#b452cd">1</span>)
+    {
+        *p=getch();
+        <span style="color:#8b008b;font-weight:bold">if</span>(*p==<span style="color:#b452cd">13</span>)
+        {
+            p--;
+            <span style="color:#8b008b;font-weight:bold">break</span>;
+        }
+        <span style="color:#8b008b;font-weight:bold">else</span> <span style="color:#8b008b;font-weight:bold">if</span>(*p==<span style="color:#cd5555">&#39;~&#39;</span>)
+        {
+            system(<span style="color:#cd5555">&#34;consoletest.exe&gt;scaned.txt&#34;</span>);
+            fp=fopen(<span style="color:#cd5555">&#34;scaned.txt&#34;</span>,<span style="color:#cd5555">&#34;r&#34;</span>);
+            fgets(us_pwd3,<span style="color:#8b008b;font-weight:bold">sizeof</span>(us_pwd3),fp);
+            fclose(fp);
+            system(<span style="color:#cd5555">&#34;del scaned.txt&#34;</span>);
+            <span style="color:#8b008b;font-weight:bold">break</span>;
+        }
+        <span style="color:#8b008b;font-weight:bold">else</span>
+        {
+            putchar(<span style="color:#cd5555">&#39;*&#39;</span>);
+            p++;
+        }
+    }
+    <span style="color:#8b008b;font-weight:bold">if</span>(Login(us_name,us_pwd)&amp;&amp;strcmp(us_pwd2,us_pwd3)==<span style="color:#b452cd">0</span>)
+    {
+        savePwd(us_name,us_pwd2);
+        miniMessage(<span style="color:#cd5555">&#34;Password modification success&#34;</span>);
+    }
+    <span style="color:#8b008b;font-weight:bold">else</span>
+    {
+        miniMessage(<span style="color:#cd5555">&#34;Password modification failed,please check you input.&#34;</span>);
+    }
+    Sleep(<span style="color:#b452cd">3000</span>);
+    system(<span style="color:#cd5555">&#34;cls&#34;</span>);
+}
+<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">del_dat</span>()
+{
+    <span style="color:#00688b;font-weight:bold">int</span> tmp_number;
+    <span style="color:#00688b;font-weight:bold">char</span> str_cmd[<span style="color:#b452cd">255</span>];
+    system(<span style="color:#cd5555">&#34;cls&#34;</span>);
+    printf(<span style="color:#cd5555">&#34;Please input the id of the data.</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
+    printf(<span style="color:#cd5555">&#34;System will delete the first data founded.</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
+    scanf(<span style="color:#cd5555">&#34;%d&#34;</span>,&amp;tmp_number);
+    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;dat_count; i++)
+    {
+        <span style="color:#8b008b;font-weight:bold">if</span>(stu_dat[i].id==tmp_number)
+        {
+            printf(<span style="color:#cd5555">&#34;Data founded.Are you sure to delete it?(Y/N)</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
+            scanf(<span style="color:#cd5555">&#34;%s&#34;</span>,str_cmd);
+            <span style="color:#8b008b;font-weight:bold">if</span>(strcmp(str_cmd,<span style="color:#cd5555">&#34;Y&#34;</span>)!=<span style="color:#b452cd">0</span>&amp;&amp;strcmp(str_cmd,<span style="color:#cd5555">&#34;y&#34;</span>)!=<span style="color:#b452cd">0</span>)
+            {
+                printf(<span style="color:#cd5555">&#34;Command canceled.</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
+                system(<span style="color:#cd5555">&#34;pause&#34;</span>);
+                <span style="color:#8b008b;font-weight:bold">return</span>;
+            }
+            stu_dat[i]=stu_dat[dat_count-<span style="color:#b452cd">1</span>];
+            dat_count--;
+            system(<span style="color:#cd5555">&#34;del main.dat&#34;</span>);
+            <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i2=<span style="color:#b452cd">0</span>; i2&lt;dat_count; i2++)
+            {
+                dat_add(&amp;stu_dat[i]);
+            }
+            printf(<span style="color:#cd5555">&#34;Del successfully!</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
+            system(<span style="color:#cd5555">&#34;pause&#34;</span>);
+            <span style="color:#8b008b;font-weight:bold">return</span>;
+        }
+    }
+    miniMessage(<span style="color:#cd5555">&#34;Cannot found target data!&#34;</span>);
+    system(<span style="color:#cd5555">&#34;pause&#34;</span>);
+}
+<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">sub_ana</span>()
+{
+    system(<span style="color:#cd5555">&#34;cls&#34;</span>);
+    <span style="color:#00688b;font-weight:bold">int</span> tmp_sum[<span style="color:#b452cd">50</span>];
+    <span style="color:#00688b;font-weight:bold">int</span> tmp_avg[<span style="color:#b452cd">50</span>];
+    <span style="color:#00688b;font-weight:bold">int</span> tmp_level[<span style="color:#b452cd">50</span>][<span style="color:#b452cd">5</span>];
+    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;<span style="color:#b452cd">50</span>; i++)
+    {
+        tmp_sum[i]=<span style="color:#b452cd">0</span>;
+        tmp_avg[i]=<span style="color:#b452cd">0</span>;
+        <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i2=<span style="color:#b452cd">0</span>; i2&lt;<span style="color:#b452cd">5</span>; i2++)
+        {
+            tmp_level[i][i2]=<span style="color:#b452cd">0</span>;
+        }
+    }
+    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;dat_count; i++)
+    {
+        <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i2=<span style="color:#b452cd">0</span>; i2&lt;sub_count; i2++)
+        {
+            tmp_sum[i2]+=stu_dat[i].subjects[i2];
+            <span style="color:#8b008b;font-weight:bold">switch</span>(stu_dat[i].subjects[i2]/<span style="color:#b452cd">10</span>)
+            {
+            <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">10</span>:
+            <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">9</span>:
+                tmp_level[i][<span style="color:#b452cd">0</span>]++;
+                <span style="color:#8b008b;font-weight:bold">break</span>;
+            <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">8</span>:
+                tmp_level[i][<span style="color:#b452cd">1</span>]++;
+                <span style="color:#8b008b;font-weight:bold">break</span>;
+            <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">7</span>:
+                tmp_level[i][<span style="color:#b452cd">2</span>]++;
+                <span style="color:#8b008b;font-weight:bold">break</span>;
+            <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">6</span>:
+                tmp_level[i][<span style="color:#b452cd">3</span>]++;
+                <span style="color:#8b008b;font-weight:bold">break</span>;
+            <span style="color:#8b008b;font-weight:bold">default</span>:
+                tmp_level[i][<span style="color:#b452cd">4</span>]++;
+            }
+        }
+    }
+    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;sub_count; i++)
+    {
+        tmp_avg[i]=tmp_sum[i]/dat_count;
+    }
+    printf(<span style="color:#cd5555">&#34;科目</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">总分</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">平均分</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">优秀</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">良好</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">中等</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">及格</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">不及格</span><span style="color:#cd5555">\t\n</span><span style="color:#cd5555">&#34;</span>);
+    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;sub_count; i++)
+    {
+        printf(<span style="color:#cd5555">&#34;%s</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t\n</span><span style="color:#cd5555">&#34;</span>,sub_name[i],tmp_sum[i],tmp_avg[i]
+               ,tmp_level[i][<span style="color:#b452cd">0</span>],tmp_level[i][<span style="color:#b452cd">1</span>],tmp_level[i][<span style="color:#b452cd">2</span>],tmp_level[i][<span style="color:#b452cd">3</span>]
+               ,tmp_level[i][<span style="color:#b452cd">4</span>]);
+    }
+    system(<span style="color:#cd5555">&#34;pause&#34;</span>);
+}
+<span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">cmpbysum1</span>(<span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#00688b;font-weight:bold">void</span> *p1,<span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#00688b;font-weight:bold">void</span> *p2)
+{
+    <span style="color:#8b008b;font-weight:bold">return</span> ((student*)p1)-&gt;sum-((student*)p2)-&gt;sum;
+}
+<span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">cmpbysum2</span>(<span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#00688b;font-weight:bold">void</span> *p1,<span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#00688b;font-weight:bold">void</span> *p2)
+{
+    <span style="color:#8b008b;font-weight:bold">return</span> ((student*)p2)-&gt;sum-((student*)p1)-&gt;sum;
+}
+<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">sortbysum</span>()
+{
+    <span style="color:#228b22">//ascending sort升序排序
+</span><span style="color:#228b22"></span>    <span style="color:#228b22">//descending sort降序排序
+</span><span style="color:#228b22"></span>    <span style="color:#00688b;font-weight:bold">char</span> mnu[][<span style="color:#b452cd">50</span>]= {<span style="color:#cd5555">&#34;Ascending sort↑&#34;</span>,<span style="color:#cd5555">&#34;Descending sort↓&#34;</span>,<span style="color:#cd5555">&#34;Cancel&#34;</span>};
+    <span style="color:#00688b;font-weight:bold">int</span> m_resu;
+    m_resu=showMenu(mnu,<span style="color:#b452cd">3</span>,<span style="color:#b452cd">0</span>,<span style="color:#b452cd">7</span>,<span style="color:#b452cd">7</span>);
+    system(<span style="color:#cd5555">&#34;cls&#34;</span>);
+    <span style="color:#8b008b;font-weight:bold">switch</span>(m_resu)
+    {
+    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">0</span>:
+        qsort(stu_dat,dat_count,<span style="color:#8b008b;font-weight:bold">sizeof</span>(student),cmpbysum1);
+        <span style="color:#8b008b;font-weight:bold">break</span>;
+    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">1</span>:
+        qsort(stu_dat,dat_count,<span style="color:#8b008b;font-weight:bold">sizeof</span>(student),cmpbysum2);
+        <span style="color:#8b008b;font-weight:bold">break</span>;
+    <span style="color:#8b008b;font-weight:bold">default</span>:
+        printf(<span style="color:#cd5555">&#34;Command canceled.</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
+        system(<span style="color:#cd5555">&#34;pause&#34;</span>);
+        <span style="color:#8b008b;font-weight:bold">return</span>;
+    }
+    printf(<span style="color:#cd5555">&#34;OK.</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
+    system(<span style="color:#cd5555">&#34;pause&#34;</span>);
+    showalldata();
+}
+<span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">cmpbyid1</span>(<span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#00688b;font-weight:bold">void</span> *p1,<span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#00688b;font-weight:bold">void</span> *p2)
+{
+    <span style="color:#8b008b;font-weight:bold">return</span> ((student*)p1)-&gt;id-((student*)p2)-&gt;id;
+}
+<span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">cmpbyid2</span>(<span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#00688b;font-weight:bold">void</span> *p1,<span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#00688b;font-weight:bold">void</span> *p2)
+{
+    <span style="color:#8b008b;font-weight:bold">return</span> ((student*)p2)-&gt;id-((student*)p1)-&gt;id;
+}
+<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">sortbyid</span>()
+{
+    <span style="color:#00688b;font-weight:bold">char</span> mnu[][<span style="color:#b452cd">50</span>]= {<span style="color:#cd5555">&#34;Ascending sort↑&#34;</span>,<span style="color:#cd5555">&#34;Descending sort↓&#34;</span>,<span style="color:#cd5555">&#34;Cancel&#34;</span>};
+    <span style="color:#00688b;font-weight:bold">int</span> m_resu;
+    m_resu=showMenu(mnu,<span style="color:#b452cd">3</span>,<span style="color:#b452cd">0</span>,<span style="color:#b452cd">7</span>,<span style="color:#b452cd">7</span>);
+    system(<span style="color:#cd5555">&#34;cls&#34;</span>);
+    <span style="color:#8b008b;font-weight:bold">switch</span>(m_resu)
+    {
+    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">0</span>:
+        qsort(stu_dat,dat_count,<span style="color:#8b008b;font-weight:bold">sizeof</span>(student),cmpbyid1);
+        <span style="color:#8b008b;font-weight:bold">break</span>;
+    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">1</span>:
+        qsort(stu_dat,dat_count,<span style="color:#8b008b;font-weight:bold">sizeof</span>(student),cmpbyid2);
+        <span style="color:#8b008b;font-weight:bold">break</span>;
+    <span style="color:#8b008b;font-weight:bold">default</span>:
+        printf(<span style="color:#cd5555">&#34;Command canceled.</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
+        system(<span style="color:#cd5555">&#34;pause&#34;</span>);
+        <span style="color:#8b008b;font-weight:bold">return</span>;
+    }
+    printf(<span style="color:#cd5555">&#34;OK.</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
+    system(<span style="color:#cd5555">&#34;pause&#34;</span>);
+    showalldata();
+}
+<span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">cmpbyname</span>(<span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#00688b;font-weight:bold">void</span> *p1,<span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#00688b;font-weight:bold">void</span> *p2)
+{
+    <span style="color:#8b008b;font-weight:bold">return</span> strcmp(((student*)p1)-&gt;name,((student*)p2)-&gt;name);
+}
+<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">sortbyname</span>()
+{
+    system(<span style="color:#cd5555">&#34;cls&#34;</span>);
+    qsort(stu_dat,dat_count,<span style="color:#8b008b;font-weight:bold">sizeof</span>(student),cmpbyname);
+    printf(<span style="color:#cd5555">&#34;OK.</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
+    system(<span style="color:#cd5555">&#34;pause&#34;</span>);
+    showalldata();
+}
+<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">searchbyid</span>()
+{
+    <span style="color:#00688b;font-weight:bold">int</span> tmp_id;
+    <span style="color:#00688b;font-weight:bold">int</span> founded=<span style="color:#b452cd">0</span>;
+    system(<span style="color:#cd5555">&#34;cls&#34;</span>);
+    printf(<span style="color:#cd5555">&#34;Please input the id of the student.</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
+    scanf(<span style="color:#cd5555">&#34;%d&#34;</span>,&amp;tmp_id);
+    system(<span style="color:#cd5555">&#34;cls&#34;</span>);
+    sub_print();
+    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;dat_count; i++)
+    {
+        <span style="color:#8b008b;font-weight:bold">if</span>(stu_dat[i].id==tmp_id)
+        {
+            founded++;
+            printf(<span style="color:#cd5555">&#34;%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%s</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%c</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">&#34;</span>,stu_dat[i].id,stu_dat[i].name,stu_dat[i].sex,stu_dat[i].age);
+            <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i2=<span style="color:#b452cd">0</span>; i2&lt;sub_count; i2++)
+            {
+                printf(<span style="color:#cd5555">&#34;%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">&#34;</span>,stu_dat[i].subjects[i2]);
+            }
+            printf(<span style="color:#cd5555">&#34;%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t\n</span><span style="color:#cd5555">&#34;</span>,stu_dat[i].sum,stu_dat[i].avg,founded);
+        }
+    }
+    <span style="color:#8b008b;font-weight:bold">if</span>(founded==<span style="color:#b452cd">0</span>)
+    {
+        system(<span style="color:#cd5555">&#34;cls&#34;</span>);
+        printf(<span style="color:#cd5555">&#34;Not founded!</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
+    }
+    system(<span style="color:#cd5555">&#34;pause&#34;</span>);
+}
+<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">searchbyname</span>()
+{
+    <span style="color:#00688b;font-weight:bold">char</span> tmp_name[<span style="color:#b452cd">25</span>];
+    <span style="color:#00688b;font-weight:bold">int</span> founded=<span style="color:#b452cd">0</span>;
+    system(<span style="color:#cd5555">&#34;cls&#34;</span>);
+    printf(<span style="color:#cd5555">&#34;Please input the name of the student.</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
+    scanf(<span style="color:#cd5555">&#34;%s&#34;</span>,tmp_name);
+    system(<span style="color:#cd5555">&#34;cls&#34;</span>);
+    sub_print();
+    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;dat_count; i++)
+    {
+        <span style="color:#8b008b;font-weight:bold">if</span>(strcmp(stu_dat[i].name,tmp_name)==<span style="color:#b452cd">0</span>)
+        {
+            founded++;
+            printf(<span style="color:#cd5555">&#34;%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%s</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%c</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">&#34;</span>,stu_dat[i].id,stu_dat[i].name,stu_dat[i].sex,stu_dat[i].age);
+            <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i2=<span style="color:#b452cd">0</span>; i2&lt;sub_count; i2++)
+            {
+                printf(<span style="color:#cd5555">&#34;%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">&#34;</span>,stu_dat[i].subjects[i2]);
+            }
+            printf(<span style="color:#cd5555">&#34;%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t\n</span><span style="color:#cd5555">&#34;</span>,stu_dat[i].sum,stu_dat[i].avg,founded);
+        }
+    }
+    <span style="color:#8b008b;font-weight:bold">if</span>(founded==<span style="color:#b452cd">0</span>)
+    {
+        system(<span style="color:#cd5555">&#34;cls&#34;</span>);
+        printf(<span style="color:#cd5555">&#34;Not founded!</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
+    }
+    system(<span style="color:#cd5555">&#34;pause&#34;</span>);
+}
+<span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">main</span>()
+{
+    atexit(showExitPic);
+    <span style="color:#00688b;font-weight:bold">int</span> m_resu;
+    <span style="color:#00688b;font-weight:bold">char</span> mnu[][<span style="color:#b452cd">50</span>]= {<span style="color:#cd5555">&#34;Modify the password&#34;</span>,<span style="color:#cd5555">&#34;Add new data&#34;</span>,<span style="color:#cd5555">&#34;Show all data&#34;</span>,
+                     <span style="color:#cd5555">&#34;Del data by id&#34;</span>,<span style="color:#cd5555">&#34;Subject analysis&#34;</span>,<span style="color:#cd5555">&#34;Sort data by sum&#34;</span>,<span style="color:#cd5555">&#34;Sort data by id&#34;</span>
+                     ,<span style="color:#cd5555">&#34;Sort in dictionary order by name&#34;</span>,<span style="color:#cd5555">&#34;Search by id&#34;</span>,<span style="color:#cd5555">&#34;Search by name&#34;</span>
+                     ,<span style="color:#cd5555">&#34;about&#34;</span>,<span style="color:#cd5555">&#34;exit&#34;</span>
+                    };
+    system(<span style="color:#cd5555">&#34;title 学生成绩管理系统V6.0&#34;</span>);
+    system(<span style="color:#cd5555">&#34;mode con cols=100 lines=30&#34;</span>);
+    <span style="color:#228b22">//picLoad(&#34;background.bmp&#34;);
+</span><span style="color:#228b22"></span>    <span style="color:#228b22">//loadBlack();
+</span><span style="color:#228b22"></span>    system(<span style="color:#cd5555">&#34;image background.bmp 0 0&#34;</span>);
+    Sleep(<span style="color:#b452cd">3000</span>);
+    system(<span style="color:#cd5555">&#34;image /d&#34;</span>);
+    system(<span style="color:#cd5555">&#34;cls&#34;</span>);
+    miniLogin();
+    system(<span style="color:#cd5555">&#34;cls&#34;</span>);
+    sub_load();
+    dat_count=dat_load();
+beg:
+    m_resu=showMenu(mnu,<span style="color:#b452cd">12</span>,<span style="color:#b452cd">0</span>,<span style="color:#b452cd">5</span>,<span style="color:#b452cd">6</span>);
+    <span style="color:#8b008b;font-weight:bold">switch</span>(m_resu)
+    {
+    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">0</span>:
+        ed_password();
+        <span style="color:#8b008b;font-weight:bold">break</span>;
+    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">1</span>:
+        add_stu();
+        <span style="color:#8b008b;font-weight:bold">break</span>;
+    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">2</span>:
+        showalldata();
+        <span style="color:#8b008b;font-weight:bold">break</span>;
+    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">3</span>:
+        del_dat();
+        <span style="color:#8b008b;font-weight:bold">break</span>;
+    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">4</span>:
+        sub_ana();
+        <span style="color:#8b008b;font-weight:bold">break</span>;
+    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">5</span>:
+        sortbysum();
+        <span style="color:#8b008b;font-weight:bold">break</span>;
+    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">6</span>:
+        sortbyid();
+        <span style="color:#8b008b;font-weight:bold">break</span>;
+    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">7</span>:
+        sortbyname();
+        <span style="color:#8b008b;font-weight:bold">break</span>;
+    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">8</span>:
+        searchbyid();
+        <span style="color:#8b008b;font-weight:bold">break</span>;
+    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">9</span>:
+        searchbyname();
+        <span style="color:#8b008b;font-weight:bold">break</span>;
+    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">10</span>:
+        system(<span style="color:#cd5555">&#34;write about.rtf&#34;</span>);
+        <span style="color:#8b008b;font-weight:bold">break</span>;
+    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">11</span>:
+        <span style="color:#8b008b;font-weight:bold">goto</span> end;
+    }
+    <span style="color:#8b008b;font-weight:bold">goto</span> beg;
+end:
+    ;
+}
+</code></pre></div>
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">最后修改于 2019-04-13</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts" href="https://ntutn.top/posts/%E5%9B%BE%E4%B9%A6%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/">
+			下回<br>图书管理系统
+                </a>
+                
+                
+                
+                <a class="older-posts" href="https://ntutn.top/posts/%E4%BD%BF%E7%94%A8%E6%98%A0%E5%83%8F%E5%8A%AB%E6%8C%81%E6%8A%80%E6%9C%AF%E5%B1%8F%E8%94%BD%E7%94%B5%E8%84%91%E4%B8%AD%E7%9A%84%E5%B9%BF%E5%91%8A%E8%BF%9B%E7%A8%8B/">
+			上回<br>使用映像劫持技术屏蔽电脑中的广告进程
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+<script src="https://utteranc.es/client.js"
+        repo="zerofancy/zerofancy.github.io"
+        issue-term="title"
+        label=""
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	CC BY-SA 4.0
+	
+</div>
+            </div>
+    
+    <script src="/js/journal.js"></script>
+    </body>
+</html>
