@@ -30,5 +30,23 @@
 #include &amp;lt;iostream&amp;gt;#include&amp;lt;cstdlib&amp;gt;#include&amp;lt;cstring&amp;gt;#include&amp;lt;fstream&amp;gt;using namespace std; class CUser { private: int code; //表示用户编号；  char name[20]; //表示用户姓名 public: CUser() { ; }; // 默认构造函数  CUser(int id, char na[]) { code=id; strcpy(name,na); }; //构造函数，初始化用户信息  void setcode(int n) { code=n; }; //用来设置用户编号  int getcode() { return code; }; //用来获取用户编号  void setname(char na[]) { strcpy(name,na); }; //用来设置用户姓名  char* getname() { return name; }; //用来获取用户姓名  void show() { cout&amp;lt;&amp;lt;&amp;#34;用户编号：&amp;#34;&amp;lt;&amp;lt;code&amp;lt;&amp;lt;endl; cout&amp;lt;&amp;lt;&amp;#34;姓名：&amp;#34;&amp;lt;&amp;lt;name&amp;lt;&amp;lt;endl; }; //用来显示用户的基本信息 }; class CBook { private: int code; //图书编号  char name[20]; //图书名称  bool Is_Stock; //true为在架，false为借出  bool Is_Existing; //true为存在, false为删除 public: CBook() { ; }; //默认构造函数  CBook(int no,char na[]) { code=no; strcpy(name,na); Is_Stock=true; Is_Existing=true; }; //构造函数，初始化图书信息  void setcode(int n) { code=n; }; //设置图书编号  int getcode() { return code; }; //获取图书编号  void setname(char na[]) { strcpy(name,na); }; //设置图书名称  char* getname() { return name; }; //获取图书名称  bool get_Stock() { return Is_Stock; }; //获取图书是否在库信息  void set_Stock(bool isstock) { Is_Stock=isstock; };// 设置图书是否在库信息  bool get_Existing() { return Is_Existing; };//获取存在标志  void set_Existing(bool isex) { Is_Existing=isex; };//设置存在标志 }; class CReader:public CUser { private: bool Is_Existing; //true存在，false删除  bool Is_Borrowing; //true借过书，false没有借书  CBook brbook; //表示读者所借的图书 public: CReader() { CUser(); }; //构造函数，初始化读者信息  CReader(int id, char na[]) { CUser(id,na); }; //构造函数，初始化读者信息  bool get_Existing() { return Is_Existing; }; //用来获取删除标志  void set_Existing(bool isex) { Is_Existing=isex; }; //用来设置删除标志  bool get_Borrowing() { return Is_Borrowing; }; //用来获取读者借阅情况  void set_Borrowing(bool isbo) { Is_Borrowing=isbo; }; //用来设置读者借阅情况  void setbrbook(CBook bt) { brbook=bt; Is_Borrowing=true; }; //用来记录读者结束信息  CBook getbrbook() { return brbook; }; //用来获取读者结束信息  void show() { CUser::show(); if(Is_Borrowing) { cout&amp;lt;&amp;lt;&amp;#34;当前借书：&amp;#34;&amp;lt;&amp;lt;brbook.</description>
     </item>
     
+    <item>
+      <title>堆栈ADT实现及应用</title>
+      <link>https://ntutn.top/posts/%E5%A0%86%E6%A0%88adt%E5%AE%9E%E7%8E%B0%E5%8F%8A%E5%BA%94%E7%94%A8/</link>
+      <pubDate>Tue, 26 Mar 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E5%A0%86%E6%A0%88adt%E5%AE%9E%E7%8E%B0%E5%8F%8A%E5%BA%94%E7%94%A8/</guid>
+      <description>假设栈ADT的数据元素为整数，栈ADT的实现采用顺序存储结构。现要用栈来辅助完成任意非负十进制整数到Base(Base不大于35)进制的转换。部分代码已经给出，请补充完善栈溢出处理函数和主函数。 注意：只提交需要补充的函数，其他代码不允许自己重写和修改。
+ 栈溢出处理函数overflowProcess：当栈满时，将栈的空间在原来基础上扩大1倍。
+主函数： 输入一个非负十进制整数n及要转换的进制Base，输出其转换后的进制形式，以及长度。输出格式如下：
+($...$)10=(#...#)Base Length=转换进制后数的位数 其中$...$是输入的十进制数n，#...#是转换得到的Base进制数，如果转换后位码多于1位，则用大写字母A,B,&amp;hellip;等表示，10-A, 11-B,&amp;hellip;&amp;hellip;
+例如，输入：
+1024 2 输出：
+(1024)10=(10000000000)2 Length=11 再如，输入：
+25 30 输出：
+(25)10=(P)30 Length=1 预置代码如下：
+#include &amp;lt;iostream&amp;gt;using namespace std; #include &amp;lt;stdio.h&amp;gt;#include &amp;lt;stdlib.h&amp;gt;typedef int ElemType; class SeqStack { //顺序栈类定义  private: ElemType *elements; //数组存放栈元素  int top; //栈顶指示器  int maxSize; //栈最大容量  void overflowProcess(); //栈的溢出处理  public: SeqStack(int sz); //构造函数  ~SeqStack() { delete []elements; }; //析构函数  void Push(ElemType x); //进栈  int Pop(ElemType &amp;amp;x); //出栈  int IsEmpty() const { return top == -1; } int IsFull() const { return top == maxSize-1; } int GetSize() const {return top+1;} }; SeqStack::SeqStack(int sz) { elements=new ElemType[sz]; //申请连续空间  if(elements==NULL) {cout&amp;lt;&amp;lt;&amp;#34;空间申请错误！&amp;#34;&amp;lt;&amp;lt;endl;exit(1);} else { top=-1; //栈顶指示器指向栈底  maxSize=sz; //栈的最大空间  }; }; /* ********************************************************** 补充overflowProcess() 函数 ********************************************************** */ void SeqStack::Push(ElemType x) { //若栈满,则溢出处理，将元素x插入该栈栈顶  if (IsFull() == 1) overflowProcess(); //栈满  elements[++top] = x; //栈顶指针先加1, 再元素进栈 }; int SeqStack::Pop(ElemType &amp;amp; x) {//若栈不空，函数退出栈顶元素并将栈顶元素的值赋给x,  //返回true，否则返回false  if (IsEmpty() == 1) return 0; x = elements[top--]; //先取元素，栈顶指针退1  return 1; //退栈成功 }; /* ************************************************************** 补充mian()函数 ************************************************************** */ 分析和错误 OverflowProcess，用于栈溢出处理，一般申请原长度二倍的存储空间。</description>
+    </item>
+    
   </channel>
 </rss>

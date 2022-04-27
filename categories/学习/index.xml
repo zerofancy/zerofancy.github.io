@@ -133,5 +133,43 @@ Answer 针对这个题目，我写出了这样的代码：
 /* * @lc app=leetcode.cn id=80 lang=java * * [80] 删除排序数组中的重复项 II */ // @lc code=start class Solution { public int removeDuplicates(int[] nums) { int l = 0, r = 0; int ans1 = Integer.</description>
     </item>
     
+    <item>
+      <title>大型数组按行遍历与按列遍历的区别</title>
+      <link>https://ntutn.top/posts/%E5%A4%A7%E5%9E%8B%E6%95%B0%E7%BB%84%E6%8C%89%E8%A1%8C%E9%81%8D%E5%8E%86%E4%B8%8E%E6%8C%89%E5%88%97%E9%81%8D%E5%8E%86%E7%9A%84%E5%8C%BA%E5%88%AB/</link>
+      <pubDate>Mon, 16 Sep 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E5%A4%A7%E5%9E%8B%E6%95%B0%E7%BB%84%E6%8C%89%E8%A1%8C%E9%81%8D%E5%8E%86%E4%B8%8E%E6%8C%89%E5%88%97%E9%81%8D%E5%8E%86%E7%9A%84%E5%8C%BA%E5%88%AB/</guid>
+      <description>今天这学期开学第一天，上了《计算机操作系统原理》，老师提出个问题
+ 对于一个很大的数组（如70000×70000），按行遍历速度快还是按列遍历快，为什么？
+ 乍一看，程序时间复杂度一样，理论上不是应该一样快吗？难道老师在钓鱼？
+实践出真知，我们就写个程序跑一跑。
+程序  70000×70000我电脑在默认情况下开不下，我这里用20000×20000测试
+ 按行遍历 /** * M1 */ public class M1 { public static void main(String[] args) { final int N=20000; int[][] a = new int[N][N]; Long start=System.currentTimeMillis(); for(int i=0;i&amp;lt;N;i++){ for (int j = 0; j &amp;lt; N; j++) { a[i][j]=1; } } Long stop=System.currentTimeMillis(); System.out.println(stop-start); } } 按列遍历 /** * M2 */ public class M2 { public static void main(String[] args) { final int N=20000; int[][] a = new int[N][N]; Long start=System.</description>
+    </item>
+    
+    <item>
+      <title>学生管理系统</title>
+      <link>https://ntutn.top/posts/%E5%AD%A6%E7%94%9F%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/</link>
+      <pubDate>Sat, 13 Apr 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E5%AD%A6%E7%94%9F%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/</guid>
+      <description>翻出了以前C语言C实验的大作业，当时搞了好多奇技淫巧，最终拿到99分。
+ 介绍 学生成绩管理系统v6.0是由软件工程1702刘海鑫设计的一款用于学生成绩管理的软件。
+文件列表  Stuv6.0.exe	主体程序，用于实现整体功能。 main.dat	程序的数据文件，用于存储学生信息。 goodbye.bmp	程序退出时加载的图片。 desktop.ini	修改程序所在文件夹的图标。 consoletest.exe	编译的au3程序，用于辅助输入中文。  代码：
+$re=InputBox(&amp;quot;Input&amp;quot;,&amp;quot;You can input your massage now.(支持中文)&amp;quot;) ConsoleWrite($re)  code.dat	密码存储文件。该文件存储的是xor算法加密的账号密码。 black.bmp	一张纯黑的图片，用于清除控制台加载图片的痕迹。2018年1月20日使用了image /d清除图片，本文件不再使用。 background.bmp	程序启动时加载的图片。 about.rtf	程序的说明文档。 scaned.txt	存储用户输入的临时文件，一般会自动清除。 subjects.dat	存储科目的名称，每行一个，最多允许50个，可用记事本直接打开编辑。 image.exe	外部程序，用于加载图片。  使用说明 双击stuv6.0.exe，程序启动。
+待启动图片显示过后，出现密码输入框，回车确认输入。
+默认账号：admin
+默认密码：admin888
+输入密码时如果输入~符号，将弹出一个信息框提示输入。这是为了便于输入中文和特殊符号。
+本程序的密码存储是xor运算的结果，仅用于比对密码是否正确。
+接下来进入主菜单。菜单使用黄色为底色，红色标定选中项。你可以按上下键选择，或直接按项目对应数字，回车确认。
+开发日志   2018年3月10日，加入了控制台窗口大小控制的代码。
+  修改了exe文件的图标。
+  改用外部程序image.exe加载图片，并修改gotoxy函数的使用，成功使代码兼容了gun gcc系列编译器。
+  测试WIN7运行效果，图片加载错位，无法全屏，其他功能不受影响。
+  在科目分析功能加入分层成绩展示，至此，程序主体开发完毕。
+  加入查找功能，查找方式为遍历，依据为id或姓名。 同理，加入按id排序、按姓名的字典顺序排序。 数据排序功能，选择后弹出二级菜单，进行升序排序或降序排序。 排序的结果不会保存。 排序后将自动展示排序结果。</description>
+    </item>
+    
   </channel>
 </rss>

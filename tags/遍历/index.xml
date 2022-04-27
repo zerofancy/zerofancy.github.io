@@ -23,6 +23,20 @@
     </item>
     
     <item>
+      <title>大型数组按行遍历与按列遍历的区别</title>
+      <link>https://ntutn.top/posts/%E5%A4%A7%E5%9E%8B%E6%95%B0%E7%BB%84%E6%8C%89%E8%A1%8C%E9%81%8D%E5%8E%86%E4%B8%8E%E6%8C%89%E5%88%97%E9%81%8D%E5%8E%86%E7%9A%84%E5%8C%BA%E5%88%AB/</link>
+      <pubDate>Mon, 16 Sep 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E5%A4%A7%E5%9E%8B%E6%95%B0%E7%BB%84%E6%8C%89%E8%A1%8C%E9%81%8D%E5%8E%86%E4%B8%8E%E6%8C%89%E5%88%97%E9%81%8D%E5%8E%86%E7%9A%84%E5%8C%BA%E5%88%AB/</guid>
+      <description>今天这学期开学第一天，上了《计算机操作系统原理》，老师提出个问题
+ 对于一个很大的数组（如70000×70000），按行遍历速度快还是按列遍历快，为什么？
+ 乍一看，程序时间复杂度一样，理论上不是应该一样快吗？难道老师在钓鱼？
+实践出真知，我们就写个程序跑一跑。
+程序  70000×70000我电脑在默认情况下开不下，我这里用20000×20000测试
+ 按行遍历 /** * M1 */ public class M1 { public static void main(String[] args) { final int N=20000; int[][] a = new int[N][N]; Long start=System.currentTimeMillis(); for(int i=0;i&amp;lt;N;i++){ for (int j = 0; j &amp;lt; N; j++) { a[i][j]=1; } } Long stop=System.currentTimeMillis(); System.out.println(stop-start); } } 按列遍历 /** * M2 */ public class M2 { public static void main(String[] args) { final int N=20000; int[][] a = new int[N][N]; Long start=System.</description>
+    </item>
+    
+    <item>
       <title>二叉树ADT的实现</title>
       <link>https://ntutn.top/posts/%E4%BA%8C%E5%8F%89%E6%A0%91adt%E7%9A%84%E5%AE%9E%E7%8E%B0/</link>
       <pubDate>Tue, 14 May 2019 03:11:37 +0800</pubDate>

@@ -292,6 +292,20 @@ Answer 针对这个题目，我写出了这样的代码：
     </item>
     
     <item>
+      <title>大型数组按行遍历与按列遍历的区别</title>
+      <link>https://ntutn.top/posts/%E5%A4%A7%E5%9E%8B%E6%95%B0%E7%BB%84%E6%8C%89%E8%A1%8C%E9%81%8D%E5%8E%86%E4%B8%8E%E6%8C%89%E5%88%97%E9%81%8D%E5%8E%86%E7%9A%84%E5%8C%BA%E5%88%AB/</link>
+      <pubDate>Mon, 16 Sep 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E5%A4%A7%E5%9E%8B%E6%95%B0%E7%BB%84%E6%8C%89%E8%A1%8C%E9%81%8D%E5%8E%86%E4%B8%8E%E6%8C%89%E5%88%97%E9%81%8D%E5%8E%86%E7%9A%84%E5%8C%BA%E5%88%AB/</guid>
+      <description>今天这学期开学第一天，上了《计算机操作系统原理》，老师提出个问题
+ 对于一个很大的数组（如70000×70000），按行遍历速度快还是按列遍历快，为什么？
+ 乍一看，程序时间复杂度一样，理论上不是应该一样快吗？难道老师在钓鱼？
+实践出真知，我们就写个程序跑一跑。
+程序  70000×70000我电脑在默认情况下开不下，我这里用20000×20000测试
+ 按行遍历 /** * M1 */ public class M1 { public static void main(String[] args) { final int N=20000; int[][] a = new int[N][N]; Long start=System.currentTimeMillis(); for(int i=0;i&amp;lt;N;i++){ for (int j = 0; j &amp;lt; N; j++) { a[i][j]=1; } } Long stop=System.currentTimeMillis(); System.out.println(stop-start); } } 按列遍历 /** * M2 */ public class M2 { public static void main(String[] args) { final int N=20000; int[][] a = new int[N][N]; Long start=System.</description>
+    </item>
+    
+    <item>
       <title>在Windows10上安装血战上海滩</title>
       <link>https://ntutn.top/posts/%E5%9C%A8windows10%E4%B8%8A%E5%AE%89%E8%A3%85%E8%A1%80%E6%88%98%E4%B8%8A%E6%B5%B7%E6%BB%A9/</link>
       <pubDate>Sat, 01 Jun 2019 03:11:37 +0800</pubDate>
@@ -334,6 +348,30 @@ using System; using System.Collections.Generic; using System.Linq; using System.
     </item>
     
     <item>
+      <title>学生管理系统</title>
+      <link>https://ntutn.top/posts/%E5%AD%A6%E7%94%9F%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/</link>
+      <pubDate>Sat, 13 Apr 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E5%AD%A6%E7%94%9F%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/</guid>
+      <description>翻出了以前C语言C实验的大作业，当时搞了好多奇技淫巧，最终拿到99分。
+ 介绍 学生成绩管理系统v6.0是由软件工程1702刘海鑫设计的一款用于学生成绩管理的软件。
+文件列表  Stuv6.0.exe	主体程序，用于实现整体功能。 main.dat	程序的数据文件，用于存储学生信息。 goodbye.bmp	程序退出时加载的图片。 desktop.ini	修改程序所在文件夹的图标。 consoletest.exe	编译的au3程序，用于辅助输入中文。  代码：
+$re=InputBox(&amp;quot;Input&amp;quot;,&amp;quot;You can input your massage now.(支持中文)&amp;quot;) ConsoleWrite($re)  code.dat	密码存储文件。该文件存储的是xor算法加密的账号密码。 black.bmp	一张纯黑的图片，用于清除控制台加载图片的痕迹。2018年1月20日使用了image /d清除图片，本文件不再使用。 background.bmp	程序启动时加载的图片。 about.rtf	程序的说明文档。 scaned.txt	存储用户输入的临时文件，一般会自动清除。 subjects.dat	存储科目的名称，每行一个，最多允许50个，可用记事本直接打开编辑。 image.exe	外部程序，用于加载图片。  使用说明 双击stuv6.0.exe，程序启动。
+待启动图片显示过后，出现密码输入框，回车确认输入。
+默认账号：admin
+默认密码：admin888
+输入密码时如果输入~符号，将弹出一个信息框提示输入。这是为了便于输入中文和特殊符号。
+本程序的密码存储是xor运算的结果，仅用于比对密码是否正确。
+接下来进入主菜单。菜单使用黄色为底色，红色标定选中项。你可以按上下键选择，或直接按项目对应数字，回车确认。
+开发日志   2018年3月10日，加入了控制台窗口大小控制的代码。
+  修改了exe文件的图标。
+  改用外部程序image.exe加载图片，并修改gotoxy函数的使用，成功使代码兼容了gun gcc系列编译器。
+  测试WIN7运行效果，图片加载错位，无法全屏，其他功能不受影响。
+  在科目分析功能加入分层成绩展示，至此，程序主体开发完毕。
+  加入查找功能，查找方式为遍历，依据为id或姓名。 同理，加入按id排序、按姓名的字典顺序排序。 数据排序功能，选择后弹出二级菜单，进行升序排序或降序排序。 排序的结果不会保存。 排序后将自动展示排序结果。</description>
+    </item>
+    
+    <item>
       <title>使用映像劫持技术屏蔽电脑中的广告进程</title>
       <link>https://ntutn.top/posts/%E4%BD%BF%E7%94%A8%E6%98%A0%E5%83%8F%E5%8A%AB%E6%8C%81%E6%8A%80%E6%9C%AF%E5%B1%8F%E8%94%BD%E7%94%B5%E8%84%91%E4%B8%AD%E7%9A%84%E5%B9%BF%E5%91%8A%E8%BF%9B%E7%A8%8B/</link>
       <pubDate>Thu, 28 Mar 2019 03:11:37 +0800</pubDate>
@@ -343,6 +381,24 @@ using System; using System.Collections.Generic; using System.Linq; using System.
  国内很多软件都有重度广告，“资讯”、“新闻”、“弹窗”，不胜其烦。直接找到广告进程删除掉，结果一自动更新，又回来了。
 于是，我想到了“映像劫持”：
 Windows Registry Editor Version 5.00 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SLBService.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\TsService.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\FoxitDesktopAd.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\FoxitProtect.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\LCServer.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\LRServer.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\2345MiniPage.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SohuNews.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\PinyinUp.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SGDownload.</description>
+    </item>
+    
+    <item>
+      <title>堆栈ADT实现及应用</title>
+      <link>https://ntutn.top/posts/%E5%A0%86%E6%A0%88adt%E5%AE%9E%E7%8E%B0%E5%8F%8A%E5%BA%94%E7%94%A8/</link>
+      <pubDate>Tue, 26 Mar 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E5%A0%86%E6%A0%88adt%E5%AE%9E%E7%8E%B0%E5%8F%8A%E5%BA%94%E7%94%A8/</guid>
+      <description>假设栈ADT的数据元素为整数，栈ADT的实现采用顺序存储结构。现要用栈来辅助完成任意非负十进制整数到Base(Base不大于35)进制的转换。部分代码已经给出，请补充完善栈溢出处理函数和主函数。 注意：只提交需要补充的函数，其他代码不允许自己重写和修改。
+ 栈溢出处理函数overflowProcess：当栈满时，将栈的空间在原来基础上扩大1倍。
+主函数： 输入一个非负十进制整数n及要转换的进制Base，输出其转换后的进制形式，以及长度。输出格式如下：
+($...$)10=(#...#)Base Length=转换进制后数的位数 其中$...$是输入的十进制数n，#...#是转换得到的Base进制数，如果转换后位码多于1位，则用大写字母A,B,&amp;hellip;等表示，10-A, 11-B,&amp;hellip;&amp;hellip;
+例如，输入：
+1024 2 输出：
+(1024)10=(10000000000)2 Length=11 再如，输入：
+25 30 输出：
+(25)10=(P)30 Length=1 预置代码如下：
+#include &amp;lt;iostream&amp;gt;using namespace std; #include &amp;lt;stdio.h&amp;gt;#include &amp;lt;stdlib.h&amp;gt;typedef int ElemType; class SeqStack { //顺序栈类定义  private: ElemType *elements; //数组存放栈元素  int top; //栈顶指示器  int maxSize; //栈最大容量  void overflowProcess(); //栈的溢出处理  public: SeqStack(int sz); //构造函数  ~SeqStack() { delete []elements; }; //析构函数  void Push(ElemType x); //进栈  int Pop(ElemType &amp;amp;x); //出栈  int IsEmpty() const { return top == -1; } int IsFull() const { return top == maxSize-1; } int GetSize() const {return top+1;} }; SeqStack::SeqStack(int sz) { elements=new ElemType[sz]; //申请连续空间  if(elements==NULL) {cout&amp;lt;&amp;lt;&amp;#34;空间申请错误！&amp;#34;&amp;lt;&amp;lt;endl;exit(1);} else { top=-1; //栈顶指示器指向栈底  maxSize=sz; //栈的最大空间  }; }; /* ********************************************************** 补充overflowProcess() 函数 ********************************************************** */ void SeqStack::Push(ElemType x) { //若栈满,则溢出处理，将元素x插入该栈栈顶  if (IsFull() == 1) overflowProcess(); //栈满  elements[++top] = x; //栈顶指针先加1, 再元素进栈 }; int SeqStack::Pop(ElemType &amp;amp; x) {//若栈不空，函数退出栈顶元素并将栈顶元素的值赋给x,  //返回true，否则返回false  if (IsEmpty() == 1) return 0; x = elements[top--]; //先取元素，栈顶指针退1  return 1; //退栈成功 }; /* ************************************************************** 补充mian()函数 ************************************************************** */ 分析和错误 OverflowProcess，用于栈溢出处理，一般申请原长度二倍的存储空间。</description>
     </item>
     
     <item>
@@ -363,6 +419,24 @@ Windows Registry Editor Version 5.00 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Wind
 指心功能：即指向人心智世界里的对象，代表心智世界里的对象表示。
 指名功能：指向认知世界或者符号世界表示对象的符号名称，这些符号名称组成各种语言。
 人工智能的三个流派  专注于实现AI指名功能的人工智能流派，称为符号主义。 专注于实现AI指心功能的人工智能流派，称为连接主义。 专注于实现AI指物功能的人工智能流派，称为行为主义。     概念的功能 人工智能的流派 观点 思想实验 挑战     指名功能 符号主义 指名对了，指物自然正确 图灵测试、中文屋实验 完全实现指名功能也不见得有智能。概念的组合爆炸问题；概念的组合悖论问题；经典概念在现实中很难获得。知识很难获取   指物功能 连接主义 发现大脑的结构及处理信息的机制，揭示人工智能的本质机理，进而在机器上实现响应模拟 缸中之脑实验 指心没有问题，指物也存在问题。   指心功能 行为主义 只要实现指物功能，就认为具有智能了 完美伪装者和斯巴达人 外在表现与内心没有联系，无法测试    第2章概念表示 概念定义及三个组成部分 知识由概念组成，概念是构成人类知识世界的基本单元。</description>
+    </item>
+    
+    <item>
+      <title>我发现了齐鲁软件大赛系统的漏洞</title>
+      <link>https://ntutn.top/posts/%E6%88%91%E5%8F%91%E7%8E%B0%E4%BA%86%E9%BD%90%E9%B2%81%E8%BD%AF%E4%BB%B6%E5%A4%A7%E8%B5%9B%E7%B3%BB%E7%BB%9F%E7%9A%84%E6%BC%8F%E6%B4%9E/</link>
+      <pubDate>Thu, 03 Jan 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E6%88%91%E5%8F%91%E7%8E%B0%E4%BA%86%E9%BD%90%E9%B2%81%E8%BD%AF%E4%BB%B6%E5%A4%A7%E8%B5%9B%E7%B3%BB%E7%BB%9F%E7%9A%84%E6%BC%8F%E6%B4%9E/</guid>
+      <description>事情起因是这样的：
+本来我计划今天处理齐软提交作品的事情，然而知乎真是好看……
+等我想起了这回事，提交信息后，先弹出修改成功提示，然后告诉我没有登录。
+what?没有登录但修改成功了？
+吓得我感觉登进去，可不就是我刚刚填写的资料嘛。
+为了排除在线编辑器本地保存重新加载的可能，我祭出curl。
+然后再次登进去
+嗯，没得洗了。直接修改数据的接口竟然不做登录验证。万一我写个循环这不就几乎删库了。
+不过我是谁？我是正直的好青年，我当然选择把bug上交国家，不对，是告诉厂家，不对怎么说来着……算了，就是这个意思。
+目前这个bug已经修复了，可惜也不能凭借发现这么严重漏洞直接拿个奖……</description>
     </item>
     
   </channel>

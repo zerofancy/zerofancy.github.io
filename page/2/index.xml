@@ -634,6 +634,126 @@ a与b直接比较，&lt;code&gt;a==b&lt;/code&gt;，两者不是同一对象。�
     
     
         <item>
+        <title>大型数组按行遍历与按列遍历的区别</title>
+        <link>https://ntutn.top/posts/%E5%A4%A7%E5%9E%8B%E6%95%B0%E7%BB%84%E6%8C%89%E8%A1%8C%E9%81%8D%E5%8E%86%E4%B8%8E%E6%8C%89%E5%88%97%E9%81%8D%E5%8E%86%E7%9A%84%E5%8C%BA%E5%88%AB/</link>
+        <pubDate>Mon, 16 Sep 2019 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/%E5%A4%A7%E5%9E%8B%E6%95%B0%E7%BB%84%E6%8C%89%E8%A1%8C%E9%81%8D%E5%8E%86%E4%B8%8E%E6%8C%89%E5%88%97%E9%81%8D%E5%8E%86%E7%9A%84%E5%8C%BA%E5%88%AB/</guid>
+        <description>归零幻想 https://ntutn.top/posts/%E5%A4%A7%E5%9E%8B%E6%95%B0%E7%BB%84%E6%8C%89%E8%A1%8C%E9%81%8D%E5%8E%86%E4%B8%8E%E6%8C%89%E5%88%97%E9%81%8D%E5%8E%86%E7%9A%84%E5%8C%BA%E5%88%AB/ -&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;今天这学期开学第一天，上了《计算机操作系统原理》，老师提出个问题&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;对于一个很大的数组（如&lt;code&gt;70000×70000&lt;/code&gt;），按行遍历速度快还是按列遍历快，为什么？&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;乍一看，程序时间复杂度一样，理论上不是应该一样快吗？难道老师在钓鱼？&lt;/p&gt;
+&lt;p&gt;实践出真知，我们就写个程序跑一跑。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;h2 id=&#34;程序&#34;&gt;程序&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;70000×70000我电脑在默认情况下开不下，我这里用20000×20000测试&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;按行遍历&#34;&gt;按行遍历&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;/**
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * M1
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; */&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;M1&lt;/span&gt; {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;(String[] args) {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;final&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; N=20000;
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;[][] a = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;[N][N];
+        Long start=System.&lt;span style=&#34;color:#658b00&#34;&gt;currentTimeMillis&lt;/span&gt;();
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=0;i&amp;lt;N;i++){
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; (&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; j = 0; j &amp;lt; N; j++) {
+                a[i][j]=1;
+            }
+        }
+        Long stop=System.&lt;span style=&#34;color:#658b00&#34;&gt;currentTimeMillis&lt;/span&gt;();
+        System.&lt;span style=&#34;color:#658b00&#34;&gt;out&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;println&lt;/span&gt;(stop-start);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;按列遍历&#34;&gt;按列遍历&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;/**
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * M2
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; */&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;M2&lt;/span&gt; {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;(String[] args) {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;final&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; N=20000;
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;[][] a = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;[N][N];
+        Long start=System.&lt;span style=&#34;color:#658b00&#34;&gt;currentTimeMillis&lt;/span&gt;();
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=0;i&amp;lt;N;i++){
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; (&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; j = 0; j &amp;lt; N; j++) {
+                a[j][i]=1;
+            }
+        }
+        Long stop=System.&lt;span style=&#34;color:#658b00&#34;&gt;currentTimeMillis&lt;/span&gt;();
+        System.&lt;span style=&#34;color:#658b00&#34;&gt;out&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;println&lt;/span&gt;(stop-start);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;运行结果&#34;&gt;运行结果&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2020/08/20/h7FJbzeVcMOpi3Z.png&#34; alt=&#34;1.png&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;分析&#34;&gt;分析&lt;/h2&gt;
+&lt;p&gt;好吧，看上去的确是不一样。看这结果是不是感觉有点玄学，为啥差这么多？&lt;/p&gt;
+&lt;p&gt;回想计算机组成原理学过的知识，&lt;a href=&#34;https://ntutn.top/show/19.html&#34;&gt;计算机组成原理笔记&lt;/a&gt;，存储器的层次化结构，高速缓存……&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;没错，就是这货！&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2020/08/20/IwMb8ixF2g1k3mT.jpg&#34; alt=&#34;2.jpeg&#34;&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;存储器的层次化结构&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;典型存取时间&lt;/th&gt;
+&lt;th&gt;存储器&lt;/th&gt;
+&lt;th&gt;典型容量&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;1ns&lt;/td&gt;
+&lt;td&gt;寄存器&lt;/td&gt;
+&lt;td&gt;&amp;lt;1KB&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;2ns&lt;/td&gt;
+&lt;td&gt;高速缓存（cache）&lt;/td&gt;
+&lt;td&gt;4MB&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;10ns&lt;/td&gt;
+&lt;td&gt;主存储器（RAM和ROM）&lt;/td&gt;
+&lt;td&gt;500MB~4GB&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;10ms&lt;/td&gt;
+&lt;td&gt;辅助存储器（硬盘）&lt;/td&gt;
+&lt;td&gt;40~500G&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;10s&lt;/td&gt;
+&lt;td&gt;海量后备存储器（磁带库、光盘等）&lt;/td&gt;
+&lt;td&gt;10~100TB&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;在很多主流编程语言中，数组在内存中存放的方式是“一行行”存放的，按行遍历，访问的内存地址分别为&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;/blockquote&gt;
+&lt;/blockquote&gt;
+&lt;pre&gt;&lt;code&gt;x+1,x+2,x+3,……,x+n,x+n+1……
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;而按列遍历访问的顺序是&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;x+1,x+n+1,x+2n+1,……,x+n(n-1)+1,x+2,x+n+2,……
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;cache的命中率基本为0，结合几种存储器的速度，不难分析出原因了。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;所以，针对这个问题，在回答时要说明前提，即数组在内存中的实际的编址方式是怎样的。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;在我机器java这例子，就是按行遍历快了。&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;2019年09月16日，我把实验过程给老师看了，老师补充这个速度除了与高速缓存的命中有关，还与编译器的内存管理有关。&lt;/p&gt;
+- https://ntutn.top/posts/%E5%A4%A7%E5%9E%8B%E6%95%B0%E7%BB%84%E6%8C%89%E8%A1%8C%E9%81%8D%E5%8E%86%E4%B8%8E%E6%8C%89%E5%88%97%E9%81%8D%E5%8E%86%E7%9A%84%E5%8C%BA%E5%88%AB/ - CC BY-SA 4.0</description>
+        </item>
+    
+    
+    
+        <item>
         <title>在Windows10上安装血战上海滩</title>
         <link>https://ntutn.top/posts/%E5%9C%A8windows10%E4%B8%8A%E5%AE%89%E8%A3%85%E8%A1%80%E6%88%98%E4%B8%8A%E6%B5%B7%E6%BB%A9/</link>
         <pubDate>Sat, 01 Jun 2019 03:11:37 +0800</pubDate>
@@ -1691,50 +1811,6 @@ A
     &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://ntutn.top/posts/%E5%9B%BE%E4%B9%A6%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>使用映像劫持技术屏蔽电脑中的广告进程</title>
-        <link>https://ntutn.top/posts/%E4%BD%BF%E7%94%A8%E6%98%A0%E5%83%8F%E5%8A%AB%E6%8C%81%E6%8A%80%E6%9C%AF%E5%B1%8F%E8%94%BD%E7%94%B5%E8%84%91%E4%B8%AD%E7%9A%84%E5%B9%BF%E5%91%8A%E8%BF%9B%E7%A8%8B/</link>
-        <pubDate>Thu, 28 Mar 2019 03:11:37 +0800</pubDate>
-        
-        <guid>https://ntutn.top/posts/%E4%BD%BF%E7%94%A8%E6%98%A0%E5%83%8F%E5%8A%AB%E6%8C%81%E6%8A%80%E6%9C%AF%E5%B1%8F%E8%94%BD%E7%94%B5%E8%84%91%E4%B8%AD%E7%9A%84%E5%B9%BF%E5%91%8A%E8%BF%9B%E7%A8%8B/</guid>
-        <description>归零幻想 https://ntutn.top/posts/%E4%BD%BF%E7%94%A8%E6%98%A0%E5%83%8F%E5%8A%AB%E6%8C%81%E6%8A%80%E6%9C%AF%E5%B1%8F%E8%94%BD%E7%94%B5%E8%84%91%E4%B8%AD%E7%9A%84%E5%B9%BF%E5%91%8A%E8%BF%9B%E7%A8%8B/ -&lt;!-- raw HTML omitted --&gt;
-&lt;blockquote&gt;
-&lt;p&gt;映像劫持（Image File Execution Options），简单的说法，就是当你打开的是程序A，而运行的确是程序B。映像劫持其实是Windows内设的用来调试程序的功能，但是现在却往往被病毒恶意利用。当用户双击对应的程序后，操作系统就会给外壳程序（例如“explorer.exe”）发布相应的指令，其中包含有执行程序的路径和文件名，然后由外壳程序来执行该程序。事实上在该过程中，Windows还会在注册表的上述路径中查询所有的映像劫持子键，如果存在和该程序名称完全相同的子键，就查询对应子健中包含的“dubugger”键值名，并用其指定的程序路径来代替原始的程序，之后执行的是遭到“劫持”的虚假程序。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;国内很多软件都有重度广告，“资讯”、“新闻”、“弹窗”，不胜其烦。直接找到广告进程删除掉，结果一自动更新，又回来了。&lt;/p&gt;
-&lt;p&gt;于是，我想到了“映像劫持”：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ini&#34; data-lang=&#34;ini&#34;&gt;&lt;span style=&#34;color:#658b00&#34;&gt;Windows Registry Editor Version 5.00&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SLBService.exe]&lt;/span&gt;
-&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\TsService.exe]&lt;/span&gt;
-&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\FoxitDesktopAd.exe]&lt;/span&gt;
-&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\FoxitProtect.exe]&lt;/span&gt;
-&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\LCServer.exe]&lt;/span&gt;
-&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\LRServer.exe]&lt;/span&gt;
-&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\2345MiniPage.exe]&lt;/span&gt;
-&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SohuNews.exe]&lt;/span&gt;
-&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\PinyinUp.exe]&lt;/span&gt;
-&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SGDownload.exe]&lt;/span&gt;
-&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SGMedalLoader.exe]&lt;/span&gt;
-&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SogouCloud.exe]&lt;/span&gt;
-&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;保存为&lt;code&gt;.reg&lt;/code&gt;文件，导入注册表即可。&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
-- https://ntutn.top/posts/%E4%BD%BF%E7%94%A8%E6%98%A0%E5%83%8F%E5%8A%AB%E6%8C%81%E6%8A%80%E6%9C%AF%E5%B1%8F%E8%94%BD%E7%94%B5%E8%84%91%E4%B8%AD%E7%9A%84%E5%B9%BF%E5%91%8A%E8%BF%9B%E7%A8%8B/ - CC BY-SA 4.0</description>
         </item>
     
     

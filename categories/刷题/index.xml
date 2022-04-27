@@ -34,5 +34,23 @@
  C：根据完全前序序列创建二叉树，#表示空结点（空子树）；输入：二叉树的完全前序序列，创建成功输出 Created success! H：求二叉树的高度； 输出： Height=高度 L：计算二叉树的叶子数；输出：Leaves=叶子个数 N：计算二叉树中元素总个数；输出：Nodes=结点个数 1：先序遍历二叉树；输出：Preorder is:序列 . 2：中序遍历二叉树；输出：Inorder is:序列 . 3：后序遍历二叉树；输出：Postorder is:序列 . 4：广度遍历二叉树；输出：BFSorder is:序列 . F：查找值为x的结点个数；输出：The count of x is 个数 . P：以目录缩格文本形式输出所有节点。输出：The tree is:（换行，下面各行是输出的二叉树） X：退出  Example Input C ABC##DE#G##F### H L N 1 2 3 4 F A P X Output Created success! Height=5 Leaves=3 Nodes=7 Preorder is:A B C D E G F . Inorder is:C B E G D F A .</description>
     </item>
     
+    <item>
+      <title>堆栈ADT实现及应用</title>
+      <link>https://ntutn.top/posts/%E5%A0%86%E6%A0%88adt%E5%AE%9E%E7%8E%B0%E5%8F%8A%E5%BA%94%E7%94%A8/</link>
+      <pubDate>Tue, 26 Mar 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E5%A0%86%E6%A0%88adt%E5%AE%9E%E7%8E%B0%E5%8F%8A%E5%BA%94%E7%94%A8/</guid>
+      <description>假设栈ADT的数据元素为整数，栈ADT的实现采用顺序存储结构。现要用栈来辅助完成任意非负十进制整数到Base(Base不大于35)进制的转换。部分代码已经给出，请补充完善栈溢出处理函数和主函数。 注意：只提交需要补充的函数，其他代码不允许自己重写和修改。
+ 栈溢出处理函数overflowProcess：当栈满时，将栈的空间在原来基础上扩大1倍。
+主函数： 输入一个非负十进制整数n及要转换的进制Base，输出其转换后的进制形式，以及长度。输出格式如下：
+($...$)10=(#...#)Base Length=转换进制后数的位数 其中$...$是输入的十进制数n，#...#是转换得到的Base进制数，如果转换后位码多于1位，则用大写字母A,B,&amp;hellip;等表示，10-A, 11-B,&amp;hellip;&amp;hellip;
+例如，输入：
+1024 2 输出：
+(1024)10=(10000000000)2 Length=11 再如，输入：
+25 30 输出：
+(25)10=(P)30 Length=1 预置代码如下：
+#include &amp;lt;iostream&amp;gt;using namespace std; #include &amp;lt;stdio.h&amp;gt;#include &amp;lt;stdlib.h&amp;gt;typedef int ElemType; class SeqStack { //顺序栈类定义  private: ElemType *elements; //数组存放栈元素  int top; //栈顶指示器  int maxSize; //栈最大容量  void overflowProcess(); //栈的溢出处理  public: SeqStack(int sz); //构造函数  ~SeqStack() { delete []elements; }; //析构函数  void Push(ElemType x); //进栈  int Pop(ElemType &amp;amp;x); //出栈  int IsEmpty() const { return top == -1; } int IsFull() const { return top == maxSize-1; } int GetSize() const {return top+1;} }; SeqStack::SeqStack(int sz) { elements=new ElemType[sz]; //申请连续空间  if(elements==NULL) {cout&amp;lt;&amp;lt;&amp;#34;空间申请错误！&amp;#34;&amp;lt;&amp;lt;endl;exit(1);} else { top=-1; //栈顶指示器指向栈底  maxSize=sz; //栈的最大空间  }; }; /* ********************************************************** 补充overflowProcess() 函数 ********************************************************** */ void SeqStack::Push(ElemType x) { //若栈满,则溢出处理，将元素x插入该栈栈顶  if (IsFull() == 1) overflowProcess(); //栈满  elements[++top] = x; //栈顶指针先加1, 再元素进栈 }; int SeqStack::Pop(ElemType &amp;amp; x) {//若栈不空，函数退出栈顶元素并将栈顶元素的值赋给x,  //返回true，否则返回false  if (IsEmpty() == 1) return 0; x = elements[top--]; //先取元素，栈顶指针退1  return 1; //退栈成功 }; /* ************************************************************** 补充mian()函数 ************************************************************** */ 分析和错误 OverflowProcess，用于栈溢出处理，一般申请原长度二倍的存储空间。</description>
+    </item>
+    
   </channel>
 </rss>

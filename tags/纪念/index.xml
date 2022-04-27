@@ -38,5 +38,29 @@ using System; using System.Collections.Generic; using System.Linq; using System.
 #include &amp;lt;iostream&amp;gt;#include&amp;lt;cstdlib&amp;gt;#include&amp;lt;cstring&amp;gt;#include&amp;lt;fstream&amp;gt;using namespace std; class CUser { private: int code; //表示用户编号；  char name[20]; //表示用户姓名 public: CUser() { ; }; // 默认构造函数  CUser(int id, char na[]) { code=id; strcpy(name,na); }; //构造函数，初始化用户信息  void setcode(int n) { code=n; }; //用来设置用户编号  int getcode() { return code; }; //用来获取用户编号  void setname(char na[]) { strcpy(name,na); }; //用来设置用户姓名  char* getname() { return name; }; //用来获取用户姓名  void show() { cout&amp;lt;&amp;lt;&amp;#34;用户编号：&amp;#34;&amp;lt;&amp;lt;code&amp;lt;&amp;lt;endl; cout&amp;lt;&amp;lt;&amp;#34;姓名：&amp;#34;&amp;lt;&amp;lt;name&amp;lt;&amp;lt;endl; }; //用来显示用户的基本信息 }; class CBook { private: int code; //图书编号  char name[20]; //图书名称  bool Is_Stock; //true为在架，false为借出  bool Is_Existing; //true为存在, false为删除 public: CBook() { ; }; //默认构造函数  CBook(int no,char na[]) { code=no; strcpy(name,na); Is_Stock=true; Is_Existing=true; }; //构造函数，初始化图书信息  void setcode(int n) { code=n; }; //设置图书编号  int getcode() { return code; }; //获取图书编号  void setname(char na[]) { strcpy(name,na); }; //设置图书名称  char* getname() { return name; }; //获取图书名称  bool get_Stock() { return Is_Stock; }; //获取图书是否在库信息  void set_Stock(bool isstock) { Is_Stock=isstock; };// 设置图书是否在库信息  bool get_Existing() { return Is_Existing; };//获取存在标志  void set_Existing(bool isex) { Is_Existing=isex; };//设置存在标志 }; class CReader:public CUser { private: bool Is_Existing; //true存在，false删除  bool Is_Borrowing; //true借过书，false没有借书  CBook brbook; //表示读者所借的图书 public: CReader() { CUser(); }; //构造函数，初始化读者信息  CReader(int id, char na[]) { CUser(id,na); }; //构造函数，初始化读者信息  bool get_Existing() { return Is_Existing; }; //用来获取删除标志  void set_Existing(bool isex) { Is_Existing=isex; }; //用来设置删除标志  bool get_Borrowing() { return Is_Borrowing; }; //用来获取读者借阅情况  void set_Borrowing(bool isbo) { Is_Borrowing=isbo; }; //用来设置读者借阅情况  void setbrbook(CBook bt) { brbook=bt; Is_Borrowing=true; }; //用来记录读者结束信息  CBook getbrbook() { return brbook; }; //用来获取读者结束信息  void show() { CUser::show(); if(Is_Borrowing) { cout&amp;lt;&amp;lt;&amp;#34;当前借书：&amp;#34;&amp;lt;&amp;lt;brbook.</description>
     </item>
     
+    <item>
+      <title>学生管理系统</title>
+      <link>https://ntutn.top/posts/%E5%AD%A6%E7%94%9F%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/</link>
+      <pubDate>Sat, 13 Apr 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E5%AD%A6%E7%94%9F%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/</guid>
+      <description>翻出了以前C语言C实验的大作业，当时搞了好多奇技淫巧，最终拿到99分。
+ 介绍 学生成绩管理系统v6.0是由软件工程1702刘海鑫设计的一款用于学生成绩管理的软件。
+文件列表  Stuv6.0.exe	主体程序，用于实现整体功能。 main.dat	程序的数据文件，用于存储学生信息。 goodbye.bmp	程序退出时加载的图片。 desktop.ini	修改程序所在文件夹的图标。 consoletest.exe	编译的au3程序，用于辅助输入中文。  代码：
+$re=InputBox(&amp;quot;Input&amp;quot;,&amp;quot;You can input your massage now.(支持中文)&amp;quot;) ConsoleWrite($re)  code.dat	密码存储文件。该文件存储的是xor算法加密的账号密码。 black.bmp	一张纯黑的图片，用于清除控制台加载图片的痕迹。2018年1月20日使用了image /d清除图片，本文件不再使用。 background.bmp	程序启动时加载的图片。 about.rtf	程序的说明文档。 scaned.txt	存储用户输入的临时文件，一般会自动清除。 subjects.dat	存储科目的名称，每行一个，最多允许50个，可用记事本直接打开编辑。 image.exe	外部程序，用于加载图片。  使用说明 双击stuv6.0.exe，程序启动。
+待启动图片显示过后，出现密码输入框，回车确认输入。
+默认账号：admin
+默认密码：admin888
+输入密码时如果输入~符号，将弹出一个信息框提示输入。这是为了便于输入中文和特殊符号。
+本程序的密码存储是xor运算的结果，仅用于比对密码是否正确。
+接下来进入主菜单。菜单使用黄色为底色，红色标定选中项。你可以按上下键选择，或直接按项目对应数字，回车确认。
+开发日志   2018年3月10日，加入了控制台窗口大小控制的代码。
+  修改了exe文件的图标。
+  改用外部程序image.exe加载图片，并修改gotoxy函数的使用，成功使代码兼容了gun gcc系列编译器。
+  测试WIN7运行效果，图片加载错位，无法全屏，其他功能不受影响。
+  在科目分析功能加入分层成绩展示，至此，程序主体开发完毕。
+  加入查找功能，查找方式为遍历，依据为id或姓名。 同理，加入按id排序、按姓名的字典顺序排序。 数据排序功能，选择后弹出二级菜单，进行升序排序或降序排序。 排序的结果不会保存。 排序后将自动展示排序结果。</description>
+    </item>
+    
   </channel>
 </rss>
