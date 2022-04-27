@@ -363,5 +363,1380 @@
         </item>
     
     
+    
+        <item>
+        <title>Typora&#43;git自动同步你的笔记</title>
+        <link>https://ntutn.top/posts/typora&#43;git%E8%87%AA%E5%8A%A8%E5%90%8C%E6%AD%A5%E4%BD%A0%E7%9A%84%E7%AC%94%E8%AE%B0/</link>
+        <pubDate>Mon, 02 Mar 2020 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/typora&#43;git%E8%87%AA%E5%8A%A8%E5%90%8C%E6%AD%A5%E4%BD%A0%E7%9A%84%E7%AC%94%E8%AE%B0/</guid>
+        <description>归零幻想 https://ntutn.top/posts/typora&#43;git%E8%87%AA%E5%8A%A8%E5%90%8C%E6%AD%A5%E4%BD%A0%E7%9A%84%E7%AC%94%E8%AE%B0/ -&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;这两天看了群里某个大佬的笔记，突然觉得自己用VSCode记笔记的方案不香了。VSCode虽然对&lt;code&gt;markdown&lt;/code&gt;的支持不错，但毕竟本职工作不是这个，直接拿来做笔记还是不够方便，太笨重了。于是我终于想起之前同学给我安利的&lt;code&gt;markdown&lt;/code&gt;编辑器：Typora。&lt;/p&gt;
+&lt;h2 id=&#34;dalao的笔记&#34;&gt;dalao的笔记&lt;/h2&gt;
+&lt;p&gt;首先看看大佬的笔记：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2020/08/20/1Lr3BfMvSw8haYy.png&#34; alt=&#34;1.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;好想去偷他的笔记。不过话说他这笔记软件也不错啊，看起来简约清晰，我也有试一试的想法了。&lt;/p&gt;
+&lt;p&gt;他用的笔记软件：&lt;a href=&#34;https://github.com/tsujan/FeatherNotes&#34;&gt;https://github.com/tsujan/FeatherNotes&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;然后就被编译安装劝退了。一个是不太想这么折腾，另一个是这个软件没有提供编译好的包，感觉还是不够放心啊，毕竟如果以后开发者不维护了要再折腾一遍会非常麻烦。&lt;/p&gt;
+&lt;h2 id=&#34;typora同学安利的markdown编辑工具&#34;&gt;Typora，同学安利的markdown编辑工具&lt;/h2&gt;
+&lt;p&gt;与多数markdown编辑工具不同，Typora是所见即所得的markdown编辑工具。为什么程序员偏爱markdown？就是因为markdown可以让我们写作的时候只关注内容本身，而不用太在意排版的问题。而Typora又改变了传统的左右分栏或者点击切换预览的传统markdown编辑模式，用起来就更舒服了。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2020/08/20/V7LzFNRXyT1hUbj.png&#34; alt=&#34;2.png&#34;&gt;&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;h3 id=&#34;安装&#34;&gt;安装&lt;/h3&gt;
+&lt;p&gt;在Ubuntu下安装还是非常方便的：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;# or run:&lt;/span&gt;
+&lt;span style=&#34;color:#228b22&#34;&gt;# sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA300B7755AFCFAE&lt;/span&gt;
+wget -qO - https://typora.io/linux/public-key.asc | sudo apt-key add -
+&lt;span style=&#34;color:#228b22&#34;&gt;# add Typora&amp;#39;s repository&lt;/span&gt;
+sudo add-apt-repository &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;deb https://typora.io/linux ./&amp;#39;&lt;/span&gt;
+sudo apt-get update
+&lt;span style=&#34;color:#228b22&#34;&gt;# install typora&lt;/span&gt;
+sudo apt-get install typora
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;其他系统参考&lt;a href=&#34;https://www.typora.net/#download&#34;&gt;官网&lt;/a&gt;。&lt;/p&gt;
+&lt;h3 id=&#34;复制图片&#34;&gt;复制图片&lt;/h3&gt;
+&lt;p&gt;不过有一点要注意：我们写文档常常要插入一些图片，为了后面和git好配合，我们需要将这些图片也放到当前文件夹里。按下&lt;code&gt;Ctrl+逗号&lt;/code&gt;打开设置，将图片复制到当前文件夹下。如图。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2020/08/20/VWcp6qEGOF9beZf.png&#34; alt=&#34;3.png&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;重要的快捷键&#34;&gt;重要的快捷键&lt;/h3&gt;
+&lt;p&gt;都是重点等于没有重点。我们只要记住能让我们离开鼠标提高效率的就行了。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;快捷键&lt;/th&gt;
+&lt;th&gt;功能&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;Ctrl+S&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;保存&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;Ctrl+Z&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;撤销&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;Ctrl+Y&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;重做&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;Ctrl+Shift+L&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;侧边栏&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;Ctrl+/&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;切换源代码模式&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;表格中，&lt;code&gt;Ctrl+Enter&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;添加一行&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&#34;用git管理笔记&#34;&gt;用git管理笔记&lt;/h2&gt;
+&lt;p&gt;首先什么是git？有些少年区分不了git和github，这是姿势水平还不够啊。听说过GitLab没？听说过码云没？不是修福报的那个马云哦。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;git：当前最流行的分布式版本控制软件&lt;/li&gt;
+&lt;li&gt;github：通过Git进行版本控制的软件源代码托管服务平台&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;鉴于本文并不是为了介绍这二者，本人就简单粗暴放个链接了。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://zh.wikipedia.org/wiki/Git&#34;&gt;https://zh.wikipedia.org/wiki/Git&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://zh.wikipedia.org/wiki/GitHub&#34;&gt;https://zh.wikipedia.org/wiki/GitHub&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;git虽然大多用于管理程序源代码，但用来管理我们的笔记却也正好。虽然笔记对于版本控制的需求不是非常大，但聊胜于无嘛。最重要的是，你可以把笔记借助git同步到github上，什么时候换工作环境完全可以全pull下来，岂不美滋滋？&lt;/p&gt;
+&lt;p&gt;git版本库托管平台有很多，这里我并没有选择github，而是选择了&lt;a href=&#34;https://code.aliyun.com&#34;&gt;阿里云的Code平台&lt;/a&gt;。毕竟在国内速度比较快啊。阿里云单个仓库容量足有2G，足够我们放笔记和笔记涉及的图片了。&lt;/p&gt;
+&lt;p&gt;怎么注册账号，怎么建立仓库我就不说了。clone下来，这就是以后笔记安家的地方了。&lt;/p&gt;
+&lt;h2 id=&#34;自动同步笔记&#34;&gt;自动同步笔记&lt;/h2&gt;
+&lt;p&gt;然而，我们还是需要运行&lt;code&gt;git add&lt;/code&gt;、&lt;code&gt;git commit&lt;/code&gt;、&lt;code&gt;git push&lt;/code&gt;，而且在别处修改了笔记还得手动pull一下。执行的命令这么固定，肯定是要写成脚本(.sync.sh)了。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#658b00&#34;&gt;cd&lt;/span&gt; /home/zero/Documents/Notes
+git pull &amp;amp;
+typora . TODO.md
+git add .
+git commit -m &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Sync&amp;#34;&lt;/span&gt;
+git push
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;注意上面的路径改为你自己笔记文件夹的路径。第二行的&lt;code&gt;&amp;amp;&lt;/code&gt;不要省，我们没必要等pull完才打开Typora，这样可以加快一点启动速度。&lt;/p&gt;
+&lt;p&gt;好了，现在我们执行脚本就能打开Typora，而且所有编辑还能自动同步。由于git默认不允许保留空提交，没有修改的时候也不会产生大量无用的记录，完美。&lt;/p&gt;
+&lt;p&gt;最后写个桌面启动器就大功告成了：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ini&#34; data-lang=&#34;ini&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[Desktop Entry]&lt;/span&gt;
+&lt;span style=&#34;color:#658b00&#34;&gt;Type&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;Application&lt;/span&gt;
+&lt;span style=&#34;color:#658b00&#34;&gt;Icon&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;typora&lt;/span&gt;
+&lt;span style=&#34;color:#658b00&#34;&gt;Name&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;笔记&lt;/span&gt;
+&lt;span style=&#34;color:#658b00&#34;&gt;Exec&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;/home/zero/Documents/Notes/.sync.sh&lt;/span&gt;
+&lt;span style=&#34;color:#658b00&#34;&gt;Terminal&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;false&lt;/span&gt;
+&lt;span style=&#34;color:#658b00&#34;&gt;Hidden&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;false&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;Note.desktop&lt;/code&gt;文件名保存到桌面就成了。&lt;/p&gt;
+&lt;h2 id=&#34;windows下的配置&#34;&gt;Windows下的配置&lt;/h2&gt;
+&lt;p&gt;Git是跨平台的，Typora也是跨平台的，那么我们这个方案自然同样可以跨平台。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Windows下的Typora并没有默认添加环境变量，请手动添加。添加后需要重启。
+首先对应上面的sh，写个cmd(.sync.cmd)：&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cmd&#34; data-lang=&#34;cmd&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;start&lt;/span&gt; /b git pull
+typora . TODO.md
+git add .
+git commit -m &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Sync&amp;#34;&lt;/span&gt;
+git push
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;第一行不一样，这是因为cmd后台执行是用&lt;code&gt;start /b&lt;/code&gt;的，与shell脚本的&lt;code&gt;&amp;amp;&lt;/code&gt;效果是一样的。&lt;/p&gt;
+&lt;p&gt;此时双击这个cmd已经能看到效果了。&lt;/p&gt;
+&lt;p&gt;但cmd执行时会有黑窗口，很影响美观，我们写个vbs脚本(.sync.vbs)来调用它，这样可以不显示黑窗口。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-vbs&#34; data-lang=&#34;vbs&#34;&gt;WScript.CreateObject(&amp;quot;WScript.Shell&amp;quot;).Run &amp;quot;.sync.cmd&amp;quot;,0
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;最后创建个桌面快捷方式，指向&lt;code&gt;.sync.vbs&lt;/code&gt;，就大功告成了。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;注意：快捷方式的起始目录要指向笔记的目录。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;p&gt;美中不足的是，在Android上我没找到比较合适的git客户端。虽然看到有个商用的评价不错，但为了这点笔记花那么多银子还是不值得。Android上的笔记软件倒是找到一个不错的：&lt;a href=&#34;https://github.com/gsantner/markor&#34;&gt;Markor&lt;/a&gt;。虽然没有Typora的所见即所得那么厉害，但他的编辑界面做的很不错，配上蓝牙键盘，非常适合某些科目上课做笔记。&lt;/p&gt;
+- https://ntutn.top/posts/typora&#43;git%E8%87%AA%E5%8A%A8%E5%90%8C%E6%AD%A5%E4%BD%A0%E7%9A%84%E7%AC%94%E8%AE%B0/ - CC BY-SA 4.0</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>Java自动装箱自动拆箱踩坑</title>
+        <link>https://ntutn.top/posts/java%E8%87%AA%E5%8A%A8%E8%A3%85%E7%AE%B1%E8%87%AA%E5%8A%A8%E6%8B%86%E7%AE%B1%E8%B8%A9%E5%9D%91/</link>
+        <pubDate>Sun, 01 Mar 2020 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/java%E8%87%AA%E5%8A%A8%E8%A3%85%E7%AE%B1%E8%87%AA%E5%8A%A8%E6%8B%86%E7%AE%B1%E8%B8%A9%E5%9D%91/</guid>
+        <description>归零幻想 https://ntutn.top/posts/java%E8%87%AA%E5%8A%A8%E8%A3%85%E7%AE%B1%E8%87%AA%E5%8A%A8%E6%8B%86%E7%AE%B1%E8%B8%A9%E5%9D%91/ -&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;int和Integer有什么区别？前者是基础数据类型，后者是封装的Java对象。但在有&lt;code&gt;Autoboxing&lt;/code&gt;和&lt;code&gt;Unboxing&lt;/code&gt;的情况下我们常常就把两者等同看待，无非后者能放&lt;code&gt;null&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;事情要首先从一道力扣题目说起：&lt;/p&gt;
+&lt;h2 id=&#34;删除排序数组中的重复项-ii&#34;&gt;删除排序数组中的重复项 II&lt;/h2&gt;
+&lt;p&gt;给定一个排序数组，你需要在原地删除重复出现的元素，使得每个元素最多出现两次，返回移除后数组的新长度。&lt;/p&gt;
+&lt;p&gt;不要使用额外的数组空间，你必须在原地修改输入数组并在使用 O(1) 额外空间的条件下完成。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;h3 id=&#34;示例-1&#34;&gt;示例 1:&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;给定 nums = [1,1,1,2,2,3],
+函数应返回新长度 length = 5, 并且原数组的前五个元素被修改为 1, 1, 2, 2, 3 。
+你不需要考虑数组中超出新长度后面的元素。
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;示例-2&#34;&gt;示例 2:&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;给定 nums = [0,0,1,1,1,1,2,3,3],
+函数应返回新长度 length = 7, 并且原数组的前五个元素被修改为 0, 0, 1, 1, 2, 3, 3 。
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;你不需要考虑数组中超出新长度后面的元素。&lt;/p&gt;
+&lt;h3 id=&#34;answer&#34;&gt;Answer&lt;/h3&gt;
+&lt;p&gt;针对这个题目，我写出了这样的代码：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;/*
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * @lc app=leetcode.cn id=80 lang=java
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; *
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * [80] 删除排序数组中的重复项 II
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; */&lt;/span&gt;
+&lt;span style=&#34;color:#228b22&#34;&gt;// @lc code=start
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Solution&lt;/span&gt; {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;removeDuplicates&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;[] nums) {
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; l = 0, r = 0;
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; ans1 = Integer.&lt;span style=&#34;color:#658b00&#34;&gt;MIN_VALUE&lt;/span&gt;, ans2 = Integer.&lt;span style=&#34;color:#658b00&#34;&gt;MIN_VALUE&lt;/span&gt;;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt; (r &amp;lt; nums.&lt;span style=&#34;color:#658b00&#34;&gt;length&lt;/span&gt;) {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (ans1==ans2&amp;amp;&amp;amp; ans2 == nums[r]) {
+                ;
+            } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; {
+                nums[l] = nums[r];
+                ans1 = ans2;
+                ans2 = nums[r];
+                l++;
+            }
+            r++;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; l;
+    }
+}
+&lt;span style=&#34;color:#228b22&#34;&gt;// @lc code=end
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;掉坑&#34;&gt;掉坑&lt;/h3&gt;
+&lt;p&gt;这代码在一般情况是没有问题的，但题目有个测试样例是&lt;code&gt;[-2147483648,-2147483648,-2147483648,1,1,1,2]&lt;/code&gt;，WA。&lt;/p&gt;
+&lt;p&gt;懒得处理开头特殊情况，但貌似运气不好，出题人是想让我处理一下的。&lt;/p&gt;
+&lt;p&gt;但作为懒癌患者我立马想到了新的偷懒方案，即用Integer代替int，这样用&lt;code&gt;null&lt;/code&gt;表示没有就正好了。&lt;/p&gt;
+&lt;p&gt;于是改变如上语句，&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;        Integer ans1 = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;, ans2 = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;和，&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (ans1!=&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;&amp;amp;&amp;amp;ans1== ans2&amp;amp;&amp;amp; ans2 == nums[r]) {
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然而又WA了。那组样例输出是&lt;code&gt;[-2147483648,-2147483648,-2147483648,1,1,2]&lt;/code&gt;。&lt;/p&gt;
+&lt;h2 id=&#34;问题原因&#34;&gt;问题原因&lt;/h2&gt;
+&lt;p&gt;打开&lt;code&gt;jshell&lt;/code&gt;，
+jshell&amp;gt; Integer a=-2147483648
+a ==&amp;gt; -2147483648
+jshell&amp;gt; Integer b=-2147483648
+b ==&amp;gt; -2147483648
+jshell&amp;gt; a==b
+$6 ==&amp;gt; false
+jshell&amp;gt; a==-2147483648
+$7 ==&amp;gt; true
+jshell&amp;gt;
+成功复现问题。
+a与b直接比较，&lt;code&gt;a==b&lt;/code&gt;，两者不是同一对象。与基本数据类型比较，&lt;code&gt;a==-2147483648&lt;/code&gt;，发生自动拆箱，两者值相等。
+所以，上述代码只需要修改&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (ans1 != &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt; &amp;amp;&amp;amp; ans1.&lt;span style=&#34;color:#658b00&#34;&gt;intValue&lt;/span&gt;() == ans2.&lt;span style=&#34;color:#658b00&#34;&gt;intValue&lt;/span&gt;() &amp;amp; ans2 == nums[r]) {
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;AC。&lt;/p&gt;
+&lt;h2 id=&#34;另一个处坑&#34;&gt;另一个处坑&lt;/h2&gt;
+&lt;p&gt;这不是&lt;em&gt;自动装箱/自动拆箱&lt;/em&gt;第一次坑我，曾经有这样一段代码：&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;自动装箱自动拆箱配上函数重载，简直法力无边。你以为你删除了元素&lt;code&gt;3&lt;/code&gt;，实际上你的代码是删除第三个元素……&lt;/p&gt;
+&lt;h2 id=&#34;参考&#34;&gt;参考&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://chanthuang.github.io/2016/09/07/java-autoboxing-and-unboxing/&#34;&gt;Java 的自动装箱(autoboxing)与拆箱(unboxing) &lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+- https://ntutn.top/posts/java%E8%87%AA%E5%8A%A8%E8%A3%85%E7%AE%B1%E8%87%AA%E5%8A%A8%E6%8B%86%E7%AE%B1%E8%B8%A9%E5%9D%91/ - CC BY-SA 4.0</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>三门问题</title>
+        <link>https://ntutn.top/posts/%E4%B8%89%E9%97%A8%E9%97%AE%E9%A2%98/</link>
+        <pubDate>Mon, 16 Sep 2019 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/%E4%B8%89%E9%97%A8%E9%97%AE%E9%A2%98/</guid>
+        <description>归零幻想 https://ntutn.top/posts/%E4%B8%89%E9%97%A8%E9%97%AE%E9%A2%98/ -&lt;!-- raw HTML omitted --&gt;
+&lt;blockquote&gt;
+&lt;p&gt;参赛者面前有三扇关闭着的门，其中一扇的后面是一辆汽车，选中后面有车的那扇门就可以赢得该汽车，
+而另外两扇门后面则各藏有一只山羊。当参赛者选定了一扇门，但未去开启它的时候，主持人会开启剩
+下两扇门中的一扇，露出其中一只山羊。主持人其后会问参赛者要不要更换选择，选另一扇仍然关着的门。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;那么，应不应该更换呢？
+&lt;img src=&#34;https://i.loli.net/2020/08/20/eWcOG6t1FpUD5mC.png&#34; alt=&#34;1560925478346.png&#34;&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/blockquote&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;h2 id=&#34;分析&#34;&gt;分析&lt;/h2&gt;
+&lt;p&gt;假如你选择了A，那你中奖概率应为1/3.&lt;/p&gt;
+&lt;p&gt;主持人在B、C中选了个没奖的，这与你的选择其实没影响，因为你没选的肯定有个没奖的。&lt;/p&gt;
+&lt;p&gt;换与不换其实就相当于问你选A还是不选A。&lt;/p&gt;
+&lt;h2 id=&#34;程序模拟&#34;&gt;程序模拟&lt;/h2&gt;
+&lt;p&gt;有点绕，咱学软件的，就干脆让电脑跑一跑。&lt;/p&gt;
+&lt;h3 id=&#34;代码&#34;&gt;代码&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;java.util.Random&lt;/span&gt;;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Test&lt;/span&gt;{
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;(String[] args) {
+        Random ran=&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; Random();
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; c1=0,c2=0;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=0;i&amp;lt;1e6;i++){
+            &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;boolean&lt;/span&gt; boxes[]={&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;,&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;,&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;};
+            boxes[ran.&lt;span style=&#34;color:#658b00&#34;&gt;nextInt&lt;/span&gt;(boxes.&lt;span style=&#34;color:#658b00&#34;&gt;length&lt;/span&gt;)]=&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;;&lt;span style=&#34;color:#228b22&#34;&gt;//某个门后有奖
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;            &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; sel=ran.&lt;span style=&#34;color:#658b00&#34;&gt;nextInt&lt;/span&gt;(boxes.&lt;span style=&#34;color:#658b00&#34;&gt;length&lt;/span&gt;);&lt;span style=&#34;color:#228b22&#34;&gt;//随便选择一扇门
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;            &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; p=0;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt;(p==sel||boxes[p]){&lt;span style=&#34;color:#228b22&#34;&gt;//主持人选择一扇没奖的门（且不与参与者选同一扇）
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                p=ran.&lt;span style=&#34;color:#658b00&#34;&gt;nextInt&lt;/span&gt;(boxes.&lt;span style=&#34;color:#658b00&#34;&gt;length&lt;/span&gt;);
+            }
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(boxes[sel]){&lt;span style=&#34;color:#228b22&#34;&gt;//不更换中奖
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                c1++;
+            }
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(boxes[0+1+2-sel-p]){&lt;span style=&#34;color:#228b22&#34;&gt;//更换中奖
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                c2++;
+            }
+        }
+        System.&lt;span style=&#34;color:#658b00&#34;&gt;out&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;println&lt;/span&gt;(c1/1e6);
+        System.&lt;span style=&#34;color:#658b00&#34;&gt;out&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;println&lt;/span&gt;(c2/1e6);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;运行结果&#34;&gt;运行结果&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;0.332419
+0.667581
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;看来是更换比较好了。&lt;/p&gt;
+- https://ntutn.top/posts/%E4%B8%89%E9%97%A8%E9%97%AE%E9%A2%98/ - CC BY-SA 4.0</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>在Windows10上安装血战上海滩</title>
+        <link>https://ntutn.top/posts/%E5%9C%A8windows10%E4%B8%8A%E5%AE%89%E8%A3%85%E8%A1%80%E6%88%98%E4%B8%8A%E6%B5%B7%E6%BB%A9/</link>
+        <pubDate>Sat, 01 Jun 2019 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/%E5%9C%A8windows10%E4%B8%8A%E5%AE%89%E8%A3%85%E8%A1%80%E6%88%98%E4%B8%8A%E6%B5%B7%E6%BB%A9/</guid>
+        <description>归零幻想 https://ntutn.top/posts/%E5%9C%A8windows10%E4%B8%8A%E5%AE%89%E8%A3%85%E8%A1%80%E6%88%98%E4%B8%8A%E6%B5%B7%E6%BB%A9/ -&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;《血战上海滩》是由北京欢乐亿派科技有限公司开发的单机FPS游戏，发行于2003年，是一个非常经典的老游戏了。
+近来我打算把这个游戏找出来再玩一遍，可是在Windows10上安装还是有些问题……&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2022/04/cae87d561f3a723b0187e837e3e63ab0.gif&#34; alt=&#34;血战上海滩&#34;&gt;&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;h2 id=&#34;下载&#34;&gt;下载&lt;/h2&gt;
+&lt;p&gt;下载不用多说，自己找资源吧，一共三百多兆的单机游戏。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;现在很多单机游戏下载时网站都会给你带上一个“启动器”来显示广告，恶心的很。找到文件夹中，注意血战上海滩的游戏文件是一个帽子的图标，大小为&lt;code&gt;1.87M&lt;/code&gt;，SHA1为&lt;code&gt;FE5A102AA9DE633FB6E388EAAEEA38BC43E8E7E4&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;启动&#34;&gt;启动&lt;/h2&gt;
+&lt;p&gt;直接双击exe，然后……它免费帮你调了一下分辨率，就没反应了。&lt;/p&gt;
+&lt;p&gt;貌似兼容性是个比较大的问题……于是在网上找了好久，终于知道，可以用命令行控制游戏窗口运行：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cmd&#34; data-lang=&#34;cmd&#34;&gt;shanghai.exe -windows
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;修改屏幕分辨率实现全屏&#34;&gt;修改屏幕分辨率实现全屏&lt;/h2&gt;
+&lt;p&gt;倒是能运行了，只是……画面都在左上角，没法玩啊……&lt;/p&gt;
+&lt;p&gt;所以再加上自动修改屏幕分辨率就可以全屏了。修改屏幕分辨率可以用&lt;code&gt;setres&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.majorgeeks.com/files/details/setres.html&#34;&gt;下载链接&lt;/a&gt;下载并将exe文件放到血战上海滩的游戏文件夹。&lt;/p&gt;
+&lt;p&gt;于是用下面的命令：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cmd&#34; data-lang=&#34;cmd&#34;&gt;setres h800 v600
+shanghai.exe -windows
+setres h1920 v1080
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;1920*1080&lt;/code&gt;是我电脑的屏幕分辨率，注意换成自己的。&lt;/p&gt;
+&lt;h2 id=&#34;隐藏显示任务栏&#34;&gt;隐藏显示任务栏&lt;/h2&gt;
+&lt;p&gt;然而，这样还是有问题，就是这样“全屏”后任务栏并没有消失，虽然可以设置自动隐藏任务栏但总归还是不爽，于是写了个简单C#程序在启动游戏隐藏任务栏（虽然很简单，但没找到只用命令实现的方法）&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-C#&#34; data-lang=&#34;C#&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System&lt;/span&gt;;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System.Collections.Generic&lt;/span&gt;;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System.Linq&lt;/span&gt;;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System.Text&lt;/span&gt;;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System.Threading.Tasks&lt;/span&gt;;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System.Runtime.InteropServices&lt;/span&gt;;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;namespace&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;ShowTaskBar&lt;/span&gt;
+{
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Program&lt;/span&gt;
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; SW_HIDE = &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;  &lt;span style=&#34;color:#228b22&#34;&gt;//隐藏任务栏
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; SW_RESTORE = &lt;span style=&#34;color:#b452cd&#34;&gt;9&lt;/span&gt;;&lt;span style=&#34;color:#228b22&#34;&gt;//显示任务栏
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#658b00&#34;&gt;        [DllImport(&amp;#34;user32.dll&amp;#34;)]&lt;/span&gt;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;extern&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; ShowWindow(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; hwnd, &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; nCmdShow);
+&lt;span style=&#34;color:#658b00&#34;&gt;        [DllImport(&amp;#34;user32.dll&amp;#34;)]&lt;/span&gt;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;extern&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; FindWindow(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;string&lt;/span&gt; lpClassName, &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;string&lt;/span&gt; lpWindowName);
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;void&lt;/span&gt; Main(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;string&lt;/span&gt;[] args)
+        {
+            ShowWindow(FindWindow(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Shell_TrayWnd&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;), SW_HIDE);
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-C#&#34; data-lang=&#34;C#&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System&lt;/span&gt;;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System.Collections.Generic&lt;/span&gt;;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System.Linq&lt;/span&gt;;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System.Text&lt;/span&gt;;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System.Threading.Tasks&lt;/span&gt;;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System.Runtime.InteropServices&lt;/span&gt;;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;namespace&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;ShowTaskBar&lt;/span&gt;
+{
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Program&lt;/span&gt;
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; SW_HIDE = &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;  &lt;span style=&#34;color:#228b22&#34;&gt;//隐藏任务栏
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; SW_RESTORE = &lt;span style=&#34;color:#b452cd&#34;&gt;9&lt;/span&gt;;&lt;span style=&#34;color:#228b22&#34;&gt;//显示任务栏
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#658b00&#34;&gt;        [DllImport(&amp;#34;user32.dll&amp;#34;)]&lt;/span&gt;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;extern&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; ShowWindow(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; hwnd, &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; nCmdShow);
+&lt;span style=&#34;color:#658b00&#34;&gt;        [DllImport(&amp;#34;user32.dll&amp;#34;)]&lt;/span&gt;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;extern&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; FindWindow(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;string&lt;/span&gt; lpClassName, &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;string&lt;/span&gt; lpWindowName);
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;void&lt;/span&gt; Main(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;string&lt;/span&gt;[] args)
+        {
+            ShowWindow(FindWindow(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Shell_TrayWnd&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;), SW_RESTORE);
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;编译并将生成文件也放到游戏文件夹。这样我们就可以用一个&lt;code&gt;start.cmd&lt;/code&gt;打开游戏：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cmd&#34; data-lang=&#34;cmd&#34;&gt;setres h800 v600
+hidetaskbar
+shanghai.exe -windows
+showtaskbar
+setres h1920 v1080
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;体验相当完美。&lt;/p&gt;
+- https://ntutn.top/posts/%E5%9C%A8windows10%E4%B8%8A%E5%AE%89%E8%A3%85%E8%A1%80%E6%88%98%E4%B8%8A%E6%B5%B7%E6%BB%A9/ - CC BY-SA 4.0</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>二叉树ADT的实现</title>
+        <link>https://ntutn.top/posts/%E4%BA%8C%E5%8F%89%E6%A0%91adt%E7%9A%84%E5%AE%9E%E7%8E%B0/</link>
+        <pubDate>Tue, 14 May 2019 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/%E4%BA%8C%E5%8F%89%E6%A0%91adt%E7%9A%84%E5%AE%9E%E7%8E%B0/</guid>
+        <description>归零幻想 https://ntutn.top/posts/%E4%BA%8C%E5%8F%89%E6%A0%91adt%E7%9A%84%E5%AE%9E%E7%8E%B0/ -&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;人工智能知识点整理Question&lt;/p&gt;
+&lt;p&gt;假设二叉数的数据元素为字符，采用二叉链式存储结构。请编码实现二叉树ADT，其中包括创建二叉树、遍历二叉树（深度、广度）、求二叉树的深度（高度）、计算二叉树的元素个数、计算二叉树的叶子数、二叉树的格式输出等。&lt;/p&gt;
+&lt;p&gt;根据输入的符号，执行相应的操作。如下：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;C：根据完全前序序列创建二叉树，#表示空结点（空子树）；输入：二叉树的完全前序序列，创建成功输出 &lt;code&gt;Created success!&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;H：求二叉树的高度；   输出： &lt;code&gt;Height=高度&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;L：计算二叉树的叶子数；输出：&lt;code&gt;Leaves=叶子个数&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;N：计算二叉树中元素总个数；输出：&lt;code&gt;Nodes=结点个数&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;1：先序遍历二叉树；输出：&lt;code&gt;Preorder is:序列 .&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;2：中序遍历二叉树；输出：&lt;code&gt;Inorder is:序列 .&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;3：后序遍历二叉树；输出：&lt;code&gt;Postorder is:序列 .&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;4：广度遍历二叉树；输出：&lt;code&gt;BFSorder is:序列 .&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;F：查找值为x的结点个数；输出：&lt;code&gt;The count of x is 个数 .&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;P：以目录缩格文本形式输出所有节点。输出：&lt;code&gt;The tree is:&lt;/code&gt;（换行，下面各行是输出的二叉树）&lt;/li&gt;
+&lt;li&gt;X：退出&lt;/li&gt;
+&lt;/ul&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;h2 id=&#34;example&#34;&gt;Example&lt;/h2&gt;
+&lt;h3 id=&#34;input&#34;&gt;Input&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;C
+ABC##DE#G##F###
+H
+L
+N
+1
+2
+3
+4
+F
+A
+P
+X
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;output&#34;&gt;Output&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;Created success!
+Height=5
+Leaves=3
+Nodes=7
+Preorder is:A B C D E G F .
+Inorder is:C B E G D F A .
+Postorder is:C G E F D B A .
+BFSorder is:A B C D E F G .
+The count of A is 1
+The tree is:
+A
+  B
+    C
+    D
+      E
+        G
+      F
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;分析&#34;&gt;分析&lt;/h2&gt;
+&lt;p&gt;二叉树不多说，数据结构的基本内容。这题主要就是麻烦，要求的操作比较多，一看肯定不卡时间，递归走起。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;递归一时爽，一直递归一直爽。
+在思路清晰的情况下，递归大大降低了编码的复杂程度，于是创建递归，求叶子数递归，求高度递归，总个数递归，查找递归，目录形式输出递归，深度遍历递归，广度……咳咳，好吧，这个不用递归，要用个队列。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;不让用&lt;code&gt;STL&lt;/code&gt;，队列也只好手写。&lt;/p&gt;
+&lt;p&gt;我一开始写程序&lt;code&gt;Leaves=&lt;/code&gt;写成了&lt;code&gt;Leaf=&lt;/code&gt;，这鬼畜的错误半天没检查出来。顺便推荐个文本差异对比工具吧，这样找起来也容易：&lt;a href=&#34;http://www.jq22.com/textDifference&#34; title=&#34;在线文本差异对比&#34;&gt;在线文本差异对比&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;算上空行都300行了，真是够麻烦的。&lt;/p&gt;
+&lt;h2 id=&#34;answer&#34;&gt;Answer&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-c++&#34; data-lang=&#34;c++&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;namespace&lt;/span&gt; std;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;template&lt;/span&gt;&amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;T&lt;/span&gt;&amp;gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;QueueNode&lt;/span&gt;{
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt;:
+    T data;
+    QueueNode*link=&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;;
+    QueueNode(){
+        ;
+    }
+    QueueNode(T data){
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;-&amp;gt;data=data;
+    }
+};
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;template&lt;/span&gt;&amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;T&lt;/span&gt;&amp;gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Queue&lt;/span&gt;{
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt;:
+    QueueNode&amp;lt;T&amp;gt;*tail=&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;;
+    QueueNode&amp;lt;T&amp;gt;*head=&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt;:
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt; isEmpty(){
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; head==&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;;
+    }
+    ~Queue(){
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt;(head!=&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;){
+            QueueNode&amp;lt;T&amp;gt;*p=head-&amp;gt;link;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;delete&lt;/span&gt; head;
+            head=p;
+        }
+    }
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;enQueue&lt;/span&gt;(T data){
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(tail==&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;){
+            head=tail=&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; QueueNode&amp;lt;T&amp;gt;(data);
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;;
+        }
+        tail-&amp;gt;link=&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; QueueNode&amp;lt;T&amp;gt;(data);
+        tail=tail-&amp;gt;link;
+    }
+    T &lt;span style=&#34;color:#008b45&#34;&gt;deQueue&lt;/span&gt;(){
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(isEmpty()){
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;;
+        }
+        T res=head-&amp;gt;data;
+        QueueNode&amp;lt;T&amp;gt;*tmp=head;
+        head=head-&amp;gt;link;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;delete&lt;/span&gt; tmp;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(head==&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;){
+            tail=&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; res;
+    }
+};
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Tree&lt;/span&gt;;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Node&lt;/span&gt;{
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;friend&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Tree&lt;/span&gt;;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt;:
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; data=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;\0&amp;#39;&lt;/span&gt;;
+    Node*lChild=&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;;
+    Node*rChild=&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt;:
+    Node(){
+        ;
+    }
+    Node(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; data){
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;-&amp;gt;data=data;
+    }
+};
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Tree&lt;/span&gt;{
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt;:
+    Node*root=&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;;
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;createTree&lt;/span&gt;(Node*&amp;amp;p,string&amp;amp;str,&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;&amp;amp;id){
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(id&amp;gt;=str.size()){
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(str.at(id)==&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;#&amp;#39;&lt;/span&gt;){
+            id++;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;;
+        }
+        p=&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; Node();
+        p-&amp;gt;data=str.at(id);
+        id++;
+        createTree(p-&amp;gt;lChild,str,id);
+        createTree(p-&amp;gt;rChild,str,id);
+    }
+    size_t &lt;span style=&#34;color:#008b45&#34;&gt;getHeight&lt;/span&gt;(Node*p){
+        size_t lHeight;
+        size_t rHeight;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(p-&amp;gt;lChild==&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;){
+            lHeight=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+        }&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt;{
+            lHeight=getHeight(p-&amp;gt;lChild);
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(p-&amp;gt;rChild==&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;){
+            rHeight=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+        }&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt;{
+            rHeight=getHeight(p-&amp;gt;rChild);
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; max(lHeight,rHeight)+&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;;
+    }
+    size_t &lt;span style=&#34;color:#008b45&#34;&gt;getLeaves&lt;/span&gt;(Node*p){
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(p==&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;){
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+        }
+        size_t res=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(p-&amp;gt;lChild==&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;&amp;amp;&amp;amp;p-&amp;gt;rChild==&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;){
+            res++;
+        }
+        res+=getLeaves(p-&amp;gt;lChild);
+        res+=getLeaves(p-&amp;gt;rChild);
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; res;
+    }
+    size_t &lt;span style=&#34;color:#008b45&#34;&gt;getNodes&lt;/span&gt;(Node*p){
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(p==&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;){
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; getNodes(p-&amp;gt;lChild)+getNodes(p-&amp;gt;rChild)+&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;;
+    }
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;visit1&lt;/span&gt;(Node*p){
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(p==&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;){
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;;
+        }
+        cout&amp;lt;&amp;lt;p-&amp;gt;data&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39; &amp;#39;&lt;/span&gt;;
+        visit1(p-&amp;gt;lChild);
+        visit1(p-&amp;gt;rChild);
+    }
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;visit2&lt;/span&gt;(Node*p){
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(p==&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;){
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;;
+        }
+        visit2(p-&amp;gt;lChild);
+        cout&amp;lt;&amp;lt;p-&amp;gt;data&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39; &amp;#39;&lt;/span&gt;;
+        visit2(p-&amp;gt;rChild);
+    }
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;visit3&lt;/span&gt;(Node*p){
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(p==&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;){
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;;
+        }
+        visit3(p-&amp;gt;lChild);
+        visit3(p-&amp;gt;rChild);
+        cout&amp;lt;&amp;lt;p-&amp;gt;data&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39; &amp;#39;&lt;/span&gt;;
+    }
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;delNode&lt;/span&gt;(Node*p){
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(p==&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;){
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;;
+        }
+        delNode(p-&amp;gt;lChild);
+        delNode(p-&amp;gt;rChild);
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;delete&lt;/span&gt; p;
+    }
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;search&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; c,Node*p){
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(p==&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;){
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+        }
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; res=p-&amp;gt;data==c?&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;:&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; search(c,p-&amp;gt;lChild)+search(c,p-&amp;gt;rChild)+res;
+    }
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;indexTree&lt;/span&gt;(Node*p,&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; depth){
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(p==&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;){
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;i&amp;lt;depth;i++){
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39; &amp;#39;&lt;/span&gt;&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39; &amp;#39;&lt;/span&gt;;
+        }
+        cout&amp;lt;&amp;lt;p-&amp;gt;data&amp;lt;&amp;lt;endl;
+        indexTree(p-&amp;gt;lChild,depth+&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;);
+        indexTree(p-&amp;gt;rChild,depth+&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;);
+    }
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt;:
+    Tree(string str){
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; id=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+        createTree(root,str,id);
+    }
+    size_t &lt;span style=&#34;color:#008b45&#34;&gt;getHeight&lt;/span&gt;(){
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; getHeight(root);
+    }
+    size_t &lt;span style=&#34;color:#008b45&#34;&gt;getLeaves&lt;/span&gt;(){
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; getLeaves(root);
+    }
+    size_t &lt;span style=&#34;color:#008b45&#34;&gt;getNodes&lt;/span&gt;(){
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; getNodes(root);
+    }
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;visit1&lt;/span&gt;(){
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Preorder is:&amp;#34;&lt;/span&gt;;
+        visit1(root);
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;.&amp;#39;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+    }
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;visit2&lt;/span&gt;(){
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Inorder is:&amp;#34;&lt;/span&gt;;
+        visit2(root);
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;.&amp;#39;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+    }
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;visit3&lt;/span&gt;(){
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Postorder is:&amp;#34;&lt;/span&gt;;
+        visit3(root);
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;.&amp;#39;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+    }
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;visitBFS&lt;/span&gt;(){
+        Queue&amp;lt;Node*&amp;gt;*q=&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; Queue&amp;lt;Node*&amp;gt;();
+        q-&amp;gt;enQueue(root);
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt;(!q-&amp;gt;isEmpty()){
+            Node*tmp=q-&amp;gt;deQueue();
+            cout&amp;lt;&amp;lt;tmp-&amp;gt;data&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39; &amp;#39;&lt;/span&gt;;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(tmp-&amp;gt;lChild!=&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;){
+                q-&amp;gt;enQueue(tmp-&amp;gt;lChild);
+            }
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(tmp-&amp;gt;rChild!=&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;){
+                q-&amp;gt;enQueue(tmp-&amp;gt;rChild);
+            }
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;delete&lt;/span&gt; q;
+    }
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;search&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; c){
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; search(c,root);
+    }
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;indexTree&lt;/span&gt;(){
+        indexTree(root,&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;);
+    }
+    ~Tree(){
+        delNode(root);
+    }
+};
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;()
+{
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; Op;
+    Tree*tree;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt;(cin&amp;gt;&amp;gt;Op){
+        string str;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;switch&lt;/span&gt;(Op){
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;C&amp;#39;&lt;/span&gt;:
+            cin&amp;gt;&amp;gt;str;
+            tree=&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; Tree(str);
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Created success!&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;H&amp;#39;&lt;/span&gt;:
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Height=&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;tree-&amp;gt;getHeight()&amp;lt;&amp;lt;endl;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;L&amp;#39;&lt;/span&gt;:
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Leaves=&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;tree-&amp;gt;getLeaves()&amp;lt;&amp;lt;endl;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;N&amp;#39;&lt;/span&gt;:
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Nodes=&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;tree-&amp;gt;getNodes()&amp;lt;&amp;lt;endl;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;1&amp;#39;&lt;/span&gt;:
+            tree-&amp;gt;visit1();
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;2&amp;#39;&lt;/span&gt;:
+            tree-&amp;gt;visit2();
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;3&amp;#39;&lt;/span&gt;:
+            tree-&amp;gt;visit3();
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;4&amp;#39;&lt;/span&gt;:
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;BFSorder is:&amp;#34;&lt;/span&gt;;
+            tree-&amp;gt;visitBFS();
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;.&amp;#39;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;F&amp;#39;&lt;/span&gt;:
+            &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; x;
+            cin&amp;gt;&amp;gt;x;
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;The count of &amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;x&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34; is &amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;tree-&amp;gt;search(x)&amp;lt;&amp;lt;endl;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;P&amp;#39;&lt;/span&gt;:
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;The tree is:&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+            tree-&amp;gt;indexTree();
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+        }
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;delete&lt;/span&gt; tree;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://ntutn.top/posts/%E4%BA%8C%E5%8F%89%E6%A0%91adt%E7%9A%84%E5%AE%9E%E7%8E%B0/ - CC BY-SA 4.0</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>图书管理系统</title>
+        <link>https://ntutn.top/posts/%E5%9B%BE%E4%B9%A6%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/</link>
+        <pubDate>Sat, 13 Apr 2019 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/%E5%9B%BE%E4%B9%A6%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/</guid>
+        <description>归零幻想 https://ntutn.top/posts/%E5%9B%BE%E4%B9%A6%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/ -&lt;p&gt;翻出了以前写的C++作业，图书管理系统，虽然挺简单的，但留下纪念下吧。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cpp&#34; data-lang=&#34;cpp&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;cstdlib&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;cstring&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;fstream&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;namespace&lt;/span&gt; std;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;CUser&lt;/span&gt;
+{
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt;:
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; code;      &lt;span style=&#34;color:#228b22&#34;&gt;//表示用户编号；
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; name[&lt;span style=&#34;color:#b452cd&#34;&gt;20&lt;/span&gt;];  &lt;span style=&#34;color:#228b22&#34;&gt;//表示用户姓名
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt;:
+    CUser()
+    {
+        ;
+    };   &lt;span style=&#34;color:#228b22&#34;&gt;// 默认构造函数
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    CUser(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; id, &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; na[])
+    {
+        code=id;
+        strcpy(name,na);
+    };   &lt;span style=&#34;color:#228b22&#34;&gt;//构造函数，初始化用户信息
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;setcode&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; n)
+    {
+        code=n;
+    };      &lt;span style=&#34;color:#228b22&#34;&gt;//用来设置用户编号
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;getcode&lt;/span&gt;()
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; code;
+    };          &lt;span style=&#34;color:#228b22&#34;&gt;//用来获取用户编号
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;setname&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; na[])
+    {
+        strcpy(name,na);
+    };  &lt;span style=&#34;color:#228b22&#34;&gt;//用来设置用户姓名
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt;* &lt;span style=&#34;color:#008b45&#34;&gt;getname&lt;/span&gt;()
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; name;
+    };        &lt;span style=&#34;color:#228b22&#34;&gt;//用来获取用户姓名
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;show&lt;/span&gt;()
+    {
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;用户编号：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;code&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;姓名：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;name&amp;lt;&amp;lt;endl;
+    };           &lt;span style=&#34;color:#228b22&#34;&gt;//用来显示用户的基本信息
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;};
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;CBook&lt;/span&gt;
+{
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt;:
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; code;              &lt;span style=&#34;color:#228b22&#34;&gt;//图书编号
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; name[&lt;span style=&#34;color:#b452cd&#34;&gt;20&lt;/span&gt;];      &lt;span style=&#34;color:#228b22&#34;&gt;//图书名称
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt; Is_Stock;          &lt;span style=&#34;color:#228b22&#34;&gt;//true为在架，false为借出
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt; Is_Existing;       &lt;span style=&#34;color:#228b22&#34;&gt;//true为存在, false为删除
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt;:
+    CBook()
+    {
+        ;
+    }; &lt;span style=&#34;color:#228b22&#34;&gt;//默认构造函数
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    CBook(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; no,&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; na[])
+    {
+        code=no;
+        strcpy(name,na);
+        Is_Stock=&lt;span style=&#34;color:#658b00&#34;&gt;true&lt;/span&gt;;
+        Is_Existing=&lt;span style=&#34;color:#658b00&#34;&gt;true&lt;/span&gt;;
+    };    &lt;span style=&#34;color:#228b22&#34;&gt;//构造函数，初始化图书信息
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;setcode&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; n)
+    {
+        code=n;
+    };   &lt;span style=&#34;color:#228b22&#34;&gt;//设置图书编号
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;getcode&lt;/span&gt;()
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; code;
+    };    &lt;span style=&#34;color:#228b22&#34;&gt;//获取图书编号
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;setname&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; na[])
+    {
+        strcpy(name,na);
+    };    &lt;span style=&#34;color:#228b22&#34;&gt;//设置图书名称
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt;* &lt;span style=&#34;color:#008b45&#34;&gt;getname&lt;/span&gt;()
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; name;
+    };  &lt;span style=&#34;color:#228b22&#34;&gt;//获取图书名称
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt;  &lt;span style=&#34;color:#008b45&#34;&gt;get_Stock&lt;/span&gt;()
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; Is_Stock;
+    };  &lt;span style=&#34;color:#228b22&#34;&gt;//获取图书是否在库信息
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;set_Stock&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt; isstock)
+    {
+        Is_Stock=isstock;
+    };&lt;span style=&#34;color:#228b22&#34;&gt;// 设置图书是否在库信息
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt;  &lt;span style=&#34;color:#008b45&#34;&gt;get_Existing&lt;/span&gt;()
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; Is_Existing;
+    };&lt;span style=&#34;color:#228b22&#34;&gt;//获取存在标志
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;set_Existing&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt; isex)
+    {
+        Is_Existing=isex;
+    };&lt;span style=&#34;color:#228b22&#34;&gt;//设置存在标志
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;};
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;CReader&lt;/span&gt;:&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; CUser
+{
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt;:
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt; Is_Existing;  &lt;span style=&#34;color:#228b22&#34;&gt;//true存在，false删除
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt; Is_Borrowing;  &lt;span style=&#34;color:#228b22&#34;&gt;//true借过书，false没有借书
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    CBook brbook;     &lt;span style=&#34;color:#228b22&#34;&gt;//表示读者所借的图书
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt;:
+    CReader()
+    {
+        CUser();
+    };   &lt;span style=&#34;color:#228b22&#34;&gt;//构造函数，初始化读者信息
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    CReader(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; id, &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; na[])
+    {
+        CUser(id,na);
+    };   &lt;span style=&#34;color:#228b22&#34;&gt;//构造函数，初始化读者信息
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;get_Existing&lt;/span&gt;()
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; Is_Existing;
+    };        &lt;span style=&#34;color:#228b22&#34;&gt;//用来获取删除标志
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;set_Existing&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt; isex)
+    {
+        Is_Existing=isex;
+    };     &lt;span style=&#34;color:#228b22&#34;&gt;//用来设置删除标志
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;get_Borrowing&lt;/span&gt;()
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; Is_Borrowing;
+    };      &lt;span style=&#34;color:#228b22&#34;&gt;//用来获取读者借阅情况
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;set_Borrowing&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt; isbo)
+    {
+        Is_Borrowing=isbo;
+    };   &lt;span style=&#34;color:#228b22&#34;&gt;//用来设置读者借阅情况
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;setbrbook&lt;/span&gt;(CBook bt)
+    {
+        brbook=bt;
+        Is_Borrowing=&lt;span style=&#34;color:#658b00&#34;&gt;true&lt;/span&gt;;
+    };  &lt;span style=&#34;color:#228b22&#34;&gt;//用来记录读者结束信息
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    CBook &lt;span style=&#34;color:#008b45&#34;&gt;getbrbook&lt;/span&gt;()
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; brbook;
+    };     &lt;span style=&#34;color:#228b22&#34;&gt;//用来获取读者结束信息
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;show&lt;/span&gt;()
+    {
+        CUser::show();
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(Is_Borrowing)
+        {
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;当前借书：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;brbook.getname()&amp;lt;&amp;lt;endl;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt;
+        {
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;当前用户没有借书！&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        }
+    };               &lt;span style=&#34;color:#228b22&#34;&gt;//重写基类成员，显示读者的基本信息情况和借书情况
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;};
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;CReaderManager&lt;/span&gt;
+{
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt;:
+    CReader rdarray[&lt;span style=&#34;color:#b452cd&#34;&gt;50&lt;/span&gt;];&lt;span style=&#34;color:#228b22&#34;&gt;// 存储读者信息的集合
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; top;      &lt;span style=&#34;color:#228b22&#34;&gt;//当前数组中存储的读者数量
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt;:
+    CReaderManager()
+    {
+        top=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+    };  &lt;span style=&#34;color:#228b22&#34;&gt;// 构造函数
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    ~CReaderManager()
+    {
+    };   &lt;span style=&#34;color:#228b22&#34;&gt;//析构函数
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;addreaders&lt;/span&gt;()
+    {
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; tmp[&lt;span style=&#34;color:#b452cd&#34;&gt;20&lt;/span&gt;];
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; tmp_no;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入读者的相关信息：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入读者的名称：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cin&amp;gt;&amp;gt;tmp;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入读者的编号：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cin&amp;gt;&amp;gt;tmp_no;
+        CReader tmp_reader(tmp_no,tmp);
+        rdarray[top]=tmp_reader;
+        top++;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;读者添加成功。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+    };          &lt;span style=&#34;color:#228b22&#34;&gt;//添加读者
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;findreaders&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; suffix)
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i&amp;lt;top; i++)
+        {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(rdarray[i].getcode()==suffix)
+            {
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; i;&lt;span style=&#34;color:#228b22&#34;&gt;//返回在库中的位置。
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;            }
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; -&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;;&lt;span style=&#34;color:#228b22&#34;&gt;//未找到
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    };     &lt;span style=&#34;color:#228b22&#34;&gt;//查找读者，这个函数用于借书还书操作。
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;findreaders&lt;/span&gt;()
+    {
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; tmp[&lt;span style=&#34;color:#b452cd&#34;&gt;20&lt;/span&gt;];
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入需要查找的用户的名称：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cin&amp;gt;&amp;gt;tmp;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i&amp;lt;top; i++)
+        {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(strcmp(rdarray[i].getname(),tmp)==&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;)
+            {
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; i;
+            }
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; -&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;;
+    };            &lt;span style=&#34;color:#228b22&#34;&gt;//查找读者，这个函数用于读者维护操作
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;editreaders&lt;/span&gt;()
+    {
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; tmp[&lt;span style=&#34;color:#b452cd&#34;&gt;20&lt;/span&gt;];
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; code;
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; num=findreaders();
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; tmp_ex;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(num==-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;)
+        {
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;您要的用户没有找到。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;;
+        }
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;用户姓名：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;rdarray[num].getname()&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;编号：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;rdarray[num].getcode()&amp;lt;&amp;lt;endl;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(rdarray[num].get_Borrowing())
+        {
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;用户借了&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;rdarray[num].getbrbook().getname()&amp;lt;&amp;lt;endl;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt;
+        {
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;用户没有借任何书。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(rdarray[num].get_Existing())
+        {
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;用户状态正常。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt;
+        {
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;用户已经被删除。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        }
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入修改后的姓名：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cin&amp;gt;&amp;gt;tmp;
+        rdarray[num].setname(tmp);
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入修改后的编号：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cin&amp;gt;&amp;gt;code;
+        rdarray[num].setcode(code);
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(!rdarray[num].get_Existing())
+        {
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;用户被标记为删除状态，是否恢复？(1恢复/0不恢复)&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+            cin&amp;gt;&amp;gt;tmp_ex;
+            rdarray[num].set_Existing(tmp_ex);
+        }
+    };          &lt;span style=&#34;color:#228b22&#34;&gt;//编辑读者信息
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;delreaders&lt;/span&gt;()
+    {
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; tmp_code;
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; num;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入要删除的用户的编号：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cin&amp;gt;&amp;gt;tmp_code;
+        num=findreaders(tmp_code);
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(num==-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;)
+        {
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;用户未找到，操作失败。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(!rdarray[num].get_Existing())
+        {
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;用户已经被删除，操作失败。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(!rdarray[num].get_Borrowing())
+        {
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;用户有书未还，操作失败。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;;
+        }
+        rdarray[num].set_Existing(&lt;span style=&#34;color:#658b00&#34;&gt;false&lt;/span&gt;);
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;用户删除完毕。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+    };          &lt;span style=&#34;color:#228b22&#34;&gt;//删除读者，读者如果借书要还书后才能删除
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;listreaders&lt;/span&gt;()
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i&amp;lt;top; i++)
+        {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(rdarray[i].get_Existing())
+            {
+                cout&amp;lt;&amp;lt;rdarray[i].getcode()&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;\t&amp;#39;&lt;/span&gt;&amp;lt;&amp;lt;rdarray[i].getname()&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;\t&amp;#39;&lt;/span&gt;;
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(rdarray[i].get_Borrowing())
+                {
+                    cout&amp;lt;&amp;lt;rdarray[i].getbrbook().getname();
+                }
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt;
+                {
+                    cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;未借书&amp;#34;&lt;/span&gt;;
+                }
+                cout&amp;lt;&amp;lt;endl;
+            }
+        }
+    };           &lt;span style=&#34;color:#228b22&#34;&gt;//显示所有读者
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    CReader&amp;amp; getreader(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; p)
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(p&amp;lt;&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;||p&amp;gt;=top)
+        {
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;下标越界。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+            p=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; rdarray[p];
+    }
+};
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;CBookManager&lt;/span&gt;
+{
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt;:
+    CBook btarray[&lt;span style=&#34;color:#b452cd&#34;&gt;50&lt;/span&gt;];                   &lt;span style=&#34;color:#228b22&#34;&gt;//图书集合
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; top;                         &lt;span style=&#34;color:#228b22&#34;&gt;//当前数组中存储的图书数量
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt;:
+    CBookManager()
+    {
+        top=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+    };
+    ~CBookManager()
+    {
+        ;
+    };
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;addbooks&lt;/span&gt;()
+    {
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; tmp[&lt;span style=&#34;color:#b452cd&#34;&gt;20&lt;/span&gt;];
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; tmp_no;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入图书的相关信息：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入图书的名称：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cin&amp;gt;&amp;gt;tmp;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入图书的编号：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cin&amp;gt;&amp;gt;tmp_no;
+        CBook tmp_book(tmp_no,tmp);
+        btarray[top]=tmp_book;
+        top++;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图书入库成功。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+    };    &lt;span style=&#34;color:#228b22&#34;&gt;//添加图书
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;findbooks&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; suffix)
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i&amp;lt;top; i++)
+        {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(btarray[i].getcode()==suffix)
+            {
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; i;&lt;span style=&#34;color:#228b22&#34;&gt;//返回图书在书库中的位置。
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;            }
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; -&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;;&lt;span style=&#34;color:#228b22&#34;&gt;//未找到图书
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    };  &lt;span style=&#34;color:#228b22&#34;&gt;//查找图书，这个函数用于借书还书操作
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;findbooks&lt;/span&gt;()
+    {
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; tmp[&lt;span style=&#34;color:#b452cd&#34;&gt;20&lt;/span&gt;];
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入需要查找的图书的名称：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cin&amp;gt;&amp;gt;tmp;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i&amp;lt;top; i++)
+        {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(strcmp(btarray[i].getname(),tmp)==&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;)
+            {
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; i;
+            }
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; -&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;;
+    };  &lt;span style=&#34;color:#228b22&#34;&gt;//查找图书，用于图书维护操作
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;editbooks&lt;/span&gt;()
+    {
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; tmp[&lt;span style=&#34;color:#b452cd&#34;&gt;20&lt;/span&gt;];
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; code;
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; num=findbooks();
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; tmp_ex;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(num==-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;)
+        {
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;您要的图书没有找到。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;;
+        }
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图书名称：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;btarray[num].getname()&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图书编号：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;btarray[num].getcode()&amp;lt;&amp;lt;endl;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(btarray[num].get_Stock())
+        {
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图书在架。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt;
+        {
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图书已经借出。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(btarray[num].get_Existing())
+        {
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图书状态正常。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt;
+        {
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图书已经被删除。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        }
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入修改后的名称：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cin&amp;gt;&amp;gt;tmp;
+        btarray[num].setname(tmp);
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入修改后的编号：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cin&amp;gt;&amp;gt;code;
+        btarray[num].setcode(code);
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(!btarray[num].get_Existing())
+        {
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图书被标记为删除状态，是否恢复？(1恢复/0不恢复)&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+            cin&amp;gt;&amp;gt;tmp_ex;
+            btarray[num].set_Existing(tmp_ex);
+        }
+    };     &lt;span style=&#34;color:#228b22&#34;&gt;//编辑图书
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;delbooks&lt;/span&gt;()
+    {
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; tmp_code;
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; num;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入要删除的图书的编号：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cin&amp;gt;&amp;gt;tmp_code;
+        num=findbooks(tmp_code);
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(num==-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;)
+        {
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图书未找到，操作失败。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(!btarray[num].get_Existing())
+        {
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图书已经被删除，操作失败。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(!btarray[num].get_Stock())
+        {
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图书被借出，操作失败。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;;
+        }
+        btarray[num].set_Existing(&lt;span style=&#34;color:#658b00&#34;&gt;false&lt;/span&gt;);
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图书删除完毕。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+    };   &lt;span style=&#34;color:#228b22&#34;&gt;//  删除图书
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;listbooks&lt;/span&gt;()
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i&amp;lt;top; i++)
+        {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(btarray[i].get_Stock()&amp;amp;&amp;amp;btarray[i].get_Existing())
+            {
+                cout&amp;lt;&amp;lt;btarray[i].getcode()&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;\t&amp;#39;&lt;/span&gt;&amp;lt;&amp;lt;btarray[i].getname()&amp;lt;&amp;lt;endl;
+            }
+        }
+    } ;  &lt;span style=&#34;color:#228b22&#34;&gt;//显示全部图书
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    CBook&amp;amp; getbook(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; p)
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(p&amp;lt;&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;||p&amp;gt;=top)
+        {
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;下标越界。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+            p=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; btarray[p];
+    }
+};
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;showmenu&lt;/span&gt;()
+{
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; re=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt;(re&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;1&amp;#39;&lt;/span&gt;||re&amp;gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;6&amp;#39;&lt;/span&gt;)
+    {
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;功能菜单&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.读者管理&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;2.借书管理&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;3.还书管理&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;4.图书管理&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;5.文件存储&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;6.退出&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入对应序号并回车&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cin&amp;gt;&amp;gt;re;
+        &lt;span style=&#34;color:#228b22&#34;&gt;//cout&amp;lt;&amp;lt;re;
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; re-&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;0&amp;#39;&lt;/span&gt;;
+}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;showmenu1&lt;/span&gt;()
+{
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; re=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt;(re&amp;lt;&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;||re&amp;gt;&lt;span style=&#34;color:#b452cd&#34;&gt;4&lt;/span&gt;)
+    {
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;功能菜单--读者管理&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.添加读者&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;2.删除读者&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;3.修改读者&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;4.查找读者&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入对应序号并回车&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cin&amp;gt;&amp;gt;re;
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; re;
+}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;showmenu4&lt;/span&gt;()
+{
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; re=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt;(re&amp;lt;&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;||re&amp;gt;&lt;span style=&#34;color:#b452cd&#34;&gt;4&lt;/span&gt;)
+    {
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;功能菜单--图书管理&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.添加图书&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;2.删除图书&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;3.修改图书&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;4.查找图书&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入对应序号并回车&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cin&amp;gt;&amp;gt;re;
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; re;
+}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;showmenu5&lt;/span&gt;()
+{
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; re=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt;(re&amp;lt;&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;||re&amp;gt;&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;)
+    {
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;功能菜单--文件存储&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.读取&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;2.保存&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入对应序号并回车&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cin&amp;gt;&amp;gt;re;
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; re;
+}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;()
+{
+    CReaderManager cm1;
+    CBookManager cb1;
+    ofstream file;
+    ifstream file2;
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; cz=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; tmp_us;
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; tmp_bo;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt;(&lt;span style=&#34;color:#658b00&#34;&gt;true&lt;/span&gt;)
+    {
+        cz=showmenu();
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;switch&lt;/span&gt;(cz)
+        {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;:
+            cz=showmenu1();
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;switch&lt;/span&gt;(cz)
+            {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;:
+                cm1.addreaders();
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;:
+                cm1.delreaders();
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;3&lt;/span&gt;:
+                cm1.editreaders();
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;4&lt;/span&gt;:
+                cm1.findreaders();
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+            }
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;:
+            tmp_bo=cb1.findbooks();
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(tmp_bo==-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;)
+            {
+                cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;您要借的书没有找到。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+            }
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(!cb1.getbook(tmp_bo).get_Existing())
+            {
+                cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;您要借的书已经被删除，操作失败。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+            }
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(!cb1.getbook(tmp_bo).get_Stock())
+            {
+                cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;您要借的书已经被借出，操作失败。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+            }
+            tmp_us=cm1.findreaders();
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(tmp_bo==-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;)
+            {
+                cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;您使用的身份无效。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+            }
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(!cm1.getreader(tmp_us).get_Existing())
+            {
+                cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;您的账户已经被管理员删除。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+            }
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(cm1.getreader((tmp_us)).get_Borrowing())
+            {
+                cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请把您借的书还了再借。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+            }
+            cm1.getreader(tmp_us).set_Borrowing(&lt;span style=&#34;color:#658b00&#34;&gt;true&lt;/span&gt;);
+            cm1.getreader(tmp_us).setbrbook(cb1.getbook(tmp_bo));
+            cb1.getbook(tmp_bo).set_Stock(&lt;span style=&#34;color:#658b00&#34;&gt;false&lt;/span&gt;);
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;3&lt;/span&gt;:
+            cm1.editreaders();
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;4&lt;/span&gt;:
+            cz=showmenu4();
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;switch&lt;/span&gt;(cz)
+            {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;:
+                cb1.addbooks();
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;:
+                cb1.delbooks();
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;3&lt;/span&gt;:
+                cb1.editbooks();
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;4&lt;/span&gt;:
+                cb1.findbooks();
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+            }
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;5&lt;/span&gt;:
+            cz=showmenu5();
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;switch&lt;/span&gt;(cz)
+            {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;:
+                file2.open(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;cb1.dat&amp;#34;&lt;/span&gt;,ios::binary);
+                &lt;span style=&#34;color:#228b22&#34;&gt;//二进制打开，缺省为文本，ios::out,ios::in,文本输入输出用&amp;lt;&amp;lt;,&amp;gt;&amp;gt;
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                file2.read((&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; *)&amp;amp;cb1,&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;sizeof&lt;/span&gt;(cb1));
+                &lt;span style=&#34;color:#228b22&#34;&gt;///int num=file2.gcount(); //获取读到文件的大小
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                file2.close();
+                file2.open(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;cm1.dat&amp;#34;&lt;/span&gt;,ios::binary);
+                &lt;span style=&#34;color:#228b22&#34;&gt;//二进制打开，缺省为文本，ios::out,ios::in,文本输入输出用&amp;lt;&amp;lt;,&amp;gt;&amp;gt;
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                file2.read((&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; *)&amp;amp;cm1,&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;sizeof&lt;/span&gt;(cm1));
+                &lt;span style=&#34;color:#228b22&#34;&gt;///int num=file2.gcount(); //获取读到文件的大小
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                file2.close();
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;:
+                file.open(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;cb1.dat&amp;#34;&lt;/span&gt;,ios::binary);
+                &lt;span style=&#34;color:#228b22&#34;&gt;//缓存的类型是 unsigned char *，需要类型转换
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                file.write((&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; *)&amp;amp;cb1,&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;sizeof&lt;/span&gt;(cb1));  &lt;span style=&#34;color:#228b22&#34;&gt;//winServer为类对象
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                file.close();
+                file.open(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;cm1.dat&amp;#34;&lt;/span&gt;,ios::binary);
+                &lt;span style=&#34;color:#228b22&#34;&gt;//缓存的类型是 unsigned char *，需要类型转换
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                file.write((&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; *)&amp;amp;cm1,&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;sizeof&lt;/span&gt;(cm1));  &lt;span style=&#34;color:#228b22&#34;&gt;//winServer为类对象
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                file.close();
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+            }
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;6&lt;/span&gt;:
+            exit(&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;);
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+        }
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://ntutn.top/posts/%E5%9B%BE%E4%B9%A6%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/ - CC BY-SA 4.0</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>使用映像劫持技术屏蔽电脑中的广告进程</title>
+        <link>https://ntutn.top/posts/%E4%BD%BF%E7%94%A8%E6%98%A0%E5%83%8F%E5%8A%AB%E6%8C%81%E6%8A%80%E6%9C%AF%E5%B1%8F%E8%94%BD%E7%94%B5%E8%84%91%E4%B8%AD%E7%9A%84%E5%B9%BF%E5%91%8A%E8%BF%9B%E7%A8%8B/</link>
+        <pubDate>Thu, 28 Mar 2019 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/%E4%BD%BF%E7%94%A8%E6%98%A0%E5%83%8F%E5%8A%AB%E6%8C%81%E6%8A%80%E6%9C%AF%E5%B1%8F%E8%94%BD%E7%94%B5%E8%84%91%E4%B8%AD%E7%9A%84%E5%B9%BF%E5%91%8A%E8%BF%9B%E7%A8%8B/</guid>
+        <description>归零幻想 https://ntutn.top/posts/%E4%BD%BF%E7%94%A8%E6%98%A0%E5%83%8F%E5%8A%AB%E6%8C%81%E6%8A%80%E6%9C%AF%E5%B1%8F%E8%94%BD%E7%94%B5%E8%84%91%E4%B8%AD%E7%9A%84%E5%B9%BF%E5%91%8A%E8%BF%9B%E7%A8%8B/ -&lt;!-- raw HTML omitted --&gt;
+&lt;blockquote&gt;
+&lt;p&gt;映像劫持（Image File Execution Options），简单的说法，就是当你打开的是程序A，而运行的确是程序B。映像劫持其实是Windows内设的用来调试程序的功能，但是现在却往往被病毒恶意利用。当用户双击对应的程序后，操作系统就会给外壳程序（例如“explorer.exe”）发布相应的指令，其中包含有执行程序的路径和文件名，然后由外壳程序来执行该程序。事实上在该过程中，Windows还会在注册表的上述路径中查询所有的映像劫持子键，如果存在和该程序名称完全相同的子键，就查询对应子健中包含的“dubugger”键值名，并用其指定的程序路径来代替原始的程序，之后执行的是遭到“劫持”的虚假程序。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;国内很多软件都有重度广告，“资讯”、“新闻”、“弹窗”，不胜其烦。直接找到广告进程删除掉，结果一自动更新，又回来了。&lt;/p&gt;
+&lt;p&gt;于是，我想到了“映像劫持”：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ini&#34; data-lang=&#34;ini&#34;&gt;&lt;span style=&#34;color:#658b00&#34;&gt;Windows Registry Editor Version 5.00&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SLBService.exe]&lt;/span&gt;
+&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\TsService.exe]&lt;/span&gt;
+&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\FoxitDesktopAd.exe]&lt;/span&gt;
+&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\FoxitProtect.exe]&lt;/span&gt;
+&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\LCServer.exe]&lt;/span&gt;
+&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\LRServer.exe]&lt;/span&gt;
+&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\2345MiniPage.exe]&lt;/span&gt;
+&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SohuNews.exe]&lt;/span&gt;
+&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\PinyinUp.exe]&lt;/span&gt;
+&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SGDownload.exe]&lt;/span&gt;
+&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SGMedalLoader.exe]&lt;/span&gt;
+&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SogouCloud.exe]&lt;/span&gt;
+&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;保存为&lt;code&gt;.reg&lt;/code&gt;文件，导入注册表即可。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+- https://ntutn.top/posts/%E4%BD%BF%E7%94%A8%E6%98%A0%E5%83%8F%E5%8A%AB%E6%8C%81%E6%8A%80%E6%9C%AF%E5%B1%8F%E8%94%BD%E7%94%B5%E8%84%91%E4%B8%AD%E7%9A%84%E5%B9%BF%E5%91%8A%E8%BF%9B%E7%A8%8B/ - CC BY-SA 4.0</description>
+        </item>
+    
+    
   </channel>
 </rss> 

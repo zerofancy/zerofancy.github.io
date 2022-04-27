@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html><head>
+<title>图书管理系统</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="翻出了以前写的C&#43;&#43;作业，图书管理系统，虽然挺简单的，但留下纪念下吧。">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+<meta property="og:title" content="图书管理系统" />
+<meta property="og:description" content="翻出了以前写的C&#43;&#43;作业，图书管理系统，虽然挺简单的，但留下纪念下吧。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ntutn.top/posts/%E5%9B%BE%E4%B9%A6%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/" />
+<meta property="article:published_time" content="2019-04-13T03:11:37+08:00" />
+<meta property="article:modified_time" content="2019-04-13T03:11:37+08:00" /><meta property="og:site_name" content="归零幻想" />
+
+
+
+
+
+
+
+
+
+
+<link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+
+  
+
+
+
+
+<link rel="icon" href="//images.ntutn.top/favicon.ico">
+
+
+
+<link rel="stylesheet" href="https://ntutn.top/scss/journal.min.d8d9f81b896882733c41896750adbefbf9319ca02ccccefd461650898975c3af.css" integrity="sha256-2Nn4G4lognM8QYlnUK2&#43;&#43;/kxnKAszM79RhZQiYl1w68=" media="screen">
+
+
+
+<link rel="stylesheet" href="https://ntutn.top/scss/dark-mode.min.60f86847da9fc0724177ccfd0bf7c5997b0b41f1e58d5a293cfb3723c497c422.css" integrity="sha256-YPhoR9qfwHJBd8z9C/fFmXsLQfHljVopPPs3I8SXxCI=" media="screen">
+
+
+<script src="/vendor/js/loadCSS.js"></script>
+<script>
+  loadCSS("https://fonts.googleapis.com/css?family=Fira+Mono|Material+Icons");
+</script>
+
+
+
+<script defer
+	src='https://static.cloudflareinsights.com/beacon.min.js'
+	data-cf-beacon='{"token": 5a03d307f5214109a1e7c8b2cf306a3d'>
+</script>
+
+
+
+
+
+
+  <script src="/js/toc.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://ntutn.top/">
+    
+        <div class="nav-title">
+            归零幻想
+        </div>
+        
+        <div class="nav-subtitle">
+            零点还不算熬夜
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                Archive
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/index.xml">
+                RSS Feed
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	CC BY-SA 4.0
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    
+    
+    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
+
+
+</div>
+    
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+<div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    Archive
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/categories">
+                    Categories
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/index.xml">
+                    RSS Feed
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://ntutn.top/">
+            归零幻想
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://ntutn.top/">
+        <div class="single-column-header-title">归零幻想</div>
+        
+        <div class="single-column-header-subtitle">零点还不算熬夜</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
+                    图书管理系统
+                    
+                    <div class="post-subtitle">
+                        翻出了以前写的C&#43;&#43;作业，图书管理系统，虽然挺简单的，但留下纪念下吧。
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2019-04-13 03:11
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/%E7%BA%AA%E5%BF%B5">纪念</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/c&#43;&#43;">C&#43;&#43;</a>
+                                &nbsp;
+                            
+                                <a href="/tags/%E7%BA%AA%E5%BF%B5">纪念</a>
+                                &nbsp;
+                            
+                        
+                        
+                            <i class="material-icons" style="">schedule</i>
+                            
+
+                            
+                            
+
+                            
+                            23 min
+                            
+                            23 s.
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <p>翻出了以前写的C++作业，图书管理系统，虽然挺简单的，但留下纪念下吧。</p>
+<!-- raw HTML omitted -->
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;iostream&gt;</span><span style="color:#1e889b">
+</span><span style="color:#1e889b">#include</span><span style="color:#1e889b">&lt;cstdlib&gt;</span><span style="color:#1e889b">
+</span><span style="color:#1e889b">#include</span><span style="color:#1e889b">&lt;cstring&gt;</span><span style="color:#1e889b">
+</span><span style="color:#1e889b">#include</span><span style="color:#1e889b">&lt;fstream&gt;</span><span style="color:#1e889b">
+</span><span style="color:#1e889b"></span><span style="color:#8b008b;font-weight:bold">using</span> <span style="color:#8b008b;font-weight:bold">namespace</span> std;
+<span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">CUser</span>
+{
+<span style="color:#8b008b;font-weight:bold">private</span>:
+    <span style="color:#00688b;font-weight:bold">int</span> code;      <span style="color:#228b22">//表示用户编号；
+</span><span style="color:#228b22"></span>    <span style="color:#00688b;font-weight:bold">char</span> name[<span style="color:#b452cd">20</span>];  <span style="color:#228b22">//表示用户姓名
+</span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">public</span>:
+    CUser()
+    {
+        ;
+    };   <span style="color:#228b22">// 默认构造函数
+</span><span style="color:#228b22"></span>    CUser(<span style="color:#00688b;font-weight:bold">int</span> id, <span style="color:#00688b;font-weight:bold">char</span> na[])
+    {
+        code=id;
+        strcpy(name,na);
+    };   <span style="color:#228b22">//构造函数，初始化用户信息
+</span><span style="color:#228b22"></span>    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">setcode</span>(<span style="color:#00688b;font-weight:bold">int</span> n)
+    {
+        code=n;
+    };      <span style="color:#228b22">//用来设置用户编号
+</span><span style="color:#228b22"></span>    <span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">getcode</span>()
+    {
+        <span style="color:#8b008b;font-weight:bold">return</span> code;
+    };          <span style="color:#228b22">//用来获取用户编号
+</span><span style="color:#228b22"></span>    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">setname</span>(<span style="color:#00688b;font-weight:bold">char</span> na[])
+    {
+        strcpy(name,na);
+    };  <span style="color:#228b22">//用来设置用户姓名
+</span><span style="color:#228b22"></span>    <span style="color:#00688b;font-weight:bold">char</span>* <span style="color:#008b45">getname</span>()
+    {
+        <span style="color:#8b008b;font-weight:bold">return</span> name;
+    };        <span style="color:#228b22">//用来获取用户姓名
+</span><span style="color:#228b22"></span>    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">show</span>()
+    {
+        cout&lt;&lt;<span style="color:#cd5555">&#34;用户编号：&#34;</span>&lt;&lt;code&lt;&lt;endl;
+        cout&lt;&lt;<span style="color:#cd5555">&#34;姓名：&#34;</span>&lt;&lt;name&lt;&lt;endl;
+    };           <span style="color:#228b22">//用来显示用户的基本信息
+</span><span style="color:#228b22"></span>};
+<span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">CBook</span>
+{
+<span style="color:#8b008b;font-weight:bold">private</span>:
+    <span style="color:#00688b;font-weight:bold">int</span> code;              <span style="color:#228b22">//图书编号
+</span><span style="color:#228b22"></span>    <span style="color:#00688b;font-weight:bold">char</span> name[<span style="color:#b452cd">20</span>];      <span style="color:#228b22">//图书名称
+</span><span style="color:#228b22"></span>    <span style="color:#00688b;font-weight:bold">bool</span> Is_Stock;          <span style="color:#228b22">//true为在架，false为借出
+</span><span style="color:#228b22"></span>    <span style="color:#00688b;font-weight:bold">bool</span> Is_Existing;       <span style="color:#228b22">//true为存在, false为删除
+</span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">public</span>:
+    CBook()
+    {
+        ;
+    }; <span style="color:#228b22">//默认构造函数
+</span><span style="color:#228b22"></span>    CBook(<span style="color:#00688b;font-weight:bold">int</span> no,<span style="color:#00688b;font-weight:bold">char</span> na[])
+    {
+        code=no;
+        strcpy(name,na);
+        Is_Stock=<span style="color:#658b00">true</span>;
+        Is_Existing=<span style="color:#658b00">true</span>;
+    };    <span style="color:#228b22">//构造函数，初始化图书信息
+</span><span style="color:#228b22"></span>    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">setcode</span>(<span style="color:#00688b;font-weight:bold">int</span> n)
+    {
+        code=n;
+    };   <span style="color:#228b22">//设置图书编号
+</span><span style="color:#228b22"></span>    <span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">getcode</span>()
+    {
+        <span style="color:#8b008b;font-weight:bold">return</span> code;
+    };    <span style="color:#228b22">//获取图书编号
+</span><span style="color:#228b22"></span>    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">setname</span>(<span style="color:#00688b;font-weight:bold">char</span> na[])
+    {
+        strcpy(name,na);
+    };    <span style="color:#228b22">//设置图书名称
+</span><span style="color:#228b22"></span>    <span style="color:#00688b;font-weight:bold">char</span>* <span style="color:#008b45">getname</span>()
+    {
+        <span style="color:#8b008b;font-weight:bold">return</span> name;
+    };  <span style="color:#228b22">//获取图书名称
+</span><span style="color:#228b22"></span>    <span style="color:#00688b;font-weight:bold">bool</span>  <span style="color:#008b45">get_Stock</span>()
+    {
+        <span style="color:#8b008b;font-weight:bold">return</span> Is_Stock;
+    };  <span style="color:#228b22">//获取图书是否在库信息
+</span><span style="color:#228b22"></span>    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">set_Stock</span>(<span style="color:#00688b;font-weight:bold">bool</span> isstock)
+    {
+        Is_Stock=isstock;
+    };<span style="color:#228b22">// 设置图书是否在库信息
+</span><span style="color:#228b22"></span>    <span style="color:#00688b;font-weight:bold">bool</span>  <span style="color:#008b45">get_Existing</span>()
+    {
+        <span style="color:#8b008b;font-weight:bold">return</span> Is_Existing;
+    };<span style="color:#228b22">//获取存在标志
+</span><span style="color:#228b22"></span>    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">set_Existing</span>(<span style="color:#00688b;font-weight:bold">bool</span> isex)
+    {
+        Is_Existing=isex;
+    };<span style="color:#228b22">//设置存在标志
+</span><span style="color:#228b22"></span>};
+<span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">CReader</span>:<span style="color:#8b008b;font-weight:bold">public</span> CUser
+{
+<span style="color:#8b008b;font-weight:bold">private</span>:
+    <span style="color:#00688b;font-weight:bold">bool</span> Is_Existing;  <span style="color:#228b22">//true存在，false删除
+</span><span style="color:#228b22"></span>    <span style="color:#00688b;font-weight:bold">bool</span> Is_Borrowing;  <span style="color:#228b22">//true借过书，false没有借书
+</span><span style="color:#228b22"></span>    CBook brbook;     <span style="color:#228b22">//表示读者所借的图书
+</span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">public</span>:
+    CReader()
+    {
+        CUser();
+    };   <span style="color:#228b22">//构造函数，初始化读者信息
+</span><span style="color:#228b22"></span>    CReader(<span style="color:#00688b;font-weight:bold">int</span> id, <span style="color:#00688b;font-weight:bold">char</span> na[])
+    {
+        CUser(id,na);
+    };   <span style="color:#228b22">//构造函数，初始化读者信息
+</span><span style="color:#228b22"></span>    <span style="color:#00688b;font-weight:bold">bool</span> <span style="color:#008b45">get_Existing</span>()
+    {
+        <span style="color:#8b008b;font-weight:bold">return</span> Is_Existing;
+    };        <span style="color:#228b22">//用来获取删除标志
+</span><span style="color:#228b22"></span>    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">set_Existing</span>(<span style="color:#00688b;font-weight:bold">bool</span> isex)
+    {
+        Is_Existing=isex;
+    };     <span style="color:#228b22">//用来设置删除标志
+</span><span style="color:#228b22"></span>    <span style="color:#00688b;font-weight:bold">bool</span> <span style="color:#008b45">get_Borrowing</span>()
+    {
+        <span style="color:#8b008b;font-weight:bold">return</span> Is_Borrowing;
+    };      <span style="color:#228b22">//用来获取读者借阅情况
+</span><span style="color:#228b22"></span>    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">set_Borrowing</span>(<span style="color:#00688b;font-weight:bold">bool</span> isbo)
+    {
+        Is_Borrowing=isbo;
+    };   <span style="color:#228b22">//用来设置读者借阅情况
+</span><span style="color:#228b22"></span>    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">setbrbook</span>(CBook bt)
+    {
+        brbook=bt;
+        Is_Borrowing=<span style="color:#658b00">true</span>;
+    };  <span style="color:#228b22">//用来记录读者结束信息
+</span><span style="color:#228b22"></span>    CBook <span style="color:#008b45">getbrbook</span>()
+    {
+        <span style="color:#8b008b;font-weight:bold">return</span> brbook;
+    };     <span style="color:#228b22">//用来获取读者结束信息
+</span><span style="color:#228b22"></span>    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">show</span>()
+    {
+        CUser::show();
+        <span style="color:#8b008b;font-weight:bold">if</span>(Is_Borrowing)
+        {
+            cout&lt;&lt;<span style="color:#cd5555">&#34;当前借书：&#34;</span>&lt;&lt;brbook.getname()&lt;&lt;endl;
+        }
+        <span style="color:#8b008b;font-weight:bold">else</span>
+        {
+            cout&lt;&lt;<span style="color:#cd5555">&#34;当前用户没有借书！&#34;</span>&lt;&lt;endl;
+        }
+    };               <span style="color:#228b22">//重写基类成员，显示读者的基本信息情况和借书情况
+</span><span style="color:#228b22"></span>};
+<span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">CReaderManager</span>
+{
+<span style="color:#8b008b;font-weight:bold">private</span>:
+    CReader rdarray[<span style="color:#b452cd">50</span>];<span style="color:#228b22">// 存储读者信息的集合
+</span><span style="color:#228b22"></span>    <span style="color:#00688b;font-weight:bold">int</span> top;      <span style="color:#228b22">//当前数组中存储的读者数量
+</span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">public</span>:
+    CReaderManager()
+    {
+        top=<span style="color:#b452cd">0</span>;
+    };  <span style="color:#228b22">// 构造函数
+</span><span style="color:#228b22"></span>    ~CReaderManager()
+    {
+    };   <span style="color:#228b22">//析构函数
+</span><span style="color:#228b22"></span>    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">addreaders</span>()
+    {
+        <span style="color:#00688b;font-weight:bold">char</span> tmp[<span style="color:#b452cd">20</span>];
+        <span style="color:#00688b;font-weight:bold">int</span> tmp_no;
+        cout&lt;&lt;<span style="color:#cd5555">&#34;请输入读者的相关信息：&#34;</span>&lt;&lt;endl;
+        cout&lt;&lt;<span style="color:#cd5555">&#34;请输入读者的名称：&#34;</span>&lt;&lt;endl;
+        cin&gt;&gt;tmp;
+        cout&lt;&lt;<span style="color:#cd5555">&#34;请输入读者的编号：&#34;</span>&lt;&lt;endl;
+        cin&gt;&gt;tmp_no;
+        CReader tmp_reader(tmp_no,tmp);
+        rdarray[top]=tmp_reader;
+        top++;
+        cout&lt;&lt;<span style="color:#cd5555">&#34;读者添加成功。&#34;</span>&lt;&lt;endl;
+    };          <span style="color:#228b22">//添加读者
+</span><span style="color:#228b22"></span>    <span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">findreaders</span>(<span style="color:#00688b;font-weight:bold">int</span> suffix)
+    {
+        <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;top; i++)
+        {
+            <span style="color:#8b008b;font-weight:bold">if</span>(rdarray[i].getcode()==suffix)
+            {
+                <span style="color:#8b008b;font-weight:bold">return</span> i;<span style="color:#228b22">//返回在库中的位置。
+</span><span style="color:#228b22"></span>            }
+        }
+        <span style="color:#8b008b;font-weight:bold">return</span> -<span style="color:#b452cd">1</span>;<span style="color:#228b22">//未找到
+</span><span style="color:#228b22"></span>    };     <span style="color:#228b22">//查找读者，这个函数用于借书还书操作。
+</span><span style="color:#228b22"></span>    <span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">findreaders</span>()
+    {
+        <span style="color:#00688b;font-weight:bold">char</span> tmp[<span style="color:#b452cd">20</span>];
+        cout&lt;&lt;<span style="color:#cd5555">&#34;请输入需要查找的用户的名称：&#34;</span>&lt;&lt;endl;
+        cin&gt;&gt;tmp;
+        <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;top; i++)
+        {
+            <span style="color:#8b008b;font-weight:bold">if</span>(strcmp(rdarray[i].getname(),tmp)==<span style="color:#b452cd">0</span>)
+            {
+                <span style="color:#8b008b;font-weight:bold">return</span> i;
+            }
+        }
+        <span style="color:#8b008b;font-weight:bold">return</span> -<span style="color:#b452cd">1</span>;
+    };            <span style="color:#228b22">//查找读者，这个函数用于读者维护操作
+</span><span style="color:#228b22"></span>    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">editreaders</span>()
+    {
+        <span style="color:#00688b;font-weight:bold">char</span> tmp[<span style="color:#b452cd">20</span>];
+        <span style="color:#00688b;font-weight:bold">int</span> code;
+        <span style="color:#00688b;font-weight:bold">int</span> num=findreaders();
+        <span style="color:#00688b;font-weight:bold">int</span> tmp_ex;
+        <span style="color:#8b008b;font-weight:bold">if</span>(num==-<span style="color:#b452cd">1</span>)
+        {
+            cout&lt;&lt;<span style="color:#cd5555">&#34;您要的用户没有找到。&#34;</span>&lt;&lt;endl;
+            <span style="color:#8b008b;font-weight:bold">return</span>;
+        }
+        cout&lt;&lt;<span style="color:#cd5555">&#34;用户姓名：&#34;</span>&lt;&lt;rdarray[num].getname()&lt;&lt;endl;
+        cout&lt;&lt;<span style="color:#cd5555">&#34;编号：&#34;</span>&lt;&lt;rdarray[num].getcode()&lt;&lt;endl;
+        <span style="color:#8b008b;font-weight:bold">if</span>(rdarray[num].get_Borrowing())
+        {
+            cout&lt;&lt;<span style="color:#cd5555">&#34;用户借了&#34;</span>&lt;&lt;rdarray[num].getbrbook().getname()&lt;&lt;endl;
+        }
+        <span style="color:#8b008b;font-weight:bold">else</span>
+        {
+            cout&lt;&lt;<span style="color:#cd5555">&#34;用户没有借任何书。&#34;</span>&lt;&lt;endl;
+        }
+        <span style="color:#8b008b;font-weight:bold">if</span>(rdarray[num].get_Existing())
+        {
+            cout&lt;&lt;<span style="color:#cd5555">&#34;用户状态正常。&#34;</span>&lt;&lt;endl;
+        }
+        <span style="color:#8b008b;font-weight:bold">else</span>
+        {
+            cout&lt;&lt;<span style="color:#cd5555">&#34;用户已经被删除。&#34;</span>&lt;&lt;endl;
+        }
+        cout&lt;&lt;<span style="color:#cd5555">&#34;请输入修改后的姓名：&#34;</span>&lt;&lt;endl;
+        cin&gt;&gt;tmp;
+        rdarray[num].setname(tmp);
+        cout&lt;&lt;<span style="color:#cd5555">&#34;请输入修改后的编号：&#34;</span>&lt;&lt;endl;
+        cin&gt;&gt;code;
+        rdarray[num].setcode(code);
+        <span style="color:#8b008b;font-weight:bold">if</span>(!rdarray[num].get_Existing())
+        {
+            cout&lt;&lt;<span style="color:#cd5555">&#34;用户被标记为删除状态，是否恢复？(1恢复/0不恢复)&#34;</span>&lt;&lt;endl;
+            cin&gt;&gt;tmp_ex;
+            rdarray[num].set_Existing(tmp_ex);
+        }
+    };          <span style="color:#228b22">//编辑读者信息
+</span><span style="color:#228b22"></span>    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">delreaders</span>()
+    {
+        <span style="color:#00688b;font-weight:bold">int</span> tmp_code;
+        <span style="color:#00688b;font-weight:bold">int</span> num;
+        cout&lt;&lt;<span style="color:#cd5555">&#34;请输入要删除的用户的编号：&#34;</span>&lt;&lt;endl;
+        cin&gt;&gt;tmp_code;
+        num=findreaders(tmp_code);
+        <span style="color:#8b008b;font-weight:bold">if</span>(num==-<span style="color:#b452cd">1</span>)
+        {
+            cout&lt;&lt;<span style="color:#cd5555">&#34;用户未找到，操作失败。&#34;</span>&lt;&lt;endl;
+            <span style="color:#8b008b;font-weight:bold">return</span>;
+        }
+        <span style="color:#8b008b;font-weight:bold">if</span>(!rdarray[num].get_Existing())
+        {
+            cout&lt;&lt;<span style="color:#cd5555">&#34;用户已经被删除，操作失败。&#34;</span>&lt;&lt;endl;
+            <span style="color:#8b008b;font-weight:bold">return</span>;
+        }
+        <span style="color:#8b008b;font-weight:bold">if</span>(!rdarray[num].get_Borrowing())
+        {
+            cout&lt;&lt;<span style="color:#cd5555">&#34;用户有书未还，操作失败。&#34;</span>&lt;&lt;endl;
+            <span style="color:#8b008b;font-weight:bold">return</span>;
+        }
+        rdarray[num].set_Existing(<span style="color:#658b00">false</span>);
+        cout&lt;&lt;<span style="color:#cd5555">&#34;用户删除完毕。&#34;</span>&lt;&lt;endl;
+    };          <span style="color:#228b22">//删除读者，读者如果借书要还书后才能删除
+</span><span style="color:#228b22"></span>    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">listreaders</span>()
+    {
+        <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;top; i++)
+        {
+            <span style="color:#8b008b;font-weight:bold">if</span>(rdarray[i].get_Existing())
+            {
+                cout&lt;&lt;rdarray[i].getcode()&lt;&lt;<span style="color:#cd5555">&#39;\t&#39;</span>&lt;&lt;rdarray[i].getname()&lt;&lt;<span style="color:#cd5555">&#39;\t&#39;</span>;
+                <span style="color:#8b008b;font-weight:bold">if</span>(rdarray[i].get_Borrowing())
+                {
+                    cout&lt;&lt;rdarray[i].getbrbook().getname();
+                }
+                <span style="color:#8b008b;font-weight:bold">else</span>
+                {
+                    cout&lt;&lt;<span style="color:#cd5555">&#34;未借书&#34;</span>;
+                }
+                cout&lt;&lt;endl;
+            }
+        }
+    };           <span style="color:#228b22">//显示所有读者
+</span><span style="color:#228b22"></span>    CReader&amp; getreader(<span style="color:#00688b;font-weight:bold">int</span> p)
+    {
+        <span style="color:#8b008b;font-weight:bold">if</span>(p&lt;<span style="color:#b452cd">0</span>||p&gt;=top)
+        {
+            cout&lt;&lt;<span style="color:#cd5555">&#34;下标越界。&#34;</span>&lt;&lt;endl;
+            p=<span style="color:#b452cd">0</span>;
+        }
+        <span style="color:#8b008b;font-weight:bold">return</span> rdarray[p];
+    }
+};
+<span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">CBookManager</span>
+{
+<span style="color:#8b008b;font-weight:bold">private</span>:
+    CBook btarray[<span style="color:#b452cd">50</span>];                   <span style="color:#228b22">//图书集合
+</span><span style="color:#228b22"></span>    <span style="color:#00688b;font-weight:bold">int</span> top;                         <span style="color:#228b22">//当前数组中存储的图书数量
+</span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">public</span>:
+    CBookManager()
+    {
+        top=<span style="color:#b452cd">0</span>;
+    };
+    ~CBookManager()
+    {
+        ;
+    };
+    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">addbooks</span>()
+    {
+        <span style="color:#00688b;font-weight:bold">char</span> tmp[<span style="color:#b452cd">20</span>];
+        <span style="color:#00688b;font-weight:bold">int</span> tmp_no;
+        cout&lt;&lt;<span style="color:#cd5555">&#34;请输入图书的相关信息：&#34;</span>&lt;&lt;endl;
+        cout&lt;&lt;<span style="color:#cd5555">&#34;请输入图书的名称：&#34;</span>&lt;&lt;endl;
+        cin&gt;&gt;tmp;
+        cout&lt;&lt;<span style="color:#cd5555">&#34;请输入图书的编号：&#34;</span>&lt;&lt;endl;
+        cin&gt;&gt;tmp_no;
+        CBook tmp_book(tmp_no,tmp);
+        btarray[top]=tmp_book;
+        top++;
+        cout&lt;&lt;<span style="color:#cd5555">&#34;图书入库成功。&#34;</span>&lt;&lt;endl;
+    };    <span style="color:#228b22">//添加图书
+</span><span style="color:#228b22"></span>    <span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">findbooks</span>(<span style="color:#00688b;font-weight:bold">int</span> suffix)
+    {
+        <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;top; i++)
+        {
+            <span style="color:#8b008b;font-weight:bold">if</span>(btarray[i].getcode()==suffix)
+            {
+                <span style="color:#8b008b;font-weight:bold">return</span> i;<span style="color:#228b22">//返回图书在书库中的位置。
+</span><span style="color:#228b22"></span>            }
+        }
+        <span style="color:#8b008b;font-weight:bold">return</span> -<span style="color:#b452cd">1</span>;<span style="color:#228b22">//未找到图书
+</span><span style="color:#228b22"></span>    };  <span style="color:#228b22">//查找图书，这个函数用于借书还书操作
+</span><span style="color:#228b22"></span>    <span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">findbooks</span>()
+    {
+        <span style="color:#00688b;font-weight:bold">char</span> tmp[<span style="color:#b452cd">20</span>];
+        cout&lt;&lt;<span style="color:#cd5555">&#34;请输入需要查找的图书的名称：&#34;</span>&lt;&lt;endl;
+        cin&gt;&gt;tmp;
+        <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;top; i++)
+        {
+            <span style="color:#8b008b;font-weight:bold">if</span>(strcmp(btarray[i].getname(),tmp)==<span style="color:#b452cd">0</span>)
+            {
+                <span style="color:#8b008b;font-weight:bold">return</span> i;
+            }
+        }
+        <span style="color:#8b008b;font-weight:bold">return</span> -<span style="color:#b452cd">1</span>;
+    };  <span style="color:#228b22">//查找图书，用于图书维护操作
+</span><span style="color:#228b22"></span>    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">editbooks</span>()
+    {
+        <span style="color:#00688b;font-weight:bold">char</span> tmp[<span style="color:#b452cd">20</span>];
+        <span style="color:#00688b;font-weight:bold">int</span> code;
+        <span style="color:#00688b;font-weight:bold">int</span> num=findbooks();
+        <span style="color:#00688b;font-weight:bold">int</span> tmp_ex;
+        <span style="color:#8b008b;font-weight:bold">if</span>(num==-<span style="color:#b452cd">1</span>)
+        {
+            cout&lt;&lt;<span style="color:#cd5555">&#34;您要的图书没有找到。&#34;</span>&lt;&lt;endl;
+            <span style="color:#8b008b;font-weight:bold">return</span>;
+        }
+        cout&lt;&lt;<span style="color:#cd5555">&#34;图书名称：&#34;</span>&lt;&lt;btarray[num].getname()&lt;&lt;endl;
+        cout&lt;&lt;<span style="color:#cd5555">&#34;图书编号：&#34;</span>&lt;&lt;btarray[num].getcode()&lt;&lt;endl;
+        <span style="color:#8b008b;font-weight:bold">if</span>(btarray[num].get_Stock())
+        {
+            cout&lt;&lt;<span style="color:#cd5555">&#34;图书在架。&#34;</span>&lt;&lt;endl;
+        }
+        <span style="color:#8b008b;font-weight:bold">else</span>
+        {
+            cout&lt;&lt;<span style="color:#cd5555">&#34;图书已经借出。&#34;</span>&lt;&lt;endl;
+        }
+        <span style="color:#8b008b;font-weight:bold">if</span>(btarray[num].get_Existing())
+        {
+            cout&lt;&lt;<span style="color:#cd5555">&#34;图书状态正常。&#34;</span>&lt;&lt;endl;
+        }
+        <span style="color:#8b008b;font-weight:bold">else</span>
+        {
+            cout&lt;&lt;<span style="color:#cd5555">&#34;图书已经被删除。&#34;</span>&lt;&lt;endl;
+        }
+        cout&lt;&lt;<span style="color:#cd5555">&#34;请输入修改后的名称：&#34;</span>&lt;&lt;endl;
+        cin&gt;&gt;tmp;
+        btarray[num].setname(tmp);
+        cout&lt;&lt;<span style="color:#cd5555">&#34;请输入修改后的编号：&#34;</span>&lt;&lt;endl;
+        cin&gt;&gt;code;
+        btarray[num].setcode(code);
+        <span style="color:#8b008b;font-weight:bold">if</span>(!btarray[num].get_Existing())
+        {
+            cout&lt;&lt;<span style="color:#cd5555">&#34;图书被标记为删除状态，是否恢复？(1恢复/0不恢复)&#34;</span>&lt;&lt;endl;
+            cin&gt;&gt;tmp_ex;
+            btarray[num].set_Existing(tmp_ex);
+        }
+    };     <span style="color:#228b22">//编辑图书
+</span><span style="color:#228b22"></span>    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">delbooks</span>()
+    {
+        <span style="color:#00688b;font-weight:bold">int</span> tmp_code;
+        <span style="color:#00688b;font-weight:bold">int</span> num;
+        cout&lt;&lt;<span style="color:#cd5555">&#34;请输入要删除的图书的编号：&#34;</span>&lt;&lt;endl;
+        cin&gt;&gt;tmp_code;
+        num=findbooks(tmp_code);
+        <span style="color:#8b008b;font-weight:bold">if</span>(num==-<span style="color:#b452cd">1</span>)
+        {
+            cout&lt;&lt;<span style="color:#cd5555">&#34;图书未找到，操作失败。&#34;</span>&lt;&lt;endl;
+            <span style="color:#8b008b;font-weight:bold">return</span>;
+        }
+        <span style="color:#8b008b;font-weight:bold">if</span>(!btarray[num].get_Existing())
+        {
+            cout&lt;&lt;<span style="color:#cd5555">&#34;图书已经被删除，操作失败。&#34;</span>&lt;&lt;endl;
+            <span style="color:#8b008b;font-weight:bold">return</span>;
+        }
+        <span style="color:#8b008b;font-weight:bold">if</span>(!btarray[num].get_Stock())
+        {
+            cout&lt;&lt;<span style="color:#cd5555">&#34;图书被借出，操作失败。&#34;</span>&lt;&lt;endl;
+            <span style="color:#8b008b;font-weight:bold">return</span>;
+        }
+        btarray[num].set_Existing(<span style="color:#658b00">false</span>);
+        cout&lt;&lt;<span style="color:#cd5555">&#34;图书删除完毕。&#34;</span>&lt;&lt;endl;
+    };   <span style="color:#228b22">//  删除图书
+</span><span style="color:#228b22"></span>    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">listbooks</span>()
+    {
+        <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;top; i++)
+        {
+            <span style="color:#8b008b;font-weight:bold">if</span>(btarray[i].get_Stock()&amp;&amp;btarray[i].get_Existing())
+            {
+                cout&lt;&lt;btarray[i].getcode()&lt;&lt;<span style="color:#cd5555">&#39;\t&#39;</span>&lt;&lt;btarray[i].getname()&lt;&lt;endl;
+            }
+        }
+    } ;  <span style="color:#228b22">//显示全部图书
+</span><span style="color:#228b22"></span>    CBook&amp; getbook(<span style="color:#00688b;font-weight:bold">int</span> p)
+    {
+        <span style="color:#8b008b;font-weight:bold">if</span>(p&lt;<span style="color:#b452cd">0</span>||p&gt;=top)
+        {
+            cout&lt;&lt;<span style="color:#cd5555">&#34;下标越界。&#34;</span>&lt;&lt;endl;
+            p=<span style="color:#b452cd">0</span>;
+        }
+        <span style="color:#8b008b;font-weight:bold">return</span> btarray[p];
+    }
+};
+<span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">showmenu</span>()
+{
+    <span style="color:#00688b;font-weight:bold">char</span> re=<span style="color:#b452cd">0</span>;
+    <span style="color:#8b008b;font-weight:bold">while</span>(re&lt;<span style="color:#cd5555">&#39;1&#39;</span>||re&gt;<span style="color:#cd5555">&#39;6&#39;</span>)
+    {
+        cout&lt;&lt;<span style="color:#cd5555">&#34;功能菜单&#34;</span>&lt;&lt;endl;
+        cout&lt;&lt;<span style="color:#cd5555">&#34;1.读者管理&#34;</span>&lt;&lt;endl;
+        cout&lt;&lt;<span style="color:#cd5555">&#34;2.借书管理&#34;</span>&lt;&lt;endl;
+        cout&lt;&lt;<span style="color:#cd5555">&#34;3.还书管理&#34;</span>&lt;&lt;endl;
+        cout&lt;&lt;<span style="color:#cd5555">&#34;4.图书管理&#34;</span>&lt;&lt;endl;
+        cout&lt;&lt;<span style="color:#cd5555">&#34;5.文件存储&#34;</span>&lt;&lt;endl;
+        cout&lt;&lt;<span style="color:#cd5555">&#34;6.退出&#34;</span>&lt;&lt;endl;
+        cout&lt;&lt;<span style="color:#cd5555">&#34;请输入对应序号并回车&#34;</span>&lt;&lt;endl;
+        cin&gt;&gt;re;
+        <span style="color:#228b22">//cout&lt;&lt;re;
+</span><span style="color:#228b22"></span>    }
+    <span style="color:#8b008b;font-weight:bold">return</span> re-<span style="color:#cd5555">&#39;0&#39;</span>;
+}
+<span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">showmenu1</span>()
+{
+    <span style="color:#00688b;font-weight:bold">int</span> re=<span style="color:#b452cd">0</span>;
+    <span style="color:#8b008b;font-weight:bold">while</span>(re&lt;<span style="color:#b452cd">1</span>||re&gt;<span style="color:#b452cd">4</span>)
+    {
+        cout&lt;&lt;<span style="color:#cd5555">&#34;功能菜单--读者管理&#34;</span>&lt;&lt;endl;
+        cout&lt;&lt;<span style="color:#cd5555">&#34;1.添加读者&#34;</span>&lt;&lt;endl;
+        cout&lt;&lt;<span style="color:#cd5555">&#34;2.删除读者&#34;</span>&lt;&lt;endl;
+        cout&lt;&lt;<span style="color:#cd5555">&#34;3.修改读者&#34;</span>&lt;&lt;endl;
+        cout&lt;&lt;<span style="color:#cd5555">&#34;4.查找读者&#34;</span>&lt;&lt;endl;
+        cout&lt;&lt;<span style="color:#cd5555">&#34;请输入对应序号并回车&#34;</span>&lt;&lt;endl;
+        cin&gt;&gt;re;
+    }
+    <span style="color:#8b008b;font-weight:bold">return</span> re;
+}
+<span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">showmenu4</span>()
+{
+    <span style="color:#00688b;font-weight:bold">int</span> re=<span style="color:#b452cd">0</span>;
+    <span style="color:#8b008b;font-weight:bold">while</span>(re&lt;<span style="color:#b452cd">1</span>||re&gt;<span style="color:#b452cd">4</span>)
+    {
+        cout&lt;&lt;<span style="color:#cd5555">&#34;功能菜单--图书管理&#34;</span>&lt;&lt;endl;
+        cout&lt;&lt;<span style="color:#cd5555">&#34;1.添加图书&#34;</span>&lt;&lt;endl;
+        cout&lt;&lt;<span style="color:#cd5555">&#34;2.删除图书&#34;</span>&lt;&lt;endl;
+        cout&lt;&lt;<span style="color:#cd5555">&#34;3.修改图书&#34;</span>&lt;&lt;endl;
+        cout&lt;&lt;<span style="color:#cd5555">&#34;4.查找图书&#34;</span>&lt;&lt;endl;
+        cout&lt;&lt;<span style="color:#cd5555">&#34;请输入对应序号并回车&#34;</span>&lt;&lt;endl;
+        cin&gt;&gt;re;
+    }
+    <span style="color:#8b008b;font-weight:bold">return</span> re;
+}
+<span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">showmenu5</span>()
+{
+    <span style="color:#00688b;font-weight:bold">int</span> re=<span style="color:#b452cd">0</span>;
+    <span style="color:#8b008b;font-weight:bold">while</span>(re&lt;<span style="color:#b452cd">1</span>||re&gt;<span style="color:#b452cd">2</span>)
+    {
+        cout&lt;&lt;<span style="color:#cd5555">&#34;功能菜单--文件存储&#34;</span>&lt;&lt;endl;
+        cout&lt;&lt;<span style="color:#cd5555">&#34;1.读取&#34;</span>&lt;&lt;endl;
+        cout&lt;&lt;<span style="color:#cd5555">&#34;2.保存&#34;</span>&lt;&lt;endl;
+        cout&lt;&lt;<span style="color:#cd5555">&#34;请输入对应序号并回车&#34;</span>&lt;&lt;endl;
+        cin&gt;&gt;re;
+    }
+    <span style="color:#8b008b;font-weight:bold">return</span> re;
+}
+<span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">main</span>()
+{
+    CReaderManager cm1;
+    CBookManager cb1;
+    ofstream file;
+    ifstream file2;
+    <span style="color:#00688b;font-weight:bold">int</span> cz=<span style="color:#b452cd">0</span>;
+    <span style="color:#00688b;font-weight:bold">int</span> tmp_us;
+    <span style="color:#00688b;font-weight:bold">int</span> tmp_bo;
+    <span style="color:#8b008b;font-weight:bold">while</span>(<span style="color:#658b00">true</span>)
+    {
+        cz=showmenu();
+        <span style="color:#8b008b;font-weight:bold">switch</span>(cz)
+        {
+        <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">1</span>:
+            cz=showmenu1();
+            <span style="color:#8b008b;font-weight:bold">switch</span>(cz)
+            {
+            <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">1</span>:
+                cm1.addreaders();
+                <span style="color:#8b008b;font-weight:bold">break</span>;
+            <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">2</span>:
+                cm1.delreaders();
+                <span style="color:#8b008b;font-weight:bold">break</span>;
+            <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">3</span>:
+                cm1.editreaders();
+                <span style="color:#8b008b;font-weight:bold">break</span>;
+            <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">4</span>:
+                cm1.findreaders();
+                <span style="color:#8b008b;font-weight:bold">break</span>;
+            }
+            <span style="color:#8b008b;font-weight:bold">break</span>;
+        <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">2</span>:
+            tmp_bo=cb1.findbooks();
+            <span style="color:#8b008b;font-weight:bold">if</span>(tmp_bo==-<span style="color:#b452cd">1</span>)
+            {
+                cout&lt;&lt;<span style="color:#cd5555">&#34;您要借的书没有找到。&#34;</span>&lt;&lt;endl;
+                <span style="color:#8b008b;font-weight:bold">break</span>;
+            }
+            <span style="color:#8b008b;font-weight:bold">if</span>(!cb1.getbook(tmp_bo).get_Existing())
+            {
+                cout&lt;&lt;<span style="color:#cd5555">&#34;您要借的书已经被删除，操作失败。&#34;</span>&lt;&lt;endl;
+                <span style="color:#8b008b;font-weight:bold">break</span>;
+            }
+            <span style="color:#8b008b;font-weight:bold">if</span>(!cb1.getbook(tmp_bo).get_Stock())
+            {
+                cout&lt;&lt;<span style="color:#cd5555">&#34;您要借的书已经被借出，操作失败。&#34;</span>&lt;&lt;endl;
+                <span style="color:#8b008b;font-weight:bold">break</span>;
+            }
+            tmp_us=cm1.findreaders();
+            <span style="color:#8b008b;font-weight:bold">if</span>(tmp_bo==-<span style="color:#b452cd">1</span>)
+            {
+                cout&lt;&lt;<span style="color:#cd5555">&#34;您使用的身份无效。&#34;</span>&lt;&lt;endl;
+                <span style="color:#8b008b;font-weight:bold">break</span>;
+            }
+            <span style="color:#8b008b;font-weight:bold">if</span>(!cm1.getreader(tmp_us).get_Existing())
+            {
+                cout&lt;&lt;<span style="color:#cd5555">&#34;您的账户已经被管理员删除。&#34;</span>&lt;&lt;endl;
+                <span style="color:#8b008b;font-weight:bold">break</span>;
+            }
+            <span style="color:#8b008b;font-weight:bold">if</span>(cm1.getreader((tmp_us)).get_Borrowing())
+            {
+                cout&lt;&lt;<span style="color:#cd5555">&#34;请把您借的书还了再借。&#34;</span>&lt;&lt;endl;
+                <span style="color:#8b008b;font-weight:bold">break</span>;
+            }
+            cm1.getreader(tmp_us).set_Borrowing(<span style="color:#658b00">true</span>);
+            cm1.getreader(tmp_us).setbrbook(cb1.getbook(tmp_bo));
+            cb1.getbook(tmp_bo).set_Stock(<span style="color:#658b00">false</span>);
+            <span style="color:#8b008b;font-weight:bold">break</span>;
+        <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">3</span>:
+            cm1.editreaders();
+        <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">4</span>:
+            cz=showmenu4();
+            <span style="color:#8b008b;font-weight:bold">switch</span>(cz)
+            {
+            <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">1</span>:
+                cb1.addbooks();
+                <span style="color:#8b008b;font-weight:bold">break</span>;
+            <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">2</span>:
+                cb1.delbooks();
+                <span style="color:#8b008b;font-weight:bold">break</span>;
+            <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">3</span>:
+                cb1.editbooks();
+                <span style="color:#8b008b;font-weight:bold">break</span>;
+            <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">4</span>:
+                cb1.findbooks();
+                <span style="color:#8b008b;font-weight:bold">break</span>;
+            }
+            <span style="color:#8b008b;font-weight:bold">break</span>;
+        <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">5</span>:
+            cz=showmenu5();
+            <span style="color:#8b008b;font-weight:bold">switch</span>(cz)
+            {
+            <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">1</span>:
+                file2.open(<span style="color:#cd5555">&#34;cb1.dat&#34;</span>,ios::binary);
+                <span style="color:#228b22">//二进制打开，缺省为文本，ios::out,ios::in,文本输入输出用&lt;&lt;,&gt;&gt;
+</span><span style="color:#228b22"></span>                file2.read((<span style="color:#00688b;font-weight:bold">char</span> *)&amp;cb1,<span style="color:#8b008b;font-weight:bold">sizeof</span>(cb1));
+                <span style="color:#228b22">///int num=file2.gcount(); //获取读到文件的大小
+</span><span style="color:#228b22"></span>                file2.close();
+                file2.open(<span style="color:#cd5555">&#34;cm1.dat&#34;</span>,ios::binary);
+                <span style="color:#228b22">//二进制打开，缺省为文本，ios::out,ios::in,文本输入输出用&lt;&lt;,&gt;&gt;
+</span><span style="color:#228b22"></span>                file2.read((<span style="color:#00688b;font-weight:bold">char</span> *)&amp;cm1,<span style="color:#8b008b;font-weight:bold">sizeof</span>(cm1));
+                <span style="color:#228b22">///int num=file2.gcount(); //获取读到文件的大小
+</span><span style="color:#228b22"></span>                file2.close();
+                <span style="color:#8b008b;font-weight:bold">break</span>;
+            <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">2</span>:
+                file.open(<span style="color:#cd5555">&#34;cb1.dat&#34;</span>,ios::binary);
+                <span style="color:#228b22">//缓存的类型是 unsigned char *，需要类型转换
+</span><span style="color:#228b22"></span>                file.write((<span style="color:#00688b;font-weight:bold">char</span> *)&amp;cb1,<span style="color:#8b008b;font-weight:bold">sizeof</span>(cb1));  <span style="color:#228b22">//winServer为类对象
+</span><span style="color:#228b22"></span>                file.close();
+                file.open(<span style="color:#cd5555">&#34;cm1.dat&#34;</span>,ios::binary);
+                <span style="color:#228b22">//缓存的类型是 unsigned char *，需要类型转换
+</span><span style="color:#228b22"></span>                file.write((<span style="color:#00688b;font-weight:bold">char</span> *)&amp;cm1,<span style="color:#8b008b;font-weight:bold">sizeof</span>(cm1));  <span style="color:#228b22">//winServer为类对象
+</span><span style="color:#228b22"></span>                file.close();
+                <span style="color:#8b008b;font-weight:bold">break</span>;
+            }
+            <span style="color:#8b008b;font-weight:bold">break</span>;
+        <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">6</span>:
+            exit(<span style="color:#b452cd">0</span>);
+            <span style="color:#8b008b;font-weight:bold">break</span>;
+        }
+    }
+    <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>;
+}
+</code></pre></div>
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">最后修改于 2019-04-13</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts" href="https://ntutn.top/posts/%E4%BA%8C%E5%8F%89%E6%A0%91adt%E7%9A%84%E5%AE%9E%E7%8E%B0/">
+			下回<br>二叉树ADT的实现
+                </a>
+                
+                
+                
+                <a class="older-posts" href="https://ntutn.top/posts/%E4%BD%BF%E7%94%A8%E6%98%A0%E5%83%8F%E5%8A%AB%E6%8C%81%E6%8A%80%E6%9C%AF%E5%B1%8F%E8%94%BD%E7%94%B5%E8%84%91%E4%B8%AD%E7%9A%84%E5%B9%BF%E5%91%8A%E8%BF%9B%E7%A8%8B/">
+			上回<br>使用映像劫持技术屏蔽电脑中的广告进程
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+<script src="https://utteranc.es/client.js"
+        repo="zerofancy/zerofancy.github.io"
+        issue-term="title"
+        label=""
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	CC BY-SA 4.0
+	
+</div>
+            </div>
+    
+    <script src="/js/journal.js"></script>
+    </body>
+</html>

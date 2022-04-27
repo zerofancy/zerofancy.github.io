@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>纪念 on 归零幻想</title>
+    <link>https://ntutn.top/categories/%E7%BA%AA%E5%BF%B5/</link>
+    <description>Recent content in 纪念 on 归零幻想</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <copyright>CC BY-SA 4.0</copyright>
+    <lastBuildDate>Sat, 13 Apr 2019 03:11:37 +0800</lastBuildDate><atom:link href="https://ntutn.top/categories/%E7%BA%AA%E5%BF%B5/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>图书管理系统</title>
+      <link>https://ntutn.top/posts/%E5%9B%BE%E4%B9%A6%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/</link>
+      <pubDate>Sat, 13 Apr 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E5%9B%BE%E4%B9%A6%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/</guid>
+      <description>翻出了以前写的C++作业，图书管理系统，虽然挺简单的，但留下纪念下吧。
+#include &amp;lt;iostream&amp;gt;#include&amp;lt;cstdlib&amp;gt;#include&amp;lt;cstring&amp;gt;#include&amp;lt;fstream&amp;gt;using namespace std; class CUser { private: int code; //表示用户编号；  char name[20]; //表示用户姓名 public: CUser() { ; }; // 默认构造函数  CUser(int id, char na[]) { code=id; strcpy(name,na); }; //构造函数，初始化用户信息  void setcode(int n) { code=n; }; //用来设置用户编号  int getcode() { return code; }; //用来获取用户编号  void setname(char na[]) { strcpy(name,na); }; //用来设置用户姓名  char* getname() { return name; }; //用来获取用户姓名  void show() { cout&amp;lt;&amp;lt;&amp;#34;用户编号：&amp;#34;&amp;lt;&amp;lt;code&amp;lt;&amp;lt;endl; cout&amp;lt;&amp;lt;&amp;#34;姓名：&amp;#34;&amp;lt;&amp;lt;name&amp;lt;&amp;lt;endl; }; //用来显示用户的基本信息 }; class CBook { private: int code; //图书编号  char name[20]; //图书名称  bool Is_Stock; //true为在架，false为借出  bool Is_Existing; //true为存在, false为删除 public: CBook() { ; }; //默认构造函数  CBook(int no,char na[]) { code=no; strcpy(name,na); Is_Stock=true; Is_Existing=true; }; //构造函数，初始化图书信息  void setcode(int n) { code=n; }; //设置图书编号  int getcode() { return code; }; //获取图书编号  void setname(char na[]) { strcpy(name,na); }; //设置图书名称  char* getname() { return name; }; //获取图书名称  bool get_Stock() { return Is_Stock; }; //获取图书是否在库信息  void set_Stock(bool isstock) { Is_Stock=isstock; };// 设置图书是否在库信息  bool get_Existing() { return Is_Existing; };//获取存在标志  void set_Existing(bool isex) { Is_Existing=isex; };//设置存在标志 }; class CReader:public CUser { private: bool Is_Existing; //true存在，false删除  bool Is_Borrowing; //true借过书，false没有借书  CBook brbook; //表示读者所借的图书 public: CReader() { CUser(); }; //构造函数，初始化读者信息  CReader(int id, char na[]) { CUser(id,na); }; //构造函数，初始化读者信息  bool get_Existing() { return Is_Existing; }; //用来获取删除标志  void set_Existing(bool isex) { Is_Existing=isex; }; //用来设置删除标志  bool get_Borrowing() { return Is_Borrowing; }; //用来获取读者借阅情况  void set_Borrowing(bool isbo) { Is_Borrowing=isbo; }; //用来设置读者借阅情况  void setbrbook(CBook bt) { brbook=bt; Is_Borrowing=true; }; //用来记录读者结束信息  CBook getbrbook() { return brbook; }; //用来获取读者结束信息  void show() { CUser::show(); if(Is_Borrowing) { cout&amp;lt;&amp;lt;&amp;#34;当前借书：&amp;#34;&amp;lt;&amp;lt;brbook.</description>
+    </item>
+    
+  </channel>
+</rss>

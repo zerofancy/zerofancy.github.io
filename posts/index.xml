@@ -243,5 +243,127 @@ ThreadMode.ASYNC 在单独线程中调用，用于耗时操作。
 package com.example.eventbustimerdemo import android.os.Bundle import androidx.appcompat.app.AppCompatActivity import kotlinx.android.synthetic.main.activity_main.* import org.greenrobot.eventbus.EventBus import org.greenrobot.eventbus.Subscribe import org.greenrobot.eventbus.ThreadMode class MainActivity : AppCompatActivity() { override fun onCreate(savedInstanceState: Bundle?</description>
     </item>
     
+    <item>
+      <title>Typora&#43;git自动同步你的笔记</title>
+      <link>https://ntutn.top/posts/typora&#43;git%E8%87%AA%E5%8A%A8%E5%90%8C%E6%AD%A5%E4%BD%A0%E7%9A%84%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Mon, 02 Mar 2020 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/typora&#43;git%E8%87%AA%E5%8A%A8%E5%90%8C%E6%AD%A5%E4%BD%A0%E7%9A%84%E7%AC%94%E8%AE%B0/</guid>
+      <description>这两天看了群里某个大佬的笔记，突然觉得自己用VSCode记笔记的方案不香了。VSCode虽然对markdown的支持不错，但毕竟本职工作不是这个，直接拿来做笔记还是不够方便，太笨重了。于是我终于想起之前同学给我安利的markdown编辑器：Typora。
+dalao的笔记 首先看看大佬的笔记：
+好想去偷他的笔记。不过话说他这笔记软件也不错啊，看起来简约清晰，我也有试一试的想法了。
+他用的笔记软件：https://github.com/tsujan/FeatherNotes
+然后就被编译安装劝退了。一个是不太想这么折腾，另一个是这个软件没有提供编译好的包，感觉还是不够放心啊，毕竟如果以后开发者不维护了要再折腾一遍会非常麻烦。
+Typora，同学安利的markdown编辑工具 与多数markdown编辑工具不同，Typora是所见即所得的markdown编辑工具。为什么程序员偏爱markdown？就是因为markdown可以让我们写作的时候只关注内容本身，而不用太在意排版的问题。而Typora又改变了传统的左右分栏或者点击切换预览的传统markdown编辑模式，用起来就更舒服了。
+安装 在Ubuntu下安装还是非常方便的：
+# or run: # sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA300B7755AFCFAE wget -qO - https://typora.io/linux/public-key.asc | sudo apt-key add - # add Typora&amp;#39;s repository sudo add-apt-repository &amp;#39;deb https://typora.io/linux ./&amp;#39; sudo apt-get update # install typora sudo apt-get install typora 其他系统参考官网。
+复制图片 不过有一点要注意：我们写文档常常要插入一些图片，为了后面和git好配合，我们需要将这些图片也放到当前文件夹里。按下Ctrl+逗号打开设置，将图片复制到当前文件夹下。如图。
+重要的快捷键 都是重点等于没有重点。我们只要记住能让我们离开鼠标提高效率的就行了。
+   快捷键 功能     Ctrl+S 保存   Ctrl+Z 撤销   Ctrl+Y 重做   Ctrl+Shift+L 侧边栏   Ctrl+/ 切换源代码模式   表格中，Ctrl+Enter 添加一行    用git管理笔记 首先什么是git？有些少年区分不了git和github，这是姿势水平还不够啊。听说过GitLab没？听说过码云没？不是修福报的那个马云哦。</description>
+    </item>
+    
+    <item>
+      <title>Java自动装箱自动拆箱踩坑</title>
+      <link>https://ntutn.top/posts/java%E8%87%AA%E5%8A%A8%E8%A3%85%E7%AE%B1%E8%87%AA%E5%8A%A8%E6%8B%86%E7%AE%B1%E8%B8%A9%E5%9D%91/</link>
+      <pubDate>Sun, 01 Mar 2020 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/java%E8%87%AA%E5%8A%A8%E8%A3%85%E7%AE%B1%E8%87%AA%E5%8A%A8%E6%8B%86%E7%AE%B1%E8%B8%A9%E5%9D%91/</guid>
+      <description>int和Integer有什么区别？前者是基础数据类型，后者是封装的Java对象。但在有Autoboxing和Unboxing的情况下我们常常就把两者等同看待，无非后者能放null。
+事情要首先从一道力扣题目说起：
+删除排序数组中的重复项 II 给定一个排序数组，你需要在原地删除重复出现的元素，使得每个元素最多出现两次，返回移除后数组的新长度。
+不要使用额外的数组空间，你必须在原地修改输入数组并在使用 O(1) 额外空间的条件下完成。
+示例 1: 给定 nums = [1,1,1,2,2,3], 函数应返回新长度 length = 5, 并且原数组的前五个元素被修改为 1, 1, 2, 2, 3 。 你不需要考虑数组中超出新长度后面的元素。 示例 2: 给定 nums = [0,0,1,1,1,1,2,3,3], 函数应返回新长度 length = 7, 并且原数组的前五个元素被修改为 0, 0, 1, 1, 2, 3, 3 。 你不需要考虑数组中超出新长度后面的元素。
+Answer 针对这个题目，我写出了这样的代码：
+/* * @lc app=leetcode.cn id=80 lang=java * * [80] 删除排序数组中的重复项 II */ // @lc code=start class Solution { public int removeDuplicates(int[] nums) { int l = 0, r = 0; int ans1 = Integer.</description>
+    </item>
+    
+    <item>
+      <title>三门问题</title>
+      <link>https://ntutn.top/posts/%E4%B8%89%E9%97%A8%E9%97%AE%E9%A2%98/</link>
+      <pubDate>Mon, 16 Sep 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E4%B8%89%E9%97%A8%E9%97%AE%E9%A2%98/</guid>
+      <description>参赛者面前有三扇关闭着的门，其中一扇的后面是一辆汽车，选中后面有车的那扇门就可以赢得该汽车， 而另外两扇门后面则各藏有一只山羊。当参赛者选定了一扇门，但未去开启它的时候，主持人会开启剩 下两扇门中的一扇，露出其中一只山羊。主持人其后会问参赛者要不要更换选择，选另一扇仍然关着的门。
+ 那么，应不应该更换呢？   分析 假如你选择了A，那你中奖概率应为1/3.
+主持人在B、C中选了个没奖的，这与你的选择其实没影响，因为你没选的肯定有个没奖的。
+换与不换其实就相当于问你选A还是不选A。
+程序模拟 有点绕，咱学软件的，就干脆让电脑跑一跑。
+代码 import java.util.Random; class Test{ public static void main(String[] args) { Random ran=new Random(); int c1=0,c2=0; for(int i=0;i&amp;lt;1e6;i++){ boolean boxes[]={false,false,false}; boxes[ran.nextInt(boxes.length)]=true;//某个门后有奖  int sel=ran.nextInt(boxes.length);//随便选择一扇门  int p=0; while(p==sel||boxes[p]){//主持人选择一扇没奖的门（且不与参与者选同一扇）  p=ran.nextInt(boxes.length); } if(boxes[sel]){//不更换中奖  c1++; } if(boxes[0+1+2-sel-p]){//更换中奖  c2++; } } System.out.println(c1/1e6); System.out.println(c2/1e6); } } 运行结果 0.332419 0.667581 看来是更换比较好了。</description>
+    </item>
+    
+    <item>
+      <title>在Windows10上安装血战上海滩</title>
+      <link>https://ntutn.top/posts/%E5%9C%A8windows10%E4%B8%8A%E5%AE%89%E8%A3%85%E8%A1%80%E6%88%98%E4%B8%8A%E6%B5%B7%E6%BB%A9/</link>
+      <pubDate>Sat, 01 Jun 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E5%9C%A8windows10%E4%B8%8A%E5%AE%89%E8%A3%85%E8%A1%80%E6%88%98%E4%B8%8A%E6%B5%B7%E6%BB%A9/</guid>
+      <description>《血战上海滩》是由北京欢乐亿派科技有限公司开发的单机FPS游戏，发行于2003年，是一个非常经典的老游戏了。 近来我打算把这个游戏找出来再玩一遍，可是在Windows10上安装还是有些问题……
+下载 下载不用多说，自己找资源吧，一共三百多兆的单机游戏。
+ 现在很多单机游戏下载时网站都会给你带上一个“启动器”来显示广告，恶心的很。找到文件夹中，注意血战上海滩的游戏文件是一个帽子的图标，大小为1.87M，SHA1为FE5A102AA9DE633FB6E388EAAEEA38BC43E8E7E4
+ 启动 直接双击exe，然后……它免费帮你调了一下分辨率，就没反应了。
+貌似兼容性是个比较大的问题……于是在网上找了好久，终于知道，可以用命令行控制游戏窗口运行：
+shanghai.exe -windows 修改屏幕分辨率实现全屏 倒是能运行了，只是……画面都在左上角，没法玩啊……
+所以再加上自动修改屏幕分辨率就可以全屏了。修改屏幕分辨率可以用setres
+下载链接下载并将exe文件放到血战上海滩的游戏文件夹。
+于是用下面的命令：
+setres h800 v600 shanghai.exe -windows setres h1920 v1080 1920*1080是我电脑的屏幕分辨率，注意换成自己的。
+隐藏显示任务栏 然而，这样还是有问题，就是这样“全屏”后任务栏并没有消失，虽然可以设置自动隐藏任务栏但总归还是不爽，于是写了个简单C#程序在启动游戏隐藏任务栏（虽然很简单，但没找到只用命令实现的方法）
+using System; using System.Collections.Generic; using System.Linq; using System.Text; using System.Threading.Tasks; using System.Runtime.InteropServices; namespace ShowTaskBar { class Program { private const int SW_HIDE = 0; //隐藏任务栏  private const int SW_RESTORE = 9;//显示任务栏 [DllImport(&amp;#34;user32.dll&amp;#34;)] public static extern int ShowWindow(int hwnd, int nCmdShow); [DllImport(&amp;#34;user32.dll&amp;#34;)] public static extern int FindWindow(string lpClassName, string lpWindowName); static void Main(string[] args) { ShowWindow(FindWindow(&amp;#34;Shell_TrayWnd&amp;#34;, null), SW_HIDE); } } } using System; using System.</description>
+    </item>
+    
+    <item>
+      <title>二叉树ADT的实现</title>
+      <link>https://ntutn.top/posts/%E4%BA%8C%E5%8F%89%E6%A0%91adt%E7%9A%84%E5%AE%9E%E7%8E%B0/</link>
+      <pubDate>Tue, 14 May 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E4%BA%8C%E5%8F%89%E6%A0%91adt%E7%9A%84%E5%AE%9E%E7%8E%B0/</guid>
+      <description>人工智能知识点整理Question
+假设二叉数的数据元素为字符，采用二叉链式存储结构。请编码实现二叉树ADT，其中包括创建二叉树、遍历二叉树（深度、广度）、求二叉树的深度（高度）、计算二叉树的元素个数、计算二叉树的叶子数、二叉树的格式输出等。
+根据输入的符号，执行相应的操作。如下：
+ C：根据完全前序序列创建二叉树，#表示空结点（空子树）；输入：二叉树的完全前序序列，创建成功输出 Created success! H：求二叉树的高度； 输出： Height=高度 L：计算二叉树的叶子数；输出：Leaves=叶子个数 N：计算二叉树中元素总个数；输出：Nodes=结点个数 1：先序遍历二叉树；输出：Preorder is:序列 . 2：中序遍历二叉树；输出：Inorder is:序列 . 3：后序遍历二叉树；输出：Postorder is:序列 . 4：广度遍历二叉树；输出：BFSorder is:序列 . F：查找值为x的结点个数；输出：The count of x is 个数 . P：以目录缩格文本形式输出所有节点。输出：The tree is:（换行，下面各行是输出的二叉树） X：退出  Example Input C ABC##DE#G##F### H L N 1 2 3 4 F A P X Output Created success! Height=5 Leaves=3 Nodes=7 Preorder is:A B C D E G F . Inorder is:C B E G D F A .</description>
+    </item>
+    
+    <item>
+      <title>图书管理系统</title>
+      <link>https://ntutn.top/posts/%E5%9B%BE%E4%B9%A6%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/</link>
+      <pubDate>Sat, 13 Apr 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E5%9B%BE%E4%B9%A6%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/</guid>
+      <description>翻出了以前写的C++作业，图书管理系统，虽然挺简单的，但留下纪念下吧。
+#include &amp;lt;iostream&amp;gt;#include&amp;lt;cstdlib&amp;gt;#include&amp;lt;cstring&amp;gt;#include&amp;lt;fstream&amp;gt;using namespace std; class CUser { private: int code; //表示用户编号；  char name[20]; //表示用户姓名 public: CUser() { ; }; // 默认构造函数  CUser(int id, char na[]) { code=id; strcpy(name,na); }; //构造函数，初始化用户信息  void setcode(int n) { code=n; }; //用来设置用户编号  int getcode() { return code; }; //用来获取用户编号  void setname(char na[]) { strcpy(name,na); }; //用来设置用户姓名  char* getname() { return name; }; //用来获取用户姓名  void show() { cout&amp;lt;&amp;lt;&amp;#34;用户编号：&amp;#34;&amp;lt;&amp;lt;code&amp;lt;&amp;lt;endl; cout&amp;lt;&amp;lt;&amp;#34;姓名：&amp;#34;&amp;lt;&amp;lt;name&amp;lt;&amp;lt;endl; }; //用来显示用户的基本信息 }; class CBook { private: int code; //图书编号  char name[20]; //图书名称  bool Is_Stock; //true为在架，false为借出  bool Is_Existing; //true为存在, false为删除 public: CBook() { ; }; //默认构造函数  CBook(int no,char na[]) { code=no; strcpy(name,na); Is_Stock=true; Is_Existing=true; }; //构造函数，初始化图书信息  void setcode(int n) { code=n; }; //设置图书编号  int getcode() { return code; }; //获取图书编号  void setname(char na[]) { strcpy(name,na); }; //设置图书名称  char* getname() { return name; }; //获取图书名称  bool get_Stock() { return Is_Stock; }; //获取图书是否在库信息  void set_Stock(bool isstock) { Is_Stock=isstock; };// 设置图书是否在库信息  bool get_Existing() { return Is_Existing; };//获取存在标志  void set_Existing(bool isex) { Is_Existing=isex; };//设置存在标志 }; class CReader:public CUser { private: bool Is_Existing; //true存在，false删除  bool Is_Borrowing; //true借过书，false没有借书  CBook brbook; //表示读者所借的图书 public: CReader() { CUser(); }; //构造函数，初始化读者信息  CReader(int id, char na[]) { CUser(id,na); }; //构造函数，初始化读者信息  bool get_Existing() { return Is_Existing; }; //用来获取删除标志  void set_Existing(bool isex) { Is_Existing=isex; }; //用来设置删除标志  bool get_Borrowing() { return Is_Borrowing; }; //用来获取读者借阅情况  void set_Borrowing(bool isbo) { Is_Borrowing=isbo; }; //用来设置读者借阅情况  void setbrbook(CBook bt) { brbook=bt; Is_Borrowing=true; }; //用来记录读者结束信息  CBook getbrbook() { return brbook; }; //用来获取读者结束信息  void show() { CUser::show(); if(Is_Borrowing) { cout&amp;lt;&amp;lt;&amp;#34;当前借书：&amp;#34;&amp;lt;&amp;lt;brbook.</description>
+    </item>
+    
+    <item>
+      <title>使用映像劫持技术屏蔽电脑中的广告进程</title>
+      <link>https://ntutn.top/posts/%E4%BD%BF%E7%94%A8%E6%98%A0%E5%83%8F%E5%8A%AB%E6%8C%81%E6%8A%80%E6%9C%AF%E5%B1%8F%E8%94%BD%E7%94%B5%E8%84%91%E4%B8%AD%E7%9A%84%E5%B9%BF%E5%91%8A%E8%BF%9B%E7%A8%8B/</link>
+      <pubDate>Thu, 28 Mar 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E4%BD%BF%E7%94%A8%E6%98%A0%E5%83%8F%E5%8A%AB%E6%8C%81%E6%8A%80%E6%9C%AF%E5%B1%8F%E8%94%BD%E7%94%B5%E8%84%91%E4%B8%AD%E7%9A%84%E5%B9%BF%E5%91%8A%E8%BF%9B%E7%A8%8B/</guid>
+      <description>映像劫持（Image File Execution Options），简单的说法，就是当你打开的是程序A，而运行的确是程序B。映像劫持其实是Windows内设的用来调试程序的功能，但是现在却往往被病毒恶意利用。当用户双击对应的程序后，操作系统就会给外壳程序（例如“explorer.exe”）发布相应的指令，其中包含有执行程序的路径和文件名，然后由外壳程序来执行该程序。事实上在该过程中，Windows还会在注册表的上述路径中查询所有的映像劫持子键，如果存在和该程序名称完全相同的子键，就查询对应子健中包含的“dubugger”键值名，并用其指定的程序路径来代替原始的程序，之后执行的是遭到“劫持”的虚假程序。
+ 国内很多软件都有重度广告，“资讯”、“新闻”、“弹窗”，不胜其烦。直接找到广告进程删除掉，结果一自动更新，又回来了。
+于是，我想到了“映像劫持”：
+Windows Registry Editor Version 5.00 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SLBService.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\TsService.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\FoxitDesktopAd.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\FoxitProtect.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\LCServer.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\LRServer.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\2345MiniPage.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SohuNews.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\PinyinUp.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SGDownload.</description>
+    </item>
+    
+    <item>
+      <title>人工智能知识点整理</title>
+      <link>https://ntutn.top/posts/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/</link>
+      <pubDate>Thu, 03 Jan 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/</guid>
+      <description>人工智能考试前整理的，很详细，虽然实际考试还是有好些想不起来，但总归起了一些作用的。
+ 第1章绪论 人工智能的起源 现代人工智能的起源是1956年的达特茅斯会议。
+参加者：麦卡锡、明斯基、香农、罗切斯特、纽厄尔、西蒙、萨缪尔、伯恩斯坦、摩尔、所罗门诺夫。
+会议的主要成就就是让人工智能成了一个独立的研究学科。
+定下来人工智能的英文名称是“Artificial Intelligence”
+知识的定义、概念、基本单位 定义 柏拉图在《泰阿泰德篇》中给出知识的定义，即“被证实的、真的和被相信的陈述”，简称知识的JTB（Justified True Belief）条件。
+然而，这个延续了两千多年的定义在1963年，被哲学家盖梯尔否定了。
+概念 知识的基本单位就是概念。
+概念的定义  概念的符号：即概念的名称，说明这个概念叫什么。 概念的内涵：即命题来表示，命题就是能判断真假的陈述句。 概念的外延：即经典集合来表示，用来说明与概念对应的事件对象是哪些。  概念的三个功能 指物功能：既指向客观世界的对象，表示客观世界的对象的可观测性，对象的客观的信仰，是指对相对于人或者仪器的知觉感知特性，依赖于人的主观感受。
+指心功能：即指向人心智世界里的对象，代表心智世界里的对象表示。
+指名功能：指向认知世界或者符号世界表示对象的符号名称，这些符号名称组成各种语言。
+人工智能的三个流派  专注于实现AI指名功能的人工智能流派，称为符号主义。 专注于实现AI指心功能的人工智能流派，称为连接主义。 专注于实现AI指物功能的人工智能流派，称为行为主义。     概念的功能 人工智能的流派 观点 思想实验 挑战     指名功能 符号主义 指名对了，指物自然正确 图灵测试、中文屋实验 完全实现指名功能也不见得有智能。概念的组合爆炸问题；概念的组合悖论问题；经典概念在现实中很难获得。知识很难获取   指物功能 连接主义 发现大脑的结构及处理信息的机制，揭示人工智能的本质机理，进而在机器上实现响应模拟 缸中之脑实验 指心没有问题，指物也存在问题。   指心功能 行为主义 只要实现指物功能，就认为具有智能了 完美伪装者和斯巴达人 外在表现与内心没有联系，无法测试    第2章概念表示 概念定义及三个组成部分 知识由概念组成，概念是构成人类知识世界的基本单元。</description>
+    </item>
+    
   </channel>
 </rss>
