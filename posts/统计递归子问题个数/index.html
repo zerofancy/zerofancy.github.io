@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html><head>
+<title>统计递归子问题个数</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="分治策略是算法设计的重要策略之一，该策略的基本思想是把问题进行分解成一些子问题，通过子问题的求解完成对原问题的求解。其关键是分解和合并，好的分解或合并方法才会产生高效的分治算法。">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+<meta property="og:title" content="统计递归子问题个数" />
+<meta property="og:description" content="分治策略是算法设计的重要策略之一，该策略的基本思想是把问题进行分解成一些子问题，通过子问题的求解完成对原问题的求解。其关键是分解和合并，好的分解或合并方法才会产生高效的分治算法。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ntutn.top/posts/%E7%BB%9F%E8%AE%A1%E9%80%92%E5%BD%92%E5%AD%90%E9%97%AE%E9%A2%98%E4%B8%AA%E6%95%B0/" />
+<meta property="article:published_time" content="2019-05-17T03:11:37+08:00" />
+<meta property="article:modified_time" content="2019-05-17T03:11:37+08:00" /><meta property="og:site_name" content="归零幻想" />
+
+
+
+
+
+
+
+
+
+
+<link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+
+  
+
+
+
+
+<link rel="icon" href="//images.ntutn.top/favicon.ico">
+
+
+
+<link rel="stylesheet" href="https://ntutn.top/scss/journal.min.d8d9f81b896882733c41896750adbefbf9319ca02ccccefd461650898975c3af.css" integrity="sha256-2Nn4G4lognM8QYlnUK2&#43;&#43;/kxnKAszM79RhZQiYl1w68=" media="screen">
+
+
+
+<link rel="stylesheet" href="https://ntutn.top/scss/dark-mode.min.60f86847da9fc0724177ccfd0bf7c5997b0b41f1e58d5a293cfb3723c497c422.css" integrity="sha256-YPhoR9qfwHJBd8z9C/fFmXsLQfHljVopPPs3I8SXxCI=" media="screen">
+
+
+<script src="/vendor/js/loadCSS.js"></script>
+<script>
+  loadCSS("https://fonts.googleapis.com/css?family=Fira+Mono|Material+Icons");
+</script>
+
+
+
+<script defer
+	src='https://static.cloudflareinsights.com/beacon.min.js'
+	data-cf-beacon='{"token": 5a03d307f5214109a1e7c8b2cf306a3d'>
+</script>
+
+
+
+
+
+
+  <script src="/js/toc.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://ntutn.top/">
+    
+        <div class="nav-title">
+            归零幻想
+        </div>
+        
+        <div class="nav-subtitle">
+            零点还不算熬夜
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                Archive
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/index.xml">
+                RSS Feed
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	CC BY-SA 4.0
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    
+    
+    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#question" onclick="onNavClick(`#question-nav`)" id="question-nav">
+									Question
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#example" onclick="onNavClick(`#example-nav`)" id="example-nav">
+									Example
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#input" onclick="onNavClick(`#input-nav`)" id="input-nav">
+									Input
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#output" onclick="onNavClick(`#output-nav`)" id="output-nav">
+									Output
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%88%86%e6%9e%90" onclick="onNavClick(`#分析-nav`)" id="分析-nav">
+									分析
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#answer" onclick="onNavClick(`#answer-nav`)" id="answer-nav">
+									Answer
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+    
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+<div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    Archive
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/categories">
+                    Categories
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/index.xml">
+                    RSS Feed
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#question" onclick="onNavClick(`#question-nav`)" id="question-nav">
+									Question
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#example" onclick="onNavClick(`#example-nav`)" id="example-nav">
+									Example
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#input" onclick="onNavClick(`#input-nav`)" id="input-nav">
+									Input
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#output" onclick="onNavClick(`#output-nav`)" id="output-nav">
+									Output
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%88%86%e6%9e%90" onclick="onNavClick(`#分析-nav`)" id="分析-nav">
+									分析
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#answer" onclick="onNavClick(`#answer-nav`)" id="answer-nav">
+									Answer
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://ntutn.top/">
+            归零幻想
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://ntutn.top/">
+        <div class="single-column-header-title">归零幻想</div>
+        
+        <div class="single-column-header-subtitle">零点还不算熬夜</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
+                    统计递归子问题个数
+                    
+                    <div class="post-subtitle">
+                        分治策略是算法设计的重要策略之一，该策略的基本思想是把问题进行分解成一些子问题，通过子问题的求解完成对原问题的求解。其关键是分解和合并，好的分解或合并方法才会产生高效的分治算法。
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2019-05-17 03:11
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/%E7%AE%97%E6%B3%95">算法</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/c&#43;&#43;">C&#43;&#43;</a>
+                                &nbsp;
+                            
+                                <a href="/tags/%E7%AE%97%E6%B3%95">算法</a>
+                                &nbsp;
+                            
+                                <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84">数据结构</a>
+                                &nbsp;
+                            
+                                <a href="/tags/%E6%B5%8B%E8%AF%95">测试</a>
+                                &nbsp;
+                            
+                        
+                        
+                            <i class="material-icons" style="">schedule</i>
+                            
+
+                            
+                            
+
+                            
+                            2 min
+                            
+                            37 s.
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <!-- raw HTML omitted -->
+<p>分治策略是算法设计的重要策略之一，该策略的基本思想是把问题进行分解成一些子问题，通过子问题的求解完成对原问题的求解。其关键是分解和合并，好的分解或合并方法才会产生高效的分治算法。</p>
+<p>分治策略设计出的算法最常见的就是递归算法。但是如果在分解时，分解出的子问题有很多是重复的，那么这样的分治（递归）算法求解问题的效率就非常低。例如斐波那契数问题，如果采用递归求解，算法效率非常低：O(2^n)。而如果采用递推求解(动态规划自底向上求解)，算法效率非常高：O(n)。</p>
+<h2 id="question">Question</h2>
+<p>现在请你编写程序，统计计算一个斐波那契数时分解出的各子问题的个数。</p>
+<p>斐波那契数的定义如下：</p>
+<pre><code>Fib(0)=0
+Fib(1)=1
+Fib(n)=Fib(n-1)+Fib(n-2)
+</code></pre><p>输入：一个整数n，即计算<code>Fib(n)</code></p>
+<p>输出：n+1行，即各个子问题的值及该子问题的个数。</p>
+<!-- raw HTML omitted -->
+<h2 id="example">Example</h2>
+<h3 id="input">Input</h3>
+<pre><code>5
+</code></pre><h3 id="output">Output</h3>
+<pre><code>Fib(0)=0,spn=3
+Fib(1)=1,spn=5
+Fib(2)=1,spn=3
+Fib(3)=2,spn=2
+Fib(4)=3,spn=1
+Fib(5)=5,spn=1
+</code></pre><h2 id="分析">分析</h2>
+<p>一大段分治思想的介绍，递归与递推的区别，我以为这题用递归会超时，要用递推求解，于是入坑……</p>
+<p>这题要统计子问题个数，递推或者递归加备忘录根本没重复的计算怎么统计……</p>
+<p>不死心的我又仔细研究递推子问题个数的规律，发现子问题个数正好是一个反着的斐波那契数列（结尾元素特殊处理），所以可以正向递推求数列，反向递推求子问题个数。</p>
+<p>不过特殊情况研究的有点头疼，暂时就不搞了，下面给出的是老老实实递归求解的程序。</p>
+<h2 id="answer">Answer</h2>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;iostream&gt;</span><span style="color:#1e889b">
+</span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;cstring&gt;</span><span style="color:#1e889b">
+</span><span style="color:#1e889b"></span><span style="color:#8b008b;font-weight:bold">using</span> <span style="color:#8b008b;font-weight:bold">namespace</span> std;
+<span style="color:#00688b;font-weight:bold">int</span>*spn;
+<span style="color:#00688b;font-weight:bold">int</span>*data;
+<span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">fib</span>(<span style="color:#00688b;font-weight:bold">int</span> n){
+    spn[n]++;
+    <span style="color:#8b008b;font-weight:bold">if</span>(n==<span style="color:#b452cd">0</span>){
+        data[<span style="color:#b452cd">0</span>]=<span style="color:#b452cd">0</span>;
+        <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>;
+    }
+    <span style="color:#8b008b;font-weight:bold">if</span>(n==<span style="color:#b452cd">1</span>){
+        data[<span style="color:#b452cd">1</span>]=<span style="color:#b452cd">1</span>;
+        <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">1</span>;
+    }
+    <span style="color:#00688b;font-weight:bold">int</span> res=fib(n-<span style="color:#b452cd">1</span>)+fib(n-<span style="color:#b452cd">2</span>);
+    data[n]=res;
+    <span style="color:#8b008b;font-weight:bold">return</span> res;
+}
+<span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">main</span>()
+{
+    <span style="color:#00688b;font-weight:bold">int</span> n;
+    cin&gt;&gt;n;
+    spn=<span style="color:#8b008b;font-weight:bold">new</span> <span style="color:#00688b;font-weight:bold">int</span>[n+<span style="color:#b452cd">1</span>];
+    data=<span style="color:#8b008b;font-weight:bold">new</span> <span style="color:#00688b;font-weight:bold">int</span>[n+<span style="color:#b452cd">1</span>];
+    memset(spn,<span style="color:#b452cd">0</span>,(n+<span style="color:#b452cd">1</span>)*<span style="color:#8b008b;font-weight:bold">sizeof</span>(<span style="color:#00688b;font-weight:bold">int</span>));
+    memset(data,-<span style="color:#b452cd">1</span>,(n+<span style="color:#b452cd">1</span>)*<span style="color:#8b008b;font-weight:bold">sizeof</span>(<span style="color:#00688b;font-weight:bold">int</span>));
+    data[<span style="color:#b452cd">0</span>]=<span style="color:#b452cd">0</span>;
+    data[<span style="color:#b452cd">1</span>]=<span style="color:#b452cd">1</span>;
+    fib(n);
+    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>;i&lt;=n;i++){
+        cout&lt;&lt;<span style="color:#cd5555">&#34;Fib(&#34;</span>&lt;&lt;i&lt;&lt;<span style="color:#cd5555">&#34;)=&#34;</span>&lt;&lt;data[i]&lt;&lt;<span style="color:#cd5555">&#34;,spn=&#34;</span>&lt;&lt;spn[i]&lt;&lt;endl;
+    }
+    <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>;
+}
+</code></pre></div>
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">最后修改于 2019-05-17</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts" href="https://ntutn.top/posts/%E7%A8%80%E7%96%8F%E7%9F%A9%E9%98%B5%E7%9A%84%E5%8E%8B%E7%BC%A9%E5%AD%98%E5%82%A8/">
+			下回<br>稀疏矩阵的压缩存储
+                </a>
+                
+                
+                
+                <a class="older-posts" href="https://ntutn.top/posts/%E4%BA%8C%E5%8F%89%E6%A0%91adt%E7%9A%84%E5%AE%9E%E7%8E%B0/">
+			上回<br>二叉树ADT的实现
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+<script src="https://utteranc.es/client.js"
+        repo="zerofancy/zerofancy.github.io"
+        issue-term="title"
+        label=""
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	CC BY-SA 4.0
+	
+</div>
+            </div>
+    
+    <script src="/js/journal.js"></script>
+    </body>
+</html>

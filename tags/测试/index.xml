@@ -7,7 +7,74 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Tue, 26 Mar 2019 03:11:37 +0800</lastBuildDate><atom:link href="https://ntutn.top/tags/%E6%B5%8B%E8%AF%95/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 01 Jun 2019 03:11:37 +0800</lastBuildDate><atom:link href="https://ntutn.top/tags/%E6%B5%8B%E8%AF%95/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>数据结构第三次测试</title>
+      <link>https://ntutn.top/posts/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AC%AC%E4%B8%89%E6%AC%A1%E6%B5%8B%E8%AF%95/</link>
+      <pubDate>Sat, 01 Jun 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AC%AC%E4%B8%89%E6%AC%A1%E6%B5%8B%E8%AF%95/</guid>
+      <description>数据结构测试，树部分，水题
+ 一 假设二叉树的数据元素为字符，采用二叉链式存储结构。二叉树ADT实现的大部分代码已经给出，其中采用完全前序序列创建二叉树。请补充写出下列两个操作函数。
+ 注意： 答案区只写出两个函数，其他代码不允许修改和重写、提交！
+  计算以某结点为根的二叉树的高度； 以前序顺序输出各个元素结点为根的子树的高度；  例如：有如右图的二叉树 输入 ABD@@E@@C@F@@ 输出 Height(A)=3 Height(B)=2 Height(D)=1 Height(E)=1 Height(C)=2 Height(F)=1 已给出的代码如下：
+#include &amp;lt;iostream&amp;gt;#include &amp;lt;stdlib.h&amp;gt;using namespace std; //数据元素类型 typedef char ElemType; //二叉树结点定义 typedef struct TreeNode {	ElemType data; struct TreeNode *lson, *rson; } TreeNode; //二叉树类 class BinaryTree { private: TreeNode *root; public: BinaryTree() { root = NULL; }; ~BinaryTree() { MakeEmpty(root); } void MakeEmpty(TreeNode *t); void create( ) { root = cp_create(root); }; //完全前序建立二叉树，空指针用@表示 	TreeNode *cp_create(TreeNode *t); //****** 要补充的函数height ******** 	int height(TreeNode *t) ; //求二叉树的高度 	void output() { Pro_height(root); }; //****** 要补充的函数 Pro_height ********** 	void Pro_height(TreeNode *t); // 前序顺序输出各个元素结点为根的子树的高度 }; //二叉树置空 void BinaryTree::MakeEmpty(TreeNode *t) {	if (t !</description>
+    </item>
+    
+    <item>
+      <title>统计递归子问题个数</title>
+      <link>https://ntutn.top/posts/%E7%BB%9F%E8%AE%A1%E9%80%92%E5%BD%92%E5%AD%90%E9%97%AE%E9%A2%98%E4%B8%AA%E6%95%B0/</link>
+      <pubDate>Fri, 17 May 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E7%BB%9F%E8%AE%A1%E9%80%92%E5%BD%92%E5%AD%90%E9%97%AE%E9%A2%98%E4%B8%AA%E6%95%B0/</guid>
+      <description>分治策略是算法设计的重要策略之一，该策略的基本思想是把问题进行分解成一些子问题，通过子问题的求解完成对原问题的求解。其关键是分解和合并，好的分解或合并方法才会产生高效的分治算法。
+分治策略设计出的算法最常见的就是递归算法。但是如果在分解时，分解出的子问题有很多是重复的，那么这样的分治（递归）算法求解问题的效率就非常低。例如斐波那契数问题，如果采用递归求解，算法效率非常低：O(2^n)。而如果采用递推求解(动态规划自底向上求解)，算法效率非常高：O(n)。
+Question 现在请你编写程序，统计计算一个斐波那契数时分解出的各子问题的个数。
+斐波那契数的定义如下：
+Fib(0)=0 Fib(1)=1 Fib(n)=Fib(n-1)+Fib(n-2) 输入：一个整数n，即计算Fib(n)
+输出：n+1行，即各个子问题的值及该子问题的个数。
+Example Input 5 Output Fib(0)=0,spn=3 Fib(1)=1,spn=5 Fib(2)=1,spn=3 Fib(3)=2,spn=2 Fib(4)=3,spn=1 Fib(5)=5,spn=1 分析 一大段分治思想的介绍，递归与递推的区别，我以为这题用递归会超时，要用递推求解，于是入坑……
+这题要统计子问题个数，递推或者递归加备忘录根本没重复的计算怎么统计……
+不死心的我又仔细研究递推子问题个数的规律，发现子问题个数正好是一个反着的斐波那契数列（结尾元素特殊处理），所以可以正向递推求数列，反向递推求子问题个数。
+不过特殊情况研究的有点头疼，暂时就不搞了，下面给出的是老老实实递归求解的程序。
+Answer #include &amp;lt;iostream&amp;gt;#include &amp;lt;cstring&amp;gt;using namespace std; int*spn; int*data; int fib(int n){ spn[n]++; if(n==0){ data[0]=0; return 0; } if(n==1){ data[1]=1; return 1; } int res=fib(n-1)+fib(n-2); data[n]=res; return res; } int main() { int n; cin&amp;gt;&amp;gt;n; spn=new int[n+1]; data=new int[n+1]; memset(spn,0,(n+1)*sizeof(int)); memset(data,-1,(n+1)*sizeof(int)); data[0]=0; data[1]=1; fib(n); for(int i=0;i&amp;lt;=n;i++){ cout&amp;lt;&amp;lt;&amp;#34;Fib(&amp;#34;&amp;lt;&amp;lt;i&amp;lt;&amp;lt;&amp;#34;)=&amp;#34;&amp;lt;&amp;lt;data[i]&amp;lt;&amp;lt;&amp;#34;,spn=&amp;#34;&amp;lt;&amp;lt;spn[i]&amp;lt;&amp;lt;endl; } return 0; } </description>
+    </item>
+    
+    <item>
+      <title>活动安排问题</title>
+      <link>https://ntutn.top/posts/%E6%B4%BB%E5%8A%A8%E5%AE%89%E6%8E%92%E9%97%AE%E9%A2%98/</link>
+      <pubDate>Mon, 13 May 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E6%B4%BB%E5%8A%A8%E5%AE%89%E6%8E%92%E9%97%AE%E9%A2%98/</guid>
+      <description>经典的贪心问题。
+Question 假设有n个活动的集合E={a1,a2,...,an}，其每个活动都要求使用同一资源（如某个设备、教室、场地等），而在同一时间内只允许一个活动使用这一资源。
+每个活动都有一个要求使用该资源的起止时间si,fi，且si&amp;lt;fi。如果选择了活动ai，则它在半开的时间区间[si,fi)内占有资源。两个活动ai,aj称为是相容的，当且仅当它们的时间区间[si,fi)和[sj,fj)不相交，即si&amp;gt;=fj 或 sj &amp;gt;=fi。现要求在所给定的活动集中选出最大的相容活动子集。
+请补充要求的函数代码。
+提示：贪心策略
+输入，有多行，第1行是活动的个数n，后面n行，每行3个整数，是每个活动的编号、占用资源的开始时间、结束时间。
+输出，选出的最大活动子集，即有多行，每行包括活动的编号、开始时间、结束时间。
+Example Input 11 1 3 8 2 2 13 3 1 4 4 5 7 5 6 10 6 8 11 7 12 14 8 5 9 9 3 5 10 0 6 11 8 12 Output 3：1-4 4：5-7 6：8-11 7：12-14 分析 经典的贪心问题，贪心策略为选择结束时间最早的活动，因为这样就可以给后面的活动留出更多的时间。
+ 掉坑：在选择活动时只处理了前24小时的活动，而事实证明我画蛇添足了。
+ Answer #include &amp;lt;iostream&amp;gt;#include &amp;lt;stdio.h&amp;gt;#include &amp;lt;stdlib.h&amp;gt;using namespace std; //定义允许的最大活动数 #define Maxn 100 //定义活动的类型 typedef struct act_Node { int Id; //活动ID  int s_Time; //活动开始时间  int f_Time; //活动结束时间 } ACND; //对活动按贪心准则排序 void Sort(int n,ACND arr[]) { for(int i=0;i&amp;lt;n;i++){ int tmp=i; for(int j=i+1;j&amp;lt;n;j++){ if(arr[j].</description>
+    </item>
+    
+    <item>
+      <title>线性表ADT的实现</title>
+      <link>https://ntutn.top/posts/%E7%BA%BF%E6%80%A7%E8%A1%A8adt%E7%9A%84%E5%AE%9E%E7%8E%B0/</link>
+      <pubDate>Mon, 13 May 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E7%BA%BF%E6%80%A7%E8%A1%A8adt%E7%9A%84%E5%AE%9E%E7%8E%B0/</guid>
+      <description>线性表ADT的实现 数据结构平时测试的题目开放了，这次平时测试睡过了，全宿舍都睡过了。现在回头做做题目，还是有坑点的。
+Question 假设线性表ADT的数据元素类型为正整数，采用带头结点的单链式存储结构。线性表ADT实现的大部分代码已经给出，请补充写出类的两个成员函数insert和reverse。 注意：只需提交需要补充的函数代码，其他代码不能自己重写和修改。
+insert函数：在元素值从小到大有序的线性表中插入一个元素，仍然保持有序。
+reverse函数：实现线性表元素的倒置，即将线性表中数据元素的顺序反转。
+线性表元素输入时，以 endTag 作为结束标志。
+例如输入：
+3 8 7 2 4 9 1 6 5 0 则输出：
+9 8 7 6 5 4 3 2 1 预置代码如下： （其中/* */ 部分是要补充的insert和reverse函数）
+#include&amp;lt;iostream&amp;gt;#include&amp;lt;stdlib.h&amp;gt;using namespace std; typedef int ElemType; //数据元素类型 class List; //前视定义,否则友元无法定义 //结点类定义 class LinkNode { friend class List; private: LinkNode *link; ElemType data; public: LinkNode (LinkNode *ptr = NULL) {link=ptr;} LinkNode(const ElemType &amp;amp; item, LinkNode *ptr = NULL){ data=item;link=ptr;} ~LinkNode(){}; }; //单链表类定义 class List { private: LinkNode *first; //指向链表头结点的指针  public: List (ElemType x) { first = new LinkNode (x);} // 带头结点  ~List (){ MakeEmpty();} //析构函数  void MakeEmpty ( ); //线性表置空  void insert(ElemType val); //在有序线性表中插入元素val  void reverse(); //线性表的倒置  void output(); //线性表的输出 }; void List:: MakeEmpty ( ) { LinkNode *q; while ( first-&amp;gt;link !</description>
+    </item>
+    
     <item>
       <title>堆栈ADT实现及应用</title>
       <link>https://ntutn.top/posts/%E5%A0%86%E6%A0%88adt%E5%AE%9E%E7%8E%B0%E5%8F%8A%E5%BA%94%E7%94%A8/</link>

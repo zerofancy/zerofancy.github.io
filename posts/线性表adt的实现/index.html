@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html><head>
+<title>线性表ADT的实现</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="数据结构平时测试的题目开放了，这次平时测试睡过了，全宿舍都睡过了。现在回头做做题目，还是有坑点的。">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+<meta property="og:title" content="线性表ADT的实现" />
+<meta property="og:description" content="数据结构平时测试的题目开放了，这次平时测试睡过了，全宿舍都睡过了。现在回头做做题目，还是有坑点的。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ntutn.top/posts/%E7%BA%BF%E6%80%A7%E8%A1%A8adt%E7%9A%84%E5%AE%9E%E7%8E%B0/" />
+<meta property="article:published_time" content="2019-05-13T03:11:37+08:00" />
+<meta property="article:modified_time" content="2019-05-13T03:11:37+08:00" /><meta property="og:site_name" content="归零幻想" />
+
+
+
+
+
+
+
+
+
+
+<link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+
+  
+
+
+
+
+<link rel="icon" href="//images.ntutn.top/favicon.ico">
+
+
+
+<link rel="stylesheet" href="https://ntutn.top/scss/journal.min.d8d9f81b896882733c41896750adbefbf9319ca02ccccefd461650898975c3af.css" integrity="sha256-2Nn4G4lognM8QYlnUK2&#43;&#43;/kxnKAszM79RhZQiYl1w68=" media="screen">
+
+
+
+<link rel="stylesheet" href="https://ntutn.top/scss/dark-mode.min.60f86847da9fc0724177ccfd0bf7c5997b0b41f1e58d5a293cfb3723c497c422.css" integrity="sha256-YPhoR9qfwHJBd8z9C/fFmXsLQfHljVopPPs3I8SXxCI=" media="screen">
+
+
+<script src="/vendor/js/loadCSS.js"></script>
+<script>
+  loadCSS("https://fonts.googleapis.com/css?family=Fira+Mono|Material+Icons");
+</script>
+
+
+
+<script defer
+	src='https://static.cloudflareinsights.com/beacon.min.js'
+	data-cf-beacon='{"token": 5a03d307f5214109a1e7c8b2cf306a3d'>
+</script>
+
+
+
+
+
+
+  <script src="/js/toc.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://ntutn.top/">
+    
+        <div class="nav-title">
+            归零幻想
+        </div>
+        
+        <div class="nav-subtitle">
+            零点还不算熬夜
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                Archive
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/index.xml">
+                RSS Feed
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	CC BY-SA 4.0
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    
+    
+    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%ba%bf%e6%80%a7%e8%a1%a8adt%e7%9a%84%e5%ae%9e%e7%8e%b0" onclick="onNavClick(`#线性表adt的实现-nav`)" id="线性表adt的实现-nav">
+									线性表ADT的实现
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#question" onclick="onNavClick(`#question-nav`)" id="question-nav">
+									Question
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%88%86%e6%9e%90" onclick="onNavClick(`#分析-nav`)" id="分析-nav">
+									分析
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#answer" onclick="onNavClick(`#answer-nav`)" id="answer-nav">
+									Answer
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+    
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+<div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    Archive
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/categories">
+                    Categories
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/index.xml">
+                    RSS Feed
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%ba%bf%e6%80%a7%e8%a1%a8adt%e7%9a%84%e5%ae%9e%e7%8e%b0" onclick="onNavClick(`#线性表adt的实现-nav`)" id="线性表adt的实现-nav">
+									线性表ADT的实现
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#question" onclick="onNavClick(`#question-nav`)" id="question-nav">
+									Question
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%88%86%e6%9e%90" onclick="onNavClick(`#分析-nav`)" id="分析-nav">
+									分析
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#answer" onclick="onNavClick(`#answer-nav`)" id="answer-nav">
+									Answer
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://ntutn.top/">
+            归零幻想
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://ntutn.top/">
+        <div class="single-column-header-title">归零幻想</div>
+        
+        <div class="single-column-header-subtitle">零点还不算熬夜</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
+                    线性表ADT的实现
+                    
+                    <div class="post-subtitle">
+                        数据结构平时测试的题目开放了，这次平时测试睡过了，全宿舍都睡过了。现在回头做做题目，还是有坑点的。
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2019-05-13 03:11
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/%E5%88%B7%E9%A2%98">刷题</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/c&#43;&#43;">C&#43;&#43;</a>
+                                &nbsp;
+                            
+                                <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84">数据结构</a>
+                                &nbsp;
+                            
+                                <a href="/tags/%E6%A0%88">栈</a>
+                                &nbsp;
+                            
+                                <a href="/tags/%E7%AE%97%E6%B3%95">算法</a>
+                                &nbsp;
+                            
+                                <a href="/tags/%E6%B5%8B%E8%AF%95">测试</a>
+                                &nbsp;
+                            
+                        
+                        
+                            <i class="material-icons" style="">schedule</i>
+                            
+
+                            
+                            
+
+                            
+                            3 min
+                            
+                            26 s.
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <!-- raw HTML omitted -->
+<h1 id="线性表adt的实现">线性表ADT的实现</h1>
+<p>数据结构平时测试的题目开放了，这次平时测试睡过了，全宿舍都睡过了。现在回头做做题目，还是有坑点的。</p>
+<h2 id="question">Question</h2>
+<p>假设线性表ADT的数据元素类型为正整数，采用带头结点的单链式存储结构。线性表ADT实现的大部分代码已经给出，请补充写出类的两个成员函数<code>insert</code>和<code>reverse</code>。  注意：<strong>只需提交需要补充的函数代码，其他代码不能自己重写和修改。</strong></p>
+<p><code>insert</code>函数：在元素值从小到大有序的线性表中插入一个元素，仍然保持有序。</p>
+<p><code>reverse</code>函数：实现线性表元素的倒置，即将线性表中数据元素的顺序反转。</p>
+<p>线性表元素输入时，以 <code>endTag</code> 作为结束标志。</p>
+<!-- raw HTML omitted -->
+<p>例如输入：</p>
+<pre><code>3 8 7 2 4 9 1 6 5 0
+</code></pre><p>则输出：</p>
+<pre><code>9 8 7 6 5 4 3 2 1
+</code></pre><p>预置代码如下： （其中/*   */ 部分是要补充的<code>insert</code>和<code>reverse</code>函数）</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#1e889b">#include</span><span style="color:#1e889b">&lt;iostream&gt;</span><span style="color:#1e889b">
+</span><span style="color:#1e889b">#include</span><span style="color:#1e889b">&lt;stdlib.h&gt;</span><span style="color:#1e889b">
+</span><span style="color:#1e889b"></span><span style="color:#8b008b;font-weight:bold">using</span> <span style="color:#8b008b;font-weight:bold">namespace</span> std;
+<span style="color:#8b008b;font-weight:bold">typedef</span> <span style="color:#00688b;font-weight:bold">int</span> ElemType;  <span style="color:#228b22">//数据元素类型
+</span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">List</span>; <span style="color:#228b22">//前视定义,否则友元无法定义
+</span><span style="color:#228b22">//结点类定义
+</span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">LinkNode</span>
+{  <span style="color:#8b008b;font-weight:bold">friend</span>  <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">List</span>; 
+   <span style="color:#8b008b;font-weight:bold">private</span>: 
+     LinkNode *link; 
+     ElemType data;  
+   <span style="color:#8b008b;font-weight:bold">public</span>: 
+     LinkNode (LinkNode *ptr = <span style="color:#658b00">NULL</span>)    {link=ptr;}
+     LinkNode(<span style="color:#8b008b;font-weight:bold">const</span> ElemType &amp; item, LinkNode *ptr = <span style="color:#658b00">NULL</span>){  data=item;link=ptr;} 
+     ~LinkNode(){}; 
+}; 
+<span style="color:#228b22">//单链表类定义 
+</span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">List</span>   
+{  <span style="color:#8b008b;font-weight:bold">private</span>:    
+     LinkNode *first; <span style="color:#228b22">//指向链表头结点的指针          
+</span><span style="color:#228b22"></span>   <span style="color:#8b008b;font-weight:bold">public</span>:
+     List (ElemType x) { first = <span style="color:#8b008b;font-weight:bold">new</span> LinkNode (x);}   <span style="color:#228b22">// 带头结点
+</span><span style="color:#228b22"></span>     ~List (){ MakeEmpty();}         <span style="color:#228b22">//析构函数
+</span><span style="color:#228b22"></span>     <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">MakeEmpty</span> ( );      <span style="color:#228b22">//线性表置空    
+</span><span style="color:#228b22"></span>     <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">insert</span>(ElemType val);   <span style="color:#228b22">//在有序线性表中插入元素val
+</span><span style="color:#228b22"></span>     <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">reverse</span>();   <span style="color:#228b22">//线性表的倒置
+</span><span style="color:#228b22"></span>     <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">output</span>();    <span style="color:#228b22">//线性表的输出               
+</span><span style="color:#228b22"></span>}; 
+<span style="color:#00688b;font-weight:bold">void</span> List:: MakeEmpty ( )
+ { LinkNode *q;
+   <span style="color:#8b008b;font-weight:bold">while</span> (  first-&gt;link != <span style="color:#658b00">NULL</span> ) 
+	{ q = first-&gt;link;  <span style="color:#228b22">//指向别摘下结点 
+</span><span style="color:#228b22"></span>      first-&gt;link = q-&gt;link;<span style="color:#228b22">//从链中摘下结点
+</span><span style="color:#228b22"></span>      <span style="color:#8b008b;font-weight:bold">delete</span> q;        <span style="color:#228b22">//释放摘下的结点 
+</span><span style="color:#228b22"></span>    }
+};	
+<span style="color:#00688b;font-weight:bold">void</span> List ::output ( )
+{  LinkNode  *p=first-&gt;link; 
+   <span style="color:#8b008b;font-weight:bold">while</span>(p!=<span style="color:#658b00">NULL</span>)
+   { <span style="color:#8b008b;font-weight:bold">if</span>(p==first-&gt;link) cout&lt;&lt;p-&gt;data;
+     <span style="color:#8b008b;font-weight:bold">else</span>  cout&lt;&lt;<span style="color:#cd5555">&#34; &#34;</span>&lt;&lt;p-&gt;data;
+     p=p-&gt;link;
+   }
+   cout&lt;&lt;endl;
+}
+<span style="color:#228b22">/*
+</span><span style="color:#228b22">**************************************************
+</span><span style="color:#228b22">请写出 insert 成员函数
+</span><span style="color:#228b22">**************************************************
+</span><span style="color:#228b22">**************************************************
+</span><span style="color:#228b22">请写出 reverse 成员函数
+</span><span style="color:#228b22">**************************************************
+</span><span style="color:#228b22">*/</span>
+<span style="color:#00688b;font-weight:bold">int</span>  <span style="color:#008b45">main</span>()
+{   List list(<span style="color:#b452cd">0</span>);
+    ElemType endTag=<span style="color:#b452cd">0</span>;
+    ElemType val;
+    <span style="color:#228b22">//下面通过不断读入元素，插入到有序单链表中，建立从小到大的有序单链表
+</span><span style="color:#228b22"></span>    cin&gt;&gt;val;
+    <span style="color:#8b008b;font-weight:bold">while</span>(val!=endTag) 
+     {  list.insert(val);     <span style="color:#228b22">//在有序表中插入一个元素
+</span><span style="color:#228b22"></span>        cin&gt;&gt;val;  
+      }
+    list.reverse ();   <span style="color:#228b22">//线性表倒置
+</span><span style="color:#228b22"></span>    cout&lt;&lt;<span style="color:#cd5555">&#34;The result is:&#34;</span>&lt;&lt;endl;
+    list.output ();
+    <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>;
+}
+</code></pre></div><h2 id="分析">分析</h2>
+<p>基础题，注意边界的判断和特例的处理。</p>
+<h2 id="answer">Answer</h2>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#228b22">/*
+</span><span style="color:#228b22">**************************************************
+</span><span style="color:#228b22">请写出 insert 成员函数
+</span><span style="color:#228b22">**************************************************
+</span><span style="color:#228b22">*/</span>
+<span style="color:#00688b;font-weight:bold">void</span> List::insert(ElemType val){
+    LinkNode*pNew=<span style="color:#8b008b;font-weight:bold">new</span> LinkNode(val);
+    LinkNode*pPointer=first;
+    <span style="color:#8b008b;font-weight:bold">while</span>(pPointer-&gt;link!=<span style="color:#658b00">NULL</span>){
+        <span style="color:#8b008b;font-weight:bold">if</span>(val&lt;pPointer-&gt;link-&gt;data){
+            pNew-&gt;link=pPointer-&gt;link;
+            pPointer-&gt;link=pNew;
+            <span style="color:#8b008b;font-weight:bold">return</span>;
+        }
+        pPointer=pPointer-&gt;link;
+    }
+    pPointer-&gt;link=pNew;
+}
+<span style="color:#228b22">/*
+</span><span style="color:#228b22">**************************************************
+</span><span style="color:#228b22">请写出 reverse 成员函数
+</span><span style="color:#228b22">**************************************************
+</span><span style="color:#228b22">*/</span>
+<span style="color:#00688b;font-weight:bold">void</span> List::reverse(){
+    <span style="color:#8b008b;font-weight:bold">if</span>(first-&gt;link==<span style="color:#658b00">NULL</span>||first-&gt;link-&gt;link==<span style="color:#658b00">NULL</span>){
+        <span style="color:#8b008b;font-weight:bold">return</span>;
+    }
+    LinkNode*pParent=first-&gt;link;
+    LinkNode*pChild=first-&gt;link-&gt;link;
+    first-&gt;link-&gt;link=<span style="color:#658b00">NULL</span>;
+    <span style="color:#8b008b;font-weight:bold">while</span>(pChild!=<span style="color:#658b00">NULL</span>){
+        LinkNode*pTemp=pChild-&gt;link;
+        pChild-&gt;link=pParent;
+        pParent=pChild;
+        pChild=pTemp;
+    }
+    first-&gt;link=pParent;
+}
+</code></pre></div>
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">最后修改于 2019-05-13</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts" href="https://ntutn.top/posts/%E6%B4%BB%E5%8A%A8%E5%AE%89%E6%8E%92%E9%97%AE%E9%A2%98/">
+			下回<br>活动安排问题
+                </a>
+                
+                
+                
+                <a class="older-posts" href="https://ntutn.top/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86%E7%AC%94%E8%AE%B0/">
+			上回<br>计算机组成原理笔记
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+<script src="https://utteranc.es/client.js"
+        repo="zerofancy/zerofancy.github.io"
+        issue-term="title"
+        label=""
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	CC BY-SA 4.0
+	
+</div>
+            </div>
+    
+    <script src="/js/journal.js"></script>
+    </body>
+</html>

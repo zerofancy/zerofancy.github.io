@@ -244,6 +244,18 @@ package com.example.eventbustimerdemo import android.os.Bundle import androidx.a
     </item>
     
     <item>
+      <title>掉坑的日常：springboot的json属性名大小写问题</title>
+      <link>https://ntutn.top/posts/%E6%8E%89%E5%9D%91%E7%9A%84%E6%97%A5%E5%B8%B8springboot%E7%9A%84json%E5%B1%9E%E6%80%A7%E5%90%8D%E5%A4%A7%E5%B0%8F%E5%86%99%E9%97%AE%E9%A2%98/</link>
+      <pubDate>Tue, 24 Mar 2020 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E6%8E%89%E5%9D%91%E7%9A%84%E6%97%A5%E5%B8%B8springboot%E7%9A%84json%E5%B1%9E%E6%80%A7%E5%90%8D%E5%A4%A7%E5%B0%8F%E5%86%99%E9%97%AE%E9%A2%98/</guid>
+      <description>这两天想给自己小组的项目添加一个自动升级功能。这事听着复杂，但毕竟是个很常见的功能，github上的轮子很多。经过考虑，我决定选择这个组件，然后自己写后端。反正后端就返回一个json的事。然后就掉了坑。
+起因 案发现场没什么好说的，就是我发现自己设置的不能实现升级，在客户端调试半天发现用官方的json能升级。然后我就找我的json和官方的json有什么区别，看ContentType也没设置错，仔细比对发现属性大小写竟然不对。我当时还挺惊讶的，毕竟是直接复制的。
+springboot可以使用@ResponseBody返回对象自动转换json，而转换成的json属性名首字母会被转换成小写。
+解决方案 引入fastjson &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;com.alibaba&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;fastjson&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;1.2.66&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; 注入bean @Bean public HttpMessageConverters httpMessageConverters() { FastJsonHttpMessageConverter fastJsonHttpMessageConverter = new FastJsonHttpMessageConverter(); // 添加fastJson的配置信息  FastJsonConfig fastJsonConfig = new FastJsonConfig(); fastJsonConfig.setSerializerFeatures(SerializerFeature.PrettyFormat); // 处理中文乱码问题  List&amp;lt;MediaType&amp;gt; fastMediaTypes = new ArrayList&amp;lt;&amp;gt;(); fastMediaTypes.add(MediaType.APPLICATION_JSON); // 在convert中添加配置信息.  fastJsonHttpMessageConverter.setSupportedMediaTypes(fastMediaTypes); fastJsonHttpMessageConverter.setFastJsonConfig(fastJsonConfig); HttpMessageConverter&amp;lt;?&amp;gt; converter = fastJsonHttpMessageConverter; return new HttpMessageConverters(converter); } 在属性上加注解 package edu.upc.mishuserver.vo; import com.alibaba.fastjson.annotation.JSONField; import lombok.AllArgsConstructor; import lombok.Builder; import lombok.Data; import lombok.NoArgsConstructor; /** * UpdateInfo */ @Data @AllArgsConstructor @NoArgsConstructor @Builder public class UpdateInfo { @JSONField(name=&amp;#34;Code&amp;#34;) private Long code; @JSONField(name = &amp;#34;Msg&amp;#34;) private String msg; @JSONField(name = &amp;#34;UpdateStatus&amp;#34;) private Integer updateStatus; @JSONField(name = &amp;#34;VersionCode&amp;#34;) private Long versionCode; @JSONField(name = &amp;#34;VersionName&amp;#34;) private String versionName; @JSONField(name = &amp;#34;ModifyContent&amp;#34;) private String modifyContent; @JSONField(name = &amp;#34;DownloadUrl&amp;#34;) private String downloadUrl; @JSONField(name = &amp;#34;ApkSize&amp;#34;) private Long apkSize; @JSONField(name = &amp;#34;ApkMd5&amp;#34;) private String apkMd5; } </description>
+    </item>
+    
+    <item>
       <title>Typora&#43;git自动同步你的笔记</title>
       <link>https://ntutn.top/posts/typora&#43;git%E8%87%AA%E5%8A%A8%E5%90%8C%E6%AD%A5%E4%BD%A0%E7%9A%84%E7%AC%94%E8%AE%B0/</link>
       <pubDate>Mon, 02 Mar 2020 03:11:37 +0800</pubDate>
@@ -278,6 +290,44 @@ Answer 针对这个题目，我写出了这样的代码：
     </item>
     
     <item>
+      <title>记Lenovo V310 15 IKB的第n次死机</title>
+      <link>https://ntutn.top/posts/%E8%AE%B0lenovo_v310_15_ikb%E7%9A%84%E7%AC%ACn%E6%AC%A1%E6%AD%BB%E6%9C%BA/</link>
+      <pubDate>Wed, 01 Jan 2020 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E8%AE%B0lenovo_v310_15_ikb%E7%9A%84%E7%AC%ACn%E6%AC%A1%E6%AD%BB%E6%9C%BA/</guid>
+      <description>今天我的电脑又死机了，首先切一下tty进不去，然后试下SysRq键没反应，熟练地按住电源10秒，松开两秒，再按一下，拿出手机刷会空间。
+这电脑刚买的时候给我的印象其实是不错的，虽然外壳线条有点丑粗犷，但整体性能比我预期要好很多。i5的CPU，1T机械硬盘，入门级Radeon独显，毕竟价格摆在那里。
+因为没有固态硬盘，这电脑慢的很，但我安慰自己反正我也不怎么打游戏。日常尽量不用UWP应用，开机刷会手机，佛系一点也没什么不好。谁说学软件就一定要用好电脑？Code Blocks不香吗？eclipse有几个电脑带不动？实在偶尔想配置安卓开发环境的时候就连自己安卓手机做测试，至于VS就不用想了，虽然号称世界上最好用的IDE，但比较新的版本没有固态硬盘反应跟不上打字……
+本来也就这样了，一分钱一分货的事。但直到某次电脑毫无征兆死机……
+死机是正常现象，没什么好怕的。我这样告诉自己。我当时正在浏览网页不要多想，不是那种满屏都是澳门首家线上赌场广告的网页，毫无征兆就死机了。一般来说，所谓死机多是资源占用过高系统失去响应的原因，根据自己的经验，按组合键尝试调出任务管理器尝试结束进程，然后没有成功。貌似死机很彻底，任务管理器根本无法调出，甚至鼠标都不能动。我放下电脑，看了集哆啦A梦，回头看电脑屏幕没有要变化的征兆。没办法，按住电源键强制关机吧。后面很久这个事情都没有再出现，我也就渐渐忘了。
+直到又有一天，在我玩《狂野飙车8：极速凌云》正高兴的时候，画面突然不动了。这扫兴的事让我没了继续玩的兴致，而后几天又死机几次，我觉得事情没有那么简单，在网上搜索时，我发现我这不是个例。
+之后我加固态硬盘装双系统，死机就跟着我到了ubuntu。一般来说，ubuntu死机多是指gnome卡死，直接Alt+F2输入r就能重启，不这样做也可以切tty进入命令操作，直到某次放歌的时候死机了，歌声都停了，别说tty了，连SysRq键都没能正常工作，这表明连linux内核都死掉了。好吧，现在有足够证据表明死机不是Windows的锅。
+想把电脑送去修，但很麻烦的是，这个问题复现很困难，死机是不定期的，似乎跟资源占用无关，跟电脑温度无关。先不考虑电脑店能不能找到原因，就算电脑店说修好了，我也没办法验证。我觉得就这样送去修最大可能就算店家给你重装了下系统，清了下灰，升级了下BIOS，这些我都试过了没有用。
+后来一直没有解决这件事，只是我养成了随手Ctrl+S的习惯。
+不管怎样，今天偶发性的连续死机两次惹恼我了，联想会进我的黑名单。</description>
+    </item>
+    
+    <item>
+      <title>计算机操作系统原理笔记</title>
+      <link>https://ntutn.top/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Tue, 10 Dec 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86%E7%AC%94%E8%AE%B0/</guid>
+      <description>操作系统快考试了，我觉得自己过应该还是没问题的吧，毕竟也有认真听课。虽然对某些部分流程记忆有点发憷。
+操作系统做什么 操作系统是用户与计算机硬件之间的接口 用户 指包括最终用户在内的各级用户。
+操作系统的发展 微机操作系统 个人机操作系统。
+实时操作系统 支持实时计算的系统，实时计算即 系统的正确性不仅取决于计算的逻辑结果，而且还依赖于产生结果的时间。
+实时任务的类型
+ 周期性实时任务 非周期性实时任务 硬实时任务 软实时任务   实时计算机可以不运行实时操作系统，直接运行应用软件
+  高可用性 截止时间  开始截止时间 实际截止时间    单道批处理系统  自动性 顺序性 单道性  优点
+减少人工等待时间
+缺点
+ 作业独占CPU CPU等待IO使得CPU利用率低  多道批处理系统  多道性 无序性 调度性 复杂性  优点
+ 提高CPU利用率 提高内存和IO利用率 增加系统吞吐量   吞吐量：单位时间里系统处理的作业量 缺点
+  平均等待周期长 缺乏交互能力  分时系统  多路性 独立性 及时性 交互性  优点</description>
+    </item>
+    
+    <item>
       <title>三门问题</title>
       <link>https://ntutn.top/posts/%E4%B8%89%E9%97%A8%E9%97%AE%E9%A2%98/</link>
       <pubDate>Mon, 16 Sep 2019 03:11:37 +0800</pubDate>
@@ -306,6 +356,22 @@ Answer 针对这个题目，我写出了这样的代码：
     </item>
     
     <item>
+      <title>闷声作大死：删除电脑内的空文件夹</title>
+      <link>https://ntutn.top/posts/%E9%97%B7%E5%A3%B0%E4%BD%9C%E5%A4%A7%E6%AD%BB%E5%88%A0%E9%99%A4%E7%94%B5%E8%84%91%E5%86%85%E7%9A%84%E7%A9%BA%E6%96%87%E4%BB%B6%E5%A4%B9/</link>
+      <pubDate>Sun, 16 Jun 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E9%97%B7%E5%A3%B0%E4%BD%9C%E5%A4%A7%E6%AD%BB%E5%88%A0%E9%99%A4%E7%94%B5%E8%84%91%E5%86%85%E7%9A%84%E7%A9%BA%E6%96%87%E4%BB%B6%E5%A4%B9/</guid>
+      <description>电脑卸载软件时，卸载程序常常不会把程序对应的空文件夹删掉，一般这时候我都是手动去把他删掉。
+我觉得有点麻烦，又想到电脑内可能还有其他的空文件夹。于是在网上找了个脚本删除电脑内的空文件夹，然后就遇到了麻烦……
+也许本文标题应该是一个空文件夹引发的血案……
+删除电脑内的空文件夹 本来我曾经写过一个C#版本的删除电脑空文件夹的工具，原理很简单，就是递归嘛：
+但是这程序执行比较慢，而且占用内存不少……
+在网上搜索了下，果然不能闭门造车啊，有大佬写过批处理：
+for /f &amp;#34;tokens=*&amp;#34; %%a in (&amp;#39;dir /b /ad /s C:\^|sort /r&amp;#39;) do rd &amp;#34;%%a&amp;#34; /q 2&amp;gt;nul 试用了下，效果相当不错。于是稍微修改使它能申请管理员权限，顺便修改下控制台颜色，看上去炫一点：
+title 删除空文件夹 color 03 echo 程序需要管理员权限…… set /a _Debug=0 ::========================================== :: 获取管理员权限 set _Args=%* if &amp;#34;%~1&amp;#34; NEQ &amp;#34;&amp;#34; ( set _Args=%_Args:&amp;#34;=% ) fltmc 1&amp;gt;nul 2&amp;gt;nul || ( cd /d &amp;#34;%~dp0&amp;#34; cmd /u /c echo Set UAC = CreateObject^(&amp;#34;Shell.Application&amp;#34;^) : UAC.ShellExecute &amp;#34;cmd.exe&amp;#34;, &amp;#34;/k cd &amp;#34;&amp;#34;%~dp0&amp;#34;&amp;#34; &amp;amp;&amp;amp; &amp;#34;&amp;#34;%~dpnx0&amp;#34;&amp;#34; &amp;#34;&amp;#34;%_Args%&amp;#34;&amp;#34;&amp;#34;, &amp;#34;&amp;#34;, &amp;#34;runas&amp;#34;, 1 &amp;gt; &amp;#34;%temp%\GetAdmin.</description>
+    </item>
+    
+    <item>
       <title>在Windows10上安装血战上海滩</title>
       <link>https://ntutn.top/posts/%E5%9C%A8windows10%E4%B8%8A%E5%AE%89%E8%A3%85%E8%A1%80%E6%88%98%E4%B8%8A%E6%B5%B7%E6%BB%A9/</link>
       <pubDate>Sat, 01 Jun 2019 03:11:37 +0800</pubDate>
@@ -326,6 +392,52 @@ using System; using System.Collections.Generic; using System.Linq; using System.
     </item>
     
     <item>
+      <title>数据结构第三次测试</title>
+      <link>https://ntutn.top/posts/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AC%AC%E4%B8%89%E6%AC%A1%E6%B5%8B%E8%AF%95/</link>
+      <pubDate>Sat, 01 Jun 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AC%AC%E4%B8%89%E6%AC%A1%E6%B5%8B%E8%AF%95/</guid>
+      <description>数据结构测试，树部分，水题
+ 一 假设二叉树的数据元素为字符，采用二叉链式存储结构。二叉树ADT实现的大部分代码已经给出，其中采用完全前序序列创建二叉树。请补充写出下列两个操作函数。
+ 注意： 答案区只写出两个函数，其他代码不允许修改和重写、提交！
+  计算以某结点为根的二叉树的高度； 以前序顺序输出各个元素结点为根的子树的高度；  例如：有如右图的二叉树 输入 ABD@@E@@C@F@@ 输出 Height(A)=3 Height(B)=2 Height(D)=1 Height(E)=1 Height(C)=2 Height(F)=1 已给出的代码如下：
+#include &amp;lt;iostream&amp;gt;#include &amp;lt;stdlib.h&amp;gt;using namespace std; //数据元素类型 typedef char ElemType; //二叉树结点定义 typedef struct TreeNode {	ElemType data; struct TreeNode *lson, *rson; } TreeNode; //二叉树类 class BinaryTree { private: TreeNode *root; public: BinaryTree() { root = NULL; }; ~BinaryTree() { MakeEmpty(root); } void MakeEmpty(TreeNode *t); void create( ) { root = cp_create(root); }; //完全前序建立二叉树，空指针用@表示 	TreeNode *cp_create(TreeNode *t); //****** 要补充的函数height ******** 	int height(TreeNode *t) ; //求二叉树的高度 	void output() { Pro_height(root); }; //****** 要补充的函数 Pro_height ********** 	void Pro_height(TreeNode *t); // 前序顺序输出各个元素结点为根的子树的高度 }; //二叉树置空 void BinaryTree::MakeEmpty(TreeNode *t) {	if (t !</description>
+    </item>
+    
+    <item>
+      <title>稀疏矩阵的压缩存储</title>
+      <link>https://ntutn.top/posts/%E7%A8%80%E7%96%8F%E7%9F%A9%E9%98%B5%E7%9A%84%E5%8E%8B%E7%BC%A9%E5%AD%98%E5%82%A8/</link>
+      <pubDate>Sat, 01 Jun 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E7%A8%80%E7%96%8F%E7%9F%A9%E9%98%B5%E7%9A%84%E5%8E%8B%E7%BC%A9%E5%AD%98%E5%82%A8/</guid>
+      <description>特殊矩阵在采用二维数组存储时，尽管矩阵操作的算法都很简单，但是其空间的利用率很低。 系数矩阵就是一种应用很广泛的特殊的矩阵。现要求稀疏矩阵采用“压缩”存储，实现矩阵的常用操作，如输出、转置、求和等。
+Question 矩阵采用“压缩”存储，实现矩阵的常用操作，如输出、转置、求和等。
+矩阵的输入：有多行，第1行包括三个整数，分别是矩阵的大小m,n及非零元素的个数r。后面r行分别输入各个非零元素的 行、列、值
+矩阵的输出：按人们习惯的矩阵格式输出，即输出一个m*n的矩阵，是零元素的输出0，非零元素输出元素值。
+例如：输入如下：
+100 90 5 //矩阵的行数为100，列数为90，共5个非零元素。 1 10 100 //a(1,10)=100 50 60 200//a(50,60)=200 50 80 100//a(50,80)=100 60 60 200//a(60,60)=200 99 89 10//a(99,89)=10 100 90 4 //矩阵b的行数为100，列数为90，共4个非零元素。 1 1 10 //b(1,1)=10 50 60 -200//b(50,60)=-200 50 80 100 //b(50,80)=100 70 70 10 //b(70,70)=10 Example Input 100 90 5 1 10 100 50 60 200 50 80 100 60 60 200 99 89 10 100 90 4 1 1 10 50 60 -200 50 80 100 70 70 10 Output The transformed matrix is: 10 1 100 60 50 200 60 60 200 80 50 100 89 99 10 The added matrix is: 1 1 10 1 10 100 50 80 200 60 60 200 70 70 10 99 89 10 分析 首先题目描述有错。</description>
+    </item>
+    
+    <item>
+      <title>统计递归子问题个数</title>
+      <link>https://ntutn.top/posts/%E7%BB%9F%E8%AE%A1%E9%80%92%E5%BD%92%E5%AD%90%E9%97%AE%E9%A2%98%E4%B8%AA%E6%95%B0/</link>
+      <pubDate>Fri, 17 May 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E7%BB%9F%E8%AE%A1%E9%80%92%E5%BD%92%E5%AD%90%E9%97%AE%E9%A2%98%E4%B8%AA%E6%95%B0/</guid>
+      <description>分治策略是算法设计的重要策略之一，该策略的基本思想是把问题进行分解成一些子问题，通过子问题的求解完成对原问题的求解。其关键是分解和合并，好的分解或合并方法才会产生高效的分治算法。
+分治策略设计出的算法最常见的就是递归算法。但是如果在分解时，分解出的子问题有很多是重复的，那么这样的分治（递归）算法求解问题的效率就非常低。例如斐波那契数问题，如果采用递归求解，算法效率非常低：O(2^n)。而如果采用递推求解(动态规划自底向上求解)，算法效率非常高：O(n)。
+Question 现在请你编写程序，统计计算一个斐波那契数时分解出的各子问题的个数。
+斐波那契数的定义如下：
+Fib(0)=0 Fib(1)=1 Fib(n)=Fib(n-1)+Fib(n-2) 输入：一个整数n，即计算Fib(n)
+输出：n+1行，即各个子问题的值及该子问题的个数。
+Example Input 5 Output Fib(0)=0,spn=3 Fib(1)=1,spn=5 Fib(2)=1,spn=3 Fib(3)=2,spn=2 Fib(4)=3,spn=1 Fib(5)=5,spn=1 分析 一大段分治思想的介绍，递归与递推的区别，我以为这题用递归会超时，要用递推求解，于是入坑……
+这题要统计子问题个数，递推或者递归加备忘录根本没重复的计算怎么统计……
+不死心的我又仔细研究递推子问题个数的规律，发现子问题个数正好是一个反着的斐波那契数列（结尾元素特殊处理），所以可以正向递推求数列，反向递推求子问题个数。
+不过特殊情况研究的有点头疼，暂时就不搞了，下面给出的是老老实实递归求解的程序。
+Answer #include &amp;lt;iostream&amp;gt;#include &amp;lt;cstring&amp;gt;using namespace std; int*spn; int*data; int fib(int n){ spn[n]++; if(n==0){ data[0]=0; return 0; } if(n==1){ data[1]=1; return 1; } int res=fib(n-1)+fib(n-2); data[n]=res; return res; } int main() { int n; cin&amp;gt;&amp;gt;n; spn=new int[n+1]; data=new int[n+1]; memset(spn,0,(n+1)*sizeof(int)); memset(data,-1,(n+1)*sizeof(int)); data[0]=0; data[1]=1; fib(n); for(int i=0;i&amp;lt;=n;i++){ cout&amp;lt;&amp;lt;&amp;#34;Fib(&amp;#34;&amp;lt;&amp;lt;i&amp;lt;&amp;lt;&amp;#34;)=&amp;#34;&amp;lt;&amp;lt;data[i]&amp;lt;&amp;lt;&amp;#34;,spn=&amp;#34;&amp;lt;&amp;lt;spn[i]&amp;lt;&amp;lt;endl; } return 0; } </description>
+    </item>
+    
+    <item>
       <title>二叉树ADT的实现</title>
       <link>https://ntutn.top/posts/%E4%BA%8C%E5%8F%89%E6%A0%91adt%E7%9A%84%E5%AE%9E%E7%8E%B0/</link>
       <pubDate>Tue, 14 May 2019 03:11:37 +0800</pubDate>
@@ -335,6 +447,95 @@ using System; using System.Collections.Generic; using System.Linq; using System.
 假设二叉数的数据元素为字符，采用二叉链式存储结构。请编码实现二叉树ADT，其中包括创建二叉树、遍历二叉树（深度、广度）、求二叉树的深度（高度）、计算二叉树的元素个数、计算二叉树的叶子数、二叉树的格式输出等。
 根据输入的符号，执行相应的操作。如下：
  C：根据完全前序序列创建二叉树，#表示空结点（空子树）；输入：二叉树的完全前序序列，创建成功输出 Created success! H：求二叉树的高度； 输出： Height=高度 L：计算二叉树的叶子数；输出：Leaves=叶子个数 N：计算二叉树中元素总个数；输出：Nodes=结点个数 1：先序遍历二叉树；输出：Preorder is:序列 . 2：中序遍历二叉树；输出：Inorder is:序列 . 3：后序遍历二叉树；输出：Postorder is:序列 . 4：广度遍历二叉树；输出：BFSorder is:序列 . F：查找值为x的结点个数；输出：The count of x is 个数 . P：以目录缩格文本形式输出所有节点。输出：The tree is:（换行，下面各行是输出的二叉树） X：退出  Example Input C ABC##DE#G##F### H L N 1 2 3 4 F A P X Output Created success! Height=5 Leaves=3 Nodes=7 Preorder is:A B C D E G F . Inorder is:C B E G D F A .</description>
+    </item>
+    
+    <item>
+      <title>活动安排问题</title>
+      <link>https://ntutn.top/posts/%E6%B4%BB%E5%8A%A8%E5%AE%89%E6%8E%92%E9%97%AE%E9%A2%98/</link>
+      <pubDate>Mon, 13 May 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E6%B4%BB%E5%8A%A8%E5%AE%89%E6%8E%92%E9%97%AE%E9%A2%98/</guid>
+      <description>经典的贪心问题。
+Question 假设有n个活动的集合E={a1,a2,...,an}，其每个活动都要求使用同一资源（如某个设备、教室、场地等），而在同一时间内只允许一个活动使用这一资源。
+每个活动都有一个要求使用该资源的起止时间si,fi，且si&amp;lt;fi。如果选择了活动ai，则它在半开的时间区间[si,fi)内占有资源。两个活动ai,aj称为是相容的，当且仅当它们的时间区间[si,fi)和[sj,fj)不相交，即si&amp;gt;=fj 或 sj &amp;gt;=fi。现要求在所给定的活动集中选出最大的相容活动子集。
+请补充要求的函数代码。
+提示：贪心策略
+输入，有多行，第1行是活动的个数n，后面n行，每行3个整数，是每个活动的编号、占用资源的开始时间、结束时间。
+输出，选出的最大活动子集，即有多行，每行包括活动的编号、开始时间、结束时间。
+Example Input 11 1 3 8 2 2 13 3 1 4 4 5 7 5 6 10 6 8 11 7 12 14 8 5 9 9 3 5 10 0 6 11 8 12 Output 3：1-4 4：5-7 6：8-11 7：12-14 分析 经典的贪心问题，贪心策略为选择结束时间最早的活动，因为这样就可以给后面的活动留出更多的时间。
+ 掉坑：在选择活动时只处理了前24小时的活动，而事实证明我画蛇添足了。
+ Answer #include &amp;lt;iostream&amp;gt;#include &amp;lt;stdio.h&amp;gt;#include &amp;lt;stdlib.h&amp;gt;using namespace std; //定义允许的最大活动数 #define Maxn 100 //定义活动的类型 typedef struct act_Node { int Id; //活动ID  int s_Time; //活动开始时间  int f_Time; //活动结束时间 } ACND; //对活动按贪心准则排序 void Sort(int n,ACND arr[]) { for(int i=0;i&amp;lt;n;i++){ int tmp=i; for(int j=i+1;j&amp;lt;n;j++){ if(arr[j].</description>
+    </item>
+    
+    <item>
+      <title>线性表ADT的实现</title>
+      <link>https://ntutn.top/posts/%E7%BA%BF%E6%80%A7%E8%A1%A8adt%E7%9A%84%E5%AE%9E%E7%8E%B0/</link>
+      <pubDate>Mon, 13 May 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E7%BA%BF%E6%80%A7%E8%A1%A8adt%E7%9A%84%E5%AE%9E%E7%8E%B0/</guid>
+      <description>线性表ADT的实现 数据结构平时测试的题目开放了，这次平时测试睡过了，全宿舍都睡过了。现在回头做做题目，还是有坑点的。
+Question 假设线性表ADT的数据元素类型为正整数，采用带头结点的单链式存储结构。线性表ADT实现的大部分代码已经给出，请补充写出类的两个成员函数insert和reverse。 注意：只需提交需要补充的函数代码，其他代码不能自己重写和修改。
+insert函数：在元素值从小到大有序的线性表中插入一个元素，仍然保持有序。
+reverse函数：实现线性表元素的倒置，即将线性表中数据元素的顺序反转。
+线性表元素输入时，以 endTag 作为结束标志。
+例如输入：
+3 8 7 2 4 9 1 6 5 0 则输出：
+9 8 7 6 5 4 3 2 1 预置代码如下： （其中/* */ 部分是要补充的insert和reverse函数）
+#include&amp;lt;iostream&amp;gt;#include&amp;lt;stdlib.h&amp;gt;using namespace std; typedef int ElemType; //数据元素类型 class List; //前视定义,否则友元无法定义 //结点类定义 class LinkNode { friend class List; private: LinkNode *link; ElemType data; public: LinkNode (LinkNode *ptr = NULL) {link=ptr;} LinkNode(const ElemType &amp;amp; item, LinkNode *ptr = NULL){ data=item;link=ptr;} ~LinkNode(){}; }; //单链表类定义 class List { private: LinkNode *first; //指向链表头结点的指针  public: List (ElemType x) { first = new LinkNode (x);} // 带头结点  ~List (){ MakeEmpty();} //析构函数  void MakeEmpty ( ); //线性表置空  void insert(ElemType val); //在有序线性表中插入元素val  void reverse(); //线性表的倒置  void output(); //线性表的输出 }; void List:: MakeEmpty ( ) { LinkNode *q; while ( first-&amp;gt;link !</description>
+    </item>
+    
+    <item>
+      <title>计算机组成原理笔记</title>
+      <link>https://ntutn.top/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Mon, 13 May 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86%E7%AC%94%E8%AE%B0/</guid>
+      <description>概述 计算机组成原理马上就要期中考试了，我也在积极准备复习，顺着课本也做了一波笔记，把每个部分的知识点都整理了一下。没理解的暂时还空着（比如海明校验码），有些整理起来不方便的也暂时空着，回头去查课本吧。
+结课了，顺着课本捋了一遍，做的一些笔记：
+计算机组成原理 概述 计算机硬件  采用存储程序工作方式。 由运算器、控制器、存储器、输入设备、输出设备部件组成。 存储器：存储数据/指令 控制器：控制指令的自动执行 运算器：加减乘除、逻辑运算 操作人员通过输入输出设备控制计算机。 计算机内部以二进制表示指令和数据 指令由操作码和地址码组成。 总线：传输信息的介质。  ALU：数据处理部件，执行算数和逻辑运算。
+计算机软件 计算机系统层次结构 应用（问题） 最终用户 算法 程序员 编程（语言） 操作系统/虚拟机 指令集体系结构（ISA）架构师 微体系结构 功能部件/RTL 电子工程师 电路 器件   机器级语言   和运行程序的计算机底层结构密切相关。 可读性差，不易于记忆。
+  汇编语言 机器语言  高级语言   和底层计算机结构关系不大。 可读性相当较好。 大多数程序员使用高级语言编写程序。
+ 程序设计语言处理系统  汇编程序：汇编器，汇编语言》机器语言 解释程序：解释器，将源程序中的语句按顺序逐条翻译并立即执行。 编译程序：编译器，高级语言》汇编语言/机器语言。  计算机系统的不同用户 最终用户 使应用程序完成特定任务的用户。
+简单的人机交互界面、安装在计算机中的相关应用程序。
+系统管理员 利用操作系统等软件提供的功能对系统进行配置管理维护的操作人员。
+部分硬件层面、系统管理层面、相关实用程序和人机交互界面。
+应用程序员 使用高级语言编制应用软件的程序员。
+硬件、操作系统提供的编程接口、人机交互界面、实用程序、相关的语言程序处理系统。
+系统程序员 设计和开发系统软件的程序员。
+计算机底层相关硬件和系统结构。</description>
+    </item>
+    
+    <item>
+      <title>数据结构 栈应用 1 括号匹配</title>
+      <link>https://ntutn.top/posts/%E6%8B%AC%E5%8F%B7%E5%8C%B9%E9%85%8D/</link>
+      <pubDate>Thu, 25 Apr 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E6%8B%AC%E5%8F%B7%E5%8C%B9%E9%85%8D/</guid>
+      <description>大概是一道栈的应用的水题吧。
+ 输入一行符号,以#结束，判断其中的括号是否匹配。 遇到左括号入栈，遇到右括号出栈。如果字符串结束栈不空，输出栈内左括号对应右括号。
+Question 用栈实现：输入一行符号,以#结束，判断其中的括号是否匹配。括号包括：
+{ } 、 [ ] 、 ( )、 &amp;lt; &amp;gt; 如果匹配，输出 right
+如果不匹配，给出错误提示。包括：
+第几个符号处理时出现错误；哪几个符号失配等
+Example 思路 遇到左括号入栈，遇到右括号出栈。如果字符串结束栈不空，输出栈内左括号对应右括号。
+ 没有一遍过，因为题目中没说如果出错就不再继续处理。
+ 相关  栈：顺序表，只允许在一端输入输出。 getline(cin,str);可输入整行，支持空格。 如果用数组实现栈，则其存储空间必须是一次性申请得到的。  Answer  指定初始maxsize=1是我某种程度上的强迫症，反正这题时间限制很宽松。
+ #include &amp;lt;iostream&amp;gt;#include&amp;lt;cstring&amp;gt;#include&amp;lt;string&amp;gt;using namespace std; class mystack{ private: char *data; int maxsize; int top; public: mystack(){ maxsize=1; data=new char[maxsize]; top=-1; } bool isEmpty(){ return top==-1; } char getTop(){ if(top&amp;gt;-1){ return data[top]; } return &amp;#39;\0&amp;#39;; } void pop(){ if(top&amp;gt;=0){ top--; } } void expand(){ char*tmp=new char[maxsize*2]; strncpy(tmp,data,maxsize); maxsize*=2; delete[] data; data=tmp; } void push(char x){ if(top+1==maxsize){ expand(); } data[++top]=x; } ~mystack(){ delete[] data; } }; char getPar(char x){ switch(x){ case &amp;#39;{&amp;#39;: return &amp;#39;}&amp;#39;; case &amp;#39;[&amp;#39;: return &amp;#39;]&amp;#39;; case &amp;#39;(&amp;#39;: return &amp;#39;)&amp;#39;; case &amp;#39;&amp;lt;&amp;#39;: return &amp;#39;&amp;gt;&amp;#39;; } return &amp;#39;\0&amp;#39;; } int isKH(char x){ switch(x){ case &amp;#39;{&amp;#39;: case &amp;#39;[&amp;#39;: case &amp;#39;(&amp;#39;: case &amp;#39;&amp;lt;&amp;#39;: return 1; case &amp;#39;}&amp;#39;: case &amp;#39;]&amp;#39;: case &amp;#39;)&amp;#39;: case &amp;#39;&amp;gt;&amp;#39;: return 2; } return 0; } int main() { string tmp; getline(cin,tmp); mystack*stk=new mystack(); bool erred=false; for(int i=0;i&amp;lt;tmp.</description>
+    </item>
+    
+    <item>
+      <title>数据结构 栈应用2 表达式求值</title>
+      <link>https://ntutn.top/posts/%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B1%82%E5%80%BC/</link>
+      <pubDate>Thu, 25 Apr 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B1%82%E5%80%BC/</guid>
+      <description>表达式求值是程序设计语言编译中的一个最基本问题，它的实现是栈应用的一个典型例子。
+ Question 表达式求值是进行数据处理的最基本操作。请编写程序完成一个简单算术表达式的求值。要求如下：
+ 运算符包括：+、-、*、-、^(乘方)、括号 运算量为数值常量，根据自己的能力可以对运算量做不同的约束，例如1位整数、多位整数、实数等（会有不同的测试用例）；   输入：一行，即表达式，以“=”结束。例如：  5*(8-3)+6/5=  输出：一行，即表达式的值。结果值为整数时输出为整数，如果有小数时保留5位小数。  26.20000 问题与分析 栈 栈是特殊的线性表，其一端固定，只允许在另一端插入或删除。其特性是“先进后出”。
+表达式的书写形式  前缀式 + × a b × - c / d e f 中缀式 a × b + (c - d / e) × f 后缀式 a b × c d e / - f × +  前缀式的运算规则 连续出现的两个操作数和在它们之前且紧靠它们的运算符构成一个最小表达式;
+运算符出现的顺序与运算顺序相反
+ 中缀式与后缀式略。其中中缀式是我们最常书写的形式。
+ 后缀式的运算  是操作数，入栈 是符号，取出两个操作数运算后入栈 表达式处理完毕后栈内唯一元素即运算结果  中缀式转换为后缀式 直接对中缀式求值 类似中缀式转后缀式的过程，把运算量的输出改为“入OPND栈”，把运算符的“输出”改为“计算”：根据运算符，出栈需要的运算量，计算值，结果作为运算量再入栈。其他不需要变化。</description>
     </item>
     
     <item>
@@ -372,6 +573,19 @@ $re=InputBox(&amp;quot;Input&amp;quot;,&amp;quot;You can input your massage now.
     </item>
     
     <item>
+      <title>连续正整数</title>
+      <link>https://ntutn.top/posts/%E8%BF%9E%E7%BB%AD%E6%AD%A3%E6%95%B4%E6%95%B0/</link>
+      <pubDate>Sat, 06 Apr 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E8%BF%9E%E7%BB%AD%E6%AD%A3%E6%95%B4%E6%95%B0/</guid>
+      <description>还是数据结构的网上作业，将一个整数分解为连续正整数之和，找对方向倒是也不算难……
+ 有些正整数可以表示为 n (n&amp;gt;1) 个连续正整数的和，如：
+15=1+2+3+4+5 =4+5+6 =7+8 给定一个正整数 N，判断其是否可以表示为一组连续正整数的和，输出符合条件的解的组数。
+Input 输入有一行，包含一个正整数 n (3≤n≤1000000000)。  Output 输出有一行，正整数n的符合条件的解的组数。  Example    Input Output     15 3   99 5   6 1   9 2    单点时限: 2.0 sec 内存限制: 256 MB
+#include &amp;lt;iostream&amp;gt;using namespace std; int main() { int n; cin&amp;gt;&amp;gt;n; int counter=0; for(int i=2; i&amp;lt;(100000&amp;lt;n?100000:n); i++) //n/i-i/2+1&amp;gt;=1  { if(n/i-i/2-i%2+1&amp;gt;=1&amp;amp;&amp;amp;(n/i-i/2-i%2+1+n/i-i/2-i%2+1+i-1)*i==n*2) { counter++; } //cout&amp;lt;&amp;lt;&amp;#34;test-&amp;#34;&amp;lt;&amp;lt;i&amp;lt;&amp;lt;endl;  } cout &amp;lt;&amp;lt; counter &amp;lt;&amp;lt; endl; return 0; } 枚举就好了。需要根据分成的整数的个数i讨论，但为了显得更牛X我就写到一起了，上面的n/i-i/2-i%2+1无论在奇偶情况下都是拆分得到的整数的第一个理应是多少。</description>
+    </item>
+    
+    <item>
       <title>使用映像劫持技术屏蔽电脑中的广告进程</title>
       <link>https://ntutn.top/posts/%E4%BD%BF%E7%94%A8%E6%98%A0%E5%83%8F%E5%8A%AB%E6%8C%81%E6%8A%80%E6%9C%AF%E5%B1%8F%E8%94%BD%E7%94%B5%E8%84%91%E4%B8%AD%E7%9A%84%E5%B9%BF%E5%91%8A%E8%BF%9B%E7%A8%8B/</link>
       <pubDate>Thu, 28 Mar 2019 03:11:37 +0800</pubDate>
@@ -381,6 +595,34 @@ $re=InputBox(&amp;quot;Input&amp;quot;,&amp;quot;You can input your massage now.
  国内很多软件都有重度广告，“资讯”、“新闻”、“弹窗”，不胜其烦。直接找到广告进程删除掉，结果一自动更新，又回来了。
 于是，我想到了“映像劫持”：
 Windows Registry Editor Version 5.00 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SLBService.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\TsService.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\FoxitDesktopAd.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\FoxitProtect.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\LCServer.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\LRServer.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\2345MiniPage.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SohuNews.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\PinyinUp.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SGDownload.</description>
+    </item>
+    
+    <item>
+      <title>数据结构与算法 C&#43;&#43;编程能力评估</title>
+      <link>https://ntutn.top/posts/c&#43;&#43;%E7%BC%96%E7%A8%8B%E8%83%BD%E5%8A%9B%E8%AF%84%E4%BC%B0/</link>
+      <pubDate>Thu, 28 Mar 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/c&#43;&#43;%E7%BC%96%E7%A8%8B%E8%83%BD%E5%8A%9B%E8%AF%84%E4%BC%B0/</guid>
+      <description>题目1 向类SeqList中插入数据，请根据main函数中的调用，完成Insert和output函数。
+ Input   5 1 2 3 4 5 2 9  Output  1 2 3 4 5 1 2 9 3 4 5  Answer  #include&amp;lt;iostream&amp;gt;#include&amp;lt;stdlib.h&amp;gt;using namespace std; class SeqList { private: int * data; int last; // index of the last element public: SeqList ( int sz ); ~SeqList ( ) { delete [ ] data; } void input (); void output() ; void Insert ( const int &amp;amp;x, int i); } ; SeqList::SeqList ( int sz ) { if ( sz &amp;gt; 0 ) { data = new int[sz]; last = -1; } } void SeqList:: input() { cin &amp;gt;&amp;gt;last; for (int i=0; i&amp;lt;last; i++) cin&amp;gt;&amp;gt;data [i]; last--; } void SeqList::output() { bool fi=false; for(int i=0; i&amp;lt;=last; i++) { if(!</description>
+    </item>
+    
+    <item>
+      <title>直</title>
+      <link>https://ntutn.top/posts/%E7%9B%B4/</link>
+      <pubDate>Wed, 27 Mar 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E7%9B%B4/</guid>
+      <description>直  发现了自己初中写的作文，我当年这么中二的吗……
+ 树是直的，直得挺拔入云；山是直的，直得直插霄汉；竹是直的直得虚心髙洁。是啊，巍峨的直无处不在。
+尺 人们仰慕大自然的直，于是制造了尺。尺，为直而生。再纷乱的外界环境，它总恪尽职守，一丝不苟。即使是它的制造者，它也将毫不留情地指出他的过失。
+人本如此。看到它，我想起了屈子，想起了岳将军，想起包拯，想起了正直的中国人。
+弓 尺是直的，但在不可抗力下它还是弯曲了。有时弯也是一种无奈，正直的树也抵不住弯曲的斧。那就弯吧。不！你没看到，弦是直的。弦如何直？那是弓在抗拒那股不可抗力！是啊，弓是弯的，但它的心是直的。它仍是一心向直的。
+人应如此。狂风袭来，竹顺势而弯，但风速减小了。虽然只有一点。看到它，我想到了周树人，想到了郭沫若，想到了在黑暗中抗争的中国人。
+箭 弓是弯的，但它不甘继续弯下去。于是它化作一支羽箭，反射着金色阳光，即使这直是有代价的。它是一根选择燃烧的火柴。它将烧尽，但它选择了燃烧。
+看到它，我想到了荆轲，想到了谭嗣同，想到了敢于与黑暗抗争的中国人。
+中华民族是一个直的民族，中国人本色如此。中国人是直的，即使在不可抗力下弯了，心还是直的。而且，他们会抗争，不管那是不是不可抗力。在忍无可忍时，他们会用自己的生命，划出一道直线。中国，拉着这样的弓，射出这样的箭，复兴也是必然的。
+这就是那个直的传说。</description>
     </item>
     
     <item>
@@ -399,6 +641,76 @@ Windows Registry Editor Version 5.00 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Wind
 25 30 输出：
 (25)10=(P)30 Length=1 预置代码如下：
 #include &amp;lt;iostream&amp;gt;using namespace std; #include &amp;lt;stdio.h&amp;gt;#include &amp;lt;stdlib.h&amp;gt;typedef int ElemType; class SeqStack { //顺序栈类定义  private: ElemType *elements; //数组存放栈元素  int top; //栈顶指示器  int maxSize; //栈最大容量  void overflowProcess(); //栈的溢出处理  public: SeqStack(int sz); //构造函数  ~SeqStack() { delete []elements; }; //析构函数  void Push(ElemType x); //进栈  int Pop(ElemType &amp;amp;x); //出栈  int IsEmpty() const { return top == -1; } int IsFull() const { return top == maxSize-1; } int GetSize() const {return top+1;} }; SeqStack::SeqStack(int sz) { elements=new ElemType[sz]; //申请连续空间  if(elements==NULL) {cout&amp;lt;&amp;lt;&amp;#34;空间申请错误！&amp;#34;&amp;lt;&amp;lt;endl;exit(1);} else { top=-1; //栈顶指示器指向栈底  maxSize=sz; //栈的最大空间  }; }; /* ********************************************************** 补充overflowProcess() 函数 ********************************************************** */ void SeqStack::Push(ElemType x) { //若栈满,则溢出处理，将元素x插入该栈栈顶  if (IsFull() == 1) overflowProcess(); //栈满  elements[++top] = x; //栈顶指针先加1, 再元素进栈 }; int SeqStack::Pop(ElemType &amp;amp; x) {//若栈不空，函数退出栈顶元素并将栈顶元素的值赋给x,  //返回true，否则返回false  if (IsEmpty() == 1) return 0; x = elements[top--]; //先取元素，栈顶指针退1  return 1; //退栈成功 }; /* ************************************************************** 补充mian()函数 ************************************************************** */ 分析和错误 OverflowProcess，用于栈溢出处理，一般申请原长度二倍的存储空间。</description>
+    </item>
+    
+    <item>
+      <title>重装机兵</title>
+      <link>https://ntutn.top/posts/%E9%87%8D%E8%A3%85%E6%9C%BA%E5%85%B5/</link>
+      <pubDate>Mon, 25 Mar 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E9%87%8D%E8%A3%85%E6%9C%BA%E5%85%B5/</guid>
+      <description>拉多：梦的起点 主角，一个满脑子都是不切实际的想法的负气出走的小毛孩，开始了他伟大的征途。这里就按照后面作品的称号吧。
+首先回家，箱子里面有5G，聊胜于无吧。去买几个参丸，准备，走。
+找到战车 出镇，去东南方向的山洞，需要逃跑的怪物类型：
+ 仿生蜗牛 生物炮 加农炮  基本是一路逃跑到了山洞最深处，喝个参丸，与挡路的狗对话。
+硬抗战狗一发攻击，然后狼会出现，并帮你打败战狗。
+山洞的战车太破，狼看不上，只拿走了副炮（徒手拆副炮啊）。于是这就是咱的第一辆战车了。
+将山洞里稍微搜刮一下，也许去找开始打不过的怪物报个仇。相当舒服。
+拉多有个规矩，就是战车不允许开进镇子，虽然没啥影响，但总是很不爽，毕竟好不容易找到战车总是想找人显摆一下啊。貌似这破规矩一直延续到第四部，香泽丽舍也有类似规矩。
+ BUG：给战车吃个参丸，然后人的HP就变成一个极大的值……
+ 水怪 作为赏金猎人，当然只有猎杀赏金首获得赏金才是最有趣的。可惜第一代这些元素不是很多，如果是第四代，任务系统是很重要的。
+水怪不是很强，基本拿到战车后就可以直接开BOSS了。
+首先去加满弹药和装甲，然后先向西走，再向北走，路上会看到一个山洞。进入，顺着箭头走，然后……就掉坑了。第一次玩的玩家基本都被坑过。在掉下来的这层到处走走，遇到水怪的概率很高。基本只用主炮输出就能打过。
+顺着坡爬上去，在另一个方向小心去拿那个箱子，是副炮。由于打水怪消耗不少装甲片，现在基本可以直接装备。副炮是无限弹药的，对于清小怪很有帮助。
+回镇补充一下，准备去下一个镇子。
+关卡，只要开着战车去，就会让你通过。
+ 打赢后记得去情报处领赏金。
+ 麦基 第一次玩我就没进入麦基镇，直接错过去了。在你向东走，路过一个小屋的标志，那就是麦基镇了。
+宝石镜 进入麦基，首先看到一片白薯地，耕会儿地吧，不要每天都打打杀杀的【滑稽】。在耕地过程中会找到一枚戒指，拿到屋里可以换得宝石镜，虽然现在暂时没用，但是是最强人类装备的四个零件之一。
+传送装置（时空隧道） 坐传送装置到拉多镇，与门口一直堵门的人对话他就会让开，以后拉多也就可以使用传真了。我个人认为这个设计是为了避免BUG，毕竟这个游戏传真使用有一定概率穿送到生命科学研究所，而在拉多这样肯定是不合理的，于是大概程序员灵机一动……
+ 在梦想起飞版本中的确有这个BUG，可以借此避免探测器球体和气息屏蔽仪被回收
+ 生命科学研究所 既然前面提到了，就在这里说一说吧。在传真出错时会传送到生命科学研究所，里面一个人都没有，设备都是故障。到自动售货机面前调查一下，可以找到一个再生丸，可以让死人复活，而且使用后这里会再出现一个。实际用处不大，因为完全可以去直接找明奇博士复活。
+波布 从麦基继续向东，可以到达波布。
+给学校捐款与BUG 在波布给学校捐款一定数量后会在镇子中央给主角立个雕像，然而当你捐款数额超过了自己实际拥有的钱数，钱没扣，但雕像立起来了……
+伙伴以及复制战车BUG 在波布南边有一个房子，开着战车进去，然后走进屋里。这时屋里跑出来一个熊孩子，开上你的战车就到处乱逛。这熊孩子就是我们诱拐的目标，未来的机械师克里夫。走上前与他对话就可以让他加入了。
+ 他开车开的挺快，可以去树那里堵他 克里夫上自己的战车，于是就有人想，如果自己先一步上车，会怎样？
+ 于是就有人进行了实验。结果表明：
+ 如果你先上车，克里夫会停在你面前，对话也得不到什么结果 如果克里夫先上车，参照前文 如果同时上车，结果……  两人都上车了，战车变成了两辆！当然这只是一个BUG，如果此时下车，复制的战车也会消失。这时，两辆车用的是同一套数据，这就造成一些判定也就可以被绕过。比如买一发特殊炮弹（铁弹）理应只能发射一枚炮弹的，但却发射两枚，于是就溢出，然后弹仓多了256枚特殊炮弹（没有名字的，价格还特别贵），然后卖掉，基本就不愁钱了。
+水鬼 找到伙伴后，去波布进行一波修整，基本就可以开第二个BOSS了。需要进行的准备有：
+ 对武器进行一次升级 买一个传真  说实话即使到现在我都感觉这游戏有些翻译很诡异，“传真”是一个传送装置（在第二部翻译叫“犬系统”），“金甲”被打烂会变成“金靴”……
+ 去给伙伴租一辆战车 补充弹药和装甲片  第二个BOSS水鬼在波布东边的桥上出没，在上面多转转就能遇到。
+没什么要注意的，记得先打蛙人，后打水鬼。你可能在波布见到过有卖特种炮弹“榴弹”，估计本来按照设计应该是用来打蛙人的，但是实际发现好像根本用不到，直接主炮硬刚就行。
+打水鬼时，水鬼在HP比较低时有概率潜入水中恢复HP。这里要看运气了，一般是没问题，但要是你脸黑，也存在炮弹打完还没死的情况。</description>
+    </item>
+    
+    <item>
+      <title>我的理想——我的一篇日记</title>
+      <link>https://ntutn.top/posts/%E6%88%91%E7%9A%84%E7%90%86%E6%83%B3%E6%88%91%E7%9A%84%E4%B8%80%E7%AF%87%E6%97%A5%E8%AE%B0/</link>
+      <pubDate>Sun, 24 Mar 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E6%88%91%E7%9A%84%E7%90%86%E6%83%B3%E6%88%91%E7%9A%84%E4%B8%80%E7%AF%87%E6%97%A5%E8%AE%B0/</guid>
+      <description>我的理想——我的一篇日记 一不小心翻到了以前初中写的一篇日记，为了装X还是用英文写的，羞耻度爆表……
+Wednesday, December 26, 2012 Sunday
+Today we learned how to talk about future intentions. Iwant to be a programmer when I grow up. So how am I going to do it? I’m goingto study computer science and English when I have free time. It’s veryimportant. I learned Visual Basic. It was made by Microsoft. I can make someprogram now. On my last summer vacation, I made some programs, like notepad.</description>
+    </item>
+    
+    <item>
+      <title>零梦</title>
+      <link>https://ntutn.top/posts/%E9%9B%B6%E6%A2%A6/</link>
+      <pubDate>Sun, 24 Mar 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E9%9B%B6%E6%A2%A6/</guid>
+      <description>做了一个有点意思的梦，细思极恐，所以特地记录一下。
+D1 我是一名初中生，一个学习非常好的中学生，我们国家有一项政策，就是学习非常好的初三学生不必在初中浪费时间，可以提前去上高中，只要到时候回来象征性参加中考就行了，而我这就是准备回家参加中考。我给家里打电话说让放心，然后打开手机地图搜索路线。
+雾很大，公交一辆一辆开过，我发现可以坐火车，坐火车是最快的。只要坐524，就能直接到达。我从入口走进，路过卖各种东西的，猪肉、水果以及其他。只有一条路，只有一个车厢，我走进，里面有一个人，正在抽烟。我问对方是不是524，对方说不知道，自己还有一站下车，这时火车开动了，而我也猛然发现车上写着522。
+D2 我被告知自己刚刚差不多是在做梦。想想也是，不符合逻辑的地方很多，首先我们初中生可以去高中体验这种诡异政策什么时候有的？车站又怎么会卖这些乱七八糟的？
+但说起来吓人，刚刚我不但一点意识不到自己在做梦，而且真的相信自己是一个初中生，真的有这奇葩的政策。
+某公司说，这是一个实验项目，主要是用于研究梦与记忆之间的关系，梦中出现的大概很多都是你心中相当害怕的事物，比如你一直在找各种交通工具就大概反映你现实是一个路痴，诸如此类。说的不错，我的确是个路痴，那按照这个说法，这个车站很值得怀疑啊，因为我不是第一次梦见这个一看就很奇怪的车站了，在以前的梦里曾经有在这个车站发生凶杀案，也就是说我曾经在某个车站类似的地方有过糟糕的经历了？总感觉自己缺了一段记忆。
+D3 我从迷蒙中清醒，脑子还是有点混乱，这里正在打仗，不对，按照规模来看，应该是两伙人在打群架，但狠辣的手法和波及到的人数占总人数的比例来看，这又是战争无疑，而且在我的观察中，我们好像并不是正义的一方。一个和尚追着我说我是他徒弟，我说自己是学生之类都会被他说是胡思乱想。不准我读书，只让我跟他学习功法。等我实在忍无可忍，就说你这两下子我也会，看他把木棍当做飞镖投向目标，我就拿起一根金针，精准地扔向他的一根白发并且成功命中。
+我就是有这样的能力，和尚就是应该有头发，这是理所当然的。
+D0 我睁开眼睛，拿起手机看了看时间，大概才六点。我不是一个初中生，我没有在配合神秘组织做实验，我不是奇怪的和尚的徒弟，我是一名大学生，最近在写一个个人博客的程序，最近买的蓝牙键盘刚刚到货。我昨晚睡得很晚，但现在一点都不困。我还在想前面这个嵌套的梦，我觉得正好可以用蓝牙键盘连接手机把这个梦写出来，发到博客里面。只是我又鬼使神差地说了一句：
+ 溺死在零梦里吧。 我不以为然，认为这是自己吓自己，感觉自己不该这么中二才对，于是起床准备洗漱了……
+ </description>
     </item>
     
     <item>
@@ -437,6 +749,30 @@ what?没有登录但修改成功了？
 嗯，没得洗了。直接修改数据的接口竟然不做登录验证。万一我写个循环这不就几乎删库了。
 不过我是谁？我是正直的好青年，我当然选择把bug上交国家，不对，是告诉厂家，不对怎么说来着……算了，就是这个意思。
 目前这个bug已经修复了，可惜也不能凭借发现这么严重漏洞直接拿个奖……</description>
+    </item>
+    
+    <item>
+      <title>日期相关的计算</title>
+      <link>https://ntutn.top/posts/%E6%97%A5%E6%9C%9F%E7%9B%B8%E5%85%B3%E7%9A%84%E8%AE%A1%E7%AE%97/</link>
+      <pubDate>Sun, 16 Sep 2018 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E6%97%A5%E6%9C%9F%E7%9B%B8%E5%85%B3%E7%9A%84%E8%AE%A1%E7%AE%97/</guid>
+      <description>今天（Sun, 16 Sep 2018 06:34:57 +0000）帮同学写一个日期相关的c++题，竟然耗费了很多时间，不得不感叹自己真是老了。 首先定义类用年月日(yy,mm,dd)存储日期 日期±天数，直接加减到“天”上，然后“多退少补”。 两日期之间相差天数。我是先计算两日前距元年元月元日的天数，然后直接相减。但我这么算，老是差几天，调试了好久，甚至我都一度打算放弃，直接调用上面做的日期加天数一天一天往上累加（可以预料到这会用多长时间）。 最后才检查出，竟然是判断闰年出错了，我把取余弄成了整除，闰年哭晕在厕所。 老了，真的老了。
+ #include &amp;lt;iostream&amp;gt;using namespace std; class TMyDate { private: int yy,mm,dd; bool isrn(int year)//判断闰年  { if((year%4==0&amp;amp;&amp;amp;year%100!=0)||(year%400==0)) { return true; } return false; } int getDaysofmonth(int y,int m)//某年某月有多少天  { switch(m) { case 1: case 3: case 5: case 7: case 8: case 10: case 12: return 31; case 2: if(isrn(y)){ return 29; } return 28; default: return 30; } } int getTotaldays(int y,int m,int d){//某年月日距元年元月元日天数  int sum=0; sum+=d; m--; while(m--){ sum+=getDaysofmonth(y,m); } y--; while(y--){ sum+=isrn(y)?</description>
+    </item>
+    
+    <item>
+      <title>梦——2018年8月19日</title>
+      <link>https://ntutn.top/posts/%E6%A2%A62018%E5%B9%B48%E6%9C%8819%E6%97%A5/</link>
+      <pubDate>Sun, 19 Aug 2018 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E6%A2%A62018%E5%B9%B48%E6%9C%8819%E6%97%A5/</guid>
+      <description>有点意思的梦。 据说人每天都做梦，很多人说自己不做梦是因为在醒后的一分钟内就忘记了梦的内容，也忘记了自己忘记过什么。这也解释了，人记住的梦大多是噩梦的现象，因为做好梦刺激不够，这一分钟不能形成足够清冽的印象。
+ So，我是盗梦空间看多了吗？为啥做个梦就非得这么惊心动魄？
+ 2018年8月19日
+做了个梦，梦里有个非常牛逼的人，他通过一些细节发现了世界逻辑上不能自洽的问题，于是他认为自己身陷梦境，决定破解这个梦境回到真实世界。
+他成功了。
+我失眠了……</description>
     </item>
     
   </channel>

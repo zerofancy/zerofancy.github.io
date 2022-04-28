@@ -22,6 +22,22 @@ echo &amp;#34;127.0.0.1 ocsp.apple.com&amp;#34; | sudo tee -a /etc/hosts 反正�
     </item>
     
     <item>
+      <title>闷声作大死：删除电脑内的空文件夹</title>
+      <link>https://ntutn.top/posts/%E9%97%B7%E5%A3%B0%E4%BD%9C%E5%A4%A7%E6%AD%BB%E5%88%A0%E9%99%A4%E7%94%B5%E8%84%91%E5%86%85%E7%9A%84%E7%A9%BA%E6%96%87%E4%BB%B6%E5%A4%B9/</link>
+      <pubDate>Sun, 16 Jun 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E9%97%B7%E5%A3%B0%E4%BD%9C%E5%A4%A7%E6%AD%BB%E5%88%A0%E9%99%A4%E7%94%B5%E8%84%91%E5%86%85%E7%9A%84%E7%A9%BA%E6%96%87%E4%BB%B6%E5%A4%B9/</guid>
+      <description>电脑卸载软件时，卸载程序常常不会把程序对应的空文件夹删掉，一般这时候我都是手动去把他删掉。
+我觉得有点麻烦，又想到电脑内可能还有其他的空文件夹。于是在网上找了个脚本删除电脑内的空文件夹，然后就遇到了麻烦……
+也许本文标题应该是一个空文件夹引发的血案……
+删除电脑内的空文件夹 本来我曾经写过一个C#版本的删除电脑空文件夹的工具，原理很简单，就是递归嘛：
+但是这程序执行比较慢，而且占用内存不少……
+在网上搜索了下，果然不能闭门造车啊，有大佬写过批处理：
+for /f &amp;#34;tokens=*&amp;#34; %%a in (&amp;#39;dir /b /ad /s C:\^|sort /r&amp;#39;) do rd &amp;#34;%%a&amp;#34; /q 2&amp;gt;nul 试用了下，效果相当不错。于是稍微修改使它能申请管理员权限，顺便修改下控制台颜色，看上去炫一点：
+title 删除空文件夹 color 03 echo 程序需要管理员权限…… set /a _Debug=0 ::========================================== :: 获取管理员权限 set _Args=%* if &amp;#34;%~1&amp;#34; NEQ &amp;#34;&amp;#34; ( set _Args=%_Args:&amp;#34;=% ) fltmc 1&amp;gt;nul 2&amp;gt;nul || ( cd /d &amp;#34;%~dp0&amp;#34; cmd /u /c echo Set UAC = CreateObject^(&amp;#34;Shell.Application&amp;#34;^) : UAC.ShellExecute &amp;#34;cmd.exe&amp;#34;, &amp;#34;/k cd &amp;#34;&amp;#34;%~dp0&amp;#34;&amp;#34; &amp;amp;&amp;amp; &amp;#34;&amp;#34;%~dpnx0&amp;#34;&amp;#34; &amp;#34;&amp;#34;%_Args%&amp;#34;&amp;#34;&amp;#34;, &amp;#34;&amp;#34;, &amp;#34;runas&amp;#34;, 1 &amp;gt; &amp;#34;%temp%\GetAdmin.</description>
+    </item>
+    
+    <item>
       <title>使用映像劫持技术屏蔽电脑中的广告进程</title>
       <link>https://ntutn.top/posts/%E4%BD%BF%E7%94%A8%E6%98%A0%E5%83%8F%E5%8A%AB%E6%8C%81%E6%8A%80%E6%9C%AF%E5%B1%8F%E8%94%BD%E7%94%B5%E8%84%91%E4%B8%AD%E7%9A%84%E5%B9%BF%E5%91%8A%E8%BF%9B%E7%A8%8B/</link>
       <pubDate>Thu, 28 Mar 2019 03:11:37 +0800</pubDate>

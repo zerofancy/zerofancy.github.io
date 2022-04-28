@@ -1,0 +1,6077 @@
+<!DOCTYPE html>
+<html><head>
+<title>计算机操作系统原理笔记</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="操作系统快考试了，我觉得自己过应该还是没问题的吧，毕竟也有认真听课。虽然对某些部分流程记忆有点发憷。">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+<meta property="og:title" content="计算机操作系统原理笔记" />
+<meta property="og:description" content="操作系统快考试了，我觉得自己过应该还是没问题的吧，毕竟也有认真听课。虽然对某些部分流程记忆有点发憷。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ntutn.top/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86%E7%AC%94%E8%AE%B0/" />
+<meta property="article:published_time" content="2019-12-10T03:11:37+08:00" />
+<meta property="article:modified_time" content="2019-12-10T03:11:37+08:00" /><meta property="og:site_name" content="归零幻想" />
+
+
+
+
+
+
+
+
+
+
+<link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+
+  
+
+
+
+
+<link rel="icon" href="//images.ntutn.top/favicon.ico">
+
+
+
+<link rel="stylesheet" href="https://ntutn.top/scss/journal.min.d8d9f81b896882733c41896750adbefbf9319ca02ccccefd461650898975c3af.css" integrity="sha256-2Nn4G4lognM8QYlnUK2&#43;&#43;/kxnKAszM79RhZQiYl1w68=" media="screen">
+
+
+
+<link rel="stylesheet" href="https://ntutn.top/scss/dark-mode.min.60f86847da9fc0724177ccfd0bf7c5997b0b41f1e58d5a293cfb3723c497c422.css" integrity="sha256-YPhoR9qfwHJBd8z9C/fFmXsLQfHljVopPPs3I8SXxCI=" media="screen">
+
+
+<script src="/vendor/js/loadCSS.js"></script>
+<script>
+  loadCSS("https://fonts.googleapis.com/css?family=Fira+Mono|Material+Icons");
+</script>
+
+
+
+<script defer
+	src='https://static.cloudflareinsights.com/beacon.min.js'
+	data-cf-beacon='{"token": 5a03d307f5214109a1e7c8b2cf306a3d'>
+</script>
+
+
+
+
+
+
+  <script src="/js/toc.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://ntutn.top/">
+    
+        <div class="nav-title">
+            归零幻想
+        </div>
+        
+        <div class="nav-subtitle">
+            零点还不算熬夜
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                Archive
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/categories">
+                Categories
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
+                Tags
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/index.xml">
+                RSS Feed
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	CC BY-SA 4.0
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    
+    
+    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f%e5%81%9a%e4%bb%80%e4%b9%88" onclick="onNavClick(`#操作系统做什么-nav`)" id="操作系统做什么-nav">
+									操作系统做什么
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f%e6%98%af%e7%94%a8%e6%88%b7%e4%b8%8e%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%a1%ac%e4%bb%b6%e4%b9%8b%e9%97%b4%e7%9a%84%e6%8e%a5%e5%8f%a3" onclick="onNavClick(`#操作系统是用户与计算机硬件之间的接口-nav`)" id="操作系统是用户与计算机硬件之间的接口-nav">
+									操作系统是用户与计算机硬件之间的接口
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f%e7%9a%84%e5%8f%91%e5%b1%95" onclick="onNavClick(`#操作系统的发展-nav`)" id="操作系统的发展-nav">
+									操作系统的发展
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%be%ae%e6%9c%ba%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f" onclick="onNavClick(`#微机操作系统-nav`)" id="微机操作系统-nav">
+									微机操作系统
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%ae%9e%e6%97%b6%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f" onclick="onNavClick(`#实时操作系统-nav`)" id="实时操作系统-nav">
+									实时操作系统
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%8d%95%e9%81%93%e6%89%b9%e5%a4%84%e7%90%86%e7%b3%bb%e7%bb%9f" onclick="onNavClick(`#单道批处理系统-nav`)" id="单道批处理系统-nav">
+									单道批处理系统
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%a4%9a%e9%81%93%e6%89%b9%e5%a4%84%e7%90%86%e7%b3%bb%e7%bb%9f" onclick="onNavClick(`#多道批处理系统-nav`)" id="多道批处理系统-nav">
+									多道批处理系统
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%88%86%e6%97%b6%e7%b3%bb%e7%bb%9f" onclick="onNavClick(`#分时系统-nav`)" id="分时系统-nav">
+									分时系统
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f%e4%ba%a7%e5%93%81%e7%8e%b0%e7%8a%b6" onclick="onNavClick(`#操作系统产品现状-nav`)" id="操作系统产品现状-nav">
+									操作系统产品现状
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%b5%8c%e5%85%a5%e5%bc%8f%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f" onclick="onNavClick(`#嵌入式操作系统-nav`)" id="嵌入式操作系统-nav">
+									嵌入式操作系统
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%8e%8c%e4%b8%8a%e8%ae%a1%e7%ae%97%e6%9c%ba%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f" onclick="onNavClick(`#掌上计算机操作系统-nav`)" id="掌上计算机操作系统-nav">
+									掌上计算机操作系统
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%ae%9e%e6%97%b6%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f-1" onclick="onNavClick(`#实时操作系统-1-nav`)" id="实时操作系统-1-nav">
+									实时操作系统
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f%e7%9a%84%e7%89%b9%e5%be%81" onclick="onNavClick(`#操作系统的特征-nav`)" id="操作系统的特征-nav">
+									操作系统的特征
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%86%85%e5%ad%98%e7%ae%a1%e7%90%86%e5%8a%9f%e8%83%bd" onclick="onNavClick(`#内存管理功能-nav`)" id="内存管理功能-nav">
+									内存管理功能
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e8%bf%9b%e7%a8%8b%e7%ae%a1%e7%90%86%e5%8a%9f%e8%83%bd" onclick="onNavClick(`#进程管理功能-nav`)" id="进程管理功能-nav">
+									进程管理功能
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e8%ae%be%e5%a4%87%e7%ae%a1%e7%90%86" onclick="onNavClick(`#设备管理-nav`)" id="设备管理-nav">
+									设备管理
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%96%87%e4%bb%b6%e7%ae%a1%e7%90%86%e5%8a%9f%e8%83%bd" onclick="onNavClick(`#文件管理功能-nav`)" id="文件管理功能-nav">
+									文件管理功能
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%8f%90%e4%be%9b%e7%94%a8%e6%88%b7%e6%8e%a5%e5%8f%a3" onclick="onNavClick(`#提供用户接口-nav`)" id="提供用户接口-nav">
+									提供用户接口
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e8%bd%af%e4%bb%b6%e7%9a%84%e4%bd%93%e7%b3%bb%e7%bb%93%e6%9e%84" onclick="onNavClick(`#软件的体系结构-nav`)" id="软件的体系结构-nav">
+									软件的体系结构
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f%e7%9a%84%e4%bd%93%e7%b3%bb%e7%bb%93%e6%9e%84" onclick="onNavClick(`#操作系统的体系结构-nav`)" id="操作系统的体系结构-nav">
+									操作系统的体系结构
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%8c%87%e4%bb%a4%e7%9a%84%e6%89%a7%e8%a1%8c" onclick="onNavClick(`#指令的执行-nav`)" id="指令的执行-nav">
+									指令的执行
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%8f%96%e6%8c%87%e4%bb%a4%e4%b8%8e%e6%89%a7%e8%a1%8c%e6%8c%87%e4%bb%a4" onclick="onNavClick(`#取指令与执行指令-nav`)" id="取指令与执行指令-nav">
+									取指令与执行指令
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e8%bf%9b%e7%a8%8b%e5%90%8c%e6%ad%a5" onclick="onNavClick(`#进程同步-nav`)" id="进程同步-nav">
+									进程同步
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e8%bf%9b%e7%a8%8b%e5%90%8c%e6%ad%a5%e7%9a%84%e5%9f%ba%e6%9c%ac%e6%a6%82%e5%bf%b5" onclick="onNavClick(`#进程同步的基本概念-nav`)" id="进程同步的基本概念-nav">
+									进程同步的基本概念
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%95%b4%e5%9e%8b%e4%bf%a1%e5%8f%b7%e9%87%8f%e6%9c%ba%e5%88%b6" onclick="onNavClick(`#整型信号量机制-nav`)" id="整型信号量机制-nav">
+									整型信号量机制
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%95%b4%e5%9e%8b%e4%bf%a1%e5%8f%b7%e9%87%8f" onclick="onNavClick(`#整型信号量-nav`)" id="整型信号量-nav">
+									整型信号量
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#wait%e5%92%8csignal%e6%93%8d%e4%bd%9cpv%e6%93%8d%e4%bd%9c" onclick="onNavClick(`#wait和signal操作pv操作-nav`)" id="wait和signal操作pv操作-nav">
+									wait和signal操作（P－V操作）
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%95%b4%e5%9e%8b%e4%bf%a1%e5%8f%b7%e9%87%8f%e5%ba%94%e7%94%a8%e4%b8%be%e4%be%8b" onclick="onNavClick(`#整型信号量应用举例-nav`)" id="整型信号量应用举例-nav">
+									整型信号量应用举例
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e8%ae%b0%e5%bd%95%e5%9e%8b%e4%bf%a1%e5%8f%b7%e9%87%8f%e6%9c%ba%e5%88%b6" onclick="onNavClick(`#记录型信号量机制-nav`)" id="记录型信号量机制-nav">
+									记录型信号量机制
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%95%b0%e6%8d%ae%e7%b1%bb%e5%9e%8b" onclick="onNavClick(`#数据类型-nav`)" id="数据类型-nav">
+									数据类型
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#wait%e5%92%8csignal%e6%93%8d%e4%bd%9c" onclick="onNavClick(`#wait和signal操作-nav`)" id="wait和signal操作-nav">
+									wait和signal操作
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%88%a9%e7%94%a8%e8%ae%b0%e5%bd%95%e5%9e%8b%e4%bf%a1%e5%8f%b7%e9%87%8f%e5%ae%9e%e7%8e%b0%e4%ba%92%e6%96%a5" onclick="onNavClick(`#利用记录型信号量实现互斥-nav`)" id="利用记录型信号量实现互斥-nav">
+									利用记录型信号量实现互斥
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%88%a9%e7%94%a8%e8%ae%b0%e5%bd%95%e5%9e%8b%e4%bf%a1%e5%8f%b7%e9%87%8f%e5%ae%9e%e7%8e%b0%e5%8d%8f%e8%b0%83%e7%9a%84%e5%ba%94%e7%94%a8%e4%b8%be%e4%be%8b" onclick="onNavClick(`#利用记录型信号量实现协调的应用举例-nav`)" id="利用记录型信号量实现协调的应用举例-nav">
+									利用记录型信号量实现“协调”的应用举例
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e7%ae%a1%e7%a8%8b" onclick="onNavClick(`#管程-nav`)" id="管程-nav">
+									管程
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e8%bf%9b%e7%a8%8b%e8%b0%83%e5%ba%a6" onclick="onNavClick(`#进程调度-nav`)" id="进程调度-nav">
+									进程调度
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e8%b0%83%e5%ba%a6%e7%ae%97%e6%b3%95" onclick="onNavClick(`#调度算法-nav`)" id="调度算法-nav">
+									调度算法
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%85%88%e6%9d%a5%e5%85%88%e6%9c%8d%e5%8a%a1fcfs" onclick="onNavClick(`#先来先服务fcfs-nav`)" id="先来先服务fcfs-nav">
+									先来先服务（FCFS）
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%9f%ad%e4%bd%9c%e4%b8%9a%e8%bf%9b%e7%a8%8b%e4%bc%98%e5%85%88" onclick="onNavClick(`#短作业进程优先-nav`)" id="短作业进程优先-nav">
+									短作业（进程）优先
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e4%bc%98%e5%85%88%e6%9d%83%e8%b0%83%e5%ba%a6%e7%ae%97%e6%b3%95" onclick="onNavClick(`#优先权调度算法-nav`)" id="优先权调度算法-nav">
+									优先权调度算法
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%97%b6%e9%97%b4%e7%89%87%e8%bd%ae%e8%bd%ac%e7%ae%97%e6%b3%95" onclick="onNavClick(`#时间片轮转算法-nav`)" id="时间片轮转算法-nav">
+									时间片轮转算法
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%a4%9a%e7%ba%a7%e9%98%9f%e5%88%97%e8%b0%83%e5%ba%a6%e7%ae%97%e6%b3%95" onclick="onNavClick(`#多级队列调度算法-nav`)" id="多级队列调度算法-nav">
+									多级队列调度算法
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%8f%82%e8%80%83" onclick="onNavClick(`#参考-nav`)" id="参考-nav">
+									参考
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e6%ad%bb%e9%94%81" onclick="onNavClick(`#死锁-nav`)" id="死锁-nav">
+									死锁
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e4%ba%a7%e7%94%9f%e6%ad%bb%e9%94%81%e7%9a%84%e5%8e%9f%e5%9b%a0%e5%92%8c%e5%bf%85%e8%a6%81%e6%9d%a1%e4%bb%b6" onclick="onNavClick(`#产生死锁的原因和必要条件-nav`)" id="产生死锁的原因和必要条件-nav">
+									产生死锁的原因和必要条件
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e4%ba%a7%e7%94%9f%e6%ad%bb%e9%94%81%e7%9a%84%e5%8e%9f%e5%9b%a0" onclick="onNavClick(`#产生死锁的原因-nav`)" id="产生死锁的原因-nav">
+									产生死锁的原因
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e4%ba%a7%e7%94%9f%e6%ad%bb%e9%94%81%e7%9a%84%e5%bf%85%e8%a6%81%e6%9d%a1%e4%bb%b6" onclick="onNavClick(`#产生死锁的必要条件-nav`)" id="产生死锁的必要条件-nav">
+									产生死锁的必要条件
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%a4%84%e7%90%86%e6%ad%bb%e9%94%81%e7%9a%84%e5%9f%ba%e6%9c%ac%e6%96%b9%e6%b3%95" onclick="onNavClick(`#处理死锁的基本方法-nav`)" id="处理死锁的基本方法-nav">
+									处理死锁的基本方法
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%ad%bb%e9%94%81%e7%9a%84%e9%a2%84%e9%98%b2" onclick="onNavClick(`#死锁的预防-nav`)" id="死锁的预防-nav">
+									死锁的预防
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%8f%82%e8%80%83-1" onclick="onNavClick(`#参考-1-nav`)" id="参考-1-nav">
+									参考
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%ad%bb%e9%94%81%e7%9a%84%e9%81%bf%e5%85%8d" onclick="onNavClick(`#死锁的避免-nav`)" id="死锁的避免-nav">
+									死锁的避免
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%88%a9%e7%94%a8%e9%93%b6%e8%a1%8c%e5%ae%b6%e7%ae%97%e6%b3%95%e9%81%bf%e5%85%8d%e6%ad%bb%e9%94%81" onclick="onNavClick(`#利用银行家算法避免死锁-nav`)" id="利用银行家算法避免死锁-nav">
+									利用银行家算法避免死锁
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%ad%bb%e9%94%81%e7%9a%84%e6%a3%80%e6%b5%8b%e5%92%8c%e8%a7%a3%e9%99%a4" onclick="onNavClick(`#死锁的检测和解除-nav`)" id="死锁的检测和解除-nav">
+									死锁的检测和解除
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%ad%98%e5%82%a8%e5%99%a8%e7%ae%a1%e7%90%86" onclick="onNavClick(`#存储器管理-nav`)" id="存储器管理-nav">
+									存储器管理
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%ad%98%e5%82%a8%e5%99%a8%e7%9a%84%e5%b1%82%e6%ac%a1%e7%bb%93%e6%9e%84" onclick="onNavClick(`#存储器的层次结构-nav`)" id="存储器的层次结构-nav">
+									存储器的层次结构
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%a8%8b%e5%ba%8f%e7%9a%84%e8%a3%85%e5%85%a5%e5%92%8c%e9%93%be%e6%8e%a5" onclick="onNavClick(`#程序的装入和链接-nav`)" id="程序的装入和链接-nav">
+									程序的装入和链接
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e7%a8%8b%e5%ba%8f%e7%9a%84%e8%a3%85%e5%85%a5" onclick="onNavClick(`#程序的装入-nav`)" id="程序的装入-nav">
+									程序的装入
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%a8%8b%e5%ba%8f%e7%9a%84%e9%93%be%e6%8e%a5" onclick="onNavClick(`#程序的链接-nav`)" id="程序的链接-nav">
+									程序的链接
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e8%bf%9e%e7%bb%ad%e5%ad%98%e5%82%a8%e7%ae%a1%e7%90%86%e6%96%b9%e5%bc%8f" onclick="onNavClick(`#连续存储管理方式-nav`)" id="连续存储管理方式-nav">
+									连续存储管理方式
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%8d%95%e4%b8%80%e8%bf%9e%e7%bb%ad%e5%88%86%e9%85%8d" onclick="onNavClick(`#单一连续分配-nav`)" id="单一连续分配-nav">
+									单一连续分配
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%9b%ba%e5%ae%9a%e5%88%86%e5%8c%ba%e5%88%86%e9%85%8d" onclick="onNavClick(`#固定分区分配-nav`)" id="固定分区分配-nav">
+									固定分区分配
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%8a%a8%e6%80%81%e5%88%86%e5%8c%ba%e5%88%86%e9%85%8d" onclick="onNavClick(`#动态分区分配-nav`)" id="动态分区分配-nav">
+									动态分区分配
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%9f%ba%e6%9c%ac%e5%88%86%e9%a1%b5%e7%ae%a1%e7%90%86%e6%96%b9%e5%bc%8f" onclick="onNavClick(`#基本分页管理方式-nav`)" id="基本分页管理方式-nav">
+									基本分页管理方式
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%88%86%e9%a1%b5%e5%ad%98%e5%82%a8%e7%ae%a1%e7%90%86%e7%9a%84%e6%96%b9%e5%bc%8f" onclick="onNavClick(`#分页存储管理的方式-nav`)" id="分页存储管理的方式-nav">
+									分页存储管理的方式
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%bf%ab%e8%a1%a8" onclick="onNavClick(`#快表-nav`)" id="快表-nav">
+									快表
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e4%b8%a4%e7%ba%a7%e5%92%8c%e5%a4%9a%e7%ba%a7%e5%88%86%e9%a1%b5" onclick="onNavClick(`#两级和多级分页-nav`)" id="两级和多级分页-nav">
+									两级和多级分页
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%88%86%e6%ae%b5%e5%ad%98%e5%82%a8%e7%ae%a1%e7%90%86" onclick="onNavClick(`#分段存储管理-nav`)" id="分段存储管理-nav">
+									分段存储管理
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%ae%b5%e8%a1%a8" onclick="onNavClick(`#段表-nav`)" id="段表-nav">
+									段表
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e8%99%9a%e6%8b%9f%e5%86%85%e5%ad%98%e7%ae%a1%e7%90%86" onclick="onNavClick(`#虚拟内存管理-nav`)" id="虚拟内存管理-nav">
+									虚拟内存管理
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e8%99%9a%e6%8b%9f%e5%ad%98%e5%82%a8%e5%99%a8%e6%a6%82%e8%bf%b0" onclick="onNavClick(`#虚拟存储器概述-nav`)" id="虚拟存储器概述-nav">
+									虚拟存储器概述
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e8%af%b7%e6%b1%82%e5%88%86%e9%a1%b5%e5%ad%98%e5%82%a8%e7%ae%a1%e7%90%86%e6%96%b9%e5%bc%8f" onclick="onNavClick(`#请求分页存储管理方式-nav`)" id="请求分页存储管理方式-nav">
+									请求分页存储管理方式
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e8%af%b7%e6%b1%82%e5%88%86%e9%a1%b5%e4%b8%ad%e7%9a%84%e7%a1%ac%e4%bb%b6%e6%94%af%e6%8c%81" onclick="onNavClick(`#请求分页中的硬件支持-nav`)" id="请求分页中的硬件支持-nav">
+									请求分页中的硬件支持
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e9%a1%b5%e9%9d%a2%e5%88%86%e9%85%8d" onclick="onNavClick(`#页面分配-nav`)" id="页面分配-nav">
+									页面分配
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e9%a1%b5%e9%9d%a2%e8%b0%83%e5%85%a5%e7%ad%96%e7%95%a5" onclick="onNavClick(`#页面调入策略-nav`)" id="页面调入策略-nav">
+									页面调入策略
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e9%a1%b5%e9%9d%a2%e7%bd%ae%e6%8d%a2%e7%ae%97%e6%b3%95" onclick="onNavClick(`#页面置换算法-nav`)" id="页面置换算法-nav">
+									页面置换算法
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%9c%80%e4%bd%b3%e7%bd%ae%e6%8d%a2%e7%ae%97%e6%b3%95" onclick="onNavClick(`#最佳置换算法-nav`)" id="最佳置换算法-nav">
+									最佳置换算法
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%85%88%e8%bf%9b%e5%85%88%e5%87%ba%e9%a1%b5%e9%9d%a2%e7%bd%ae%e6%8d%a2%e7%ae%97%e6%b3%95" onclick="onNavClick(`#先进先出页面置换算法-nav`)" id="先进先出页面置换算法-nav">
+									先进先出页面置换算法
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%9c%80%e8%bf%91%e6%9c%80%e4%b9%85%e6%9c%aa%e4%bd%bf%e7%94%a8%e7%bd%ae%e6%8d%a2%e7%ae%97%e6%b3%95" onclick="onNavClick(`#最近最久未使用置换算法-nav`)" id="最近最久未使用置换算法-nav">
+									最近最久未使用置换算法
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#lru%e7%9a%84%e8%bf%91%e4%bc%bc%e7%ae%97%e6%b3%95" onclick="onNavClick(`#lru的近似算法-nav`)" id="lru的近似算法-nav">
+									LRU的近似算法
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%85%b6%e4%bb%96%e7%bd%ae%e6%8d%a2%e7%ae%97%e6%b3%95" onclick="onNavClick(`#其他置换算法-nav`)" id="其他置换算法-nav">
+									其他置换算法
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e8%af%b7%e6%b1%82%e5%88%86%e9%a1%b5%e7%b3%bb%e7%bb%9f%e6%80%a7%e8%83%bd%e5%88%86%e6%9e%90" onclick="onNavClick(`#请求分页系统性能分析-nav`)" id="请求分页系统性能分析-nav">
+									请求分页系统性能分析
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e7%bc%ba%e9%a1%b5%e7%8e%87%e5%af%b9%e6%9c%89%e6%95%88%e8%ae%bf%e9%97%ae%e6%97%b6%e9%97%b4%e7%9a%84%e5%bd%b1%e5%93%8d" onclick="onNavClick(`#缺页率对有效访问时间的影响-nav`)" id="缺页率对有效访问时间的影响-nav">
+									缺页率对有效访问时间的影响
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%b7%a5%e4%bd%9c%e9%9b%86" onclick="onNavClick(`#工作集-nav`)" id="工作集-nav">
+									工作集
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%8a%96%e5%8a%a8" onclick="onNavClick(`#抖动-nav`)" id="抖动-nav">
+									抖动
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e6%96%87%e4%bb%b6%e7%b3%bb%e7%bb%9f" onclick="onNavClick(`#文件系统-nav`)" id="文件系统-nav">
+									文件系统
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%96%87%e4%bb%b6%e5%91%bd%e5%90%8d" onclick="onNavClick(`#文件命名-nav`)" id="文件命名-nav">
+									文件命名
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%96%87%e4%bb%b6%e7%bb%93%e6%9e%84" onclick="onNavClick(`#文件结构-nav`)" id="文件结构-nav">
+									文件结构
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%96%87%e4%bb%b6%e7%b1%bb%e5%9e%8b" onclick="onNavClick(`#文件类型-nav`)" id="文件类型-nav">
+									文件类型
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%96%87%e4%bb%b6%e5%ad%98%e5%8f%96" onclick="onNavClick(`#文件存取-nav`)" id="文件存取-nav">
+									文件存取
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%96%87%e4%bb%b6%e6%93%8d%e4%bd%9c" onclick="onNavClick(`#文件操作-nav`)" id="文件操作-nav">
+									文件操作
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e7%9b%ae%e5%bd%95" onclick="onNavClick(`#目录-nav`)" id="目录-nav">
+									目录
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%b1%82%e6%ac%a1%e7%9b%ae%e5%bd%95%e7%bb%93%e6%9e%84" onclick="onNavClick(`#层次目录结构-nav`)" id="层次目录结构-nav">
+									层次目录结构
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e8%b7%af%e5%be%84%e5%90%8d" onclick="onNavClick(`#路径名-nav`)" id="路径名-nav">
+									路径名
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%ae%9e%e7%8e%b0%e6%96%87%e4%bb%b6" onclick="onNavClick(`#实现文件-nav`)" id="实现文件-nav">
+									实现文件
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%ae%9e%e7%8e%b0%e7%9b%ae%e5%bd%95" onclick="onNavClick(`#实现目录-nav`)" id="实现目录-nav">
+									实现目录
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%a3%81%e7%9b%98%e7%a9%ba%e9%97%b4%e7%ae%a1%e7%90%86" onclick="onNavClick(`#磁盘空间管理-nav`)" id="磁盘空间管理-nav">
+									磁盘空间管理
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#io%e8%ae%be%e5%a4%87%e7%ae%a1%e7%90%86" onclick="onNavClick(`#io设备管理-nav`)" id="io设备管理-nav">
+									I/O设备管理
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#io%e7%b3%bb%e7%bb%9f%e7%9a%84%e7%bb%84%e6%88%90" onclick="onNavClick(`#io系统的组成-nav`)" id="io系统的组成-nav">
+									I/O系统的组成
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#io%e7%b3%bb%e7%bb%9f%e7%9a%84%e7%bb%93%e6%9e%84" onclick="onNavClick(`#io系统的结构-nav`)" id="io系统的结构-nav">
+									I/O系统的结构
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#io%e8%ae%be%e5%a4%87%e7%9a%84%e5%88%86%e7%b1%bb" onclick="onNavClick(`#io设备的分类-nav`)" id="io设备的分类-nav">
+									I/O设备的分类
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e8%ae%be%e5%a4%87%e6%8e%a7%e5%88%b6%e5%99%a8" onclick="onNavClick(`#设备控制器-nav`)" id="设备控制器-nav">
+									设备控制器
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#io%e6%8e%a7%e5%88%b6%e6%96%b9%e5%bc%8f" onclick="onNavClick(`#io控制方式-nav`)" id="io控制方式-nav">
+									I/O控制方式
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e8%bd%ae%e8%af%a2%e6%8e%a7%e5%88%b6%e6%96%b9%e5%bc%8f" onclick="onNavClick(`#轮询控制方式-nav`)" id="轮询控制方式-nav">
+									轮询控制方式
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e4%b8%ad%e6%96%ad%e6%8e%a7%e5%88%b6%e6%96%b9%e5%bc%8f" onclick="onNavClick(`#中断控制方式-nav`)" id="中断控制方式-nav">
+									中断控制方式
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#dma%e6%8e%a7%e5%88%b6%e6%96%b9%e5%bc%8f" onclick="onNavClick(`#dma控制方式-nav`)" id="dma控制方式-nav">
+									DMA控制方式
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e7%bc%93%e5%86%b2%e7%ae%a1%e7%90%86" onclick="onNavClick(`#缓冲管理-nav`)" id="缓冲管理-nav">
+									缓冲管理
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e7%bc%93%e5%86%b2%e7%9a%84%e5%bc%95%e5%85%a5" onclick="onNavClick(`#缓冲的引入-nav`)" id="缓冲的引入-nav">
+									缓冲的引入
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%be%aa%e7%8e%af%e7%bc%93%e5%86%b2" onclick="onNavClick(`#循环缓冲-nav`)" id="循环缓冲-nav">
+									循环缓冲
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e8%ae%be%e5%a4%87%e5%88%86%e9%85%8d" onclick="onNavClick(`#设备分配-nav`)" id="设备分配-nav">
+									设备分配
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e8%ae%be%e5%a4%87%e5%88%86%e9%85%8d%e8%a6%81%e8%80%83%e8%99%91%e7%9a%84%e5%9b%a0%e7%b4%a0" onclick="onNavClick(`#设备分配要考虑的因素-nav`)" id="设备分配要考虑的因素-nav">
+									设备分配要考虑的因素
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e8%ae%be%e5%a4%87%e7%8b%ac%e7%ab%8b%e6%80%a7" onclick="onNavClick(`#设备独立性-nav`)" id="设备独立性-nav">
+									设备独立性
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#spooling%e6%8a%80%e6%9c%af" onclick="onNavClick(`#spooling技术-nav`)" id="spooling技术-nav">
+									SPOOLING技术
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e7%a3%81%e7%9b%98%e7%ae%a1%e7%90%86" onclick="onNavClick(`#磁盘管理-nav`)" id="磁盘管理-nav">
+									磁盘管理
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e7%a3%81%e7%9b%98%e7%bb%93%e6%9e%84" onclick="onNavClick(`#磁盘结构-nav`)" id="磁盘结构-nav">
+									磁盘结构
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%a3%81%e7%9b%98%e8%b0%83%e5%ba%a6" onclick="onNavClick(`#磁盘调度-nav`)" id="磁盘调度-nav">
+									磁盘调度
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+    
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+<div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    Archive
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/categories">
+                    Categories
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
+                    Tags
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/index.xml">
+                    RSS Feed
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f%e5%81%9a%e4%bb%80%e4%b9%88" onclick="onNavClick(`#操作系统做什么-nav`)" id="操作系统做什么-nav">
+									操作系统做什么
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f%e6%98%af%e7%94%a8%e6%88%b7%e4%b8%8e%e8%ae%a1%e7%ae%97%e6%9c%ba%e7%a1%ac%e4%bb%b6%e4%b9%8b%e9%97%b4%e7%9a%84%e6%8e%a5%e5%8f%a3" onclick="onNavClick(`#操作系统是用户与计算机硬件之间的接口-nav`)" id="操作系统是用户与计算机硬件之间的接口-nav">
+									操作系统是用户与计算机硬件之间的接口
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f%e7%9a%84%e5%8f%91%e5%b1%95" onclick="onNavClick(`#操作系统的发展-nav`)" id="操作系统的发展-nav">
+									操作系统的发展
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%be%ae%e6%9c%ba%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f" onclick="onNavClick(`#微机操作系统-nav`)" id="微机操作系统-nav">
+									微机操作系统
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%ae%9e%e6%97%b6%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f" onclick="onNavClick(`#实时操作系统-nav`)" id="实时操作系统-nav">
+									实时操作系统
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%8d%95%e9%81%93%e6%89%b9%e5%a4%84%e7%90%86%e7%b3%bb%e7%bb%9f" onclick="onNavClick(`#单道批处理系统-nav`)" id="单道批处理系统-nav">
+									单道批处理系统
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%a4%9a%e9%81%93%e6%89%b9%e5%a4%84%e7%90%86%e7%b3%bb%e7%bb%9f" onclick="onNavClick(`#多道批处理系统-nav`)" id="多道批处理系统-nav">
+									多道批处理系统
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%88%86%e6%97%b6%e7%b3%bb%e7%bb%9f" onclick="onNavClick(`#分时系统-nav`)" id="分时系统-nav">
+									分时系统
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f%e4%ba%a7%e5%93%81%e7%8e%b0%e7%8a%b6" onclick="onNavClick(`#操作系统产品现状-nav`)" id="操作系统产品现状-nav">
+									操作系统产品现状
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%b5%8c%e5%85%a5%e5%bc%8f%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f" onclick="onNavClick(`#嵌入式操作系统-nav`)" id="嵌入式操作系统-nav">
+									嵌入式操作系统
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%8e%8c%e4%b8%8a%e8%ae%a1%e7%ae%97%e6%9c%ba%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f" onclick="onNavClick(`#掌上计算机操作系统-nav`)" id="掌上计算机操作系统-nav">
+									掌上计算机操作系统
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%ae%9e%e6%97%b6%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f-1" onclick="onNavClick(`#实时操作系统-1-nav`)" id="实时操作系统-1-nav">
+									实时操作系统
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f%e7%9a%84%e7%89%b9%e5%be%81" onclick="onNavClick(`#操作系统的特征-nav`)" id="操作系统的特征-nav">
+									操作系统的特征
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%86%85%e5%ad%98%e7%ae%a1%e7%90%86%e5%8a%9f%e8%83%bd" onclick="onNavClick(`#内存管理功能-nav`)" id="内存管理功能-nav">
+									内存管理功能
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e8%bf%9b%e7%a8%8b%e7%ae%a1%e7%90%86%e5%8a%9f%e8%83%bd" onclick="onNavClick(`#进程管理功能-nav`)" id="进程管理功能-nav">
+									进程管理功能
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e8%ae%be%e5%a4%87%e7%ae%a1%e7%90%86" onclick="onNavClick(`#设备管理-nav`)" id="设备管理-nav">
+									设备管理
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%96%87%e4%bb%b6%e7%ae%a1%e7%90%86%e5%8a%9f%e8%83%bd" onclick="onNavClick(`#文件管理功能-nav`)" id="文件管理功能-nav">
+									文件管理功能
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%8f%90%e4%be%9b%e7%94%a8%e6%88%b7%e6%8e%a5%e5%8f%a3" onclick="onNavClick(`#提供用户接口-nav`)" id="提供用户接口-nav">
+									提供用户接口
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e8%bd%af%e4%bb%b6%e7%9a%84%e4%bd%93%e7%b3%bb%e7%bb%93%e6%9e%84" onclick="onNavClick(`#软件的体系结构-nav`)" id="软件的体系结构-nav">
+									软件的体系结构
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%93%8d%e4%bd%9c%e7%b3%bb%e7%bb%9f%e7%9a%84%e4%bd%93%e7%b3%bb%e7%bb%93%e6%9e%84" onclick="onNavClick(`#操作系统的体系结构-nav`)" id="操作系统的体系结构-nav">
+									操作系统的体系结构
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%8c%87%e4%bb%a4%e7%9a%84%e6%89%a7%e8%a1%8c" onclick="onNavClick(`#指令的执行-nav`)" id="指令的执行-nav">
+									指令的执行
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%8f%96%e6%8c%87%e4%bb%a4%e4%b8%8e%e6%89%a7%e8%a1%8c%e6%8c%87%e4%bb%a4" onclick="onNavClick(`#取指令与执行指令-nav`)" id="取指令与执行指令-nav">
+									取指令与执行指令
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e8%bf%9b%e7%a8%8b%e5%90%8c%e6%ad%a5" onclick="onNavClick(`#进程同步-nav`)" id="进程同步-nav">
+									进程同步
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e8%bf%9b%e7%a8%8b%e5%90%8c%e6%ad%a5%e7%9a%84%e5%9f%ba%e6%9c%ac%e6%a6%82%e5%bf%b5" onclick="onNavClick(`#进程同步的基本概念-nav`)" id="进程同步的基本概念-nav">
+									进程同步的基本概念
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%95%b4%e5%9e%8b%e4%bf%a1%e5%8f%b7%e9%87%8f%e6%9c%ba%e5%88%b6" onclick="onNavClick(`#整型信号量机制-nav`)" id="整型信号量机制-nav">
+									整型信号量机制
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%95%b4%e5%9e%8b%e4%bf%a1%e5%8f%b7%e9%87%8f" onclick="onNavClick(`#整型信号量-nav`)" id="整型信号量-nav">
+									整型信号量
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#wait%e5%92%8csignal%e6%93%8d%e4%bd%9cpv%e6%93%8d%e4%bd%9c" onclick="onNavClick(`#wait和signal操作pv操作-nav`)" id="wait和signal操作pv操作-nav">
+									wait和signal操作（P－V操作）
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%95%b4%e5%9e%8b%e4%bf%a1%e5%8f%b7%e9%87%8f%e5%ba%94%e7%94%a8%e4%b8%be%e4%be%8b" onclick="onNavClick(`#整型信号量应用举例-nav`)" id="整型信号量应用举例-nav">
+									整型信号量应用举例
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e8%ae%b0%e5%bd%95%e5%9e%8b%e4%bf%a1%e5%8f%b7%e9%87%8f%e6%9c%ba%e5%88%b6" onclick="onNavClick(`#记录型信号量机制-nav`)" id="记录型信号量机制-nav">
+									记录型信号量机制
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%95%b0%e6%8d%ae%e7%b1%bb%e5%9e%8b" onclick="onNavClick(`#数据类型-nav`)" id="数据类型-nav">
+									数据类型
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#wait%e5%92%8csignal%e6%93%8d%e4%bd%9c" onclick="onNavClick(`#wait和signal操作-nav`)" id="wait和signal操作-nav">
+									wait和signal操作
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%88%a9%e7%94%a8%e8%ae%b0%e5%bd%95%e5%9e%8b%e4%bf%a1%e5%8f%b7%e9%87%8f%e5%ae%9e%e7%8e%b0%e4%ba%92%e6%96%a5" onclick="onNavClick(`#利用记录型信号量实现互斥-nav`)" id="利用记录型信号量实现互斥-nav">
+									利用记录型信号量实现互斥
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%88%a9%e7%94%a8%e8%ae%b0%e5%bd%95%e5%9e%8b%e4%bf%a1%e5%8f%b7%e9%87%8f%e5%ae%9e%e7%8e%b0%e5%8d%8f%e8%b0%83%e7%9a%84%e5%ba%94%e7%94%a8%e4%b8%be%e4%be%8b" onclick="onNavClick(`#利用记录型信号量实现协调的应用举例-nav`)" id="利用记录型信号量实现协调的应用举例-nav">
+									利用记录型信号量实现“协调”的应用举例
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e7%ae%a1%e7%a8%8b" onclick="onNavClick(`#管程-nav`)" id="管程-nav">
+									管程
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e8%bf%9b%e7%a8%8b%e8%b0%83%e5%ba%a6" onclick="onNavClick(`#进程调度-nav`)" id="进程调度-nav">
+									进程调度
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e8%b0%83%e5%ba%a6%e7%ae%97%e6%b3%95" onclick="onNavClick(`#调度算法-nav`)" id="调度算法-nav">
+									调度算法
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%85%88%e6%9d%a5%e5%85%88%e6%9c%8d%e5%8a%a1fcfs" onclick="onNavClick(`#先来先服务fcfs-nav`)" id="先来先服务fcfs-nav">
+									先来先服务（FCFS）
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%9f%ad%e4%bd%9c%e4%b8%9a%e8%bf%9b%e7%a8%8b%e4%bc%98%e5%85%88" onclick="onNavClick(`#短作业进程优先-nav`)" id="短作业进程优先-nav">
+									短作业（进程）优先
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e4%bc%98%e5%85%88%e6%9d%83%e8%b0%83%e5%ba%a6%e7%ae%97%e6%b3%95" onclick="onNavClick(`#优先权调度算法-nav`)" id="优先权调度算法-nav">
+									优先权调度算法
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%97%b6%e9%97%b4%e7%89%87%e8%bd%ae%e8%bd%ac%e7%ae%97%e6%b3%95" onclick="onNavClick(`#时间片轮转算法-nav`)" id="时间片轮转算法-nav">
+									时间片轮转算法
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%a4%9a%e7%ba%a7%e9%98%9f%e5%88%97%e8%b0%83%e5%ba%a6%e7%ae%97%e6%b3%95" onclick="onNavClick(`#多级队列调度算法-nav`)" id="多级队列调度算法-nav">
+									多级队列调度算法
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%8f%82%e8%80%83" onclick="onNavClick(`#参考-nav`)" id="参考-nav">
+									参考
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e6%ad%bb%e9%94%81" onclick="onNavClick(`#死锁-nav`)" id="死锁-nav">
+									死锁
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e4%ba%a7%e7%94%9f%e6%ad%bb%e9%94%81%e7%9a%84%e5%8e%9f%e5%9b%a0%e5%92%8c%e5%bf%85%e8%a6%81%e6%9d%a1%e4%bb%b6" onclick="onNavClick(`#产生死锁的原因和必要条件-nav`)" id="产生死锁的原因和必要条件-nav">
+									产生死锁的原因和必要条件
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e4%ba%a7%e7%94%9f%e6%ad%bb%e9%94%81%e7%9a%84%e5%8e%9f%e5%9b%a0" onclick="onNavClick(`#产生死锁的原因-nav`)" id="产生死锁的原因-nav">
+									产生死锁的原因
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e4%ba%a7%e7%94%9f%e6%ad%bb%e9%94%81%e7%9a%84%e5%bf%85%e8%a6%81%e6%9d%a1%e4%bb%b6" onclick="onNavClick(`#产生死锁的必要条件-nav`)" id="产生死锁的必要条件-nav">
+									产生死锁的必要条件
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%a4%84%e7%90%86%e6%ad%bb%e9%94%81%e7%9a%84%e5%9f%ba%e6%9c%ac%e6%96%b9%e6%b3%95" onclick="onNavClick(`#处理死锁的基本方法-nav`)" id="处理死锁的基本方法-nav">
+									处理死锁的基本方法
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%ad%bb%e9%94%81%e7%9a%84%e9%a2%84%e9%98%b2" onclick="onNavClick(`#死锁的预防-nav`)" id="死锁的预防-nav">
+									死锁的预防
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%8f%82%e8%80%83-1" onclick="onNavClick(`#参考-1-nav`)" id="参考-1-nav">
+									参考
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%ad%bb%e9%94%81%e7%9a%84%e9%81%bf%e5%85%8d" onclick="onNavClick(`#死锁的避免-nav`)" id="死锁的避免-nav">
+									死锁的避免
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%88%a9%e7%94%a8%e9%93%b6%e8%a1%8c%e5%ae%b6%e7%ae%97%e6%b3%95%e9%81%bf%e5%85%8d%e6%ad%bb%e9%94%81" onclick="onNavClick(`#利用银行家算法避免死锁-nav`)" id="利用银行家算法避免死锁-nav">
+									利用银行家算法避免死锁
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%ad%bb%e9%94%81%e7%9a%84%e6%a3%80%e6%b5%8b%e5%92%8c%e8%a7%a3%e9%99%a4" onclick="onNavClick(`#死锁的检测和解除-nav`)" id="死锁的检测和解除-nav">
+									死锁的检测和解除
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%ad%98%e5%82%a8%e5%99%a8%e7%ae%a1%e7%90%86" onclick="onNavClick(`#存储器管理-nav`)" id="存储器管理-nav">
+									存储器管理
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%ad%98%e5%82%a8%e5%99%a8%e7%9a%84%e5%b1%82%e6%ac%a1%e7%bb%93%e6%9e%84" onclick="onNavClick(`#存储器的层次结构-nav`)" id="存储器的层次结构-nav">
+									存储器的层次结构
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%a8%8b%e5%ba%8f%e7%9a%84%e8%a3%85%e5%85%a5%e5%92%8c%e9%93%be%e6%8e%a5" onclick="onNavClick(`#程序的装入和链接-nav`)" id="程序的装入和链接-nav">
+									程序的装入和链接
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e7%a8%8b%e5%ba%8f%e7%9a%84%e8%a3%85%e5%85%a5" onclick="onNavClick(`#程序的装入-nav`)" id="程序的装入-nav">
+									程序的装入
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%a8%8b%e5%ba%8f%e7%9a%84%e9%93%be%e6%8e%a5" onclick="onNavClick(`#程序的链接-nav`)" id="程序的链接-nav">
+									程序的链接
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e8%bf%9e%e7%bb%ad%e5%ad%98%e5%82%a8%e7%ae%a1%e7%90%86%e6%96%b9%e5%bc%8f" onclick="onNavClick(`#连续存储管理方式-nav`)" id="连续存储管理方式-nav">
+									连续存储管理方式
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%8d%95%e4%b8%80%e8%bf%9e%e7%bb%ad%e5%88%86%e9%85%8d" onclick="onNavClick(`#单一连续分配-nav`)" id="单一连续分配-nav">
+									单一连续分配
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%9b%ba%e5%ae%9a%e5%88%86%e5%8c%ba%e5%88%86%e9%85%8d" onclick="onNavClick(`#固定分区分配-nav`)" id="固定分区分配-nav">
+									固定分区分配
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%8a%a8%e6%80%81%e5%88%86%e5%8c%ba%e5%88%86%e9%85%8d" onclick="onNavClick(`#动态分区分配-nav`)" id="动态分区分配-nav">
+									动态分区分配
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%9f%ba%e6%9c%ac%e5%88%86%e9%a1%b5%e7%ae%a1%e7%90%86%e6%96%b9%e5%bc%8f" onclick="onNavClick(`#基本分页管理方式-nav`)" id="基本分页管理方式-nav">
+									基本分页管理方式
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%88%86%e9%a1%b5%e5%ad%98%e5%82%a8%e7%ae%a1%e7%90%86%e7%9a%84%e6%96%b9%e5%bc%8f" onclick="onNavClick(`#分页存储管理的方式-nav`)" id="分页存储管理的方式-nav">
+									分页存储管理的方式
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%bf%ab%e8%a1%a8" onclick="onNavClick(`#快表-nav`)" id="快表-nav">
+									快表
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e4%b8%a4%e7%ba%a7%e5%92%8c%e5%a4%9a%e7%ba%a7%e5%88%86%e9%a1%b5" onclick="onNavClick(`#两级和多级分页-nav`)" id="两级和多级分页-nav">
+									两级和多级分页
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%88%86%e6%ae%b5%e5%ad%98%e5%82%a8%e7%ae%a1%e7%90%86" onclick="onNavClick(`#分段存储管理-nav`)" id="分段存储管理-nav">
+									分段存储管理
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%ae%b5%e8%a1%a8" onclick="onNavClick(`#段表-nav`)" id="段表-nav">
+									段表
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e8%99%9a%e6%8b%9f%e5%86%85%e5%ad%98%e7%ae%a1%e7%90%86" onclick="onNavClick(`#虚拟内存管理-nav`)" id="虚拟内存管理-nav">
+									虚拟内存管理
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e8%99%9a%e6%8b%9f%e5%ad%98%e5%82%a8%e5%99%a8%e6%a6%82%e8%bf%b0" onclick="onNavClick(`#虚拟存储器概述-nav`)" id="虚拟存储器概述-nav">
+									虚拟存储器概述
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e8%af%b7%e6%b1%82%e5%88%86%e9%a1%b5%e5%ad%98%e5%82%a8%e7%ae%a1%e7%90%86%e6%96%b9%e5%bc%8f" onclick="onNavClick(`#请求分页存储管理方式-nav`)" id="请求分页存储管理方式-nav">
+									请求分页存储管理方式
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e8%af%b7%e6%b1%82%e5%88%86%e9%a1%b5%e4%b8%ad%e7%9a%84%e7%a1%ac%e4%bb%b6%e6%94%af%e6%8c%81" onclick="onNavClick(`#请求分页中的硬件支持-nav`)" id="请求分页中的硬件支持-nav">
+									请求分页中的硬件支持
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e9%a1%b5%e9%9d%a2%e5%88%86%e9%85%8d" onclick="onNavClick(`#页面分配-nav`)" id="页面分配-nav">
+									页面分配
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e9%a1%b5%e9%9d%a2%e8%b0%83%e5%85%a5%e7%ad%96%e7%95%a5" onclick="onNavClick(`#页面调入策略-nav`)" id="页面调入策略-nav">
+									页面调入策略
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e9%a1%b5%e9%9d%a2%e7%bd%ae%e6%8d%a2%e7%ae%97%e6%b3%95" onclick="onNavClick(`#页面置换算法-nav`)" id="页面置换算法-nav">
+									页面置换算法
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%9c%80%e4%bd%b3%e7%bd%ae%e6%8d%a2%e7%ae%97%e6%b3%95" onclick="onNavClick(`#最佳置换算法-nav`)" id="最佳置换算法-nav">
+									最佳置换算法
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%85%88%e8%bf%9b%e5%85%88%e5%87%ba%e9%a1%b5%e9%9d%a2%e7%bd%ae%e6%8d%a2%e7%ae%97%e6%b3%95" onclick="onNavClick(`#先进先出页面置换算法-nav`)" id="先进先出页面置换算法-nav">
+									先进先出页面置换算法
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%9c%80%e8%bf%91%e6%9c%80%e4%b9%85%e6%9c%aa%e4%bd%bf%e7%94%a8%e7%bd%ae%e6%8d%a2%e7%ae%97%e6%b3%95" onclick="onNavClick(`#最近最久未使用置换算法-nav`)" id="最近最久未使用置换算法-nav">
+									最近最久未使用置换算法
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#lru%e7%9a%84%e8%bf%91%e4%bc%bc%e7%ae%97%e6%b3%95" onclick="onNavClick(`#lru的近似算法-nav`)" id="lru的近似算法-nav">
+									LRU的近似算法
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%85%b6%e4%bb%96%e7%bd%ae%e6%8d%a2%e7%ae%97%e6%b3%95" onclick="onNavClick(`#其他置换算法-nav`)" id="其他置换算法-nav">
+									其他置换算法
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e8%af%b7%e6%b1%82%e5%88%86%e9%a1%b5%e7%b3%bb%e7%bb%9f%e6%80%a7%e8%83%bd%e5%88%86%e6%9e%90" onclick="onNavClick(`#请求分页系统性能分析-nav`)" id="请求分页系统性能分析-nav">
+									请求分页系统性能分析
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e7%bc%ba%e9%a1%b5%e7%8e%87%e5%af%b9%e6%9c%89%e6%95%88%e8%ae%bf%e9%97%ae%e6%97%b6%e9%97%b4%e7%9a%84%e5%bd%b1%e5%93%8d" onclick="onNavClick(`#缺页率对有效访问时间的影响-nav`)" id="缺页率对有效访问时间的影响-nav">
+									缺页率对有效访问时间的影响
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%b7%a5%e4%bd%9c%e9%9b%86" onclick="onNavClick(`#工作集-nav`)" id="工作集-nav">
+									工作集
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%8a%96%e5%8a%a8" onclick="onNavClick(`#抖动-nav`)" id="抖动-nav">
+									抖动
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e6%96%87%e4%bb%b6%e7%b3%bb%e7%bb%9f" onclick="onNavClick(`#文件系统-nav`)" id="文件系统-nav">
+									文件系统
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%96%87%e4%bb%b6%e5%91%bd%e5%90%8d" onclick="onNavClick(`#文件命名-nav`)" id="文件命名-nav">
+									文件命名
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%96%87%e4%bb%b6%e7%bb%93%e6%9e%84" onclick="onNavClick(`#文件结构-nav`)" id="文件结构-nav">
+									文件结构
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%96%87%e4%bb%b6%e7%b1%bb%e5%9e%8b" onclick="onNavClick(`#文件类型-nav`)" id="文件类型-nav">
+									文件类型
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%96%87%e4%bb%b6%e5%ad%98%e5%8f%96" onclick="onNavClick(`#文件存取-nav`)" id="文件存取-nav">
+									文件存取
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%96%87%e4%bb%b6%e6%93%8d%e4%bd%9c" onclick="onNavClick(`#文件操作-nav`)" id="文件操作-nav">
+									文件操作
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e7%9b%ae%e5%bd%95" onclick="onNavClick(`#目录-nav`)" id="目录-nav">
+									目录
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%b1%82%e6%ac%a1%e7%9b%ae%e5%bd%95%e7%bb%93%e6%9e%84" onclick="onNavClick(`#层次目录结构-nav`)" id="层次目录结构-nav">
+									层次目录结构
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e8%b7%af%e5%be%84%e5%90%8d" onclick="onNavClick(`#路径名-nav`)" id="路径名-nav">
+									路径名
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%ae%9e%e7%8e%b0%e6%96%87%e4%bb%b6" onclick="onNavClick(`#实现文件-nav`)" id="实现文件-nav">
+									实现文件
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%ae%9e%e7%8e%b0%e7%9b%ae%e5%bd%95" onclick="onNavClick(`#实现目录-nav`)" id="实现目录-nav">
+									实现目录
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%a3%81%e7%9b%98%e7%a9%ba%e9%97%b4%e7%ae%a1%e7%90%86" onclick="onNavClick(`#磁盘空间管理-nav`)" id="磁盘空间管理-nav">
+									磁盘空间管理
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#io%e8%ae%be%e5%a4%87%e7%ae%a1%e7%90%86" onclick="onNavClick(`#io设备管理-nav`)" id="io设备管理-nav">
+									I/O设备管理
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#io%e7%b3%bb%e7%bb%9f%e7%9a%84%e7%bb%84%e6%88%90" onclick="onNavClick(`#io系统的组成-nav`)" id="io系统的组成-nav">
+									I/O系统的组成
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#io%e7%b3%bb%e7%bb%9f%e7%9a%84%e7%bb%93%e6%9e%84" onclick="onNavClick(`#io系统的结构-nav`)" id="io系统的结构-nav">
+									I/O系统的结构
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#io%e8%ae%be%e5%a4%87%e7%9a%84%e5%88%86%e7%b1%bb" onclick="onNavClick(`#io设备的分类-nav`)" id="io设备的分类-nav">
+									I/O设备的分类
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e8%ae%be%e5%a4%87%e6%8e%a7%e5%88%b6%e5%99%a8" onclick="onNavClick(`#设备控制器-nav`)" id="设备控制器-nav">
+									设备控制器
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#io%e6%8e%a7%e5%88%b6%e6%96%b9%e5%bc%8f" onclick="onNavClick(`#io控制方式-nav`)" id="io控制方式-nav">
+									I/O控制方式
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e8%bd%ae%e8%af%a2%e6%8e%a7%e5%88%b6%e6%96%b9%e5%bc%8f" onclick="onNavClick(`#轮询控制方式-nav`)" id="轮询控制方式-nav">
+									轮询控制方式
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e4%b8%ad%e6%96%ad%e6%8e%a7%e5%88%b6%e6%96%b9%e5%bc%8f" onclick="onNavClick(`#中断控制方式-nav`)" id="中断控制方式-nav">
+									中断控制方式
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#dma%e6%8e%a7%e5%88%b6%e6%96%b9%e5%bc%8f" onclick="onNavClick(`#dma控制方式-nav`)" id="dma控制方式-nav">
+									DMA控制方式
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e7%bc%93%e5%86%b2%e7%ae%a1%e7%90%86" onclick="onNavClick(`#缓冲管理-nav`)" id="缓冲管理-nav">
+									缓冲管理
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e7%bc%93%e5%86%b2%e7%9a%84%e5%bc%95%e5%85%a5" onclick="onNavClick(`#缓冲的引入-nav`)" id="缓冲的引入-nav">
+									缓冲的引入
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%be%aa%e7%8e%af%e7%bc%93%e5%86%b2" onclick="onNavClick(`#循环缓冲-nav`)" id="循环缓冲-nav">
+									循环缓冲
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e8%ae%be%e5%a4%87%e5%88%86%e9%85%8d" onclick="onNavClick(`#设备分配-nav`)" id="设备分配-nav">
+									设备分配
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e8%ae%be%e5%a4%87%e5%88%86%e9%85%8d%e8%a6%81%e8%80%83%e8%99%91%e7%9a%84%e5%9b%a0%e7%b4%a0" onclick="onNavClick(`#设备分配要考虑的因素-nav`)" id="设备分配要考虑的因素-nav">
+									设备分配要考虑的因素
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e8%ae%be%e5%a4%87%e7%8b%ac%e7%ab%8b%e6%80%a7" onclick="onNavClick(`#设备独立性-nav`)" id="设备独立性-nav">
+									设备独立性
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#spooling%e6%8a%80%e6%9c%af" onclick="onNavClick(`#spooling技术-nav`)" id="spooling技术-nav">
+									SPOOLING技术
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e7%a3%81%e7%9b%98%e7%ae%a1%e7%90%86" onclick="onNavClick(`#磁盘管理-nav`)" id="磁盘管理-nav">
+									磁盘管理
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e7%a3%81%e7%9b%98%e7%bb%93%e6%9e%84" onclick="onNavClick(`#磁盘结构-nav`)" id="磁盘结构-nav">
+									磁盘结构
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%a3%81%e7%9b%98%e8%b0%83%e5%ba%a6" onclick="onNavClick(`#磁盘调度-nav`)" id="磁盘调度-nav">
+									磁盘调度
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://ntutn.top/">
+            归零幻想
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://ntutn.top/">
+        <div class="single-column-header-title">归零幻想</div>
+        
+        <div class="single-column-header-subtitle">零点还不算熬夜</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
+                    计算机操作系统原理笔记
+                    
+                    <div class="post-subtitle">
+                        操作系统快考试了，我觉得自己过应该还是没问题的吧，毕竟也有认真听课。虽然对某些部分流程记忆有点发憷。
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2019-12-10 03:11
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/%E7%AC%94%E8%AE%B0">笔记</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F">操作系统</a>
+                                &nbsp;
+                            
+                                <a href="/tags/%E7%AC%94%E8%AE%B0">笔记</a>
+                                &nbsp;
+                            
+                        
+                        
+                            <i class="material-icons" style="">schedule</i>
+                            
+
+                            
+                            
+
+                            
+                            48 min
+                            
+                            44 s.
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <!-- raw HTML omitted -->
+<p>操作系统快考试了，我觉得自己过应该还是没问题的吧，毕竟也有认真听课。虽然对某些部分流程记忆有点发憷。</p>
+<!-- raw HTML omitted -->
+<h2 id="操作系统做什么">操作系统做什么</h2>
+<h3 id="操作系统是用户与计算机硬件之间的接口">操作系统是用户与计算机硬件之间的接口</h3>
+<p><strong>用户</strong> 指包括最终用户在内的各级用户。</p>
+<h3 id="操作系统的发展">操作系统的发展</h3>
+<h4 id="微机操作系统">微机操作系统</h4>
+<p>个人机操作系统。</p>
+<h4 id="实时操作系统">实时操作系统</h4>
+<p>支持实时计算的系统，实时计算即 <strong>系统的正确性不仅取决于计算的逻辑结果，而且还依赖于产生结果的时间。</strong></p>
+<p><strong>实时任务的类型</strong></p>
+<ol>
+<li>周期性实时任务</li>
+<li>非周期性实时任务</li>
+<li>硬实时任务</li>
+<li>软实时任务</li>
+</ol>
+<blockquote>
+<p>实时计算机可以不运行实时操作系统，直接运行应用软件</p>
+</blockquote>
+<ul>
+<li>高可用性</li>
+<li>截止时间
+<ul>
+<li>开始截止时间</li>
+<li>实际截止时间</li>
+</ul>
+</li>
+</ul>
+<h4 id="单道批处理系统">单道批处理系统</h4>
+<ol>
+<li>自动性</li>
+<li>顺序性</li>
+<li>单道性</li>
+</ol>
+<p><strong>优点</strong></p>
+<p>减少人工等待时间</p>
+<p><strong>缺点</strong></p>
+<ul>
+<li>作业独占CPU</li>
+<li><em>CPU等待IO使得CPU利用率低</em></li>
+</ul>
+<h4 id="多道批处理系统">多道批处理系统</h4>
+<ul>
+<li>多道性</li>
+<li>无序性</li>
+<li>调度性</li>
+<li>复杂性</li>
+</ul>
+<p><strong>优点</strong></p>
+<ol>
+<li>提高CPU利用率</li>
+<li>提高内存和IO利用率</li>
+<li>增加系统吞吐量</li>
+</ol>
+<blockquote>
+<p>吞吐量：单位时间里系统处理的作业量
+<strong>缺点</strong></p>
+</blockquote>
+<ol>
+<li>平均等待周期长</li>
+<li>缺乏交互能力</li>
+</ol>
+<h4 id="分时系统">分时系统</h4>
+<ol>
+<li>多路性</li>
+<li>独立性</li>
+<li>及时性</li>
+<li>交互性</li>
+</ol>
+<p><strong>优点</strong></p>
+<ol>
+<li>提供人机交互</li>
+<li>多终端共享主机</li>
+</ol>
+<p><strong>关键问题</strong></p>
+<ol>
+<li>及时接收用户的命令和顺序</li>
+<li>及时处理用户的命令。 <em>使所有的用户作业都进入内存，在很短的的时间内使每个作业都运行一次</em></li>
+</ol>
+<h3 id="操作系统产品现状">操作系统产品现状</h3>
+<h4 id="嵌入式操作系统">嵌入式操作系统</h4>
+<p><strong>嵌入式系统</strong> 是宿主于非计算机设备的操作系统。 <strong>嵌入式操作系统</strong> 是运行于嵌入式系统中的操作系统。</p>
+<h4 id="掌上计算机操作系统">掌上计算机操作系统</h4>
+<p>PDA</p>
+<h4 id="实时操作系统-1">实时操作系统</h4>
+<p>在资源调度、中断处理等方面的设计和实现要充分考虑系统对时间都限制。应用领域如 <em>自动控制、军事指挥系统、民用航空管理等</em></p>
+<p>与嵌入式系统在分类上有一定重叠，有一定时限要求，在设计和实现上也有一些共同的特点， <strong>专用性、规模小、实时性、高可靠性</strong> 。</p>
+<h3 id="操作系统的特征">操作系统的特征</h3>
+<p><em>支持多任务的操作系统</em></p>
+<ul>
+<li>并发 同一时间间隔执行多个任务</li>
+<li>共享</li>
+<li>虚拟</li>
+<li>异步</li>
+</ul>
+<p><em>操作系统功能</em></p>
+<ul>
+<li>内存管理功能</li>
+<li>进程管理功能</li>
+<li>设备管理功能</li>
+<li>文件管理功能</li>
+<li>用户接口</li>
+</ul>
+<h4 id="内存管理功能">内存管理功能</h4>
+<h5 id="内存分配">内存分配</h5>
+<h5 id="内存保护">内存保护</h5>
+<p>每个进程在自己的进程空间。</p>
+<blockquote>
+<p>界限寄存器</p>
+</blockquote>
+<h5 id="地址映射">地址映射</h5>
+<blockquote>
+<p>地址映射是硬件和操作系统配合完成的。
+把进程的逻辑地址转换成内存上的物理地址。</p>
+</blockquote>
+<p><strong>逻辑地址</strong> ：程序中的地址是从某一地址开始，相对于起始地址计算的，称为逻辑地址。</p>
+<p><strong>物理地址</strong> 由内存中的一系列单元所限定的地址范围称为 <em>内存空间</em> ，其中的地址被称为物理地址。</p>
+<blockquote>
+<p>obj文件中逻辑地址是从0开始的，exe中的不是。
+编译系统形成逻辑地址原因：编译器并不知道操作系统会将程序载入内存的实际物理地址。
+中断发生时，保存现场，PC的值已经指向下一条指令，待中断返回时继续执行下一条指令。
+变长指令集，PC+1时根据当前指令的长度决定PC递增的值</p>
+</blockquote>
+<h5 id="内存扩充">内存扩充</h5>
+<p>虚拟技术。</p>
+<h5 id="内存回收">内存回收</h5>
+<p>将进程占据的内存空间标记为空闲。</p>
+<blockquote>
+<p>OS内核：在特权集下运行的程序。（除此之外，还有接口，在非特权集运行，如shell）</p>
+</blockquote>
+<h4 id="进程管理功能">进程管理功能</h4>
+<ul>
+<li>进程控制</li>
+<li>进程同步</li>
+<li>进程通信</li>
+<li>进程调度</li>
+</ul>
+<h4 id="设备管理">设备管理</h4>
+<ul>
+<li>缓冲管理：管理各种缓冲区</li>
+<li>设备分配：分配用户IO需要的设备</li>
+<li>设备处理：由设备驱动程序实现CPU与设备控制器之间的通信</li>
+<li>设备独立性</li>
+<li>虚拟设备：应用程序无需关注设备品牌等细节</li>
+</ul>
+<h4 id="文件管理功能">文件管理功能</h4>
+<ul>
+<li>文件等按名访问</li>
+<li>文件等存储</li>
+</ul>
+<h4 id="提供用户接口">提供用户接口</h4>
+<blockquote>
+<p>shell运行于用户态。</p>
+</blockquote>
+<ul>
+<li>命令接口</li>
+<li>图形接口：采用图形化的操作界面</li>
+<li>程序接口：由一组系统调用组成</li>
+</ul>
+<h3 id="软件的体系结构">软件的体系结构</h3>
+<blockquote>
+<p>为什么要研究软件的体系结构</p>
+<blockquote>
+<p>使软件模块更清晰，提高开发效率，更好测试、维护和移植，（提高软件运行的速度）。</p>
+</blockquote>
+</blockquote>
+<h3 id="操作系统的体系结构">操作系统的体系结构</h3>
+<ul>
+<li>微内核优点：移植性好</li>
+<li>缺点：运行效率低一点</li>
+</ul>
+<h3 id="指令的执行">指令的执行</h3>
+<h4 id="取指令与执行指令">取指令与执行指令</h4>
+<h5 id="取指令">取指令</h5>
+<p>每个指令周期开始时，处理器从<strong>内存</strong>中取一条指令。程序计数器<strong>PC</strong>保存有下一次要取的指令的地址。取指令后PC递增。</p>
+<h5 id="执行指令">执行指令</h5>
+<p>取到的指令放置于<strong>IR</strong>中，处理器解释指令并执行动作。</p>
+<blockquote>
+<p>一条语句常对应多条指令。
+程序执行过程反复取指令执行指令（硬件完成）
+指令执行结果是使寄存器或内存单元值变化
+保存现场（硬件隐指令）不需要保存内存的内容。内存有隔离措施，保证中断后内存内容不变。恢复现场由操作系统完成（恢复AC等值）。
+隐指令：在机器指令系统中没有的，对用户来说是不可见的，完成特定功能的指令，如中断隐指令。</p>
+</blockquote>
+<h2 id="进程同步">进程同步</h2>
+<blockquote>
+<p>操作系统快考试了，我觉得自己过应该还是没问题的吧，毕竟也有认真听课。虽然对某些部分流程记忆有点发憷。
+[tag]:操作系统|笔记</p>
+</blockquote>
+<h3 id="进程同步的基本概念">进程同步的基本概念</h3>
+<p>进程同步的任务：</p>
+<ol>
+<li>在资源共享的情况下：保证诸进程以互斥方式访问</li>
+<li>在相互合作的情况下：保证诸进程协调执行。相互合作进程可能存在资源共享的情况。</li>
+</ol>
+<ul>
+<li>临界资源：必须以互斥方式访问的共享资源。</li>
+<li>临界区：每个进程总访问共享资源的那段代码</li>
+<li>进入区：检查是否可以进入“临界区”并对临界区“加锁”的代码</li>
+<li>退出区：释放临界区访问权的代码</li>
+</ul>
+<p>同步机制应遵循准则</p>
+<ol>
+<li>空闲让进</li>
+<li>忙则等待</li>
+<li>有限等待</li>
+<li>让权等待</li>
+</ol>
+<h3 id="整型信号量机制">整型信号量机制</h3>
+<h4 id="整型信号量">整型信号量</h4>
+<p>整型信号量是表示共享资源状态 <strong>只能由特殊的原子操作(wait和signal)改变</strong> 的整型量。</p>
+<p>整型量&gt;0说明有可用资源。</p>
+<h4 id="wait和signal操作pv操作">wait和signal操作（P－V操作）</h4>
+<pre><code>var s:integer;
+wait(s){
+	while s&lt;=0 do no-op;//申请不到资源做空操作
+	s=s-1;
+}
+signal(s){
+	s=s+1;
+}
+</code></pre><blockquote>
+<p>思考：开关中断应该怎样加？</p>
+</blockquote>
+<h4 id="整型信号量应用举例">整型信号量应用举例</h4>
+<p>临界资源由程序员界定，需要为每种临界资源分别定义一种互斥信号量。</p>
+<blockquote>
+<p>缺陷：不能实现让权等待。</p>
+</blockquote>
+<h3 id="记录型信号量机制">记录型信号量机制</h3>
+<h4 id="数据类型">数据类型</h4>
+<pre><code>Type semaphore=record
+	Value:integer//资源数量
+	L:list of process//阻塞队列（PCB）
+end
+</code></pre><blockquote>
+<p>考：记录型信号量、wait和singial操作</p>
+</blockquote>
+<h4 id="wait和signal操作">wait和signal操作</h4>
+<pre><code>prodcedure wait(s)
+	var s:semaphore;
+	begin
+		s.value=s.value-1;
+		if s.value&lt;0 then block(s.L);
+	end
+procedure signal(s)
+	var s:semaphore;
+	begin
+		s.value=s.value+1;
+		if s.value&lt;=0 then wakeup(s.L);
+	end
+</code></pre><blockquote>
+<p>被阻塞的是调用wait申请资源的进程（自我阻塞）。</p>
+</blockquote>
+<h4 id="利用记录型信号量实现互斥">利用记录型信号量实现互斥</h4>
+<pre><code>var s:semaphore;
+	s.value=1;
+begin
+	repat
+		wait(s);
+			critical section;
+		signal(s);
+		reminder section;
+	until false;
+end
+</code></pre><p>先唤醒哪个进程取决于操作系统，如果使用优先权，尽量不使用静态优先权。</p>
+<h4 id="利用记录型信号量实现协调的应用举例">利用记录型信号量实现“协调”的应用举例</h4>
+<p>设置两个信号量<code>var empty,full:semaphore</code></p>
+<p>初始：empty.value=2,full.value=0</p>
+<pre><code>输入进程：
+{
+	从外存读数据;
+	wait(empty)
+	往缓冲区放数据
+	signal(full)
+}
+计算进程：
+{
+	wait(full);
+	从缓冲区读取数据
+	signal(empty)
+	处理数据
+}
+</code></pre><h3 id="管程">管程</h3>
+<blockquote>
+<p>管程由编译器提供支持。</p>
+</blockquote>
+<h2 id="进程调度">进程调度</h2>
+<blockquote>
+<p>操作系统快考试了，我觉得自己过应该还是没问题的吧，毕竟也有认真听课。虽然对某些部分流程记忆有点发憷。
+[tag]:操作系统|笔记</p>
+</blockquote>
+<blockquote>
+<p>操作系统的进程调度功能由进程调度程序完成
+什么时候操作系统会进行进程调度？</p>
+<blockquote>
+<p>进程阻塞
+时间片用完
+程序正常或异常结束
+中断返回
+高优先权进程到来</p>
+</blockquote>
+</blockquote>
+<h3 id="调度算法">调度算法</h3>
+<p>周转时间=服务时间+等待时间</p>
+<p>平均周转时间=总周转时间/进程数</p>
+<p>带权周转时间=服务时间/等待时间</p>
+<p>平均带权周转时间=总带权周转时间/进程数</p>
+<blockquote>
+<p>立即抢占：高优先级进程立即执行的最小时间单位可以是每执行完一条指令。</p>
+</blockquote>
+<h4 id="先来先服务fcfs">先来先服务（FCFS）</h4>
+<p>适合长作业，不利于短作业。有利于CPU繁忙型作业，不利于I/O繁忙型作业。</p>
+<h4 id="短作业进程优先">短作业（进程）优先</h4>
+<p>短作业优先SJF</p>
+<p>短进程优先SPF</p>
+<p>有效缩短作业和进程的平均等待时间，提高系统吞吐量。</p>
+<p><strong>缺陷</strong></p>
+<ol>
+<li>对长作业和长进程不利，如果系统中不断有短作业和短进程到来，则长作业及长进程可能长时间得不到调度。</li>
+<li>不能保证紧迫作业和进程的及时处理</li>
+<li>作业和进程的长短由用户的估算，不一定能真正做到短进程或短作业优先</li>
+</ol>
+<blockquote>
+<p>与先来先服务相比，能缩短系统的平均周转时间和平均带权周转时间。</p>
+</blockquote>
+<h4 id="优先权调度算法">优先权调度算法</h4>
+<p>实时系统中非阻塞式难以保证高优先权进程得到及时调度，因此主要用于批处理系统。</p>
+<p>静态优先权存在进程饥饿问题，使用 <strong>老化</strong> 技术动优先权避免这个问题。</p>
+<h4 id="时间片轮转算法">时间片轮转算法</h4>
+<p>进程需要在CPU上运行的时间可能小于一个时间片，也可能大于一个时间片。对于进程的时间区间小于一个时间片的情况，进程在CPU上运行结束本身会自动释放CPU，然后由操作系统执行进程调度程序为另一个就绪进程分配CPU；对于进程的时间区间大于一个时间片的情况，进程可能执行若干时间片，每当进程在CPU上连续运行的时间等于一个时间片长度时，操作系统在 <strong>时钟中断处理过程</strong> 中就会抢占CPU，进行进程切换，用新的就绪进程替代当前进程，而被替换的当前进程则重新回到就绪队列中。</p>
+<h5 id="时间片大型的确定">时间片大型的确定</h5>
+<p>时间片太长，那么进程看上去就不是并发执行的；时间片太短，频繁切换进程上下文影响效率。</p>
+<p><strong>在系统允许的最大进程数一定的情况下，时间片的长短取决于系统要求的响应时间，且响应时间越短，时间片取值应该越小。</strong></p>
+<blockquote>
+<p>时间片轮转需要的硬件软件：</p>
+<blockquote>
+<p>硬件：可编程间隔定时器、可编程中断控制器
+软件：PCB中记录在CPU上运行剩余时间都字段、时钟中断处理程序、中断处理程序</p>
+</blockquote>
+</blockquote>
+<h4 id="多级队列调度算法">多级队列调度算法</h4>
+<p>将就绪队列分为多个独立队列……</p>
+<p>课本p100</p>
+<h3 id="参考">参考</h3>
+<ul>
+<li><a href="https://blog.csdn.net/tobe98/article/details/101632841">进程调度，一个调度器的自白</a></li>
+</ul>
+<h2 id="死锁">死锁</h2>
+<blockquote>
+<p>操作系统快考试了，我觉得自己过应该还是没问题的吧，毕竟也有认真听课。虽然对某些部分流程记忆有点发憷。
+[tag]:操作系统|笔记</p>
+</blockquote>
+<h3 id="产生死锁的原因和必要条件">产生死锁的原因和必要条件</h3>
+<h4 id="产生死锁的原因">产生死锁的原因</h4>
+<ol>
+<li>竞争共享资源</li>
+<li>进程推进顺序不当</li>
+</ol>
+<h4 id="产生死锁的必要条件">产生死锁的必要条件</h4>
+<ol>
+<li>互斥条件 一个进程在访问某资源的过程中，其他进程不能访问该资源</li>
+<li>请求和保持条件 进程提出新的资源请求，被阻塞，但不释放已经保持的资源</li>
+<li>不剥夺条件 进程已经获得的资源不能被剥夺，只能由进程自己释放</li>
+<li>环路等待条件 必然存在一个进程申请资源的环形链，互相等待对方占用的资源</li>
+</ol>
+<p>只有上述四个条件同时满足时才会发生死锁。</p>
+<h3 id="处理死锁的基本方法">处理死锁的基本方法</h3>
+<ol>
+<li>预防死锁</li>
+<li>避免死锁</li>
+<li>检测并解除死锁</li>
+<li><strong>忽略死锁问题，认为死锁不可能在系统内发生</strong></li>
+</ol>
+<blockquote>
+<p>认为死锁不可能发生是一个经验、统计规律。</p>
+</blockquote>
+<h4 id="死锁的预防">死锁的预防</h4>
+<p>摒弃三个必要条件之一。</p>
+<h5 id="摒弃请求和保持条件">摒弃请求和保持条件</h5>
+<p>系统要求所有进程在执行前要一次性地申请整个运行过程中所需要的全部资源，只要有一个资源申请不成功，其他所有的资源就不分配给该进程,并阻塞该进程。</p>
+<h5 id="摒弃不剥夺条件">摒弃不剥夺条件</h5>
+<p>一个已经保持了某些资源的进程，当它再提出新的资源要求而不能立即得到满足时，必须释放它已经保持的所有资源。</p>
+<h5 id="摒弃环路等待条件">摒弃环路等待条件</h5>
+<p>规定进程必须按一定顺序申请资源。</p>
+<h4 id="参考-1">参考</h4>
+<ul>
+<li><a href="https://www.jianshu.com/p/99f10708b1e1#">哲学家就餐问题与死锁总结</a></li>
+</ul>
+<h4 id="死锁的避免">死锁的避免</h4>
+<p>把系统的资源分配状态分为 <strong>安全状态</strong> 和 <strong>不安全状态</strong> ，只要资源分配使系统处于安全状态，死锁就不会发生。</p>
+<h4 id="利用银行家算法避免死锁">利用银行家算法避免死锁</h4>
+<p>一个进程提出资源请求后，系统先进行资源的试分配，然后检测本次的试分配是否使系统处于安全状态，若安全，则按试分配方案分配资源，否则不分配资源。</p>
+<p>安全状态：能找到一个执行序列分配资源。（满足最大需求后进程释放资源）</p>
+<p>系统处于安全状态时， <strong>一定不会发生死锁</strong> ，进入不安全状态 <strong>未必会发生死锁</strong> ，发生死锁 <strong>一定是进入了不安全状态</strong> 。</p>
+<ol>
+<li><code>available[]</code> 是个一维数组，表示系统中某种资源的可用数量。</li>
+<li><code>max[]</code> 是个二维数组，表示各进程需要各类资源的最大数量，如<code>max[i,j]=k</code>表示进程pi需要j类资源的最大数量为k。</li>
+<li><code>allocation[]</code> 是个二维数组，表示某时刻已分配给进程的某类资源数，如<code>allocation[i,j]=k</code> 表示进程pi已经占有j类资源k个。</li>
+<li><code>need[]</code> 是二维数组，表示某个进程还需要多少个某类资源，如<code>need[i,j]=k</code>表示进程pi还需要j类资源k个。</li>
+</ol>
+<p>该算法缺乏实用价值，因为很少有进程能够在运行之前就知道其所需资源的最大值，而且进程数不是固定的，往往在不断变化，原本可用的资源也可能在突然之间变成不可用。</p>
+<h4 id="死锁的检测和解除">死锁的检测和解除</h4>
+<p>操作系统可以不采取预防和避免的方法来解决死锁问题，而是检测是否有死锁发生，如果检测到系统中有死锁的进程，则解除死锁。</p>
+<p>应用检测死锁算法必须面对的问题是 <strong>何时调用检测算法</strong> 及 <strong>如何检测死锁</strong> 。
+资源分配图：进程指向资源是资源请求边，资源指向进程是资源分配边。</p>
+<p>死锁定理用于检测系统所处的 <strong>资源分配状态</strong> S是否为 <strong>死锁状态</strong> 。</p>
+<p>S为死锁状态&lt;=&gt;S状态的资源分配图是不可完全简化的</p>
+<p>解除死锁的途径有两个：</p>
+<ol>
+<li>终止处于死锁状态的进程</li>
+<li>抢占死锁进程占有的资源</li>
+</ol>
+<blockquote>
+<p>系统中不会出现单个进程死锁的情况，但会出现只有一个进程饥饿的情况。</p>
+</blockquote>
+<h2 id="存储器管理">存储器管理</h2>
+<blockquote>
+<p>操作系统快考试了，我觉得自己过应该还是没问题的吧，毕竟也有认真听课。虽然对某些部分流程记忆有点发憷。
+[tag]:操作系统|笔记</p>
+</blockquote>
+<h3 id="存储器的层次结构">存储器的层次结构</h3>
+<p>局部性原理</p>
+<ol>
+<li>程序执行时，除少部分的转移和过程调用外，大多数情况下是按顺序执行的。</li>
+<li>过程调用会使程序的执行轨迹由一部分内存区域转到另一部分内存区域。但研究表明，在大多数情况下过程调用的深度都不超过5，也就是说，程序将会在一段时间内局限在很小的范围内。</li>
+<li>程序中存在很多循环结构，它们虽然由少数指令构成，但需要多次执行。</li>
+<li>程序中往往包括许多对数据结构的处理，它们往往局限在很小的范围内。</li>
+</ol>
+<blockquote>
+<p>少用goto：goto破坏程序的局部性。</p>
+</blockquote>
+<h3 id="程序的装入和链接">程序的装入和链接</h3>
+<p>高级语言程序必须经过 <strong>编译</strong> 、 <strong>链接</strong> 才能为之成为可执行程序，可执行程序必须被操作系统 <strong>装入</strong> 内存才能执行。</p>
+<blockquote>
+<p>交叉编译：开发平台不同于目标平台。</p>
+</blockquote>
+<h4 id="程序的装入">程序的装入</h4>
+<ul>
+<li>绝对装入方式</li>
+</ul>
+<p>在编译时形成物理地址</p>
+<ul>
+<li>可重定位装入方式（静态重定位）</li>
+</ul>
+<p>装入时形成物理地址</p>
+<ul>
+<li>动态运行时装入方式</li>
+</ul>
+<p>运行时形成物理地址（运行时才进行物理映射），逻辑地址在PC中。</p>
+<p>需要 <strong>重定位寄存器</strong> 的支持。</p>
+<h4 id="程序的链接">程序的链接</h4>
+<h5 id="链接要解决的问题">链接要解决的问题</h5>
+<p>将编译后的目标模块装配成一个可执行的程序。</p>
+<h5 id="链接的两种方式">链接的两种方式</h5>
+<h6 id="静态链接">静态链接</h6>
+<ul>
+<li>静态链接 在程序运行前，用链接程序将目标模块链接成一个完整的装入模块。</li>
+<li>静态链接的任务
+<ul>
+<li>对相对地址进行修改</li>
+<li>变换外部调用符号</li>
+</ul>
+</li>
+</ul>
+<ol>
+<li>存储开销大</li>
+<li>程序开发不方便</li>
+<li>程序运行相对于动态链接快</li>
+</ol>
+<h6 id="动态链接">动态链接</h6>
+<ol>
+<li>节省内存和外存空间</li>
+<li>方便程序开发</li>
+<li>程序运行时的速度变慢</li>
+</ol>
+<h3 id="连续存储管理方式">连续存储管理方式</h3>
+<h4 id="单一连续分配">单一连续分配</h4>
+<p>把内存分为系统区和用户区。</p>
+<h4 id="固定分区分配">固定分区分配</h4>
+<p>固定分区分配的 <strong>用户分区数量</strong> 是固定的， <strong>每个分区的大小</strong> 也是固定的，其大小可以相等也可以不想等。</p>
+<ul>
+<li>分区编号</li>
+<li>分区大小</li>
+<li>分区起始地址</li>
+<li>分区状态</li>
+</ul>
+<p><strong>在PCB中记录分配的分区的起始地址</strong></p>
+<p>固定分区的特点</p>
+<ol>
+<li>管理简单</li>
+<li>内存利用率低</li>
+</ol>
+<p>记录和维护空闲分区情况数据结构，常用空闲分区表、空闲分区链表。</p>
+<blockquote>
+<p>作业：写一个分配分区的程序，打印版。</p>
+</blockquote>
+<h4 id="动态分区分配">动态分区分配</h4>
+<h5 id="首次适应算法">首次适应算法</h5>
+<p>空闲分区地址递增，链首顺序查找，找出能满足要求的第一个。</p>
+<ol>
+<li>高地址部分大空闲区较多</li>
+<li>低地址部分容易留下小分区</li>
+<li>查找时间开销大</li>
+</ol>
+<h5 id="循环首次适应">循环首次适应</h5>
+<p>不再从头开始查找，从上次找到的位置开始查找。</p>
+<ol>
+<li>空闲空间分配均匀</li>
+<li>查找开销较小</li>
+<li>容易使系统缺乏较大空闲分区</li>
+</ol>
+<h5 id="最佳适应算法">最佳适应算法</h5>
+<p>空闲分区大小递增，返回满足条件，最小的第一个。</p>
+<ol>
+<li>避免大材小用，提高内存利用率</li>
+<li>容易留下难以利用的小空闲区</li>
+</ol>
+<blockquote>
+<p>问题</p>
+<blockquote>
+<p>考虑回收否？
+起始大小、状态
+代码行数、链表</p>
+</blockquote>
+</blockquote>
+<h5 id="回收">回收</h5>
+<p>修改分区大小，（删除多余的节点）</p>
+<h5 id="紧凑">紧凑</h5>
+<p>将多个空闲分区拼接成连续大空闲分区。</p>
+<h3 id="基本分页管理方式">基本分页管理方式</h3>
+<p>离散的内存管理方式</p>
+<ol>
+<li>分页存储管理</li>
+<li>分段存储管理</li>
+<li>段页式存储管理</li>
+</ol>
+<h4 id="分页存储管理的方式">分页存储管理的方式</h4>
+<h5 id="基本概念">基本概念</h5>
+<ol>
+<li>页 将一个进程的逻辑地址空间分为若干大小相等的片，称为页面或 <strong>页</strong></li>
+<li>物理块 将内存空间分成与页相同大小的若干存储块，称为 <strong>物理块</strong> 或页框或帧</li>
+<li>分页存储 在为进程分配内存时，以块为单位将进程的若干页分别装入多个可不连续的块中</li>
+<li>页内碎片 进程的最后一页一般装不满一块，而形成不可利用的碎片，称为 <strong>页内碎片</strong></li>
+</ol>
+<p>（一级分页）逻辑地址由页号、页内偏移量构成。</p>
+<p><em>计算关系</em></p>
+<p>32位系统中为高20位页号，低12位页内偏移。</p>
+<blockquote>
+<p>在有关计算题中用二进制或十六进制表示。
+页表建立页号和块号联系，但一般不必存页号，用块号顺序表示。</p>
+</blockquote>
+<blockquote>
+<p>页表在内存中连续存放，列表项长度固定（页表本身长度是页表项项数，页表项长度是页表项占字节数），页表寄存器中存储了页表起始地址和页表长度，由硬件检索页表得到访存实际地址。
+一级分页下读数据要两次访存。</p>
+</blockquote>
+<h5 id="地址变换过程">地址变换过程</h5>
+<ol>
+<li>进程执行，PCB中页表起始地址送页表寄存器</li>
+<li>CPU访问逻辑单元a</li>
+<li>由分页地址变换机构自动将a分为页号和页内偏移</li>
+<li>由硬件检索机构搜索页表，得到物理块号</li>
+</ol>
+<blockquote>
+<p>得到物理地址后，先查看高速缓存，如果命中直接取，未命中则去内存找。
+<strong>页大小的选择</strong></p>
+</blockquote>
+<p>由机器的体系结构决定，亦由硬件决定</p>
+<p>页太小，进程所需页多，页表太长，占用大量内存空间；降低页换入换出效率。</p>
+<p>页太大，页内碎片大，内存利用率低。</p>
+<ul>
+<li>页的大小是2的幂</li>
+<li>一般页大小在512B~4K</li>
+<li>现在硬件可以支持多种不同的页大小</li>
+</ul>
+<h4 id="快表">快表</h4>
+<p>快表是为了提高CPU访存速度而采用的专用缓存，用来存放 <strong>最近被访问过的页表项</strong></p>
+<p>有效减少访问页表时间。</p>
+<ul>
+<li>TLB命中，1次访问TLB时间+1次访问内存的时间</li>
+<li>TLB不命中，1次访问TLB时间+2次访问内存的时间</li>
+</ul>
+<p>TLB每CPU一个。</p>
+<h4 id="两级和多级分页">两级和多级分页</h4>
+<p>页表寄存器中的值是外层页表的起始地址。</p>
+<blockquote>
+<p>二级分页中TLB存放什么？
+外层页号、页表分页、进程页面</p>
+</blockquote>
+<blockquote>
+<p>减少页表占用内存的方法：将当前所需要的页表和外层页表放在内存中，其余页表分页放在外存中，当所需的分页不在内存时，产生中断，将请求的页表调入内存。</p>
+</blockquote>
+<h3 id="分段存储管理">分段存储管理</h3>
+<ul>
+<li>段的逻辑地址
+<ul>
+<li>段号</li>
+<li>段内偏移</li>
+</ul>
+</li>
+</ul>
+<h4 id="段表">段表</h4>
+<ol>
+<li>页是按物理空间划分的，段是按逻辑空间划分的</li>
+<li>页大小固定，段大小不固定</li>
+<li>分页地址空间是一维的，程序员给出的只是一个助记符</li>
+</ol>
+<h2 id="虚拟内存管理">虚拟内存管理</h2>
+<blockquote>
+<p>操作系统快考试了，我觉得自己过应该还是没问题的吧，毕竟也有认真听课。虽然对某些部分流程记忆有点发憷。
+[tag]:操作系统|笔记</p>
+</blockquote>
+<h3 id="虚拟存储器概述">虚拟存储器概述</h3>
+<ol>
+<li>提高内存利用率</li>
+<li>提高多道程序度</li>
+<li>把逻辑空间和物理空间分开</li>
+</ol>
+<p>虚拟存储系统具有以下主要特征：</p>
+<ol>
+<li>离散型</li>
+<li>多次性</li>
+<li>对换性</li>
+<li>虚拟性</li>
+</ol>
+<h3 id="请求分页存储管理方式">请求分页存储管理方式</h3>
+<p>运行过程中访存，若发现所访问的页面不在内存中，则产生一个缺页中断信号，系统响应缺页中断，请求调入缺页。若调入缺页时内存已满，则需要先从内存中选择一个或若干个页面换出到外存空间，以腾出内存空间容纳请求调入的缺页。</p>
+<blockquote>
+<p>系统通常不会等缺页中断再选择一页换出，而是有一个最小阈值，定期扫描</p>
+</blockquote>
+<h4 id="请求分页中的硬件支持">请求分页中的硬件支持</h4>
+<h5 id="页表机制">页表机制</h5>
+<ul>
+<li>页号 作为地址映射时的索引</li>
+<li>物理块号 页面在物理内存中的物理块编号</li>
+<li>状态位P 用来标识页面是否在内存中</li>
+<li>访问字段A 用来记录页面最近被访问的情况</li>
+<li>修改位M 用于标识页面最近是否被修改过</li>
+<li>外存地址 用于指出页面在外存的地址</li>
+</ul>
+<h5 id="缺页中断机构">缺页中断机构</h5>
+<p>在访存过程中发现缺页时产生的缺页中断信号，使CPU中断当前控制流的执行，转去执行操作系统的缺页中断处理程序。</p>
+<ol>
+<li>通过检查页表的存在位P，判断当前被访问的页是否在内存中，如果不在，则产生缺页中断信号。</li>
+<li>在内存中为请求调入的页找一个空闲物理块</li>
+<li>调磁盘操作，把需要的页装入找到的空闲物理块中</li>
+<li>修改页表，更新已经调入页的存在位、在内存中的物理块号、访问位等字段的值</li>
+<li>重新执行因缺页而被中断的指令</li>
+</ol>
+<h5 id="地址变换机构">地址变换机构</h5>
+<ol>
+<li>由内存地址变换机构从线性逻辑地址中分离出页号和页内偏移地址</li>
+<li>以页号作为索引查找快表，若快表中存在该页的页表项，则读出物理块号，计算物理地址</li>
+<li>若快表中不存在该页的信息，则转到内存页表中查找。若页表中状态位P显示该页已经调入内存，则从响应的页表项读出页面所在的物理块号并计算物理地址，然后把该页表项写入快表</li>
+<li>若该页尚未调入内存，则产生缺页中断，请求OS把该页从外存中调入内存，然后修改页表，重新执行被中断的指令。</li>
+</ol>
+<blockquote>
+<p>缺页中断一定产生于指令执行的过程中。缺页中断返回时执行原指令，而不是下一条指令。</p>
+</blockquote>
+<h4 id="页面分配">页面分配</h4>
+<h5 id="最少物理块数">最少物理块数</h5>
+<p>最少物理块数是指能保证进程正常运行所需要的最少物理块数。保证进程正常运行所需要的最少物理块数与 <del>进程的大小</del> 无关，与 <strong>计算机的硬件结构</strong> 有关，取决于指令的 <strong>格式</strong> 、 <strong>功能</strong> 和 <strong>寻址方式</strong> 。</p>
+<p>指令本身涉及的页面、操作数部分的地址涉及的页面、操作数地址中存在的内存地址中可能涉及的地址……</p>
+<h5 id="页面分配和置换策略">页面分配和置换策略</h5>
+<ol>
+<li>固定分配局部置换</li>
+<li>可变分配全局置换 广泛使用</li>
+<li>可变分配局部置换</li>
+</ol>
+<h5 id="分配算法">分配算法</h5>
+<ul>
+<li>平均分配算法</li>
+<li>按比例分配算法</li>
+<li>考虑优先权的分配算法</li>
+</ul>
+<h4 id="页面调入策略">页面调入策略</h4>
+<p>当系统产生缺页中断时，调入请求页面的同时可以只把该页面进入内存，也可以同时把与该页相邻的页面调入内存。外存页面既可以存放在对换区，也可以存放在文件区。</p>
+<h3 id="页面置换算法">页面置换算法</h3>
+<p>页面置换算法是选择淘汰页的算法。</p>
+<h4 id="最佳置换算法">最佳置换算法</h4>
+<p>选择以后永远不会被访问的页面或最长时间不会再访问的页面。</p>
+<h4 id="先进先出页面置换算法">先进先出页面置换算法</h4>
+<p>选择进入内存最早的页面淘汰。</p>
+<h4 id="最近最久未使用置换算法">最近最久未使用置换算法</h4>
+<p>将最近最久未使用的页面予以淘汰。</p>
+<p>实现：</p>
+<h5 id="寄存器">寄存器</h5>
+<p>为每个内存中的页面配置一个移位寄存器，访问时最高位1，定时右移寄存器，最小数值的最久未使用。</p>
+<h5 id="栈">栈</h5>
+<p>访问时把页面号移出，压入栈顶，栈底为最久未使用的页面。</p>
+<h5 id="计数器">计数器</h5>
+<p>为每个页表项增加时间字段……</p>
+<h4 id="lru的近似算法">LRU的近似算法</h4>
+<h5 id="附加引用位算法">附加引用位算法</h5>
+<p>类寄存器方法。</p>
+<h5 id="简单clock算法">简单Clock算法</h5>
+<p>为每一页设置一位访问位，再将内存中的所有页面通过链接指针链接成循环队列。某页被访问时，访问位置1。按FIFO算法检查访问位，若为0，选择换出；若为1，重新置0，暂不换出。</p>
+<blockquote>
+<p>只考虑访问位，未考虑修改位。</p>
+</blockquote>
+<h5 id="改进型clock算法">改进型Clock算法</h5>
+<p>A=0，M=0 最佳淘汰页
+A=0，M=1 并不是很好的淘汰页
+A=1，M=0 已访问，未修改
+A=1，M=1 已访问，已修改</p>
+<ol>
+<li>寻找A=0 M=0的，选中第一个</li>
+<li>第一步失败，寻找A=0，M=1的，选中第一个。所有经过的A置0</li>
+<li>回到开始位置，并将所有访问位A复0，重复第一步，失败则重复第二步</li>
+</ol>
+<h4 id="其他置换算法">其他置换算法</h4>
+<h5 id="最少使用置换算法">最少使用置换算法</h5>
+<p>选择最近时期使用次数最少的页面作为淘汰页。</p>
+<blockquote>
+<p>实际实现与LRU通常相同。</p>
+</blockquote>
+<h5 id="页面缓冲算法">页面缓冲算法</h5>
+<p>采用FIFO算法选择淘汰页，建立两个链表 空闲页面链表、已修改页面链表。</p>
+<p>没有被修改页面换出时实际不把它换出内存，而是把该页所在的物理块挂在空闲页链表的尾部。置换已修改页面，挂在已修改页面链表尾部。</p>
+<blockquote>
+<p>一般与其他分配算法配合使用。
+缺页中断处理的性能受不受页缓冲机制的影响？
+受影响，因为如果引入缓冲机制，缺失的页在内存中，就不必再到外存寻找，会加快处理速度。</p>
+</blockquote>
+<h3 id="请求分页系统性能分析">请求分页系统性能分析</h3>
+<h4 id="缺页率对有效访问时间的影响">缺页率对有效访问时间的影响</h4>
+<h4 id="工作集">工作集</h4>
+<p>把最近访问的页全部装入内存</p>
+<p><strong>W(t,Δ)</strong> 工作集的窗口</p>
+<p>Δ为窗口尺寸，Δ太大，影响存储器利用率</p>
+<p>Δ太小，缺页率高，影响系统的吞吐量</p>
+<h4 id="抖动">抖动</h4>
+<p>多道程序度太高，使运行进程大部分时间都用于页换入换出，几乎不能完成任何有效工作的状态称为 <strong>抖动</strong></p>
+<p><strong>预防</strong></p>
+<ol>
+<li>采用局部置换策略 进程缺页时，仅在自己内存空间范围置换页面</li>
+<li>在CPU调度程序中引入工作集算法 只有当每个进程在内存中都有足够大驻留集时，才能从外存调入新的作业</li>
+<li>L=S准则 调整多道程序度，以使发生缺页的平均时间L=系统处理缺页的平均时间S</li>
+<li>挂起若干进程 预防抖动，挂起若干进程，腾出进程占用的空间</li>
+</ol>
+<h2 id="文件系统">文件系统</h2>
+<blockquote>
+<p>操作系统快考试了，我觉得自己过应该还是没问题的吧，毕竟也有认真听课。虽然对某些部分流程记忆有点发憷。
+[tag]:操作系统|笔记</p>
+</blockquote>
+<h3 id="文件命名">文件命名</h3>
+<p>文件命名向用户提供文件访问的抽象机制。</p>
+<ul>
+<li>大小写</li>
+<li>文件扩展名</li>
+</ul>
+<h4 id="文件结构">文件结构</h4>
+<h5 id="无结构字节序列">无结构字节序列</h5>
+<p>也称 <strong>流式文件</strong> ，操作系统不关心文件的内容是什么，它所见到的就是字节，含义由使用文件的程序自行理解。</p>
+<h5 id="固定长度记录序列">固定长度记录序列</h5>
+<p>构成文件的基本单位是具有固定长度的记录，每个记录都有其内部结构。读操作返回一个记录，写操作返回或追加一个记录。</p>
+<h5 id="树形结构">树形结构</h5>
+<p>文件由一颗记录树构成，记录长度不变，在记录的固定位置包含一个关键字域，记录树按 <strong>关键字域</strong> 排序。基本操作是获取具有特定关键字的记录。增加记录时，由操作系统决定记录在文件中的存放位置。</p>
+<h4 id="文件类型">文件类型</h4>
+<p>文件的类型有 <strong>正规文件</strong> 、 <strong>目录文件</strong> 、 <strong>字符设备文件</strong> 、 <strong>块设备文件</strong> 等。正规文件包含用户信息，一般分为 <strong>ASCII文件</strong> 和 <strong>二进制文件</strong> 。</p>
+<h5 id="ascii文件">ASCII文件</h5>
+<p>由多行正文组成，在某些系统中，每行用 <strong>回车符</strong> 结束，某些则用 <strong>换行符</strong> 结束，有些系统还同时采用回车符和换行符。</p>
+<p><strong>优势</strong></p>
+<ul>
+<li>可以显示和打印</li>
+<li>可以使用通常的文本编辑器进行编辑</li>
+<li>程序使用ASCII文件输入输出可以很容易把一个程序的输出当做另一个程序的输入。</li>
+</ul>
+<h5 id="二进制文件">二进制文件</h5>
+<ul>
+<li>具有一定的内部结构，只有使用该文件的程序才了解这种结构。</li>
+<li>通常的编辑器不能直接显示和打印二进制文件</li>
+<li>不同的操作系统可以识别不同的二进制文件，把某一种结构的二进制文件作为系统中的可执行文件。</li>
+</ul>
+<h4 id="文件存取">文件存取</h4>
+<p>用户通过对 <strong>文件的存取</strong> 完成对文件的各种操作。文件的存取方式是由 <strong>文件的性质和用户使用文件的情况</strong> 来确定的。</p>
+<ul>
+<li>顺序存取</li>
+<li>随机存取</li>
+</ul>
+<blockquote>
+<p>定长记录的文件能很好地支持随机存取，而变长记录虽然可以随机存取，但实现起来复杂且存取速度慢。</p>
+</blockquote>
+<h4 id="文件操作">文件操作</h4>
+<p>使用文件的目的是存储信息，方便以后的检索。</p>
+<ol>
+<li>CREATE</li>
+<li>DELETE</li>
+<li>OPEN 使用文件之前，必须先打开文件。OPEN调用的目的是将 <strong>文件属性和磁盘地址表</strong> 装入主存，以便后续调用的快速存取。</li>
+<li>CLOSE</li>
+<li>READ</li>
+<li>WRITE</li>
+<li>APPEND</li>
+<li>SEEK</li>
+<li>GETATTRIBUTES</li>
+<li>SETATTRIBUTES</li>
+<li>RENAME</li>
+</ol>
+<h3 id="目录">目录</h3>
+<p>文件系统通常提供目录用于记录文件，在很多系统中目录本身也是文件。目录的数量对应文件的数量。</p>
+<h4 id="层次目录结构">层次目录结构</h4>
+<h5 id="目录文件的结构">目录文件的结构</h5>
+<blockquote>
+<p>2^n个扇区叫做一个簇，作为文件分配的最小单位。文件系统按名访问时需要簇号。</p>
+<table>
+<thead>
+<tr>
+<th>文件名</th>
+<th>地址信息（簇号）</th>
+</tr>
+</thead>
+</table>
+</blockquote>
+<p>地址信息在MS－DOS系统中是起始簇号，在unix是i节点所在簇号。</p>
+<ul>
+<li>单层目录</li>
+<li>双层目录 一个用户一个目录</li>
+<li>目录树</li>
+</ul>
+<h4 id="路径名">路径名</h4>
+<h4 id="实现文件">实现文件</h4>
+<p>连续分配是将文件作为连续数据存储在磁盘上。</p>
+<p>优点：简单易实现，性能好，一次操作可读出整个文件</p>
+<p>缺点：无法事先知道该为文件分多少空间，文件长度会变，造成磁盘碎片。</p>
+<p>链接表分配是为每个文件构建磁盘块的链接表，每个块的第一个字用于指向下一块的指针，块的其他部分存放数据</p>
+<p>优点：磁盘空间利用率高，管理简单</p>
+<p>缺点：随机存取的速度慢</p>
+<p>使用索引的链接表分配使用链接表实现文件，取出文件名和地址信息作为索引表。</p>
+<blockquote>
+<p>目录结合FAT表
+FAT12</p>
+</blockquote>
+<p><strong>FAT文件系统目录结构、FAT表结构作用、如何实现按名访问、数据结构与单个文件管理的最大长度的关系。</strong></p>
+<ul>
+<li>FAT12采用12位文件分配表，磁盘块大小为2KB</li>
+<li>则FAT12可以管理的磁盘容量为8M</li>
+<li>FAT12文件系统文件名：只能是8.3格式的文件名</li>
+</ul>
+<h4 id="实现目录">实现目录</h4>
+<hr>
+<p>问：有目录dir，其下有100B的a.txt，问占用磁盘空间。</p>
+<p>答：两个簇，因为一个簇不会比512B更小。</p>
+<hr>
+<p>UNIX中的目录</p>
+<h4 id="磁盘空间管理">磁盘空间管理</h4>
+<h5 id="块大小">块大小</h5>
+<p>太大浪费空间，太小浪费时间</p>
+<h5 id="记录空闲块">记录空闲块</h5>
+<ul>
+<li>空闲磁盘块链表</li>
+<li>位图</li>
+</ul>
+<h2 id="io设备管理">I/O设备管理</h2>
+<blockquote>
+<p>操作系统快考试了，我觉得自己过应该还是没问题的吧，毕竟也有认真听课。虽然对某些部分流程记忆有点发憷。
+[tag]:操作系统|笔记</p>
+</blockquote>
+<h3 id="io系统的组成">I/O系统的组成</h3>
+<p>I/O系统不仅包含各种I/O设备，还包含于设备相连的设备控制器，有的系统亦配备了专门用于输入输出控制的专业计算机 <strong>通道</strong> 。</p>
+<h4 id="io系统的结构">I/O系统的结构</h4>
+<ol>
+<li>微机I/O系统</li>
+<li>主机I/O系统</li>
+</ol>
+<h4 id="io设备的分类">I/O设备的分类</h4>
+<ol>
+<li>按速率分类</li>
+<li>按信息交换的单位分类</li>
+</ol>
+<ul>
+<li>块设备</li>
+<li>字符设备</li>
+</ul>
+<blockquote>
+<p>两种设备操作系统实现驱动程序的方式是不同的。</p>
+</blockquote>
+<ol start="3">
+<li>按设备的共享属性分类</li>
+</ol>
+<ul>
+<li>独占设备</li>
+<li>共享设备 资源调度问题</li>
+<li>虚拟设备 利用虚拟技术把一台物理设备变为若干逻辑设备</li>
+</ul>
+<h4 id="设备控制器">设备控制器</h4>
+<p>设备控制器是 <strong>CPU</strong> 与 <strong>I/O设备</strong> 之间的接口，接收I/O的命令并控制I/O完成设备工作。设备控制器是一个可编址设备，连接多个设备时可有多个设备地址。</p>
+<p>【待补充】</p>
+<h3 id="io控制方式">I/O控制方式</h3>
+<h4 id="轮询控制方式">轮询控制方式</h4>
+<h4 id="中断控制方式">中断控制方式</h4>
+<h4 id="dma控制方式">DMA控制方式</h4>
+<blockquote>
+<p>不同控制下I/O的过程
+……进程状态会发生什么变化
+OS内核会做些什么
+将进程置为阻塞态
+为进程分配设备
+中断处理，唤醒进程</p>
+</blockquote>
+<ol>
+<li>DMA控制器的组成</li>
+</ol>
+<ul>
+<li>命令/状态寄存器</li>
+<li>内存地址寄存器MAR</li>
+<li>数据寄存器DR</li>
+<li>数据计数器DC</li>
+</ul>
+<p>不使用DMA过程</p>
+<ol>
+<li>首先控制器从设备完整读出一块数据放入数据寄存器</li>
+<li>计算校验和</li>
+<li>发中断信号，将数据读入内存</li>
+</ol>
+<p>使用DMA方式</p>
+<ol>
+<li>CPU发【待补充】</li>
+</ol>
+<h3 id="缓冲管理">缓冲管理</h3>
+<h4 id="缓冲的引入">缓冲的引入</h4>
+<p>在数据到达和数据离开速度不一致的地方都可以引入缓冲。</p>
+<p>降低对硬件响应时间的要求。</p>
+<h4 id="循环缓冲">循环缓冲</h4>
+<ol>
+<li>引入循环缓冲的理由</li>
+<li>循环缓冲的组成</li>
+<li>缓冲区的使用</li>
+<li>进程同步</li>
+</ol>
+<h3 id="设备分配">设备分配</h3>
+<h4 id="设备分配要考虑的因素">设备分配要考虑的因素</h4>
+<h4 id="设备独立性">设备独立性</h4>
+<p>应用程序独立于具体的物理设备。</p>
+<h4 id="spooling技术">SPOOLING技术</h4>
+<h3 id="磁盘管理">磁盘管理</h3>
+<h4 id="磁盘结构">磁盘结构</h4>
+<p>通过改善调度算法提高访问速度=&gt;减少寻道次数</p>
+<h4 id="磁盘调度">磁盘调度</h4>
+<blockquote>
+<p>考磁盘调度算法</p>
+</blockquote>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">最后修改于 2019-12-10</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts" href="https://ntutn.top/posts/%E8%AE%B0lenovo_v310_15_ikb%E7%9A%84%E7%AC%ACn%E6%AC%A1%E6%AD%BB%E6%9C%BA/">
+			下回<br>记Lenovo V310 15 IKB的第n次死机
+                </a>
+                
+                
+                
+                <a class="older-posts" href="https://ntutn.top/posts/%E4%B8%89%E9%97%A8%E9%97%AE%E9%A2%98/">
+			上回<br>三门问题
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+<script src="https://utteranc.es/client.js"
+        repo="zerofancy/zerofancy.github.io"
+        issue-term="title"
+        label=""
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	CC BY-SA 4.0
+	
+</div>
+            </div>
+    
+    <script src="/js/journal.js"></script>
+    </body>
+</html>

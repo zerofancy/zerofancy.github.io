@@ -365,6 +365,77 @@
     
     
         <item>
+        <title>掉坑的日常：springboot的json属性名大小写问题</title>
+        <link>https://ntutn.top/posts/%E6%8E%89%E5%9D%91%E7%9A%84%E6%97%A5%E5%B8%B8springboot%E7%9A%84json%E5%B1%9E%E6%80%A7%E5%90%8D%E5%A4%A7%E5%B0%8F%E5%86%99%E9%97%AE%E9%A2%98/</link>
+        <pubDate>Tue, 24 Mar 2020 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/%E6%8E%89%E5%9D%91%E7%9A%84%E6%97%A5%E5%B8%B8springboot%E7%9A%84json%E5%B1%9E%E6%80%A7%E5%90%8D%E5%A4%A7%E5%B0%8F%E5%86%99%E9%97%AE%E9%A2%98/</guid>
+        <description>归零幻想 https://ntutn.top/posts/%E6%8E%89%E5%9D%91%E7%9A%84%E6%97%A5%E5%B8%B8springboot%E7%9A%84json%E5%B1%9E%E6%80%A7%E5%90%8D%E5%A4%A7%E5%B0%8F%E5%86%99%E9%97%AE%E9%A2%98/ -&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;这两天想给自己小组的项目添加一个自动升级功能。这事听着复杂，但毕竟是个很常见的功能，github上的轮子很多。经过考虑，我决定选择&lt;a href=&#34;https://github.com/xuexiangjys/XUpdate&#34;&gt;这个组件&lt;/a&gt;，然后自己写后端。反正后端就返回一个json的事。然后就掉了坑。&lt;/p&gt;
+&lt;h2 id=&#34;起因&#34;&gt;起因&lt;/h2&gt;
+&lt;p&gt;案发现场没什么好说的，就是我发现自己设置的不能实现升级，在客户端调试半天发现用官方的json能升级。然后我就找我的json和官方的json有什么区别，看ContentType也没设置错，仔细比对发现属性大小写竟然不对。我当时还挺惊讶的，毕竟是直接复制的。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;springboot可以使用&lt;code&gt;@ResponseBody&lt;/code&gt;返回对象自动转换json，而转换成的json属性名首字母会被转换成小写。&lt;/p&gt;
+&lt;h2 id=&#34;解决方案&#34;&gt;解决方案&lt;/h2&gt;
+&lt;h3 id=&#34;引入fastjson&#34;&gt;引入&lt;code&gt;fastjson&lt;/code&gt;&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;		&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+			&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;com.alibaba&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+			&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;fastjson&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+			&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;1.2.66&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
+		&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;注入bean&#34;&gt;注入&lt;code&gt;bean&lt;/code&gt;&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;    &lt;span style=&#34;color:#707a7c&#34;&gt;@Bean&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; HttpMessageConverters &lt;span style=&#34;color:#008b45&#34;&gt;httpMessageConverters&lt;/span&gt;() {
+        FastJsonHttpMessageConverter fastJsonHttpMessageConverter = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; FastJsonHttpMessageConverter(); &lt;span style=&#34;color:#228b22&#34;&gt;// 添加fastJson的配置信息
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        FastJsonConfig fastJsonConfig = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; FastJsonConfig();
+        fastJsonConfig.&lt;span style=&#34;color:#658b00&#34;&gt;setSerializerFeatures&lt;/span&gt;(SerializerFeature.&lt;span style=&#34;color:#658b00&#34;&gt;PrettyFormat&lt;/span&gt;); &lt;span style=&#34;color:#228b22&#34;&gt;// 处理中文乱码问题
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        List&amp;lt;MediaType&amp;gt; fastMediaTypes = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; ArrayList&amp;lt;&amp;gt;();
+        fastMediaTypes.&lt;span style=&#34;color:#658b00&#34;&gt;add&lt;/span&gt;(MediaType.&lt;span style=&#34;color:#658b00&#34;&gt;APPLICATION_JSON&lt;/span&gt;); &lt;span style=&#34;color:#228b22&#34;&gt;// 在convert中添加配置信息.
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        fastJsonHttpMessageConverter.&lt;span style=&#34;color:#658b00&#34;&gt;setSupportedMediaTypes&lt;/span&gt;(fastMediaTypes);
+        fastJsonHttpMessageConverter.&lt;span style=&#34;color:#658b00&#34;&gt;setFastJsonConfig&lt;/span&gt;(fastJsonConfig);
+        HttpMessageConverter&amp;lt;?&amp;gt; converter = fastJsonHttpMessageConverter;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; HttpMessageConverters(converter);
+    }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;在属性上加注解&#34;&gt;在属性上加注解&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;edu.upc.mishuserver.vo&lt;/span&gt;;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;com.alibaba.fastjson.annotation.JSONField&lt;/span&gt;;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;lombok.AllArgsConstructor&lt;/span&gt;;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;lombok.Builder&lt;/span&gt;;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;lombok.Data&lt;/span&gt;;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;lombok.NoArgsConstructor&lt;/span&gt;;
+&lt;span style=&#34;color:#228b22&#34;&gt;/**
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * UpdateInfo
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; */&lt;/span&gt;
+&lt;span style=&#34;color:#707a7c&#34;&gt;@Data&lt;/span&gt;
+&lt;span style=&#34;color:#707a7c&#34;&gt;@AllArgsConstructor&lt;/span&gt;
+&lt;span style=&#34;color:#707a7c&#34;&gt;@NoArgsConstructor&lt;/span&gt;
+&lt;span style=&#34;color:#707a7c&#34;&gt;@Builder&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;UpdateInfo&lt;/span&gt; {
+    &lt;span style=&#34;color:#707a7c&#34;&gt;@JSONField&lt;/span&gt;(name=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Code&amp;#34;&lt;/span&gt;)
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; Long code;
+    &lt;span style=&#34;color:#707a7c&#34;&gt;@JSONField&lt;/span&gt;(name = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Msg&amp;#34;&lt;/span&gt;)
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; String msg;
+    &lt;span style=&#34;color:#707a7c&#34;&gt;@JSONField&lt;/span&gt;(name = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;UpdateStatus&amp;#34;&lt;/span&gt;)
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; Integer updateStatus;
+    &lt;span style=&#34;color:#707a7c&#34;&gt;@JSONField&lt;/span&gt;(name = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;VersionCode&amp;#34;&lt;/span&gt;)
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; Long versionCode;
+    &lt;span style=&#34;color:#707a7c&#34;&gt;@JSONField&lt;/span&gt;(name = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;VersionName&amp;#34;&lt;/span&gt;)
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; String versionName;
+    &lt;span style=&#34;color:#707a7c&#34;&gt;@JSONField&lt;/span&gt;(name = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;ModifyContent&amp;#34;&lt;/span&gt;)
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; String modifyContent;
+    &lt;span style=&#34;color:#707a7c&#34;&gt;@JSONField&lt;/span&gt;(name = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;DownloadUrl&amp;#34;&lt;/span&gt;)
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; String downloadUrl;
+    &lt;span style=&#34;color:#707a7c&#34;&gt;@JSONField&lt;/span&gt;(name = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;ApkSize&amp;#34;&lt;/span&gt;)
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; Long apkSize;
+    &lt;span style=&#34;color:#707a7c&#34;&gt;@JSONField&lt;/span&gt;(name = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;ApkMd5&amp;#34;&lt;/span&gt;)
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; String apkMd5;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://ntutn.top/posts/%E6%8E%89%E5%9D%91%E7%9A%84%E6%97%A5%E5%B8%B8springboot%E7%9A%84json%E5%B1%9E%E6%80%A7%E5%90%8D%E5%A4%A7%E5%B0%8F%E5%86%99%E9%97%AE%E9%A2%98/ - CC BY-SA 4.0</description>
+        </item>
+    
+    
+    
+        <item>
         <title>Typora&#43;git自动同步你的笔记</title>
         <link>https://ntutn.top/posts/typora&#43;git%E8%87%AA%E5%8A%A8%E5%90%8C%E6%AD%A5%E4%BD%A0%E7%9A%84%E7%AC%94%E8%AE%B0/</link>
         <pubDate>Mon, 02 Mar 2020 03:11:37 +0800</pubDate>
@@ -577,6 +648,983 @@ a与b直接比较，&lt;code&gt;a==b&lt;/code&gt;，两者不是同一对象。�
     
     
         <item>
+        <title>记Lenovo V310 15 IKB的第n次死机</title>
+        <link>https://ntutn.top/posts/%E8%AE%B0lenovo_v310_15_ikb%E7%9A%84%E7%AC%ACn%E6%AC%A1%E6%AD%BB%E6%9C%BA/</link>
+        <pubDate>Wed, 01 Jan 2020 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/%E8%AE%B0lenovo_v310_15_ikb%E7%9A%84%E7%AC%ACn%E6%AC%A1%E6%AD%BB%E6%9C%BA/</guid>
+        <description>归零幻想 https://ntutn.top/posts/%E8%AE%B0lenovo_v310_15_ikb%E7%9A%84%E7%AC%ACn%E6%AC%A1%E6%AD%BB%E6%9C%BA/ -&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;今天我的电脑又死机了，首先切一下&lt;strong&gt;tty进不去&lt;/strong&gt;，然后试下&lt;strong&gt;SysRq键没反应&lt;/strong&gt;，熟练地按住电源10秒，松开两秒，再按一下，拿出手机刷会空间。&lt;/p&gt;
+&lt;p&gt;这电脑刚买的时候给我的印象其实是不错的，虽然外壳线条有点&lt;del&gt;丑&lt;/del&gt;粗犷，但整体性能比我预期要好很多。i5的CPU，1T机械硬盘，入门级Radeon独显，毕竟价格摆在那里。&lt;/p&gt;
+&lt;p&gt;因为没有固态硬盘，这电脑慢的很，但我安慰自己&lt;strong&gt;反正我也不怎么打游戏&lt;/strong&gt;。日常尽量不用UWP应用，开机刷会手机，佛系一点也没什么不好。谁说学软件就一定要用好电脑？Code Blocks不香吗？eclipse有几个电脑带不动？实在偶尔想配置安卓开发环境的时候就连自己安卓手机做测试，至于VS就不用想了，虽然号称世界上最好用的IDE，但比较新的版本&lt;strong&gt;没有固态硬盘反应跟不上打字&lt;/strong&gt;……&lt;/p&gt;
+&lt;p&gt;本来也就这样了，一分钱一分货的事。但直到某次电脑毫无征兆死机……&lt;/p&gt;
+&lt;p&gt;死机是正常现象，没什么好怕的。我这样告诉自己。我当时正在浏览网页&lt;del&gt;不要多想，不是那种满屏都是澳门首家线上赌场广告的网页&lt;/del&gt;，毫无征兆就死机了。一般来说，所谓死机多是资源占用过高系统失去响应的原因，根据自己的经验，按组合键尝试调出任务管理器尝试结束进程，然后没有成功。貌似死机很彻底，任务管理器根本无法调出，甚至鼠标都不能动。我放下电脑，看了集哆啦A梦，回头看电脑屏幕没有要变化的征兆。没办法，按住电源键强制关机吧。后面很久这个事情都没有再出现，我也就渐渐忘了。&lt;/p&gt;
+&lt;p&gt;直到又有一天，在我玩《狂野飙车8：极速凌云》正高兴的时候，画面突然不动了。这扫兴的事让我没了继续玩的兴致，而后几天又死机几次，我觉得事情没有那么简单，在网上搜索时，我发现我这不是个例。&lt;/p&gt;
+&lt;p&gt;之后我加固态硬盘装双系统，死机就跟着我到了ubuntu。一般来说，ubuntu死机多是指gnome卡死，直接Alt+F2输入r就能重启，不这样做也可以切tty进入命令操作，直到某次放歌的时候死机了，歌声都停了，别说tty了，连SysRq键都没能正常工作，这表明连linux内核都死掉了。好吧，现在有足够证据表明死机不是Windows的锅。&lt;/p&gt;
+&lt;p&gt;想把电脑送去修，但很麻烦的是，这个问题复现很困难，死机是不定期的，似乎跟资源占用无关，跟电脑温度无关。先不考虑电脑店能不能找到原因，就算电脑店说修好了，我也没办法验证。我觉得就这样送去修最大可能就算店家给你重装了下系统，清了下灰，升级了下BIOS，这些我都试过了没有用。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;后来一直没有解决这件事，只是我养成了随手Ctrl+S的习惯。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;不管怎样，今天偶发性的连续死机两次惹恼我了，联想会进我的黑名单。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+- https://ntutn.top/posts/%E8%AE%B0lenovo_v310_15_ikb%E7%9A%84%E7%AC%ACn%E6%AC%A1%E6%AD%BB%E6%9C%BA/ - CC BY-SA 4.0</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>计算机操作系统原理笔记</title>
+        <link>https://ntutn.top/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86%E7%AC%94%E8%AE%B0/</link>
+        <pubDate>Tue, 10 Dec 2019 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86%E7%AC%94%E8%AE%B0/</guid>
+        <description>归零幻想 https://ntutn.top/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86%E7%AC%94%E8%AE%B0/ -&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;操作系统快考试了，我觉得自己过应该还是没问题的吧，毕竟也有认真听课。虽然对某些部分流程记忆有点发憷。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;h2 id=&#34;操作系统做什么&#34;&gt;操作系统做什么&lt;/h2&gt;
+&lt;h3 id=&#34;操作系统是用户与计算机硬件之间的接口&#34;&gt;操作系统是用户与计算机硬件之间的接口&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;用户&lt;/strong&gt; 指包括最终用户在内的各级用户。&lt;/p&gt;
+&lt;h3 id=&#34;操作系统的发展&#34;&gt;操作系统的发展&lt;/h3&gt;
+&lt;h4 id=&#34;微机操作系统&#34;&gt;微机操作系统&lt;/h4&gt;
+&lt;p&gt;个人机操作系统。&lt;/p&gt;
+&lt;h4 id=&#34;实时操作系统&#34;&gt;实时操作系统&lt;/h4&gt;
+&lt;p&gt;支持实时计算的系统，实时计算即 &lt;strong&gt;系统的正确性不仅取决于计算的逻辑结果，而且还依赖于产生结果的时间。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;实时任务的类型&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;周期性实时任务&lt;/li&gt;
+&lt;li&gt;非周期性实时任务&lt;/li&gt;
+&lt;li&gt;硬实时任务&lt;/li&gt;
+&lt;li&gt;软实时任务&lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;实时计算机可以不运行实时操作系统，直接运行应用软件&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;高可用性&lt;/li&gt;
+&lt;li&gt;截止时间
+&lt;ul&gt;
+&lt;li&gt;开始截止时间&lt;/li&gt;
+&lt;li&gt;实际截止时间&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;单道批处理系统&#34;&gt;单道批处理系统&lt;/h4&gt;
+&lt;ol&gt;
+&lt;li&gt;自动性&lt;/li&gt;
+&lt;li&gt;顺序性&lt;/li&gt;
+&lt;li&gt;单道性&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;优点&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;减少人工等待时间&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;缺点&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;作业独占CPU&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;CPU等待IO使得CPU利用率低&lt;/em&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;多道批处理系统&#34;&gt;多道批处理系统&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;多道性&lt;/li&gt;
+&lt;li&gt;无序性&lt;/li&gt;
+&lt;li&gt;调度性&lt;/li&gt;
+&lt;li&gt;复杂性&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;优点&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;提高CPU利用率&lt;/li&gt;
+&lt;li&gt;提高内存和IO利用率&lt;/li&gt;
+&lt;li&gt;增加系统吞吐量&lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;吞吐量：单位时间里系统处理的作业量
+&lt;strong&gt;缺点&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ol&gt;
+&lt;li&gt;平均等待周期长&lt;/li&gt;
+&lt;li&gt;缺乏交互能力&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id=&#34;分时系统&#34;&gt;分时系统&lt;/h4&gt;
+&lt;ol&gt;
+&lt;li&gt;多路性&lt;/li&gt;
+&lt;li&gt;独立性&lt;/li&gt;
+&lt;li&gt;及时性&lt;/li&gt;
+&lt;li&gt;交互性&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;优点&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;提供人机交互&lt;/li&gt;
+&lt;li&gt;多终端共享主机&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;&lt;strong&gt;关键问题&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;及时接收用户的命令和顺序&lt;/li&gt;
+&lt;li&gt;及时处理用户的命令。 &lt;em&gt;使所有的用户作业都进入内存，在很短的的时间内使每个作业都运行一次&lt;/em&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;操作系统产品现状&#34;&gt;操作系统产品现状&lt;/h3&gt;
+&lt;h4 id=&#34;嵌入式操作系统&#34;&gt;嵌入式操作系统&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;嵌入式系统&lt;/strong&gt; 是宿主于非计算机设备的操作系统。 &lt;strong&gt;嵌入式操作系统&lt;/strong&gt; 是运行于嵌入式系统中的操作系统。&lt;/p&gt;
+&lt;h4 id=&#34;掌上计算机操作系统&#34;&gt;掌上计算机操作系统&lt;/h4&gt;
+&lt;p&gt;PDA&lt;/p&gt;
+&lt;h4 id=&#34;实时操作系统-1&#34;&gt;实时操作系统&lt;/h4&gt;
+&lt;p&gt;在资源调度、中断处理等方面的设计和实现要充分考虑系统对时间都限制。应用领域如 &lt;em&gt;自动控制、军事指挥系统、民用航空管理等&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;与嵌入式系统在分类上有一定重叠，有一定时限要求，在设计和实现上也有一些共同的特点， &lt;strong&gt;专用性、规模小、实时性、高可靠性&lt;/strong&gt; 。&lt;/p&gt;
+&lt;h3 id=&#34;操作系统的特征&#34;&gt;操作系统的特征&lt;/h3&gt;
+&lt;p&gt;&lt;em&gt;支持多任务的操作系统&lt;/em&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;并发 同一时间间隔执行多个任务&lt;/li&gt;
+&lt;li&gt;共享&lt;/li&gt;
+&lt;li&gt;虚拟&lt;/li&gt;
+&lt;li&gt;异步&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;em&gt;操作系统功能&lt;/em&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;内存管理功能&lt;/li&gt;
+&lt;li&gt;进程管理功能&lt;/li&gt;
+&lt;li&gt;设备管理功能&lt;/li&gt;
+&lt;li&gt;文件管理功能&lt;/li&gt;
+&lt;li&gt;用户接口&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;内存管理功能&#34;&gt;内存管理功能&lt;/h4&gt;
+&lt;h5 id=&#34;内存分配&#34;&gt;内存分配&lt;/h5&gt;
+&lt;h5 id=&#34;内存保护&#34;&gt;内存保护&lt;/h5&gt;
+&lt;p&gt;每个进程在自己的进程空间。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;界限寄存器&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h5 id=&#34;地址映射&#34;&gt;地址映射&lt;/h5&gt;
+&lt;blockquote&gt;
+&lt;p&gt;地址映射是硬件和操作系统配合完成的。
+把进程的逻辑地址转换成内存上的物理地址。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;逻辑地址&lt;/strong&gt; ：程序中的地址是从某一地址开始，相对于起始地址计算的，称为逻辑地址。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;物理地址&lt;/strong&gt; 由内存中的一系列单元所限定的地址范围称为 &lt;em&gt;内存空间&lt;/em&gt; ，其中的地址被称为物理地址。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;obj文件中逻辑地址是从0开始的，exe中的不是。
+编译系统形成逻辑地址原因：编译器并不知道操作系统会将程序载入内存的实际物理地址。
+中断发生时，保存现场，PC的值已经指向下一条指令，待中断返回时继续执行下一条指令。
+变长指令集，PC+1时根据当前指令的长度决定PC递增的值&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h5 id=&#34;内存扩充&#34;&gt;内存扩充&lt;/h5&gt;
+&lt;p&gt;虚拟技术。&lt;/p&gt;
+&lt;h5 id=&#34;内存回收&#34;&gt;内存回收&lt;/h5&gt;
+&lt;p&gt;将进程占据的内存空间标记为空闲。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;OS内核：在特权集下运行的程序。（除此之外，还有接口，在非特权集运行，如shell）&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4 id=&#34;进程管理功能&#34;&gt;进程管理功能&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;进程控制&lt;/li&gt;
+&lt;li&gt;进程同步&lt;/li&gt;
+&lt;li&gt;进程通信&lt;/li&gt;
+&lt;li&gt;进程调度&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;设备管理&#34;&gt;设备管理&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;缓冲管理：管理各种缓冲区&lt;/li&gt;
+&lt;li&gt;设备分配：分配用户IO需要的设备&lt;/li&gt;
+&lt;li&gt;设备处理：由设备驱动程序实现CPU与设备控制器之间的通信&lt;/li&gt;
+&lt;li&gt;设备独立性&lt;/li&gt;
+&lt;li&gt;虚拟设备：应用程序无需关注设备品牌等细节&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;文件管理功能&#34;&gt;文件管理功能&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;文件等按名访问&lt;/li&gt;
+&lt;li&gt;文件等存储&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;提供用户接口&#34;&gt;提供用户接口&lt;/h4&gt;
+&lt;blockquote&gt;
+&lt;p&gt;shell运行于用户态。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;命令接口&lt;/li&gt;
+&lt;li&gt;图形接口：采用图形化的操作界面&lt;/li&gt;
+&lt;li&gt;程序接口：由一组系统调用组成&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;软件的体系结构&#34;&gt;软件的体系结构&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;为什么要研究软件的体系结构&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;使软件模块更清晰，提高开发效率，更好测试、维护和移植，（提高软件运行的速度）。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;操作系统的体系结构&#34;&gt;操作系统的体系结构&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;微内核优点：移植性好&lt;/li&gt;
+&lt;li&gt;缺点：运行效率低一点&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;指令的执行&#34;&gt;指令的执行&lt;/h3&gt;
+&lt;h4 id=&#34;取指令与执行指令&#34;&gt;取指令与执行指令&lt;/h4&gt;
+&lt;h5 id=&#34;取指令&#34;&gt;取指令&lt;/h5&gt;
+&lt;p&gt;每个指令周期开始时，处理器从&lt;strong&gt;内存&lt;/strong&gt;中取一条指令。程序计数器&lt;strong&gt;PC&lt;/strong&gt;保存有下一次要取的指令的地址。取指令后PC递增。&lt;/p&gt;
+&lt;h5 id=&#34;执行指令&#34;&gt;执行指令&lt;/h5&gt;
+&lt;p&gt;取到的指令放置于&lt;strong&gt;IR&lt;/strong&gt;中，处理器解释指令并执行动作。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;一条语句常对应多条指令。
+程序执行过程反复取指令执行指令（硬件完成）
+指令执行结果是使寄存器或内存单元值变化
+保存现场（硬件隐指令）不需要保存内存的内容。内存有隔离措施，保证中断后内存内容不变。恢复现场由操作系统完成（恢复AC等值）。
+隐指令：在机器指令系统中没有的，对用户来说是不可见的，完成特定功能的指令，如中断隐指令。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;进程同步&#34;&gt;进程同步&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;操作系统快考试了，我觉得自己过应该还是没问题的吧，毕竟也有认真听课。虽然对某些部分流程记忆有点发憷。
+[tag]:操作系统|笔记&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;进程同步的基本概念&#34;&gt;进程同步的基本概念&lt;/h3&gt;
+&lt;p&gt;进程同步的任务：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;在资源共享的情况下：保证诸进程以互斥方式访问&lt;/li&gt;
+&lt;li&gt;在相互合作的情况下：保证诸进程协调执行。相互合作进程可能存在资源共享的情况。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;临界资源：必须以互斥方式访问的共享资源。&lt;/li&gt;
+&lt;li&gt;临界区：每个进程总访问共享资源的那段代码&lt;/li&gt;
+&lt;li&gt;进入区：检查是否可以进入“临界区”并对临界区“加锁”的代码&lt;/li&gt;
+&lt;li&gt;退出区：释放临界区访问权的代码&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;同步机制应遵循准则&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;空闲让进&lt;/li&gt;
+&lt;li&gt;忙则等待&lt;/li&gt;
+&lt;li&gt;有限等待&lt;/li&gt;
+&lt;li&gt;让权等待&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;整型信号量机制&#34;&gt;整型信号量机制&lt;/h3&gt;
+&lt;h4 id=&#34;整型信号量&#34;&gt;整型信号量&lt;/h4&gt;
+&lt;p&gt;整型信号量是表示共享资源状态 &lt;strong&gt;只能由特殊的原子操作(wait和signal)改变&lt;/strong&gt; 的整型量。&lt;/p&gt;
+&lt;p&gt;整型量&amp;gt;0说明有可用资源。&lt;/p&gt;
+&lt;h4 id=&#34;wait和signal操作pv操作&#34;&gt;wait和signal操作（P－V操作）&lt;/h4&gt;
+&lt;pre&gt;&lt;code&gt;var s:integer;
+wait(s){
+	while s&amp;lt;=0 do no-op;//申请不到资源做空操作
+	s=s-1;
+}
+signal(s){
+	s=s+1;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;blockquote&gt;
+&lt;p&gt;思考：开关中断应该怎样加？&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4 id=&#34;整型信号量应用举例&#34;&gt;整型信号量应用举例&lt;/h4&gt;
+&lt;p&gt;临界资源由程序员界定，需要为每种临界资源分别定义一种互斥信号量。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;缺陷：不能实现让权等待。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;记录型信号量机制&#34;&gt;记录型信号量机制&lt;/h3&gt;
+&lt;h4 id=&#34;数据类型&#34;&gt;数据类型&lt;/h4&gt;
+&lt;pre&gt;&lt;code&gt;Type semaphore=record
+	Value:integer//资源数量
+	L:list of process//阻塞队列（PCB）
+end
+&lt;/code&gt;&lt;/pre&gt;&lt;blockquote&gt;
+&lt;p&gt;考：记录型信号量、wait和singial操作&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4 id=&#34;wait和signal操作&#34;&gt;wait和signal操作&lt;/h4&gt;
+&lt;pre&gt;&lt;code&gt;prodcedure wait(s)
+	var s:semaphore;
+	begin
+		s.value=s.value-1;
+		if s.value&amp;lt;0 then block(s.L);
+	end
+procedure signal(s)
+	var s:semaphore;
+	begin
+		s.value=s.value+1;
+		if s.value&amp;lt;=0 then wakeup(s.L);
+	end
+&lt;/code&gt;&lt;/pre&gt;&lt;blockquote&gt;
+&lt;p&gt;被阻塞的是调用wait申请资源的进程（自我阻塞）。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4 id=&#34;利用记录型信号量实现互斥&#34;&gt;利用记录型信号量实现互斥&lt;/h4&gt;
+&lt;pre&gt;&lt;code&gt;var s:semaphore;
+	s.value=1;
+begin
+	repat
+		wait(s);
+			critical section;
+		signal(s);
+		reminder section;
+	until false;
+end
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;先唤醒哪个进程取决于操作系统，如果使用优先权，尽量不使用静态优先权。&lt;/p&gt;
+&lt;h4 id=&#34;利用记录型信号量实现协调的应用举例&#34;&gt;利用记录型信号量实现“协调”的应用举例&lt;/h4&gt;
+&lt;p&gt;设置两个信号量&lt;code&gt;var empty,full:semaphore&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;初始：empty.value=2,full.value=0&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;输入进程：
+{
+	从外存读数据;
+	wait(empty)
+	往缓冲区放数据
+	signal(full)
+}
+计算进程：
+{
+	wait(full);
+	从缓冲区读取数据
+	signal(empty)
+	处理数据
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;管程&#34;&gt;管程&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;管程由编译器提供支持。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;进程调度&#34;&gt;进程调度&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;操作系统快考试了，我觉得自己过应该还是没问题的吧，毕竟也有认真听课。虽然对某些部分流程记忆有点发憷。
+[tag]:操作系统|笔记&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;操作系统的进程调度功能由进程调度程序完成
+什么时候操作系统会进行进程调度？&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;进程阻塞
+时间片用完
+程序正常或异常结束
+中断返回
+高优先权进程到来&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;调度算法&#34;&gt;调度算法&lt;/h3&gt;
+&lt;p&gt;周转时间=服务时间+等待时间&lt;/p&gt;
+&lt;p&gt;平均周转时间=总周转时间/进程数&lt;/p&gt;
+&lt;p&gt;带权周转时间=服务时间/等待时间&lt;/p&gt;
+&lt;p&gt;平均带权周转时间=总带权周转时间/进程数&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;立即抢占：高优先级进程立即执行的最小时间单位可以是每执行完一条指令。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4 id=&#34;先来先服务fcfs&#34;&gt;先来先服务（FCFS）&lt;/h4&gt;
+&lt;p&gt;适合长作业，不利于短作业。有利于CPU繁忙型作业，不利于I/O繁忙型作业。&lt;/p&gt;
+&lt;h4 id=&#34;短作业进程优先&#34;&gt;短作业（进程）优先&lt;/h4&gt;
+&lt;p&gt;短作业优先SJF&lt;/p&gt;
+&lt;p&gt;短进程优先SPF&lt;/p&gt;
+&lt;p&gt;有效缩短作业和进程的平均等待时间，提高系统吞吐量。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;缺陷&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;对长作业和长进程不利，如果系统中不断有短作业和短进程到来，则长作业及长进程可能长时间得不到调度。&lt;/li&gt;
+&lt;li&gt;不能保证紧迫作业和进程的及时处理&lt;/li&gt;
+&lt;li&gt;作业和进程的长短由用户的估算，不一定能真正做到短进程或短作业优先&lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;与先来先服务相比，能缩短系统的平均周转时间和平均带权周转时间。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4 id=&#34;优先权调度算法&#34;&gt;优先权调度算法&lt;/h4&gt;
+&lt;p&gt;实时系统中非阻塞式难以保证高优先权进程得到及时调度，因此主要用于批处理系统。&lt;/p&gt;
+&lt;p&gt;静态优先权存在进程饥饿问题，使用 &lt;strong&gt;老化&lt;/strong&gt; 技术动优先权避免这个问题。&lt;/p&gt;
+&lt;h4 id=&#34;时间片轮转算法&#34;&gt;时间片轮转算法&lt;/h4&gt;
+&lt;p&gt;进程需要在CPU上运行的时间可能小于一个时间片，也可能大于一个时间片。对于进程的时间区间小于一个时间片的情况，进程在CPU上运行结束本身会自动释放CPU，然后由操作系统执行进程调度程序为另一个就绪进程分配CPU；对于进程的时间区间大于一个时间片的情况，进程可能执行若干时间片，每当进程在CPU上连续运行的时间等于一个时间片长度时，操作系统在 &lt;strong&gt;时钟中断处理过程&lt;/strong&gt; 中就会抢占CPU，进行进程切换，用新的就绪进程替代当前进程，而被替换的当前进程则重新回到就绪队列中。&lt;/p&gt;
+&lt;h5 id=&#34;时间片大型的确定&#34;&gt;时间片大型的确定&lt;/h5&gt;
+&lt;p&gt;时间片太长，那么进程看上去就不是并发执行的；时间片太短，频繁切换进程上下文影响效率。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;在系统允许的最大进程数一定的情况下，时间片的长短取决于系统要求的响应时间，且响应时间越短，时间片取值应该越小。&lt;/strong&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;时间片轮转需要的硬件软件：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;硬件：可编程间隔定时器、可编程中断控制器
+软件：PCB中记录在CPU上运行剩余时间都字段、时钟中断处理程序、中断处理程序&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/blockquote&gt;
+&lt;h4 id=&#34;多级队列调度算法&#34;&gt;多级队列调度算法&lt;/h4&gt;
+&lt;p&gt;将就绪队列分为多个独立队列……&lt;/p&gt;
+&lt;p&gt;课本p100&lt;/p&gt;
+&lt;h3 id=&#34;参考&#34;&gt;参考&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.csdn.net/tobe98/article/details/101632841&#34;&gt;进程调度，一个调度器的自白&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;死锁&#34;&gt;死锁&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;操作系统快考试了，我觉得自己过应该还是没问题的吧，毕竟也有认真听课。虽然对某些部分流程记忆有点发憷。
+[tag]:操作系统|笔记&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;产生死锁的原因和必要条件&#34;&gt;产生死锁的原因和必要条件&lt;/h3&gt;
+&lt;h4 id=&#34;产生死锁的原因&#34;&gt;产生死锁的原因&lt;/h4&gt;
+&lt;ol&gt;
+&lt;li&gt;竞争共享资源&lt;/li&gt;
+&lt;li&gt;进程推进顺序不当&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id=&#34;产生死锁的必要条件&#34;&gt;产生死锁的必要条件&lt;/h4&gt;
+&lt;ol&gt;
+&lt;li&gt;互斥条件 一个进程在访问某资源的过程中，其他进程不能访问该资源&lt;/li&gt;
+&lt;li&gt;请求和保持条件 进程提出新的资源请求，被阻塞，但不释放已经保持的资源&lt;/li&gt;
+&lt;li&gt;不剥夺条件 进程已经获得的资源不能被剥夺，只能由进程自己释放&lt;/li&gt;
+&lt;li&gt;环路等待条件 必然存在一个进程申请资源的环形链，互相等待对方占用的资源&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;只有上述四个条件同时满足时才会发生死锁。&lt;/p&gt;
+&lt;h3 id=&#34;处理死锁的基本方法&#34;&gt;处理死锁的基本方法&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;预防死锁&lt;/li&gt;
+&lt;li&gt;避免死锁&lt;/li&gt;
+&lt;li&gt;检测并解除死锁&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;忽略死锁问题，认为死锁不可能在系统内发生&lt;/strong&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;认为死锁不可能发生是一个经验、统计规律。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4 id=&#34;死锁的预防&#34;&gt;死锁的预防&lt;/h4&gt;
+&lt;p&gt;摒弃三个必要条件之一。&lt;/p&gt;
+&lt;h5 id=&#34;摒弃请求和保持条件&#34;&gt;摒弃请求和保持条件&lt;/h5&gt;
+&lt;p&gt;系统要求所有进程在执行前要一次性地申请整个运行过程中所需要的全部资源，只要有一个资源申请不成功，其他所有的资源就不分配给该进程,并阻塞该进程。&lt;/p&gt;
+&lt;h5 id=&#34;摒弃不剥夺条件&#34;&gt;摒弃不剥夺条件&lt;/h5&gt;
+&lt;p&gt;一个已经保持了某些资源的进程，当它再提出新的资源要求而不能立即得到满足时，必须释放它已经保持的所有资源。&lt;/p&gt;
+&lt;h5 id=&#34;摒弃环路等待条件&#34;&gt;摒弃环路等待条件&lt;/h5&gt;
+&lt;p&gt;规定进程必须按一定顺序申请资源。&lt;/p&gt;
+&lt;h4 id=&#34;参考-1&#34;&gt;参考&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.jianshu.com/p/99f10708b1e1#&#34;&gt;哲学家就餐问题与死锁总结&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;死锁的避免&#34;&gt;死锁的避免&lt;/h4&gt;
+&lt;p&gt;把系统的资源分配状态分为 &lt;strong&gt;安全状态&lt;/strong&gt; 和 &lt;strong&gt;不安全状态&lt;/strong&gt; ，只要资源分配使系统处于安全状态，死锁就不会发生。&lt;/p&gt;
+&lt;h4 id=&#34;利用银行家算法避免死锁&#34;&gt;利用银行家算法避免死锁&lt;/h4&gt;
+&lt;p&gt;一个进程提出资源请求后，系统先进行资源的试分配，然后检测本次的试分配是否使系统处于安全状态，若安全，则按试分配方案分配资源，否则不分配资源。&lt;/p&gt;
+&lt;p&gt;安全状态：能找到一个执行序列分配资源。（满足最大需求后进程释放资源）&lt;/p&gt;
+&lt;p&gt;系统处于安全状态时， &lt;strong&gt;一定不会发生死锁&lt;/strong&gt; ，进入不安全状态 &lt;strong&gt;未必会发生死锁&lt;/strong&gt; ，发生死锁 &lt;strong&gt;一定是进入了不安全状态&lt;/strong&gt; 。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;available[]&lt;/code&gt; 是个一维数组，表示系统中某种资源的可用数量。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;max[]&lt;/code&gt; 是个二维数组，表示各进程需要各类资源的最大数量，如&lt;code&gt;max[i,j]=k&lt;/code&gt;表示进程pi需要j类资源的最大数量为k。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;allocation[]&lt;/code&gt; 是个二维数组，表示某时刻已分配给进程的某类资源数，如&lt;code&gt;allocation[i,j]=k&lt;/code&gt; 表示进程pi已经占有j类资源k个。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;need[]&lt;/code&gt; 是二维数组，表示某个进程还需要多少个某类资源，如&lt;code&gt;need[i,j]=k&lt;/code&gt;表示进程pi还需要j类资源k个。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;该算法缺乏实用价值，因为很少有进程能够在运行之前就知道其所需资源的最大值，而且进程数不是固定的，往往在不断变化，原本可用的资源也可能在突然之间变成不可用。&lt;/p&gt;
+&lt;h4 id=&#34;死锁的检测和解除&#34;&gt;死锁的检测和解除&lt;/h4&gt;
+&lt;p&gt;操作系统可以不采取预防和避免的方法来解决死锁问题，而是检测是否有死锁发生，如果检测到系统中有死锁的进程，则解除死锁。&lt;/p&gt;
+&lt;p&gt;应用检测死锁算法必须面对的问题是 &lt;strong&gt;何时调用检测算法&lt;/strong&gt; 及 &lt;strong&gt;如何检测死锁&lt;/strong&gt; 。
+资源分配图：进程指向资源是资源请求边，资源指向进程是资源分配边。&lt;/p&gt;
+&lt;p&gt;死锁定理用于检测系统所处的 &lt;strong&gt;资源分配状态&lt;/strong&gt; S是否为 &lt;strong&gt;死锁状态&lt;/strong&gt; 。&lt;/p&gt;
+&lt;p&gt;S为死锁状态&amp;lt;=&amp;gt;S状态的资源分配图是不可完全简化的&lt;/p&gt;
+&lt;p&gt;解除死锁的途径有两个：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;终止处于死锁状态的进程&lt;/li&gt;
+&lt;li&gt;抢占死锁进程占有的资源&lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;系统中不会出现单个进程死锁的情况，但会出现只有一个进程饥饿的情况。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;存储器管理&#34;&gt;存储器管理&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;操作系统快考试了，我觉得自己过应该还是没问题的吧，毕竟也有认真听课。虽然对某些部分流程记忆有点发憷。
+[tag]:操作系统|笔记&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;存储器的层次结构&#34;&gt;存储器的层次结构&lt;/h3&gt;
+&lt;p&gt;局部性原理&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;程序执行时，除少部分的转移和过程调用外，大多数情况下是按顺序执行的。&lt;/li&gt;
+&lt;li&gt;过程调用会使程序的执行轨迹由一部分内存区域转到另一部分内存区域。但研究表明，在大多数情况下过程调用的深度都不超过5，也就是说，程序将会在一段时间内局限在很小的范围内。&lt;/li&gt;
+&lt;li&gt;程序中存在很多循环结构，它们虽然由少数指令构成，但需要多次执行。&lt;/li&gt;
+&lt;li&gt;程序中往往包括许多对数据结构的处理，它们往往局限在很小的范围内。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;少用goto：goto破坏程序的局部性。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;程序的装入和链接&#34;&gt;程序的装入和链接&lt;/h3&gt;
+&lt;p&gt;高级语言程序必须经过 &lt;strong&gt;编译&lt;/strong&gt; 、 &lt;strong&gt;链接&lt;/strong&gt; 才能为之成为可执行程序，可执行程序必须被操作系统 &lt;strong&gt;装入&lt;/strong&gt; 内存才能执行。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;交叉编译：开发平台不同于目标平台。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4 id=&#34;程序的装入&#34;&gt;程序的装入&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;绝对装入方式&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;在编译时形成物理地址&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;可重定位装入方式（静态重定位）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;装入时形成物理地址&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;动态运行时装入方式&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;运行时形成物理地址（运行时才进行物理映射），逻辑地址在PC中。&lt;/p&gt;
+&lt;p&gt;需要 &lt;strong&gt;重定位寄存器&lt;/strong&gt; 的支持。&lt;/p&gt;
+&lt;h4 id=&#34;程序的链接&#34;&gt;程序的链接&lt;/h4&gt;
+&lt;h5 id=&#34;链接要解决的问题&#34;&gt;链接要解决的问题&lt;/h5&gt;
+&lt;p&gt;将编译后的目标模块装配成一个可执行的程序。&lt;/p&gt;
+&lt;h5 id=&#34;链接的两种方式&#34;&gt;链接的两种方式&lt;/h5&gt;
+&lt;h6 id=&#34;静态链接&#34;&gt;静态链接&lt;/h6&gt;
+&lt;ul&gt;
+&lt;li&gt;静态链接 在程序运行前，用链接程序将目标模块链接成一个完整的装入模块。&lt;/li&gt;
+&lt;li&gt;静态链接的任务
+&lt;ul&gt;
+&lt;li&gt;对相对地址进行修改&lt;/li&gt;
+&lt;li&gt;变换外部调用符号&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol&gt;
+&lt;li&gt;存储开销大&lt;/li&gt;
+&lt;li&gt;程序开发不方便&lt;/li&gt;
+&lt;li&gt;程序运行相对于动态链接快&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h6 id=&#34;动态链接&#34;&gt;动态链接&lt;/h6&gt;
+&lt;ol&gt;
+&lt;li&gt;节省内存和外存空间&lt;/li&gt;
+&lt;li&gt;方便程序开发&lt;/li&gt;
+&lt;li&gt;程序运行时的速度变慢&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;连续存储管理方式&#34;&gt;连续存储管理方式&lt;/h3&gt;
+&lt;h4 id=&#34;单一连续分配&#34;&gt;单一连续分配&lt;/h4&gt;
+&lt;p&gt;把内存分为系统区和用户区。&lt;/p&gt;
+&lt;h4 id=&#34;固定分区分配&#34;&gt;固定分区分配&lt;/h4&gt;
+&lt;p&gt;固定分区分配的 &lt;strong&gt;用户分区数量&lt;/strong&gt; 是固定的， &lt;strong&gt;每个分区的大小&lt;/strong&gt; 也是固定的，其大小可以相等也可以不想等。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;分区编号&lt;/li&gt;
+&lt;li&gt;分区大小&lt;/li&gt;
+&lt;li&gt;分区起始地址&lt;/li&gt;
+&lt;li&gt;分区状态&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;在PCB中记录分配的分区的起始地址&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;固定分区的特点&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;管理简单&lt;/li&gt;
+&lt;li&gt;内存利用率低&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;记录和维护空闲分区情况数据结构，常用空闲分区表、空闲分区链表。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;作业：写一个分配分区的程序，打印版。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4 id=&#34;动态分区分配&#34;&gt;动态分区分配&lt;/h4&gt;
+&lt;h5 id=&#34;首次适应算法&#34;&gt;首次适应算法&lt;/h5&gt;
+&lt;p&gt;空闲分区地址递增，链首顺序查找，找出能满足要求的第一个。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;高地址部分大空闲区较多&lt;/li&gt;
+&lt;li&gt;低地址部分容易留下小分区&lt;/li&gt;
+&lt;li&gt;查找时间开销大&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h5 id=&#34;循环首次适应&#34;&gt;循环首次适应&lt;/h5&gt;
+&lt;p&gt;不再从头开始查找，从上次找到的位置开始查找。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;空闲空间分配均匀&lt;/li&gt;
+&lt;li&gt;查找开销较小&lt;/li&gt;
+&lt;li&gt;容易使系统缺乏较大空闲分区&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h5 id=&#34;最佳适应算法&#34;&gt;最佳适应算法&lt;/h5&gt;
+&lt;p&gt;空闲分区大小递增，返回满足条件，最小的第一个。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;避免大材小用，提高内存利用率&lt;/li&gt;
+&lt;li&gt;容易留下难以利用的小空闲区&lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;问题&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;考虑回收否？
+起始大小、状态
+代码行数、链表&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/blockquote&gt;
+&lt;h5 id=&#34;回收&#34;&gt;回收&lt;/h5&gt;
+&lt;p&gt;修改分区大小，（删除多余的节点）&lt;/p&gt;
+&lt;h5 id=&#34;紧凑&#34;&gt;紧凑&lt;/h5&gt;
+&lt;p&gt;将多个空闲分区拼接成连续大空闲分区。&lt;/p&gt;
+&lt;h3 id=&#34;基本分页管理方式&#34;&gt;基本分页管理方式&lt;/h3&gt;
+&lt;p&gt;离散的内存管理方式&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;分页存储管理&lt;/li&gt;
+&lt;li&gt;分段存储管理&lt;/li&gt;
+&lt;li&gt;段页式存储管理&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id=&#34;分页存储管理的方式&#34;&gt;分页存储管理的方式&lt;/h4&gt;
+&lt;h5 id=&#34;基本概念&#34;&gt;基本概念&lt;/h5&gt;
+&lt;ol&gt;
+&lt;li&gt;页 将一个进程的逻辑地址空间分为若干大小相等的片，称为页面或 &lt;strong&gt;页&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;物理块 将内存空间分成与页相同大小的若干存储块，称为 &lt;strong&gt;物理块&lt;/strong&gt; 或页框或帧&lt;/li&gt;
+&lt;li&gt;分页存储 在为进程分配内存时，以块为单位将进程的若干页分别装入多个可不连续的块中&lt;/li&gt;
+&lt;li&gt;页内碎片 进程的最后一页一般装不满一块，而形成不可利用的碎片，称为 &lt;strong&gt;页内碎片&lt;/strong&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;（一级分页）逻辑地址由页号、页内偏移量构成。&lt;/p&gt;
+&lt;p&gt;&lt;em&gt;计算关系&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;32位系统中为高20位页号，低12位页内偏移。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;在有关计算题中用二进制或十六进制表示。
+页表建立页号和块号联系，但一般不必存页号，用块号顺序表示。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;页表在内存中连续存放，列表项长度固定（页表本身长度是页表项项数，页表项长度是页表项占字节数），页表寄存器中存储了页表起始地址和页表长度，由硬件检索页表得到访存实际地址。
+一级分页下读数据要两次访存。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h5 id=&#34;地址变换过程&#34;&gt;地址变换过程&lt;/h5&gt;
+&lt;ol&gt;
+&lt;li&gt;进程执行，PCB中页表起始地址送页表寄存器&lt;/li&gt;
+&lt;li&gt;CPU访问逻辑单元a&lt;/li&gt;
+&lt;li&gt;由分页地址变换机构自动将a分为页号和页内偏移&lt;/li&gt;
+&lt;li&gt;由硬件检索机构搜索页表，得到物理块号&lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;得到物理地址后，先查看高速缓存，如果命中直接取，未命中则去内存找。
+&lt;strong&gt;页大小的选择&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;由机器的体系结构决定，亦由硬件决定&lt;/p&gt;
+&lt;p&gt;页太小，进程所需页多，页表太长，占用大量内存空间；降低页换入换出效率。&lt;/p&gt;
+&lt;p&gt;页太大，页内碎片大，内存利用率低。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;页的大小是2的幂&lt;/li&gt;
+&lt;li&gt;一般页大小在512B~4K&lt;/li&gt;
+&lt;li&gt;现在硬件可以支持多种不同的页大小&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;快表&#34;&gt;快表&lt;/h4&gt;
+&lt;p&gt;快表是为了提高CPU访存速度而采用的专用缓存，用来存放 &lt;strong&gt;最近被访问过的页表项&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;有效减少访问页表时间。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;TLB命中，1次访问TLB时间+1次访问内存的时间&lt;/li&gt;
+&lt;li&gt;TLB不命中，1次访问TLB时间+2次访问内存的时间&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;TLB每CPU一个。&lt;/p&gt;
+&lt;h4 id=&#34;两级和多级分页&#34;&gt;两级和多级分页&lt;/h4&gt;
+&lt;p&gt;页表寄存器中的值是外层页表的起始地址。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;二级分页中TLB存放什么？
+外层页号、页表分页、进程页面&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;减少页表占用内存的方法：将当前所需要的页表和外层页表放在内存中，其余页表分页放在外存中，当所需的分页不在内存时，产生中断，将请求的页表调入内存。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;分段存储管理&#34;&gt;分段存储管理&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;段的逻辑地址
+&lt;ul&gt;
+&lt;li&gt;段号&lt;/li&gt;
+&lt;li&gt;段内偏移&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;段表&#34;&gt;段表&lt;/h4&gt;
+&lt;ol&gt;
+&lt;li&gt;页是按物理空间划分的，段是按逻辑空间划分的&lt;/li&gt;
+&lt;li&gt;页大小固定，段大小不固定&lt;/li&gt;
+&lt;li&gt;分页地址空间是一维的，程序员给出的只是一个助记符&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;虚拟内存管理&#34;&gt;虚拟内存管理&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;操作系统快考试了，我觉得自己过应该还是没问题的吧，毕竟也有认真听课。虽然对某些部分流程记忆有点发憷。
+[tag]:操作系统|笔记&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;虚拟存储器概述&#34;&gt;虚拟存储器概述&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;提高内存利用率&lt;/li&gt;
+&lt;li&gt;提高多道程序度&lt;/li&gt;
+&lt;li&gt;把逻辑空间和物理空间分开&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;虚拟存储系统具有以下主要特征：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;离散型&lt;/li&gt;
+&lt;li&gt;多次性&lt;/li&gt;
+&lt;li&gt;对换性&lt;/li&gt;
+&lt;li&gt;虚拟性&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;请求分页存储管理方式&#34;&gt;请求分页存储管理方式&lt;/h3&gt;
+&lt;p&gt;运行过程中访存，若发现所访问的页面不在内存中，则产生一个缺页中断信号，系统响应缺页中断，请求调入缺页。若调入缺页时内存已满，则需要先从内存中选择一个或若干个页面换出到外存空间，以腾出内存空间容纳请求调入的缺页。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;系统通常不会等缺页中断再选择一页换出，而是有一个最小阈值，定期扫描&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4 id=&#34;请求分页中的硬件支持&#34;&gt;请求分页中的硬件支持&lt;/h4&gt;
+&lt;h5 id=&#34;页表机制&#34;&gt;页表机制&lt;/h5&gt;
+&lt;ul&gt;
+&lt;li&gt;页号 作为地址映射时的索引&lt;/li&gt;
+&lt;li&gt;物理块号 页面在物理内存中的物理块编号&lt;/li&gt;
+&lt;li&gt;状态位P 用来标识页面是否在内存中&lt;/li&gt;
+&lt;li&gt;访问字段A 用来记录页面最近被访问的情况&lt;/li&gt;
+&lt;li&gt;修改位M 用于标识页面最近是否被修改过&lt;/li&gt;
+&lt;li&gt;外存地址 用于指出页面在外存的地址&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h5 id=&#34;缺页中断机构&#34;&gt;缺页中断机构&lt;/h5&gt;
+&lt;p&gt;在访存过程中发现缺页时产生的缺页中断信号，使CPU中断当前控制流的执行，转去执行操作系统的缺页中断处理程序。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;通过检查页表的存在位P，判断当前被访问的页是否在内存中，如果不在，则产生缺页中断信号。&lt;/li&gt;
+&lt;li&gt;在内存中为请求调入的页找一个空闲物理块&lt;/li&gt;
+&lt;li&gt;调磁盘操作，把需要的页装入找到的空闲物理块中&lt;/li&gt;
+&lt;li&gt;修改页表，更新已经调入页的存在位、在内存中的物理块号、访问位等字段的值&lt;/li&gt;
+&lt;li&gt;重新执行因缺页而被中断的指令&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h5 id=&#34;地址变换机构&#34;&gt;地址变换机构&lt;/h5&gt;
+&lt;ol&gt;
+&lt;li&gt;由内存地址变换机构从线性逻辑地址中分离出页号和页内偏移地址&lt;/li&gt;
+&lt;li&gt;以页号作为索引查找快表，若快表中存在该页的页表项，则读出物理块号，计算物理地址&lt;/li&gt;
+&lt;li&gt;若快表中不存在该页的信息，则转到内存页表中查找。若页表中状态位P显示该页已经调入内存，则从响应的页表项读出页面所在的物理块号并计算物理地址，然后把该页表项写入快表&lt;/li&gt;
+&lt;li&gt;若该页尚未调入内存，则产生缺页中断，请求OS把该页从外存中调入内存，然后修改页表，重新执行被中断的指令。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;缺页中断一定产生于指令执行的过程中。缺页中断返回时执行原指令，而不是下一条指令。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4 id=&#34;页面分配&#34;&gt;页面分配&lt;/h4&gt;
+&lt;h5 id=&#34;最少物理块数&#34;&gt;最少物理块数&lt;/h5&gt;
+&lt;p&gt;最少物理块数是指能保证进程正常运行所需要的最少物理块数。保证进程正常运行所需要的最少物理块数与 &lt;del&gt;进程的大小&lt;/del&gt; 无关，与 &lt;strong&gt;计算机的硬件结构&lt;/strong&gt; 有关，取决于指令的 &lt;strong&gt;格式&lt;/strong&gt; 、 &lt;strong&gt;功能&lt;/strong&gt; 和 &lt;strong&gt;寻址方式&lt;/strong&gt; 。&lt;/p&gt;
+&lt;p&gt;指令本身涉及的页面、操作数部分的地址涉及的页面、操作数地址中存在的内存地址中可能涉及的地址……&lt;/p&gt;
+&lt;h5 id=&#34;页面分配和置换策略&#34;&gt;页面分配和置换策略&lt;/h5&gt;
+&lt;ol&gt;
+&lt;li&gt;固定分配局部置换&lt;/li&gt;
+&lt;li&gt;可变分配全局置换 广泛使用&lt;/li&gt;
+&lt;li&gt;可变分配局部置换&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h5 id=&#34;分配算法&#34;&gt;分配算法&lt;/h5&gt;
+&lt;ul&gt;
+&lt;li&gt;平均分配算法&lt;/li&gt;
+&lt;li&gt;按比例分配算法&lt;/li&gt;
+&lt;li&gt;考虑优先权的分配算法&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;页面调入策略&#34;&gt;页面调入策略&lt;/h4&gt;
+&lt;p&gt;当系统产生缺页中断时，调入请求页面的同时可以只把该页面进入内存，也可以同时把与该页相邻的页面调入内存。外存页面既可以存放在对换区，也可以存放在文件区。&lt;/p&gt;
+&lt;h3 id=&#34;页面置换算法&#34;&gt;页面置换算法&lt;/h3&gt;
+&lt;p&gt;页面置换算法是选择淘汰页的算法。&lt;/p&gt;
+&lt;h4 id=&#34;最佳置换算法&#34;&gt;最佳置换算法&lt;/h4&gt;
+&lt;p&gt;选择以后永远不会被访问的页面或最长时间不会再访问的页面。&lt;/p&gt;
+&lt;h4 id=&#34;先进先出页面置换算法&#34;&gt;先进先出页面置换算法&lt;/h4&gt;
+&lt;p&gt;选择进入内存最早的页面淘汰。&lt;/p&gt;
+&lt;h4 id=&#34;最近最久未使用置换算法&#34;&gt;最近最久未使用置换算法&lt;/h4&gt;
+&lt;p&gt;将最近最久未使用的页面予以淘汰。&lt;/p&gt;
+&lt;p&gt;实现：&lt;/p&gt;
+&lt;h5 id=&#34;寄存器&#34;&gt;寄存器&lt;/h5&gt;
+&lt;p&gt;为每个内存中的页面配置一个移位寄存器，访问时最高位1，定时右移寄存器，最小数值的最久未使用。&lt;/p&gt;
+&lt;h5 id=&#34;栈&#34;&gt;栈&lt;/h5&gt;
+&lt;p&gt;访问时把页面号移出，压入栈顶，栈底为最久未使用的页面。&lt;/p&gt;
+&lt;h5 id=&#34;计数器&#34;&gt;计数器&lt;/h5&gt;
+&lt;p&gt;为每个页表项增加时间字段……&lt;/p&gt;
+&lt;h4 id=&#34;lru的近似算法&#34;&gt;LRU的近似算法&lt;/h4&gt;
+&lt;h5 id=&#34;附加引用位算法&#34;&gt;附加引用位算法&lt;/h5&gt;
+&lt;p&gt;类寄存器方法。&lt;/p&gt;
+&lt;h5 id=&#34;简单clock算法&#34;&gt;简单Clock算法&lt;/h5&gt;
+&lt;p&gt;为每一页设置一位访问位，再将内存中的所有页面通过链接指针链接成循环队列。某页被访问时，访问位置1。按FIFO算法检查访问位，若为0，选择换出；若为1，重新置0，暂不换出。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;只考虑访问位，未考虑修改位。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h5 id=&#34;改进型clock算法&#34;&gt;改进型Clock算法&lt;/h5&gt;
+&lt;p&gt;A=0，M=0 最佳淘汰页
+A=0，M=1 并不是很好的淘汰页
+A=1，M=0 已访问，未修改
+A=1，M=1 已访问，已修改&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;寻找A=0 M=0的，选中第一个&lt;/li&gt;
+&lt;li&gt;第一步失败，寻找A=0，M=1的，选中第一个。所有经过的A置0&lt;/li&gt;
+&lt;li&gt;回到开始位置，并将所有访问位A复0，重复第一步，失败则重复第二步&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id=&#34;其他置换算法&#34;&gt;其他置换算法&lt;/h4&gt;
+&lt;h5 id=&#34;最少使用置换算法&#34;&gt;最少使用置换算法&lt;/h5&gt;
+&lt;p&gt;选择最近时期使用次数最少的页面作为淘汰页。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;实际实现与LRU通常相同。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h5 id=&#34;页面缓冲算法&#34;&gt;页面缓冲算法&lt;/h5&gt;
+&lt;p&gt;采用FIFO算法选择淘汰页，建立两个链表 空闲页面链表、已修改页面链表。&lt;/p&gt;
+&lt;p&gt;没有被修改页面换出时实际不把它换出内存，而是把该页所在的物理块挂在空闲页链表的尾部。置换已修改页面，挂在已修改页面链表尾部。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;一般与其他分配算法配合使用。
+缺页中断处理的性能受不受页缓冲机制的影响？
+受影响，因为如果引入缓冲机制，缺失的页在内存中，就不必再到外存寻找，会加快处理速度。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;请求分页系统性能分析&#34;&gt;请求分页系统性能分析&lt;/h3&gt;
+&lt;h4 id=&#34;缺页率对有效访问时间的影响&#34;&gt;缺页率对有效访问时间的影响&lt;/h4&gt;
+&lt;h4 id=&#34;工作集&#34;&gt;工作集&lt;/h4&gt;
+&lt;p&gt;把最近访问的页全部装入内存&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;W(t,Δ)&lt;/strong&gt; 工作集的窗口&lt;/p&gt;
+&lt;p&gt;Δ为窗口尺寸，Δ太大，影响存储器利用率&lt;/p&gt;
+&lt;p&gt;Δ太小，缺页率高，影响系统的吞吐量&lt;/p&gt;
+&lt;h4 id=&#34;抖动&#34;&gt;抖动&lt;/h4&gt;
+&lt;p&gt;多道程序度太高，使运行进程大部分时间都用于页换入换出，几乎不能完成任何有效工作的状态称为 &lt;strong&gt;抖动&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;预防&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;采用局部置换策略 进程缺页时，仅在自己内存空间范围置换页面&lt;/li&gt;
+&lt;li&gt;在CPU调度程序中引入工作集算法 只有当每个进程在内存中都有足够大驻留集时，才能从外存调入新的作业&lt;/li&gt;
+&lt;li&gt;L=S准则 调整多道程序度，以使发生缺页的平均时间L=系统处理缺页的平均时间S&lt;/li&gt;
+&lt;li&gt;挂起若干进程 预防抖动，挂起若干进程，腾出进程占用的空间&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;文件系统&#34;&gt;文件系统&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;操作系统快考试了，我觉得自己过应该还是没问题的吧，毕竟也有认真听课。虽然对某些部分流程记忆有点发憷。
+[tag]:操作系统|笔记&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;文件命名&#34;&gt;文件命名&lt;/h3&gt;
+&lt;p&gt;文件命名向用户提供文件访问的抽象机制。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;大小写&lt;/li&gt;
+&lt;li&gt;文件扩展名&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;文件结构&#34;&gt;文件结构&lt;/h4&gt;
+&lt;h5 id=&#34;无结构字节序列&#34;&gt;无结构字节序列&lt;/h5&gt;
+&lt;p&gt;也称 &lt;strong&gt;流式文件&lt;/strong&gt; ，操作系统不关心文件的内容是什么，它所见到的就是字节，含义由使用文件的程序自行理解。&lt;/p&gt;
+&lt;h5 id=&#34;固定长度记录序列&#34;&gt;固定长度记录序列&lt;/h5&gt;
+&lt;p&gt;构成文件的基本单位是具有固定长度的记录，每个记录都有其内部结构。读操作返回一个记录，写操作返回或追加一个记录。&lt;/p&gt;
+&lt;h5 id=&#34;树形结构&#34;&gt;树形结构&lt;/h5&gt;
+&lt;p&gt;文件由一颗记录树构成，记录长度不变，在记录的固定位置包含一个关键字域，记录树按 &lt;strong&gt;关键字域&lt;/strong&gt; 排序。基本操作是获取具有特定关键字的记录。增加记录时，由操作系统决定记录在文件中的存放位置。&lt;/p&gt;
+&lt;h4 id=&#34;文件类型&#34;&gt;文件类型&lt;/h4&gt;
+&lt;p&gt;文件的类型有 &lt;strong&gt;正规文件&lt;/strong&gt; 、 &lt;strong&gt;目录文件&lt;/strong&gt; 、 &lt;strong&gt;字符设备文件&lt;/strong&gt; 、 &lt;strong&gt;块设备文件&lt;/strong&gt; 等。正规文件包含用户信息，一般分为 &lt;strong&gt;ASCII文件&lt;/strong&gt; 和 &lt;strong&gt;二进制文件&lt;/strong&gt; 。&lt;/p&gt;
+&lt;h5 id=&#34;ascii文件&#34;&gt;ASCII文件&lt;/h5&gt;
+&lt;p&gt;由多行正文组成，在某些系统中，每行用 &lt;strong&gt;回车符&lt;/strong&gt; 结束，某些则用 &lt;strong&gt;换行符&lt;/strong&gt; 结束，有些系统还同时采用回车符和换行符。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;优势&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;可以显示和打印&lt;/li&gt;
+&lt;li&gt;可以使用通常的文本编辑器进行编辑&lt;/li&gt;
+&lt;li&gt;程序使用ASCII文件输入输出可以很容易把一个程序的输出当做另一个程序的输入。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h5 id=&#34;二进制文件&#34;&gt;二进制文件&lt;/h5&gt;
+&lt;ul&gt;
+&lt;li&gt;具有一定的内部结构，只有使用该文件的程序才了解这种结构。&lt;/li&gt;
+&lt;li&gt;通常的编辑器不能直接显示和打印二进制文件&lt;/li&gt;
+&lt;li&gt;不同的操作系统可以识别不同的二进制文件，把某一种结构的二进制文件作为系统中的可执行文件。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;文件存取&#34;&gt;文件存取&lt;/h4&gt;
+&lt;p&gt;用户通过对 &lt;strong&gt;文件的存取&lt;/strong&gt; 完成对文件的各种操作。文件的存取方式是由 &lt;strong&gt;文件的性质和用户使用文件的情况&lt;/strong&gt; 来确定的。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;顺序存取&lt;/li&gt;
+&lt;li&gt;随机存取&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;定长记录的文件能很好地支持随机存取，而变长记录虽然可以随机存取，但实现起来复杂且存取速度慢。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4 id=&#34;文件操作&#34;&gt;文件操作&lt;/h4&gt;
+&lt;p&gt;使用文件的目的是存储信息，方便以后的检索。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;CREATE&lt;/li&gt;
+&lt;li&gt;DELETE&lt;/li&gt;
+&lt;li&gt;OPEN 使用文件之前，必须先打开文件。OPEN调用的目的是将 &lt;strong&gt;文件属性和磁盘地址表&lt;/strong&gt; 装入主存，以便后续调用的快速存取。&lt;/li&gt;
+&lt;li&gt;CLOSE&lt;/li&gt;
+&lt;li&gt;READ&lt;/li&gt;
+&lt;li&gt;WRITE&lt;/li&gt;
+&lt;li&gt;APPEND&lt;/li&gt;
+&lt;li&gt;SEEK&lt;/li&gt;
+&lt;li&gt;GETATTRIBUTES&lt;/li&gt;
+&lt;li&gt;SETATTRIBUTES&lt;/li&gt;
+&lt;li&gt;RENAME&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;目录&#34;&gt;目录&lt;/h3&gt;
+&lt;p&gt;文件系统通常提供目录用于记录文件，在很多系统中目录本身也是文件。目录的数量对应文件的数量。&lt;/p&gt;
+&lt;h4 id=&#34;层次目录结构&#34;&gt;层次目录结构&lt;/h4&gt;
+&lt;h5 id=&#34;目录文件的结构&#34;&gt;目录文件的结构&lt;/h5&gt;
+&lt;blockquote&gt;
+&lt;p&gt;2^n个扇区叫做一个簇，作为文件分配的最小单位。文件系统按名访问时需要簇号。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;文件名&lt;/th&gt;
+&lt;th&gt;地址信息（簇号）&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;/table&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;地址信息在MS－DOS系统中是起始簇号，在unix是i节点所在簇号。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;单层目录&lt;/li&gt;
+&lt;li&gt;双层目录 一个用户一个目录&lt;/li&gt;
+&lt;li&gt;目录树&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;路径名&#34;&gt;路径名&lt;/h4&gt;
+&lt;h4 id=&#34;实现文件&#34;&gt;实现文件&lt;/h4&gt;
+&lt;p&gt;连续分配是将文件作为连续数据存储在磁盘上。&lt;/p&gt;
+&lt;p&gt;优点：简单易实现，性能好，一次操作可读出整个文件&lt;/p&gt;
+&lt;p&gt;缺点：无法事先知道该为文件分多少空间，文件长度会变，造成磁盘碎片。&lt;/p&gt;
+&lt;p&gt;链接表分配是为每个文件构建磁盘块的链接表，每个块的第一个字用于指向下一块的指针，块的其他部分存放数据&lt;/p&gt;
+&lt;p&gt;优点：磁盘空间利用率高，管理简单&lt;/p&gt;
+&lt;p&gt;缺点：随机存取的速度慢&lt;/p&gt;
+&lt;p&gt;使用索引的链接表分配使用链接表实现文件，取出文件名和地址信息作为索引表。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;目录结合FAT表
+FAT12&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;strong&gt;FAT文件系统目录结构、FAT表结构作用、如何实现按名访问、数据结构与单个文件管理的最大长度的关系。&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;FAT12采用12位文件分配表，磁盘块大小为2KB&lt;/li&gt;
+&lt;li&gt;则FAT12可以管理的磁盘容量为8M&lt;/li&gt;
+&lt;li&gt;FAT12文件系统文件名：只能是8.3格式的文件名&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;实现目录&#34;&gt;实现目录&lt;/h4&gt;
+&lt;hr&gt;
+&lt;p&gt;问：有目录dir，其下有100B的a.txt，问占用磁盘空间。&lt;/p&gt;
+&lt;p&gt;答：两个簇，因为一个簇不会比512B更小。&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;UNIX中的目录&lt;/p&gt;
+&lt;h4 id=&#34;磁盘空间管理&#34;&gt;磁盘空间管理&lt;/h4&gt;
+&lt;h5 id=&#34;块大小&#34;&gt;块大小&lt;/h5&gt;
+&lt;p&gt;太大浪费空间，太小浪费时间&lt;/p&gt;
+&lt;h5 id=&#34;记录空闲块&#34;&gt;记录空闲块&lt;/h5&gt;
+&lt;ul&gt;
+&lt;li&gt;空闲磁盘块链表&lt;/li&gt;
+&lt;li&gt;位图&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;io设备管理&#34;&gt;I/O设备管理&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;操作系统快考试了，我觉得自己过应该还是没问题的吧，毕竟也有认真听课。虽然对某些部分流程记忆有点发憷。
+[tag]:操作系统|笔记&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;io系统的组成&#34;&gt;I/O系统的组成&lt;/h3&gt;
+&lt;p&gt;I/O系统不仅包含各种I/O设备，还包含于设备相连的设备控制器，有的系统亦配备了专门用于输入输出控制的专业计算机 &lt;strong&gt;通道&lt;/strong&gt; 。&lt;/p&gt;
+&lt;h4 id=&#34;io系统的结构&#34;&gt;I/O系统的结构&lt;/h4&gt;
+&lt;ol&gt;
+&lt;li&gt;微机I/O系统&lt;/li&gt;
+&lt;li&gt;主机I/O系统&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id=&#34;io设备的分类&#34;&gt;I/O设备的分类&lt;/h4&gt;
+&lt;ol&gt;
+&lt;li&gt;按速率分类&lt;/li&gt;
+&lt;li&gt;按信息交换的单位分类&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;块设备&lt;/li&gt;
+&lt;li&gt;字符设备&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;两种设备操作系统实现驱动程序的方式是不同的。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;按设备的共享属性分类&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;独占设备&lt;/li&gt;
+&lt;li&gt;共享设备 资源调度问题&lt;/li&gt;
+&lt;li&gt;虚拟设备 利用虚拟技术把一台物理设备变为若干逻辑设备&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;设备控制器&#34;&gt;设备控制器&lt;/h4&gt;
+&lt;p&gt;设备控制器是 &lt;strong&gt;CPU&lt;/strong&gt; 与 &lt;strong&gt;I/O设备&lt;/strong&gt; 之间的接口，接收I/O的命令并控制I/O完成设备工作。设备控制器是一个可编址设备，连接多个设备时可有多个设备地址。&lt;/p&gt;
+&lt;p&gt;【待补充】&lt;/p&gt;
+&lt;h3 id=&#34;io控制方式&#34;&gt;I/O控制方式&lt;/h3&gt;
+&lt;h4 id=&#34;轮询控制方式&#34;&gt;轮询控制方式&lt;/h4&gt;
+&lt;h4 id=&#34;中断控制方式&#34;&gt;中断控制方式&lt;/h4&gt;
+&lt;h4 id=&#34;dma控制方式&#34;&gt;DMA控制方式&lt;/h4&gt;
+&lt;blockquote&gt;
+&lt;p&gt;不同控制下I/O的过程
+……进程状态会发生什么变化
+OS内核会做些什么
+将进程置为阻塞态
+为进程分配设备
+中断处理，唤醒进程&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ol&gt;
+&lt;li&gt;DMA控制器的组成&lt;/li&gt;
+&lt;/ol&gt;
+&lt;ul&gt;
+&lt;li&gt;命令/状态寄存器&lt;/li&gt;
+&lt;li&gt;内存地址寄存器MAR&lt;/li&gt;
+&lt;li&gt;数据寄存器DR&lt;/li&gt;
+&lt;li&gt;数据计数器DC&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;不使用DMA过程&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;首先控制器从设备完整读出一块数据放入数据寄存器&lt;/li&gt;
+&lt;li&gt;计算校验和&lt;/li&gt;
+&lt;li&gt;发中断信号，将数据读入内存&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;使用DMA方式&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;CPU发【待补充】&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;缓冲管理&#34;&gt;缓冲管理&lt;/h3&gt;
+&lt;h4 id=&#34;缓冲的引入&#34;&gt;缓冲的引入&lt;/h4&gt;
+&lt;p&gt;在数据到达和数据离开速度不一致的地方都可以引入缓冲。&lt;/p&gt;
+&lt;p&gt;降低对硬件响应时间的要求。&lt;/p&gt;
+&lt;h4 id=&#34;循环缓冲&#34;&gt;循环缓冲&lt;/h4&gt;
+&lt;ol&gt;
+&lt;li&gt;引入循环缓冲的理由&lt;/li&gt;
+&lt;li&gt;循环缓冲的组成&lt;/li&gt;
+&lt;li&gt;缓冲区的使用&lt;/li&gt;
+&lt;li&gt;进程同步&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;设备分配&#34;&gt;设备分配&lt;/h3&gt;
+&lt;h4 id=&#34;设备分配要考虑的因素&#34;&gt;设备分配要考虑的因素&lt;/h4&gt;
+&lt;h4 id=&#34;设备独立性&#34;&gt;设备独立性&lt;/h4&gt;
+&lt;p&gt;应用程序独立于具体的物理设备。&lt;/p&gt;
+&lt;h4 id=&#34;spooling技术&#34;&gt;SPOOLING技术&lt;/h4&gt;
+&lt;h3 id=&#34;磁盘管理&#34;&gt;磁盘管理&lt;/h3&gt;
+&lt;h4 id=&#34;磁盘结构&#34;&gt;磁盘结构&lt;/h4&gt;
+&lt;p&gt;通过改善调度算法提高访问速度=&amp;gt;减少寻道次数&lt;/p&gt;
+&lt;h4 id=&#34;磁盘调度&#34;&gt;磁盘调度&lt;/h4&gt;
+&lt;blockquote&gt;
+&lt;p&gt;考磁盘调度算法&lt;/p&gt;
+&lt;/blockquote&gt;
+- https://ntutn.top/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86%E7%AC%94%E8%AE%B0/ - CC BY-SA 4.0</description>
+        </item>
+    
+    
+    
+        <item>
         <title>三门问题</title>
         <link>https://ntutn.top/posts/%E4%B8%89%E9%97%A8%E9%97%AE%E9%A2%98/</link>
         <pubDate>Mon, 16 Sep 2019 03:11:37 +0800</pubDate>
@@ -749,1068 +1797,6 @@ a与b直接比较，&lt;code&gt;a==b&lt;/code&gt;，两者不是同一对象。�
 &lt;hr&gt;
 &lt;p&gt;2019年09月16日，我把实验过程给老师看了，老师补充这个速度除了与高速缓存的命中有关，还与编译器的内存管理有关。&lt;/p&gt;
 - https://ntutn.top/posts/%E5%A4%A7%E5%9E%8B%E6%95%B0%E7%BB%84%E6%8C%89%E8%A1%8C%E9%81%8D%E5%8E%86%E4%B8%8E%E6%8C%89%E5%88%97%E9%81%8D%E5%8E%86%E7%9A%84%E5%8C%BA%E5%88%AB/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>在Windows10上安装血战上海滩</title>
-        <link>https://ntutn.top/posts/%E5%9C%A8windows10%E4%B8%8A%E5%AE%89%E8%A3%85%E8%A1%80%E6%88%98%E4%B8%8A%E6%B5%B7%E6%BB%A9/</link>
-        <pubDate>Sat, 01 Jun 2019 03:11:37 +0800</pubDate>
-        
-        <guid>https://ntutn.top/posts/%E5%9C%A8windows10%E4%B8%8A%E5%AE%89%E8%A3%85%E8%A1%80%E6%88%98%E4%B8%8A%E6%B5%B7%E6%BB%A9/</guid>
-        <description>归零幻想 https://ntutn.top/posts/%E5%9C%A8windows10%E4%B8%8A%E5%AE%89%E8%A3%85%E8%A1%80%E6%88%98%E4%B8%8A%E6%B5%B7%E6%BB%A9/ -&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;《血战上海滩》是由北京欢乐亿派科技有限公司开发的单机FPS游戏，发行于2003年，是一个非常经典的老游戏了。
-近来我打算把这个游戏找出来再玩一遍，可是在Windows10上安装还是有些问题……&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2022/04/cae87d561f3a723b0187e837e3e63ab0.gif&#34; alt=&#34;血战上海滩&#34;&gt;&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;h2 id=&#34;下载&#34;&gt;下载&lt;/h2&gt;
-&lt;p&gt;下载不用多说，自己找资源吧，一共三百多兆的单机游戏。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;现在很多单机游戏下载时网站都会给你带上一个“启动器”来显示广告，恶心的很。找到文件夹中，注意血战上海滩的游戏文件是一个帽子的图标，大小为&lt;code&gt;1.87M&lt;/code&gt;，SHA1为&lt;code&gt;FE5A102AA9DE633FB6E388EAAEEA38BC43E8E7E4&lt;/code&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&#34;启动&#34;&gt;启动&lt;/h2&gt;
-&lt;p&gt;直接双击exe，然后……它免费帮你调了一下分辨率，就没反应了。&lt;/p&gt;
-&lt;p&gt;貌似兼容性是个比较大的问题……于是在网上找了好久，终于知道，可以用命令行控制游戏窗口运行：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cmd&#34; data-lang=&#34;cmd&#34;&gt;shanghai.exe -windows
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;修改屏幕分辨率实现全屏&#34;&gt;修改屏幕分辨率实现全屏&lt;/h2&gt;
-&lt;p&gt;倒是能运行了，只是……画面都在左上角，没法玩啊……&lt;/p&gt;
-&lt;p&gt;所以再加上自动修改屏幕分辨率就可以全屏了。修改屏幕分辨率可以用&lt;code&gt;setres&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.majorgeeks.com/files/details/setres.html&#34;&gt;下载链接&lt;/a&gt;下载并将exe文件放到血战上海滩的游戏文件夹。&lt;/p&gt;
-&lt;p&gt;于是用下面的命令：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cmd&#34; data-lang=&#34;cmd&#34;&gt;setres h800 v600
-shanghai.exe -windows
-setres h1920 v1080
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;1920*1080&lt;/code&gt;是我电脑的屏幕分辨率，注意换成自己的。&lt;/p&gt;
-&lt;h2 id=&#34;隐藏显示任务栏&#34;&gt;隐藏显示任务栏&lt;/h2&gt;
-&lt;p&gt;然而，这样还是有问题，就是这样“全屏”后任务栏并没有消失，虽然可以设置自动隐藏任务栏但总归还是不爽，于是写了个简单C#程序在启动游戏隐藏任务栏（虽然很简单，但没找到只用命令实现的方法）&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-C#&#34; data-lang=&#34;C#&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System&lt;/span&gt;;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System.Collections.Generic&lt;/span&gt;;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System.Linq&lt;/span&gt;;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System.Text&lt;/span&gt;;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System.Threading.Tasks&lt;/span&gt;;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System.Runtime.InteropServices&lt;/span&gt;;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;namespace&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;ShowTaskBar&lt;/span&gt;
-{
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Program&lt;/span&gt;
-    {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; SW_HIDE = &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;  &lt;span style=&#34;color:#228b22&#34;&gt;//隐藏任务栏
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; SW_RESTORE = &lt;span style=&#34;color:#b452cd&#34;&gt;9&lt;/span&gt;;&lt;span style=&#34;color:#228b22&#34;&gt;//显示任务栏
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#658b00&#34;&gt;        [DllImport(&amp;#34;user32.dll&amp;#34;)]&lt;/span&gt;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;extern&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; ShowWindow(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; hwnd, &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; nCmdShow);
-&lt;span style=&#34;color:#658b00&#34;&gt;        [DllImport(&amp;#34;user32.dll&amp;#34;)]&lt;/span&gt;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;extern&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; FindWindow(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;string&lt;/span&gt; lpClassName, &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;string&lt;/span&gt; lpWindowName);
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;void&lt;/span&gt; Main(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;string&lt;/span&gt;[] args)
-        {
-            ShowWindow(FindWindow(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Shell_TrayWnd&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;), SW_HIDE);
-        }
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-C#&#34; data-lang=&#34;C#&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System&lt;/span&gt;;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System.Collections.Generic&lt;/span&gt;;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System.Linq&lt;/span&gt;;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System.Text&lt;/span&gt;;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System.Threading.Tasks&lt;/span&gt;;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System.Runtime.InteropServices&lt;/span&gt;;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;namespace&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;ShowTaskBar&lt;/span&gt;
-{
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Program&lt;/span&gt;
-    {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; SW_HIDE = &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;  &lt;span style=&#34;color:#228b22&#34;&gt;//隐藏任务栏
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; SW_RESTORE = &lt;span style=&#34;color:#b452cd&#34;&gt;9&lt;/span&gt;;&lt;span style=&#34;color:#228b22&#34;&gt;//显示任务栏
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#658b00&#34;&gt;        [DllImport(&amp;#34;user32.dll&amp;#34;)]&lt;/span&gt;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;extern&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; ShowWindow(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; hwnd, &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; nCmdShow);
-&lt;span style=&#34;color:#658b00&#34;&gt;        [DllImport(&amp;#34;user32.dll&amp;#34;)]&lt;/span&gt;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;extern&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; FindWindow(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;string&lt;/span&gt; lpClassName, &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;string&lt;/span&gt; lpWindowName);
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;void&lt;/span&gt; Main(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;string&lt;/span&gt;[] args)
-        {
-            ShowWindow(FindWindow(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Shell_TrayWnd&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;), SW_RESTORE);
-        }
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;编译并将生成文件也放到游戏文件夹。这样我们就可以用一个&lt;code&gt;start.cmd&lt;/code&gt;打开游戏：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cmd&#34; data-lang=&#34;cmd&#34;&gt;setres h800 v600
-hidetaskbar
-shanghai.exe -windows
-showtaskbar
-setres h1920 v1080
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;体验相当完美。&lt;/p&gt;
-- https://ntutn.top/posts/%E5%9C%A8windows10%E4%B8%8A%E5%AE%89%E8%A3%85%E8%A1%80%E6%88%98%E4%B8%8A%E6%B5%B7%E6%BB%A9/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>二叉树ADT的实现</title>
-        <link>https://ntutn.top/posts/%E4%BA%8C%E5%8F%89%E6%A0%91adt%E7%9A%84%E5%AE%9E%E7%8E%B0/</link>
-        <pubDate>Tue, 14 May 2019 03:11:37 +0800</pubDate>
-        
-        <guid>https://ntutn.top/posts/%E4%BA%8C%E5%8F%89%E6%A0%91adt%E7%9A%84%E5%AE%9E%E7%8E%B0/</guid>
-        <description>归零幻想 https://ntutn.top/posts/%E4%BA%8C%E5%8F%89%E6%A0%91adt%E7%9A%84%E5%AE%9E%E7%8E%B0/ -&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;人工智能知识点整理Question&lt;/p&gt;
-&lt;p&gt;假设二叉数的数据元素为字符，采用二叉链式存储结构。请编码实现二叉树ADT，其中包括创建二叉树、遍历二叉树（深度、广度）、求二叉树的深度（高度）、计算二叉树的元素个数、计算二叉树的叶子数、二叉树的格式输出等。&lt;/p&gt;
-&lt;p&gt;根据输入的符号，执行相应的操作。如下：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;C：根据完全前序序列创建二叉树，#表示空结点（空子树）；输入：二叉树的完全前序序列，创建成功输出 &lt;code&gt;Created success!&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;H：求二叉树的高度；   输出： &lt;code&gt;Height=高度&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;L：计算二叉树的叶子数；输出：&lt;code&gt;Leaves=叶子个数&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;N：计算二叉树中元素总个数；输出：&lt;code&gt;Nodes=结点个数&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;1：先序遍历二叉树；输出：&lt;code&gt;Preorder is:序列 .&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;2：中序遍历二叉树；输出：&lt;code&gt;Inorder is:序列 .&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;3：后序遍历二叉树；输出：&lt;code&gt;Postorder is:序列 .&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;4：广度遍历二叉树；输出：&lt;code&gt;BFSorder is:序列 .&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;F：查找值为x的结点个数；输出：&lt;code&gt;The count of x is 个数 .&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;P：以目录缩格文本形式输出所有节点。输出：&lt;code&gt;The tree is:&lt;/code&gt;（换行，下面各行是输出的二叉树）&lt;/li&gt;
-&lt;li&gt;X：退出&lt;/li&gt;
-&lt;/ul&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;h2 id=&#34;example&#34;&gt;Example&lt;/h2&gt;
-&lt;h3 id=&#34;input&#34;&gt;Input&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;C
-ABC##DE#G##F###
-H
-L
-N
-1
-2
-3
-4
-F
-A
-P
-X
-&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;output&#34;&gt;Output&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;Created success!
-Height=5
-Leaves=3
-Nodes=7
-Preorder is:A B C D E G F .
-Inorder is:C B E G D F A .
-Postorder is:C G E F D B A .
-BFSorder is:A B C D E F G .
-The count of A is 1
-The tree is:
-A
-  B
-    C
-    D
-      E
-        G
-      F
-&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;分析&#34;&gt;分析&lt;/h2&gt;
-&lt;p&gt;二叉树不多说，数据结构的基本内容。这题主要就是麻烦，要求的操作比较多，一看肯定不卡时间，递归走起。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;递归一时爽，一直递归一直爽。
-在思路清晰的情况下，递归大大降低了编码的复杂程度，于是创建递归，求叶子数递归，求高度递归，总个数递归，查找递归，目录形式输出递归，深度遍历递归，广度……咳咳，好吧，这个不用递归，要用个队列。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;不让用&lt;code&gt;STL&lt;/code&gt;，队列也只好手写。&lt;/p&gt;
-&lt;p&gt;我一开始写程序&lt;code&gt;Leaves=&lt;/code&gt;写成了&lt;code&gt;Leaf=&lt;/code&gt;，这鬼畜的错误半天没检查出来。顺便推荐个文本差异对比工具吧，这样找起来也容易：&lt;a href=&#34;http://www.jq22.com/textDifference&#34; title=&#34;在线文本差异对比&#34;&gt;在线文本差异对比&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;算上空行都300行了，真是够麻烦的。&lt;/p&gt;
-&lt;h2 id=&#34;answer&#34;&gt;Answer&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-c++&#34; data-lang=&#34;c++&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
-&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;namespace&lt;/span&gt; std;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;template&lt;/span&gt;&amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;T&lt;/span&gt;&amp;gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;QueueNode&lt;/span&gt;{
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt;:
-    T data;
-    QueueNode*link=&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;;
-    QueueNode(){
-        ;
-    }
-    QueueNode(T data){
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;-&amp;gt;data=data;
-    }
-};
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;template&lt;/span&gt;&amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;T&lt;/span&gt;&amp;gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Queue&lt;/span&gt;{
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt;:
-    QueueNode&amp;lt;T&amp;gt;*tail=&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;;
-    QueueNode&amp;lt;T&amp;gt;*head=&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt;:
-    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt; isEmpty(){
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; head==&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;;
-    }
-    ~Queue(){
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt;(head!=&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;){
-            QueueNode&amp;lt;T&amp;gt;*p=head-&amp;gt;link;
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;delete&lt;/span&gt; head;
-            head=p;
-        }
-    }
-    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;enQueue&lt;/span&gt;(T data){
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(tail==&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;){
-            head=tail=&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; QueueNode&amp;lt;T&amp;gt;(data);
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;;
-        }
-        tail-&amp;gt;link=&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; QueueNode&amp;lt;T&amp;gt;(data);
-        tail=tail-&amp;gt;link;
-    }
-    T &lt;span style=&#34;color:#008b45&#34;&gt;deQueue&lt;/span&gt;(){
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(isEmpty()){
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;;
-        }
-        T res=head-&amp;gt;data;
-        QueueNode&amp;lt;T&amp;gt;*tmp=head;
-        head=head-&amp;gt;link;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;delete&lt;/span&gt; tmp;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(head==&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;){
-            tail=&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;;
-        }
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; res;
-    }
-};
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Tree&lt;/span&gt;;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Node&lt;/span&gt;{
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;friend&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Tree&lt;/span&gt;;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt;:
-    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; data=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;\0&amp;#39;&lt;/span&gt;;
-    Node*lChild=&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;;
-    Node*rChild=&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt;:
-    Node(){
-        ;
-    }
-    Node(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; data){
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;-&amp;gt;data=data;
-    }
-};
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Tree&lt;/span&gt;{
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt;:
-    Node*root=&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;;
-    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;createTree&lt;/span&gt;(Node*&amp;amp;p,string&amp;amp;str,&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;&amp;amp;id){
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(id&amp;gt;=str.size()){
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;;
-        }
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(str.at(id)==&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;#&amp;#39;&lt;/span&gt;){
-            id++;
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;;
-        }
-        p=&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; Node();
-        p-&amp;gt;data=str.at(id);
-        id++;
-        createTree(p-&amp;gt;lChild,str,id);
-        createTree(p-&amp;gt;rChild,str,id);
-    }
-    size_t &lt;span style=&#34;color:#008b45&#34;&gt;getHeight&lt;/span&gt;(Node*p){
-        size_t lHeight;
-        size_t rHeight;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(p-&amp;gt;lChild==&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;){
-            lHeight=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
-        }&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt;{
-            lHeight=getHeight(p-&amp;gt;lChild);
-        }
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(p-&amp;gt;rChild==&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;){
-            rHeight=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
-        }&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt;{
-            rHeight=getHeight(p-&amp;gt;rChild);
-        }
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; max(lHeight,rHeight)+&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;;
-    }
-    size_t &lt;span style=&#34;color:#008b45&#34;&gt;getLeaves&lt;/span&gt;(Node*p){
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(p==&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;){
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
-        }
-        size_t res=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(p-&amp;gt;lChild==&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;&amp;amp;&amp;amp;p-&amp;gt;rChild==&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;){
-            res++;
-        }
-        res+=getLeaves(p-&amp;gt;lChild);
-        res+=getLeaves(p-&amp;gt;rChild);
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; res;
-    }
-    size_t &lt;span style=&#34;color:#008b45&#34;&gt;getNodes&lt;/span&gt;(Node*p){
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(p==&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;){
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
-        }
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; getNodes(p-&amp;gt;lChild)+getNodes(p-&amp;gt;rChild)+&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;;
-    }
-    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;visit1&lt;/span&gt;(Node*p){
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(p==&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;){
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;;
-        }
-        cout&amp;lt;&amp;lt;p-&amp;gt;data&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39; &amp;#39;&lt;/span&gt;;
-        visit1(p-&amp;gt;lChild);
-        visit1(p-&amp;gt;rChild);
-    }
-    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;visit2&lt;/span&gt;(Node*p){
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(p==&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;){
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;;
-        }
-        visit2(p-&amp;gt;lChild);
-        cout&amp;lt;&amp;lt;p-&amp;gt;data&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39; &amp;#39;&lt;/span&gt;;
-        visit2(p-&amp;gt;rChild);
-    }
-    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;visit3&lt;/span&gt;(Node*p){
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(p==&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;){
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;;
-        }
-        visit3(p-&amp;gt;lChild);
-        visit3(p-&amp;gt;rChild);
-        cout&amp;lt;&amp;lt;p-&amp;gt;data&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39; &amp;#39;&lt;/span&gt;;
-    }
-    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;delNode&lt;/span&gt;(Node*p){
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(p==&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;){
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;;
-        }
-        delNode(p-&amp;gt;lChild);
-        delNode(p-&amp;gt;rChild);
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;delete&lt;/span&gt; p;
-    }
-    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;search&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; c,Node*p){
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(p==&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;){
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
-        }
-        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; res=p-&amp;gt;data==c?&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;:&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; search(c,p-&amp;gt;lChild)+search(c,p-&amp;gt;rChild)+res;
-    }
-    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;indexTree&lt;/span&gt;(Node*p,&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; depth){
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(p==&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;){
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;;
-        }
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;i&amp;lt;depth;i++){
-            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39; &amp;#39;&lt;/span&gt;&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39; &amp;#39;&lt;/span&gt;;
-        }
-        cout&amp;lt;&amp;lt;p-&amp;gt;data&amp;lt;&amp;lt;endl;
-        indexTree(p-&amp;gt;lChild,depth+&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;);
-        indexTree(p-&amp;gt;rChild,depth+&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;);
-    }
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt;:
-    Tree(string str){
-        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; id=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
-        createTree(root,str,id);
-    }
-    size_t &lt;span style=&#34;color:#008b45&#34;&gt;getHeight&lt;/span&gt;(){
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; getHeight(root);
-    }
-    size_t &lt;span style=&#34;color:#008b45&#34;&gt;getLeaves&lt;/span&gt;(){
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; getLeaves(root);
-    }
-    size_t &lt;span style=&#34;color:#008b45&#34;&gt;getNodes&lt;/span&gt;(){
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; getNodes(root);
-    }
-    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;visit1&lt;/span&gt;(){
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Preorder is:&amp;#34;&lt;/span&gt;;
-        visit1(root);
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;.&amp;#39;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-    }
-    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;visit2&lt;/span&gt;(){
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Inorder is:&amp;#34;&lt;/span&gt;;
-        visit2(root);
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;.&amp;#39;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-    }
-    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;visit3&lt;/span&gt;(){
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Postorder is:&amp;#34;&lt;/span&gt;;
-        visit3(root);
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;.&amp;#39;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-    }
-    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;visitBFS&lt;/span&gt;(){
-        Queue&amp;lt;Node*&amp;gt;*q=&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; Queue&amp;lt;Node*&amp;gt;();
-        q-&amp;gt;enQueue(root);
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt;(!q-&amp;gt;isEmpty()){
-            Node*tmp=q-&amp;gt;deQueue();
-            cout&amp;lt;&amp;lt;tmp-&amp;gt;data&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39; &amp;#39;&lt;/span&gt;;
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(tmp-&amp;gt;lChild!=&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;){
-                q-&amp;gt;enQueue(tmp-&amp;gt;lChild);
-            }
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(tmp-&amp;gt;rChild!=&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;){
-                q-&amp;gt;enQueue(tmp-&amp;gt;rChild);
-            }
-        }
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;delete&lt;/span&gt; q;
-    }
-    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;search&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; c){
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; search(c,root);
-    }
-    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;indexTree&lt;/span&gt;(){
-        indexTree(root,&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;);
-    }
-    ~Tree(){
-        delNode(root);
-    }
-};
-&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;()
-{
-    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; Op;
-    Tree*tree;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt;(cin&amp;gt;&amp;gt;Op){
-        string str;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;switch&lt;/span&gt;(Op){
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;C&amp;#39;&lt;/span&gt;:
-            cin&amp;gt;&amp;gt;str;
-            tree=&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; Tree(str);
-            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Created success!&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;H&amp;#39;&lt;/span&gt;:
-            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Height=&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;tree-&amp;gt;getHeight()&amp;lt;&amp;lt;endl;
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;L&amp;#39;&lt;/span&gt;:
-            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Leaves=&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;tree-&amp;gt;getLeaves()&amp;lt;&amp;lt;endl;
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;N&amp;#39;&lt;/span&gt;:
-            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Nodes=&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;tree-&amp;gt;getNodes()&amp;lt;&amp;lt;endl;
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;1&amp;#39;&lt;/span&gt;:
-            tree-&amp;gt;visit1();
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;2&amp;#39;&lt;/span&gt;:
-            tree-&amp;gt;visit2();
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;3&amp;#39;&lt;/span&gt;:
-            tree-&amp;gt;visit3();
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;4&amp;#39;&lt;/span&gt;:
-            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;BFSorder is:&amp;#34;&lt;/span&gt;;
-            tree-&amp;gt;visitBFS();
-            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;.&amp;#39;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;F&amp;#39;&lt;/span&gt;:
-            &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; x;
-            cin&amp;gt;&amp;gt;x;
-            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;The count of &amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;x&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34; is &amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;tree-&amp;gt;search(x)&amp;lt;&amp;lt;endl;
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;P&amp;#39;&lt;/span&gt;:
-            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;The tree is:&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-            tree-&amp;gt;indexTree();
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
-        }
-    }
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;delete&lt;/span&gt; tree;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://ntutn.top/posts/%E4%BA%8C%E5%8F%89%E6%A0%91adt%E7%9A%84%E5%AE%9E%E7%8E%B0/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>图书管理系统</title>
-        <link>https://ntutn.top/posts/%E5%9B%BE%E4%B9%A6%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/</link>
-        <pubDate>Sat, 13 Apr 2019 03:11:37 +0800</pubDate>
-        
-        <guid>https://ntutn.top/posts/%E5%9B%BE%E4%B9%A6%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/</guid>
-        <description>归零幻想 https://ntutn.top/posts/%E5%9B%BE%E4%B9%A6%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/ -&lt;p&gt;翻出了以前写的C++作业，图书管理系统，虽然挺简单的，但留下纪念下吧。&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cpp&#34; data-lang=&#34;cpp&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
-&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;cstdlib&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
-&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;cstring&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
-&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;fstream&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
-&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;namespace&lt;/span&gt; std;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;CUser&lt;/span&gt;
-{
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt;:
-    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; code;      &lt;span style=&#34;color:#228b22&#34;&gt;//表示用户编号；
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; name[&lt;span style=&#34;color:#b452cd&#34;&gt;20&lt;/span&gt;];  &lt;span style=&#34;color:#228b22&#34;&gt;//表示用户姓名
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt;:
-    CUser()
-    {
-        ;
-    };   &lt;span style=&#34;color:#228b22&#34;&gt;// 默认构造函数
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    CUser(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; id, &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; na[])
-    {
-        code=id;
-        strcpy(name,na);
-    };   &lt;span style=&#34;color:#228b22&#34;&gt;//构造函数，初始化用户信息
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;setcode&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; n)
-    {
-        code=n;
-    };      &lt;span style=&#34;color:#228b22&#34;&gt;//用来设置用户编号
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;getcode&lt;/span&gt;()
-    {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; code;
-    };          &lt;span style=&#34;color:#228b22&#34;&gt;//用来获取用户编号
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;setname&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; na[])
-    {
-        strcpy(name,na);
-    };  &lt;span style=&#34;color:#228b22&#34;&gt;//用来设置用户姓名
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt;* &lt;span style=&#34;color:#008b45&#34;&gt;getname&lt;/span&gt;()
-    {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; name;
-    };        &lt;span style=&#34;color:#228b22&#34;&gt;//用来获取用户姓名
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;show&lt;/span&gt;()
-    {
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;用户编号：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;code&amp;lt;&amp;lt;endl;
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;姓名：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;name&amp;lt;&amp;lt;endl;
-    };           &lt;span style=&#34;color:#228b22&#34;&gt;//用来显示用户的基本信息
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;};
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;CBook&lt;/span&gt;
-{
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt;:
-    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; code;              &lt;span style=&#34;color:#228b22&#34;&gt;//图书编号
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; name[&lt;span style=&#34;color:#b452cd&#34;&gt;20&lt;/span&gt;];      &lt;span style=&#34;color:#228b22&#34;&gt;//图书名称
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt; Is_Stock;          &lt;span style=&#34;color:#228b22&#34;&gt;//true为在架，false为借出
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt; Is_Existing;       &lt;span style=&#34;color:#228b22&#34;&gt;//true为存在, false为删除
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt;:
-    CBook()
-    {
-        ;
-    }; &lt;span style=&#34;color:#228b22&#34;&gt;//默认构造函数
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    CBook(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; no,&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; na[])
-    {
-        code=no;
-        strcpy(name,na);
-        Is_Stock=&lt;span style=&#34;color:#658b00&#34;&gt;true&lt;/span&gt;;
-        Is_Existing=&lt;span style=&#34;color:#658b00&#34;&gt;true&lt;/span&gt;;
-    };    &lt;span style=&#34;color:#228b22&#34;&gt;//构造函数，初始化图书信息
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;setcode&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; n)
-    {
-        code=n;
-    };   &lt;span style=&#34;color:#228b22&#34;&gt;//设置图书编号
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;getcode&lt;/span&gt;()
-    {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; code;
-    };    &lt;span style=&#34;color:#228b22&#34;&gt;//获取图书编号
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;setname&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; na[])
-    {
-        strcpy(name,na);
-    };    &lt;span style=&#34;color:#228b22&#34;&gt;//设置图书名称
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt;* &lt;span style=&#34;color:#008b45&#34;&gt;getname&lt;/span&gt;()
-    {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; name;
-    };  &lt;span style=&#34;color:#228b22&#34;&gt;//获取图书名称
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt;  &lt;span style=&#34;color:#008b45&#34;&gt;get_Stock&lt;/span&gt;()
-    {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; Is_Stock;
-    };  &lt;span style=&#34;color:#228b22&#34;&gt;//获取图书是否在库信息
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;set_Stock&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt; isstock)
-    {
-        Is_Stock=isstock;
-    };&lt;span style=&#34;color:#228b22&#34;&gt;// 设置图书是否在库信息
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt;  &lt;span style=&#34;color:#008b45&#34;&gt;get_Existing&lt;/span&gt;()
-    {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; Is_Existing;
-    };&lt;span style=&#34;color:#228b22&#34;&gt;//获取存在标志
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;set_Existing&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt; isex)
-    {
-        Is_Existing=isex;
-    };&lt;span style=&#34;color:#228b22&#34;&gt;//设置存在标志
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;};
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;CReader&lt;/span&gt;:&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; CUser
-{
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt;:
-    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt; Is_Existing;  &lt;span style=&#34;color:#228b22&#34;&gt;//true存在，false删除
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt; Is_Borrowing;  &lt;span style=&#34;color:#228b22&#34;&gt;//true借过书，false没有借书
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    CBook brbook;     &lt;span style=&#34;color:#228b22&#34;&gt;//表示读者所借的图书
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt;:
-    CReader()
-    {
-        CUser();
-    };   &lt;span style=&#34;color:#228b22&#34;&gt;//构造函数，初始化读者信息
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    CReader(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; id, &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; na[])
-    {
-        CUser(id,na);
-    };   &lt;span style=&#34;color:#228b22&#34;&gt;//构造函数，初始化读者信息
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;get_Existing&lt;/span&gt;()
-    {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; Is_Existing;
-    };        &lt;span style=&#34;color:#228b22&#34;&gt;//用来获取删除标志
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;set_Existing&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt; isex)
-    {
-        Is_Existing=isex;
-    };     &lt;span style=&#34;color:#228b22&#34;&gt;//用来设置删除标志
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;get_Borrowing&lt;/span&gt;()
-    {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; Is_Borrowing;
-    };      &lt;span style=&#34;color:#228b22&#34;&gt;//用来获取读者借阅情况
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;set_Borrowing&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt; isbo)
-    {
-        Is_Borrowing=isbo;
-    };   &lt;span style=&#34;color:#228b22&#34;&gt;//用来设置读者借阅情况
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;setbrbook&lt;/span&gt;(CBook bt)
-    {
-        brbook=bt;
-        Is_Borrowing=&lt;span style=&#34;color:#658b00&#34;&gt;true&lt;/span&gt;;
-    };  &lt;span style=&#34;color:#228b22&#34;&gt;//用来记录读者结束信息
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    CBook &lt;span style=&#34;color:#008b45&#34;&gt;getbrbook&lt;/span&gt;()
-    {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; brbook;
-    };     &lt;span style=&#34;color:#228b22&#34;&gt;//用来获取读者结束信息
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;show&lt;/span&gt;()
-    {
-        CUser::show();
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(Is_Borrowing)
-        {
-            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;当前借书：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;brbook.getname()&amp;lt;&amp;lt;endl;
-        }
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt;
-        {
-            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;当前用户没有借书！&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-        }
-    };               &lt;span style=&#34;color:#228b22&#34;&gt;//重写基类成员，显示读者的基本信息情况和借书情况
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;};
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;CReaderManager&lt;/span&gt;
-{
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt;:
-    CReader rdarray[&lt;span style=&#34;color:#b452cd&#34;&gt;50&lt;/span&gt;];&lt;span style=&#34;color:#228b22&#34;&gt;// 存储读者信息的集合
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; top;      &lt;span style=&#34;color:#228b22&#34;&gt;//当前数组中存储的读者数量
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt;:
-    CReaderManager()
-    {
-        top=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
-    };  &lt;span style=&#34;color:#228b22&#34;&gt;// 构造函数
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    ~CReaderManager()
-    {
-    };   &lt;span style=&#34;color:#228b22&#34;&gt;//析构函数
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;addreaders&lt;/span&gt;()
-    {
-        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; tmp[&lt;span style=&#34;color:#b452cd&#34;&gt;20&lt;/span&gt;];
-        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; tmp_no;
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入读者的相关信息：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入读者的名称：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-        cin&amp;gt;&amp;gt;tmp;
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入读者的编号：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-        cin&amp;gt;&amp;gt;tmp_no;
-        CReader tmp_reader(tmp_no,tmp);
-        rdarray[top]=tmp_reader;
-        top++;
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;读者添加成功。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-    };          &lt;span style=&#34;color:#228b22&#34;&gt;//添加读者
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;findreaders&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; suffix)
-    {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i&amp;lt;top; i++)
-        {
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(rdarray[i].getcode()==suffix)
-            {
-                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; i;&lt;span style=&#34;color:#228b22&#34;&gt;//返回在库中的位置。
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;            }
-        }
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; -&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;;&lt;span style=&#34;color:#228b22&#34;&gt;//未找到
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    };     &lt;span style=&#34;color:#228b22&#34;&gt;//查找读者，这个函数用于借书还书操作。
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;findreaders&lt;/span&gt;()
-    {
-        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; tmp[&lt;span style=&#34;color:#b452cd&#34;&gt;20&lt;/span&gt;];
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入需要查找的用户的名称：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-        cin&amp;gt;&amp;gt;tmp;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i&amp;lt;top; i++)
-        {
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(strcmp(rdarray[i].getname(),tmp)==&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;)
-            {
-                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; i;
-            }
-        }
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; -&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;;
-    };            &lt;span style=&#34;color:#228b22&#34;&gt;//查找读者，这个函数用于读者维护操作
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;editreaders&lt;/span&gt;()
-    {
-        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; tmp[&lt;span style=&#34;color:#b452cd&#34;&gt;20&lt;/span&gt;];
-        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; code;
-        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; num=findreaders();
-        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; tmp_ex;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(num==-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;)
-        {
-            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;您要的用户没有找到。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;;
-        }
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;用户姓名：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;rdarray[num].getname()&amp;lt;&amp;lt;endl;
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;编号：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;rdarray[num].getcode()&amp;lt;&amp;lt;endl;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(rdarray[num].get_Borrowing())
-        {
-            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;用户借了&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;rdarray[num].getbrbook().getname()&amp;lt;&amp;lt;endl;
-        }
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt;
-        {
-            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;用户没有借任何书。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-        }
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(rdarray[num].get_Existing())
-        {
-            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;用户状态正常。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-        }
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt;
-        {
-            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;用户已经被删除。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-        }
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入修改后的姓名：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-        cin&amp;gt;&amp;gt;tmp;
-        rdarray[num].setname(tmp);
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入修改后的编号：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-        cin&amp;gt;&amp;gt;code;
-        rdarray[num].setcode(code);
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(!rdarray[num].get_Existing())
-        {
-            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;用户被标记为删除状态，是否恢复？(1恢复/0不恢复)&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-            cin&amp;gt;&amp;gt;tmp_ex;
-            rdarray[num].set_Existing(tmp_ex);
-        }
-    };          &lt;span style=&#34;color:#228b22&#34;&gt;//编辑读者信息
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;delreaders&lt;/span&gt;()
-    {
-        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; tmp_code;
-        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; num;
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入要删除的用户的编号：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-        cin&amp;gt;&amp;gt;tmp_code;
-        num=findreaders(tmp_code);
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(num==-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;)
-        {
-            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;用户未找到，操作失败。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;;
-        }
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(!rdarray[num].get_Existing())
-        {
-            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;用户已经被删除，操作失败。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;;
-        }
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(!rdarray[num].get_Borrowing())
-        {
-            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;用户有书未还，操作失败。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;;
-        }
-        rdarray[num].set_Existing(&lt;span style=&#34;color:#658b00&#34;&gt;false&lt;/span&gt;);
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;用户删除完毕。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-    };          &lt;span style=&#34;color:#228b22&#34;&gt;//删除读者，读者如果借书要还书后才能删除
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;listreaders&lt;/span&gt;()
-    {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i&amp;lt;top; i++)
-        {
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(rdarray[i].get_Existing())
-            {
-                cout&amp;lt;&amp;lt;rdarray[i].getcode()&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;\t&amp;#39;&lt;/span&gt;&amp;lt;&amp;lt;rdarray[i].getname()&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;\t&amp;#39;&lt;/span&gt;;
-                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(rdarray[i].get_Borrowing())
-                {
-                    cout&amp;lt;&amp;lt;rdarray[i].getbrbook().getname();
-                }
-                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt;
-                {
-                    cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;未借书&amp;#34;&lt;/span&gt;;
-                }
-                cout&amp;lt;&amp;lt;endl;
-            }
-        }
-    };           &lt;span style=&#34;color:#228b22&#34;&gt;//显示所有读者
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    CReader&amp;amp; getreader(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; p)
-    {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(p&amp;lt;&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;||p&amp;gt;=top)
-        {
-            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;下标越界。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-            p=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
-        }
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; rdarray[p];
-    }
-};
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;CBookManager&lt;/span&gt;
-{
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt;:
-    CBook btarray[&lt;span style=&#34;color:#b452cd&#34;&gt;50&lt;/span&gt;];                   &lt;span style=&#34;color:#228b22&#34;&gt;//图书集合
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; top;                         &lt;span style=&#34;color:#228b22&#34;&gt;//当前数组中存储的图书数量
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt;:
-    CBookManager()
-    {
-        top=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
-    };
-    ~CBookManager()
-    {
-        ;
-    };
-    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;addbooks&lt;/span&gt;()
-    {
-        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; tmp[&lt;span style=&#34;color:#b452cd&#34;&gt;20&lt;/span&gt;];
-        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; tmp_no;
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入图书的相关信息：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入图书的名称：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-        cin&amp;gt;&amp;gt;tmp;
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入图书的编号：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-        cin&amp;gt;&amp;gt;tmp_no;
-        CBook tmp_book(tmp_no,tmp);
-        btarray[top]=tmp_book;
-        top++;
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图书入库成功。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-    };    &lt;span style=&#34;color:#228b22&#34;&gt;//添加图书
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;findbooks&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; suffix)
-    {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i&amp;lt;top; i++)
-        {
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(btarray[i].getcode()==suffix)
-            {
-                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; i;&lt;span style=&#34;color:#228b22&#34;&gt;//返回图书在书库中的位置。
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;            }
-        }
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; -&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;;&lt;span style=&#34;color:#228b22&#34;&gt;//未找到图书
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    };  &lt;span style=&#34;color:#228b22&#34;&gt;//查找图书，这个函数用于借书还书操作
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;findbooks&lt;/span&gt;()
-    {
-        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; tmp[&lt;span style=&#34;color:#b452cd&#34;&gt;20&lt;/span&gt;];
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入需要查找的图书的名称：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-        cin&amp;gt;&amp;gt;tmp;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i&amp;lt;top; i++)
-        {
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(strcmp(btarray[i].getname(),tmp)==&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;)
-            {
-                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; i;
-            }
-        }
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; -&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;;
-    };  &lt;span style=&#34;color:#228b22&#34;&gt;//查找图书，用于图书维护操作
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;editbooks&lt;/span&gt;()
-    {
-        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; tmp[&lt;span style=&#34;color:#b452cd&#34;&gt;20&lt;/span&gt;];
-        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; code;
-        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; num=findbooks();
-        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; tmp_ex;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(num==-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;)
-        {
-            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;您要的图书没有找到。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;;
-        }
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图书名称：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;btarray[num].getname()&amp;lt;&amp;lt;endl;
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图书编号：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;btarray[num].getcode()&amp;lt;&amp;lt;endl;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(btarray[num].get_Stock())
-        {
-            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图书在架。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-        }
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt;
-        {
-            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图书已经借出。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-        }
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(btarray[num].get_Existing())
-        {
-            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图书状态正常。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-        }
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt;
-        {
-            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图书已经被删除。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-        }
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入修改后的名称：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-        cin&amp;gt;&amp;gt;tmp;
-        btarray[num].setname(tmp);
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入修改后的编号：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-        cin&amp;gt;&amp;gt;code;
-        btarray[num].setcode(code);
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(!btarray[num].get_Existing())
-        {
-            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图书被标记为删除状态，是否恢复？(1恢复/0不恢复)&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-            cin&amp;gt;&amp;gt;tmp_ex;
-            btarray[num].set_Existing(tmp_ex);
-        }
-    };     &lt;span style=&#34;color:#228b22&#34;&gt;//编辑图书
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;delbooks&lt;/span&gt;()
-    {
-        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; tmp_code;
-        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; num;
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入要删除的图书的编号：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-        cin&amp;gt;&amp;gt;tmp_code;
-        num=findbooks(tmp_code);
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(num==-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;)
-        {
-            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图书未找到，操作失败。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;;
-        }
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(!btarray[num].get_Existing())
-        {
-            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图书已经被删除，操作失败。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;;
-        }
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(!btarray[num].get_Stock())
-        {
-            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图书被借出，操作失败。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;;
-        }
-        btarray[num].set_Existing(&lt;span style=&#34;color:#658b00&#34;&gt;false&lt;/span&gt;);
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图书删除完毕。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-    };   &lt;span style=&#34;color:#228b22&#34;&gt;//  删除图书
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;listbooks&lt;/span&gt;()
-    {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i&amp;lt;top; i++)
-        {
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(btarray[i].get_Stock()&amp;amp;&amp;amp;btarray[i].get_Existing())
-            {
-                cout&amp;lt;&amp;lt;btarray[i].getcode()&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;\t&amp;#39;&lt;/span&gt;&amp;lt;&amp;lt;btarray[i].getname()&amp;lt;&amp;lt;endl;
-            }
-        }
-    } ;  &lt;span style=&#34;color:#228b22&#34;&gt;//显示全部图书
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    CBook&amp;amp; getbook(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; p)
-    {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(p&amp;lt;&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;||p&amp;gt;=top)
-        {
-            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;下标越界。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-            p=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
-        }
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; btarray[p];
-    }
-};
-&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;showmenu&lt;/span&gt;()
-{
-    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; re=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt;(re&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;1&amp;#39;&lt;/span&gt;||re&amp;gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;6&amp;#39;&lt;/span&gt;)
-    {
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;功能菜单&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.读者管理&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;2.借书管理&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;3.还书管理&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;4.图书管理&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;5.文件存储&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;6.退出&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入对应序号并回车&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-        cin&amp;gt;&amp;gt;re;
-        &lt;span style=&#34;color:#228b22&#34;&gt;//cout&amp;lt;&amp;lt;re;
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    }
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; re-&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;0&amp;#39;&lt;/span&gt;;
-}
-&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;showmenu1&lt;/span&gt;()
-{
-    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; re=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt;(re&amp;lt;&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;||re&amp;gt;&lt;span style=&#34;color:#b452cd&#34;&gt;4&lt;/span&gt;)
-    {
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;功能菜单--读者管理&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.添加读者&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;2.删除读者&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;3.修改读者&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;4.查找读者&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入对应序号并回车&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-        cin&amp;gt;&amp;gt;re;
-    }
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; re;
-}
-&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;showmenu4&lt;/span&gt;()
-{
-    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; re=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt;(re&amp;lt;&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;||re&amp;gt;&lt;span style=&#34;color:#b452cd&#34;&gt;4&lt;/span&gt;)
-    {
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;功能菜单--图书管理&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.添加图书&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;2.删除图书&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;3.修改图书&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;4.查找图书&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入对应序号并回车&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-        cin&amp;gt;&amp;gt;re;
-    }
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; re;
-}
-&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;showmenu5&lt;/span&gt;()
-{
-    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; re=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt;(re&amp;lt;&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;||re&amp;gt;&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;)
-    {
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;功能菜单--文件存储&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.读取&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;2.保存&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入对应序号并回车&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-        cin&amp;gt;&amp;gt;re;
-    }
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; re;
-}
-&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;()
-{
-    CReaderManager cm1;
-    CBookManager cb1;
-    ofstream file;
-    ifstream file2;
-    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; cz=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
-    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; tmp_us;
-    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; tmp_bo;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt;(&lt;span style=&#34;color:#658b00&#34;&gt;true&lt;/span&gt;)
-    {
-        cz=showmenu();
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;switch&lt;/span&gt;(cz)
-        {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;:
-            cz=showmenu1();
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;switch&lt;/span&gt;(cz)
-            {
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;:
-                cm1.addreaders();
-                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;:
-                cm1.delreaders();
-                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;3&lt;/span&gt;:
-                cm1.editreaders();
-                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;4&lt;/span&gt;:
-                cm1.findreaders();
-                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
-            }
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;:
-            tmp_bo=cb1.findbooks();
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(tmp_bo==-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;)
-            {
-                cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;您要借的书没有找到。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
-            }
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(!cb1.getbook(tmp_bo).get_Existing())
-            {
-                cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;您要借的书已经被删除，操作失败。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
-            }
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(!cb1.getbook(tmp_bo).get_Stock())
-            {
-                cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;您要借的书已经被借出，操作失败。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
-            }
-            tmp_us=cm1.findreaders();
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(tmp_bo==-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;)
-            {
-                cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;您使用的身份无效。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
-            }
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(!cm1.getreader(tmp_us).get_Existing())
-            {
-                cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;您的账户已经被管理员删除。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
-            }
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(cm1.getreader((tmp_us)).get_Borrowing())
-            {
-                cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请把您借的书还了再借。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
-                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
-            }
-            cm1.getreader(tmp_us).set_Borrowing(&lt;span style=&#34;color:#658b00&#34;&gt;true&lt;/span&gt;);
-            cm1.getreader(tmp_us).setbrbook(cb1.getbook(tmp_bo));
-            cb1.getbook(tmp_bo).set_Stock(&lt;span style=&#34;color:#658b00&#34;&gt;false&lt;/span&gt;);
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;3&lt;/span&gt;:
-            cm1.editreaders();
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;4&lt;/span&gt;:
-            cz=showmenu4();
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;switch&lt;/span&gt;(cz)
-            {
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;:
-                cb1.addbooks();
-                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;:
-                cb1.delbooks();
-                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;3&lt;/span&gt;:
-                cb1.editbooks();
-                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;4&lt;/span&gt;:
-                cb1.findbooks();
-                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
-            }
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;5&lt;/span&gt;:
-            cz=showmenu5();
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;switch&lt;/span&gt;(cz)
-            {
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;:
-                file2.open(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;cb1.dat&amp;#34;&lt;/span&gt;,ios::binary);
-                &lt;span style=&#34;color:#228b22&#34;&gt;//二进制打开，缺省为文本，ios::out,ios::in,文本输入输出用&amp;lt;&amp;lt;,&amp;gt;&amp;gt;
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                file2.read((&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; *)&amp;amp;cb1,&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;sizeof&lt;/span&gt;(cb1));
-                &lt;span style=&#34;color:#228b22&#34;&gt;///int num=file2.gcount(); //获取读到文件的大小
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                file2.close();
-                file2.open(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;cm1.dat&amp;#34;&lt;/span&gt;,ios::binary);
-                &lt;span style=&#34;color:#228b22&#34;&gt;//二进制打开，缺省为文本，ios::out,ios::in,文本输入输出用&amp;lt;&amp;lt;,&amp;gt;&amp;gt;
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                file2.read((&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; *)&amp;amp;cm1,&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;sizeof&lt;/span&gt;(cm1));
-                &lt;span style=&#34;color:#228b22&#34;&gt;///int num=file2.gcount(); //获取读到文件的大小
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                file2.close();
-                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;:
-                file.open(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;cb1.dat&amp;#34;&lt;/span&gt;,ios::binary);
-                &lt;span style=&#34;color:#228b22&#34;&gt;//缓存的类型是 unsigned char *，需要类型转换
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                file.write((&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; *)&amp;amp;cb1,&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;sizeof&lt;/span&gt;(cb1));  &lt;span style=&#34;color:#228b22&#34;&gt;//winServer为类对象
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                file.close();
-                file.open(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;cm1.dat&amp;#34;&lt;/span&gt;,ios::binary);
-                &lt;span style=&#34;color:#228b22&#34;&gt;//缓存的类型是 unsigned char *，需要类型转换
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                file.write((&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; *)&amp;amp;cm1,&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;sizeof&lt;/span&gt;(cm1));  &lt;span style=&#34;color:#228b22&#34;&gt;//winServer为类对象
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                file.close();
-                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
-            }
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;6&lt;/span&gt;:
-            exit(&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;);
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
-        }
-    }
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://ntutn.top/posts/%E5%9B%BE%E4%B9%A6%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/ - CC BY-SA 4.0</description>
         </item>
     
     

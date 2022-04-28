@@ -23,6 +23,19 @@
     </item>
     
     <item>
+      <title>数据结构第三次测试</title>
+      <link>https://ntutn.top/posts/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AC%AC%E4%B8%89%E6%AC%A1%E6%B5%8B%E8%AF%95/</link>
+      <pubDate>Sat, 01 Jun 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AC%AC%E4%B8%89%E6%AC%A1%E6%B5%8B%E8%AF%95/</guid>
+      <description>数据结构测试，树部分，水题
+ 一 假设二叉树的数据元素为字符，采用二叉链式存储结构。二叉树ADT实现的大部分代码已经给出，其中采用完全前序序列创建二叉树。请补充写出下列两个操作函数。
+ 注意： 答案区只写出两个函数，其他代码不允许修改和重写、提交！
+  计算以某结点为根的二叉树的高度； 以前序顺序输出各个元素结点为根的子树的高度；  例如：有如右图的二叉树 输入 ABD@@E@@C@F@@ 输出 Height(A)=3 Height(B)=2 Height(D)=1 Height(E)=1 Height(C)=2 Height(F)=1 已给出的代码如下：
+#include &amp;lt;iostream&amp;gt;#include &amp;lt;stdlib.h&amp;gt;using namespace std; //数据元素类型 typedef char ElemType; //二叉树结点定义 typedef struct TreeNode {	ElemType data; struct TreeNode *lson, *rson; } TreeNode; //二叉树类 class BinaryTree { private: TreeNode *root; public: BinaryTree() { root = NULL; }; ~BinaryTree() { MakeEmpty(root); } void MakeEmpty(TreeNode *t); void create( ) { root = cp_create(root); }; //完全前序建立二叉树，空指针用@表示 	TreeNode *cp_create(TreeNode *t); //****** 要补充的函数height ******** 	int height(TreeNode *t) ; //求二叉树的高度 	void output() { Pro_height(root); }; //****** 要补充的函数 Pro_height ********** 	void Pro_height(TreeNode *t); // 前序顺序输出各个元素结点为根的子树的高度 }; //二叉树置空 void BinaryTree::MakeEmpty(TreeNode *t) {	if (t !</description>
+    </item>
+    
+    <item>
       <title>二叉树ADT的实现</title>
       <link>https://ntutn.top/posts/%E4%BA%8C%E5%8F%89%E6%A0%91adt%E7%9A%84%E5%AE%9E%E7%8E%B0/</link>
       <pubDate>Tue, 14 May 2019 03:11:37 +0800</pubDate>
@@ -32,6 +45,97 @@
 假设二叉数的数据元素为字符，采用二叉链式存储结构。请编码实现二叉树ADT，其中包括创建二叉树、遍历二叉树（深度、广度）、求二叉树的深度（高度）、计算二叉树的元素个数、计算二叉树的叶子数、二叉树的格式输出等。
 根据输入的符号，执行相应的操作。如下：
  C：根据完全前序序列创建二叉树，#表示空结点（空子树）；输入：二叉树的完全前序序列，创建成功输出 Created success! H：求二叉树的高度； 输出： Height=高度 L：计算二叉树的叶子数；输出：Leaves=叶子个数 N：计算二叉树中元素总个数；输出：Nodes=结点个数 1：先序遍历二叉树；输出：Preorder is:序列 . 2：中序遍历二叉树；输出：Inorder is:序列 . 3：后序遍历二叉树；输出：Postorder is:序列 . 4：广度遍历二叉树；输出：BFSorder is:序列 . F：查找值为x的结点个数；输出：The count of x is 个数 . P：以目录缩格文本形式输出所有节点。输出：The tree is:（换行，下面各行是输出的二叉树） X：退出  Example Input C ABC##DE#G##F### H L N 1 2 3 4 F A P X Output Created success! Height=5 Leaves=3 Nodes=7 Preorder is:A B C D E G F . Inorder is:C B E G D F A .</description>
+    </item>
+    
+    <item>
+      <title>活动安排问题</title>
+      <link>https://ntutn.top/posts/%E6%B4%BB%E5%8A%A8%E5%AE%89%E6%8E%92%E9%97%AE%E9%A2%98/</link>
+      <pubDate>Mon, 13 May 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E6%B4%BB%E5%8A%A8%E5%AE%89%E6%8E%92%E9%97%AE%E9%A2%98/</guid>
+      <description>经典的贪心问题。
+Question 假设有n个活动的集合E={a1,a2,...,an}，其每个活动都要求使用同一资源（如某个设备、教室、场地等），而在同一时间内只允许一个活动使用这一资源。
+每个活动都有一个要求使用该资源的起止时间si,fi，且si&amp;lt;fi。如果选择了活动ai，则它在半开的时间区间[si,fi)内占有资源。两个活动ai,aj称为是相容的，当且仅当它们的时间区间[si,fi)和[sj,fj)不相交，即si&amp;gt;=fj 或 sj &amp;gt;=fi。现要求在所给定的活动集中选出最大的相容活动子集。
+请补充要求的函数代码。
+提示：贪心策略
+输入，有多行，第1行是活动的个数n，后面n行，每行3个整数，是每个活动的编号、占用资源的开始时间、结束时间。
+输出，选出的最大活动子集，即有多行，每行包括活动的编号、开始时间、结束时间。
+Example Input 11 1 3 8 2 2 13 3 1 4 4 5 7 5 6 10 6 8 11 7 12 14 8 5 9 9 3 5 10 0 6 11 8 12 Output 3：1-4 4：5-7 6：8-11 7：12-14 分析 经典的贪心问题，贪心策略为选择结束时间最早的活动，因为这样就可以给后面的活动留出更多的时间。
+ 掉坑：在选择活动时只处理了前24小时的活动，而事实证明我画蛇添足了。
+ Answer #include &amp;lt;iostream&amp;gt;#include &amp;lt;stdio.h&amp;gt;#include &amp;lt;stdlib.h&amp;gt;using namespace std; //定义允许的最大活动数 #define Maxn 100 //定义活动的类型 typedef struct act_Node { int Id; //活动ID  int s_Time; //活动开始时间  int f_Time; //活动结束时间 } ACND; //对活动按贪心准则排序 void Sort(int n,ACND arr[]) { for(int i=0;i&amp;lt;n;i++){ int tmp=i; for(int j=i+1;j&amp;lt;n;j++){ if(arr[j].</description>
+    </item>
+    
+    <item>
+      <title>线性表ADT的实现</title>
+      <link>https://ntutn.top/posts/%E7%BA%BF%E6%80%A7%E8%A1%A8adt%E7%9A%84%E5%AE%9E%E7%8E%B0/</link>
+      <pubDate>Mon, 13 May 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E7%BA%BF%E6%80%A7%E8%A1%A8adt%E7%9A%84%E5%AE%9E%E7%8E%B0/</guid>
+      <description>线性表ADT的实现 数据结构平时测试的题目开放了，这次平时测试睡过了，全宿舍都睡过了。现在回头做做题目，还是有坑点的。
+Question 假设线性表ADT的数据元素类型为正整数，采用带头结点的单链式存储结构。线性表ADT实现的大部分代码已经给出，请补充写出类的两个成员函数insert和reverse。 注意：只需提交需要补充的函数代码，其他代码不能自己重写和修改。
+insert函数：在元素值从小到大有序的线性表中插入一个元素，仍然保持有序。
+reverse函数：实现线性表元素的倒置，即将线性表中数据元素的顺序反转。
+线性表元素输入时，以 endTag 作为结束标志。
+例如输入：
+3 8 7 2 4 9 1 6 5 0 则输出：
+9 8 7 6 5 4 3 2 1 预置代码如下： （其中/* */ 部分是要补充的insert和reverse函数）
+#include&amp;lt;iostream&amp;gt;#include&amp;lt;stdlib.h&amp;gt;using namespace std; typedef int ElemType; //数据元素类型 class List; //前视定义,否则友元无法定义 //结点类定义 class LinkNode { friend class List; private: LinkNode *link; ElemType data; public: LinkNode (LinkNode *ptr = NULL) {link=ptr;} LinkNode(const ElemType &amp;amp; item, LinkNode *ptr = NULL){ data=item;link=ptr;} ~LinkNode(){}; }; //单链表类定义 class List { private: LinkNode *first; //指向链表头结点的指针  public: List (ElemType x) { first = new LinkNode (x);} // 带头结点  ~List (){ MakeEmpty();} //析构函数  void MakeEmpty ( ); //线性表置空  void insert(ElemType val); //在有序线性表中插入元素val  void reverse(); //线性表的倒置  void output(); //线性表的输出 }; void List:: MakeEmpty ( ) { LinkNode *q; while ( first-&amp;gt;link !</description>
+    </item>
+    
+    <item>
+      <title>数据结构 栈应用 1 括号匹配</title>
+      <link>https://ntutn.top/posts/%E6%8B%AC%E5%8F%B7%E5%8C%B9%E9%85%8D/</link>
+      <pubDate>Thu, 25 Apr 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E6%8B%AC%E5%8F%B7%E5%8C%B9%E9%85%8D/</guid>
+      <description>大概是一道栈的应用的水题吧。
+ 输入一行符号,以#结束，判断其中的括号是否匹配。 遇到左括号入栈，遇到右括号出栈。如果字符串结束栈不空，输出栈内左括号对应右括号。
+Question 用栈实现：输入一行符号,以#结束，判断其中的括号是否匹配。括号包括：
+{ } 、 [ ] 、 ( )、 &amp;lt; &amp;gt; 如果匹配，输出 right
+如果不匹配，给出错误提示。包括：
+第几个符号处理时出现错误；哪几个符号失配等
+Example 思路 遇到左括号入栈，遇到右括号出栈。如果字符串结束栈不空，输出栈内左括号对应右括号。
+ 没有一遍过，因为题目中没说如果出错就不再继续处理。
+ 相关  栈：顺序表，只允许在一端输入输出。 getline(cin,str);可输入整行，支持空格。 如果用数组实现栈，则其存储空间必须是一次性申请得到的。  Answer  指定初始maxsize=1是我某种程度上的强迫症，反正这题时间限制很宽松。
+ #include &amp;lt;iostream&amp;gt;#include&amp;lt;cstring&amp;gt;#include&amp;lt;string&amp;gt;using namespace std; class mystack{ private: char *data; int maxsize; int top; public: mystack(){ maxsize=1; data=new char[maxsize]; top=-1; } bool isEmpty(){ return top==-1; } char getTop(){ if(top&amp;gt;-1){ return data[top]; } return &amp;#39;\0&amp;#39;; } void pop(){ if(top&amp;gt;=0){ top--; } } void expand(){ char*tmp=new char[maxsize*2]; strncpy(tmp,data,maxsize); maxsize*=2; delete[] data; data=tmp; } void push(char x){ if(top+1==maxsize){ expand(); } data[++top]=x; } ~mystack(){ delete[] data; } }; char getPar(char x){ switch(x){ case &amp;#39;{&amp;#39;: return &amp;#39;}&amp;#39;; case &amp;#39;[&amp;#39;: return &amp;#39;]&amp;#39;; case &amp;#39;(&amp;#39;: return &amp;#39;)&amp;#39;; case &amp;#39;&amp;lt;&amp;#39;: return &amp;#39;&amp;gt;&amp;#39;; } return &amp;#39;\0&amp;#39;; } int isKH(char x){ switch(x){ case &amp;#39;{&amp;#39;: case &amp;#39;[&amp;#39;: case &amp;#39;(&amp;#39;: case &amp;#39;&amp;lt;&amp;#39;: return 1; case &amp;#39;}&amp;#39;: case &amp;#39;]&amp;#39;: case &amp;#39;)&amp;#39;: case &amp;#39;&amp;gt;&amp;#39;: return 2; } return 0; } int main() { string tmp; getline(cin,tmp); mystack*stk=new mystack(); bool erred=false; for(int i=0;i&amp;lt;tmp.</description>
+    </item>
+    
+    <item>
+      <title>数据结构 栈应用2 表达式求值</title>
+      <link>https://ntutn.top/posts/%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B1%82%E5%80%BC/</link>
+      <pubDate>Thu, 25 Apr 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B1%82%E5%80%BC/</guid>
+      <description>表达式求值是程序设计语言编译中的一个最基本问题，它的实现是栈应用的一个典型例子。
+ Question 表达式求值是进行数据处理的最基本操作。请编写程序完成一个简单算术表达式的求值。要求如下：
+ 运算符包括：+、-、*、-、^(乘方)、括号 运算量为数值常量，根据自己的能力可以对运算量做不同的约束，例如1位整数、多位整数、实数等（会有不同的测试用例）；   输入：一行，即表达式，以“=”结束。例如：  5*(8-3)+6/5=  输出：一行，即表达式的值。结果值为整数时输出为整数，如果有小数时保留5位小数。  26.20000 问题与分析 栈 栈是特殊的线性表，其一端固定，只允许在另一端插入或删除。其特性是“先进后出”。
+表达式的书写形式  前缀式 + × a b × - c / d e f 中缀式 a × b + (c - d / e) × f 后缀式 a b × c d e / - f × +  前缀式的运算规则 连续出现的两个操作数和在它们之前且紧靠它们的运算符构成一个最小表达式;
+运算符出现的顺序与运算顺序相反
+ 中缀式与后缀式略。其中中缀式是我们最常书写的形式。
+ 后缀式的运算  是操作数，入栈 是符号，取出两个操作数运算后入栈 表达式处理完毕后栈内唯一元素即运算结果  中缀式转换为后缀式 直接对中缀式求值 类似中缀式转后缀式的过程，把运算量的输出改为“入OPND栈”，把运算符的“输出”改为“计算”：根据运算符，出栈需要的运算量，计算值，结果作为运算量再入栈。其他不需要变化。</description>
+    </item>
+    
+    <item>
+      <title>连续正整数</title>
+      <link>https://ntutn.top/posts/%E8%BF%9E%E7%BB%AD%E6%AD%A3%E6%95%B4%E6%95%B0/</link>
+      <pubDate>Sat, 06 Apr 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E8%BF%9E%E7%BB%AD%E6%AD%A3%E6%95%B4%E6%95%B0/</guid>
+      <description>还是数据结构的网上作业，将一个整数分解为连续正整数之和，找对方向倒是也不算难……
+ 有些正整数可以表示为 n (n&amp;gt;1) 个连续正整数的和，如：
+15=1+2+3+4+5 =4+5+6 =7+8 给定一个正整数 N，判断其是否可以表示为一组连续正整数的和，输出符合条件的解的组数。
+Input 输入有一行，包含一个正整数 n (3≤n≤1000000000)。  Output 输出有一行，正整数n的符合条件的解的组数。  Example    Input Output     15 3   99 5   6 1   9 2    单点时限: 2.0 sec 内存限制: 256 MB
+#include &amp;lt;iostream&amp;gt;using namespace std; int main() { int n; cin&amp;gt;&amp;gt;n; int counter=0; for(int i=2; i&amp;lt;(100000&amp;lt;n?100000:n); i++) //n/i-i/2+1&amp;gt;=1  { if(n/i-i/2-i%2+1&amp;gt;=1&amp;amp;&amp;amp;(n/i-i/2-i%2+1+n/i-i/2-i%2+1+i-1)*i==n*2) { counter++; } //cout&amp;lt;&amp;lt;&amp;#34;test-&amp;#34;&amp;lt;&amp;lt;i&amp;lt;&amp;lt;endl;  } cout &amp;lt;&amp;lt; counter &amp;lt;&amp;lt; endl; return 0; } 枚举就好了。需要根据分成的整数的个数i讨论，但为了显得更牛X我就写到一起了，上面的n/i-i/2-i%2+1无论在奇偶情况下都是拆分得到的整数的第一个理应是多少。</description>
+    </item>
+    
+    <item>
+      <title>数据结构与算法 C&#43;&#43;编程能力评估</title>
+      <link>https://ntutn.top/posts/c&#43;&#43;%E7%BC%96%E7%A8%8B%E8%83%BD%E5%8A%9B%E8%AF%84%E4%BC%B0/</link>
+      <pubDate>Thu, 28 Mar 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/c&#43;&#43;%E7%BC%96%E7%A8%8B%E8%83%BD%E5%8A%9B%E8%AF%84%E4%BC%B0/</guid>
+      <description>题目1 向类SeqList中插入数据，请根据main函数中的调用，完成Insert和output函数。
+ Input   5 1 2 3 4 5 2 9  Output  1 2 3 4 5 1 2 9 3 4 5  Answer  #include&amp;lt;iostream&amp;gt;#include&amp;lt;stdlib.h&amp;gt;using namespace std; class SeqList { private: int * data; int last; // index of the last element public: SeqList ( int sz ); ~SeqList ( ) { delete [ ] data; } void input (); void output() ; void Insert ( const int &amp;amp;x, int i); } ; SeqList::SeqList ( int sz ) { if ( sz &amp;gt; 0 ) { data = new int[sz]; last = -1; } } void SeqList:: input() { cin &amp;gt;&amp;gt;last; for (int i=0; i&amp;lt;last; i++) cin&amp;gt;&amp;gt;data [i]; last--; } void SeqList::output() { bool fi=false; for(int i=0; i&amp;lt;=last; i++) { if(!</description>
     </item>
     
     <item>
@@ -50,6 +154,16 @@
 25 30 输出：
 (25)10=(P)30 Length=1 预置代码如下：
 #include &amp;lt;iostream&amp;gt;using namespace std; #include &amp;lt;stdio.h&amp;gt;#include &amp;lt;stdlib.h&amp;gt;typedef int ElemType; class SeqStack { //顺序栈类定义  private: ElemType *elements; //数组存放栈元素  int top; //栈顶指示器  int maxSize; //栈最大容量  void overflowProcess(); //栈的溢出处理  public: SeqStack(int sz); //构造函数  ~SeqStack() { delete []elements; }; //析构函数  void Push(ElemType x); //进栈  int Pop(ElemType &amp;amp;x); //出栈  int IsEmpty() const { return top == -1; } int IsFull() const { return top == maxSize-1; } int GetSize() const {return top+1;} }; SeqStack::SeqStack(int sz) { elements=new ElemType[sz]; //申请连续空间  if(elements==NULL) {cout&amp;lt;&amp;lt;&amp;#34;空间申请错误！&amp;#34;&amp;lt;&amp;lt;endl;exit(1);} else { top=-1; //栈顶指示器指向栈底  maxSize=sz; //栈的最大空间  }; }; /* ********************************************************** 补充overflowProcess() 函数 ********************************************************** */ void SeqStack::Push(ElemType x) { //若栈满,则溢出处理，将元素x插入该栈栈顶  if (IsFull() == 1) overflowProcess(); //栈满  elements[++top] = x; //栈顶指针先加1, 再元素进栈 }; int SeqStack::Pop(ElemType &amp;amp; x) {//若栈不空，函数退出栈顶元素并将栈顶元素的值赋给x,  //返回true，否则返回false  if (IsEmpty() == 1) return 0; x = elements[top--]; //先取元素，栈顶指针退1  return 1; //退栈成功 }; /* ************************************************************** 补充mian()函数 ************************************************************** */ 分析和错误 OverflowProcess，用于栈溢出处理，一般申请原长度二倍的存储空间。</description>
+    </item>
+    
+    <item>
+      <title>日期相关的计算</title>
+      <link>https://ntutn.top/posts/%E6%97%A5%E6%9C%9F%E7%9B%B8%E5%85%B3%E7%9A%84%E8%AE%A1%E7%AE%97/</link>
+      <pubDate>Sun, 16 Sep 2018 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E6%97%A5%E6%9C%9F%E7%9B%B8%E5%85%B3%E7%9A%84%E8%AE%A1%E7%AE%97/</guid>
+      <description>今天（Sun, 16 Sep 2018 06:34:57 +0000）帮同学写一个日期相关的c++题，竟然耗费了很多时间，不得不感叹自己真是老了。 首先定义类用年月日(yy,mm,dd)存储日期 日期±天数，直接加减到“天”上，然后“多退少补”。 两日期之间相差天数。我是先计算两日前距元年元月元日的天数，然后直接相减。但我这么算，老是差几天，调试了好久，甚至我都一度打算放弃，直接调用上面做的日期加天数一天一天往上累加（可以预料到这会用多长时间）。 最后才检查出，竟然是判断闰年出错了，我把取余弄成了整除，闰年哭晕在厕所。 老了，真的老了。
+ #include &amp;lt;iostream&amp;gt;using namespace std; class TMyDate { private: int yy,mm,dd; bool isrn(int year)//判断闰年  { if((year%4==0&amp;amp;&amp;amp;year%100!=0)||(year%400==0)) { return true; } return false; } int getDaysofmonth(int y,int m)//某年某月有多少天  { switch(m) { case 1: case 3: case 5: case 7: case 8: case 10: case 12: return 31; case 2: if(isrn(y)){ return 29; } return 28; default: return 30; } } int getTotaldays(int y,int m,int d){//某年月日距元年元月元日天数  int sum=0; sum+=d; m--; while(m--){ sum+=getDaysofmonth(y,m); } y--; while(y--){ sum+=isrn(y)?</description>
     </item>
     
   </channel>

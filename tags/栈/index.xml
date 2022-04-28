@@ -7,7 +7,57 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Tue, 26 Mar 2019 03:11:37 +0800</lastBuildDate><atom:link href="https://ntutn.top/tags/%E6%A0%88/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 13 May 2019 03:11:37 +0800</lastBuildDate><atom:link href="https://ntutn.top/tags/%E6%A0%88/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>线性表ADT的实现</title>
+      <link>https://ntutn.top/posts/%E7%BA%BF%E6%80%A7%E8%A1%A8adt%E7%9A%84%E5%AE%9E%E7%8E%B0/</link>
+      <pubDate>Mon, 13 May 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E7%BA%BF%E6%80%A7%E8%A1%A8adt%E7%9A%84%E5%AE%9E%E7%8E%B0/</guid>
+      <description>线性表ADT的实现 数据结构平时测试的题目开放了，这次平时测试睡过了，全宿舍都睡过了。现在回头做做题目，还是有坑点的。
+Question 假设线性表ADT的数据元素类型为正整数，采用带头结点的单链式存储结构。线性表ADT实现的大部分代码已经给出，请补充写出类的两个成员函数insert和reverse。 注意：只需提交需要补充的函数代码，其他代码不能自己重写和修改。
+insert函数：在元素值从小到大有序的线性表中插入一个元素，仍然保持有序。
+reverse函数：实现线性表元素的倒置，即将线性表中数据元素的顺序反转。
+线性表元素输入时，以 endTag 作为结束标志。
+例如输入：
+3 8 7 2 4 9 1 6 5 0 则输出：
+9 8 7 6 5 4 3 2 1 预置代码如下： （其中/* */ 部分是要补充的insert和reverse函数）
+#include&amp;lt;iostream&amp;gt;#include&amp;lt;stdlib.h&amp;gt;using namespace std; typedef int ElemType; //数据元素类型 class List; //前视定义,否则友元无法定义 //结点类定义 class LinkNode { friend class List; private: LinkNode *link; ElemType data; public: LinkNode (LinkNode *ptr = NULL) {link=ptr;} LinkNode(const ElemType &amp;amp; item, LinkNode *ptr = NULL){ data=item;link=ptr;} ~LinkNode(){}; }; //单链表类定义 class List { private: LinkNode *first; //指向链表头结点的指针  public: List (ElemType x) { first = new LinkNode (x);} // 带头结点  ~List (){ MakeEmpty();} //析构函数  void MakeEmpty ( ); //线性表置空  void insert(ElemType val); //在有序线性表中插入元素val  void reverse(); //线性表的倒置  void output(); //线性表的输出 }; void List:: MakeEmpty ( ) { LinkNode *q; while ( first-&amp;gt;link !</description>
+    </item>
+    
+    <item>
+      <title>数据结构 栈应用 1 括号匹配</title>
+      <link>https://ntutn.top/posts/%E6%8B%AC%E5%8F%B7%E5%8C%B9%E9%85%8D/</link>
+      <pubDate>Thu, 25 Apr 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E6%8B%AC%E5%8F%B7%E5%8C%B9%E9%85%8D/</guid>
+      <description>大概是一道栈的应用的水题吧。
+ 输入一行符号,以#结束，判断其中的括号是否匹配。 遇到左括号入栈，遇到右括号出栈。如果字符串结束栈不空，输出栈内左括号对应右括号。
+Question 用栈实现：输入一行符号,以#结束，判断其中的括号是否匹配。括号包括：
+{ } 、 [ ] 、 ( )、 &amp;lt; &amp;gt; 如果匹配，输出 right
+如果不匹配，给出错误提示。包括：
+第几个符号处理时出现错误；哪几个符号失配等
+Example 思路 遇到左括号入栈，遇到右括号出栈。如果字符串结束栈不空，输出栈内左括号对应右括号。
+ 没有一遍过，因为题目中没说如果出错就不再继续处理。
+ 相关  栈：顺序表，只允许在一端输入输出。 getline(cin,str);可输入整行，支持空格。 如果用数组实现栈，则其存储空间必须是一次性申请得到的。  Answer  指定初始maxsize=1是我某种程度上的强迫症，反正这题时间限制很宽松。
+ #include &amp;lt;iostream&amp;gt;#include&amp;lt;cstring&amp;gt;#include&amp;lt;string&amp;gt;using namespace std; class mystack{ private: char *data; int maxsize; int top; public: mystack(){ maxsize=1; data=new char[maxsize]; top=-1; } bool isEmpty(){ return top==-1; } char getTop(){ if(top&amp;gt;-1){ return data[top]; } return &amp;#39;\0&amp;#39;; } void pop(){ if(top&amp;gt;=0){ top--; } } void expand(){ char*tmp=new char[maxsize*2]; strncpy(tmp,data,maxsize); maxsize*=2; delete[] data; data=tmp; } void push(char x){ if(top+1==maxsize){ expand(); } data[++top]=x; } ~mystack(){ delete[] data; } }; char getPar(char x){ switch(x){ case &amp;#39;{&amp;#39;: return &amp;#39;}&amp;#39;; case &amp;#39;[&amp;#39;: return &amp;#39;]&amp;#39;; case &amp;#39;(&amp;#39;: return &amp;#39;)&amp;#39;; case &amp;#39;&amp;lt;&amp;#39;: return &amp;#39;&amp;gt;&amp;#39;; } return &amp;#39;\0&amp;#39;; } int isKH(char x){ switch(x){ case &amp;#39;{&amp;#39;: case &amp;#39;[&amp;#39;: case &amp;#39;(&amp;#39;: case &amp;#39;&amp;lt;&amp;#39;: return 1; case &amp;#39;}&amp;#39;: case &amp;#39;]&amp;#39;: case &amp;#39;)&amp;#39;: case &amp;#39;&amp;gt;&amp;#39;: return 2; } return 0; } int main() { string tmp; getline(cin,tmp); mystack*stk=new mystack(); bool erred=false; for(int i=0;i&amp;lt;tmp.</description>
+    </item>
+    
+    <item>
+      <title>数据结构 栈应用2 表达式求值</title>
+      <link>https://ntutn.top/posts/%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B1%82%E5%80%BC/</link>
+      <pubDate>Thu, 25 Apr 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B1%82%E5%80%BC/</guid>
+      <description>表达式求值是程序设计语言编译中的一个最基本问题，它的实现是栈应用的一个典型例子。
+ Question 表达式求值是进行数据处理的最基本操作。请编写程序完成一个简单算术表达式的求值。要求如下：
+ 运算符包括：+、-、*、-、^(乘方)、括号 运算量为数值常量，根据自己的能力可以对运算量做不同的约束，例如1位整数、多位整数、实数等（会有不同的测试用例）；   输入：一行，即表达式，以“=”结束。例如：  5*(8-3)+6/5=  输出：一行，即表达式的值。结果值为整数时输出为整数，如果有小数时保留5位小数。  26.20000 问题与分析 栈 栈是特殊的线性表，其一端固定，只允许在另一端插入或删除。其特性是“先进后出”。
+表达式的书写形式  前缀式 + × a b × - c / d e f 中缀式 a × b + (c - d / e) × f 后缀式 a b × c d e / - f × +  前缀式的运算规则 连续出现的两个操作数和在它们之前且紧靠它们的运算符构成一个最小表达式;
+运算符出现的顺序与运算顺序相反
+ 中缀式与后缀式略。其中中缀式是我们最常书写的形式。
+ 后缀式的运算  是操作数，入栈 是符号，取出两个操作数运算后入栈 表达式处理完毕后栈内唯一元素即运算结果  中缀式转换为后缀式 直接对中缀式求值 类似中缀式转后缀式的过程，把运算量的输出改为“入OPND栈”，把运算符的“输出”改为“计算”：根据运算符，出栈需要的运算量，计算值，结果作为运算量再入栈。其他不需要变化。</description>
+    </item>
+    
     <item>
       <title>堆栈ADT实现及应用</title>
       <link>https://ntutn.top/posts/%E5%A0%86%E6%A0%88adt%E5%AE%9E%E7%8E%B0%E5%8F%8A%E5%BA%94%E7%94%A8/</link>
