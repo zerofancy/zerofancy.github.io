@@ -1,0 +1,1408 @@
+<!DOCTYPE html>
+<html><head>
+<title>安卓连连看游戏设计</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="字节取消大小周了，于是周末时间多起来了。虽然想着到处去玩，但现在疫情形势又不好了，于是安心呆在家里当一个肥宅。除了补一补番剧，就是把之前就想过的连连看游戏做出来了。">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+<meta property="og:title" content="安卓连连看游戏设计" />
+<meta property="og:description" content="字节取消大小周了，于是周末时间多起来了。虽然想着到处去玩，但现在疫情形势又不好了，于是安心呆在家里当一个肥宅。除了补一补番剧，就是把之前就想过的连连看游戏做出来了。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ntutn.top/posts/%E5%AE%89%E5%8D%93%E8%BF%9E%E8%BF%9E%E7%9C%8B%E6%B8%B8%E6%88%8F%E8%AE%BE%E8%AE%A1/" />
+<meta property="article:published_time" content="2021-04-25T03:11:37+08:00" />
+<meta property="article:modified_time" content="2021-04-25T03:11:37+08:00" /><meta property="og:site_name" content="归零幻想" />
+
+
+
+
+
+
+
+
+
+
+<link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+
+  
+
+
+
+
+<link rel="icon" href="//images.ntutn.top/favicon.ico">
+
+
+
+<link rel="stylesheet" href="https://ntutn.top/scss/journal.min.d8d9f81b896882733c41896750adbefbf9319ca02ccccefd461650898975c3af.css" integrity="sha256-2Nn4G4lognM8QYlnUK2&#43;&#43;/kxnKAszM79RhZQiYl1w68=" media="screen">
+
+
+
+<link rel="stylesheet" href="https://ntutn.top/scss/dark-mode.min.60f86847da9fc0724177ccfd0bf7c5997b0b41f1e58d5a293cfb3723c497c422.css" integrity="sha256-YPhoR9qfwHJBd8z9C/fFmXsLQfHljVopPPs3I8SXxCI=" media="screen">
+
+
+<script src="/vendor/js/loadCSS.js"></script>
+<script>
+  loadCSS("https://fonts.googleapis.com/css?family=Fira+Mono|Material+Icons");
+</script>
+
+
+
+<script defer
+	src='https://static.cloudflareinsights.com/beacon.min.js'
+	data-cf-beacon='{"token": 5a03d307f5214109a1e7c8b2cf306a3d'>
+</script>
+
+
+
+
+
+
+  <script src="/js/toc.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://ntutn.top/">
+    
+        <div class="nav-title">
+            归零幻想
+        </div>
+        
+        <div class="nav-subtitle">
+            零点还不算熬夜
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                归档
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/categories">
+                分类
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
+                标签
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/friends">
+                友链
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/about">
+                关于
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/index.xml">
+                RSS
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	CC BY-SA 4.0
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    
+    
+    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e8%b5%84%e6%ba%90%e5%87%86%e5%a4%87" onclick="onNavClick(`#资源准备-nav`)" id="资源准备-nav">
+									资源准备
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%95%8c%e9%9d%a2%e8%ae%be%e8%ae%a1" onclick="onNavClick(`#界面设计-nav`)" id="界面设计-nav">
+									界面设计
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%95%b0%e6%8d%ae%e7%bb%93%e6%9e%84%e5%ae%9a%e4%b9%89" onclick="onNavClick(`#数据结构定义-nav`)" id="数据结构定义-nav">
+									数据结构定义
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%b8%b8%e6%88%8f%e6%95%b0%e6%8d%ae%e5%88%9d%e5%a7%8b%e5%8c%96" onclick="onNavClick(`#游戏数据初始化-nav`)" id="游戏数据初始化-nav">
+									游戏数据初始化
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%b8%b8%e6%88%8f%e7%95%8c%e9%9d%a2%e6%98%be%e7%a4%ba" onclick="onNavClick(`#游戏界面显示-nav`)" id="游戏界面显示-nav">
+									游戏界面显示
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%b6%88%e9%99%a4" onclick="onNavClick(`#消除-nav`)" id="消除-nav">
+									消除
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e9%80%89%e4%b8%ad" onclick="onNavClick(`#选中-nav`)" id="选中-nav">
+									选中
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e9%ba%bb%e5%b0%86%e7%89%8c%e7%82%b9%e5%87%bb%e4%ba%8b%e4%bb%b6" onclick="onNavClick(`#麻将牌点击事件-nav`)" id="麻将牌点击事件-nav">
+									麻将牌点击事件
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e9%80%89%e4%b8%ad-1" onclick="onNavClick(`#选中-1-nav`)" id="选中-1-nav">
+									选中
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%b6%88%e9%99%a4-1" onclick="onNavClick(`#消除-1-nav`)" id="消除-1-nav">
+									消除
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e8%ae%a1%e6%97%b6%e7%b3%bb%e7%bb%9f%e7%9a%84%e8%ae%be%e8%ae%a1" onclick="onNavClick(`#计时系统的设计-nav`)" id="计时系统的设计-nav">
+									计时系统的设计
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e8%bf%98%e6%9c%89%e5%95%a5" onclick="onNavClick(`#还有啥-nav`)" id="还有啥-nav">
+									还有啥
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+    
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+<div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    归档
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/categories">
+                    分类
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
+                    标签
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/friends">
+                    友链
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/about">
+                    关于
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/index.xml">
+                    RSS
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e8%b5%84%e6%ba%90%e5%87%86%e5%a4%87" onclick="onNavClick(`#资源准备-nav`)" id="资源准备-nav">
+									资源准备
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%95%8c%e9%9d%a2%e8%ae%be%e8%ae%a1" onclick="onNavClick(`#界面设计-nav`)" id="界面设计-nav">
+									界面设计
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%95%b0%e6%8d%ae%e7%bb%93%e6%9e%84%e5%ae%9a%e4%b9%89" onclick="onNavClick(`#数据结构定义-nav`)" id="数据结构定义-nav">
+									数据结构定义
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%b8%b8%e6%88%8f%e6%95%b0%e6%8d%ae%e5%88%9d%e5%a7%8b%e5%8c%96" onclick="onNavClick(`#游戏数据初始化-nav`)" id="游戏数据初始化-nav">
+									游戏数据初始化
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%b8%b8%e6%88%8f%e7%95%8c%e9%9d%a2%e6%98%be%e7%a4%ba" onclick="onNavClick(`#游戏界面显示-nav`)" id="游戏界面显示-nav">
+									游戏界面显示
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%b6%88%e9%99%a4" onclick="onNavClick(`#消除-nav`)" id="消除-nav">
+									消除
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e9%80%89%e4%b8%ad" onclick="onNavClick(`#选中-nav`)" id="选中-nav">
+									选中
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e9%ba%bb%e5%b0%86%e7%89%8c%e7%82%b9%e5%87%bb%e4%ba%8b%e4%bb%b6" onclick="onNavClick(`#麻将牌点击事件-nav`)" id="麻将牌点击事件-nav">
+									麻将牌点击事件
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e9%80%89%e4%b8%ad-1" onclick="onNavClick(`#选中-1-nav`)" id="选中-1-nav">
+									选中
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%b6%88%e9%99%a4-1" onclick="onNavClick(`#消除-1-nav`)" id="消除-1-nav">
+									消除
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e8%ae%a1%e6%97%b6%e7%b3%bb%e7%bb%9f%e7%9a%84%e8%ae%be%e8%ae%a1" onclick="onNavClick(`#计时系统的设计-nav`)" id="计时系统的设计-nav">
+									计时系统的设计
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e8%bf%98%e6%9c%89%e5%95%a5" onclick="onNavClick(`#还有啥-nav`)" id="还有啥-nav">
+									还有啥
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://ntutn.top/">
+            归零幻想
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://ntutn.top/">
+        <div class="single-column-header-title">归零幻想</div>
+        
+        <div class="single-column-header-subtitle">零点还不算熬夜</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+                
+            
+
+            <div class="post-head-wrapper"
+                
+                    
+                    
+                    style="background-image: url('https://s3.jpg.cm/2021/08/08/IAjmPL.jpg')"
+                    
+                
+            >
+                <div class="post-title">
+                    安卓连连看游戏设计
+                    
+                    <div class="post-subtitle">
+                        字节取消大小周了，于是周末时间多起来了。虽然想着到处去玩，但现在疫情形势又不好了，于是安心呆在家里当一个肥宅。除了补一补番剧，就是把之前就想过的连连看游戏做出来了。
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2021-04-25 03:11
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/%E6%8A%98%E8%85%BE">折腾</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/%E5%AE%89%E5%8D%93">安卓</a>
+                                &nbsp;
+                            
+                                <a href="/tags/kotlin">Kotlin</a>
+                                &nbsp;
+                            
+                                <a href="/tags/%E9%80%92%E5%BD%92">递归</a>
+                                &nbsp;
+                            
+                                <a href="/tags/bfs">BFS</a>
+                                &nbsp;
+                            
+                                <a href="/tags/%E6%B8%B8%E6%88%8F">游戏</a>
+                                &nbsp;
+                            
+                        
+                        
+                            <i class="material-icons" style="">schedule</i>
+                            
+
+                            
+                            
+
+                            
+                            15 min
+                            
+                            11 s.
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <!-- raw HTML omitted -->
+<p>字节取消大小周了，于是周末时间多起来了。虽然想着到处去玩，但现在疫情形势又不好了，于是安心呆在家里当一个肥宅。除了补一补番剧，就是把之前就想过的连连看游戏做出来了。</p>
+<p>连连看游戏规则简单，点击两个相同的元素，如果他们能在两次拐弯以内连接起来，那么就可以消除。消除后就会出现空位，可以连接的就更多了。在规定时间内连续操作，直到消除所有元素。</p>
+<p>虽然规则比较简单，但真正动手实现一遍还是很费工夫的。游戏既然做好了，那么我水一篇博客不过分吧:&gt;</p>
+<p><img src="https://s3.jpg.cm/2021/08/08/IAjmPL.jpg" alt="连连看游戏界面"> <sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup></p>
+<p>项目的代码我放到了github。写的贼丑，轻喷。 <a href="https://github.com/zerofancy/match">https://github.com/zerofancy/match</a></p>
+<!-- raw HTML omitted -->
+<h2 id="资源准备">资源准备</h2>
+<p>连连看需要一些素材图，可以考虑用水果、动物甚至我同学的头像等，但我想把难度设计高一点，手机屏幕就这么大，图片很小也能有比较高的辨识度，思来想去还是麻将比较合适。</p>
+<p>幸运的是，我找到了这么一套免费的图片素材，<a href="http://martinpersson.org/">Mahjong Icons</a>，只要提供一个指向这个页面的超链接就可以免费用。</p>
+<p>另外还需要一个应用图标，这个我是直接在<a href="https://iconpark.oceanengine.com/home">Icon Park</a>上找了一个。</p>
+<p>接下来将素材导入到项目，为了随处使用方便，我还定义到了一个类中：</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kt" data-lang="kt"><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.match</span>
+<span style="color:#228b22">/**
+</span><span style="color:#228b22"> * 麻将牌
+</span><span style="color:#228b22"> */</span>
+<span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#008b45;font-weight:bold">Mahjong</span> {
+    <span style="color:#8b008b;font-weight:bold">val</span> bamboos = listOf(
+        R.drawable.bamboo1,
+        R.drawable.bamboo2,
+        R.drawable.bamboo3,
+        R.drawable.bamboo4,
+        R.drawable.bamboo5,
+        R.drawable.bamboo6,
+        R.drawable.bamboo7,
+        R.drawable.bamboo8,
+        R.drawable.bamboo9
+    )
+    <span style="color:#8b008b;font-weight:bold">val</span> dragons = listOf(
+        R.drawable.dragon_chun,
+        R.drawable.dragon_green,
+        R.drawable.dragon_haku
+    )
+    <span style="color:#8b008b;font-weight:bold">val</span> faceDown = R.drawable.face_down
+    <span style="color:#8b008b;font-weight:bold">val</span> mans = listOf(
+        R.drawable.man1,
+        R.drawable.man2,
+        R.drawable.man3,
+        R.drawable.man4,
+        R.drawable.man5,
+        R.drawable.man6,
+        R.drawable.man7,
+        R.drawable.man8,
+        R.drawable.man9
+    )
+    <span style="color:#8b008b;font-weight:bold">val</span> pins = listOf(
+        R.drawable.pin1,
+        R.drawable.pin2,
+        R.drawable.pin3,
+        R.drawable.pin4,
+        R.drawable.pin5,
+        R.drawable.pin6,
+        R.drawable.pin7,
+        R.drawable.pin8,
+        R.drawable.pin9
+    )
+    <span style="color:#8b008b;font-weight:bold">val</span> redDoras = listOf(
+        R.drawable.red_dora_bamboo5,
+        R.drawable.red_dora_man5,
+        R.drawable.red_dora_pin5
+    )
+    <span style="color:#8b008b;font-weight:bold">val</span> winds = listOf(
+        R.drawable.wind_east,
+        R.drawable.wind_north,
+        R.drawable.wind_south,
+        R.drawable.wind_west
+    )
+    <span style="color:#8b008b;font-weight:bold">val</span> front = bamboos + dragons + mans + pins + redDoras + winds
+    <span style="color:#8b008b;font-weight:bold">val</span> all = front + faceDown
+}
+</code></pre></div><h2 id="界面设计">界面设计</h2>
+<p>参考上面截图，游戏区域其实是相当简单的，但麻将格子太多，如何显示到界面中呢？我采取的是使用多个ImageView，然后用代码动态添加的方式。这样我可以将ImageView也存成一个二维数组，正好跟游戏数据的二维数组对应起来，写起来更方便。</p>
+<p>这样我的界面就比较简单了，只要准备上方计时器的TextView和主要区域的ImageView就可以了。在<code>onCreate()</code>生命周期我创建并添加这些ImageView：</p>
+<p>这里我计算了中间区域的尺寸，让游戏区域为位于中间区域的一个近似正方形：</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kt" data-lang="kt">        <span style="color:#228b22">// post一下，不然取不到
+</span><span style="color:#228b22"></span>        imageContainer.post {
+            <span style="color:#228b22">// 中间正方形区域宽高
+</span><span style="color:#228b22"></span>            areaWidth = min(imageContainer.width, imageContainer.height - horizontalGap * (N - <span style="color:#b452cd">1</span>))
+            imageViewArray = Array(N) { i -&gt;
+                Array(N) { j -&gt;
+                    ImageView(<span style="color:#8b008b;font-weight:bold">this</span>).apply {
+                        imageContainer.addView(<span style="color:#8b008b;font-weight:bold">this</span>)
+                        layoutParams = FrameLayout.LayoutParams(areaWidth / N, areaWidth / N)
+                        y =
+                            (i * (areaWidth / N + horizontalGap)).toFloat() - areaWidth / <span style="color:#b452cd">2</span> - horizontalGap * N / <span style="color:#b452cd">2</span> + imageContainer.height / <span style="color:#b452cd">2</span>
+                        x = (j * areaWidth / N).toFloat() - areaWidth / <span style="color:#b452cd">2</span> + imageContainer.width / <span style="color:#b452cd">2</span>
+                        scaleType = ImageView.ScaleType.CENTER_INSIDE
+                        setOnClickListener {
+                            viewModel.itemClick(i + <span style="color:#b452cd">1</span>, j + <span style="color:#b452cd">1</span>)
+                        }
+                    }
+                }
+            }
+            <span style="color:#228b22">// 配置改变不重建
+</span><span style="color:#228b22"></span>            savedInstanceState ?: kotlin.run {
+                viewModel.<span style="color:#8b008b;font-weight:bold">init</span>(N, N, mahjongSize, maxGameTime, stepGameTime)
+                viewModel.start()
+            }
+        }
+</code></pre></div><h2 id="数据结构定义">数据结构定义</h2>
+<p>对于每一个麻将牌，我们需要关心他们显示的内容和当前的状态（是否被选中，是否已经消除），因而定义这样的数据结构：</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kt" data-lang="kt"><span style="color:#228b22">/**
+</span><span style="color:#228b22"> * 麻将数据类型
+</span><span style="color:#228b22"> * @param id 本次游戏中的编号（不是资源id）
+</span><span style="color:#228b22"> * @param isSelected 麻将是否被选中
+</span><span style="color:#228b22"> * @param isDeleted 麻将是否已经被删除
+</span><span style="color:#228b22"> */</span>
+<span style="color:#8b008b;font-weight:bold">data</span> <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">MahjongType</span>(
+    <span style="color:#8b008b;font-weight:bold">val</span> id: Int,
+    <span style="color:#8b008b;font-weight:bold">var</span> isSelected: Boolean = <span style="color:#8b008b;font-weight:bold">false</span>,
+    <span style="color:#8b008b;font-weight:bold">var</span> isDeleted: Boolean = <span style="color:#8b008b;font-weight:bold">false</span>
+)
+</code></pre></div><p>在ViewModel中，我用一个二维数组来存储游戏数据</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kt" data-lang="kt">    <span style="color:#8b008b;font-weight:bold">var</span> mahjongArea: Array&lt;Array&lt;MahjongType&gt;&gt; = arrayOf()
+        <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">set</span>
+</code></pre></div><p>对于选中点，需要记录它的行数和列数</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kt" data-lang="kt">    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">var</span> selectedIndex: Pair&lt;Int, Int&gt;? = <span style="color:#8b008b;font-weight:bold">null</span>
+</code></pre></div><p>游戏有三种事件：游戏状态改变（开始、结束、暂停等）、游戏区域刷新、倒计时改变。这些我定义为LiveData。这里的refreshArea是一个Unit类型的LiveData，因为不需要传递什么数据，只要通知这个事件到来就可以了。</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kt" data-lang="kt">    <span style="color:#228b22">// 游戏区域刷新事件
+</span><span style="color:#228b22"></span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> _refreshArea = MutableLiveData&lt;Unit&gt;()
+    <span style="color:#8b008b;font-weight:bold">val</span> refreshArea: LiveData&lt;Unit&gt;
+        <span style="color:#8b008b;font-weight:bold">get</span>() = _refreshArea
+    <span style="color:#228b22">// 游戏状态改变
+</span><span style="color:#228b22"></span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> _gameState = MutableLiveData&lt;GameState&gt;()
+    <span style="color:#8b008b;font-weight:bold">val</span> gameState: LiveData&lt;GameState&gt;
+        <span style="color:#8b008b;font-weight:bold">get</span>() = _gameState
+    <span style="color:#228b22">// 游戏倒计时
+</span><span style="color:#228b22"></span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> _gameTime = MutableLiveData&lt;Int&gt;()
+    <span style="color:#8b008b;font-weight:bold">val</span> gameTime: LiveData&lt;Int&gt;
+        <span style="color:#8b008b;font-weight:bold">get</span>() = _gameTime
+    <span style="color:#8b008b;font-weight:bold">enum</span> <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">GameState</span> {
+        PENDING,
+        RUNNING,
+        PAUSE,
+        SUCCEEDED,
+        FAILED
+    }
+</code></pre></div><h2 id="游戏数据初始化">游戏数据初始化</h2>
+<p>游戏数据初始化时，我们要将所有变量置为初始状态。</p>
+<ol>
+<li>游戏区域 为了计算方便，我们实际存储的游戏区域比显示出来的游戏区域实际上是多一圈的，多一圈空格子，这样边上的元素计算能否连通的时候就不需要特殊处理</li>
+<li>游戏中，麻将元素应该是成对的，所以我首先选择一些元素，然后随机添加到一个list中，每个添加两份，最后再打乱顺序</li>
+<li>游戏中，所有需要后面判断和比较差异的复制都应该是深拷贝，否则他们是同一个对象，怎么比都是一样</li>
+</ol>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kt" data-lang="kt">    <span style="color:#228b22">/**
+</span><span style="color:#228b22">     * 初始化游戏
+</span><span style="color:#228b22">     * @param rows 游戏区域行数
+</span><span style="color:#228b22">     * @param cols 游戏区域列数
+</span><span style="color:#228b22">     * @param itemCount 使用的麻将牌的数量
+</span><span style="color:#228b22">     */</span>
+    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">init</span>(rows: Int, cols: Int, itemCount: Int, maxGameTime: Int, stepGameTime: Int) {
+        require(rows * cols % <span style="color:#b452cd">2</span> == <span style="color:#b452cd">0</span>) { <span style="color:#cd5555">&#34;区域应该有偶数个元素&#34;</span> }
+        require(itemCount &lt;= Mahjong.front.size) { <span style="color:#cd5555">&#34;麻将牌资源不足&#34;</span> }
+        require(maxGameTime &gt; <span style="color:#b452cd">5</span>) { <span style="color:#cd5555">&#34;游戏时间过短&#34;</span> }
+        require(stepGameTime &gt;= <span style="color:#b452cd">0</span>) { <span style="color:#cd5555">&#34;stepGameTime参数错误&#34;</span> }
+        <span style="color:#8b008b;font-weight:bold">this</span>.rows = rows
+        <span style="color:#8b008b;font-weight:bold">this</span>.cols = cols
+        <span style="color:#8b008b;font-weight:bold">this</span>.maxGameTime = maxGameTime
+        <span style="color:#8b008b;font-weight:bold">this</span>.stepGameTime = stepGameTime
+        <span style="color:#228b22">// +2是为了给周围放上一圈空格子，计算的时候方便
+</span><span style="color:#228b22"></span>        mahjongArea = Array(rows + <span style="color:#b452cd">2</span>) {
+            Array(cols + <span style="color:#b452cd">2</span>) {
+                MahjongType(id = Mahjong.faceDown, isDeleted = <span style="color:#8b008b;font-weight:bold">true</span>)
+            }
+        }
+        <span style="color:#8b008b;font-weight:bold">val</span> totalItemCollection = Mahjong.front.shuffled().subList(<span style="color:#b452cd">0</span>, itemCount)
+        <span style="color:#8b008b;font-weight:bold">val</span> res = mutableListOf&lt;MahjongType&gt;()
+        <span style="color:#8b008b;font-weight:bold">while</span> (res.size &lt; rows * cols) {
+            <span style="color:#8b008b;font-weight:bold">val</span> item = MahjongType(id = totalItemCollection.random())
+            res.add(item)
+            <span style="color:#228b22">// 深拷贝
+</span><span style="color:#228b22"></span>            res.add(item.copy())
+        }
+        res.shuffle()
+        <span style="color:#8b008b;font-weight:bold">for</span> (i <span style="color:#8b008b;font-weight:bold">in</span> res.indices) {
+            mahjongArea[i / cols + <span style="color:#b452cd">1</span>][i % cols + <span style="color:#b452cd">1</span>] = res[i]
+        }
+        selectedIndex = <span style="color:#8b008b;font-weight:bold">null</span>
+        _refreshArea.value = Unit
+        _gameState.value = GameState.PENDING
+    }
+</code></pre></div><h2 id="游戏界面显示">游戏界面显示</h2>
+<p>我将每个ImageView对应的数据存储到它的tag中，这样在收到区域刷新事件时就可以直接比较判断是否要刷新了。</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kt" data-lang="kt">        viewModel.refreshArea.observe(<span style="color:#8b008b;font-weight:bold">this</span>) {
+            <span style="color:#8b008b;font-weight:bold">for</span> (i <span style="color:#8b008b;font-weight:bold">in</span> <span style="color:#b452cd">0</span> until N) {
+                <span style="color:#8b008b;font-weight:bold">for</span> (j <span style="color:#8b008b;font-weight:bold">in</span> <span style="color:#b452cd">0</span> until N) {
+                    <span style="color:#8b008b;font-weight:bold">val</span> dataItem = viewModel.mahjongArea[i + <span style="color:#b452cd">1</span>][j + <span style="color:#b452cd">1</span>]
+                    <span style="color:#8b008b;font-weight:bold">val</span> viewItem = imageViewArray[i][j]
+                    <span style="color:#8b008b;font-weight:bold">if</span> (viewItem.tag != dataItem) {
+                        <span style="color:#8b008b;font-weight:bold">if</span> (dataItem.isDeleted) {
+                            viewItem.setImageDrawable(<span style="color:#8b008b;font-weight:bold">null</span>)
+                        } <span style="color:#8b008b;font-weight:bold">else</span> {
+                            viewItem.setImageResource(dataItem.id)
+                        }
+                        viewItem.scaleType = ImageView.ScaleType.CENTER_INSIDE
+                        viewItem.tag = dataItem.copy() <span style="color:#228b22">// 深拷贝，否则一直一样
+</span><span style="color:#228b22"></span>                        <span style="color:#8b008b;font-weight:bold">if</span> (dataItem.isSelected) {
+                            viewItem.colorFilter = grayColorMatrixColorFilter
+                        } <span style="color:#8b008b;font-weight:bold">else</span> {
+                            viewItem.clearColorFilter()
+                        }
+                    }
+                }
+            }
+        }
+</code></pre></div><h3 id="消除">消除</h3>
+<p>对于被消除的元素，通过<code>viewItem.setImageDrawable(null)</code>清除显示内容。</p>
+<h3 id="选中">选中</h3>
+<p>对于被选中的元素，我通过设置<code>colorFilter</code>的方式调整图片饱和度来做到高亮显示的目的。这个<code>colorFilter</code>定义如下：</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kt" data-lang="kt">    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> grayColorMatrixColorFilter <span style="color:#8b008b;font-weight:bold">by</span> lazy {
+        <span style="color:#8b008b;font-weight:bold">val</span> colorMatrix = ColorMatrix().apply {
+            setSaturation(<span style="color:#b452cd">25f</span>)
+        }
+        ColorMatrixColorFilter(colorMatrix)
+    }
+</code></pre></div><h2 id="麻将牌点击事件">麻将牌点击事件</h2>
+<h3 id="选中-1">选中</h3>
+<p>首先我们只需要处理没有被消除的元素</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kt" data-lang="kt">        <span style="color:#8b008b;font-weight:bold">if</span> (mahjongArea[row][col].isDeleted) {
+            <span style="color:#228b22">// 当前点击元素已经消除
+</span><span style="color:#228b22"></span>            <span style="color:#8b008b;font-weight:bold">return</span>
+        }
+</code></pre></div><p>如果之前没有选中元素，那么我们应该直接选中这个元素</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kt" data-lang="kt">        <span style="color:#8b008b;font-weight:bold">if</span> (selectedIndex == <span style="color:#8b008b;font-weight:bold">null</span>) {
+            <span style="color:#228b22">// 没有已经选中的，选中点击项
+</span><span style="color:#228b22"></span>            mahjongArea[row][col].isSelected = <span style="color:#8b008b;font-weight:bold">true</span>
+            selectedIndex = row to col
+            _refreshArea.value = Unit
+            <span style="color:#8b008b;font-weight:bold">return</span>
+        }
+</code></pre></div><h3 id="消除-1">消除</h3>
+<p>否则就判断一下两个元素能否配对消除，并判断是否已经全部消除</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kt" data-lang="kt">        <span style="color:#8b008b;font-weight:bold">val</span> previousSelected = mahjongArea[selectedIndex!!.first][selectedIndex!!.second]
+        <span style="color:#8b008b;font-weight:bold">val</span> currentSelected = mahjongArea[row][col]
+        <span style="color:#228b22">// 判断是否可消除
+</span><span style="color:#228b22"></span>        <span style="color:#8b008b;font-weight:bold">if</span> (checkIsCanDelete(row to col, selectedIndex!!)) {
+            previousSelected.isSelected = <span style="color:#8b008b;font-weight:bold">false</span>
+            previousSelected.isDeleted = <span style="color:#8b008b;font-weight:bold">true</span>
+            currentSelected.isDeleted = <span style="color:#8b008b;font-weight:bold">true</span>
+            selectedIndex = <span style="color:#8b008b;font-weight:bold">null</span>
+            <span style="color:#8b008b;font-weight:bold">val</span> gameTime = (_gameTime.value ?: <span style="color:#b452cd">1</span>) + stepGameTime
+            _gameTime.value = gameTime.takeIf { <span style="color:#8b008b;font-weight:bold">it</span> &lt;= maxGameTime } ?: maxGameTime
+            <span style="color:#8b008b;font-weight:bold">if</span> (mahjongArea.all { <span style="color:#8b008b;font-weight:bold">it</span>.all { <span style="color:#8b008b;font-weight:bold">it</span>.isDeleted } }) {
+                <span style="color:#228b22">// 所有麻将已经消除，游戏胜利
+</span><span style="color:#228b22"></span>                _gameState.value = GameState.SUCCEEDED
+            }
+        } <span style="color:#8b008b;font-weight:bold">else</span> {
+            previousSelected.isSelected = <span style="color:#8b008b;font-weight:bold">false</span>
+            selectedIndex = <span style="color:#8b008b;font-weight:bold">null</span>
+        }
+        _refreshArea.value = Unit
+</code></pre></div><p>那么如何判断能否消除呢？</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kt" data-lang="kt">    <span style="color:#228b22">/**
+</span><span style="color:#228b22">     * 判断两个元素是否能消除
+</span><span style="color:#228b22">     */</span>
+    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">checkIsCanDelete</span>(itemIndex1: Pair&lt;Int, Int&gt;, itemIndex2: Pair&lt;Int, Int&gt;): Boolean {
+        <span style="color:#8b008b;font-weight:bold">if</span> (itemIndex1 == itemIndex2) {
+            <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">false</span>
+        }
+        <span style="color:#8b008b;font-weight:bold">if</span> (mahjongArea.getByPair(itemIndex1).id != mahjongArea.getByPair(itemIndex2).id) {
+            <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">false</span>
+        }
+        <span style="color:#8b008b;font-weight:bold">return</span> VisitDirection.values().any {
+            checkIsCanMatch(itemIndex1, itemIndex2, <span style="color:#8b008b;font-weight:bold">it</span>)
+        }
+    }
+</code></pre></div><p>如果是同一个元素，肯定不能消除；如果两个元素不同，那也不能消除。在排除了这两种情况后，要判断能否通过两次以内的拐弯就到达就需要BFS了。</p>
+<ol>
+<li>如果当前元素当前方向的下一个元素可以与目标元素拐n次弯相连，那么当前元素可以与目标元素拐n次弯相连</li>
+<li>如果当前元素非当前方向的下一个元素可以与目标元素拐n次弯相连，那么当前元素可以与目标元素拐n+1次弯相连</li>
+</ol>
+<p>这里我用递归实现了这个算法，但实现的……有点丑</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kt" data-lang="kt">    <span style="color:#228b22">/**
+</span><span style="color:#228b22">     * 判断两个在不同位置的相同元素是否能消除
+</span><span style="color:#228b22">     * BFS
+</span><span style="color:#228b22">     */</span>
+    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">checkIsCanMatch</span>(
+        currentPoint: Pair&lt;Int, Int&gt;,
+        targetPoint: Pair&lt;Int, Int&gt;,
+        visitDirection: VisitDirection,
+        maxRounds: Int = <span style="color:#b452cd">2</span>
+    ): Boolean {
+        <span style="color:#8b008b;font-weight:bold">val</span> nextPoints = currentPoint.getNextPoints(visitDirection, targetPoint).filter {
+            <span style="color:#8b008b;font-weight:bold">if</span> (maxRounds &gt; <span style="color:#b452cd">0</span>) <span style="color:#8b008b;font-weight:bold">true</span> <span style="color:#8b008b;font-weight:bold">else</span> <span style="color:#8b008b;font-weight:bold">it</span>.third == <span style="color:#b452cd">0</span>
+        }
+        <span style="color:#8b008b;font-weight:bold">if</span> (targetPoint <span style="color:#8b008b;font-weight:bold">in</span> nextPoints.map { <span style="color:#8b008b;font-weight:bold">it</span>.first }) {
+            <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">true</span>
+        }
+        <span style="color:#8b008b;font-weight:bold">return</span> nextPoints.isNotEmpty() &amp;&amp; nextPoints.any {
+            checkIsCanMatch(<span style="color:#8b008b;font-weight:bold">it</span>.first, targetPoint, <span style="color:#8b008b;font-weight:bold">it</span>.second, maxRounds - <span style="color:#8b008b;font-weight:bold">it</span>.third)
+        }
+    }
+    <span style="color:#228b22">/**
+</span><span style="color:#228b22">     * 当前结点是否在游戏区域内
+</span><span style="color:#228b22">     */</span>
+    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">Pair</span>&lt;Int, Int&gt;.isPointValid() =
+        <span style="color:#8b008b;font-weight:bold">this</span>.first <span style="color:#8b008b;font-weight:bold">in</span> <span style="color:#b452cd">0.</span>.(rows + <span style="color:#b452cd">1</span>) &amp;&amp; <span style="color:#8b008b;font-weight:bold">this</span>.second <span style="color:#8b008b;font-weight:bold">in</span> <span style="color:#b452cd">0.</span>.(cols + <span style="color:#b452cd">1</span>)
+    <span style="color:#228b22">/**
+</span><span style="color:#228b22">     * 当前访问方向
+</span><span style="color:#228b22">     */</span>
+    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">enum</span> <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">VisitDirection</span> {
+        TOP,
+        BOTTOM,
+        LEFT,
+        RIGHT
+    }
+    <span style="color:#228b22">/**
+</span><span style="color:#228b22">     * 获取当前点的下一个点
+</span><span style="color:#228b22">     * @param currentDirection 当前朝向的方向
+</span><span style="color:#228b22">     * @return 一个集合，集合中有0～3个三元组，每个三元组有{点，朝向，需要拐弯次数}
+</span><span style="color:#228b22">     */</span>
+    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">Pair</span>&lt;Int, Int&gt;.getNextPoints(
+        currentDirection: VisitDirection,
+        targetPoint: Pair&lt;Int, Int&gt;
+    ): Set&lt;Triple&lt;Pair&lt;Int, Int&gt;, VisitDirection, Int&gt;&gt; {
+        <span style="color:#8b008b;font-weight:bold">val</span> res = mutableSetOf&lt;Triple&lt;Pair&lt;Int, Int&gt;, VisitDirection, Int&gt;&gt;()
+        <span style="color:#8b008b;font-weight:bold">val</span> nextPoint = <span style="color:#8b008b;font-weight:bold">when</span> (currentDirection) {
+            VisitDirection.TOP -&gt; first - <span style="color:#b452cd">1</span> to second
+            VisitDirection.BOTTOM -&gt; first + <span style="color:#b452cd">1</span> to second
+            VisitDirection.LEFT -&gt; first to second - <span style="color:#b452cd">1</span>
+            VisitDirection.RIGHT -&gt; first to second + <span style="color:#b452cd">1</span>
+        }
+        <span style="color:#8b008b;font-weight:bold">val</span> <span style="color:#a61717;background-color:#e3d2d2">(</span>leftPoint, leftDirection) = <span style="color:#8b008b;font-weight:bold">when</span> (currentDirection) {
+            VisitDirection.TOP -&gt; first to second - <span style="color:#b452cd">1</span> to VisitDirection.LEFT
+            VisitDirection.BOTTOM -&gt; first to second + <span style="color:#b452cd">1</span> to VisitDirection.RIGHT
+            VisitDirection.LEFT -&gt; first + <span style="color:#b452cd">1</span> to second to VisitDirection.BOTTOM
+            VisitDirection.RIGHT -&gt; first - <span style="color:#b452cd">1</span> to second to VisitDirection.TOP
+        }
+        <span style="color:#8b008b;font-weight:bold">val</span> <span style="color:#a61717;background-color:#e3d2d2">(</span>rightPoint, rightDirection) = <span style="color:#8b008b;font-weight:bold">when</span> (currentDirection) {
+            VisitDirection.TOP -&gt; first to second + <span style="color:#b452cd">1</span> to VisitDirection.RIGHT
+            VisitDirection.BOTTOM -&gt; first to second - <span style="color:#b452cd">1</span> to VisitDirection.LEFT
+            VisitDirection.LEFT -&gt; first - <span style="color:#b452cd">1</span> to second to VisitDirection.TOP
+            VisitDirection.RIGHT -&gt; first + <span style="color:#b452cd">1</span> to second to VisitDirection.BOTTOM
+        }
+        <span style="color:#8b008b;font-weight:bold">if</span> (nextPoint.isPointCanUse(targetPoint)) {
+            res.add(Triple(nextPoint, currentDirection, <span style="color:#b452cd">0</span>))
+        }
+        <span style="color:#8b008b;font-weight:bold">if</span> (leftPoint.isPointCanUse(targetPoint)) {
+            res.add(Triple(leftPoint, leftDirection, <span style="color:#b452cd">1</span>))
+        }
+        <span style="color:#8b008b;font-weight:bold">if</span> (rightPoint.isPointCanUse(targetPoint)) {
+            res.add(Triple(rightPoint, rightDirection, <span style="color:#b452cd">1</span>))
+        }
+        <span style="color:#8b008b;font-weight:bold">return</span> res
+    }
+    <span style="color:#228b22">/**
+</span><span style="color:#228b22">     * 判断某个点在游戏区域内，而且是空白格子或目标格子
+</span><span style="color:#228b22">     */</span>
+    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">Pair</span>&lt;Int, Int&gt;.isPointCanUse(targetPoint: Pair&lt;Int, Int&gt;) =
+        isPointValid() &amp;&amp; (mahjongArea.getByPair(<span style="color:#8b008b;font-weight:bold">this</span>).isDeleted || <span style="color:#8b008b;font-weight:bold">this</span> == targetPoint)
+</code></pre></div><h2 id="计时系统的设计">计时系统的设计</h2>
+<p>在VM中我有一个方法，当游戏在进行状态，每调用一次时间就减一。而在每成功消除一次，时间就加3，这样难度就不会太高。</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kt" data-lang="kt">    <span style="color:#228b22">/**
+</span><span style="color:#228b22">     * 每秒钟被调用，计算游戏倒计时
+</span><span style="color:#228b22">     */</span>
+    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">timeTick</span>() {
+        <span style="color:#8b008b;font-weight:bold">if</span> (_gameState.value != GameState.RUNNING) {
+            <span style="color:#8b008b;font-weight:bold">return</span>
+        }
+        <span style="color:#8b008b;font-weight:bold">val</span> gameTime = (_gameTime.value ?: <span style="color:#b452cd">1</span>) - <span style="color:#b452cd">1</span>
+        _gameTime.value = gameTime
+        <span style="color:#8b008b;font-weight:bold">if</span> (gameTime &lt;= <span style="color:#b452cd">0</span>) {
+            _gameState.value = GameState.FAILED
+        }
+    }
+</code></pre></div><p>我利用了handler的机制来实现每秒调用一次</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kt" data-lang="kt">        <span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#a61717;background-color:#e3d2d2">: </span><span style="color:#008b45;font-weight:bold">Runnable</span> {
+            <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">run</span>() {
+                viewModel.timeTick()
+                handler.postDelayed(<span style="color:#8b008b;font-weight:bold">this</span>, <span style="color:#b452cd">1000L</span>)
+            }
+        }.run()
+</code></pre></div><p>因为判断了游戏状态，所以暂停和继续也很好做了：</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kt" data-lang="kt">    <span style="color:#228b22">/**
+</span><span style="color:#228b22">     * 游戏暂停
+</span><span style="color:#228b22">     */</span>
+    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">pause</span>() {
+        <span style="color:#8b008b;font-weight:bold">if</span> (_gameState.value != GameState.RUNNING) {
+            <span style="color:#8b008b;font-weight:bold">return</span>
+        }
+        _gameState.value = GameState.PAUSE
+    }
+    <span style="color:#228b22">/**
+</span><span style="color:#228b22">     * 继续游戏
+</span><span style="color:#228b22">     */</span>
+    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">resume</span>() {
+        <span style="color:#8b008b;font-weight:bold">if</span> (_gameState.value != GameState.PAUSE) {
+            <span style="color:#8b008b;font-weight:bold">return</span>
+        }
+        _gameState.value = GameState.RUNNING
+    }
+</code></pre></div><h2 id="还有啥">还有啥</h2>
+<p>拓展函数确实是一个很好用的东西，很多通用的转换操作可以定义成拓展函数，用起来贼舒服。</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kt" data-lang="kt"><span style="color:#228b22">/**
+</span><span style="color:#228b22"> * 将dp值转换为px
+</span><span style="color:#228b22"> */</span>
+<span style="color:#8b008b;font-weight:bold">val</span> Number.toPxFloat: Float
+    <span style="color:#8b008b;font-weight:bold">get</span>() {
+        <span style="color:#8b008b;font-weight:bold">val</span> r: Resources = Resources.getSystem()
+        <span style="color:#8b008b;font-weight:bold">val</span> px =
+            TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, <span style="color:#8b008b;font-weight:bold">this</span>.toFloat(), r.displayMetrics)
+        <span style="color:#8b008b;font-weight:bold">return</span> px
+    }
+<span style="color:#228b22">/**
+</span><span style="color:#228b22"> * 将dp值转换为px
+</span><span style="color:#228b22"> */</span>
+<span style="color:#8b008b;font-weight:bold">val</span> Number.toPx: Int
+    <span style="color:#8b008b;font-weight:bold">get</span>() = toPxFloat.roundToInt()
+<span style="color:#228b22">/**
+</span><span style="color:#228b22"> * 将px值转换为dp
+</span><span style="color:#228b22"> */</span>
+<span style="color:#8b008b;font-weight:bold">val</span> Number.toDpFloat: Float
+    <span style="color:#8b008b;font-weight:bold">get</span>() {
+        <span style="color:#8b008b;font-weight:bold">val</span> scale: Float = Resources.getSystem().displayMetrics.density
+        <span style="color:#8b008b;font-weight:bold">return</span> (<span style="color:#8b008b;font-weight:bold">this</span>.toFloat() * scale + <span style="color:#b452cd">0.5f</span>)
+    }
+<span style="color:#228b22">/**
+</span><span style="color:#228b22"> * 将px值转换为dp
+</span><span style="color:#228b22"> */</span>
+<span style="color:#8b008b;font-weight:bold">val</span> Number.toDp: Int
+    <span style="color:#8b008b;font-weight:bold">get</span>() = toDpFloat.roundToInt()
+<span style="color:#228b22">/**
+</span><span style="color:#228b22"> * 使用一个Int对来取二维数组中的元素
+</span><span style="color:#228b22"> */</span>
+<span style="color:#8b008b;font-weight:bold">fun</span> &lt;<span style="color:#008b45;font-weight:bold">T</span>&gt; <span style="color:#008b45">Array</span>&lt;Array&lt;T&gt;&gt;.getByPair(pair: Pair&lt;Int, Int&gt;) = <span style="color:#8b008b;font-weight:bold">this</span>[pair.first][pair.second]
+</code></pre></div><p><a href="https://developer.android.com/jetpack/compose">JetPack Compose</a>发布了，也许有机会我会重构下这个小游戏的界面，你可以不抱期待等等看。</p>
+<section class="footnotes" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn:1" role="doc-endnote">
+<p>本图片由<a href="https://imagelol.com/?utm_source=iplaysoft.com&amp;hmsr=iplaysoft.com">笑果图床</a> 提供支持。 <a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+</li>
+</ol>
+</section>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">最后修改于 2021-04-25</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts" href="https://ntutn.top/posts/%E8%A3%85%E9%A5%B0%E6%A8%A1%E5%BC%8F%E5%AE%9E%E7%8E%B0%E5%88%86%E4%BA%AB%E5%8A%9F%E8%83%BD/">
+			下回<br>装饰模式实现分享功能
+                </a>
+                
+                
+                
+                <a class="older-posts" href="https://ntutn.top/posts/classloader%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%89%98%E6%9C%BA%E5%88%B6%E6%8E%A2%E7%A9%B6/">
+			上回<br>ClassLoader双亲委托机制探究
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+<script src="https://utteranc.es/client.js"
+        repo="zerofancy/zerofancy.github.io"
+        issue-term="title"
+        label=""
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	CC BY-SA 4.0
+	
+</div>
+            </div>
+    
+    <script src="/js/journal.js"></script>
+    </body>
+</html>

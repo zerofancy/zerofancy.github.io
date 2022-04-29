@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html><head>
+<title>AUIL学习</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="AUIL是个比较知名的图片加载库，源码结构比较清晰和简单，我在阅读学习中做了一些整理。">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+<meta property="og:title" content="AUIL学习" />
+<meta property="og:description" content="AUIL是个比较知名的图片加载库，源码结构比较清晰和简单，我在阅读学习中做了一些整理。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ntutn.top/posts/auil%E5%AD%A6%E4%B9%A0/" />
+<meta property="article:published_time" content="2022-02-13T18:11:08+08:00" />
+<meta property="article:modified_time" content="2022-02-13T18:11:08+08:00" /><meta property="og:site_name" content="归零幻想" />
+
+
+
+
+
+
+
+
+
+
+<link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+
+  
+
+
+
+
+<link rel="icon" href="//images.ntutn.top/favicon.ico">
+
+
+
+<link rel="stylesheet" href="https://ntutn.top/scss/journal.min.d8d9f81b896882733c41896750adbefbf9319ca02ccccefd461650898975c3af.css" integrity="sha256-2Nn4G4lognM8QYlnUK2&#43;&#43;/kxnKAszM79RhZQiYl1w68=" media="screen">
+
+
+
+<link rel="stylesheet" href="https://ntutn.top/scss/dark-mode.min.60f86847da9fc0724177ccfd0bf7c5997b0b41f1e58d5a293cfb3723c497c422.css" integrity="sha256-YPhoR9qfwHJBd8z9C/fFmXsLQfHljVopPPs3I8SXxCI=" media="screen">
+
+
+<script src="/vendor/js/loadCSS.js"></script>
+<script>
+  loadCSS("https://fonts.googleapis.com/css?family=Fira+Mono|Material+Icons");
+</script>
+
+
+
+<script defer
+	src='https://static.cloudflareinsights.com/beacon.min.js'
+	data-cf-beacon='{"token": 5a03d307f5214109a1e7c8b2cf306a3d'>
+</script>
+
+
+
+
+
+
+  <script src="/js/toc.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://ntutn.top/">
+    
+        <div class="nav-title">
+            归零幻想
+        </div>
+        
+        <div class="nav-subtitle">
+            零点还不算熬夜
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                归档
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/categories">
+                分类
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
+                标签
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/friends">
+                友链
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/about">
+                关于
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/index.xml">
+                RSS
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	CC BY-SA 4.0
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    
+    
+    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#auil-%e6%ba%90%e7%a0%81%e5%ad%a6%e4%b9%a0-%e9%87%8d%e7%82%b9%e9%97%ae%e9%a2%98" onclick="onNavClick(`#auil-源码学习-重点问题-nav`)" id="auil-源码学习-重点问题-nav">
+									AUIL 源码学习 重点问题
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#memorycache" onclick="onNavClick(`#memorycache-nav`)" id="memorycache-nav">
+									MemoryCache
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%95%b4%e4%b8%aa%e6%a1%86%e6%9e%b6%e5%88%86%e5%a4%9a%e5%b0%91%e4%b8%aa%e6%a8%a1%e5%9d%97%e6%af%8f%e4%b8%aa%e6%a8%a1%e5%9d%97%e7%9a%84%e4%bd%9c%e7%94%a8%e6%98%af%e4%bb%80%e4%b9%88" onclick="onNavClick(`#整个框架分多少个模块每个模块的作用是什么-nav`)" id="整个框架分多少个模块每个模块的作用是什么-nav">
+									整个框架分多少个模块，每个模块的作用是什么
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%a6%82%e4%bd%95%e4%bb%85%e9%80%9a%e8%bf%87interface%e5%b0%b1%e5%b0%86%e6%a1%86%e6%9e%b6%e7%9a%84%e6%95%b4%e4%b8%aa%e6%b5%81%e7%a8%8b%e4%b8%b2%e8%81%94%e8%b5%b7%e6%9d%a5" onclick="onNavClick(`#如何仅通过interface就将框架的整个流程串联起来-nav`)" id="如何仅通过interface就将框架的整个流程串联起来-nav">
+									如何仅通过interface就将框架的整个流程串联起来
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%a6%82%e4%bd%95%e8%bf%9b%e8%a1%8c%e5%86%85%e5%ad%98%e7%ae%a1%e7%90%86%e7%9a%84lru%e6%98%af%e7%a7%8d%e4%bb%80%e4%b9%88%e7%ae%97%e6%b3%95%e6%9c%89%e6%b2%a1%e6%9c%89%e6%af%94lru%e6%9b%b4%e5%a5%bd%e7%9a%84" onclick="onNavClick(`#如何进行内存管理的lru是种什么算法有没有比lru更好的-nav`)" id="如何进行内存管理的lru是种什么算法有没有比lru更好的-nav">
+									如何进行内存管理的，LRU是种什么算法，有没有比LRU更好的？
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%94%a8%e5%88%b0%e4%ba%86%e5%a4%9a%e5%b0%91%e4%b8%aa%e7%ba%bf%e7%a8%8b%e6%b1%a0%e8%bf%99%e4%ba%9b%e7%ba%bf%e7%a8%8b%e6%b1%a0%e4%b9%8b%e9%97%b4%e7%9a%84%e5%8c%ba%e5%88%ab%e6%98%af%e4%bb%80%e4%b9%88%e5%a6%82%e6%9e%9c%e5%8f%aa%e7%94%a8%e4%b8%80%e4%b8%aa%e7%ba%bf%e7%a8%8b%e6%b1%a0%e5%8f%af%e4%bb%a5%e4%b9%88" onclick="onNavClick(`#用到了多少个线程池这些线程池之间的区别是什么如果只用一个线程池可以么-nav`)" id="用到了多少个线程池这些线程池之间的区别是什么如果只用一个线程池可以么-nav">
+									用到了多少个线程池，这些线程池之间的区别是什么，如果只用一个线程池可以么？
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+    
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+<div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    归档
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/categories">
+                    分类
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
+                    标签
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/friends">
+                    友链
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/about">
+                    关于
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/index.xml">
+                    RSS
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#auil-%e6%ba%90%e7%a0%81%e5%ad%a6%e4%b9%a0-%e9%87%8d%e7%82%b9%e9%97%ae%e9%a2%98" onclick="onNavClick(`#auil-源码学习-重点问题-nav`)" id="auil-源码学习-重点问题-nav">
+									AUIL 源码学习 重点问题
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#memorycache" onclick="onNavClick(`#memorycache-nav`)" id="memorycache-nav">
+									MemoryCache
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%95%b4%e4%b8%aa%e6%a1%86%e6%9e%b6%e5%88%86%e5%a4%9a%e5%b0%91%e4%b8%aa%e6%a8%a1%e5%9d%97%e6%af%8f%e4%b8%aa%e6%a8%a1%e5%9d%97%e7%9a%84%e4%bd%9c%e7%94%a8%e6%98%af%e4%bb%80%e4%b9%88" onclick="onNavClick(`#整个框架分多少个模块每个模块的作用是什么-nav`)" id="整个框架分多少个模块每个模块的作用是什么-nav">
+									整个框架分多少个模块，每个模块的作用是什么
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%a6%82%e4%bd%95%e4%bb%85%e9%80%9a%e8%bf%87interface%e5%b0%b1%e5%b0%86%e6%a1%86%e6%9e%b6%e7%9a%84%e6%95%b4%e4%b8%aa%e6%b5%81%e7%a8%8b%e4%b8%b2%e8%81%94%e8%b5%b7%e6%9d%a5" onclick="onNavClick(`#如何仅通过interface就将框架的整个流程串联起来-nav`)" id="如何仅通过interface就将框架的整个流程串联起来-nav">
+									如何仅通过interface就将框架的整个流程串联起来
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%a6%82%e4%bd%95%e8%bf%9b%e8%a1%8c%e5%86%85%e5%ad%98%e7%ae%a1%e7%90%86%e7%9a%84lru%e6%98%af%e7%a7%8d%e4%bb%80%e4%b9%88%e7%ae%97%e6%b3%95%e6%9c%89%e6%b2%a1%e6%9c%89%e6%af%94lru%e6%9b%b4%e5%a5%bd%e7%9a%84" onclick="onNavClick(`#如何进行内存管理的lru是种什么算法有没有比lru更好的-nav`)" id="如何进行内存管理的lru是种什么算法有没有比lru更好的-nav">
+									如何进行内存管理的，LRU是种什么算法，有没有比LRU更好的？
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%94%a8%e5%88%b0%e4%ba%86%e5%a4%9a%e5%b0%91%e4%b8%aa%e7%ba%bf%e7%a8%8b%e6%b1%a0%e8%bf%99%e4%ba%9b%e7%ba%bf%e7%a8%8b%e6%b1%a0%e4%b9%8b%e9%97%b4%e7%9a%84%e5%8c%ba%e5%88%ab%e6%98%af%e4%bb%80%e4%b9%88%e5%a6%82%e6%9e%9c%e5%8f%aa%e7%94%a8%e4%b8%80%e4%b8%aa%e7%ba%bf%e7%a8%8b%e6%b1%a0%e5%8f%af%e4%bb%a5%e4%b9%88" onclick="onNavClick(`#用到了多少个线程池这些线程池之间的区别是什么如果只用一个线程池可以么-nav`)" id="用到了多少个线程池这些线程池之间的区别是什么如果只用一个线程池可以么-nav">
+									用到了多少个线程池，这些线程池之间的区别是什么，如果只用一个线程池可以么？
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://ntutn.top/">
+            归零幻想
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://ntutn.top/">
+        <div class="single-column-header-title">归零幻想</div>
+        
+        <div class="single-column-header-subtitle">零点还不算熬夜</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+                
+            
+
+            <div class="post-head-wrapper"
+                
+                    
+                    
+                    style="background-image: url('https://images.ntutn.top/2022/02/04ac71a8c8e1622e2bc287f2fd6e92cf.svg')"
+                    
+                
+            >
+                <div class="post-title">
+                    AUIL学习
+                    
+                    <div class="post-subtitle">
+                        AUIL是个比较知名的图片加载库，源码结构比较清晰和简单，我在阅读学习中做了一些整理。
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2022-02-13 18:11
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/%E5%AD%A6%E4%B9%A0">学习</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/java">Java</a>
+                                &nbsp;
+                            
+                                <a href="/tags/%E5%AE%89%E5%8D%93">安卓</a>
+                                &nbsp;
+                            
+                                <a href="/tags/%E5%BC%80%E6%BA%90">开源</a>
+                                &nbsp;
+                            
+                                <a href="/tags/lru">LRU</a>
+                                &nbsp;
+                            
+                        
+                        
+                            <i class="material-icons" style="">schedule</i>
+                            
+
+                            
+                            
+
+                            
+                            4 min
+                            
+                            43 s.
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <!-- raw HTML omitted -->
+<h1 id="auil-源码学习-重点问题">AUIL 源码学习 重点问题</h1>
+<p>AUIL是个比较知名的图片加载库，源码结构比较清晰和简单，我在阅读学习中整理了以下内容。</p>
+<h2 id="memorycache">MemoryCache</h2>
+<p>顾名思义，这个是在内存中缓存Bitmap相关的代码。</p>
+<p><img src="https://images.ntutn.top/2022/02/04ac71a8c8e1622e2bc287f2fd6e92cf.svg" alt="auil"></p>
+<p>MemoryCache结合了策略模式和装饰器模式，初始化时可选择不同缓存策略。</p>
+<p>一个Cache类内部持有一定量的Bitmap元素，并根据某种策略自动移除未使用的Bitmap。看结构我们应该从BaseMemoryCache开始看起。</p>
+<p>BaseMemoryCache中持有了所有放入的元素的弱引用，而它的子类根据策略持有了部分缓存对象的强引用。</p>
+<!-- raw HTML omitted -->
+<h2 id="整个框架分多少个模块每个模块的作用是什么">整个框架分多少个模块，每个模块的作用是什么</h2>
+<ul>
+<li>ImageLoader 门面。</li>
+<li>ImageAware 对最终处理和展示图片操作的封装。</li>
+<li>MemoryCache bitmap在内存中的缓存。</li>
+<li>BitmapProcessor 图片处理器，处理原始图片。分为预处理和后处理，预处理的结果会存入缓存，而后处理每次展示都会执行。</li>
+<li>BitmapDisplayer 控制图片展示，可为其附加一定的展示效果。</li>
+<li>DiskCache bitmap在磁盘中的缓存</li>
+<li>ImageDecoder 将图片解码为Bitmap，并缩放到合适尺寸</li>
+</ul>
+<h2 id="如何仅通过interface就将框架的整个流程串联起来">如何仅通过interface就将框架的整个流程串联起来</h2>
+<p><img src="https://images.ntutn.top/2022/02/09ba58caadf71408c7a97bc8e1443154.svg" alt="模块调用顺序"></p>
+<h2 id="如何进行内存管理的lru是种什么算法有没有比lru更好的">如何进行内存管理的，LRU是种什么算法，有没有比LRU更好的？</h2>
+<p>AUIL的图片缓存有二级，一是所有缓存过的图片都会持有WeakReference，可能随时回收；二是部分图片会持有强引用，不会被回收。这里的部分图片的总共大小可以设置，达到阈值之后使用一定的算法淘汰一些图片。这里最常用的就是LRU。</p>
+<p>LRU是淘汰缓存文件的算法，它每次淘汰最久未使用的文件。是一种最常用的页面置换算法。除了LRU之外，AUIL预置的算法还有FIFO（先入先出）、LargestLimitted（淘汰最大的文件）、LFU（淘汰使用频率最低的）。三者各有优劣。</p>
+<p>如，LRU因为图片展示频率在时间上的不均匀性，可能将一些高频展示的图片淘汰掉，导致缓存命中率下降；LFU对于新图片频率统计无法比较好把控。</p>
+<h2 id="用到了多少个线程池这些线程池之间的区别是什么如果只用一个线程池可以么">用到了多少个线程池，这些线程池之间的区别是什么，如果只用一个线程池可以么？</h2>
+<p>使用了三个线程池：</p>
+<ol>
+<li>taskExecutor</li>
+<li>taskExecutorForCachedImages</li>
+<li>taskDistributor</li>
+</ol>
+<p>taskExecutor和taskExecutorForCachedImages都是用来执行图片处理和展示任务的，他们处理顺序都是个LIFO（后进先出）的队列，而taskDistributor是个普通的线程池，用于框架内其他任务。</p>
+<p>taskExecutorForCachedImages是专门为缓存中读取的图片展示用的线程池，因为这类图片响应会很快，所以AUIL专门给他们准备了一个线程池。
+综上，如果用一个线程池则最终效果会大打折扣。</p>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">最后修改于 2022-02-13</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts" href="https://ntutn.top/posts/%E6%8A%8A%E4%BD%A0%E7%9A%84%E5%85%89%E7%8C%AB%E5%8F%98%E6%88%90%E4%B8%80%E4%B8%AA%E4%B8%90%E7%89%88nas/">
+			下回<br>把你的光猫变成一个丐版nas
+                </a>
+                
+                
+                
+                <a class="older-posts" href="https://ntutn.top/posts/%E7%BB%99app%E6%B7%BB%E5%8A%A0%E6%9E%84%E5%BB%BA%E4%BF%A1%E6%81%AF/">
+			上回<br>给APP添加构建信息
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+<script src="https://utteranc.es/client.js"
+        repo="zerofancy/zerofancy.github.io"
+        issue-term="title"
+        label=""
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	CC BY-SA 4.0
+	
+</div>
+            </div>
+    
+    <script src="/js/journal.js"></script>
+    </body>
+</html>

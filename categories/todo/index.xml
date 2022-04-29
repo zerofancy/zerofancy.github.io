@@ -7,7 +7,22 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Tue, 15 Dec 2020 03:11:37 +0800</lastBuildDate><atom:link href="https://ntutn.top/categories/todo/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 12 Apr 2022 01:21:54 +0800</lastBuildDate><atom:link href="https://ntutn.top/categories/todo/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>把你的光猫变成一个丐版nas</title>
+      <link>https://ntutn.top/posts/%E6%8A%8A%E4%BD%A0%E7%9A%84%E5%85%89%E7%8C%AB%E5%8F%98%E6%88%90%E4%B8%80%E4%B8%AA%E4%B8%90%E7%89%88nas/</link>
+      <pubDate>Tue, 12 Apr 2022 01:21:54 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E6%8A%8A%E4%BD%A0%E7%9A%84%E5%85%89%E7%8C%AB%E5%8F%98%E6%88%90%E4%B8%80%E4%B8%AA%E4%B8%90%E7%89%88nas/</guid>
+      <description>把你的光猫变成一个丐版NAS 我的初衷是调研下光猫改桥接的可行性，结果拿到超级管理员密码后还是没有这个选项。但在这个过程中发现直接在光猫上跑个下载服务却是可行的。
+允许FTP访问和telnet访问 访问 http://192.168.1.1 ，输入密码后进入光猫管理后台。这里我找到“上网帐号设置”，备份宽带帐号和密码。不得不说他系统还是挺拉的，密码框直接用审查元素功能把 type 改为 input 就可以看到密码了。
+第一步后台不要退出，访问 http://192.168.1.1/servmngr.html 。这里看到一个空白页面，审查元素后发现大有乾坤。 将这些代码取消注释，此时网页还是空白的，但是用 Ctrl+A 可以看到实际是有内容的。在这个页面开启 telnet 访问，并设置密码。注意用户名为 admin 不要改，否则后面 telnet 登陆不进去。
+telnet 192.168.1.1 成功后执行sh。然后uname -a看下。这里我就不记录查看管理员密码步骤了，反正这个型号管理员面板也没有设置桥接的选项。
+开始整活 top，发现占用内存最高的是个两个 java 进程。java -version，发现安装了 java8 。
+# java -version openjdk version &amp;#34;1.8.0-internal&amp;#34; OpenJDK Runtime Environment (build 1.8.0-internal-jenkinsang_2022_01_15_04_03-b00) JamVM (build 2.0.0, inline-threaded interpreter with stack-caching) free命令可知总内存约二十多兆，剩余仅 3 兆。这点空间是搞不了什么事情的，因此我尝试干掉前述两个 java 进程。ps -aux | grep java，发现除了存在两个 java 进程，还写了脚本自动把这两个进程拉起来，即/etc/monitor_java.sh 。统统 kill 掉。
+现在有 10 兆左右的内存了，对于 java 来说可能还是不太能搞事，但跑个 aria2 足够了！尝试插入 U 盘，发现在/mnt/usb1_1自动挂载。</description>
+    </item>
+    
     <item>
       <title>写产品和写demo的区别</title>
       <link>https://ntutn.top/posts/%E5%86%99%E4%BA%A7%E5%93%81%E5%92%8C%E5%86%99demo%E7%9A%84%E5%8C%BA%E5%88%AB/</link>

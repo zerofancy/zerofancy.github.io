@@ -7,7 +7,42 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Sun, 24 Oct 2021 03:11:37 +0800</lastBuildDate><atom:link href="https://ntutn.top/tags/%E5%AE%89%E5%8D%93/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 13 Feb 2022 18:11:08 +0800</lastBuildDate><atom:link href="https://ntutn.top/tags/%E5%AE%89%E5%8D%93/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>AUIL学习</title>
+      <link>https://ntutn.top/posts/auil%E5%AD%A6%E4%B9%A0/</link>
+      <pubDate>Sun, 13 Feb 2022 18:11:08 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/auil%E5%AD%A6%E4%B9%A0/</guid>
+      <description>AUIL 源码学习 重点问题 AUIL是个比较知名的图片加载库，源码结构比较清晰和简单，我在阅读学习中整理了以下内容。
+MemoryCache 顾名思义，这个是在内存中缓存Bitmap相关的代码。
+MemoryCache结合了策略模式和装饰器模式，初始化时可选择不同缓存策略。
+一个Cache类内部持有一定量的Bitmap元素，并根据某种策略自动移除未使用的Bitmap。看结构我们应该从BaseMemoryCache开始看起。
+BaseMemoryCache中持有了所有放入的元素的弱引用，而它的子类根据策略持有了部分缓存对象的强引用。
+整个框架分多少个模块，每个模块的作用是什么  ImageLoader 门面。 ImageAware 对最终处理和展示图片操作的封装。 MemoryCache bitmap在内存中的缓存。 BitmapProcessor 图片处理器，处理原始图片。分为预处理和后处理，预处理的结果会存入缓存，而后处理每次展示都会执行。 BitmapDisplayer 控制图片展示，可为其附加一定的展示效果。 DiskCache bitmap在磁盘中的缓存 ImageDecoder 将图片解码为Bitmap，并缩放到合适尺寸  如何仅通过interface就将框架的整个流程串联起来 如何进行内存管理的，LRU是种什么算法，有没有比LRU更好的？ AUIL的图片缓存有二级，一是所有缓存过的图片都会持有WeakReference，可能随时回收；二是部分图片会持有强引用，不会被回收。这里的部分图片的总共大小可以设置，达到阈值之后使用一定的算法淘汰一些图片。这里最常用的就是LRU。
+LRU是淘汰缓存文件的算法，它每次淘汰最久未使用的文件。是一种最常用的页面置换算法。除了LRU之外，AUIL预置的算法还有FIFO（先入先出）、LargestLimitted（淘汰最大的文件）、LFU（淘汰使用频率最低的）。三者各有优劣。
+如，LRU因为图片展示频率在时间上的不均匀性，可能将一些高频展示的图片淘汰掉，导致缓存命中率下降；LFU对于新图片频率统计无法比较好把控。
+用到了多少个线程池，这些线程池之间的区别是什么，如果只用一个线程池可以么？ 使用了三个线程池：
+ taskExecutor taskExecutorForCachedImages taskDistributor  taskExecutor和taskExecutorForCachedImages都是用来执行图片处理和展示任务的，他们处理顺序都是个LIFO（后进先出）的队列，而taskDistributor是个普通的线程池，用于框架内其他任务。
+taskExecutorForCachedImages是专门为缓存中读取的图片展示用的线程池，因为这类图片响应会很快，所以AUIL专门给他们准备了一个线程池。 综上，如果用一个线程池则最终效果会大打折扣。</description>
+    </item>
+    
+    <item>
+      <title>给APP添加构建信息</title>
+      <link>https://ntutn.top/posts/%E7%BB%99app%E6%B7%BB%E5%8A%A0%E6%9E%84%E5%BB%BA%E4%BF%A1%E6%81%AF/</link>
+      <pubDate>Sun, 16 Jan 2022 23:24:16 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E7%BB%99app%E6%B7%BB%E5%8A%A0%E6%9E%84%E5%BB%BA%E4%BF%A1%E6%81%AF/</guid>
+      <description>给APP添加构建信息  这两天在琢磨一个问题，一个APP是怎么知道自己是怎么来的呢？ 一个应用得知道自己是怎么来的，这样出了问题才知道该找谁。举个例子，当应用发生了一个线上crash，崩溃信息收集上来，然后我们打开堆栈一看懵了——这个发生崩溃的v5.c是哪个类呢？
+ 显然，代码被混淆过，我们要拿到编译时生成的mapping.txt来还原堆栈，如图
+**然而，我们编译了很多次，客官您要的是哪次的mapping文件呢？**显然，我们不仅要保留每次构建的相关信息，还得能准确区分开每次构建的产物，能做到有问题立即查询到对应构建信息。
+应用需要知道自己是“怎么来的”。
+区分不同构建结果  可以收集当前commit id，commit不同一定是不同构建。 可以生成一个较长的随机数每次构建不同。  看上去前者更优雅，但一个commit id上并不一定只有一个成功的构建，比如你做一应用叫“快音”，测试通过后调整了一些编译选项打出线上包，此时只根据commit id就无法确定是对应测试包的构建还是线上包了。
+所以，最实在的方法还是后者。
+fun runShellCommand(command: String): String { val byteOut = ByteArrayOutputStream() project.exec { commandLine = command.split(&amp;#34; &amp;#34;) standardOutput = byteOut } return String(byteOut.toByteArray()) } val buildNumber = UUID.randomUUID() val gitBranch = runShellCommand(&amp;#34;git branch --show-current&amp;#34;).trim() val gitCommitId = runShellCommand(&amp;#34;git rev-parse HEAD&amp;#34;).trim() val buildTimeMILLIS = System.currentTimeMillis() 将信息传给应用 不知道大家有没有这种习惯，在开发时加一些测试代码时判断只在Debug版本生效，即
+if (BuildConfig.DEBUG) { Toast.makeText(applicationContext, &amp;#34;test&amp;#34;, Toast.LENGTH_SHORT).show() } 这样即使我真的忘记删除这段代码也不会影响到线上，让用户看到个“test”感到莫名其妙。这里用的BuildConfig就是在Gradle构建时生成的一个类，里面包含了一些有关当前构建的信息1。</description>
+    </item>
+    
     <item>
       <title>android项目开发：持久化</title>
       <link>https://ntutn.top/posts/%E6%8C%81%E4%B9%85%E5%8C%96/</link>
@@ -17,6 +52,98 @@
       <description>《第一行代码》阅读记录，有关数据持久化存储，略过了数据库的方式。
 持久化 文件存储 先暂时只是写了个demo，有需要再深入看。
 private fun saveText(inputText: String) { try { val output = openFileOutput(&amp;#34;data&amp;#34;, Context.MODE_PRIVATE) val writer = BufferedWriter(OutputStreamWriter(output)) writer.use { it.write(inputText) } } catch (e: IOException) { e.printStackTrace() } } private fun loadText(): String { val content = StringBuilder() try { val input = openFileInput(&amp;#34;data&amp;#34;) val reader = BufferedReader(InputStreamReader(input)) reader.use { r -&amp;gt; r.forEachLine { content.appendLine(it) } } } catch (e: IOException) { e.printStackTrace() } return content.toString() } SharedPreference saveButton.</description>
+    </item>
+    
+    <item>
+      <title>安卓连连看游戏设计</title>
+      <link>https://ntutn.top/posts/%E5%AE%89%E5%8D%93%E8%BF%9E%E8%BF%9E%E7%9C%8B%E6%B8%B8%E6%88%8F%E8%AE%BE%E8%AE%A1/</link>
+      <pubDate>Sun, 25 Apr 2021 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E5%AE%89%E5%8D%93%E8%BF%9E%E8%BF%9E%E7%9C%8B%E6%B8%B8%E6%88%8F%E8%AE%BE%E8%AE%A1/</guid>
+      <description>字节取消大小周了，于是周末时间多起来了。虽然想着到处去玩，但现在疫情形势又不好了，于是安心呆在家里当一个肥宅。除了补一补番剧，就是把之前就想过的连连看游戏做出来了。
+连连看游戏规则简单，点击两个相同的元素，如果他们能在两次拐弯以内连接起来，那么就可以消除。消除后就会出现空位，可以连接的就更多了。在规定时间内连续操作，直到消除所有元素。
+虽然规则比较简单，但真正动手实现一遍还是很费工夫的。游戏既然做好了，那么我水一篇博客不过分吧:&amp;gt;
+1
+项目的代码我放到了github。写的贼丑，轻喷。 https://github.com/zerofancy/match
+资源准备 连连看需要一些素材图，可以考虑用水果、动物甚至我同学的头像等，但我想把难度设计高一点，手机屏幕就这么大，图片很小也能有比较高的辨识度，思来想去还是麻将比较合适。
+幸运的是，我找到了这么一套免费的图片素材，Mahjong Icons，只要提供一个指向这个页面的超链接就可以免费用。
+另外还需要一个应用图标，这个我是直接在Icon Park上找了一个。
+接下来将素材导入到项目，为了随处使用方便，我还定义到了一个类中：
+package top.ntutn.match /** * 麻将牌 */ object Mahjong { val bamboos = listOf( R.drawable.bamboo1, R.drawable.bamboo2, R.drawable.bamboo3, R.drawable.bamboo4, R.drawable.bamboo5, R.drawable.bamboo6, R.drawable.bamboo7, R.drawable.bamboo8, R.drawable.bamboo9 ) val dragons = listOf( R.drawable.dragon_chun, R.drawable.dragon_green, R.drawable.dragon_haku ) val faceDown = R.drawable.face_down val mans = listOf( R.drawable.man1, R.drawable.man2, R.drawable.man3, R.drawable.man4, R.drawable.man5, R.drawable.man6, R.drawable.man7, R.drawable.man8, R.drawable.man9 ) val pins = listOf( R.drawable.pin1, R.drawable.pin2, R.drawable.pin3, R.drawable.pin4, R.</description>
+    </item>
+    
+    <item>
+      <title>ClassLoader双亲委托机制探究</title>
+      <link>https://ntutn.top/posts/classloader%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%89%98%E6%9C%BA%E5%88%B6%E6%8E%A2%E7%A9%B6/</link>
+      <pubDate>Sun, 11 Apr 2021 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/classloader%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%89%98%E6%9C%BA%E5%88%B6%E6%8E%A2%E7%A9%B6/</guid>
+      <description>最近在研究抖音进入热点内流的耗时问题，种种线索指向了类加载耗时上。为此，我研究了Java类加载的双亲委托机制，并尝试给出了优化建议。
+双亲委托机制 双亲委托机制中最重要的是loadClass方法，让我们看看它是怎么实现的。
+protected Class&amp;lt;?&amp;gt; loadClass(String name, boolean resolve) throws ClassNotFoundException { // First, check if the class has already been loaded  Class&amp;lt;?&amp;gt; c = findLoadedClass(name); // 已加载过直接返回  if (c == null) { try { if (parent != null) { c = parent.loadClass(name, false); //尝试让parent加载  } else { c = findBootstrapClassOrNull(name); // bootstrap class loader是否加载过  } } catch (ClassNotFoundException e) { // ClassNotFoundException thrown if class not found  // from the non-null parent class loader  } if (c == null) { // If still not found, then invoke findClass in order  // to find the class.</description>
+    </item>
+    
+    <item>
+      <title>DebugEntrance和DebugConfig</title>
+      <link>https://ntutn.top/posts/debugentrance%E5%92%8Cdebugconfig/</link>
+      <pubDate>Mon, 22 Feb 2021 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/debugentrance%E5%92%8Cdebugconfig/</guid>
+      <description>工欲善其事，必先利其器。毕设是一个相对复杂的项目了，我觉得要想顺利完成肯定是需要一些手段帮助我调试的。于是这里我准备了debug页面，主要功能就两个：提供某个功能的入口以及存储配置（最好能直接在手机上修改）
+DebugEntrance 就是一个各种测试功能的入口。
+这个一看实现就很简单，不细说了。
+DebugConfig 因为字节自己的ABManager用着挺顺手，感觉自己项目调试时有类似这么个东西会比较舒服，于是搞了这么个东西。
+使用 先看使用：
+@ZeroConfig(key = &amp;#34;retrofit_config&amp;#34;, title = &amp;#34;Retrofit配置&amp;#34;, owner = &amp;#34;liuhaixin.zero&amp;#34;) data class RetrofitConfig(val baseUrl: String = RetrofitUtil.BASE_URL) private val retrofitConfig by zeroConfig&amp;lt;RetrofitConfig&amp;gt;() private val retrofit by lazy { Retrofit.Builder() .baseUrl(retrofitConfig?.baseUrl ?: BASE_URL) .addConverterFactory(GsonConverterFactory.create()) .client(okHttpClient) .build() } 看上去还是有点让人心动的吧。
+属性委托、泛型实化 首先是一段来自菜鸟教程的描述：
+ 属性委托指的是一个类的某个属性值不是在类中直接进行定义，而是将其托付给一个代理类，从而实现对该类属性的统一管理。
+val/var &amp;lt;属性名&amp;gt;: &amp;lt;类型&amp;gt; by &amp;lt;表达式&amp;gt; by 关键字之后的表达式就是委托, 属性的 get() 方法(以及set() 方法)将被委托给这个对象的 getValue() 和 setValue() 方法。属性委托不必实现任何接口, 但必须提供 getValue() 函数(对于 var属性,还需要 setValue() 函数)。
+ 借助这个特征，我们可以定义这样一个委托类：</description>
+    </item>
+    
+    <item>
+      <title>ViewBinding、ViewModel和LiveData</title>
+      <link>https://ntutn.top/posts/viewbindingviewmodel%E5%92%8Clivedata/</link>
+      <pubDate>Mon, 22 Feb 2021 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/viewbindingviewmodel%E5%92%8Clivedata/</guid>
+      <description>毕设项目没有历史包袱，我可以尽量向best practice努力。
+ViewBinding 无数人痛恨findViewById，并且为了干掉它做了许多尝试，比如ButterKnife、kotlin-android-extensions。
+现在，有了ViewBinding，项目中真的可以不写findViewById了。至少目前为止我的毕设项目还没有一个findViewById。
+其实与ViewBinding相似的，还有一个DataBinding，但我不太喜欢，感觉在xml里面写代码不是一个好主意。
+使用 首先在build.gradle（或build.gradle.kts）中的android块添加
+buildFeatures { viewBinding = true } 在xml中正常定义你的布局
+&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt; &amp;lt;LinearLayout xmlns:android=&amp;#34;http://schemas.android.com/apk/res/android&amp;#34; xmlns:tools=&amp;#34;http://schemas.android.com/tools&amp;#34; android:layout_width=&amp;#34;match_parent&amp;#34; android:layout_height=&amp;#34;match_parent&amp;#34; android:orientation=&amp;#34;vertical&amp;#34; tools:context=&amp;#34;.MainActivity&amp;#34;&amp;gt; &amp;lt;TextView android:id=&amp;#34;@+id/text_view&amp;#34; android:layout_width=&amp;#34;match_parent&amp;#34; android:layout_height=&amp;#34;wrap_content&amp;#34; android:text=&amp;#34;Hello World!&amp;#34; /&amp;gt; &amp;lt;Button android:id=&amp;#34;@+id/test_button&amp;#34; android:layout_width=&amp;#34;match_parent&amp;#34; android:layout_height=&amp;#34;wrap_content&amp;#34; android:text=&amp;#34;toast&amp;#34; /&amp;gt; &amp;lt;Button android:id=&amp;#34;@+id/change_button&amp;#34; android:layout_width=&amp;#34;match_parent&amp;#34; android:layout_height=&amp;#34;wrap_content&amp;#34; android:text=&amp;#34;change&amp;#34; /&amp;gt; &amp;lt;/LinearLayout&amp;gt; 接下来就可以愉快使用了
+package top.ntutn.viewmodeldemo import android.os.Bundle import android.widget.Toast import androidx.appcompat.app.AppCompatActivity import top.ntutn.viewmodeldemo.databinding.ActivityMainBinding class MainActivity : AppCompatActivity() { private lateinit var binding: ActivityMainBinding override fun onCreate(savedInstanceState: Bundle?) { super.</description>
+    </item>
+    
+    <item>
+      <title>【译】用BuildSrc和Kotlin_DSL管理Gradle依赖</title>
+      <link>https://ntutn.top/posts/%E8%AF%91%E7%94%A8buildsrc%E5%92%8Ckotlin_dsl%E7%AE%A1%E7%90%86gradle%E4%BE%9D%E8%B5%96/</link>
+      <pubDate>Sun, 21 Feb 2021 03:00:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E8%AF%91%E7%94%A8buildsrc%E5%92%8Ckotlin_dsl%E7%AE%A1%E7%90%86gradle%E4%BE%9D%E8%B5%96/</guid>
+      <description>多模块工程中一个更好的引入依赖的方法 翻译自Gradle Dependency Management With BuildSrc and Kotlin DSL
+ 第一次尝试翻译英文文章……
+要点 主要集中在如何用buildSrc目录和Kotlin DSL脚本构建一个Gradle依赖管理系统，你也会学到这样做相对使用传统Groovy代码的好处。
+如果你倾向于通过视频来看这篇博客，文末附有一个Youtube视频。
+问题 众所周知在一个快速发展的项目中维护依赖是一个乏味的工作，而传统的Groovy脚本没有code navigation、自动补全，再加上性能问题和运行时错误让这一切变得更糟糕。
+更重要的是，多数安卓开发者不懂Groovy，甚至我也不知道我之前在用Groovy做啥。
+感谢Gradle团队和社区的工作提供了一个顺畅安全的构建流程，他们提出的最棒的主意之一就是用Kotlin DSL脚本写buildSrc目录。
+解决 依赖库引入和自定义task不应该放到构建脚本中，它们应该被声明到一个独立文件中再被构建脚本使用。在这个实现的早期，开发者习惯于创建一个Gradle文件来声明所有库并在构建脚本中使用。
+这确实在一定程度上解决了问题，你可以在这篇文章读到这种方法。但这个简单方案不能解决类似自动补全和code navigation的问题，这使得在长远上看这个方案不够可靠。在这之外，buildSrc似乎有希望解决这个问题。
+ 这个目录被当作一个included build看待。在发现这个目录之后，Gradle自动编译和测试它的代码，并将编译结果放到你的构建脚本的class path中。在一个多模块的工程中只能有一个这样的目录，并且要放到工程的顶级目录中。应该优先通过script plugins因为这样更便于管理、重构和测试代码。 ——Gradle团队
+ 创建buildSrc目录 使用Kotlin DSL脚本不但能解决构建脚本中的这些问题，还能得到先进的IDE支持，包括code navigation、编译时错误提示等。最重要的，我们再也不用使用Groovy了。
+我们要做的第一件事是创建一个buildSrc目录：
+ 在工程上右键 点击New并选择Directory 把它命名为buildSrc  如果你仍然不懂怎么创建这个目录，请看这里：
+然后我们需要在这个目录里创建一个叫做build.gradle.kts的文件，在这个文件里导入插件和存储库。
+plugins{ `kotlin-dsl` } repositories { jcenter() } 完成后你还需要点击gradle的“sync now”按钮，因为gradle把它当作了一个新建目录中的普通文件。现在你可以实现Kotlin DSL脚本了。
+下一步是创建一个类似这样的目录结构src&amp;gt;main&amp;gt;java，完成后如上图所示。
+现在我们可以创建Kotlin文件来声明依赖库，管理版本或者实现自定义task。
+现在我们的目标是实现一个依赖管理系统，所以我们创建一个叫做Dependencies.kt的文件（你可以用你喜欢的任何名字）。
+完成后我们就可以通过Kotlin代码来声明依赖库和版本了。这里我们用object来声明特定的类型，例如版本号、AndroidX依赖库等。
+首先我们创建一个用来用Kotlin风格定义所有依赖库版本号的object。
+object Versions{ val constraint_layout_version = &amp;#34;1.1.3&amp;#34; val lifecycle_version = &amp;#34;2.2.0&amp;#34; val coroutines_version = &amp;#34;1.</description>
     </item>
     
   </channel>

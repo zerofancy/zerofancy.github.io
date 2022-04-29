@@ -1,0 +1,1561 @@
+<?xml-stylesheet href="/rss.xsl" type="text/xsl"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>归零幻想</title>
+    <link>https://ntutn.top/</link>
+    <description>Recent content on 归零幻想</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <copyright>CC BY-SA 4.0</copyright>
+    <lastBuildDate>Sat, 30 Apr 2022 01:33:04 +0800</lastBuildDate>
+    
+        <atom:link href="https://ntutn.top/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>连续正整数</title>
+        <link>https://ntutn.top/posts/%E8%BF%9E%E7%BB%AD%E6%AD%A3%E6%95%B4%E6%95%B0/</link>
+        <pubDate>Sat, 06 Apr 2019 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/%E8%BF%9E%E7%BB%AD%E6%AD%A3%E6%95%B4%E6%95%B0/</guid>
+        <description>归零幻想 https://ntutn.top/posts/%E8%BF%9E%E7%BB%AD%E6%AD%A3%E6%95%B4%E6%95%B0/ -&lt;!-- raw HTML omitted --&gt;
+&lt;blockquote&gt;
+&lt;p&gt;还是数据结构的网上作业，将一个整数分解为连续正整数之和，找对方向倒是也不算难……&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;有些正整数可以表示为 n (n&amp;gt;1) 个连续正整数的和，如：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;15=1+2+3+4+5
+    =4+5+6
+    =7+8
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;给定一个正整数 N，判断其是否可以表示为一组连续正整数的和，输出符合条件的解的组数。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;h2 id=&#34;input&#34;&gt;Input&lt;/h2&gt;
+&lt;pre&gt;&lt;code&gt;输入有一行，包含一个正整数 n (3≤n≤1000000000)。
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;output&#34;&gt;Output&lt;/h2&gt;
+&lt;pre&gt;&lt;code&gt;输出有一行，正整数n的符合条件的解的组数。
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;example&#34;&gt;Example&lt;/h2&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Input&lt;/th&gt;
+&lt;th&gt;Output&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;15&lt;/td&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;99&lt;/td&gt;
+&lt;td&gt;5&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;6&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;9&lt;/td&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;strong&gt;单点时限: 2.0 sec&lt;/strong&gt;
+&lt;strong&gt;内存限制: 256 MB&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cpp&#34; data-lang=&#34;cpp&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;namespace&lt;/span&gt; std;
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;()
+{
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; n;
+    cin&amp;gt;&amp;gt;n;
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; counter=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;; i&amp;lt;(&lt;span style=&#34;color:#b452cd&#34;&gt;100000&lt;/span&gt;&amp;lt;n?&lt;span style=&#34;color:#b452cd&#34;&gt;100000&lt;/span&gt;:n); i++) &lt;span style=&#34;color:#228b22&#34;&gt;//n/i-i/2+1&amp;gt;=1
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(n/i-i/&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;-i%&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;+&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;&amp;gt;=&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;&amp;amp;&amp;amp;(n/i-i/&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;-i%&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;+&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;+n/i-i/&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;-i%&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;+&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;+i-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;)*i==n*&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;)
+        {
+            counter++;
+        }
+        &lt;span style=&#34;color:#228b22&#34;&gt;//cout&amp;lt;&amp;lt;&amp;#34;test-&amp;#34;&amp;lt;&amp;lt;i&amp;lt;&amp;lt;endl;
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    }
+    cout &amp;lt;&amp;lt; counter &amp;lt;&amp;lt; endl;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;枚举就好了。需要根据分成的整数的个数i讨论，但为了显得更牛X我就写到一起了，上面的&lt;code&gt;n/i-i/2-i%2+1&lt;/code&gt;无论在奇偶情况下都是拆分得到的整数的第一个&lt;em&gt;理应&lt;/em&gt;是多少。&lt;/p&gt;
+&lt;p&gt;判断的主要逻辑：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;第一个数字大于等于1&lt;/li&gt;
+&lt;li&gt;所有数之和等于原数&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;求和在这里就不必用循环了，用等差数列明显更高效。注意这里计算时为了防止整数除法运算截断的问题，将除法移动到了等式的右边。&lt;/p&gt;
+- https://ntutn.top/posts/%E8%BF%9E%E7%BB%AD%E6%AD%A3%E6%95%B4%E6%95%B0/ - CC BY-SA 4.0</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>使用映像劫持技术屏蔽电脑中的广告进程</title>
+        <link>https://ntutn.top/posts/%E4%BD%BF%E7%94%A8%E6%98%A0%E5%83%8F%E5%8A%AB%E6%8C%81%E6%8A%80%E6%9C%AF%E5%B1%8F%E8%94%BD%E7%94%B5%E8%84%91%E4%B8%AD%E7%9A%84%E5%B9%BF%E5%91%8A%E8%BF%9B%E7%A8%8B/</link>
+        <pubDate>Thu, 28 Mar 2019 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/%E4%BD%BF%E7%94%A8%E6%98%A0%E5%83%8F%E5%8A%AB%E6%8C%81%E6%8A%80%E6%9C%AF%E5%B1%8F%E8%94%BD%E7%94%B5%E8%84%91%E4%B8%AD%E7%9A%84%E5%B9%BF%E5%91%8A%E8%BF%9B%E7%A8%8B/</guid>
+        <description>归零幻想 https://ntutn.top/posts/%E4%BD%BF%E7%94%A8%E6%98%A0%E5%83%8F%E5%8A%AB%E6%8C%81%E6%8A%80%E6%9C%AF%E5%B1%8F%E8%94%BD%E7%94%B5%E8%84%91%E4%B8%AD%E7%9A%84%E5%B9%BF%E5%91%8A%E8%BF%9B%E7%A8%8B/ -&lt;!-- raw HTML omitted --&gt;
+&lt;blockquote&gt;
+&lt;p&gt;映像劫持（Image File Execution Options），简单的说法，就是当你打开的是程序A，而运行的确是程序B。映像劫持其实是Windows内设的用来调试程序的功能，但是现在却往往被病毒恶意利用。当用户双击对应的程序后，操作系统就会给外壳程序（例如“explorer.exe”）发布相应的指令，其中包含有执行程序的路径和文件名，然后由外壳程序来执行该程序。事实上在该过程中，Windows还会在注册表的上述路径中查询所有的映像劫持子键，如果存在和该程序名称完全相同的子键，就查询对应子健中包含的“dubugger”键值名，并用其指定的程序路径来代替原始的程序，之后执行的是遭到“劫持”的虚假程序。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;国内很多软件都有重度广告，“资讯”、“新闻”、“弹窗”，不胜其烦。直接找到广告进程删除掉，结果一自动更新，又回来了。&lt;/p&gt;
+&lt;p&gt;于是，我想到了“映像劫持”：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ini&#34; data-lang=&#34;ini&#34;&gt;&lt;span style=&#34;color:#658b00&#34;&gt;Windows Registry Editor Version 5.00&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SLBService.exe]&lt;/span&gt;
+&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\TsService.exe]&lt;/span&gt;
+&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\FoxitDesktopAd.exe]&lt;/span&gt;
+&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\FoxitProtect.exe]&lt;/span&gt;
+&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\LCServer.exe]&lt;/span&gt;
+&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\LRServer.exe]&lt;/span&gt;
+&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\2345MiniPage.exe]&lt;/span&gt;
+&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SohuNews.exe]&lt;/span&gt;
+&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\PinyinUp.exe]&lt;/span&gt;
+&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SGDownload.exe]&lt;/span&gt;
+&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SGMedalLoader.exe]&lt;/span&gt;
+&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SogouCloud.exe]&lt;/span&gt;
+&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;保存为&lt;code&gt;.reg&lt;/code&gt;文件，导入注册表即可。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+- https://ntutn.top/posts/%E4%BD%BF%E7%94%A8%E6%98%A0%E5%83%8F%E5%8A%AB%E6%8C%81%E6%8A%80%E6%9C%AF%E5%B1%8F%E8%94%BD%E7%94%B5%E8%84%91%E4%B8%AD%E7%9A%84%E5%B9%BF%E5%91%8A%E8%BF%9B%E7%A8%8B/ - CC BY-SA 4.0</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>数据结构与算法 C&#43;&#43;编程能力评估</title>
+        <link>https://ntutn.top/posts/c&#43;&#43;%E7%BC%96%E7%A8%8B%E8%83%BD%E5%8A%9B%E8%AF%84%E4%BC%B0/</link>
+        <pubDate>Thu, 28 Mar 2019 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/c&#43;&#43;%E7%BC%96%E7%A8%8B%E8%83%BD%E5%8A%9B%E8%AF%84%E4%BC%B0/</guid>
+        <description>归零幻想 https://ntutn.top/posts/c&#43;&#43;%E7%BC%96%E7%A8%8B%E8%83%BD%E5%8A%9B%E8%AF%84%E4%BC%B0/ -&lt;!-- raw HTML omitted --&gt;
+&lt;h2 id=&#34;题目1&#34;&gt;题目1&lt;/h2&gt;
+&lt;p&gt;向类SeqList中插入数据，请根据main函数中的调用，完成Insert和output函数。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;ul&gt;
+&lt;li&gt;Input&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;    5
+    1 2 3 4 5
+    2 9
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;Output&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;1 2 3 4 5
+1 2 9 3 4 5
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;Answer&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cpp&#34; data-lang=&#34;cpp&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;stdlib.h&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;namespace&lt;/span&gt; std;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;SeqList&lt;/span&gt;
+{
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt;:
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; * data;
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; last; &lt;span style=&#34;color:#228b22&#34;&gt;// index of the last element
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt;:
+    SeqList ( &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; sz );
+    ~SeqList ( )
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;delete&lt;/span&gt; [ ] data;
+    }
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;input&lt;/span&gt; ();
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;output&lt;/span&gt;() ;
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;Insert&lt;/span&gt;   ( &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &amp;amp;x, &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i);
+}  ;
+SeqList::SeqList ( &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; sz )
+{
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; ( sz &amp;gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt; )
+    {
+        data = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;[sz];
+        last = -&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;;
+    }
+}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; SeqList:: input()
+{
+    cin &amp;gt;&amp;gt;last;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; (&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i&amp;lt;last; i++)
+        cin&amp;gt;&amp;gt;data [i];
+    last--;
+}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; SeqList::output()
+{
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt; fi=&lt;span style=&#34;color:#658b00&#34;&gt;false&lt;/span&gt;;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i&amp;lt;=last; i++)
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(!fi)
+        {
+            fi=!fi;
+            cout&amp;lt;&amp;lt;data[i];
+        }&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt;{
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39; &amp;#39;&lt;/span&gt;&amp;lt;&amp;lt;data[i];
+        }
+    }
+    cout&amp;lt;&amp;lt;endl;
+}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; SeqList::Insert(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;&amp;amp; x, &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i)
+{
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i1=last;i1&amp;gt;=i;i1--){
+        data[i1+&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;]=data[i1];
+    }
+    data[i]=x;
+    last++;
+}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;()
+{
+    SeqList myList(&lt;span style=&#34;color:#b452cd&#34;&gt;50&lt;/span&gt;);
+    myList.input();
+    myList.output();
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; where,value;
+    cin &amp;gt;&amp;gt;where;
+    cin &amp;gt;&amp;gt;value;
+    myList.Insert(value,where);
+    myList.output ();
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;题目2&#34;&gt;题目2&lt;/h2&gt;
+&lt;p&gt;已知一块靶场大小为m*n（m行n列），每个点上都有一面旗子，我们的炮兵发射炮弹，炮弹一次只能炸掉一面旗子，每次炮弹的落点坐标都有记录，问你几炮过后，靶场还剩下几面旗子呢？&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Input&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;有若干行，第一行为两个整数m,n，以空格分隔，都是整数，且1&amp;lt;=m&amp;lt;=n&amp;lt;=100；&lt;/p&gt;
+&lt;p&gt;接下来有若干行，每行有两个整数x,y，代表炮弹落点的坐标（行、列坐标，编号从0开始）。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;3 3
+1 1
+1 1
+99 99
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;Output&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;一个整数，代表最后靶场上剩余的旗子数。&lt;/p&gt;
+&lt;p&gt;提示：炮弹可能打在同一个位置，也可能脱靶，但保证在100*100的范围内。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;8
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;Answer&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cpp&#34; data-lang=&#34;cpp&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#define N 105
+&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;namespace&lt;/span&gt; std;
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;()
+{
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt; data[N][N];
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;i&amp;lt;N;i++){
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i2=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;i2&amp;lt;N;i2++){
+            data[i][i2]=&lt;span style=&#34;color:#658b00&#34;&gt;false&lt;/span&gt;;
+        }
+    }
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; m,n;
+    cin&amp;gt;&amp;gt;m&amp;gt;&amp;gt;n;
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; res=m*n;
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; x,y;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt;(cin&amp;gt;&amp;gt;x&amp;gt;&amp;gt;y){
+        data[x][y]=&lt;span style=&#34;color:#658b00&#34;&gt;true&lt;/span&gt;;
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;i&amp;lt;m;i++){
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i2=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;i2&amp;lt;n;i2++){
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(data[i][i2]){
+                res--;
+            }
+        }
+    }
+    cout&amp;lt;&amp;lt;res&amp;lt;&amp;lt;endl;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;题目3&#34;&gt;题目3&lt;/h2&gt;
+&lt;p&gt;买房面积不要求太大，环境不要求太好，只要单价够便宜就已经很满足啦~现在挑选了一些房源，请你帮忙选一选，哪个最适合呢？小本本上记录了房子的名称（字母和数字组成，无空格）、面积和总价，你来帮编个程序自动计算一下吧。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Input&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;第一行为一个整数N(1&amp;lt;=N&amp;lt;=100)，表示接下来有N套房源信息；&lt;/p&gt;
+&lt;p&gt;接下来有N行，每行包括房源名称(不超过100个字符)、面积和总价（double类型，小数点后保留两位），以空格分隔。&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;3
+Tangdaowan0101 50 50
+Jiangshan1314 49 50
+Jinshatan1111 51 50
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;Output&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;Jinshatan1111 51.00 50.00
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;仅一行，为最适合的房源信息，以空格分隔，末尾换行。&lt;/p&gt;
+&lt;p&gt;测试用例保证没有单价重复的情况。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Answer&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cpp&#34; data-lang=&#34;cpp&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;stdio.h&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;string.h&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;limits.h&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;typedef&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;struct&lt;/span&gt;
+{
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; name[&lt;span style=&#34;color:#b452cd&#34;&gt;101&lt;/span&gt;];
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;double&lt;/span&gt; area;
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;double&lt;/span&gt; sum;
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;double&lt;/span&gt; avg;
+} House;
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;Gethouse&lt;/span&gt;(House*h,&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; n){
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;double&lt;/span&gt; res=INT_MAX;
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; res_num=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;i&amp;lt;n;i++){
+        h[i].avg=h[i].sum/h[i].area;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(h[i].avg&amp;lt;res){
+            res=h[i].avg;
+            res_num=i;
+       }
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; res_num;
+}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;()
+{
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; n,i,flag = &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;&lt;span style=&#34;color:#228b22&#34;&gt;//n有几行
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    scanf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;%d&amp;#34;&lt;/span&gt;,&amp;amp;n);
+    House h[n];
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; (i = &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i &amp;lt; n; i ++)
+      scanf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;%s%lf%lf&amp;#34;&lt;/span&gt;,h[i].name,&amp;amp;h[i].area,&amp;amp;h[i].sum);
+    flag= Gethouse(h,n);
+    printf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;%s %.2f %.2f&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;,h[flag].name, h[flag].area, h[flag].sum);
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;题目4&#34;&gt;题目4&lt;/h2&gt;
+&lt;p&gt;实现链表的输入（已实现）、输出和删除成员函数。&lt;/p&gt;
+&lt;p&gt;输入时，根据endtag确定是否结束输入；&lt;/p&gt;
+&lt;p&gt;删除时，根据下标（从0开始）。&lt;/p&gt;
+&lt;p&gt;注意，输入的顺序跟存放的顺序以及输出的顺序是相反的。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Input&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;1 2 3 4 5 0
+2
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;Output&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;5 4 3 2 1
+5 4 2 1
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;Answer&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cpp&#34; data-lang=&#34;cpp&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;#34;stdlib.h&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;#34;iostream&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;cstdlib&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;namespace&lt;/span&gt; std ;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;List&lt;/span&gt;; &lt;span style=&#34;color:#228b22&#34;&gt;//前视定义,否则友元无法定义
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;LinkNode&lt;/span&gt;
+{
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;friend&lt;/span&gt;  List; &lt;span style=&#34;color:#228b22&#34;&gt;//链表结点类的定义
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt;:
+    LinkNode *link;
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; data;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt;:
+    LinkNode(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &amp;amp; item, LinkNode *ptr = &lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;)
+    {
+        data=item;
+        link=ptr;
+    }
+    LinkNode (LinkNode *ptr = &lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;)
+    {
+        link=ptr;
+    }
+    ~LinkNode() {};
+};
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;List&lt;/span&gt;
+{
+    &lt;span style=&#34;color:#228b22&#34;&gt;//单链表类的定义
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt;:
+    LinkNode *first; &lt;span style=&#34;color:#228b22&#34;&gt;//指向首结点的指针
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt;:
+    List ()
+    {
+        first = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; LinkNode ();   &lt;span style=&#34;color:#228b22&#34;&gt;// 带头结点
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    }
+    ~List ()
+    {
+        MakeEmpty();   &lt;span style=&#34;color:#228b22&#34;&gt;//析构函数
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    }
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;MakeEmpty&lt;/span&gt; ( );      &lt;span style=&#34;color:#228b22&#34;&gt;//链表置空
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;Remove&lt;/span&gt; ( &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i );
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;input&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;  endTag);
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;output&lt;/span&gt;();
+};
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; List:: MakeEmpty ( )
+{
+    LinkNode *q;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt; (  first-&amp;gt;link != &lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt; )
+    {
+        q = first-&amp;gt;link;
+        first-&amp;gt;link = q-&amp;gt;link;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;delete&lt;/span&gt; q;
+    }
+};
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; List :: input (&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; endTag)
+{
+    LinkNode  *newnode;
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; val;
+    cin&amp;gt;&amp;gt;val;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt;(val!=endTag)
+    {
+        newnode=&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; LinkNode (val);
+        newnode-&amp;gt;link=first-&amp;gt;link;
+        first-&amp;gt;link=newnode;
+        cin&amp;gt;&amp;gt;val;
+    }
+}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; List::Remove(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i)
+{
+    LinkNode*tmp=first;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i2=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;i2&amp;lt;i;i2++){
+        tmp=tmp-&amp;gt;link;
+    }
+    LinkNode*tmp1=tmp-&amp;gt;link;
+    tmp-&amp;gt;link=tmp-&amp;gt;link-&amp;gt;link;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;delete&lt;/span&gt;(tmp1);
+}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; List::output()
+{
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; fi=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+    LinkNode*tmp=first-&amp;gt;link;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt;(tmp!=&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;)
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(fi++)
+        {
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39; &amp;#39;&lt;/span&gt;&amp;lt;&amp;lt;tmp-&amp;gt;data;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt;
+        {
+            cout&amp;lt;&amp;lt;tmp-&amp;gt;data;
+        }
+        tmp=tmp-&amp;gt;link;
+    }
+    cout&amp;lt;&amp;lt;endl;
+}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;()
+{
+    List l;
+    l.input(&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;); &lt;span style=&#34;color:#228b22&#34;&gt;//0为输入的结束数字
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    l.output ();
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; index;
+    cin&amp;gt;&amp;gt;index; &lt;span style=&#34;color:#228b22&#34;&gt;//要删除的元素的下标，下标从0 开始
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    l.Remove(index);
+    l.output (); &lt;span style=&#34;color:#228b22&#34;&gt;//删除后输出
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://ntutn.top/posts/c&#43;&#43;%E7%BC%96%E7%A8%8B%E8%83%BD%E5%8A%9B%E8%AF%84%E4%BC%B0/ - CC BY-SA 4.0</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>直</title>
+        <link>https://ntutn.top/posts/%E7%9B%B4/</link>
+        <pubDate>Wed, 27 Mar 2019 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/%E7%9B%B4/</guid>
+        <description>归零幻想 https://ntutn.top/posts/%E7%9B%B4/ -&lt;!-- raw HTML omitted --&gt;
+&lt;h1 id=&#34;直&#34;&gt;直&lt;/h1&gt;
+&lt;blockquote&gt;
+&lt;p&gt;发现了自己初中写的作文，我当年这么中二的吗……&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;树是直的，直得挺拔入云；山是直的，直得直插霄汉；竹是直的直得虚心髙洁。是啊，巍峨的直无处不在。&lt;/p&gt;
+&lt;h2 id=&#34;尺&#34;&gt;尺&lt;/h2&gt;
+&lt;p&gt;人们仰慕大自然的直，于是制造了尺。尺，为直而生。再纷乱的外界环境，它总恪尽职守，一丝不苟。即使是它的制造者，它也将毫不留情地指出他的过失。&lt;/p&gt;
+&lt;p&gt;人本如此。看到它，我想起了屈子，想起了岳将军，想起包拯，想起了正直的中国人。&lt;/p&gt;
+&lt;h2 id=&#34;弓&#34;&gt;弓&lt;/h2&gt;
+&lt;p&gt;尺是直的，但在不可抗力下它还是弯曲了。有时弯也是一种无奈，正直的树也抵不住弯曲的斧。那就弯吧。不！你没看到，弦是直的。弦如何直？那是弓在抗拒那股不可抗力！是啊，弓是弯的，但它的心是直的。它仍是一心向直的。&lt;/p&gt;
+&lt;p&gt;人应如此。狂风袭来，竹顺势而弯，但风速减小了。虽然只有一点。看到它，我想到了周树人，想到了郭沫若，想到了在黑暗中抗争的中国人。&lt;/p&gt;
+&lt;h2 id=&#34;箭&#34;&gt;箭&lt;/h2&gt;
+&lt;p&gt;弓是弯的，但它不甘继续弯下去。于是它化作一支羽箭，反射着金色阳光，即使这直是有代价的。它是一根选择燃烧的火柴。它将烧尽，但它选择了燃烧。&lt;/p&gt;
+&lt;p&gt;看到它，我想到了荆轲，想到了谭嗣同，想到了敢于与黑暗抗争的中国人。&lt;/p&gt;
+&lt;p&gt;中华民族是一个直的民族，中国人本色如此。中国人是直的，即使在不可抗力下弯了，心还是直的。而且，他们会抗争，不管那是不是不可抗力。在忍无可忍时，他们会用自己的生命，划出一道直线。中国，拉着这样的弓，射出这样的箭，复兴也是必然的。&lt;/p&gt;
+&lt;p&gt;这就是那个直的传说。&lt;/p&gt;
+- https://ntutn.top/posts/%E7%9B%B4/ - CC BY-SA 4.0</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>堆栈ADT实现及应用</title>
+        <link>https://ntutn.top/posts/%E5%A0%86%E6%A0%88adt%E5%AE%9E%E7%8E%B0%E5%8F%8A%E5%BA%94%E7%94%A8/</link>
+        <pubDate>Tue, 26 Mar 2019 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/%E5%A0%86%E6%A0%88adt%E5%AE%9E%E7%8E%B0%E5%8F%8A%E5%BA%94%E7%94%A8/</guid>
+        <description>归零幻想 https://ntutn.top/posts/%E5%A0%86%E6%A0%88adt%E5%AE%9E%E7%8E%B0%E5%8F%8A%E5%BA%94%E7%94%A8/ -&lt;!-- raw HTML omitted --&gt;
+&lt;blockquote&gt;
+&lt;p&gt;假设栈ADT的数据元素为整数，栈ADT的实现采用顺序存储结构。现要用栈来辅助完成任意非负十进制整数到Base(Base不大于35)进制的转换。部分代码已经给出，请补充完善栈溢出处理函数和主函数。  注意：只提交需要补充的函数，其他代码不允许自己重写和修改。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;栈溢出处理函数&lt;code&gt;overflowProcess&lt;/code&gt;：当栈满时，将栈的空间在原来基础上扩大1倍。&lt;/p&gt;
+&lt;p&gt;主函数： 输入一个非负十进制整数n及要转换的进制&lt;code&gt;Base&lt;/code&gt;，输出其转换后的进制形式，以及长度。输出格式如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;($...$)10=(#...#)Base 
+Length=转换进制后数的位数
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;其中&lt;code&gt;$...$&lt;/code&gt;是输入的十进制数n，&lt;code&gt;#...#&lt;/code&gt;是转换得到的&lt;code&gt;Base&lt;/code&gt;进制数，如果转换后位码多于1位，则用大写字母A,B,&amp;hellip;等表示，&lt;code&gt;10-A&lt;/code&gt;, &lt;code&gt;11-B&lt;/code&gt;,&amp;hellip;&amp;hellip;&lt;/p&gt;
+&lt;p&gt;例如，输入：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;1024 2
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;输出：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;(1024)10=(10000000000)2
+Length=11
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;再如，输入：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;25 30
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;输出：&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;(25)10=(P)30
+Length=1
+&lt;/code&gt;&lt;/pre&gt;&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;预置代码如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-c++&#34; data-lang=&#34;c++&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;namespace&lt;/span&gt; std;
+&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;stdio.h&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;stdlib.h&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;typedef&lt;/span&gt;  &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;  ElemType;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;SeqStack&lt;/span&gt;  
+{  &lt;span style=&#34;color:#228b22&#34;&gt;//顺序栈类定义
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt;:     
+        ElemType *elements; &lt;span style=&#34;color:#228b22&#34;&gt;//数组存放栈元素
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; top;             &lt;span style=&#34;color:#228b22&#34;&gt;//栈顶指示器
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; maxSize;               &lt;span style=&#34;color:#228b22&#34;&gt;//栈最大容量     
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;overflowProcess&lt;/span&gt;(); &lt;span style=&#34;color:#228b22&#34;&gt;//栈的溢出处理
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt;:
+         SeqStack(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; sz);                    &lt;span style=&#34;color:#228b22&#34;&gt;//构造函数
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;         ~SeqStack() { &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;delete&lt;/span&gt; []elements; };        &lt;span style=&#34;color:#228b22&#34;&gt;//析构函数
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;         &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;Push&lt;/span&gt;(ElemType x);    &lt;span style=&#34;color:#228b22&#34;&gt;//进栈
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;         &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;Pop&lt;/span&gt;(ElemType &amp;amp;x);     &lt;span style=&#34;color:#228b22&#34;&gt;//出栈
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;         &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;IsEmpty&lt;/span&gt;() &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; { &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; top == -&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;; }
+         &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;IsFull&lt;/span&gt;() &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; { &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; top == maxSize-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;; }
+         &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;GetSize&lt;/span&gt;() &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; {&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; top+&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;;}
+};
+SeqStack::SeqStack(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; sz)
+{  elements=&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; ElemType[sz];  &lt;span style=&#34;color:#228b22&#34;&gt;//申请连续空间
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(elements==&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;) {cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;空间申请错误！&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;exit(&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;);}
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; { top=-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;;       &lt;span style=&#34;color:#228b22&#34;&gt;//栈顶指示器指向栈底
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;               maxSize=sz;     &lt;span style=&#34;color:#228b22&#34;&gt;//栈的最大空间
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;               };
+};
+&lt;span style=&#34;color:#228b22&#34;&gt;/*
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;**********************************************************
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;  补充overflowProcess() 函数
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;**********************************************************
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;*/&lt;/span&gt;
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; SeqStack::Push(ElemType x) 
+{   &lt;span style=&#34;color:#228b22&#34;&gt;//若栈满,则溢出处理，将元素x插入该栈栈顶
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (IsFull() == &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;) overflowProcess();   &lt;span style=&#34;color:#228b22&#34;&gt;//栈满
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    elements[++top] = x;       &lt;span style=&#34;color:#228b22&#34;&gt;//栈顶指针先加1, 再元素进栈
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;}; 
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; SeqStack::Pop(ElemType &amp;amp; x) 
+{&lt;span style=&#34;color:#228b22&#34;&gt;//若栈不空，函数退出栈顶元素并将栈顶元素的值赋给x,
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#228b22&#34;&gt;//返回true，否则返回false
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;   &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (IsEmpty() == &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+    x = elements[top--];           &lt;span style=&#34;color:#228b22&#34;&gt;//先取元素，栈顶指针退1
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;      &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;;    &lt;span style=&#34;color:#228b22&#34;&gt;//退栈成功
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;};
+&lt;span style=&#34;color:#228b22&#34;&gt;/*
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;**************************************************************
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;  补充mian()函数
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;**************************************************************
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;*/&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;分析和错误&#34;&gt;分析和错误&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;OverflowProcess&lt;/code&gt;，用于栈溢出处理，一般申请原长度二倍的存储空间。&lt;/p&gt;
+&lt;p&gt;进制转换，10进制转n进制，除n取余法。&lt;/p&gt;
+&lt;p&gt;不能通过隐藏样例，认为是有类似0100之类零开头的结果，写代码排除，还是不行。&lt;/p&gt;
+&lt;p&gt;多次尝试无法通过，与通过的同学对比，发现是溢出处理写错了，在申请完二倍的空间后没让&lt;code&gt;maxSize&lt;/code&gt;乘二。其实他的也写错了，不过因为他开的初始空间足够大这个函数压根没执行到，而强迫症的我就被卡了。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;不得不吐槽的一点是题目中竟然让我补充&lt;code&gt;mian&lt;/code&gt;函数……&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;answer&#34;&gt;Answer&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-c++&#34; data-lang=&#34;c++&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;/*
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;**********************************************************
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;  补充overflowProcess() 函数
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;**********************************************************
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;*/&lt;/span&gt;
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; SeqStack::overflowProcess(){
+    ElemType*tmp=&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; ElemType[maxSize*&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;];
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;i&amp;lt;maxSize;i++){
+        tmp[i]=elements[i];
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;delete&lt;/span&gt;[] elements;
+    elements=tmp;
+    maxSize*=&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;;
+}
+&lt;span style=&#34;color:#228b22&#34;&gt;/*
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;**************************************************************
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;  补充mian()函数
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;**************************************************************
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;*/&lt;/span&gt;
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;(){
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; n,base;
+    SeqStack*stk=&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; SeqStack(&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;);
+    cin&amp;gt;&amp;gt;n&amp;gt;&amp;gt;base;
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; tmp=n;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt;(tmp&amp;gt;=base){
+        stk-&amp;gt;Push(tmp%base);
+        tmp=tmp/base;
+    }
+    stk-&amp;gt;Push(tmp);
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; counter=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+    cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;(&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;n&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;)10=&amp;#34;&lt;/span&gt;;
+    cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;(&amp;#34;&lt;/span&gt;;
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; tmp1;
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt; flag=&lt;span style=&#34;color:#658b00&#34;&gt;true&lt;/span&gt;;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt;(stk-&amp;gt;Pop(tmp1)){
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(flag&amp;amp;&amp;amp;tmp1==&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;){
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;continue&lt;/span&gt;;
+        }&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt;{
+            flag=&lt;span style=&#34;color:#658b00&#34;&gt;false&lt;/span&gt;;
+        }
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; tmp2;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(tmp1&amp;gt;&lt;span style=&#34;color:#b452cd&#34;&gt;9&lt;/span&gt;){
+            tmp2=tmp1-&lt;span style=&#34;color:#b452cd&#34;&gt;10&lt;/span&gt;+&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;A&amp;#39;&lt;/span&gt;;
+        }&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt;{
+            tmp2=tmp1+&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;0&amp;#39;&lt;/span&gt;;
+        }
+        cout&amp;lt;&amp;lt;tmp2;
+        counter++;
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(counter==&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;){
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+        counter++;
+    }
+    cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;)&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;base&amp;lt;&amp;lt;endl;
+    cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Length=&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;counter&amp;lt;&amp;lt;endl;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;delete&lt;/span&gt; stk;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://ntutn.top/posts/%E5%A0%86%E6%A0%88adt%E5%AE%9E%E7%8E%B0%E5%8F%8A%E5%BA%94%E7%94%A8/ - CC BY-SA 4.0</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>重装机兵</title>
+        <link>https://ntutn.top/posts/%E9%87%8D%E8%A3%85%E6%9C%BA%E5%85%B5/</link>
+        <pubDate>Mon, 25 Mar 2019 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/%E9%87%8D%E8%A3%85%E6%9C%BA%E5%85%B5/</guid>
+        <description>归零幻想 https://ntutn.top/posts/%E9%87%8D%E8%A3%85%E6%9C%BA%E5%85%B5/ -&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2022/04/5f99d24152d225af453f2e8d52f1ac0a.jpg&#34; alt=&#34;重装机兵&#34;&gt;&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;h2 id=&#34;拉多梦的起点&#34;&gt;拉多：梦的起点&lt;/h2&gt;
+&lt;p&gt;主角，一个满脑子都是不切实际的想法的负气出走的小毛孩，开始了他伟大的征途。这里就按照后面作品的称号吧。&lt;/p&gt;
+&lt;p&gt;首先回家，箱子里面有5G，聊胜于无吧。去买几个参丸，准备，走。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;h3 id=&#34;找到战车&#34;&gt;找到战车&lt;/h3&gt;
+&lt;p&gt;出镇，去东南方向的山洞，需要逃跑的怪物类型：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;仿生蜗牛&lt;/li&gt;
+&lt;li&gt;生物炮&lt;/li&gt;
+&lt;li&gt;加农炮&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;基本是一路逃跑到了山洞最深处，喝个参丸，与挡路的狗对话。&lt;/p&gt;
+&lt;p&gt;硬抗战狗一发攻击，然后&lt;code&gt;狼&lt;/code&gt;会出现，并帮你打败战狗。&lt;/p&gt;
+&lt;p&gt;山洞的战车太破，&lt;code&gt;狼&lt;/code&gt;看不上，只拿走了副炮（徒手拆副炮啊）。于是这就是咱的第一辆战车了。&lt;/p&gt;
+&lt;p&gt;将山洞里稍微搜刮一下，也许去找开始打不过的怪物报个仇。相当舒服。&lt;/p&gt;
+&lt;p&gt;拉多有个规矩，就是战车不允许开进镇子，虽然没啥影响，但总是很不爽，毕竟好不容易找到战车总是想找人显摆一下啊。貌似这破规矩一直延续到第四部，香泽丽舍也有类似规矩。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;BUG：给战车吃个参丸，然后人的HP就变成一个极大的值……&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;水怪&#34;&gt;水怪&lt;/h3&gt;
+&lt;p&gt;作为赏金猎人，当然只有猎杀赏金首获得赏金才是最有趣的。可惜第一代这些元素不是很多，如果是第四代，任务系统是很重要的。&lt;/p&gt;
+&lt;p&gt;水怪不是很强，基本拿到战车后就可以直接开BOSS了。&lt;/p&gt;
+&lt;p&gt;首先去加满弹药和装甲，然后先向西走，再向北走，路上会看到一个山洞。进入，顺着箭头走，然后……就掉坑了。第一次玩的玩家基本都被坑过。在掉下来的这层到处走走，遇到水怪的概率很高。基本只用主炮输出就能打过。&lt;/p&gt;
+&lt;p&gt;顺着坡爬上去，在另一个方向小心去拿那个箱子，是副炮。由于打水怪消耗不少装甲片，现在基本可以直接装备。副炮是无限弹药的，对于清小怪很有帮助。&lt;/p&gt;
+&lt;p&gt;回镇补充一下，准备去下一个镇子。&lt;/p&gt;
+&lt;p&gt;关卡，只要开着战车去，就会让你通过。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;打赢后记得去情报处领赏金。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;麦基&#34;&gt;麦基&lt;/h2&gt;
+&lt;p&gt;第一次玩我就没进入麦基镇，直接错过去了。在你向东走，路过一个小屋的标志，那就是麦基镇了。&lt;/p&gt;
+&lt;h3 id=&#34;宝石镜&#34;&gt;宝石镜&lt;/h3&gt;
+&lt;p&gt;进入麦基，首先看到一片白薯地，耕会儿地吧，不要每天都打打杀杀的【滑稽】。在耕地过程中会找到一枚戒指，拿到屋里可以换得宝石镜，虽然现在暂时没用，但是是最强人类装备的四个零件之一。&lt;/p&gt;
+&lt;h3 id=&#34;传送装置时空隧道&#34;&gt;传送装置（时空隧道）&lt;/h3&gt;
+&lt;p&gt;坐传送装置到拉多镇，与门口一直堵门的人对话他就会让开，以后拉多也就可以使用传真了。我个人认为这个设计是为了避免BUG，毕竟这个游戏传真使用有一定概率穿送到生命科学研究所，而在拉多这样肯定是不合理的，于是大概程序员灵机一动……&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;在梦想起飞版本中的确有这个BUG，可以借此避免探测器球体和气息屏蔽仪被回收&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;生命科学研究所&#34;&gt;生命科学研究所&lt;/h2&gt;
+&lt;p&gt;既然前面提到了，就在这里说一说吧。在传真出错时会传送到生命科学研究所，里面一个人都没有，设备都是故障。到自动售货机面前调查一下，可以找到一个再生丸，可以让死人复活，而且使用后这里会再出现一个。实际用处不大，因为完全可以去直接找明奇博士复活。&lt;/p&gt;
+&lt;h2 id=&#34;波布&#34;&gt;波布&lt;/h2&gt;
+&lt;p&gt;从麦基继续向东，可以到达波布。&lt;/p&gt;
+&lt;h3 id=&#34;给学校捐款与bug&#34;&gt;给学校捐款与BUG&lt;/h3&gt;
+&lt;p&gt;在波布给学校捐款一定数量后会在镇子中央给主角立个雕像，&lt;em&gt;然而当你捐款数额超过了自己实际拥有的钱数，钱没扣，但雕像立起来了……&lt;/em&gt;&lt;/p&gt;
+&lt;h3 id=&#34;伙伴以及复制战车bug&#34;&gt;伙伴以及复制战车BUG&lt;/h3&gt;
+&lt;p&gt;在波布南边有一个房子，开着战车进去，然后走进屋里。这时屋里跑出来一个熊孩子，开上你的战车就到处乱逛。这熊孩子就是我们诱拐的目标，未来的机械师克里夫。走上前与他对话就可以让他加入了。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;他开车开的挺快，可以去树那里堵他
+克里夫上自己的战车，于是就有人想，如果自己先一步上车，会怎样？&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;于是就有人进行了实验。结果表明：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;如果你先上车，克里夫会停在你面前，对话也得不到什么结果&lt;/li&gt;
+&lt;li&gt;如果克里夫先上车，参照前文&lt;/li&gt;
+&lt;li&gt;如果同时上车，结果……&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;两人都上车了，战车变成了两辆！当然这只是一个BUG，如果此时下车，复制的战车也会消失。这时，两辆车用的是同一套数据，这就造成一些判定也就可以被绕过。比如买一发特殊炮弹（铁弹）理应只能发射一枚炮弹的，但却发射两枚，于是就溢出，然后弹仓多了256枚特殊炮弹（没有名字的，价格还特别贵），然后卖掉，基本就不愁钱了。&lt;/p&gt;
+&lt;h3 id=&#34;水鬼&#34;&gt;水鬼&lt;/h3&gt;
+&lt;p&gt;找到伙伴后，去波布进行一波修整，基本就可以开第二个BOSS了。需要进行的准备有：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;对武器进行一次升级&lt;/li&gt;
+&lt;li&gt;买一个传真&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;说实话即使到现在我都感觉这游戏有些翻译很诡异，“传真”是一个传送装置（在第二部翻译叫“犬系统”），“金甲”被打烂会变成“金靴”……&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;去给伙伴租一辆战车&lt;/li&gt;
+&lt;li&gt;补充弹药和装甲片&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;第二个BOSS&lt;code&gt;水鬼&lt;/code&gt;在波布东边的桥上出没，在上面多转转就能遇到。&lt;/p&gt;
+&lt;p&gt;没什么要注意的，记得先打&lt;strong&gt;蛙人&lt;/strong&gt;，后打&lt;strong&gt;水鬼&lt;/strong&gt;。你可能在波布见到过有卖特种炮弹“榴弹”，估计本来按照设计应该是用来打蛙人的，但是实际发现好像根本用不到，直接主炮硬刚就行。&lt;/p&gt;
+&lt;p&gt;打水鬼时，水鬼在HP比较低时有概率潜入水中恢复HP。这里要看运气了，一般是没问题，但要是你脸黑，也存在炮弹打完还没死的情况。&lt;/p&gt;
+&lt;h3 id=&#34;找到战车-1&#34;&gt;找到战车&lt;/h3&gt;
+&lt;p&gt;虽然出租战车也挺舒服的，但是价格比较高，长期租很不合算（土豪随意）。出租战车收费是按照你租了多少战车，直接在你打怪得到的报酬中按照比例扣除。所以，在不用的时候，一定要按时归还，因为就算不用也是收钱的。&lt;/p&gt;
+&lt;p&gt;准备：因为有人类战，买最好的人类装备，准备好恢复道具等。&lt;/p&gt;
+&lt;p&gt;穿过水怪所在的大桥，就到了一家在偷偷排放污水的工厂。这可能与作品主题有点关系吧。有个大叔说不要踩花，虽然想吐槽他自己就站在花上，但这里想表现的大概是人们只注意自己身边的环境整洁，实质上并不注重环保。&lt;/p&gt;
+&lt;p&gt;去找社长要战车，社长说要让花儿决定，然后，他拿出来花，“给，不给，给……”。虽然知道花儿都是三瓣的是因为画质问题，但果然还是好像吐槽。&lt;/p&gt;
+&lt;h3 id=&#34;巨型炮&#34;&gt;巨型炮&lt;/h3&gt;
+&lt;p&gt;拉多的事情到这里基本就结束了，可以准备去下一个镇子了。&lt;/p&gt;
+&lt;p&gt;要准备的有：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;弹药和装甲片的补充&lt;/li&gt;
+&lt;li&gt;购买8枚“铁弹”&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;巨型炮算是我们前期遇到的一个比较不好打的敌人了，攻防都很高，尤其你走到他面前基本就没弹药了。&lt;/p&gt;
+&lt;p&gt;雷班纳每回合都用铁弹，机械师随意（就是打酱油的）。&lt;/p&gt;
+&lt;p&gt;等铁弹用完，基本巨型炮的装备就全坏了，主炮解决掉就好了。&lt;/p&gt;
+&lt;p&gt;不过经验倒是超级多，也算是挺合算的了。&lt;/p&gt;
+&lt;p&gt;这时基本战车就坏的差不多了，回拉多修修车吧。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;拉多爸爸修车不要钱&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;如果战车坏的动都动不了，可以去租一辆战车，然后在原战车上调查，“牵引”走。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;奥多&#34;&gt;奥多&lt;/h2&gt;
+&lt;h3 id=&#34;女战士英格丽特&#34;&gt;女战士英格丽特&lt;/h3&gt;
+&lt;p&gt;在酒吧对话即可。没有太多要注意的，按照对话走就能收进队伍。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;如果你的HP太低，对方可能不理你。这大概是后面立即有一场战斗。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;军号&#34;&gt;军号&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;非常影响游戏乐趣！&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;重装机兵不能不说的神器，据说是因为翻译导致的BUG造成的。使用军号后会将己方防御力提升到极高，而&lt;strong&gt;冲撞攻击&lt;/strong&gt;的判定依靠的就是防御力。买个撞击板（战车道具，在塔镇有卖），使用军号，一击秒最终BOSS。&lt;/p&gt;
+&lt;p&gt;获得方法：在奥多的第二个自动售货机（卖炮弹的）抽奖有几率获得。&lt;/p&gt;
+&lt;h2 id=&#34;罗克&#34;&gt;罗克&lt;/h2&gt;
+&lt;p&gt;虽然一般情况下我们是把一个镇子的剧情全部触发完才进入下一个镇子的，但在奥多买装备实在太亏了，因为往北走不久就是&lt;strong&gt;罗克&lt;/strong&gt;镇。&lt;/p&gt;
+&lt;p&gt;路上遇到什么怪物尽量逃跑吧，反正这一次主要是买东西以及记录个传送点。路上会遇到&lt;strong&gt;地震&lt;/strong&gt;，然而好像并不会影响什么。&lt;/p&gt;
+&lt;h3 id=&#34;买车&#34;&gt;买车&lt;/h3&gt;
+&lt;p&gt;在奥多东南的码头有一个建筑物，其中有个人出售战车。按照道理说刚刚玩到这里应该是买不起的，当然如果提前刷了复制战车BUG自然没问题。&lt;/p&gt;
+&lt;p&gt;对方让你出价，这就很烦，不知道具体应该是多少钱。我是先出1G，然后每次乘10直到他同意为止，最后好像花了10w吧。据说通过一定的套路4w就能拿下，懒得搞了。&lt;/p&gt;
+&lt;p&gt;这个战场性能不错，毕竟本来就是为了后来设计的。&lt;/p&gt;
+&lt;h3 id=&#34;异形以及万能钥匙&#34;&gt;异形以及万能钥匙&lt;/h3&gt;
+&lt;p&gt;与屋子里一人对话，拿到钥匙，打开旁边屋子门，在某个衣柜里面，调查与异形战斗。有点难打，打完给1k，然后回去对话，就能拿到&lt;strong&gt;扳手&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;扳手能撬开这世界上绝大部分锁，部分电脑控制的不行。&lt;/p&gt;
+&lt;p&gt;在码头最里面的建筑物，撬开锁后可以拿到一些没啥用处的装备和一些钱，估计是为了演示万能钥匙的使用。&lt;/p&gt;
+&lt;h3 id=&#34;马歇尔&#34;&gt;马歇尔&lt;/h3&gt;
+&lt;p&gt;在罗克西边的医院里面，有通缉犯马歇尔。需要准备的有：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;酸瓶*2&lt;/li&gt;
+&lt;li&gt;回复药剂&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;白刃战，第一波全体扔酸瓶，然后直接打吧。&lt;/p&gt;
+&lt;p&gt;打败马歇尔后可以获得一辆战车，是一辆救护车，移动时还可以给乘员加血……&lt;/p&gt;
+&lt;h2 id=&#34;弗里&#34;&gt;弗里&lt;/h2&gt;
+&lt;p&gt;没有路了，游戏就到此结束了吗？&lt;/p&gt;
+&lt;p&gt;并不是，由罗克向东北走到海边，看到海里那棵树，往回走，走到看不见的位置继续，遇到一波敌人打败后再次到海边，海水就会退潮，看到有洞口露出。穿过这个洞穴，向北走，就可以看到冰冻的小镇&lt;strong&gt;弗里&lt;/strong&gt;。&lt;/p&gt;
+&lt;h3 id=&#34;冰面行走&#34;&gt;冰面行走&lt;/h3&gt;
+&lt;p&gt;如何进入中间主要建筑物要花不少心思呢。正确的路线：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;冲树向上开&lt;/li&gt;
+&lt;li&gt;向左&lt;/li&gt;
+&lt;li&gt;向上&lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;由于BUG，还有另一种方法，就是在冰面上调出“装备”菜单人物就会停下，停在任何位置！&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;大象&#34;&gt;大象&lt;/h3&gt;
+&lt;p&gt;问如何把大象放冰箱里，第一步……咳咳，好吧，这游戏应该是在赵本山的小品之前出的，不知道为啥这里会有这么多冰箱。&lt;/p&gt;
+&lt;p&gt;准备工作：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;装备更新换代&lt;/li&gt;
+&lt;li&gt;补充弹药装甲&lt;/li&gt;
+&lt;li&gt;购买特殊炮弹&lt;strong&gt;烟雾弹&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;不得不说烟雾弹是神器啊，降低对方命中和防御，效果还能叠加，对付大象再好不过了。打完大象可以拿到&lt;strong&gt;象牙&lt;/strong&gt;，没有特殊剧情，就是比较值钱而已。&lt;/p&gt;
+&lt;h3 id=&#34;被掩埋的战车&#34;&gt;被掩埋的战车&lt;/h3&gt;
+&lt;p&gt;在弗里有传闻沙滩里掩埋了一辆战车。准备：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;探测器&lt;/li&gt;
+&lt;li&gt;最强的群组攻击的副炮（主炮可以暂时拆下来放仓库，多带些装甲片）&lt;/li&gt;
+&lt;li&gt;补充装甲片&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;很多童鞋没有刷BUG开老金的，这时估计并没有拿到花钱的那个战车，这时凑够三个就必须算上马歇尔的那个救护车了。然而救护车没有炮洞，只能代步，很多人只知道去伊尔的&lt;strong&gt;铁洞&lt;/strong&gt;工厂，却不知道在罗克的神秘人帐篷就已经能提供这个服务了。去那里打个副炮的洞，马歇尔的这救护车引擎非常好，能带不少的装甲片。&lt;/p&gt;
+&lt;p&gt;需要面临的主要敌人：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;激光蚓
+激光蚓攻击力和攻速很高，但防御较差。&lt;/li&gt;
+&lt;li&gt;地雷龟
+一般打就好，但有可能潜入地下等你踩雷，探测器可以探测到。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;没什么好说的，用探测器慢慢探就好了。&lt;/p&gt;
+&lt;h3 id=&#34;炸大楼&#34;&gt;炸大楼&lt;/h3&gt;
+&lt;p&gt;主要剧情是追着一个女孩子跑。注意点：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;女孩走过的不只有楼梯，有的会在阳台出去在外面跑。&lt;/li&gt;
+&lt;li&gt;去顶楼见男人跟着走时狐疑不要掉下去，不要提前自己坐上电梯，也不要离太远被拉下。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;伊尔&#34;&gt;伊尔&lt;/h2&gt;
+&lt;p&gt;没多少剧情。虽然在设定上是个大镇，但真的没有什么剧情。铁洞工厂前文提到了，有个舞女请求讨山贼报仇，可惜没有任务系统。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;不要在伊尔换装备，比较亏，去西南的无歌村买。&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&#34;无歌村&#34;&gt;无歌村&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;多么萧条的村子啊，今天又喝多了。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;无歌村是一个因为山贼的侵袭正在不断变得萧条的镇子，在这里可以换一拨装备。&lt;/p&gt;
+&lt;h3 id=&#34;瓦鲁&#34;&gt;瓦鲁&lt;/h3&gt;
+&lt;p&gt;在无歌村有山贼，可以在那里打了，也可以不打，到渡口去打。那三个山贼都是瓦鲁的部下。&lt;/p&gt;
+&lt;p&gt;路上埋了5颗地雷，可以用探测器慢慢探，也可以趟过去，反正炸一下影响也不大。&lt;/p&gt;
+&lt;p&gt;打瓦鲁注意先打部下，因为会催眠，很恶心。&lt;/p&gt;
+&lt;h3 id=&#34;v48&#34;&gt;V48&lt;/h3&gt;
+&lt;p&gt;重装机兵有很多隐藏物品，像是彩蛋一样的。本文中基本没有提及隐藏物品，不过这个引擎实在有些重要。&lt;/p&gt;
+&lt;p&gt;大地图（南9 东4），可获得v48引擎。这个v48与在商店里面买到的v24升级的v48不同，可以继续升级为v66、v100（据说后者叫v48超人型，这个叫v48金刚型，也不知道啥意思），而v100是这个游戏中最强的发动机之一。&lt;/p&gt;
+&lt;h3 id=&#34;神秘人&#34;&gt;神秘人&lt;/h3&gt;
+&lt;p&gt;神秘人在过了渡口就可能出现，外貌是神风弹的样子，也不攻击，在一定回合后逃跑。不用强求，在高等级后回来刷一波带走就行了。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;据说在神秘商人营地的三棵树附近出现概率较高。
+据说被酸腐蚀后就不会逃跑，没有试过是不是真的。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;索鲁&#34;&gt;索鲁&lt;/h2&gt;
+&lt;p&gt;过了渡口向东走即可到达索鲁。&lt;/p&gt;
+&lt;h3 id=&#34;异型鱼与眼镜&#34;&gt;异型鱼与眼镜&lt;/h3&gt;
+&lt;p&gt;准备：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;更换人类装备&lt;/li&gt;
+&lt;li&gt;购买几个&lt;strong&gt;穿甲弹&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;防御超高，只能上穿甲弹。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;首先先去找电脑排空污水，否则下水道里面一堆水鬼很不好惹。
+记得拿下水道里面的&lt;strong&gt;眼镜&lt;/strong&gt;，最终人类武器四镜片之一。
+打完异型鱼在另外一个下水道口出去，可以获得一辆战车。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;伊甸&#34;&gt;伊甸&lt;/h2&gt;
+&lt;p&gt;记得第一次完老奇怪为啥传真的传送点空了一个，就是因为我把伊甸错过去了。在索鲁出来，贴着森林向西走，就会发现伊甸的入口。&lt;/p&gt;
+&lt;p&gt;伊甸的人都住在火车车厢里面，不知道是什么习俗。在这里建议升级一下战车装备，因为后面有不少硬仗要打。&lt;/p&gt;
+&lt;h3 id=&#34;蜈蚣&#34;&gt;蜈蚣&lt;/h3&gt;
+&lt;p&gt;从伊甸东南的山洞进入，走到没路为止，调查墙上的裂缝，开炮，然后就能走了。&lt;/p&gt;
+&lt;p&gt;在原来不能走的这个位置，遇到蜈蚣的几率很高，没什么要注意的，A过去就行了。&lt;/p&gt;
+&lt;h3 id=&#34;东京塔与卫星地图&#34;&gt;东京塔与卫星地图&lt;/h3&gt;
+&lt;p&gt;东京塔里面有很多人偶，不用很在意。有一个老人，要你找回玛丽莲偶人，可以做，需要去下水道，有许多水鬼比较难打。送回后可以得到一套&lt;strong&gt;金甲&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;有一个偶人一直在挡路，可以推一下红色的偶人，挡住它。&lt;/p&gt;
+&lt;p&gt;在东京塔顶层对话得到&lt;strong&gt;地图&lt;/strong&gt;。地图有两个作用：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;在非战斗状态大地图下，可以查看大地图以及自己所在的位置。&lt;/li&gt;
+&lt;li&gt;在战斗中，可以给卫星信号，有几率触发卫星攻击。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;据说是神器，但在我看来用处不大。&lt;/p&gt;
+&lt;h3 id=&#34;戈麦斯&#34;&gt;戈麦斯&lt;/h3&gt;
+&lt;p&gt;过了大瀑布，正好遇到戈麦斯阴死红狼，并说出那句特别知名但在续作被打脸无数的话：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;血肉之躯是无法与战车匹敌的。
+拿到红狼战车，红狼临死说要告诉尼娜“忘了我吧”。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;红狼，一个一共就出场了三次的配角，却成功给玩家留下深刻印象，很多人都在研究怎样能让红狼不死。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;疯狂练级，主角等级高到一定程度，红狼就会以血肉之躯打败戈麦斯，然后还是死了，不过主角的名字会变成“狼”。
+在开始打战狗时逃跑，可以拿到战车，这样再次打战狗就又可以见到红狼一次。
+通过调游戏配色把主角造型替换成红狼。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;同人重制版《重装机兵：梦想起飞》红狼也没有死，而是加入了主角队伍。&lt;/p&gt;
+&lt;h2 id=&#34;塔镇&#34;&gt;塔镇&lt;/h2&gt;
+&lt;p&gt;塔镇的装备不错，可以在这里换一拨。&lt;/p&gt;
+&lt;h3 id=&#34;洗车&#34;&gt;洗车&lt;/h3&gt;
+&lt;p&gt;战车道具中出现用不能用，扔也扔不掉的“鸟粪”、“铅竹”？去洗车洗掉就可以了。全游戏唯一可以洗车的地方，就在塔镇。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;说实话，这些东西可以到拉多财产保管存仓库里，这样就不占地方了。所以，又一个BUG……&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;沙漠之舟&#34;&gt;沙漠之舟&lt;/h3&gt;
+&lt;p&gt;在“飞猪阵”出现概率较高（就是大地图上看上去像一只鸟的地方），没什么注意的，A过去吧。&lt;/p&gt;
+&lt;h3 id=&#34;弗朗&#34;&gt;弗朗&lt;/h3&gt;
+&lt;p&gt;在西北方向的垃圾站，人类战，要是感觉不稳可以买些烟雾。&lt;/p&gt;
+&lt;h2 id=&#34;地狱门&#34;&gt;地狱门&lt;/h2&gt;
+&lt;p&gt;红色机器人会与你战斗，比较难打，蓝色机器人可以储存游戏记录。&lt;/p&gt;
+&lt;h2 id=&#34;阳平关&#34;&gt;阳平关&lt;/h2&gt;
+&lt;p&gt;在“飞猪阵”的上方，这里卖的装备相当不错，还有“储存箱”，可以随时随地保存游戏记录的战车装备（可惜出现太晚了）。&lt;/p&gt;
+&lt;h2 id=&#34;卡拉&#34;&gt;卡拉&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;沿着山体向南，到达最后一个镇子。&lt;/li&gt;
+&lt;li&gt;首先与酒店老板对话，得知有一个一直被欺负的小孩喜欢玩火。&lt;/li&gt;
+&lt;li&gt;然后去西北的研究所找博士讨论关于激光炮的事。（研究所可以拿到一辆战车）&lt;/li&gt;
+&lt;li&gt;从研究所出来，发现着火了。&lt;/li&gt;
+&lt;li&gt;去塔镇买个灭火器成功灭火&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;然后，是不是有点眼熟？没错，前面是拉多，惊喜不惊喜，意外不意外？&lt;/p&gt;
+&lt;p&gt;在烧毁的地方用探测器可以找到220炮（最强主炮）。&lt;/p&gt;
+&lt;p&gt;中间有一座房子，进去可以遇到“波特”以及获得光镜。&lt;/p&gt;
+&lt;h2 id=&#34;地狱门-1&#34;&gt;地狱门&lt;/h2&gt;
+&lt;h3 id=&#34;帕鲁&#34;&gt;帕鲁&lt;/h3&gt;
+&lt;p&gt;在地狱门西北，可以进入帕鲁的山洞。红狼的老相好就是被他抓走了。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;如果你开的是红狼的战车，打完帕鲁尼娜冲出山洞叫着红狼的名字，死了。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;如果不是，尼娜会说会一直等红狼。(直到你开红狼战车出现，参照上条)&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;诺亚&#34;&gt;诺亚&lt;/h3&gt;
+&lt;p&gt;一个打不死的最终BOSS，主要作用是告诉你事情的前因后果，表达游戏的主题，以及让你可以多玩一段时间。&lt;/p&gt;
+&lt;p&gt;在诺亚基地（地球拯救中心）可以找到很多装备，找到激光炮的最后一枚镜片&lt;strong&gt;太阳镜&lt;/strong&gt;。建议第一次去先解决每个楼层的巨型炮。按照咱现在战车的配置，基本是一炮一个或者两炮一个，很有复仇的感觉。&lt;/p&gt;
+&lt;p&gt;完。&lt;/p&gt;
+- https://ntutn.top/posts/%E9%87%8D%E8%A3%85%E6%9C%BA%E5%85%B5/ - CC BY-SA 4.0</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>我的理想——我的一篇日记</title>
+        <link>https://ntutn.top/posts/%E6%88%91%E7%9A%84%E7%90%86%E6%83%B3%E6%88%91%E7%9A%84%E4%B8%80%E7%AF%87%E6%97%A5%E8%AE%B0/</link>
+        <pubDate>Sun, 24 Mar 2019 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/%E6%88%91%E7%9A%84%E7%90%86%E6%83%B3%E6%88%91%E7%9A%84%E4%B8%80%E7%AF%87%E6%97%A5%E8%AE%B0/</guid>
+        <description>归零幻想 https://ntutn.top/posts/%E6%88%91%E7%9A%84%E7%90%86%E6%83%B3%E6%88%91%E7%9A%84%E4%B8%80%E7%AF%87%E6%97%A5%E8%AE%B0/ -&lt;!-- raw HTML omitted --&gt;
+&lt;h1 id=&#34;我的理想我的一篇日记&#34;&gt;我的理想——我的一篇日记&lt;/h1&gt;
+&lt;p&gt;一不小心翻到了以前初中写的一篇日记，为了装X还是用英文写的，羞耻度爆表……&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;Wednesday, December 26, 2012
+Sunday&lt;/p&gt;
+&lt;p&gt;Today we learned how to talk about future intentions. Iwant to be a programmer when I grow up. So how am I going to do it? I’m goingto study computer science and English when I have free time. It’s veryimportant. I learned Visual Basic. It was made by Microsoft. I can make someprogram now. On my last summer vacation, I made some programs, like notepad. Forexample, the program was made for a math problem:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-vb&#34; data-lang=&#34;vb&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;Private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;Sub&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;Main&lt;/span&gt;()
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;Const&lt;/span&gt; 兔脚数 &lt;span style=&#34;color:#8b008b&#34;&gt;As&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;Integer&lt;/span&gt; = 4, 鸡脚数 &lt;span style=&#34;color:#8b008b&#34;&gt;As&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;Integer&lt;/span&gt; = 2
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;Dim&lt;/span&gt; 总头数 &lt;span style=&#34;color:#8b008b&#34;&gt;As&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;Long&lt;/span&gt;, 总脚数 &lt;span style=&#34;color:#8b008b&#34;&gt;As&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;Long&lt;/span&gt;, 鸡的数量 &lt;span style=&#34;color:#8b008b&#34;&gt;As&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;Long&lt;/span&gt;, 兔的数量 &lt;span style=&#34;color:#8b008b&#34;&gt;As&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;Long&lt;/span&gt;
+总头数 =Val(InputBox(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;从上面看一共有多少个头？&amp;#34;&lt;/span&gt;))
+总脚数 =Val(InputBox(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;从下面看一共有多少只脚？&amp;#34;&lt;/span&gt;))
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;If&lt;/span&gt; (总头数 &amp;lt; 0) &lt;span style=&#34;color:#8b008b&#34;&gt;Or&lt;/span&gt; (总脚数 &amp;lt; 0) &lt;span style=&#34;color:#8b008b&#34;&gt;Or&lt;/span&gt; (总头数 * 2 &amp;gt; 总脚数) &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;Then&lt;/span&gt;
+    MsgBox &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;输入有误！&amp;#34;&lt;/span&gt;, vbExclamation
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;Exit&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;Sub&lt;/span&gt;
+&lt;span style=&#34;color:#008b45&#34;&gt;End&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;If&lt;/span&gt;
+鸡的数量 = (兔脚数 * 总头数 - 总脚数) / (总脚数 - 鸡脚数)
+兔的数量 = 总头数 - 鸡的数量
+计算结果 = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;鸡有&amp;#34;&lt;/span&gt; &amp;amp; 鸡的数量 &amp;amp; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;只，兔有&amp;#34;&lt;/span&gt; &amp;amp; 兔的数量 &amp;amp; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;只。&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;Call&lt;/span&gt; bcjg
+MsgBox 计算结果, vbInformation
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;End&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;Sub&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;You can see a form on the screen if the program isrunning. Input the number of heads and click the button “OK”. Then you can seeanother form on the screen. You can input the number of feet. Click the button “OK”again. Finally, you can see the result.&lt;/p&gt;
+&lt;p&gt;I sent my programs to my friends by e-mail.&lt;/p&gt;
+&lt;p&gt;I want to make a company. I call it WonderfulSoft. Iknow it’s very difficult. But I hope one day my dream can be true.&lt;/p&gt;
+&lt;p&gt;My IT teacher said: “Java is more useful than VisualBasic. Because the program was made by it can run on the many systems.” I alsowant to learn it. But it is too difficult to learn. I think I’ll learn to makeprograms by Java.&lt;/p&gt;
+- https://ntutn.top/posts/%E6%88%91%E7%9A%84%E7%90%86%E6%83%B3%E6%88%91%E7%9A%84%E4%B8%80%E7%AF%87%E6%97%A5%E8%AE%B0/ - CC BY-SA 4.0</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>零梦</title>
+        <link>https://ntutn.top/posts/%E9%9B%B6%E6%A2%A6/</link>
+        <pubDate>Sun, 24 Mar 2019 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/%E9%9B%B6%E6%A2%A6/</guid>
+        <description>归零幻想 https://ntutn.top/posts/%E9%9B%B6%E6%A2%A6/ -&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;做了一个有点意思的梦，细思极恐，所以特地记录一下。&lt;/p&gt;
+&lt;h2 id=&#34;d1&#34;&gt;D1&lt;/h2&gt;
+&lt;p&gt;我是一名初中生，一个学习非常好的中学生，我们国家有一项政策，就是学习非常好的初三学生不必在初中浪费时间，可以提前去上高中，只要到时候回来象征性参加中考就行了，而我这就是准备回家参加中考。我给家里打电话说让放心，然后打开手机地图搜索路线。&lt;/p&gt;
+&lt;p&gt;雾很大，公交一辆一辆开过，我发现可以坐火车，坐火车是最快的。只要坐524，就能直接到达。我从入口走进，路过卖各种东西的，猪肉、水果以及其他。只有一条路，只有一个车厢，我走进，里面有一个人，正在抽烟。我问对方是不是524，对方说不知道，自己还有一站下车，这时火车开动了，而我也猛然发现车上写着522。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;h2 id=&#34;d2&#34;&gt;D2&lt;/h2&gt;
+&lt;p&gt;我被告知自己刚刚差不多是在做梦。想想也是，不符合逻辑的地方很多，首先我们初中生可以去高中体验这种诡异政策什么时候有的？车站又怎么会卖这些乱七八糟的？&lt;/p&gt;
+&lt;p&gt;但说起来吓人，刚刚我不但一点意识不到自己在做梦，而且真的相信自己是一个初中生，真的有这奇葩的政策。&lt;/p&gt;
+&lt;p&gt;某公司说，这是一个实验项目，主要是用于研究梦与记忆之间的关系，梦中出现的大概很多都是你心中相当害怕的事物，比如你一直在找各种交通工具就大概反映你现实是一个路痴，诸如此类。说的不错，我的确是个路痴，那按照这个说法，这个车站很值得怀疑啊，因为我不是第一次梦见这个一看就很奇怪的车站了，在以前的梦里曾经有在这个车站发生凶杀案，也就是说我曾经在某个车站类似的地方有过糟糕的经历了？总感觉自己缺了一段记忆。&lt;/p&gt;
+&lt;h2 id=&#34;d3&#34;&gt;D3&lt;/h2&gt;
+&lt;p&gt;我从迷蒙中清醒，脑子还是有点混乱，这里正在打仗，不对，按照规模来看，应该是两伙人在打群架，但狠辣的手法和波及到的人数占总人数的比例来看，这又是战争无疑，而且在我的观察中，我们好像并不是正义的一方。一个和尚追着我说我是他徒弟，我说自己是学生之类都会被他说是胡思乱想。不准我读书，只让我跟他学习功法。等我实在忍无可忍，就说你这两下子我也会，看他把木棍当做飞镖投向目标，我就拿起一根金针，精准地扔向他的一根白发并且成功命中。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;我就是有这样的能力，和尚就是应该有头发，这是理所当然的。&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id=&#34;d0&#34;&gt;D0&lt;/h2&gt;
+&lt;p&gt;我睁开眼睛，拿起手机看了看时间，大概才六点。我不是一个初中生，我没有在配合神秘组织做实验，我不是奇怪的和尚的徒弟，我是一名大学生，最近在写一个个人博客的程序，最近买的蓝牙键盘刚刚到货。我昨晚睡得很晚，但现在一点都不困。我还在想前面这个嵌套的梦，我觉得正好可以用蓝牙键盘连接手机把这个梦写出来，发到博客里面。只是我又鬼使神差地说了一句：&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;溺死在零梦里吧。
+我不以为然，认为这是自己吓自己，感觉自己不该这么中二才对，于是起床准备洗漱了……&lt;/p&gt;
+&lt;/blockquote&gt;
+- https://ntutn.top/posts/%E9%9B%B6%E6%A2%A6/ - CC BY-SA 4.0</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>人工智能知识点整理</title>
+        <link>https://ntutn.top/posts/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/</link>
+        <pubDate>Thu, 03 Jan 2019 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/</guid>
+        <description>归零幻想 https://ntutn.top/posts/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/ -&lt;!-- raw HTML omitted --&gt;
+&lt;blockquote&gt;
+&lt;p&gt;人工智能考试前整理的，很详细，虽然实际考试还是有好些想不起来，但总归起了一些作用的。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;第1章绪论&#34;&gt;第1章绪论&lt;/h2&gt;
+&lt;h3 id=&#34;人工智能的起源&#34;&gt;人工智能的起源&lt;/h3&gt;
+&lt;p&gt;现代人工智能的起源是&lt;strong&gt;1956年的达特茅斯会议&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;参加者：&lt;strong&gt;麦卡锡、明斯基&lt;/strong&gt;、香农、罗切斯特、纽厄尔、西蒙、萨缪尔、伯恩斯坦、摩尔、所罗门诺夫。&lt;/p&gt;
+&lt;p&gt;会议的主要成就就是让人工智能成了一个独立的研究学科。&lt;/p&gt;
+&lt;p&gt;定下来人工智能的英文名称是“Artificial Intelligence”&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;h3 id=&#34;知识的定义概念基本单位&#34;&gt;知识的定义、概念、基本单位&lt;/h3&gt;
+&lt;h4 id=&#34;定义&#34;&gt;定义&lt;/h4&gt;
+&lt;p&gt;柏拉图在《泰阿泰德篇》中给出知识的定义，即“&lt;strong&gt;被证实的、真的和被相信的陈述&lt;/strong&gt;”，简称知识的JTB（Justified True Belief）条件。&lt;/p&gt;
+&lt;p&gt;然而，这个延续了两千多年的定义在1963年，被哲学家盖梯尔否定了。&lt;/p&gt;
+&lt;h4 id=&#34;概念&#34;&gt;概念&lt;/h4&gt;
+&lt;p&gt;知识的基本单位就是&lt;strong&gt;概念&lt;/strong&gt;。&lt;/p&gt;
+&lt;h3 id=&#34;概念的定义&#34;&gt;概念的定义&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;概念的符号&lt;/strong&gt;：即概念的名称，说明这个概念叫什么。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;概念的内涵&lt;/strong&gt;：即命题来表示，命题就是能判断真假的陈述句。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;概念的外延&lt;/strong&gt;：即经典集合来表示，用来说明与概念对应的事件对象是哪些。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;概念的三个功能&#34;&gt;概念的三个功能&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;指物功能&lt;/strong&gt;：既指向客观世界的对象，表示客观世界的对象的可观测性，对象的客观的信仰，是指对相对于人或者仪器的知觉感知特性，依赖于人的主观感受。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;指心功能&lt;/strong&gt;：即指向人心智世界里的对象，代表心智世界里的对象表示。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;指名功能&lt;/strong&gt;：指向认知世界或者符号世界表示对象的符号名称，这些符号名称组成各种语言。&lt;/p&gt;
+&lt;h3 id=&#34;人工智能的三个流派&#34;&gt;人工智能的三个流派&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;专注于实现AI指名功能的人工智能流派，称为&lt;strong&gt;符号主义&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;专注于实现AI指心功能的人工智能流派，称为&lt;strong&gt;连接主义&lt;/strong&gt;。&lt;/li&gt;
+&lt;li&gt;专注于实现AI指物功能的人工智能流派，称为&lt;strong&gt;行为主义&lt;/strong&gt;。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;概念的功能&lt;/th&gt;
+&lt;th&gt;人工智能的流派&lt;/th&gt;
+&lt;th&gt;观点&lt;/th&gt;
+&lt;th&gt;思想实验&lt;/th&gt;
+&lt;th&gt;挑战&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;指名功能&lt;/td&gt;
+&lt;td&gt;符号主义&lt;/td&gt;
+&lt;td&gt;指名对了，指物自然正确&lt;/td&gt;
+&lt;td&gt;图灵测试、中文屋实验&lt;/td&gt;
+&lt;td&gt;完全实现指名功能也不见得有智能。概念的组合爆炸问题；概念的组合悖论问题；经典概念在现实中很难获得。知识很难获取&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;指物功能&lt;/td&gt;
+&lt;td&gt;连接主义&lt;/td&gt;
+&lt;td&gt;发现大脑的结构及处理信息的机制，揭示人工智能的本质机理，进而在机器上实现响应模拟&lt;/td&gt;
+&lt;td&gt;缸中之脑实验&lt;/td&gt;
+&lt;td&gt;指心没有问题，指物也存在问题。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;指心功能&lt;/td&gt;
+&lt;td&gt;行为主义&lt;/td&gt;
+&lt;td&gt;只要实现指物功能，就认为具有智能了&lt;/td&gt;
+&lt;td&gt;完美伪装者和斯巴达人&lt;/td&gt;
+&lt;td&gt;外在表现与内心没有联系，无法测试&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&#34;第2章概念表示&#34;&gt;第2章概念表示&lt;/h2&gt;
+&lt;h3 id=&#34;概念定义及三个组成部分&#34;&gt;概念定义及三个组成部分&lt;/h3&gt;
+&lt;p&gt;知识由概念组成，&lt;strong&gt;概念&lt;/strong&gt;是构成人类知识世界的基本单元。&lt;/p&gt;
+&lt;h4 id=&#34;经典概念理论&#34;&gt;经典概念理论&lt;/h4&gt;
+&lt;p&gt;一个经典概念由三部分组成&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;概念名&lt;/li&gt;
+&lt;li&gt;概念的内涵表示&lt;/li&gt;
+&lt;li&gt;概念的外延表示&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code&gt;概念名：偶数
+内涵：能被2整除的自然数
+外延：{0,2,5,8,...}
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;谓词符号化&#34;&gt;谓词符号化&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;两个奇数之和是奇数
+令F(x)：x是奇数。
+∀x∀y (F(x)⋀F(y)→F(x+y))
+&lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt;任何人都会死，苏格拉底是人，因此，苏格拉底是会死的。
+令F(x)：x会死；M(x)：x是人；a：苏格拉底。
+(∀x(M(x)→F(x))⋀M(a))→F(a)
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;集合表示&#34;&gt;集合表示&lt;/h3&gt;
+&lt;p&gt;一个由概念指称的所有对象组成的整体称为该概念的集合，这些概念是集合中的元素或成员。该概念名为集合的名称，该集合称为对应&lt;em&gt;概念的外延表示&lt;/em&gt;，集合中的元素为对应概念的指称对象。&lt;/p&gt;
+&lt;h3 id=&#34;三种新概念理论&#34;&gt;三种新概念理论&lt;/h3&gt;
+&lt;h4 id=&#34;原型理论&#34;&gt;原型理论&lt;/h4&gt;
+&lt;p&gt;一个概念可以由一个原型表示。一个原型可以是一个实际的或虚拟的&lt;strong&gt;对象样例&lt;/strong&gt;，也可以是一个假设性的&lt;strong&gt;图示性表征&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;模糊集合、模糊逻辑。&lt;/p&gt;
+&lt;h4 id=&#34;样例理论&#34;&gt;样例理论&lt;/h4&gt;
+&lt;p&gt;概念不可以由一个对象样例或原型来代表，但可以由许多个已知样例来表示。&lt;/p&gt;
+&lt;p&gt;概念的样例三种不同形式：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;由该概念的所有已知样例来表示&lt;/li&gt;
+&lt;li&gt;由该概念的已知最佳、最经典或最常见样例来表示&lt;/li&gt;
+&lt;li&gt;由该概念的经过选择的部分样例来表示&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id=&#34;知识理论&#34;&gt;知识理论&lt;/h4&gt;
+&lt;p&gt;概念是特定知识框架（文明）的一个组成部分。&lt;/p&gt;
+&lt;p&gt;概念在人的心智中的表示称为&lt;strong&gt;认知表示&lt;/strong&gt;，属于概念的内涵表示。&lt;/p&gt;
+&lt;h2 id=&#34;第3章知识表示&#34;&gt;第3章知识表示&lt;/h2&gt;
+&lt;h3 id=&#34;知识的特性&#34;&gt;知识的特性&lt;/h3&gt;
+&lt;h4 id=&#34;相对正确性&#34;&gt;相对正确性&lt;/h4&gt;
+&lt;p&gt;所有知识都是&lt;strong&gt;在一定条件及环境下产生的&lt;/strong&gt;，在这种条件及环境下才是正确的。&lt;/p&gt;
+&lt;h4 id=&#34;不确定性&#34;&gt;不确定性&lt;/h4&gt;
+&lt;p&gt;存在真与假的中间状态。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;随机性引起的不确定性（连环计）&lt;/li&gt;
+&lt;li&gt;模糊性引起的不确定性（张三跑得快）&lt;/li&gt;
+&lt;li&gt;经验引起的不确定性（老马识途）&lt;/li&gt;
+&lt;li&gt;不完全性引起的不确定性（火星）&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id=&#34;可表示性与可利用性&#34;&gt;可表示性与可利用性&lt;/h4&gt;
+&lt;p&gt;知识可以用适当形式表示出来，如用语言、文字、图形、神经网络等。&lt;/p&gt;
+&lt;p&gt;知识可以被用来解决问题。&lt;/p&gt;
+&lt;h3 id=&#34;了解常用的知识表示方法&#34;&gt;&lt;del&gt;了解&lt;/del&gt;常用的知识表示方法&lt;/h3&gt;
+&lt;p&gt;知识表示：将人类认知形式化或模型化。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;产生式表示法&lt;/li&gt;
+&lt;li&gt;框架表示法&lt;/li&gt;
+&lt;li&gt;状态空间表示法&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;掌握产生式表示法&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;产生式表示法&lt;/h3&gt;
+&lt;h4 id=&#34;确定性规则知识的产生式表示&#34;&gt;确定性规则知识的产生式表示&lt;/h4&gt;
+&lt;pre&gt;&lt;code&gt;IF 动物会飞 AND 会下蛋 THEN 该动物是鸟
+IF P THEN Q
+P→Q
+&lt;/code&gt;&lt;/pre&gt;&lt;blockquote&gt;
+&lt;p&gt;蕴含是产生式的一种特例&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4 id=&#34;不确定性知识的产生式表示&#34;&gt;不确定性知识的产生式表示&lt;/h4&gt;
+&lt;pre&gt;&lt;code&gt;IF 发烧 THEN 感冒 (0.6)
+IF P THEN Q (置信度)
+P→Q (置信度)
+&lt;/code&gt;&lt;/pre&gt;&lt;blockquote&gt;
+&lt;p&gt;置信度如果等于1就称为确定性知识&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h4 id=&#34;确定性事实性知识的产生式表示&#34;&gt;确定性事实性知识的产生式表示&lt;/h4&gt;
+&lt;pre&gt;&lt;code&gt;老李年龄是40岁 (Li,age,40)
+老李和老王是朋友 (friend,Li,Wang)
+(对象,属性,值)
+(关系,对象1,对象2)
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&#34;不确定性事实产生式表示&#34;&gt;不确定性事实产生式表示&lt;/h4&gt;
+&lt;pre&gt;&lt;code&gt;老李年龄很可能是40岁 (Li,age,40,0.8)
+老李和老王不大可能是朋友 (friend,Li,Wang,0.1)
+(对象,属性,值,置信度)
+(关系,对象1,对象2,置信度)
+&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&#34;产生式与蕴含的区别&#34;&gt;产生式与蕴含的区别&lt;/h4&gt;
+&lt;p&gt;产生式除蕴含外，还包括各种操作、规则、算子、函数等。蕴含是产生式的特例。&lt;/p&gt;
+&lt;p&gt;蕴含只能表示精确的知识，产生式可以表示不精确的知识。&lt;/p&gt;
+&lt;h4 id=&#34;bnf&#34;&gt;BNF&lt;/h4&gt;
+&lt;p&gt;&lt;code&gt;::=&lt;/code&gt;表示定义为，&lt;code&gt;|&lt;/code&gt;表示或者是，&lt;code&gt;[]&lt;/code&gt;表示可缺省。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bnf&#34; data-lang=&#34;bnf&#34;&gt;&amp;lt;产生式&amp;gt;::=&amp;lt;前提&amp;gt; &amp;lt;结论&amp;gt;
+&amp;lt;前提&amp;gt;::=&amp;lt;简单条件&amp;gt;|&amp;lt;复合条件&amp;gt;
+&amp;lt;结论&amp;gt;::=&amp;lt;事实&amp;gt;|&amp;lt;操作&amp;gt;
+&amp;lt;复合条件&amp;gt;::=&amp;lt;简单条件&amp;gt;AND&amp;lt;简单条件&amp;gt;[AND&amp;lt;简单条件&amp;gt;...]|&amp;lt;简单条件&amp;gt;OR&amp;lt;简单条件&amp;gt;[OR&amp;lt;简单条件&amp;gt;...]
+&amp;lt;操作&amp;gt;::=&amp;lt;操作名&amp;gt;[(&amp;lt;变元&amp;gt;,...)]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;规则&#34;&gt;规则&lt;/h4&gt;
+&lt;p&gt;匹配成功，调整顺序，找出常用规则。&lt;/p&gt;
+&lt;p&gt;初始事物存在综合数据库。&lt;/p&gt;
+&lt;p&gt;不断匹配，添加匹配成功的知识，直到成功匹配。&lt;/p&gt;
+&lt;hr&gt;
+&lt;ul&gt;
+&lt;li&gt;效率较低&lt;/li&gt;
+&lt;li&gt;不能表达结构性信息&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;ul&gt;
+&lt;li&gt;领域间关系密切，不存在结构性知识&lt;/li&gt;
+&lt;li&gt;经验性知识，没有严格统一标准&lt;/li&gt;
+&lt;li&gt;领域问题的求解过程可表示为一系列相对独立操作，每个操作可表示为一条或多条产生式规则。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;掌握框架表示法&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;框架表示法&lt;/h3&gt;
+&lt;p&gt;框架：描述所论对象属性的一种数据结构&lt;/p&gt;
+&lt;p&gt;一个框架分为若干个槽，一个槽分为若干个侧面&lt;/p&gt;
+&lt;p&gt;一个槽用于描述对象某一方面的属性&lt;/p&gt;
+&lt;p&gt;一个侧面用于描述相应属性的一个方面&lt;/p&gt;
+&lt;p&gt;槽与侧面具有的属性值称为槽值和侧面值&lt;/p&gt;
+&lt;p&gt;&amp;lt;框架名&amp;gt;
+槽名1： 侧面名11，侧面名12&lt;/p&gt;
+&lt;p&gt;槽名2：侧面名21，侧面名22&lt;/p&gt;
+&lt;p&gt;约束：约束条件1，约束条件2&lt;/p&gt;
+&lt;p&gt;框架可作为另一框架子框架&lt;/p&gt;
+&lt;hr&gt;
+&lt;ul&gt;
+&lt;li&gt;结构性好&lt;/li&gt;
+&lt;li&gt;继承性好&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;第4章知识图谱&#34;&gt;第4章知识图谱&lt;/h2&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;h3 id=&#34;掌握并会描述知识图谱的四个阶段&#34;&gt;&lt;del&gt;掌握并会描述&lt;/del&gt;知识图谱的四个阶段&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;知识建模 知识表示、本体建模 定义领域知识描述的概念、事件、规则及相互关系的知识表示方法，建立知识图谱的概念模型&lt;/li&gt;
+&lt;li&gt;知识获取 知识学习、语义集成 对知识建模定义知识要素进行实例化&lt;/li&gt;
+&lt;li&gt;知识管理 知识存储和索引&lt;/li&gt;
+&lt;li&gt;知识赋能 语义搜索、知识问答、大数据语义分析&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;掌握命题的谓词表示及语义网络表示&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;命题的谓词表示及语义网络表示&lt;/h3&gt;
+&lt;p&gt;【PPT、请教】&lt;/p&gt;
+&lt;h2 id=&#34;第5章搜索算法&#34;&gt;第5章搜索算法&lt;/h2&gt;
+&lt;h3 id=&#34;掌握4种搜索算法并会根据问题给出状态转移图&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;4种搜索算法并会根据问题给出状态转移图&lt;/h3&gt;
+&lt;p&gt;无信息引导的搜索策略（盲目搜索）：不考虑给定问题的特有知识，系统根据实现确定的某种固定排序，依次调用规则或随机调用规则
+有信息引导的搜索策略（启发式搜索）：考虑问题领域可应用知识，&lt;/p&gt;
+&lt;h4 id=&#34;深度优先搜索&#34;&gt;深度优先搜索&lt;/h4&gt;
+&lt;p&gt;扩展、回溯、深度限制
+如果深度限制过深，则影响求解效率；反之如果限制过浅，则可能导致找不到解。
+死循环问题解决：&lt;strong&gt;记录从初始节点到当前节点的路径&lt;/strong&gt;，每扩展一个节点，就要检测该节点是否出现在这条路径上；&lt;strong&gt;如果发现出现在该路径上，则强制回溯&lt;/strong&gt;，探索其他深度最深的节点。&lt;/p&gt;
+&lt;h4 id=&#34;广度优先搜索&#34;&gt;广度优先搜索&lt;/h4&gt;
+&lt;p&gt;问题有解，一定能比DFS先找到最优解。
+占用比较大的搜索空间。&lt;/p&gt;
+&lt;h4 id=&#34;a算法&#34;&gt;A算法&lt;/h4&gt;
+&lt;p&gt;为尽快找到耗散值较小的路径，希望选择节点尽可能处于最佳路径。
+节点处于最佳路径可能性评价函数：
+f(n)=g(n)+h(n)&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;g(n) 初始节点s到节点n的最佳路径耗散值的估计值。&lt;/li&gt;
+&lt;li&gt;h(n) 从节点n到目标点t的最佳路径耗散值的估计值，称为&lt;strong&gt;启发函数&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;f(n) 初始节点s经节点n到达目标节点t最佳路径耗散值的估计值，称为&lt;strong&gt;评价函数&lt;/strong&gt;
+OPEN：已经被生成但未被扩展的节点
+CLOSE:已经被生成并且被扩展的节点
+每次从OPEN表中取f最小的节点进行扩展。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;博弈搜索&#34;&gt;博弈搜索&lt;/h4&gt;
+&lt;p&gt;选择、扩展、模拟、回传。&lt;/p&gt;
+&lt;h3 id=&#34;掌握启发式函数的定义及含义并会给出启发式函数&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;启发式函数的定义及含义，并会给出启发式函数&lt;/h3&gt;
+&lt;p&gt;【课后第2题】&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;A*条件：h(n)&amp;lt;=h*(n)
+单调条件：h(ni)-h(nj)&amp;lt;=C(ni,nj)且h(t)=0
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;第6章群智能算法&#34;&gt;第6章群智能算法&lt;/h2&gt;
+&lt;h3 id=&#34;掌握遗传算法的计算流程&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;遗传算法的计算流程&lt;/h3&gt;
+&lt;p&gt;5个基本要素&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;参数编码 二进制编码/实数编码 每个参数二进制编码得到子串，连在一起形成染色体&lt;/li&gt;
+&lt;li&gt;初始种群设定 太小性能不好，太大计算复杂&lt;/li&gt;
+&lt;li&gt;适应度函数的设计&lt;/li&gt;
+&lt;li&gt;遗传操作的设计
+&lt;ul&gt;
+&lt;li&gt;线性排序&lt;/li&gt;
+&lt;li&gt;最佳个体保存&lt;/li&gt;
+&lt;li&gt;一点交叉&lt;/li&gt;
+&lt;li&gt;二点交叉&lt;/li&gt;
+&lt;li&gt;一点变异&lt;/li&gt;
+&lt;li&gt;逆转变异&lt;/li&gt;
+&lt;li&gt;插入变异&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;控制参数的设定&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;比较高效进行概率意义的搜索&lt;/p&gt;
+&lt;h3 id=&#34;掌握蚁群算法公式中参数的含义&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;蚁群算法公式中参数的含义&lt;/h3&gt;
+&lt;p&gt;信息素和局部启发信息共同决定下一步。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;α越大，蚂蚁倾向于选择其他蚂蚁走过路径&lt;/li&gt;
+&lt;li&gt;α=0，多重起点的随机贪婪算法&lt;/li&gt;
+&lt;li&gt;β=0，正反馈启发算法&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;各路径信息素消散规则&lt;/p&gt;
+&lt;p&gt;蚁群信息素浓度更新规则&lt;/p&gt;
+&lt;h3 id=&#34;掌握粒子群算法公式中参数的含义&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;粒子群算法公式中参数的含义&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Ω 惯性权重因子 非负 全局寻优 部分寻优&lt;/li&gt;
+&lt;li&gt;1 个体学习因子&lt;/li&gt;
+&lt;li&gt;2 社会学习因子&lt;/li&gt;
+&lt;li&gt;Vmax 最大速度 每维变化的20%~30%&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;只有第1部分：一直以当前速度飞行&lt;/p&gt;
+&lt;p&gt;没有第1部分：速度只取决于当前位置和历史最好位置&lt;/p&gt;
+&lt;p&gt;没有第2部分：有能力到达新的搜索空间，复杂问题容易陷入局部最优&lt;/p&gt;
+&lt;p&gt;没有第3部分：得到最优解概率非常小&lt;/p&gt;
+&lt;h2 id=&#34;第7章机器学习&#34;&gt;第7章机器学习&lt;/h2&gt;
+&lt;h3 id=&#34;掌握监督学习无监督学习弱监督学习的定义及所属经典算法&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;监督学习、无监督学习、弱监督学习的定义及所属经典算法&lt;/h3&gt;
+&lt;h4 id=&#34;监督学习&#34;&gt;监督学习&lt;/h4&gt;
+&lt;p&gt;给定数据集学习出一个函数，训练集中的目标是人类标注的。&lt;/p&gt;
+&lt;p&gt;垃圾邮件过滤&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;K临近算法&lt;/li&gt;
+&lt;li&gt;决策树&lt;/li&gt;
+&lt;li&gt;朴素贝叶斯&lt;/li&gt;
+&lt;li&gt;Logistic回归&lt;/li&gt;
+&lt;li&gt;支持向量机&lt;/li&gt;
+&lt;li&gt;AdaBoost&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;无监督学习&#34;&gt;无监督学习&lt;/h4&gt;
+&lt;p&gt;学习中只提供事物的基本特征，不提供事物的名称，让学习者自己总结归纳。&lt;/p&gt;
+&lt;p&gt;分类：事先确定有哪些类别，每个类别有标签&lt;/p&gt;
+&lt;p&gt;聚类：数据没有标签，按照一定算法将相似数据聚集到一起。&lt;/p&gt;
+&lt;h3 id=&#34;掌握knn算法&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;KNN算法&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;计算待预测样本与训练集合所有样本距离&lt;/li&gt;
+&lt;li&gt;取k个最相似样本，统计坐标&lt;/li&gt;
+&lt;li&gt;占比最高的类标赋予待预测样本&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;掌握决策树算法并会画决策树&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;决策树算法并会画决策树&lt;/h3&gt;
+&lt;p&gt;【决策树】&lt;/p&gt;
+&lt;h3 id=&#34;掌握支持向量机的定义了解求解过程&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;支持向量机的定义，了解求解过程&lt;/h3&gt;
+&lt;p&gt;【？】&lt;/p&gt;
+&lt;p&gt;找出超平面，二分类&lt;/p&gt;
+&lt;p&gt;核函数&lt;/p&gt;
+&lt;h3 id=&#34;掌握k-means算法&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;K-means算法&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;初始化k个聚类中心&lt;/li&gt;
+&lt;li&gt;为每个个体分配聚类中心&lt;/li&gt;
+&lt;li&gt;移动聚类中心&lt;/li&gt;
+&lt;li&gt;重复迭代，直到聚类中心不变或变化很小&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;了解强化学习的定义及内涵&#34;&gt;了解强化学习的定义及内涵&lt;/h3&gt;
+&lt;p&gt;把学习看作试探评价过程。Agent选择一个动作作用于环境，环境接收该动作后状态发生变化，产生一个强化信号反馈给Agent，Agent根据强化信号和环境所处状态选择下一个动作。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;根据先验得到初始认知(值函数)&lt;/li&gt;
+&lt;li&gt;根据认知选择动作(伴随一定的随机性)&lt;/li&gt;
+&lt;li&gt;获得经验&lt;/li&gt;
+&lt;li&gt;根据反馈，修改认知&lt;/li&gt;
+&lt;li&gt;根据延迟的反馈，回退修改历史认知&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;第8章人工神经网络与深度学习&#34;&gt;第8章人工神经网络与深度学习&lt;/h2&gt;
+&lt;h3 id=&#34;掌握神经网络并会画全连接的神经网络图&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;神经网络并会画全连接的神经网络图&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;前馈型：各神经元接受前一层的输入并传给下一层，没有反馈&lt;/li&gt;
+&lt;li&gt;反馈型：存在一些神经元的输出经过若干个神经元后反馈到这些神经元的输入端&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;了解神经网络中的参数及意义&#34;&gt;&lt;del&gt;了解&lt;/del&gt;神经网络中的参数及意义&lt;/h3&gt;
+&lt;p&gt;加权求和、线性动态系统、非线性函数映射。&lt;/p&gt;
+&lt;p&gt;sigmod(z)=1/(1+exp{-z})&lt;/p&gt;
+&lt;p&gt;relu(u)=z(z&amp;gt;0)或relu(z)=0(z&amp;lt;=0)&lt;/p&gt;
+&lt;h3 id=&#34;会计算卷积&#34;&gt;会计算卷积&lt;/h3&gt;
+&lt;p&gt;如何通俗易懂地解释卷积？ - 马同学的回答 - 知乎
+&lt;a href=&#34;https://www.zhihu.com/question/22298352/answer/228543288&#34;&gt;https://www.zhihu.com/question/22298352/answer/228543288&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&#34;掌握生成对抗网络中的两个主要部件及其功能&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;生成对抗网络中的两个主要部件及其功能&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;生成器&lt;/strong&gt;的输入是一个来自常见概率分布的随机噪声矢量，输出是计算机生成的伪数据。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;判别器&lt;/strong&gt;的输入是图片，可能采用真实数据，也可能采用生成数据，输出是一个标量用于代表真实图片的概率。&lt;/p&gt;
+&lt;h2 id=&#34;第9章专家系统&#34;&gt;第9章专家系统&lt;/h2&gt;
+&lt;h3 id=&#34;掌握专家系统的定义&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;专家系统的定义&lt;/h3&gt;
+&lt;p&gt;一种智能的计算机程序，它运用知识和推理来解决只有专家才能解决的复杂问题。&lt;/p&gt;
+&lt;p&gt;知识库：存储求解领域问题需要的知识。一般以规则表示。&lt;/p&gt;
+&lt;p&gt;推理机：一个执行结构，对知识库中的知识进行解析，利用知识进行推理。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;人机交互界面&lt;/li&gt;
+&lt;li&gt;知识获取模块&lt;/li&gt;
+&lt;li&gt;动态数据库&lt;/li&gt;
+&lt;li&gt;解释器 专家系统特有的模块，与一般计算机软件系统的区别之一
+&lt;ul&gt;
+&lt;li&gt;why解释&lt;/li&gt;
+&lt;li&gt;how解释&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;正向推理：正向运用规则，由已知条件向目标出发运用推理。&lt;/p&gt;
+&lt;p&gt;逆向推理：逆向运用规则，假设目标解成立，逆向进行推理。&lt;/p&gt;
+&lt;h3 id=&#34;掌握非确定性推理并会计算&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;非确定性推理并会计算&lt;/h3&gt;
+&lt;pre&gt;&lt;code&gt;IF A THEN B CF(B,A)
+CF(A∧B) = min(CF(A), CF(B))
+CF(A∨B) = max(CF(A), CF(B))
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;第10章计算机视觉&#34;&gt;第10章计算机视觉&lt;/h2&gt;
+&lt;h3 id=&#34;掌握基于浅层模型的方法的处理流程&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;基于浅层模型的方法的处理流程&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;图像预处理过程p
+&lt;ul&gt;
+&lt;li&gt;目标对齐&lt;/li&gt;
+&lt;li&gt;几何归一化&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;特征设计与提取过程q
+&lt;ul&gt;
+&lt;li&gt;全局特征 图像全部像素或多个区域含有的信息建模&lt;/li&gt;
+&lt;li&gt;局部特征 只从一个局部区域内的少量像素中提取信息&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;特征汇聚或变换h&lt;/li&gt;
+&lt;li&gt;分类器或回归器函数g的设计与训练&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;掌握后三个步骤中涉及的主要技术&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;后三个步骤中涉及的主要技术&lt;/h3&gt;
+&lt;h4 id=&#34;局部二值模式&#34;&gt;局部二值模式&lt;/h4&gt;
+&lt;h4 id=&#34;词袋模型&#34;&gt;词袋模型&lt;/h4&gt;
+&lt;h4 id=&#34;主成分分析&#34;&gt;主成分分析&lt;/h4&gt;
+&lt;h4 id=&#34;线性判别分析&#34;&gt;线性判别分析&lt;/h4&gt;
+&lt;h4 id=&#34;核方法&#34;&gt;核方法&lt;/h4&gt;
+&lt;h4 id=&#34;流形学习&#34;&gt;流形学习&lt;/h4&gt;
+&lt;h2 id=&#34;第11章自然语言处理&#34;&gt;第11章自然语言处理&lt;/h2&gt;
+&lt;h3 id=&#34;人工智能的分类和处理技术&#34;&gt;人工智能的分类和处理技术&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;运算智能 记忆和计算&lt;/li&gt;
+&lt;li&gt;感知智能 感知环境的能力，如听觉、视觉、触觉等&lt;/li&gt;
+&lt;li&gt;认知智能 语言理解，知识和推理&lt;/li&gt;
+&lt;li&gt;创造智能 对未见过、未发生过的事物和问题，运用经验，通过想象力设计实验、验证并予以发现的智能过程&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;自然语言处理是从自然语言到机器内部的一个映射。&lt;/strong&gt;&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;自然语言处理是认知智能的核心&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;引导知识图谱进步&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;提高用户理解能力&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;推动推理能力&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;了解自然语言处理中的主要技术和应用场景&#34;&gt;&lt;del&gt;了解&lt;/del&gt;自然语言处理中的主要技术和应用场景&lt;/h3&gt;
+&lt;p&gt;【NLP技术.km】&lt;/p&gt;
+&lt;h3 id=&#34;掌握自然语言人机交互包括人机对话及聊天机器人的设计&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;自然语言人机交互，包括人机对话及聊天机器人的设计&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;对话理解
+&lt;ul&gt;
+&lt;li&gt;领域分类：根据用户对话内容确定所属领域&lt;/li&gt;
+&lt;li&gt;用户意图分类：根据领域分类结果确定用户意图&lt;/li&gt;
+&lt;li&gt;槽位填充：针对某个具体任务，抽取槽位信息&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;对话管理
+&lt;ul&gt;
+&lt;li&gt;对话状态跟踪&lt;/li&gt;
+&lt;li&gt;对话策略优化
+&lt;ul&gt;
+&lt;li&gt;基于有限状态机的方法&lt;/li&gt;
+&lt;li&gt;基于部分可观测马尔科夫链的方法&lt;/li&gt;
+&lt;li&gt;基于深度学习的方法&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;回复生成
+&lt;ul&gt;
+&lt;li&gt;基于模板的方法&lt;/li&gt;
+&lt;li&gt;基于统计的方法&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;基于规则的聊天机器人&#34;&gt;基于规则的聊天机器人&lt;/h4&gt;
+&lt;ol&gt;
+&lt;li&gt;规则系统对输入的自然语言进行解析&lt;/li&gt;
+&lt;li&gt;抽取预定义的关键词&lt;/li&gt;
+&lt;li&gt;通过预先定义的模板进行回复&lt;/li&gt;
+&lt;li&gt;如果不在规则体系内，则采用万能回复&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id=&#34;基于检索的聊天机器人&#34;&gt;基于检索的聊天机器人&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;搜索引擎技术+人类对话语料&lt;/li&gt;
+&lt;li&gt;组织成一问一答结构&lt;/li&gt;
+&lt;li&gt;匹配模型是关键&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;序列-编码器-&amp;gt;向量-编码器-&amp;gt;序列&lt;/p&gt;
+&lt;h2 id=&#34;第12章语音处理&#34;&gt;第12章语音处理&lt;/h2&gt;
+&lt;h3 id=&#34;掌握声音的四要素&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;声音的四要素&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;音高 声波频率&lt;/li&gt;
+&lt;li&gt;音强 振幅大小&lt;/li&gt;
+&lt;li&gt;音长 持续时间长短&lt;/li&gt;
+&lt;li&gt;音色 声音的特色和本质&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;掌握声音识别常用的几种声学特征&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;声音识别常用的几种声学特征&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;梅尔频率倒谱系数&lt;/li&gt;
+&lt;li&gt;梅尔标度滤波器组特征&lt;/li&gt;
+&lt;li&gt;感知线性预测倒谱系数&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;了解语音识别中常见的难题&#34;&gt;&lt;del&gt;了解&lt;/del&gt;语音识别中常见的难题&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;语音信号复杂多样&lt;/li&gt;
+&lt;li&gt;语音信号只有少量信息与语音识别相关&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;掌握语音识别系统的框架并掌握部分功能&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;语音识别系统的框架，并掌握部分功能&lt;/h3&gt;
+&lt;p&gt;特征提取、声学模型、语言模型、解码搜索
+【PPT第26页】&lt;/p&gt;
+&lt;h3 id=&#34;了解语音增强中的几种关键技术&#34;&gt;&lt;del&gt;了解&lt;/del&gt;语音增强中的几种关键技术&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;回声消除&lt;/li&gt;
+&lt;li&gt;混响抑制&lt;/li&gt;
+&lt;li&gt;语音降噪&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;了解情感语音的描述方式&#34;&gt;&lt;del&gt;了解&lt;/del&gt;情感语音的描述方式&lt;/h3&gt;
+&lt;p&gt;离散情感模型，将情感描述为离散的形容词、标签的形式，如高兴，愤怒等&lt;/p&gt;
+&lt;p&gt;维度情感模型将情感状态描述为多维情感空间中的连续数值，也称作连续情感描述。&lt;/p&gt;
+&lt;h2 id=&#34;第13章规划&#34;&gt;第13章规划&lt;/h2&gt;
+&lt;h3 id=&#34;掌握经典规划的假设条件以及经典规划的定义&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;经典规划的假设条件以及经典规划的定义&lt;/h3&gt;
+&lt;ol start=&#34;0&#34;&gt;
+&lt;li&gt;有限系统 问题只涉及有限的状态、行动、事件等&lt;/li&gt;
+&lt;li&gt;完全可观察 永远知道系统当前所在的状态&lt;/li&gt;
+&lt;li&gt;确定性 每个行动只会导致一种确定的影响&lt;/li&gt;
+&lt;li&gt;静态性 不存在外部行动，环境所有的改变都来自控制者的行动&lt;/li&gt;
+&lt;li&gt;状态目标 目标是一些需要达到的目标状态&lt;/li&gt;
+&lt;li&gt;序列规则 规则结果是一个线性行动序列&lt;/li&gt;
+&lt;li&gt;隐含时间 不考虑时间连续性&lt;/li&gt;
+&lt;li&gt;离线规划 规划求解器不考虑执行时状态&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;满足上述所有假设的称为经典规划。&lt;/p&gt;
+&lt;h3 id=&#34;掌握运用经典规划理论描述和解决实际问题的方法&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;运用经典规划理论描述和解决实际问题的方法&lt;/h3&gt;
+&lt;p&gt;这个问题可以定义3个行动：Load(装载), Unload(卸载)和Fly(飞行)。行动作用于两个谓词：In(c,p)表示货物c在飞机p内，At(x,a)表示物体x(飞机或货物)在机场a。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;注意当货物在飞机内（In）时，它不在（At）任何地方，所以At的实际意思是“可供在一个给定的地方使用”&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;pre&gt;&lt;code&gt;Action(Load(c,p,a))
+前提：At(c,a) ∧ At(p,a) ∧ Cargo(c) ∧ Plane(p) ∧ Airport(a)
+正效果：In(c,p)
+负效果： At(c,a)
+Action(Unload(c,p,a))
+前提：In(c,p) ∧ At(p,a) ∧ Cargo(c) ∧ Plane(p) ∧ Airport(a)
+正反馈：At(c,a)
+负反馈：In(c,p)
+Action(Fly(p,from,to))
+前提：At(p,from) ∧ Plane(p) ∧ Airport(from) ∧ Airport(to)
+正反馈：At(p,to)
+负反馈： At(p,from) 
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;第14章多智能体&#34;&gt;第14章多智能体&lt;/h2&gt;
+&lt;h3 id=&#34;掌握多智能体的定义&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;多智能体的定义&lt;/h3&gt;
+&lt;p&gt;智能体是一个软件实体，可以代表一个人类用户或其他程序。智能体具有一个行为集合，且具有某种程度的独立性或者自主性。智能体在采取行动时，通常采用知识来表示用户的目标或期望。&lt;/p&gt;
+&lt;h3 id=&#34;掌握多智能体的四种性质和强性质&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;多智能体的四种性质和强性质&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;自主性&lt;/li&gt;
+&lt;li&gt;主动性&lt;/li&gt;
+&lt;li&gt;反应能力&lt;/li&gt;
+&lt;li&gt;社会能力&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;强性质&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;移动性 具备在网络上移动的能力&lt;/li&gt;
+&lt;li&gt;诚实性 互相通信时不会传输错误的信息&lt;/li&gt;
+&lt;li&gt;无私性 不会有冲突的目标&lt;/li&gt;
+&lt;li&gt;理性 具备一定的理性，能分析目标是否能实现&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;掌握智能体的抽象结构&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;智能体的抽象结构&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;无内部状态&lt;/li&gt;
+&lt;li&gt;有内部状态
+【……】&lt;/li&gt;
+&lt;/ul&gt;
+- https://ntutn.top/posts/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/ - CC BY-SA 4.0</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>我发现了齐鲁软件大赛系统的漏洞</title>
+        <link>https://ntutn.top/posts/%E6%88%91%E5%8F%91%E7%8E%B0%E4%BA%86%E9%BD%90%E9%B2%81%E8%BD%AF%E4%BB%B6%E5%A4%A7%E8%B5%9B%E7%B3%BB%E7%BB%9F%E7%9A%84%E6%BC%8F%E6%B4%9E/</link>
+        <pubDate>Thu, 03 Jan 2019 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/%E6%88%91%E5%8F%91%E7%8E%B0%E4%BA%86%E9%BD%90%E9%B2%81%E8%BD%AF%E4%BB%B6%E5%A4%A7%E8%B5%9B%E7%B3%BB%E7%BB%9F%E7%9A%84%E6%BC%8F%E6%B4%9E/</guid>
+        <description>归零幻想 https://ntutn.top/posts/%E6%88%91%E5%8F%91%E7%8E%B0%E4%BA%86%E9%BD%90%E9%B2%81%E8%BD%AF%E4%BB%B6%E5%A4%A7%E8%B5%9B%E7%B3%BB%E7%BB%9F%E7%9A%84%E6%BC%8F%E6%B4%9E/ -&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;事情起因是这样的：&lt;/p&gt;
+&lt;p&gt;本来我计划今天处理齐软提交作品的事情，然而知乎真是好看……&lt;/p&gt;
+&lt;p&gt;等我想起了这回事，提交信息后，先弹出修改成功提示，然后告诉我&lt;strong&gt;没有登录&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;what?没有登录但修改成功了？&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;吓得我感觉登进去，可不就是我刚刚填写的资料嘛。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2020/08/20/jZQeLTqHG9haiuI.png&#34; alt=&#34;1.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;为了排除在线编辑器本地保存重新加载的可能，我祭出&lt;code&gt;curl&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2020/08/20/hKGqjndUfYB7RTi.png&#34; alt=&#34;2.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;然后再次登进去&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2020/08/20/MbwDRyafdKBOQxq.png&#34; alt=&#34;4.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;嗯，没得洗了。直接修改数据的接口竟然不做登录验证。万一我写个循环这不就几乎删库了。&lt;/p&gt;
+&lt;p&gt;不过我是谁？我是正直的好青年，我当然选择把bug上交国家，不对，是告诉厂家，不对怎么说来着……算了，就是这个意思。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;目前这个bug已经修复了，可惜也不能凭借发现这么严重漏洞直接拿个奖……&lt;/p&gt;
+- https://ntutn.top/posts/%E6%88%91%E5%8F%91%E7%8E%B0%E4%BA%86%E9%BD%90%E9%B2%81%E8%BD%AF%E4%BB%B6%E5%A4%A7%E8%B5%9B%E7%B3%BB%E7%BB%9F%E7%9A%84%E6%BC%8F%E6%B4%9E/ - CC BY-SA 4.0</description>
+        </item>
+    
+    
+  </channel>
+</rss> 

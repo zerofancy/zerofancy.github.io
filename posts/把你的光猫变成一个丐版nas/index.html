@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html><head>
+<title>把你的光猫变成一个丐版nas</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="我的初衷是调研下光猫改桥接的可行性，结果拿到超级管理员密码后还是没有这个选项。但在这个过程中发现直接在光猫上跑个下载服务却是可行的。">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+<meta property="og:title" content="把你的光猫变成一个丐版nas" />
+<meta property="og:description" content="我的初衷是调研下光猫改桥接的可行性，结果拿到超级管理员密码后还是没有这个选项。但在这个过程中发现直接在光猫上跑个下载服务却是可行的。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ntutn.top/posts/%E6%8A%8A%E4%BD%A0%E7%9A%84%E5%85%89%E7%8C%AB%E5%8F%98%E6%88%90%E4%B8%80%E4%B8%AA%E4%B8%90%E7%89%88nas/" />
+<meta property="article:published_time" content="2022-04-12T01:21:54+08:00" />
+<meta property="article:modified_time" content="2022-04-12T01:21:54+08:00" /><meta property="og:site_name" content="归零幻想" />
+
+
+
+
+
+
+
+
+
+
+<link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+
+  
+
+
+
+
+<link rel="icon" href="//images.ntutn.top/favicon.ico">
+
+
+
+<link rel="stylesheet" href="https://ntutn.top/scss/journal.min.d8d9f81b896882733c41896750adbefbf9319ca02ccccefd461650898975c3af.css" integrity="sha256-2Nn4G4lognM8QYlnUK2&#43;&#43;/kxnKAszM79RhZQiYl1w68=" media="screen">
+
+
+
+<link rel="stylesheet" href="https://ntutn.top/scss/dark-mode.min.60f86847da9fc0724177ccfd0bf7c5997b0b41f1e58d5a293cfb3723c497c422.css" integrity="sha256-YPhoR9qfwHJBd8z9C/fFmXsLQfHljVopPPs3I8SXxCI=" media="screen">
+
+
+<script src="/vendor/js/loadCSS.js"></script>
+<script>
+  loadCSS("https://fonts.googleapis.com/css?family=Fira+Mono|Material+Icons");
+</script>
+
+
+
+<script defer
+	src='https://static.cloudflareinsights.com/beacon.min.js'
+	data-cf-beacon='{"token": 5a03d307f5214109a1e7c8b2cf306a3d'>
+</script>
+
+
+
+
+
+
+  <script src="/js/toc.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+<body>
+    	<div id="app"><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://ntutn.top/">
+    
+        <div class="nav-title">
+            归零幻想
+        </div>
+        
+        <div class="nav-subtitle">
+            零点还不算熬夜
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                归档
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/categories">
+                分类
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
+                标签
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/friends">
+                友链
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/about">
+                关于
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/index.xml">
+                RSS
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	CC BY-SA 4.0
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    
+    
+    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%8a%8a%e4%bd%a0%e7%9a%84%e5%85%89%e7%8c%ab%e5%8f%98%e6%88%90%e4%b8%80%e4%b8%aa%e4%b8%90%e7%89%88nas" onclick="onNavClick(`#把你的光猫变成一个丐版nas-nav`)" id="把你的光猫变成一个丐版nas-nav">
+									把你的光猫变成一个丐版NAS
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%85%81%e8%ae%b8ftp%e8%ae%bf%e9%97%ae%e5%92%8ctelnet%e8%ae%bf%e9%97%ae" onclick="onNavClick(`#允许ftp访问和telnet访问-nav`)" id="允许ftp访问和telnet访问-nav">
+									允许FTP访问和telnet访问
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%bc%80%e5%a7%8b%e6%95%b4%e6%b4%bb" onclick="onNavClick(`#开始整活-nav`)" id="开始整活-nav">
+									开始整活
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%88%90%e5%93%81" onclick="onNavClick(`#成品-nav`)" id="成品-nav">
+									成品
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%8b%93%e5%b1%95" onclick="onNavClick(`#拓展-nav`)" id="拓展-nav">
+									拓展
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e8%a2%ab%e6%88%91%e5%b9%b2%e6%8e%89%e7%9a%84%e4%b8%a4%e4%b8%aa-java-%e8%bf%9b%e7%a8%8b%e6%98%af%e5%81%9a%e4%bb%80%e4%b9%88%e7%9a%84" onclick="onNavClick(`#被我干掉的两个-java-进程是做什么的-nav`)" id="被我干掉的两个-java-进程是做什么的-nav">
+									被我干掉的两个 java 进程是做什么的
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#ftp%e8%ae%bf%e9%97%ae%e4%b8%ba%e7%a9%ba%e7%99%bd" onclick="onNavClick(`#ftp访问为空白-nav`)" id="ftp访问为空白-nav">
+									FTP访问为空白
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%97%a0%e6%b3%95%e6%89%a7%e8%a1%8c%e9%87%8d%e5%90%af%e5%90%8e%e6%96%87%e4%bb%b6%e4%b8%a2%e5%a4%b1" onclick="onNavClick(`#无法执行重启后文件丢失-nav`)" id="无法执行重启后文件丢失-nav">
+									无法执行/重启后文件丢失
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%94%af%e6%8c%81-https" onclick="onNavClick(`#支持-https-nav`)" id="支持-https-nav">
+									支持 https
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#oom" onclick="onNavClick(`#oom-nav`)" id="oom-nav">
+									OOM
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+    
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+<div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    归档
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/categories">
+                    分类
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
+                    标签
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/friends">
+                    友链
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/about">
+                    关于
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/index.xml">
+                    RSS
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%8a%8a%e4%bd%a0%e7%9a%84%e5%85%89%e7%8c%ab%e5%8f%98%e6%88%90%e4%b8%80%e4%b8%aa%e4%b8%90%e7%89%88nas" onclick="onNavClick(`#把你的光猫变成一个丐版nas-nav`)" id="把你的光猫变成一个丐版nas-nav">
+									把你的光猫变成一个丐版NAS
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%85%81%e8%ae%b8ftp%e8%ae%bf%e9%97%ae%e5%92%8ctelnet%e8%ae%bf%e9%97%ae" onclick="onNavClick(`#允许ftp访问和telnet访问-nav`)" id="允许ftp访问和telnet访问-nav">
+									允许FTP访问和telnet访问
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%bc%80%e5%a7%8b%e6%95%b4%e6%b4%bb" onclick="onNavClick(`#开始整活-nav`)" id="开始整活-nav">
+									开始整活
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%88%90%e5%93%81" onclick="onNavClick(`#成品-nav`)" id="成品-nav">
+									成品
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%8b%93%e5%b1%95" onclick="onNavClick(`#拓展-nav`)" id="拓展-nav">
+									拓展
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e8%a2%ab%e6%88%91%e5%b9%b2%e6%8e%89%e7%9a%84%e4%b8%a4%e4%b8%aa-java-%e8%bf%9b%e7%a8%8b%e6%98%af%e5%81%9a%e4%bb%80%e4%b9%88%e7%9a%84" onclick="onNavClick(`#被我干掉的两个-java-进程是做什么的-nav`)" id="被我干掉的两个-java-进程是做什么的-nav">
+									被我干掉的两个 java 进程是做什么的
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#ftp%e8%ae%bf%e9%97%ae%e4%b8%ba%e7%a9%ba%e7%99%bd" onclick="onNavClick(`#ftp访问为空白-nav`)" id="ftp访问为空白-nav">
+									FTP访问为空白
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%97%a0%e6%b3%95%e6%89%a7%e8%a1%8c%e9%87%8d%e5%90%af%e5%90%8e%e6%96%87%e4%bb%b6%e4%b8%a2%e5%a4%b1" onclick="onNavClick(`#无法执行重启后文件丢失-nav`)" id="无法执行重启后文件丢失-nav">
+									无法执行/重启后文件丢失
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%94%af%e6%8c%81-https" onclick="onNavClick(`#支持-https-nav`)" id="支持-https-nav">
+									支持 https
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#oom" onclick="onNavClick(`#oom-nav`)" id="oom-nav">
+									OOM
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://ntutn.top/">
+            归零幻想
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://ntutn.top/">
+        <div class="single-column-header-title">归零幻想</div>
+        
+        <div class="single-column-header-subtitle">零点还不算熬夜</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+                
+            
+
+            <div class="post-head-wrapper"
+                
+                    
+                    
+                    style="background-image: url('https://images.ntutn.top/2022/04/bc80e51855b842dedd7268113042e378.png')"
+                    
+                
+            >
+                <div class="post-title">
+                    把你的光猫变成一个丐版nas
+                    
+                    <div class="post-subtitle">
+                        我的初衷是调研下光猫改桥接的可行性，结果拿到超级管理员密码后还是没有这个选项。但在这个过程中发现直接在光猫上跑个下载服务却是可行的。
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2022-04-12 01:21
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/todo">Todo</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/%E6%8A%98%E8%85%BE">折腾</a>
+                                &nbsp;
+                            
+                                <a href="/tags/%E5%AE%BD%E5%B8%A6">宽带</a>
+                                &nbsp;
+                            
+                                <a href="/tags/linux">Linux</a>
+                                &nbsp;
+                            
+                                <a href="/tags/bt">BT</a>
+                                &nbsp;
+                            
+                                <a href="/tags/%E4%B8%8B%E8%BD%BD">下载</a>
+                                &nbsp;
+                            
+                        
+                        
+                            <i class="material-icons" style="">schedule</i>
+                            
+
+                            
+                            
+
+                            
+                            6 min
+                            
+                            7 s.
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <!-- raw HTML omitted -->
+<h1 id="把你的光猫变成一个丐版nas">把你的光猫变成一个丐版NAS</h1>
+<p>我的初衷是调研下光猫改桥接的可行性，结果拿到超级管理员密码后还是没有这个选项。但在这个过程中发现直接在光猫上跑个下载服务却是可行的。</p>
+<h2 id="允许ftp访问和telnet访问">允许FTP访问和telnet访问</h2>
+<p>访问 http://192.168.1.1 ，输入密码后进入光猫管理后台。这里我找到“上网帐号设置”，备份宽带帐号和密码。不得不说他系统还是挺拉的，密码框直接用审查元素功能把 type 改为 input 就可以看到密码了。</p>
+<p>第一步后台不要退出，访问 http://192.168.1.1/servmngr.html 。这里看到一个空白页面，审查元素后发现大有乾坤。 <img src="https://images.ntutn.top/2022/04/78e9db7285fda2ee43fd5901902d3208.png" alt="img"></p>
+<p>将这些代码取消注释，此时网页还是空白的，但是用 Ctrl+A 可以看到实际是有内容的。在这个页面开启 telnet 访问，并设置密码。注意用户名为 admin 不要改，否则后面 telnet 登陆不进去。</p>
+<p><code>telnet 192.168.1.1</code> 成功后执行<code>sh</code>。然后<code>uname -a</code>看下。这里我就不记录查看管理员密码步骤了，反正这个型号管理员面板也没有设置桥接的选项。</p>
+<h2 id="开始整活">开始整活</h2>
+<p><code>top</code>，发现占用内存最高的是个两个 java 进程。<code>java -version</code>，发现安装了 java8 。</p>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-plain" data-lang="plain"># java -version
+openjdk version &#34;1.8.0-internal&#34;
+OpenJDK Runtime Environment (build 1.8.0-internal-jenkinsang_2022_01_15_04_03-b00)
+JamVM (build 2.0.0, inline-threaded interpreter with stack-caching)
+</code></pre></div><p><code>free</code>命令可知总内存约二十多兆，剩余仅 3 兆。这点空间是搞不了什么事情的，因此我尝试干掉前述两个 java 进程。<code>ps -aux | grep java</code>，发现除了存在两个 java 进程，还写了脚本自动把这两个进程拉起来，即<code>/etc/monitor_java.sh</code> 。统统 kill 掉。</p>
+<p>现在有 10 兆左右的内存了，对于 java 来说可能还是不太能搞事，但跑个 aria2 足够了！尝试插入 U 盘，发现在<code>/mnt/usb1_1</code>自动挂载。</p>
+<p>交叉编译 aria2c ，这里我用的是这个脚本：https://gitee.com/logic_2050/auto-build-aria2-mips32-static 。在我的 debian11 编译过程中只遇到一个问题，手动<code>sudo apt install autoreconf</code>即可。</p>
+<p>如何把文件弄到光猫里，以及取出来？每次插拔 U 盘也太麻烦了。于是我找到一个支持上传的简单文件服务器：https://github.com/mayth/go-simple-upload-server。仍然交叉编译到 mips 静态包。<code>env GOOS=linux GOARCH=mips GOMIPS=softfloat go build -trimpath -ldflags=&quot;-s -w -extldflags=-static&quot;</code></p>
+<h2 id="成品">成品</h2>
+<p><img src="https://images.ntutn.top/2022/04/bc80e51855b842dedd7268113042e378.png" alt="img"></p>
+<h2 id="拓展">拓展</h2>
+<h3 id="被我干掉的两个-java-进程是做什么的">被我干掉的两个 java 进程是做什么的</h3>
+<p>光猫跑 java 属实有点离谱，一半内存都是他们占的，干掉后也不影响上网，甚至也不影响光猫后台管理。嗯，有点耐人寻味。</p>
+<h3 id="ftp访问为空白">FTP访问为空白</h3>
+<p>经测试，该型号FTP访问根目录是一片空白，但大多数子目录还是可以正常访问的，如<code>/mnt/usb1_1</code>，完全能满足要求。</p>
+<h3 id="无法执行重启后文件丢失">无法执行/重启后文件丢失</h3>
+<p>有些目录下是无法写入的，有些虽然可以写入，但是重启会丢失，还有些目录下无法执行程序。</p>
+<p>我选择把整活用的程序放到<code>/fhconf/</code>下，因为光猫自己的配置文件备份就放在这里，显然这里是不会重置的。</p>
+<h3 id="支持-https">支持 https</h3>
+<p>只要将你的电脑下的<code>/etc/ssl/certs/ca-certificates.crt</code>文件复制到光猫下，并在aria2的配置文件中指定就可以了。</p>
+<pre><code>ca-certificate=/fhconf/custom/aria2/ca-certificates.crt
+</code></pre><h3 id="oom">OOM</h3>
+<p>尽管aria2确实已经很省资源了，但当尝试BT下载一个比较大的文件时（超过2GB）还是很容易占用超过10M内存，然后关键进程OOM就巴比Q了。我尝试过修改配置文件，关闭disk-cache、关闭预分配甚至限制下载速度等均无法解决。所以该方案的实用性其实并不是很高。</p>
+<blockquote>
+<p>也无所谓，生命在于折腾嘛。
+也许设置swap可以解决这个问题，但默认没有这个命令，估计还得去编译busybox。唉，算了吧……</p>
+</blockquote>
+<!-- raw HTML omitted -->
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">最后修改于 2022-04-12</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts" href="https://ntutn.top/friends/">
+			下回<br>Friends
+                </a>
+                
+                
+                
+                <a class="older-posts" href="https://ntutn.top/posts/auil%E5%AD%A6%E4%B9%A0/">
+			上回<br>AUIL学习
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+<script src="https://utteranc.es/client.js"
+        repo="zerofancy/zerofancy.github.io"
+        issue-term="title"
+        label=""
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	CC BY-SA 4.0
+	
+</div>
+            </div>
+    
+    <script src="/js/journal.js"></script>
+    </body>
+</html>

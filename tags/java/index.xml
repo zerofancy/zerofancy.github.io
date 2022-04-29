@@ -7,7 +7,50 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Sun, 01 Mar 2020 03:11:37 +0800</lastBuildDate><atom:link href="https://ntutn.top/tags/java/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 13 Feb 2022 18:11:08 +0800</lastBuildDate><atom:link href="https://ntutn.top/tags/java/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>AUIL学习</title>
+      <link>https://ntutn.top/posts/auil%E5%AD%A6%E4%B9%A0/</link>
+      <pubDate>Sun, 13 Feb 2022 18:11:08 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/auil%E5%AD%A6%E4%B9%A0/</guid>
+      <description>AUIL 源码学习 重点问题 AUIL是个比较知名的图片加载库，源码结构比较清晰和简单，我在阅读学习中整理了以下内容。
+MemoryCache 顾名思义，这个是在内存中缓存Bitmap相关的代码。
+MemoryCache结合了策略模式和装饰器模式，初始化时可选择不同缓存策略。
+一个Cache类内部持有一定量的Bitmap元素，并根据某种策略自动移除未使用的Bitmap。看结构我们应该从BaseMemoryCache开始看起。
+BaseMemoryCache中持有了所有放入的元素的弱引用，而它的子类根据策略持有了部分缓存对象的强引用。
+整个框架分多少个模块，每个模块的作用是什么  ImageLoader 门面。 ImageAware 对最终处理和展示图片操作的封装。 MemoryCache bitmap在内存中的缓存。 BitmapProcessor 图片处理器，处理原始图片。分为预处理和后处理，预处理的结果会存入缓存，而后处理每次展示都会执行。 BitmapDisplayer 控制图片展示，可为其附加一定的展示效果。 DiskCache bitmap在磁盘中的缓存 ImageDecoder 将图片解码为Bitmap，并缩放到合适尺寸  如何仅通过interface就将框架的整个流程串联起来 如何进行内存管理的，LRU是种什么算法，有没有比LRU更好的？ AUIL的图片缓存有二级，一是所有缓存过的图片都会持有WeakReference，可能随时回收；二是部分图片会持有强引用，不会被回收。这里的部分图片的总共大小可以设置，达到阈值之后使用一定的算法淘汰一些图片。这里最常用的就是LRU。
+LRU是淘汰缓存文件的算法，它每次淘汰最久未使用的文件。是一种最常用的页面置换算法。除了LRU之外，AUIL预置的算法还有FIFO（先入先出）、LargestLimitted（淘汰最大的文件）、LFU（淘汰使用频率最低的）。三者各有优劣。
+如，LRU因为图片展示频率在时间上的不均匀性，可能将一些高频展示的图片淘汰掉，导致缓存命中率下降；LFU对于新图片频率统计无法比较好把控。
+用到了多少个线程池，这些线程池之间的区别是什么，如果只用一个线程池可以么？ 使用了三个线程池：
+ taskExecutor taskExecutorForCachedImages taskDistributor  taskExecutor和taskExecutorForCachedImages都是用来执行图片处理和展示任务的，他们处理顺序都是个LIFO（后进先出）的队列，而taskDistributor是个普通的线程池，用于框架内其他任务。
+taskExecutorForCachedImages是专门为缓存中读取的图片展示用的线程池，因为这类图片响应会很快，所以AUIL专门给他们准备了一个线程池。 综上，如果用一个线程池则最终效果会大打折扣。</description>
+    </item>
+    
+    <item>
+      <title>Java默认修饰符问题</title>
+      <link>https://ntutn.top/posts/java%E9%BB%98%E8%AE%A4%E4%BF%AE%E9%A5%B0%E7%AC%A6%E9%97%AE%E9%A2%98/</link>
+      <pubDate>Tue, 12 Oct 2021 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/java%E9%BB%98%E8%AE%A4%E4%BF%AE%E9%A5%B0%E7%AC%A6%E9%97%AE%E9%A2%98/</guid>
+      <description>问题描述 和工具线配合完成某个需求，我这边的改动很少，但一鼓作气搞完后却遇到了奇怪的报错。已知工具线的代码大多是java的，而我这边自然是力推Kotlin。我们的代码参考如下：
+代码参考 工具线定义了一个接口用于callback
+package a; interface IPublishCallback { void onFinish(); } 工具线在执行完发布逻辑后无论成功还是失败都会调用我们的callback
+package a; public class PublishUtil { public static void publishVideo(String videoName, IPublishCallback callback) { Runnable runnable = () -&amp;gt; { try { System.out.println(&amp;#34;[&amp;#34; + videoName + &amp;#34;]开始执行耗时发布操作……&amp;#34;); Thread.sleep(1000L); } catch (InterruptedException e) { e.printStackTrace(); } callback.onFinish(); }; Thread thread = new Thread(runnable); thread.start(); try { thread.join(); } catch (InterruptedException e) { e.printStackTrace(); } } } 我们这边的实现是Kotlin的，就是调用了下工具线的方法
+package b import a.</description>
+    </item>
+    
+    <item>
+      <title>ClassLoader双亲委托机制探究</title>
+      <link>https://ntutn.top/posts/classloader%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%89%98%E6%9C%BA%E5%88%B6%E6%8E%A2%E7%A9%B6/</link>
+      <pubDate>Sun, 11 Apr 2021 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/classloader%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%89%98%E6%9C%BA%E5%88%B6%E6%8E%A2%E7%A9%B6/</guid>
+      <description>最近在研究抖音进入热点内流的耗时问题，种种线索指向了类加载耗时上。为此，我研究了Java类加载的双亲委托机制，并尝试给出了优化建议。
+双亲委托机制 双亲委托机制中最重要的是loadClass方法，让我们看看它是怎么实现的。
+protected Class&amp;lt;?&amp;gt; loadClass(String name, boolean resolve) throws ClassNotFoundException { // First, check if the class has already been loaded  Class&amp;lt;?&amp;gt; c = findLoadedClass(name); // 已加载过直接返回  if (c == null) { try { if (parent != null) { c = parent.loadClass(name, false); //尝试让parent加载  } else { c = findBootstrapClassOrNull(name); // bootstrap class loader是否加载过  } } catch (ClassNotFoundException e) { // ClassNotFoundException thrown if class not found  // from the non-null parent class loader  } if (c == null) { // If still not found, then invoke findClass in order  // to find the class.</description>
+    </item>
+    
     <item>
       <title>Java自动装箱自动拆箱踩坑</title>
       <link>https://ntutn.top/posts/java%E8%87%AA%E5%8A%A8%E8%A3%85%E7%AE%B1%E8%87%AA%E5%8A%A8%E6%8B%86%E7%AE%B1%E8%B8%A9%E5%9D%91/</link>
