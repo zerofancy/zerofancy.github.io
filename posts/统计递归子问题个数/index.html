@@ -19,9 +19,10 @@
 <meta property="og:title" content="统计递归子问题个数" />
 <meta property="og:description" content="分治策略是算法设计的重要策略之一，该策略的基本思想是把问题进行分解成一些子问题，通过子问题的求解完成对原问题的求解。其关键是分解和合并，好的分解或合并方法才会产生高效的分治算法。" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://ntutn.top/posts/%E7%BB%9F%E8%AE%A1%E9%80%92%E5%BD%92%E5%AD%90%E9%97%AE%E9%A2%98%E4%B8%AA%E6%95%B0/" />
+<meta property="og:url" content="https://ntutn.top/posts/%E7%BB%9F%E8%AE%A1%E9%80%92%E5%BD%92%E5%AD%90%E9%97%AE%E9%A2%98%E4%B8%AA%E6%95%B0/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2019-05-17T03:11:37+08:00" />
 <meta property="article:modified_time" content="2019-05-17T03:11:37+08:00" /><meta property="og:site_name" content="归零幻想" />
+
 
 
 
@@ -44,11 +45,11 @@
 
 
 
-<link rel="stylesheet" href="https://ntutn.top/scss/journal.min.d8d9f81b896882733c41896750adbefbf9319ca02ccccefd461650898975c3af.css" integrity="sha256-2Nn4G4lognM8QYlnUK2&#43;&#43;/kxnKAszM79RhZQiYl1w68=" media="screen">
+<link rel="stylesheet" href="https://ntutn.top/scss/journal.min.0f46f98b723f2aad4b02d9370bb6aa7848b5c2b2a5579642014082283683d2d8.css" integrity="sha256-D0b5i3I/Kq1LAtk3C7aqeEi1wrKlV5ZCAUCCKDaD0tg=" media="screen">
 
 
 
-<link rel="stylesheet" href="https://ntutn.top/scss/dark-mode.min.60f86847da9fc0724177ccfd0bf7c5997b0b41f1e58d5a293cfb3723c497c422.css" integrity="sha256-YPhoR9qfwHJBd8z9C/fFmXsLQfHljVopPPs3I8SXxCI=" media="screen">
+<link rel="stylesheet" href="https://ntutn.top/scss/dark-mode.min.79c34391dbcff20df8b4dac718e2606701efcbfdb9f3b08447ac39ac9dc7b463.css" integrity="sha256-ecNDkdvP8g34tNrHGOJgZwHvy/2587CER6w5rJ3HtGM=" media="screen">
 
 
 <script src="/vendor/js/loadCSS.js"></script>
@@ -666,7 +667,7 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <h2 id="question">Question</h2>
 <p>现在请你编写程序，统计计算一个斐波那契数时分解出的各子问题的个数。</p>
 <p>斐波那契数的定义如下：</p>
-<pre><code>Fib(0)=0
+<pre tabindex="0"><code>Fib(0)=0
 Fib(1)=1
 Fib(n)=Fib(n-1)+Fib(n-2)
 </code></pre><p>输入：一个整数n，即计算<code>Fib(n)</code></p>
@@ -674,9 +675,9 @@ Fib(n)=Fib(n-1)+Fib(n-2)
 <!-- raw HTML omitted -->
 <h2 id="example">Example</h2>
 <h3 id="input">Input</h3>
-<pre><code>5
+<pre tabindex="0"><code>5
 </code></pre><h3 id="output">Output</h3>
-<pre><code>Fib(0)=0,spn=3
+<pre tabindex="0"><code>Fib(0)=0,spn=3
 Fib(1)=1,spn=5
 Fib(2)=1,spn=3
 Fib(3)=2,spn=2
@@ -688,42 +689,42 @@ Fib(5)=5,spn=1
 <p>不死心的我又仔细研究递推子问题个数的规律，发现子问题个数正好是一个反着的斐波那契数列（结尾元素特殊处理），所以可以正向递推求数列，反向递推求子问题个数。</p>
 <p>不过特殊情况研究的有点头疼，暂时就不搞了，下面给出的是老老实实递归求解的程序。</p>
 <h2 id="answer">Answer</h2>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;iostream&gt;</span><span style="color:#1e889b">
-</span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;cstring&gt;</span><span style="color:#1e889b">
-</span><span style="color:#1e889b"></span><span style="color:#8b008b;font-weight:bold">using</span> <span style="color:#8b008b;font-weight:bold">namespace</span> std;
-<span style="color:#00688b;font-weight:bold">int</span>*spn;
-<span style="color:#00688b;font-weight:bold">int</span>*data;
-<span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">fib</span>(<span style="color:#00688b;font-weight:bold">int</span> n){
-    spn[n]++;
-    <span style="color:#8b008b;font-weight:bold">if</span>(n==<span style="color:#b452cd">0</span>){
-        data[<span style="color:#b452cd">0</span>]=<span style="color:#b452cd">0</span>;
-        <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>;
-    }
-    <span style="color:#8b008b;font-weight:bold">if</span>(n==<span style="color:#b452cd">1</span>){
-        data[<span style="color:#b452cd">1</span>]=<span style="color:#b452cd">1</span>;
-        <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">1</span>;
-    }
-    <span style="color:#00688b;font-weight:bold">int</span> res=fib(n-<span style="color:#b452cd">1</span>)+fib(n-<span style="color:#b452cd">2</span>);
-    data[n]=res;
-    <span style="color:#8b008b;font-weight:bold">return</span> res;
-}
-<span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">main</span>()
-{
-    <span style="color:#00688b;font-weight:bold">int</span> n;
-    cin&gt;&gt;n;
-    spn=<span style="color:#8b008b;font-weight:bold">new</span> <span style="color:#00688b;font-weight:bold">int</span>[n+<span style="color:#b452cd">1</span>];
-    data=<span style="color:#8b008b;font-weight:bold">new</span> <span style="color:#00688b;font-weight:bold">int</span>[n+<span style="color:#b452cd">1</span>];
-    memset(spn,<span style="color:#b452cd">0</span>,(n+<span style="color:#b452cd">1</span>)*<span style="color:#8b008b;font-weight:bold">sizeof</span>(<span style="color:#00688b;font-weight:bold">int</span>));
-    memset(data,-<span style="color:#b452cd">1</span>,(n+<span style="color:#b452cd">1</span>)*<span style="color:#8b008b;font-weight:bold">sizeof</span>(<span style="color:#00688b;font-weight:bold">int</span>));
-    data[<span style="color:#b452cd">0</span>]=<span style="color:#b452cd">0</span>;
-    data[<span style="color:#b452cd">1</span>]=<span style="color:#b452cd">1</span>;
-    fib(n);
-    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>;i&lt;=n;i++){
-        cout&lt;&lt;<span style="color:#cd5555">&#34;Fib(&#34;</span>&lt;&lt;i&lt;&lt;<span style="color:#cd5555">&#34;)=&#34;</span>&lt;&lt;data[i]&lt;&lt;<span style="color:#cd5555">&#34;,spn=&#34;</span>&lt;&lt;spn[i]&lt;&lt;endl;
-    }
-    <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>;
-}
-</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;iostream&gt;</span><span style="color:#1e889b">
+</span></span></span><span style="display:flex;"><span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;cstring&gt;</span><span style="color:#1e889b">
+</span></span></span><span style="display:flex;"><span><span style="color:#1e889b"></span><span style="color:#8b008b;font-weight:bold">using</span> <span style="color:#8b008b;font-weight:bold">namespace</span> std;
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">int</span>*spn;
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">int</span>*data;
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">fib</span>(<span style="color:#00688b;font-weight:bold">int</span> n){
+</span></span><span style="display:flex;"><span>    spn[n]++;
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">if</span>(n==<span style="color:#b452cd">0</span>){
+</span></span><span style="display:flex;"><span>        data[<span style="color:#b452cd">0</span>]=<span style="color:#b452cd">0</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">if</span>(n==<span style="color:#b452cd">1</span>){
+</span></span><span style="display:flex;"><span>        data[<span style="color:#b452cd">1</span>]=<span style="color:#b452cd">1</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">1</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> res=fib(n-<span style="color:#b452cd">1</span>)+fib(n-<span style="color:#b452cd">2</span>);
+</span></span><span style="display:flex;"><span>    data[n]=res;
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">return</span> res;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">main</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> n;
+</span></span><span style="display:flex;"><span>    cin&gt;&gt;n;
+</span></span><span style="display:flex;"><span>    spn=<span style="color:#8b008b;font-weight:bold">new</span> <span style="color:#00688b;font-weight:bold">int</span>[n+<span style="color:#b452cd">1</span>];
+</span></span><span style="display:flex;"><span>    data=<span style="color:#8b008b;font-weight:bold">new</span> <span style="color:#00688b;font-weight:bold">int</span>[n+<span style="color:#b452cd">1</span>];
+</span></span><span style="display:flex;"><span>    memset(spn,<span style="color:#b452cd">0</span>,(n+<span style="color:#b452cd">1</span>)*<span style="color:#8b008b;font-weight:bold">sizeof</span>(<span style="color:#00688b;font-weight:bold">int</span>));
+</span></span><span style="display:flex;"><span>    memset(data,-<span style="color:#b452cd">1</span>,(n+<span style="color:#b452cd">1</span>)*<span style="color:#8b008b;font-weight:bold">sizeof</span>(<span style="color:#00688b;font-weight:bold">int</span>));
+</span></span><span style="display:flex;"><span>    data[<span style="color:#b452cd">0</span>]=<span style="color:#b452cd">0</span>;
+</span></span><span style="display:flex;"><span>    data[<span style="color:#b452cd">1</span>]=<span style="color:#b452cd">1</span>;
+</span></span><span style="display:flex;"><span>    fib(n);
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>;i&lt;=n;i++){
+</span></span><span style="display:flex;"><span>        cout&lt;&lt;<span style="color:#cd5555">&#34;Fib(&#34;</span>&lt;&lt;i&lt;&lt;<span style="color:#cd5555">&#34;)=&#34;</span>&lt;&lt;data[i]&lt;&lt;<span style="color:#cd5555">&#34;,spn=&#34;</span>&lt;&lt;spn[i]&lt;&lt;endl;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div>
                     
                     <HR width="100%" id="EOF">
 		    <p style="color:#777;">最后修改于 2019-05-17</p>
@@ -735,8 +736,8 @@ Fib(5)=5,spn=1
             <nav class="post-pagination">
 
                 
-                <a class="newer-posts" href="https://ntutn.top/posts/%E7%A8%80%E7%96%8F%E7%9F%A9%E9%98%B5%E7%9A%84%E5%8E%8B%E7%BC%A9%E5%AD%98%E5%82%A8/">
-			下回<br>稀疏矩阵的压缩存储
+                <a class="newer-posts" href="https://ntutn.top/posts/%E5%9C%A8windows10%E4%B8%8A%E5%AE%89%E8%A3%85%E8%A1%80%E6%88%98%E4%B8%8A%E6%B5%B7%E6%BB%A9/">
+			下回<br>在Windows10上安装血战上海滩
                 </a>
                 
                 

@@ -19,9 +19,10 @@
 <meta property="og:title" content="android项目开发：持久化" />
 <meta property="og:description" content="《第一行代码》阅读记录，有关数据持久化存储，略过了数据库的方式。" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://ntutn.top/posts/%E6%8C%81%E4%B9%85%E5%8C%96/" />
+<meta property="og:url" content="https://ntutn.top/posts/%E6%8C%81%E4%B9%85%E5%8C%96/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2021-10-24T03:11:37+08:00" />
 <meta property="article:modified_time" content="2021-10-24T03:11:37+08:00" /><meta property="og:site_name" content="归零幻想" />
+
 
 
 
@@ -44,11 +45,11 @@
 
 
 
-<link rel="stylesheet" href="https://ntutn.top/scss/journal.min.d8d9f81b896882733c41896750adbefbf9319ca02ccccefd461650898975c3af.css" integrity="sha256-2Nn4G4lognM8QYlnUK2&#43;&#43;/kxnKAszM79RhZQiYl1w68=" media="screen">
+<link rel="stylesheet" href="https://ntutn.top/scss/journal.min.0f46f98b723f2aad4b02d9370bb6aa7848b5c2b2a5579642014082283683d2d8.css" integrity="sha256-D0b5i3I/Kq1LAtk3C7aqeEi1wrKlV5ZCAUCCKDaD0tg=" media="screen">
 
 
 
-<link rel="stylesheet" href="https://ntutn.top/scss/dark-mode.min.60f86847da9fc0724177ccfd0bf7c5997b0b41f1e58d5a293cfb3723c497c422.css" integrity="sha256-YPhoR9qfwHJBd8z9C/fFmXsLQfHljVopPPs3I8SXxCI=" media="screen">
+<link rel="stylesheet" href="https://ntutn.top/scss/dark-mode.min.79c34391dbcff20df8b4dac718e2606701efcbfdb9f3b08447ac39ac9dc7b463.css" integrity="sha256-ecNDkdvP8g34tNrHGOJgZwHvy/2587CER6w5rJ3HtGM=" media="screen">
 
 
 <script src="/vendor/js/loadCSS.js"></script>
@@ -573,177 +574,177 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <h1 id="持久化">持久化</h1>
 <h2 id="文件存储">文件存储</h2>
 <p>先暂时只是写了个demo，有需要再深入看。</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">saveText</span>(inputText: String) {
-        <span style="color:#8b008b;font-weight:bold">try</span> {
-            <span style="color:#8b008b;font-weight:bold">val</span> output = openFileOutput(<span style="color:#cd5555">&#34;data&#34;</span>, Context.MODE_PRIVATE)
-            <span style="color:#8b008b;font-weight:bold">val</span> writer = BufferedWriter(OutputStreamWriter(output))
-            writer.use {
-                <span style="color:#8b008b;font-weight:bold">it</span>.write(inputText)
-            }
-        } <span style="color:#8b008b;font-weight:bold">catch</span> (e: IOException) {
-            e.printStackTrace()
-        }
-    }
-    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">loadText</span>(): String {
-        <span style="color:#8b008b;font-weight:bold">val</span> content = StringBuilder()
-        <span style="color:#8b008b;font-weight:bold">try</span> {
-            <span style="color:#8b008b;font-weight:bold">val</span> input = openFileInput(<span style="color:#cd5555">&#34;data&#34;</span>)
-            <span style="color:#8b008b;font-weight:bold">val</span> reader = BufferedReader(InputStreamReader(input))
-            reader.use { r -&gt;
-                r.forEachLine {
-                    content.appendLine(<span style="color:#8b008b;font-weight:bold">it</span>)
-                }
-            }
-        } <span style="color:#8b008b;font-weight:bold">catch</span> (e: IOException) {
-            e.printStackTrace()
-        }
-        <span style="color:#8b008b;font-weight:bold">return</span> content.toString()
-    }
-</code></pre></div><h2 id="sharedpreference">SharedPreference</h2>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">            saveButton.setOnClickListener {
-                getSharedPreferences(<span style="color:#cd5555">&#34;data&#34;</span>, Context.MODE_PRIVATE).edit {
-                    putString(<span style="color:#cd5555">&#34;name&#34;</span>, <span style="color:#cd5555">&#34;Tom&#34;</span>)
-                    putInt(<span style="color:#cd5555">&#34;age&#34;</span>, <span style="color:#b452cd">28</span>)
-                    putBoolean(<span style="color:#cd5555">&#34;married&#34;</span>, <span style="color:#8b008b;font-weight:bold">false</span>)
-                }
-            }
-            restoreButton.setOnClickListener {
-                getSharedPreferences(<span style="color:#cd5555">&#34;data&#34;</span>, Context.MODE_PRIVATE).apply {
-                    <span style="color:#8b008b;font-weight:bold">val</span> name = getString(<span style="color:#cd5555">&#34;name&#34;</span>, <span style="color:#cd5555">&#34;苏珊&#34;</span>)
-                    <span style="color:#8b008b;font-weight:bold">val</span> age = getInt(<span style="color:#cd5555">&#34;age&#34;</span>, <span style="color:#b452cd">15</span>)
-                    <span style="color:#8b008b;font-weight:bold">val</span> isMarried = getBoolean(<span style="color:#cd5555">&#34;married&#34;</span>, <span style="color:#8b008b;font-weight:bold">false</span>)
-                    Toast.makeText(
-                        <span style="color:#8b008b;font-weight:bold">this</span><span style="color:#707a7c">@MainActivity</span>,
-                        <span style="color:#cd5555">&#34;</span><span style="color:#cd5555">${name}</span><span style="color:#cd5555">年龄</span><span style="color:#cd5555">${age}</span><span style="color:#cd5555">岁</span><span style="color:#cd5555">${if (isMarried) &#34;已婚&#34; else &#34;未婚&#34;}</span><span style="color:#cd5555">&#34;</span>,
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-            }
-</code></pre></div><h2 id="数据库">数据库</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">saveText</span>(inputText: String) {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">try</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">val</span> output = openFileOutput(<span style="color:#cd5555">&#34;data&#34;</span>, Context.MODE_PRIVATE)
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">val</span> writer = BufferedWriter(OutputStreamWriter(output))
+</span></span><span style="display:flex;"><span>            writer.use {
+</span></span><span style="display:flex;"><span>                <span style="color:#8b008b;font-weight:bold">it</span>.write(inputText)
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        } <span style="color:#8b008b;font-weight:bold">catch</span> (e: IOException) {
+</span></span><span style="display:flex;"><span>            e.printStackTrace()
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">loadText</span>(): String {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">val</span> content = StringBuilder()
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">try</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">val</span> input = openFileInput(<span style="color:#cd5555">&#34;data&#34;</span>)
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">val</span> reader = BufferedReader(InputStreamReader(input))
+</span></span><span style="display:flex;"><span>            reader.use { r -&gt;
+</span></span><span style="display:flex;"><span>                r.forEachLine {
+</span></span><span style="display:flex;"><span>                    content.appendLine(<span style="color:#8b008b;font-weight:bold">it</span>)
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        } <span style="color:#8b008b;font-weight:bold">catch</span> (e: IOException) {
+</span></span><span style="display:flex;"><span>            e.printStackTrace()
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span> content.toString()
+</span></span><span style="display:flex;"><span>    }
+</span></span></code></pre></div><h2 id="sharedpreference">SharedPreference</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span>            saveButton.setOnClickListener {
+</span></span><span style="display:flex;"><span>                getSharedPreferences(<span style="color:#cd5555">&#34;data&#34;</span>, Context.MODE_PRIVATE).edit {
+</span></span><span style="display:flex;"><span>                    putString(<span style="color:#cd5555">&#34;name&#34;</span>, <span style="color:#cd5555">&#34;Tom&#34;</span>)
+</span></span><span style="display:flex;"><span>                    putInt(<span style="color:#cd5555">&#34;age&#34;</span>, <span style="color:#b452cd">28</span>)
+</span></span><span style="display:flex;"><span>                    putBoolean(<span style="color:#cd5555">&#34;married&#34;</span>, <span style="color:#8b008b;font-weight:bold">false</span>)
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            restoreButton.setOnClickListener {
+</span></span><span style="display:flex;"><span>                getSharedPreferences(<span style="color:#cd5555">&#34;data&#34;</span>, Context.MODE_PRIVATE).apply {
+</span></span><span style="display:flex;"><span>                    <span style="color:#8b008b;font-weight:bold">val</span> name = getString(<span style="color:#cd5555">&#34;name&#34;</span>, <span style="color:#cd5555">&#34;苏珊&#34;</span>)
+</span></span><span style="display:flex;"><span>                    <span style="color:#8b008b;font-weight:bold">val</span> age = getInt(<span style="color:#cd5555">&#34;age&#34;</span>, <span style="color:#b452cd">15</span>)
+</span></span><span style="display:flex;"><span>                    <span style="color:#8b008b;font-weight:bold">val</span> isMarried = getBoolean(<span style="color:#cd5555">&#34;married&#34;</span>, <span style="color:#8b008b;font-weight:bold">false</span>)
+</span></span><span style="display:flex;"><span>                    Toast.makeText(
+</span></span><span style="display:flex;"><span>                        <span style="color:#8b008b;font-weight:bold">this</span><span style="color:#707a7c">@MainActivity</span>,
+</span></span><span style="display:flex;"><span>                        <span style="color:#cd5555">&#34;</span><span style="color:#cd5555">${name}</span><span style="color:#cd5555">年龄</span><span style="color:#cd5555">${age}</span><span style="color:#cd5555">岁</span><span style="color:#cd5555">${if (isMarried) &#34;已婚&#34; else &#34;未婚&#34;}</span><span style="color:#cd5555">&#34;</span>,
+</span></span><span style="display:flex;"><span>                        Toast.LENGTH_LONG
+</span></span><span style="display:flex;"><span>                    ).show()
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>            }
+</span></span></code></pre></div><h2 id="数据库">数据库</h2>
 <p>基本用法demo</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.databasetest</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.content.ContentValues</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.content.Context</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.database.Cursor</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.database.sqlite.SQLiteDatabase</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.database.sqlite.SQLiteOpenHelper</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.util.Log</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.widget.Toast</span>
-<span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">MyDatabaseHelper</span>(<span style="color:#8b008b;font-weight:bold">val</span> context: Context, name: String, version: Int) :
-    SQLiteOpenHelper(context, name, <span style="color:#8b008b;font-weight:bold">null</span>, version) {
-    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> createBook = <span style="color:#cd5555">&#34;&#34;&#34;
-</span><span style="color:#cd5555">        create table Book (
-</span><span style="color:#cd5555">            id integer primary key autoincrement,
-</span><span style="color:#cd5555">            author text,
-</span><span style="color:#cd5555">            price real,
-</span><span style="color:#cd5555">            pages integer,
-</span><span style="color:#cd5555">            name text
-</span><span style="color:#cd5555">        )
-</span><span style="color:#cd5555">    &#34;&#34;&#34;</span>.trimIndent()
-    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> createCategory = <span style="color:#cd5555">&#34;&#34;&#34;
-</span><span style="color:#cd5555">        create table Category (
-</span><span style="color:#cd5555">            id integer primary key autoincrement,
-</span><span style="color:#cd5555">            category_name text,
-</span><span style="color:#cd5555">            category_code integer
-</span><span style="color:#cd5555">        )
-</span><span style="color:#cd5555">    &#34;&#34;&#34;</span>.trimIndent()
-    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onCreate</span>(db: SQLiteDatabase) {
-        db.execSQL(createBook)
-        db.execSQL(createCategory)
-        Toast.makeText(context, <span style="color:#cd5555">&#34;建立数据库完成&#34;</span>, Toast.LENGTH_LONG).show()
-    }
-    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onUpgrade</span>(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        <span style="color:#8b008b;font-weight:bold">if</span> (oldVersion == newVersion) <span style="color:#8b008b;font-weight:bold">return</span>
-        Log.d(javaClass.simpleName, <span style="color:#cd5555">&#34;旧版是</span><span style="color:#cd5555">${oldVersion}</span><span style="color:#cd5555">，新版是</span><span style="color:#cd5555">${newVersion}</span><span style="color:#cd5555">，数据库升级开始&#34;</span>)
-        db.execSQL(<span style="color:#cd5555">&#34;drop table if exists Book&#34;</span>)
-        db.execSQL(<span style="color:#cd5555">&#34;drop table if exists Category&#34;</span>)
-        onCreate(db)
-    }
-}
-<span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">cvOf</span>(<span style="color:#8b008b;font-weight:bold">vararg</span> pairs: Pair&lt;String, Any?&gt;): ContentValues {
-    <span style="color:#8b008b;font-weight:bold">val</span> cv = ContentValues()
-    <span style="color:#8b008b;font-weight:bold">for</span> (pair <span style="color:#8b008b;font-weight:bold">in</span> pairs) {
-        <span style="color:#8b008b;font-weight:bold">val</span> key = pair.first
-        <span style="color:#8b008b;font-weight:bold">when</span> (<span style="color:#8b008b;font-weight:bold">val</span> value = pair.second) {
-            <span style="color:#8b008b;font-weight:bold">is</span> Int -&gt; cv.put(key, value)
-            <span style="color:#8b008b;font-weight:bold">is</span> Long -&gt; cv.put(key, value)
-            <span style="color:#8b008b;font-weight:bold">is</span> Short -&gt; cv.put(key, value)
-            <span style="color:#8b008b;font-weight:bold">is</span> Float -&gt; cv.put(key, value)
-            <span style="color:#8b008b;font-weight:bold">is</span> Double -&gt; cv.put(key, value)
-            <span style="color:#8b008b;font-weight:bold">is</span> Boolean -&gt; cv.put(key, value)
-            <span style="color:#8b008b;font-weight:bold">is</span> String -&gt; cv.put(key, value)
-            <span style="color:#8b008b;font-weight:bold">is</span> Byte -&gt; cv.put(key, value)
-            <span style="color:#8b008b;font-weight:bold">is</span> ByteArray -&gt; cv.put(key, value)
-            <span style="color:#8b008b;font-weight:bold">null</span> -&gt; cv.putNull(key)
-            <span style="color:#8b008b;font-weight:bold">else</span> -&gt; <span style="color:#8b008b;font-weight:bold">throw</span> IllegalArgumentException(<span style="color:#cd5555">&#34;不支持的cv类型&#34;</span>)
-        }
-    }
-    <span style="color:#8b008b;font-weight:bold">return</span> cv
-}
-<span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">Cursor</span>.getString(name: String): String = getString(getColumnIndex(name))
-<span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">Cursor</span>.getInt(name: String): Int = getInt(getColumnIndex(name))
-<span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">Cursor</span>.getDouble(name: String): Double = getDouble(getColumnIndex(name))
-</code></pre></div><div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.databasetest</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.os.Bundle</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.util.Log</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">androidx.appcompat.app.AppCompatActivity</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.databasetest.databinding.ActivityMainBinding</span>
-<span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">MainActivity</span> : AppCompatActivity() {
-    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">lateinit</span> <span style="color:#8b008b;font-weight:bold">var</span> binding: ActivityMainBinding
-    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onCreate</span>(savedInstanceState: Bundle?) {
-        <span style="color:#8b008b;font-weight:bold">super</span>.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        <span style="color:#8b008b;font-weight:bold">val</span> dbHelper = MyDatabaseHelper(<span style="color:#8b008b;font-weight:bold">this</span>, <span style="color:#cd5555">&#34;BookStore.db&#34;</span>, <span style="color:#b452cd">6</span>)
-        binding.createDatabaseButton.setOnClickListener {
-            dbHelper.writableDatabase
-        }
-        binding.addDataButton.setOnClickListener {
-            <span style="color:#8b008b;font-weight:bold">val</span> db = dbHelper.writableDatabase
-            <span style="color:#8b008b;font-weight:bold">val</span> values1 = cvOf(
-                <span style="color:#cd5555">&#34;name&#34;</span> to <span style="color:#cd5555">&#34;The Da Vinci Code&#34;</span>,
-                <span style="color:#cd5555">&#34;author&#34;</span> to <span style="color:#cd5555">&#34;Dan Brown&#34;</span>,
-                <span style="color:#cd5555">&#34;pages&#34;</span> to <span style="color:#b452cd">454</span>,
-                <span style="color:#cd5555">&#34;price&#34;</span> to <span style="color:#b452cd">16.96</span>
-            )
-            db.insert(<span style="color:#cd5555">&#34;Book&#34;</span>, <span style="color:#8b008b;font-weight:bold">null</span>, values1)
-            <span style="color:#8b008b;font-weight:bold">val</span> values2 = cvOf(
-                <span style="color:#cd5555">&#34;name&#34;</span> to <span style="color:#cd5555">&#34;The Lost Symbol&#34;</span>,
-                <span style="color:#cd5555">&#34;author&#34;</span> to <span style="color:#cd5555">&#34;Dan Brown&#34;</span>,
-                <span style="color:#cd5555">&#34;pages&#34;</span> to <span style="color:#b452cd">510</span>,
-                <span style="color:#cd5555">&#34;price&#34;</span> to <span style="color:#b452cd">19.95</span>
-            )
-            db.insert(<span style="color:#cd5555">&#34;Book&#34;</span>, <span style="color:#8b008b;font-weight:bold">null</span>, values2)
-        }
-        binding.updateDataButton.setOnClickListener {
-            <span style="color:#8b008b;font-weight:bold">val</span> db = dbHelper.writableDatabase
-            <span style="color:#8b008b;font-weight:bold">val</span> values = cvOf(<span style="color:#cd5555">&#34;price&#34;</span> to <span style="color:#b452cd">10.99</span>)
-            db.update(<span style="color:#cd5555">&#34;Book&#34;</span>, values, <span style="color:#cd5555">&#34;name=?&#34;</span>, arrayOf(<span style="color:#cd5555">&#34;The Da Vinci Code&#34;</span>))
-        }
-        binding.deleteDataButton.setOnClickListener {
-            <span style="color:#8b008b;font-weight:bold">val</span> db = dbHelper.writableDatabase
-            db.delete(<span style="color:#cd5555">&#34;Book&#34;</span>, <span style="color:#cd5555">&#34;pages &gt; ?&#34;</span>, arrayOf(<span style="color:#cd5555">&#34;500&#34;</span>))
-        }
-        binding.queryDataButton.setOnClickListener {
-            <span style="color:#8b008b;font-weight:bold">val</span> db = dbHelper.writableDatabase
-            <span style="color:#8b008b;font-weight:bold">val</span> cursor = db.query(<span style="color:#cd5555">&#34;Book&#34;</span>, <span style="color:#8b008b;font-weight:bold">null</span>, <span style="color:#8b008b;font-weight:bold">null</span>, <span style="color:#8b008b;font-weight:bold">null</span>, <span style="color:#8b008b;font-weight:bold">null</span>, <span style="color:#8b008b;font-weight:bold">null</span>, <span style="color:#8b008b;font-weight:bold">null</span>)
-            <span style="color:#8b008b;font-weight:bold">if</span> (cursor.moveToFirst()) {
-                <span style="color:#8b008b;font-weight:bold">do</span> {
-                    <span style="color:#8b008b;font-weight:bold">val</span> name = cursor.getString(<span style="color:#cd5555">&#34;name&#34;</span>)
-                    <span style="color:#8b008b;font-weight:bold">val</span> author = cursor.getString(<span style="color:#cd5555">&#34;author&#34;</span>)
-                    <span style="color:#8b008b;font-weight:bold">val</span> pages = cursor.getInt(<span style="color:#cd5555">&#34;pages&#34;</span>)
-                    <span style="color:#8b008b;font-weight:bold">val</span> price = cursor.getDouble(<span style="color:#cd5555">&#34;price&#34;</span>)
-                    Log.d(
-                        javaClass.simpleName,
-                        <span style="color:#cd5555">&#34;name: </span><span style="color:#cd5555">$name</span><span style="color:#cd5555">, author: </span><span style="color:#cd5555">$author</span><span style="color:#cd5555">, pages: </span><span style="color:#cd5555">$pages</span><span style="color:#cd5555">, price: </span><span style="color:#cd5555">$price</span><span style="color:#cd5555">&#34;</span>
-                    )
-                } <span style="color:#8b008b;font-weight:bold">while</span> (cursor.moveToNext())
-            }
-            cursor.close()
-        }
-    }
-}
-</code></pre></div><!-- raw HTML omitted -->
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.databasetest</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.content.ContentValues</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.content.Context</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.database.Cursor</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.database.sqlite.SQLiteDatabase</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.database.sqlite.SQLiteOpenHelper</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.util.Log</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.widget.Toast</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">MyDatabaseHelper</span>(<span style="color:#8b008b;font-weight:bold">val</span> context: Context, name: String, version: Int) :
+</span></span><span style="display:flex;"><span>    SQLiteOpenHelper(context, name, <span style="color:#8b008b;font-weight:bold">null</span>, version) {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> createBook = <span style="color:#cd5555">&#34;&#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#cd5555">        create table Book (
+</span></span></span><span style="display:flex;"><span><span style="color:#cd5555">            id integer primary key autoincrement,
+</span></span></span><span style="display:flex;"><span><span style="color:#cd5555">            author text,
+</span></span></span><span style="display:flex;"><span><span style="color:#cd5555">            price real,
+</span></span></span><span style="display:flex;"><span><span style="color:#cd5555">            pages integer,
+</span></span></span><span style="display:flex;"><span><span style="color:#cd5555">            name text
+</span></span></span><span style="display:flex;"><span><span style="color:#cd5555">        )
+</span></span></span><span style="display:flex;"><span><span style="color:#cd5555">    &#34;&#34;&#34;</span>.trimIndent()
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> createCategory = <span style="color:#cd5555">&#34;&#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#cd5555">        create table Category (
+</span></span></span><span style="display:flex;"><span><span style="color:#cd5555">            id integer primary key autoincrement,
+</span></span></span><span style="display:flex;"><span><span style="color:#cd5555">            category_name text,
+</span></span></span><span style="display:flex;"><span><span style="color:#cd5555">            category_code integer
+</span></span></span><span style="display:flex;"><span><span style="color:#cd5555">        )
+</span></span></span><span style="display:flex;"><span><span style="color:#cd5555">    &#34;&#34;&#34;</span>.trimIndent()
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onCreate</span>(db: SQLiteDatabase) {
+</span></span><span style="display:flex;"><span>        db.execSQL(createBook)
+</span></span><span style="display:flex;"><span>        db.execSQL(createCategory)
+</span></span><span style="display:flex;"><span>        Toast.makeText(context, <span style="color:#cd5555">&#34;建立数据库完成&#34;</span>, Toast.LENGTH_LONG).show()
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onUpgrade</span>(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span> (oldVersion == newVersion) <span style="color:#8b008b;font-weight:bold">return</span>
+</span></span><span style="display:flex;"><span>        Log.d(javaClass.simpleName, <span style="color:#cd5555">&#34;旧版是</span><span style="color:#cd5555">${oldVersion}</span><span style="color:#cd5555">，新版是</span><span style="color:#cd5555">${newVersion}</span><span style="color:#cd5555">，数据库升级开始&#34;</span>)
+</span></span><span style="display:flex;"><span>        db.execSQL(<span style="color:#cd5555">&#34;drop table if exists Book&#34;</span>)
+</span></span><span style="display:flex;"><span>        db.execSQL(<span style="color:#cd5555">&#34;drop table if exists Category&#34;</span>)
+</span></span><span style="display:flex;"><span>        onCreate(db)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">cvOf</span>(<span style="color:#8b008b;font-weight:bold">vararg</span> pairs: Pair&lt;String, Any?&gt;): ContentValues {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> cv = ContentValues()
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">for</span> (pair <span style="color:#8b008b;font-weight:bold">in</span> pairs) {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">val</span> key = pair.first
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">when</span> (<span style="color:#8b008b;font-weight:bold">val</span> value = pair.second) {
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">is</span> Int -&gt; cv.put(key, value)
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">is</span> Long -&gt; cv.put(key, value)
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">is</span> Short -&gt; cv.put(key, value)
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">is</span> Float -&gt; cv.put(key, value)
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">is</span> Double -&gt; cv.put(key, value)
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">is</span> Boolean -&gt; cv.put(key, value)
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">is</span> String -&gt; cv.put(key, value)
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">is</span> Byte -&gt; cv.put(key, value)
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">is</span> ByteArray -&gt; cv.put(key, value)
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">null</span> -&gt; cv.putNull(key)
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">else</span> -&gt; <span style="color:#8b008b;font-weight:bold">throw</span> IllegalArgumentException(<span style="color:#cd5555">&#34;不支持的cv类型&#34;</span>)
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">return</span> cv
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">Cursor</span>.getString(name: String): String = getString(getColumnIndex(name))
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">Cursor</span>.getInt(name: String): Int = getInt(getColumnIndex(name))
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">Cursor</span>.getDouble(name: String): Double = getDouble(getColumnIndex(name))
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.databasetest</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.os.Bundle</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.util.Log</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">androidx.appcompat.app.AppCompatActivity</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.databasetest.databinding.ActivityMainBinding</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">MainActivity</span> : AppCompatActivity() {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">lateinit</span> <span style="color:#8b008b;font-weight:bold">var</span> binding: ActivityMainBinding
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onCreate</span>(savedInstanceState: Bundle?) {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">super</span>.onCreate(savedInstanceState)
+</span></span><span style="display:flex;"><span>        binding = ActivityMainBinding.inflate(layoutInflater)
+</span></span><span style="display:flex;"><span>        setContentView(binding.root)
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">val</span> dbHelper = MyDatabaseHelper(<span style="color:#8b008b;font-weight:bold">this</span>, <span style="color:#cd5555">&#34;BookStore.db&#34;</span>, <span style="color:#b452cd">6</span>)
+</span></span><span style="display:flex;"><span>        binding.createDatabaseButton.setOnClickListener {
+</span></span><span style="display:flex;"><span>            dbHelper.writableDatabase
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        binding.addDataButton.setOnClickListener {
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">val</span> db = dbHelper.writableDatabase
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">val</span> values1 = cvOf(
+</span></span><span style="display:flex;"><span>                <span style="color:#cd5555">&#34;name&#34;</span> to <span style="color:#cd5555">&#34;The Da Vinci Code&#34;</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#cd5555">&#34;author&#34;</span> to <span style="color:#cd5555">&#34;Dan Brown&#34;</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#cd5555">&#34;pages&#34;</span> to <span style="color:#b452cd">454</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#cd5555">&#34;price&#34;</span> to <span style="color:#b452cd">16.96</span>
+</span></span><span style="display:flex;"><span>            )
+</span></span><span style="display:flex;"><span>            db.insert(<span style="color:#cd5555">&#34;Book&#34;</span>, <span style="color:#8b008b;font-weight:bold">null</span>, values1)
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">val</span> values2 = cvOf(
+</span></span><span style="display:flex;"><span>                <span style="color:#cd5555">&#34;name&#34;</span> to <span style="color:#cd5555">&#34;The Lost Symbol&#34;</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#cd5555">&#34;author&#34;</span> to <span style="color:#cd5555">&#34;Dan Brown&#34;</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#cd5555">&#34;pages&#34;</span> to <span style="color:#b452cd">510</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#cd5555">&#34;price&#34;</span> to <span style="color:#b452cd">19.95</span>
+</span></span><span style="display:flex;"><span>            )
+</span></span><span style="display:flex;"><span>            db.insert(<span style="color:#cd5555">&#34;Book&#34;</span>, <span style="color:#8b008b;font-weight:bold">null</span>, values2)
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        binding.updateDataButton.setOnClickListener {
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">val</span> db = dbHelper.writableDatabase
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">val</span> values = cvOf(<span style="color:#cd5555">&#34;price&#34;</span> to <span style="color:#b452cd">10.99</span>)
+</span></span><span style="display:flex;"><span>            db.update(<span style="color:#cd5555">&#34;Book&#34;</span>, values, <span style="color:#cd5555">&#34;name=?&#34;</span>, arrayOf(<span style="color:#cd5555">&#34;The Da Vinci Code&#34;</span>))
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        binding.deleteDataButton.setOnClickListener {
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">val</span> db = dbHelper.writableDatabase
+</span></span><span style="display:flex;"><span>            db.delete(<span style="color:#cd5555">&#34;Book&#34;</span>, <span style="color:#cd5555">&#34;pages &gt; ?&#34;</span>, arrayOf(<span style="color:#cd5555">&#34;500&#34;</span>))
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        binding.queryDataButton.setOnClickListener {
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">val</span> db = dbHelper.writableDatabase
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">val</span> cursor = db.query(<span style="color:#cd5555">&#34;Book&#34;</span>, <span style="color:#8b008b;font-weight:bold">null</span>, <span style="color:#8b008b;font-weight:bold">null</span>, <span style="color:#8b008b;font-weight:bold">null</span>, <span style="color:#8b008b;font-weight:bold">null</span>, <span style="color:#8b008b;font-weight:bold">null</span>, <span style="color:#8b008b;font-weight:bold">null</span>)
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">if</span> (cursor.moveToFirst()) {
+</span></span><span style="display:flex;"><span>                <span style="color:#8b008b;font-weight:bold">do</span> {
+</span></span><span style="display:flex;"><span>                    <span style="color:#8b008b;font-weight:bold">val</span> name = cursor.getString(<span style="color:#cd5555">&#34;name&#34;</span>)
+</span></span><span style="display:flex;"><span>                    <span style="color:#8b008b;font-weight:bold">val</span> author = cursor.getString(<span style="color:#cd5555">&#34;author&#34;</span>)
+</span></span><span style="display:flex;"><span>                    <span style="color:#8b008b;font-weight:bold">val</span> pages = cursor.getInt(<span style="color:#cd5555">&#34;pages&#34;</span>)
+</span></span><span style="display:flex;"><span>                    <span style="color:#8b008b;font-weight:bold">val</span> price = cursor.getDouble(<span style="color:#cd5555">&#34;price&#34;</span>)
+</span></span><span style="display:flex;"><span>                    Log.d(
+</span></span><span style="display:flex;"><span>                        javaClass.simpleName,
+</span></span><span style="display:flex;"><span>                        <span style="color:#cd5555">&#34;name: </span><span style="color:#cd5555">$name</span><span style="color:#cd5555">, author: </span><span style="color:#cd5555">$author</span><span style="color:#cd5555">, pages: </span><span style="color:#cd5555">$pages</span><span style="color:#cd5555">, price: </span><span style="color:#cd5555">$price</span><span style="color:#cd5555">&#34;</span>
+</span></span><span style="display:flex;"><span>                    )
+</span></span><span style="display:flex;"><span>                } <span style="color:#8b008b;font-weight:bold">while</span> (cursor.moveToNext())
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            cursor.close()
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><!-- raw HTML omitted -->
 
                     
                     <HR width="100%" id="EOF">

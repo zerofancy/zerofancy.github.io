@@ -19,9 +19,10 @@
 <meta property="og:title" content="ClassLoader双亲委托机制探究" />
 <meta property="og:description" content="最近在研究抖音进入热点内流的耗时问题，种种线索指向了类加载耗时上。为此，我研究了Java类加载的双亲委托机制，并尝试给出了优化建议。" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://ntutn.top/posts/classloader%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%89%98%E6%9C%BA%E5%88%B6%E6%8E%A2%E7%A9%B6/" />
+<meta property="og:url" content="https://ntutn.top/posts/classloader%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%89%98%E6%9C%BA%E5%88%B6%E6%8E%A2%E7%A9%B6/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2021-04-11T03:11:37+08:00" />
 <meta property="article:modified_time" content="2021-04-11T03:11:37+08:00" /><meta property="og:site_name" content="归零幻想" />
+
 
 
 
@@ -44,11 +45,11 @@
 
 
 
-<link rel="stylesheet" href="https://ntutn.top/scss/journal.min.d8d9f81b896882733c41896750adbefbf9319ca02ccccefd461650898975c3af.css" integrity="sha256-2Nn4G4lognM8QYlnUK2&#43;&#43;/kxnKAszM79RhZQiYl1w68=" media="screen">
+<link rel="stylesheet" href="https://ntutn.top/scss/journal.min.0f46f98b723f2aad4b02d9370bb6aa7848b5c2b2a5579642014082283683d2d8.css" integrity="sha256-D0b5i3I/Kq1LAtk3C7aqeEi1wrKlV5ZCAUCCKDaD0tg=" media="screen">
 
 
 
-<link rel="stylesheet" href="https://ntutn.top/scss/dark-mode.min.60f86847da9fc0724177ccfd0bf7c5997b0b41f1e58d5a293cfb3723c497c422.css" integrity="sha256-YPhoR9qfwHJBd8z9C/fFmXsLQfHljVopPPs3I8SXxCI=" media="screen">
+<link rel="stylesheet" href="https://ntutn.top/scss/dark-mode.min.79c34391dbcff20df8b4dac718e2606701efcbfdb9f3b08447ac39ac9dc7b463.css" integrity="sha256-ecNDkdvP8g34tNrHGOJgZwHvy/2587CER6w5rJ3HtGM=" media="screen">
 
 
 <script src="/vendor/js/loadCSS.js"></script>
@@ -569,31 +570,31 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <p>最近在研究抖音进入热点内流的耗时问题，种种线索指向了类加载耗时上。为此，我研究了Java类加载的双亲委托机制，并尝试给出了优化建议。</p>
 <h2 id="双亲委托机制">双亲委托机制</h2>
 <p>双亲委托机制中最重要的是loadClass方法，让我们看看它是怎么实现的。</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">    <span style="color:#8b008b;font-weight:bold">protected</span> Class&lt;?&gt; loadClass(String name, <span style="color:#00688b;font-weight:bold">boolean</span> resolve)
-        <span style="color:#8b008b;font-weight:bold">throws</span> ClassNotFoundException
-    {
-            <span style="color:#228b22">// First, check if the class has already been loaded
-</span><span style="color:#228b22"></span>            Class&lt;?&gt; c = findLoadedClass(name); <span style="color:#228b22">// 已加载过直接返回
-</span><span style="color:#228b22"></span>            <span style="color:#8b008b;font-weight:bold">if</span> (c == <span style="color:#8b008b;font-weight:bold">null</span>) {
-                <span style="color:#8b008b;font-weight:bold">try</span> {
-                    <span style="color:#8b008b;font-weight:bold">if</span> (parent != <span style="color:#8b008b;font-weight:bold">null</span>) {
-                        c = parent.<span style="color:#658b00">loadClass</span>(name, <span style="color:#8b008b;font-weight:bold">false</span>); <span style="color:#228b22">//尝试让parent加载
-</span><span style="color:#228b22"></span>                    } <span style="color:#8b008b;font-weight:bold">else</span> {
-                        c = findBootstrapClassOrNull(name); <span style="color:#228b22">// bootstrap class loader是否加载过
-</span><span style="color:#228b22"></span>                    }
-                } <span style="color:#8b008b;font-weight:bold">catch</span> (ClassNotFoundException e) {
-                    <span style="color:#228b22">// ClassNotFoundException thrown if class not found
-</span><span style="color:#228b22"></span>                    <span style="color:#228b22">// from the non-null parent class loader
-</span><span style="color:#228b22"></span>                }
-                <span style="color:#8b008b;font-weight:bold">if</span> (c == <span style="color:#8b008b;font-weight:bold">null</span>) {
-                    <span style="color:#228b22">// If still not found, then invoke findClass in order
-</span><span style="color:#228b22"></span>                    <span style="color:#228b22">// to find the class.
-</span><span style="color:#228b22"></span>                    c = findClass(name); <span style="color:#228b22">// 自己加载（找不到会抛出异常）
-</span><span style="color:#228b22"></span>                }
-            }
-            <span style="color:#8b008b;font-weight:bold">return</span> c;
-    }
-</code></pre></div><p>findClass就是根据类名去加载具体类的方法，则整个加载机制就很清楚了。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">protected</span> Class&lt;?&gt; loadClass(String name, <span style="color:#00688b;font-weight:bold">boolean</span> resolve)
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">throws</span> ClassNotFoundException
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>            <span style="color:#228b22">// First, check if the class has already been loaded
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>            Class&lt;?&gt; c = findLoadedClass(name); <span style="color:#228b22">// 已加载过直接返回
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>            <span style="color:#8b008b;font-weight:bold">if</span> (c == <span style="color:#8b008b;font-weight:bold">null</span>) {
+</span></span><span style="display:flex;"><span>                <span style="color:#8b008b;font-weight:bold">try</span> {
+</span></span><span style="display:flex;"><span>                    <span style="color:#8b008b;font-weight:bold">if</span> (parent != <span style="color:#8b008b;font-weight:bold">null</span>) {
+</span></span><span style="display:flex;"><span>                        c = parent.<span style="color:#658b00">loadClass</span>(name, <span style="color:#8b008b;font-weight:bold">false</span>); <span style="color:#228b22">//尝试让parent加载
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>                    } <span style="color:#8b008b;font-weight:bold">else</span> {
+</span></span><span style="display:flex;"><span>                        c = findBootstrapClassOrNull(name); <span style="color:#228b22">// bootstrap class loader是否加载过
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>                    }
+</span></span><span style="display:flex;"><span>                } <span style="color:#8b008b;font-weight:bold">catch</span> (ClassNotFoundException e) {
+</span></span><span style="display:flex;"><span>                    <span style="color:#228b22">// ClassNotFoundException thrown if class not found
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>                    <span style="color:#228b22">// from the non-null parent class loader
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>                }
+</span></span><span style="display:flex;"><span>                <span style="color:#8b008b;font-weight:bold">if</span> (c == <span style="color:#8b008b;font-weight:bold">null</span>) {
+</span></span><span style="display:flex;"><span>                    <span style="color:#228b22">// If still not found, then invoke findClass in order
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>                    <span style="color:#228b22">// to find the class.
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>                    c = findClass(name); <span style="color:#228b22">// 自己加载（找不到会抛出异常）
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>                }
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">return</span> c;
+</span></span><span style="display:flex;"><span>    }
+</span></span></code></pre></div><p>findClass就是根据类名去加载具体类的方法，则整个加载机制就很清楚了。</p>
 <ol>
 <li>首先部分类会被BootstrapClassLoader加载，这部分是native实现。</li>
 <li>会先尝试让parent加载</li>
@@ -605,160 +606,160 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <blockquote>
 <p>Talk is cheap, show me the code.</p>
 </blockquote>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">ClassLoaderProxy</span> : ClassLoader() {
-    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">findClass</span>(name: String?): Class&lt;*&gt; {
-        <span style="color:#8b008b;font-weight:bold">if</span> (name != <span style="color:#8b008b;font-weight:bold">null</span> &amp;&amp; recording) loadedClass.add(name)
-        <span style="color:#8b008b;font-weight:bold">throw</span> ClassNotFoundException()
-    }
-    <span style="color:#8b008b;font-weight:bold">companion</span> <span style="color:#8b008b;font-weight:bold">object</span> {
-        <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> loadedClass = mutableSetOf&lt;String&gt;()
-        <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">var</span> recording = <span style="color:#8b008b;font-weight:bold">false</span>
-        <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">var</span> hooked = <span style="color:#8b008b;font-weight:bold">false</span>
-        <span style="color:#707a7c">@JvmStatic</span>
-        <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">inject</span>(context: Context): Boolean {
-            Log.w(ClassLoaderWrapper2::<span style="color:#8b008b;font-weight:bold">class</span>.java.simpleName, <span style="color:#cd5555">&#34;Hook开始&#34;</span>)
-            <span style="color:#8b008b;font-weight:bold">try</span> {
-                <span style="color:#8b008b;font-weight:bold">val</span> originClassLoader = context.classLoader
-                Log.d(<span style="color:#cd5555">&#34;ClassLoader类型&#34;</span>, originClassLoader.javaClass.simpleName)
-                <span style="color:#8b008b;font-weight:bold">val</span> delegateClassLoader = ClassLoaderWrapper2()
-                setParent(delegateClassLoader, originClassLoader.parent)
-                setParent(originClassLoader, delegateClassLoader)
-                Log.w(ClassLoaderWrapper2::<span style="color:#8b008b;font-weight:bold">class</span>.java.simpleName, <span style="color:#cd5555">&#34;Hook成功&#34;</span>)
-                hooked = <span style="color:#8b008b;font-weight:bold">true</span>
-                <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">true</span>
-            } <span style="color:#8b008b;font-weight:bold">catch</span> (e: Throwable) {
-            }
-            Log.e(ClassLoaderWrapper2::<span style="color:#8b008b;font-weight:bold">class</span>.java.simpleName, <span style="color:#cd5555">&#34;Hook没有成功&#34;</span>)
-            <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">false</span>
-        }
-        <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">setParent</span>(classLoader: ClassLoader, newParent: ClassLoader) {
-            <span style="color:#8b008b;font-weight:bold">val</span> parentField = ClassLoader::<span style="color:#8b008b;font-weight:bold">class</span>.java.getDeclaredField(<span style="color:#cd5555">&#34;parent&#34;</span>)
-            parentField.isAccessible = <span style="color:#8b008b;font-weight:bold">true</span>
-            parentField.<span style="color:#8b008b;font-weight:bold">set</span>(classLoader, newParent)
-        }
-        <span style="color:#707a7c">@Throws</span>(IllegalStateException::<span style="color:#8b008b;font-weight:bold">class</span>)
-        <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">checkHookState</span>() {
-            <span style="color:#8b008b;font-weight:bold">if</span> (!hooked) {
-                <span style="color:#8b008b;font-weight:bold">throw</span> IllegalStateException(<span style="color:#cd5555">&#34;hookPackageClassLoader没有执行成功！&#34;</span>)
-            }
-        }
-        <span style="color:#707a7c">@Throws</span>(IllegalStateException::<span style="color:#8b008b;font-weight:bold">class</span>, RuntimeException::<span style="color:#8b008b;font-weight:bold">class</span>)
-        <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">startRecord</span>() {
-            checkHookState()
-            synchronized(recording) {
-                <span style="color:#8b008b;font-weight:bold">if</span> (recording) {
-                    <span style="color:#8b008b;font-weight:bold">throw</span> RuntimeException(<span style="color:#cd5555">&#34;已经存在正在监听的任务！&#34;</span>)
-                }
-                loadedClass.clear()
-                recording = <span style="color:#8b008b;font-weight:bold">true</span>
-            }
-        }
-        <span style="color:#707a7c">@Throws</span>(IllegalStateException::<span style="color:#8b008b;font-weight:bold">class</span>, RuntimeException::<span style="color:#8b008b;font-weight:bold">class</span>)
-        <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">endRecord</span>(block: (Set&lt;String&gt;) -&gt; Unit) {
-            checkHookState()
-            synchronized(recording) {
-                <span style="color:#8b008b;font-weight:bold">if</span> (!recording) {
-                    <span style="color:#8b008b;font-weight:bold">throw</span> RuntimeException(<span style="color:#cd5555">&#34;当前没有在监听！&#34;</span>)
-                }
-                recording = <span style="color:#8b008b;font-weight:bold">false</span>
-                block.invoke(loadedClass)
-            }
-        }
-    }
-}
-</code></pre></div><p>因为我们并不需要做实际的加载，只要抛出异常，加载还是交给我们儿子PathClassLoader就可以了。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">ClassLoaderProxy</span> : ClassLoader() {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">findClass</span>(name: String?): Class&lt;*&gt; {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span> (name != <span style="color:#8b008b;font-weight:bold">null</span> &amp;&amp; recording) loadedClass.add(name)
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">throw</span> ClassNotFoundException()
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">companion</span> <span style="color:#8b008b;font-weight:bold">object</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> loadedClass = mutableSetOf&lt;String&gt;()
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">var</span> recording = <span style="color:#8b008b;font-weight:bold">false</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">var</span> hooked = <span style="color:#8b008b;font-weight:bold">false</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#707a7c">@JvmStatic</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">inject</span>(context: Context): Boolean {
+</span></span><span style="display:flex;"><span>            Log.w(ClassLoaderWrapper2::<span style="color:#8b008b;font-weight:bold">class</span>.java.simpleName, <span style="color:#cd5555">&#34;Hook开始&#34;</span>)
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">try</span> {
+</span></span><span style="display:flex;"><span>                <span style="color:#8b008b;font-weight:bold">val</span> originClassLoader = context.classLoader
+</span></span><span style="display:flex;"><span>                Log.d(<span style="color:#cd5555">&#34;ClassLoader类型&#34;</span>, originClassLoader.javaClass.simpleName)
+</span></span><span style="display:flex;"><span>                <span style="color:#8b008b;font-weight:bold">val</span> delegateClassLoader = ClassLoaderWrapper2()
+</span></span><span style="display:flex;"><span>                setParent(delegateClassLoader, originClassLoader.parent)
+</span></span><span style="display:flex;"><span>                setParent(originClassLoader, delegateClassLoader)
+</span></span><span style="display:flex;"><span>                Log.w(ClassLoaderWrapper2::<span style="color:#8b008b;font-weight:bold">class</span>.java.simpleName, <span style="color:#cd5555">&#34;Hook成功&#34;</span>)
+</span></span><span style="display:flex;"><span>                hooked = <span style="color:#8b008b;font-weight:bold">true</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">true</span>
+</span></span><span style="display:flex;"><span>            } <span style="color:#8b008b;font-weight:bold">catch</span> (e: Throwable) {
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            Log.e(ClassLoaderWrapper2::<span style="color:#8b008b;font-weight:bold">class</span>.java.simpleName, <span style="color:#cd5555">&#34;Hook没有成功&#34;</span>)
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">false</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">setParent</span>(classLoader: ClassLoader, newParent: ClassLoader) {
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">val</span> parentField = ClassLoader::<span style="color:#8b008b;font-weight:bold">class</span>.java.getDeclaredField(<span style="color:#cd5555">&#34;parent&#34;</span>)
+</span></span><span style="display:flex;"><span>            parentField.isAccessible = <span style="color:#8b008b;font-weight:bold">true</span>
+</span></span><span style="display:flex;"><span>            parentField.<span style="color:#8b008b;font-weight:bold">set</span>(classLoader, newParent)
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#707a7c">@Throws</span>(IllegalStateException::<span style="color:#8b008b;font-weight:bold">class</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">checkHookState</span>() {
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">if</span> (!hooked) {
+</span></span><span style="display:flex;"><span>                <span style="color:#8b008b;font-weight:bold">throw</span> IllegalStateException(<span style="color:#cd5555">&#34;hookPackageClassLoader没有执行成功！&#34;</span>)
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#707a7c">@Throws</span>(IllegalStateException::<span style="color:#8b008b;font-weight:bold">class</span>, RuntimeException::<span style="color:#8b008b;font-weight:bold">class</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">startRecord</span>() {
+</span></span><span style="display:flex;"><span>            checkHookState()
+</span></span><span style="display:flex;"><span>            synchronized(recording) {
+</span></span><span style="display:flex;"><span>                <span style="color:#8b008b;font-weight:bold">if</span> (recording) {
+</span></span><span style="display:flex;"><span>                    <span style="color:#8b008b;font-weight:bold">throw</span> RuntimeException(<span style="color:#cd5555">&#34;已经存在正在监听的任务！&#34;</span>)
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>                loadedClass.clear()
+</span></span><span style="display:flex;"><span>                recording = <span style="color:#8b008b;font-weight:bold">true</span>
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#707a7c">@Throws</span>(IllegalStateException::<span style="color:#8b008b;font-weight:bold">class</span>, RuntimeException::<span style="color:#8b008b;font-weight:bold">class</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">endRecord</span>(block: (Set&lt;String&gt;) -&gt; Unit) {
+</span></span><span style="display:flex;"><span>            checkHookState()
+</span></span><span style="display:flex;"><span>            synchronized(recording) {
+</span></span><span style="display:flex;"><span>                <span style="color:#8b008b;font-weight:bold">if</span> (!recording) {
+</span></span><span style="display:flex;"><span>                    <span style="color:#8b008b;font-weight:bold">throw</span> RuntimeException(<span style="color:#cd5555">&#34;当前没有在监听！&#34;</span>)
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>                recording = <span style="color:#8b008b;font-weight:bold">false</span>
+</span></span><span style="display:flex;"><span>                block.invoke(loadedClass)
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>因为我们并不需要做实际的加载，只要抛出异常，加载还是交给我们儿子PathClassLoader就可以了。</p>
 <h2 id="记录加载时间">记录加载时间</h2>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.hookpackageclassloader</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.content.Context</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.util.Log</span>
-<span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">ClassLoaderWrapper</span>(<span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> realClassLoader: ClassLoader) : ClassLoader() {
-    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> findClassMethod <span style="color:#8b008b;font-weight:bold">by</span> lazy {
-        ClassLoader::<span style="color:#8b008b;font-weight:bold">class</span>.java.getDeclaredMethod(<span style="color:#cd5555">&#34;findClass&#34;</span>, String::<span style="color:#8b008b;font-weight:bold">class</span>.java).apply {
-            isAccessible = <span style="color:#8b008b;font-weight:bold">true</span>
-        }
-    }
-    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">loadClass</span>(name: String?, resolve: Boolean): Class&lt;*&gt; {
-        <span style="color:#8b008b;font-weight:bold">val</span> startTime = System.currentTimeMillis()
-        <span style="color:#228b22">// First, check if the class has already been loaded
-</span><span style="color:#228b22"></span>        <span style="color:#8b008b;font-weight:bold">var</span> c: Class&lt;*&gt;? = <span style="color:#8b008b;font-weight:bold">null</span>
-        <span style="color:#8b008b;font-weight:bold">try</span> {
-            c = parent.loadClass(name)
-        } <span style="color:#8b008b;font-weight:bold">catch</span> (e: ClassNotFoundException) {
-            <span style="color:#228b22">// ClassNotFoundException thrown if class not found
-</span><span style="color:#228b22"></span>            <span style="color:#228b22">// from the non-null parent class loader
-</span><span style="color:#228b22"></span>        }
-        <span style="color:#8b008b;font-weight:bold">if</span> (c == <span style="color:#8b008b;font-weight:bold">null</span>) {
-            c = findClassMethod.invoke(realClassLoader, name) <span style="color:#8b008b;font-weight:bold">as</span> Class&lt;*&gt;?
-        }
-        Log.e(<span style="color:#cd5555">&#34;classloader&#34;</span>, <span style="color:#cd5555">&#34;load class: </span><span style="color:#cd5555">$name</span><span style="color:#cd5555">&#34;</span>)
-        loadedClasses.add(name.toString() to System.currentTimeMillis() - startTime)
-        <span style="color:#8b008b;font-weight:bold">return</span> c!!
-    }
-    <span style="color:#8b008b;font-weight:bold">companion</span> <span style="color:#8b008b;font-weight:bold">object</span> {
-        <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> loadedClasses = mutableSetOf&lt;Pair&lt;String, Long&gt;&gt;()
-        <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">var</span> recording = <span style="color:#8b008b;font-weight:bold">false</span>
-        <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">var</span> hooked = <span style="color:#8b008b;font-weight:bold">false</span>
-        <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> preloadClasses = setOf(
-            <span style="color:#cd5555">&#34;kotlin.collections.CollectionsKt&#34;</span>,
-            <span style="color:#cd5555">&#34;kotlin.Triple&#34;</span>,
-            <span style="color:#cd5555">&#34;top.ntutn.hookpackageclassloader.ClassLoaderWrapper&#34;</span>,
-            <span style="color:#cd5555">&#34;top.ntutn.hookpackageclassloader.ClassLoaderWrapper</span><span style="color:#cd5555">\$</span><span style="color:#cd5555">Companion&#34;</span>
-        )
-        <span style="color:#707a7c">@JvmStatic</span>
-        <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">inject</span>(context: Context): Boolean {
-            <span style="color:#228b22">// 提前加载避免死循环
-</span><span style="color:#228b22"></span>            preloadClasses.forEach { Class.forName(<span style="color:#8b008b;font-weight:bold">it</span>) }
-            <span style="color:#8b008b;font-weight:bold">try</span> {
-                <span style="color:#8b008b;font-weight:bold">val</span> originClassLoader = context.classLoader
-                <span style="color:#8b008b;font-weight:bold">val</span> originParent = originClassLoader.parent
-                <span style="color:#8b008b;font-weight:bold">val</span> applicationInfo = context.applicationInfo
-                applicationInfo.sourceDir
-                <span style="color:#8b008b;font-weight:bold">val</span> delegateClassLoader = ClassLoaderWrapper3(originClassLoader)
-                setParent(delegateClassLoader, originParent)
-                setParent(originClassLoader, delegateClassLoader)
-                hooked = <span style="color:#8b008b;font-weight:bold">true</span>
-                <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">true</span>
-            } <span style="color:#8b008b;font-weight:bold">catch</span> (e: Exception) {
-                Log.e(ClassLoaderWrapper3::<span style="color:#8b008b;font-weight:bold">class</span>.simpleName, <span style="color:#cd5555">&#34;hook失败&#34;</span>)
-            }
-            <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">false</span>
-        }
-        <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">setParent</span>(classLoader: ClassLoader, newParent: ClassLoader) {
-            <span style="color:#8b008b;font-weight:bold">val</span> parentField = ClassLoader::<span style="color:#8b008b;font-weight:bold">class</span>.java.getDeclaredField(<span style="color:#cd5555">&#34;parent&#34;</span>)
-            parentField.isAccessible = <span style="color:#8b008b;font-weight:bold">true</span>
-            parentField.<span style="color:#8b008b;font-weight:bold">set</span>(classLoader, newParent)
-        }
-        <span style="color:#707a7c">@Throws</span>(IllegalStateException::<span style="color:#8b008b;font-weight:bold">class</span>)
-        <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">checkHookState</span>() {
-            <span style="color:#8b008b;font-weight:bold">if</span> (!hooked) {
-                <span style="color:#8b008b;font-weight:bold">throw</span> IllegalStateException(<span style="color:#cd5555">&#34;hook没有执行成功！&#34;</span>)
-            }
-        }
-        <span style="color:#707a7c">@Throws</span>(IllegalStateException::<span style="color:#8b008b;font-weight:bold">class</span>, RuntimeException::<span style="color:#8b008b;font-weight:bold">class</span>)
-        <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">startRecord</span>() {
-            checkHookState()
-            synchronized(recording) {
-                <span style="color:#8b008b;font-weight:bold">if</span> (recording) {
-                    <span style="color:#8b008b;font-weight:bold">throw</span> RuntimeException(<span style="color:#cd5555">&#34;已经存在正在监听的任务！&#34;</span>)
-                }
-                loadedClasses.clear()
-                recording = <span style="color:#8b008b;font-weight:bold">true</span>
-            }
-        }
-        <span style="color:#707a7c">@Throws</span>(IllegalStateException::<span style="color:#8b008b;font-weight:bold">class</span>, RuntimeException::<span style="color:#8b008b;font-weight:bold">class</span>)
-        <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">endRecord</span>(block: (Set&lt;Pair&lt;String, Long&gt;&gt;) -&gt; Unit) {
-            checkHookState()
-            synchronized(recording) {
-                <span style="color:#8b008b;font-weight:bold">if</span> (!recording) {
-                    <span style="color:#8b008b;font-weight:bold">throw</span> RuntimeException(<span style="color:#cd5555">&#34;当前没有在监听！&#34;</span>)
-                }
-                recording = <span style="color:#8b008b;font-weight:bold">false</span>
-                block.invoke(loadedClasses)
-            }
-        }
-    }
-}
-</code></pre></div><p>相比前面方案来说，注意点就是不要搞出死循环来，另外就是Kotlin自己的类似乎并不会被BootstrapClassLoader加载，需要在计时前加载一下。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.hookpackageclassloader</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.content.Context</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.util.Log</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">ClassLoaderWrapper</span>(<span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> realClassLoader: ClassLoader) : ClassLoader() {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> findClassMethod <span style="color:#8b008b;font-weight:bold">by</span> lazy {
+</span></span><span style="display:flex;"><span>        ClassLoader::<span style="color:#8b008b;font-weight:bold">class</span>.java.getDeclaredMethod(<span style="color:#cd5555">&#34;findClass&#34;</span>, String::<span style="color:#8b008b;font-weight:bold">class</span>.java).apply {
+</span></span><span style="display:flex;"><span>            isAccessible = <span style="color:#8b008b;font-weight:bold">true</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">loadClass</span>(name: String?, resolve: Boolean): Class&lt;*&gt; {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">val</span> startTime = System.currentTimeMillis()
+</span></span><span style="display:flex;"><span>        <span style="color:#228b22">// First, check if the class has already been loaded
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>        <span style="color:#8b008b;font-weight:bold">var</span> c: Class&lt;*&gt;? = <span style="color:#8b008b;font-weight:bold">null</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">try</span> {
+</span></span><span style="display:flex;"><span>            c = parent.loadClass(name)
+</span></span><span style="display:flex;"><span>        } <span style="color:#8b008b;font-weight:bold">catch</span> (e: ClassNotFoundException) {
+</span></span><span style="display:flex;"><span>            <span style="color:#228b22">// ClassNotFoundException thrown if class not found
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>            <span style="color:#228b22">// from the non-null parent class loader
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span> (c == <span style="color:#8b008b;font-weight:bold">null</span>) {
+</span></span><span style="display:flex;"><span>            c = findClassMethod.invoke(realClassLoader, name) <span style="color:#8b008b;font-weight:bold">as</span> Class&lt;*&gt;?
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        Log.e(<span style="color:#cd5555">&#34;classloader&#34;</span>, <span style="color:#cd5555">&#34;load class: </span><span style="color:#cd5555">$name</span><span style="color:#cd5555">&#34;</span>)
+</span></span><span style="display:flex;"><span>        loadedClasses.add(name.toString() to System.currentTimeMillis() - startTime)
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span> c!!
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">companion</span> <span style="color:#8b008b;font-weight:bold">object</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> loadedClasses = mutableSetOf&lt;Pair&lt;String, Long&gt;&gt;()
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">var</span> recording = <span style="color:#8b008b;font-weight:bold">false</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">var</span> hooked = <span style="color:#8b008b;font-weight:bold">false</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> preloadClasses = setOf(
+</span></span><span style="display:flex;"><span>            <span style="color:#cd5555">&#34;kotlin.collections.CollectionsKt&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#cd5555">&#34;kotlin.Triple&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#cd5555">&#34;top.ntutn.hookpackageclassloader.ClassLoaderWrapper&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#cd5555">&#34;top.ntutn.hookpackageclassloader.ClassLoaderWrapper</span><span style="color:#cd5555">\$</span><span style="color:#cd5555">Companion&#34;</span>
+</span></span><span style="display:flex;"><span>        )
+</span></span><span style="display:flex;"><span>        <span style="color:#707a7c">@JvmStatic</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">inject</span>(context: Context): Boolean {
+</span></span><span style="display:flex;"><span>            <span style="color:#228b22">// 提前加载避免死循环
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>            preloadClasses.forEach { Class.forName(<span style="color:#8b008b;font-weight:bold">it</span>) }
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">try</span> {
+</span></span><span style="display:flex;"><span>                <span style="color:#8b008b;font-weight:bold">val</span> originClassLoader = context.classLoader
+</span></span><span style="display:flex;"><span>                <span style="color:#8b008b;font-weight:bold">val</span> originParent = originClassLoader.parent
+</span></span><span style="display:flex;"><span>                <span style="color:#8b008b;font-weight:bold">val</span> applicationInfo = context.applicationInfo
+</span></span><span style="display:flex;"><span>                applicationInfo.sourceDir
+</span></span><span style="display:flex;"><span>                <span style="color:#8b008b;font-weight:bold">val</span> delegateClassLoader = ClassLoaderWrapper3(originClassLoader)
+</span></span><span style="display:flex;"><span>                setParent(delegateClassLoader, originParent)
+</span></span><span style="display:flex;"><span>                setParent(originClassLoader, delegateClassLoader)
+</span></span><span style="display:flex;"><span>                hooked = <span style="color:#8b008b;font-weight:bold">true</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">true</span>
+</span></span><span style="display:flex;"><span>            } <span style="color:#8b008b;font-weight:bold">catch</span> (e: Exception) {
+</span></span><span style="display:flex;"><span>                Log.e(ClassLoaderWrapper3::<span style="color:#8b008b;font-weight:bold">class</span>.simpleName, <span style="color:#cd5555">&#34;hook失败&#34;</span>)
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">false</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">setParent</span>(classLoader: ClassLoader, newParent: ClassLoader) {
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">val</span> parentField = ClassLoader::<span style="color:#8b008b;font-weight:bold">class</span>.java.getDeclaredField(<span style="color:#cd5555">&#34;parent&#34;</span>)
+</span></span><span style="display:flex;"><span>            parentField.isAccessible = <span style="color:#8b008b;font-weight:bold">true</span>
+</span></span><span style="display:flex;"><span>            parentField.<span style="color:#8b008b;font-weight:bold">set</span>(classLoader, newParent)
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#707a7c">@Throws</span>(IllegalStateException::<span style="color:#8b008b;font-weight:bold">class</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">checkHookState</span>() {
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">if</span> (!hooked) {
+</span></span><span style="display:flex;"><span>                <span style="color:#8b008b;font-weight:bold">throw</span> IllegalStateException(<span style="color:#cd5555">&#34;hook没有执行成功！&#34;</span>)
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#707a7c">@Throws</span>(IllegalStateException::<span style="color:#8b008b;font-weight:bold">class</span>, RuntimeException::<span style="color:#8b008b;font-weight:bold">class</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">startRecord</span>() {
+</span></span><span style="display:flex;"><span>            checkHookState()
+</span></span><span style="display:flex;"><span>            synchronized(recording) {
+</span></span><span style="display:flex;"><span>                <span style="color:#8b008b;font-weight:bold">if</span> (recording) {
+</span></span><span style="display:flex;"><span>                    <span style="color:#8b008b;font-weight:bold">throw</span> RuntimeException(<span style="color:#cd5555">&#34;已经存在正在监听的任务！&#34;</span>)
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>                loadedClasses.clear()
+</span></span><span style="display:flex;"><span>                recording = <span style="color:#8b008b;font-weight:bold">true</span>
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#707a7c">@Throws</span>(IllegalStateException::<span style="color:#8b008b;font-weight:bold">class</span>, RuntimeException::<span style="color:#8b008b;font-weight:bold">class</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">endRecord</span>(block: (Set&lt;Pair&lt;String, Long&gt;&gt;) -&gt; Unit) {
+</span></span><span style="display:flex;"><span>            checkHookState()
+</span></span><span style="display:flex;"><span>            synchronized(recording) {
+</span></span><span style="display:flex;"><span>                <span style="color:#8b008b;font-weight:bold">if</span> (!recording) {
+</span></span><span style="display:flex;"><span>                    <span style="color:#8b008b;font-weight:bold">throw</span> RuntimeException(<span style="color:#cd5555">&#34;当前没有在监听！&#34;</span>)
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>                recording = <span style="color:#8b008b;font-weight:bold">false</span>
+</span></span><span style="display:flex;"><span>                block.invoke(loadedClasses)
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>相比前面方案来说，注意点就是不要搞出死循环来，另外就是Kotlin自己的类似乎并不会被BootstrapClassLoader加载，需要在计时前加载一下。</p>
 <h2 id="反射进行类加载">反射进行类加载</h2>
 <p>非常简单，就是用<code>Class.forName()</code>去加载了下这些类。</p>
 <p>既然用了反射，混淆问题怎么解决？</p>

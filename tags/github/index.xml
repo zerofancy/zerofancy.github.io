@@ -16,8 +16,8 @@
       <guid>https://ntutn.top/posts/%E6%88%91%E7%9A%84%E9%BB%91%E5%8E%86%E5%8F%B2%E8%A2%ABgithub%E5%9F%8B%E5%88%B0%E5%8C%97%E6%9E%81%E4%BA%86/</guid>
       <description>昨天整理自己的github仓库的时候发现自己的个人主页多了个徽章：Arctic Code Vault Contributor
 So what happened?
-GitHub Code Vault是什么  GitHub Code Vault（GitHub 代码保险库）是由 GitHub Archive Program（GitHub 代码永久保存计划）设立的代码档案库，旨在保存开源软件以供未来使用。1
- 天灾人祸，世界末日，地球回到原始时代重新发展，或者betacat污染了所有开源代码库啦，人类就可以找到这份代码库，重建网络世界。
+GitHub Code Vault是什么 GitHub Code Vault（GitHub 代码保险库）是由 GitHub Archive Program（GitHub 代码永久保存计划）设立的代码档案库，旨在保存开源软件以供未来使用。1
+天灾人祸，世界末日，地球回到原始时代重新发展，或者betacat污染了所有开源代码库啦，人类就可以找到这份代码库，重建网络世界。
 该项目给github上活跃的开源代码库建立快照，将他们存储在胶片上运往北极。据称这些代码将被保存至少1000年。
 每个细节都充满了科幻的味道，比如考虑一前年后的人类不一定读懂今天的代码，在《GitHub Code Vault 指南》中介绍了二进制、计算机、软件、编译等基本概念，以及如何解码胶片上的信息。 当然，这个指南本身并没有被压缩和编码，他们没有犯某些网站的RARSetup.rar的错误。
 考虑到地球文明重建，人类不一定造出了计算机，于是还放了一份科技树指南，包含理解软件所需的多层技术基础，如微处理器、网络、电子、半导体，甚至工业社会前的技术。有了这些技术，让人类可以重新造出现代计算机。
@@ -35,7 +35,7 @@ noveldownloader https://github.com/zerofancy/noveldownloader
 我的代码留点bug给后世解决不算什么，但996.icu也被选中了。这下真的被钉到历史的耻辱柱上了……
 面向Stackoverflow编程 不同时快照一份 stackoverflow ，后代也不会抄啊。2
 大家还贡献了什么 dotfile、Github Pages、个人演讲库和个人网站、给女朋友的信，听说鸿蒙的ppt也在里面……
-参考  除了bug，GitHub可能还把你的女装照冻到了北极，1000年后还能读那种 https://archiveprogram.github.com/ GitHub Archive Program: the journey of the world’s open source code to the Arctic    GitHub Code Vault 指南 &amp;#x21a9;&amp;#xfe0e;</description>
+参考 除了bug，GitHub可能还把你的女装照冻到了北极，1000年后还能读那种 https://archiveprogram.github.com/ GitHub Archive Program: the journey of the world’s open source code to the Arctic GitHub Code Vault 指南&amp;#160;&amp;#x21a9;&amp;#xfe0e;</description>
     </item>
     
     <item>
@@ -44,10 +44,10 @@ noveldownloader https://github.com/zerofancy/noveldownloader
       <pubDate>Tue, 24 Mar 2020 03:11:37 +0800</pubDate>
       
       <guid>https://ntutn.top/posts/%E6%8E%89%E5%9D%91%E7%9A%84%E6%97%A5%E5%B8%B8springboot%E7%9A%84json%E5%B1%9E%E6%80%A7%E5%90%8D%E5%A4%A7%E5%B0%8F%E5%86%99%E9%97%AE%E9%A2%98/</guid>
-      <description>这两天想给自己小组的项目添加一个自动升级功能。这事听着复杂，但毕竟是个很常见的功能，github上的轮子很多。经过考虑，我决定选择这个组件，然后自己写后端。反正后端就返回一个json的事。然后就掉了坑。
+      <description> 这两天想给自己小组的项目添加一个自动升级功能。这事听着复杂，但毕竟是个很常见的功能，github上的轮子很多。经过考虑，我决定选择这个组件，然后自己写后端。反正后端就返回一个json的事。然后就掉了坑。
 起因 案发现场没什么好说的，就是我发现自己设置的不能实现升级，在客户端调试半天发现用官方的json能升级。然后我就找我的json和官方的json有什么区别，看ContentType也没设置错，仔细比对发现属性大小写竟然不对。我当时还挺惊讶的，毕竟是直接复制的。
 springboot可以使用@ResponseBody返回对象自动转换json，而转换成的json属性名首字母会被转换成小写。
-解决方案 引入fastjson &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;com.alibaba&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;fastjson&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;1.2.66&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; 注入bean @Bean public HttpMessageConverters httpMessageConverters() { FastJsonHttpMessageConverter fastJsonHttpMessageConverter = new FastJsonHttpMessageConverter(); // 添加fastJson的配置信息  FastJsonConfig fastJsonConfig = new FastJsonConfig(); fastJsonConfig.setSerializerFeatures(SerializerFeature.PrettyFormat); // 处理中文乱码问题  List&amp;lt;MediaType&amp;gt; fastMediaTypes = new ArrayList&amp;lt;&amp;gt;(); fastMediaTypes.add(MediaType.APPLICATION_JSON); // 在convert中添加配置信息.  fastJsonHttpMessageConverter.setSupportedMediaTypes(fastMediaTypes); fastJsonHttpMessageConverter.setFastJsonConfig(fastJsonConfig); HttpMessageConverter&amp;lt;?&amp;gt; converter = fastJsonHttpMessageConverter; return new HttpMessageConverters(converter); } 在属性上加注解 package edu.upc.mishuserver.vo; import com.alibaba.fastjson.annotation.JSONField; import lombok.AllArgsConstructor; import lombok.Builder; import lombok.Data; import lombok.NoArgsConstructor; /** * UpdateInfo */ @Data @AllArgsConstructor @NoArgsConstructor @Builder public class UpdateInfo { @JSONField(name=&amp;#34;Code&amp;#34;) private Long code; @JSONField(name = &amp;#34;Msg&amp;#34;) private String msg; @JSONField(name = &amp;#34;UpdateStatus&amp;#34;) private Integer updateStatus; @JSONField(name = &amp;#34;VersionCode&amp;#34;) private Long versionCode; @JSONField(name = &amp;#34;VersionName&amp;#34;) private String versionName; @JSONField(name = &amp;#34;ModifyContent&amp;#34;) private String modifyContent; @JSONField(name = &amp;#34;DownloadUrl&amp;#34;) private String downloadUrl; @JSONField(name = &amp;#34;ApkSize&amp;#34;) private Long apkSize; @JSONField(name = &amp;#34;ApkMd5&amp;#34;) private String apkMd5; } </description>
+解决方案 引入fastjson &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;com.alibaba&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;fastjson&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;1.2.66&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; 注入bean @Bean public HttpMessageConverters httpMessageConverters() { FastJsonHttpMessageConverter fastJsonHttpMessageConverter = new FastJsonHttpMessageConverter(); // 添加fastJson的配置信息 FastJsonConfig fastJsonConfig = new FastJsonConfig(); fastJsonConfig.setSerializerFeatures(SerializerFeature.PrettyFormat); // 处理中文乱码问题 List&amp;lt;MediaType&amp;gt; fastMediaTypes = new ArrayList&amp;lt;&amp;gt;(); fastMediaTypes.add(MediaType.APPLICATION_JSON); // 在convert中添加配置信息. fastJsonHttpMessageConverter.setSupportedMediaTypes(fastMediaTypes); fastJsonHttpMessageConverter.setFastJsonConfig(fastJsonConfig); HttpMessageConverter&amp;lt;?&amp;gt; converter = fastJsonHttpMessageConverter; return new HttpMessageConverters(converter); } 在属性上加注解 package edu.upc.mishuserver.vo; import com.alibaba.fastjson.annotation.JSONField; import lombok.AllArgsConstructor; import lombok.Builder; import lombok.Data; import lombok.NoArgsConstructor; /** * UpdateInfo */ @Data @AllArgsConstructor @NoArgsConstructor @Builder public class UpdateInfo { @JSONField(name=&amp;#34;Code&amp;#34;) private Long code; @JSONField(name = &amp;#34;Msg&amp;#34;) private String msg; @JSONField(name = &amp;#34;UpdateStatus&amp;#34;) private Integer updateStatus; @JSONField(name = &amp;#34;VersionCode&amp;#34;) private Long versionCode; @JSONField(name = &amp;#34;VersionName&amp;#34;) private String versionName; @JSONField(name = &amp;#34;ModifyContent&amp;#34;) private String modifyContent; @JSONField(name = &amp;#34;DownloadUrl&amp;#34;) private String downloadUrl; @JSONField(name = &amp;#34;ApkSize&amp;#34;) private Long apkSize; @JSONField(name = &amp;#34;ApkMd5&amp;#34;) private String apkMd5; } </description>
     </item>
     
   </channel>

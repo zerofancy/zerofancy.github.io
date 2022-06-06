@@ -19,9 +19,10 @@
 <meta property="og:title" content="Typora&#43;git自动同步你的笔记" />
 <meta property="og:description" content="这两天看了群里某个大佬的笔记，突然觉得自己用VSCode记笔记的方案不香了。VSCode虽然对markdown的支持不错，但毕竟本职工作不是这个，直接拿来做笔记还是不够方便，太笨重了。于是我终于想起之前同学给我安利的markdown编辑器：Typora。" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://ntutn.top/posts/typora&#43;git%E8%87%AA%E5%8A%A8%E5%90%8C%E6%AD%A5%E4%BD%A0%E7%9A%84%E7%AC%94%E8%AE%B0/" />
+<meta property="og:url" content="https://ntutn.top/posts/typora&#43;git%E8%87%AA%E5%8A%A8%E5%90%8C%E6%AD%A5%E4%BD%A0%E7%9A%84%E7%AC%94%E8%AE%B0/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2020-03-02T03:11:37+08:00" />
 <meta property="article:modified_time" content="2020-03-02T03:11:37+08:00" /><meta property="og:site_name" content="归零幻想" />
+
 
 
 
@@ -44,11 +45,11 @@
 
 
 
-<link rel="stylesheet" href="https://ntutn.top/scss/journal.min.d8d9f81b896882733c41896750adbefbf9319ca02ccccefd461650898975c3af.css" integrity="sha256-2Nn4G4lognM8QYlnUK2&#43;&#43;/kxnKAszM79RhZQiYl1w68=" media="screen">
+<link rel="stylesheet" href="https://ntutn.top/scss/journal.min.0f46f98b723f2aad4b02d9370bb6aa7848b5c2b2a5579642014082283683d2d8.css" integrity="sha256-D0b5i3I/Kq1LAtk3C7aqeEi1wrKlV5ZCAUCCKDaD0tg=" media="screen">
 
 
 
-<link rel="stylesheet" href="https://ntutn.top/scss/dark-mode.min.60f86847da9fc0724177ccfd0bf7c5997b0b41f1e58d5a293cfb3723c497c422.css" integrity="sha256-YPhoR9qfwHJBd8z9C/fFmXsLQfHljVopPPs3I8SXxCI=" media="screen">
+<link rel="stylesheet" href="https://ntutn.top/scss/dark-mode.min.79c34391dbcff20df8b4dac718e2606701efcbfdb9f3b08447ac39ac9dc7b463.css" integrity="sha256-ecNDkdvP8g34tNrHGOJgZwHvy/2587CER6w5rJ3HtGM=" media="screen">
 
 
 <script src="/vendor/js/loadCSS.js"></script>
@@ -753,15 +754,15 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <!-- raw HTML omitted -->
 <h3 id="安装">安装</h3>
 <p>在Ubuntu下安装还是非常方便的：</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#228b22"># or run:</span>
-<span style="color:#228b22"># sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA300B7755AFCFAE</span>
-wget -qO - https://typora.io/linux/public-key.asc | sudo apt-key add -
-<span style="color:#228b22"># add Typora&#39;s repository</span>
-sudo add-apt-repository <span style="color:#cd5555">&#39;deb https://typora.io/linux ./&#39;</span>
-sudo apt-get update
-<span style="color:#228b22"># install typora</span>
-sudo apt-get install typora
-</code></pre></div><p>其他系统参考<a href="https://www.typora.net/#download">官网</a>。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#228b22"># or run:</span>
+</span></span><span style="display:flex;"><span><span style="color:#228b22"># sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA300B7755AFCFAE</span>
+</span></span><span style="display:flex;"><span>wget -qO - https://typora.io/linux/public-key.asc | sudo apt-key add -
+</span></span><span style="display:flex;"><span><span style="color:#228b22"># add Typora&#39;s repository</span>
+</span></span><span style="display:flex;"><span>sudo add-apt-repository <span style="color:#cd5555">&#39;deb https://typora.io/linux ./&#39;</span>
+</span></span><span style="display:flex;"><span>sudo apt-get update
+</span></span><span style="display:flex;"><span><span style="color:#228b22"># install typora</span>
+</span></span><span style="display:flex;"><span>sudo apt-get install typora
+</span></span></code></pre></div><p>其他系统参考<a href="https://www.typora.net/#download">官网</a>。</p>
 <h3 id="复制图片">复制图片</h3>
 <p>不过有一点要注意：我们写文档常常要插入一些图片，为了后面和git好配合，我们需要将这些图片也放到当前文件夹里。按下<code>Ctrl+逗号</code>打开设置，将图片复制到当前文件夹下。如图。</p>
 <p><img src="https://i.loli.net/2020/08/20/VWcp6qEGOF9beZf.png" alt="3.png"></p>
@@ -815,38 +816,38 @@ sudo apt-get install typora
 <p>怎么注册账号，怎么建立仓库我就不说了。clone下来，这就是以后笔记安家的地方了。</p>
 <h2 id="自动同步笔记">自动同步笔记</h2>
 <p>然而，我们还是需要运行<code>git add</code>、<code>git commit</code>、<code>git push</code>，而且在别处修改了笔记还得手动pull一下。执行的命令这么固定，肯定是要写成脚本(.sync.sh)了。</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#658b00">cd</span> /home/zero/Documents/Notes
-git pull &amp;
-typora . TODO.md
-git add .
-git commit -m <span style="color:#cd5555">&#34;Sync&#34;</span>
-git push
-</code></pre></div><p>注意上面的路径改为你自己笔记文件夹的路径。第二行的<code>&amp;</code>不要省，我们没必要等pull完才打开Typora，这样可以加快一点启动速度。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#658b00">cd</span> /home/zero/Documents/Notes
+</span></span><span style="display:flex;"><span>git pull &amp;
+</span></span><span style="display:flex;"><span>typora . TODO.md
+</span></span><span style="display:flex;"><span>git add .
+</span></span><span style="display:flex;"><span>git commit -m <span style="color:#cd5555">&#34;Sync&#34;</span>
+</span></span><span style="display:flex;"><span>git push
+</span></span></code></pre></div><p>注意上面的路径改为你自己笔记文件夹的路径。第二行的<code>&amp;</code>不要省，我们没必要等pull完才打开Typora，这样可以加快一点启动速度。</p>
 <p>好了，现在我们执行脚本就能打开Typora，而且所有编辑还能自动同步。由于git默认不允许保留空提交，没有修改的时候也不会产生大量无用的记录，完美。</p>
 <p>最后写个桌面启动器就大功告成了：</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ini" data-lang="ini"><span style="color:#8b008b;font-weight:bold">[Desktop Entry]</span>
-<span style="color:#658b00">Type</span>=<span style="color:#cd5555">Application</span>
-<span style="color:#658b00">Icon</span>=<span style="color:#cd5555">typora</span>
-<span style="color:#658b00">Name</span>=<span style="color:#cd5555">笔记</span>
-<span style="color:#658b00">Exec</span>=<span style="color:#cd5555">/home/zero/Documents/Notes/.sync.sh</span>
-<span style="color:#658b00">Terminal</span>=<span style="color:#cd5555">false</span>
-<span style="color:#658b00">Hidden</span>=<span style="color:#cd5555">false</span>
-</code></pre></div><p><code>Note.desktop</code>文件名保存到桌面就成了。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ini" data-lang="ini"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">[Desktop Entry]</span>
+</span></span><span style="display:flex;"><span><span style="color:#658b00">Type</span>=<span style="color:#cd5555">Application</span>
+</span></span><span style="display:flex;"><span><span style="color:#658b00">Icon</span>=<span style="color:#cd5555">typora</span>
+</span></span><span style="display:flex;"><span><span style="color:#658b00">Name</span>=<span style="color:#cd5555">笔记</span>
+</span></span><span style="display:flex;"><span><span style="color:#658b00">Exec</span>=<span style="color:#cd5555">/home/zero/Documents/Notes/.sync.sh</span>
+</span></span><span style="display:flex;"><span><span style="color:#658b00">Terminal</span>=<span style="color:#cd5555">false</span>
+</span></span><span style="display:flex;"><span><span style="color:#658b00">Hidden</span>=<span style="color:#cd5555">false</span>
+</span></span></code></pre></div><p><code>Note.desktop</code>文件名保存到桌面就成了。</p>
 <h2 id="windows下的配置">Windows下的配置</h2>
 <p>Git是跨平台的，Typora也是跨平台的，那么我们这个方案自然同样可以跨平台。</p>
 <blockquote>
 <p>Windows下的Typora并没有默认添加环境变量，请手动添加。添加后需要重启。
 首先对应上面的sh，写个cmd(.sync.cmd)：</p>
 </blockquote>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cmd" data-lang="cmd"><span style="color:#8b008b;font-weight:bold">start</span> /b git pull
-typora . TODO.md
-git add .
-git commit -m <span style="color:#cd5555">&#34;Sync&#34;</span>
-git push
-</code></pre></div><p>第一行不一样，这是因为cmd后台执行是用<code>start /b</code>的，与shell脚本的<code>&amp;</code>效果是一样的。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cmd" data-lang="cmd"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">start</span> /b git pull
+</span></span><span style="display:flex;"><span>typora . TODO.md
+</span></span><span style="display:flex;"><span>git add .
+</span></span><span style="display:flex;"><span>git commit -m <span style="color:#cd5555">&#34;Sync&#34;</span>
+</span></span><span style="display:flex;"><span>git push
+</span></span></code></pre></div><p>第一行不一样，这是因为cmd后台执行是用<code>start /b</code>的，与shell脚本的<code>&amp;</code>效果是一样的。</p>
 <p>此时双击这个cmd已经能看到效果了。</p>
 <p>但cmd执行时会有黑窗口，很影响美观，我们写个vbs脚本(.sync.vbs)来调用它，这样可以不显示黑窗口。</p>
-<pre><code class="language-vbs" data-lang="vbs">WScript.CreateObject(&quot;WScript.Shell&quot;).Run &quot;.sync.cmd&quot;,0
+<pre tabindex="0"><code class="language-vbs" data-lang="vbs">WScript.CreateObject(&#34;WScript.Shell&#34;).Run &#34;.sync.cmd&#34;,0
 </code></pre><p>最后创建个桌面快捷方式，指向<code>.sync.vbs</code>，就大功告成了。</p>
 <blockquote>
 <p>注意：快捷方式的起始目录要指向笔记的目录。</p>

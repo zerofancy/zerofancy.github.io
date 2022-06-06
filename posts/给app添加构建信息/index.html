@@ -19,9 +19,10 @@
 <meta property="og:title" content="给APP添加构建信息" />
 <meta property="og:description" content="这两天在琢磨一个问题，一个APP是怎么知道自己是怎么来的呢？ 一个应用得知道自己是怎么来的，这样出了问题才知道该找谁。举个例子，当应用发生了一个线上crash，崩溃信息收集上来，然后我们打开堆栈一看懵了——这个发生崩溃的`v5.c`是哪个类呢？" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://ntutn.top/posts/%E7%BB%99app%E6%B7%BB%E5%8A%A0%E6%9E%84%E5%BB%BA%E4%BF%A1%E6%81%AF/" />
+<meta property="og:url" content="https://ntutn.top/posts/%E7%BB%99app%E6%B7%BB%E5%8A%A0%E6%9E%84%E5%BB%BA%E4%BF%A1%E6%81%AF/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2022-01-16T23:24:16+08:00" />
 <meta property="article:modified_time" content="2022-01-16T23:24:16+08:00" /><meta property="og:site_name" content="归零幻想" />
+
 
 
 
@@ -44,11 +45,11 @@
 
 
 
-<link rel="stylesheet" href="https://ntutn.top/scss/journal.min.d8d9f81b896882733c41896750adbefbf9319ca02ccccefd461650898975c3af.css" integrity="sha256-2Nn4G4lognM8QYlnUK2&#43;&#43;/kxnKAszM79RhZQiYl1w68=" media="screen">
+<link rel="stylesheet" href="https://ntutn.top/scss/journal.min.0f46f98b723f2aad4b02d9370bb6aa7848b5c2b2a5579642014082283683d2d8.css" integrity="sha256-D0b5i3I/Kq1LAtk3C7aqeEi1wrKlV5ZCAUCCKDaD0tg=" media="screen">
 
 
 
-<link rel="stylesheet" href="https://ntutn.top/scss/dark-mode.min.60f86847da9fc0724177ccfd0bf7c5997b0b41f1e58d5a293cfb3723c497c422.css" integrity="sha256-YPhoR9qfwHJBd8z9C/fFmXsLQfHljVopPPs3I8SXxCI=" media="screen">
+<link rel="stylesheet" href="https://ntutn.top/scss/dark-mode.min.79c34391dbcff20df8b4dac718e2606701efcbfdb9f3b08447ac39ac9dc7b463.css" integrity="sha256-ecNDkdvP8g34tNrHGOJgZwHvy/2587CER6w5rJ3HtGM=" media="screen">
 
 
 <script src="/vendor/js/loadCSS.js"></script>
@@ -594,55 +595,55 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 </ol>
 <p>看上去前者更优雅，但一个commit id上并不一定只有一个成功的构建，比如你做一应用叫“快音”，测试通过后调整了一些编译选项打出线上包，此时只根据commit id就无法确定是对应测试包的构建还是线上包了。</p>
 <p>所以，最实在的方法还是后者。</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">runShellCommand</span>(command: String): String {
-    <span style="color:#8b008b;font-weight:bold">val</span> byteOut = ByteArrayOutputStream()
-    project.exec {
-        commandLine = command.split(<span style="color:#cd5555">&#34; &#34;</span>)
-        standardOutput = byteOut
-    }
-    <span style="color:#8b008b;font-weight:bold">return</span> String(byteOut.toByteArray())
-}
-<span style="color:#8b008b;font-weight:bold">val</span> buildNumber = UUID.randomUUID()
-<span style="color:#8b008b;font-weight:bold">val</span> gitBranch = runShellCommand(<span style="color:#cd5555">&#34;git branch --show-current&#34;</span>).trim()
-<span style="color:#8b008b;font-weight:bold">val</span> gitCommitId = runShellCommand(<span style="color:#cd5555">&#34;git rev-parse HEAD&#34;</span>).trim()
-<span style="color:#8b008b;font-weight:bold">val</span> buildTimeMILLIS = System.currentTimeMillis()
-</code></pre></div><h2 id="将信息传给应用">将信息传给应用</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">runShellCommand</span>(command: String): String {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> byteOut = ByteArrayOutputStream()
+</span></span><span style="display:flex;"><span>    project.exec {
+</span></span><span style="display:flex;"><span>        commandLine = command.split(<span style="color:#cd5555">&#34; &#34;</span>)
+</span></span><span style="display:flex;"><span>        standardOutput = byteOut
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">return</span> String(byteOut.toByteArray())
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">val</span> buildNumber = UUID.randomUUID()
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">val</span> gitBranch = runShellCommand(<span style="color:#cd5555">&#34;git branch --show-current&#34;</span>).trim()
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">val</span> gitCommitId = runShellCommand(<span style="color:#cd5555">&#34;git rev-parse HEAD&#34;</span>).trim()
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">val</span> buildTimeMILLIS = System.currentTimeMillis()
+</span></span></code></pre></div><h2 id="将信息传给应用">将信息传给应用</h2>
 <p>不知道大家有没有这种习惯，在开发时加一些测试代码时判断只在Debug版本生效，即</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">if</span> (BuildConfig.DEBUG) {
-    Toast.makeText(applicationContext, <span style="color:#cd5555">&#34;test&#34;</span>, Toast.LENGTH_SHORT).show()
-}
-</code></pre></div><p>这样即使我真的忘记删除这段代码也不会影响到线上，让用户看到个“test”感到莫名其妙。这里用的<code>BuildConfig</code>就是在Gradle构建时生成的一个类，里面包含了一些有关当前构建的信息<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">if</span> (BuildConfig.DEBUG) {
+</span></span><span style="display:flex;"><span>    Toast.makeText(applicationContext, <span style="color:#cd5555">&#34;test&#34;</span>, Toast.LENGTH_SHORT).show()
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>这样即使我真的忘记删除这段代码也不会影响到线上，让用户看到个“test”感到莫名其妙。这里用的<code>BuildConfig</code>就是在Gradle构建时生成的一个类，里面包含了一些有关当前构建的信息<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>。</p>
 <p>而幸运的是，官方也提供了方法让我们可以往<code>BuildConfig</code>里面自己加东西，于是</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">android {
-    defaultConfig {
-        buildConfigField(<span style="color:#cd5555">&#34;String&#34;</span>, <span style="color:#cd5555">&#34;BUILD_NUMBER&#34;</span>, <span style="color:#cd5555">&#34;</span><span style="color:#cd5555">\&#34;</span><span style="color:#cd5555">$buildNumber</span><span style="color:#cd5555">\&#34;</span><span style="color:#cd5555">&#34;</span>)
-        buildConfigField(<span style="color:#cd5555">&#34;String&#34;</span>, <span style="color:#cd5555">&#34;GIT_BRANCH&#34;</span>, <span style="color:#cd5555">&#34;</span><span style="color:#cd5555">\&#34;</span><span style="color:#cd5555">$gitBranch</span><span style="color:#cd5555">\&#34;</span><span style="color:#cd5555">&#34;</span>)
-        buildConfigField(<span style="color:#cd5555">&#34;String&#34;</span>, <span style="color:#cd5555">&#34;GIT_COMMIT_ID&#34;</span>, <span style="color:#cd5555">&#34;</span><span style="color:#cd5555">\&#34;</span><span style="color:#cd5555">$gitCommitId</span><span style="color:#cd5555">\&#34;</span><span style="color:#cd5555">&#34;</span>)
-        buildConfigField(<span style="color:#cd5555">&#34;Long&#34;</span>, <span style="color:#cd5555">&#34;BUILD_TIME_MILLIS&#34;</span>, <span style="color:#cd5555">&#34;</span><span style="color:#cd5555">${buildTimeMILLIS}</span><span style="color:#cd5555">L&#34;</span>)
-    }
-}
-</code></pre></div><p>然后这些字段就会出现在<code>BuildConfig</code>中</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span>android {
+</span></span><span style="display:flex;"><span>    defaultConfig {
+</span></span><span style="display:flex;"><span>        buildConfigField(<span style="color:#cd5555">&#34;String&#34;</span>, <span style="color:#cd5555">&#34;BUILD_NUMBER&#34;</span>, <span style="color:#cd5555">&#34;</span><span style="color:#cd5555">\&#34;</span><span style="color:#cd5555">$buildNumber</span><span style="color:#cd5555">\&#34;</span><span style="color:#cd5555">&#34;</span>)
+</span></span><span style="display:flex;"><span>        buildConfigField(<span style="color:#cd5555">&#34;String&#34;</span>, <span style="color:#cd5555">&#34;GIT_BRANCH&#34;</span>, <span style="color:#cd5555">&#34;</span><span style="color:#cd5555">\&#34;</span><span style="color:#cd5555">$gitBranch</span><span style="color:#cd5555">\&#34;</span><span style="color:#cd5555">&#34;</span>)
+</span></span><span style="display:flex;"><span>        buildConfigField(<span style="color:#cd5555">&#34;String&#34;</span>, <span style="color:#cd5555">&#34;GIT_COMMIT_ID&#34;</span>, <span style="color:#cd5555">&#34;</span><span style="color:#cd5555">\&#34;</span><span style="color:#cd5555">$gitCommitId</span><span style="color:#cd5555">\&#34;</span><span style="color:#cd5555">&#34;</span>)
+</span></span><span style="display:flex;"><span>        buildConfigField(<span style="color:#cd5555">&#34;Long&#34;</span>, <span style="color:#cd5555">&#34;BUILD_TIME_MILLIS&#34;</span>, <span style="color:#cd5555">&#34;</span><span style="color:#cd5555">${buildTimeMILLIS}</span><span style="color:#cd5555">L&#34;</span>)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>然后这些字段就会出现在<code>BuildConfig</code>中</p>
 <p><img src="https://images.ntutn.top/2022/01/55dc59fdd208c87b155b6a3947fc77f4.png" alt="BuildConfig自定义字段"></p>
 <p>我们在报告崩溃信息时就可以带上，这样排查时就知道从何开始找起了。</p>
 <h2 id="保存构建信息">保存构建信息</h2>
 <p>自定义一个task来进行发布，反正都是Kotlin代码，怎么保存这里不展开了。最终我们的服务端不但记录每一次构建时的最终产物，还记录了<code>mapping.txt</code>文件，记录了buildNumber，当后面排查问题时就能比较简单复现场景了。</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">tasks.create(<span style="color:#cd5555">&#34;apkReleaseAndUpload&#34;</span>) {
-    dependsOn(tasks[<span style="color:#cd5555">&#34;assemble&#34;</span>])
-    doLast {
-        println(<span style="color:#cd5555">&#34;发布任务开始（构建版本号</span><span style="color:#cd5555">$buildNumber</span><span style="color:#cd5555">）&#34;</span>)
-        <span style="color:#228b22">// 保存构建信息
-</span><span style="color:#228b22"></span>    }
-}
-</code></pre></div><hr>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span>tasks.create(<span style="color:#cd5555">&#34;apkReleaseAndUpload&#34;</span>) {
+</span></span><span style="display:flex;"><span>    dependsOn(tasks[<span style="color:#cd5555">&#34;assemble&#34;</span>])
+</span></span><span style="display:flex;"><span>    doLast {
+</span></span><span style="display:flex;"><span>        println(<span style="color:#cd5555">&#34;发布任务开始（构建版本号</span><span style="color:#cd5555">$buildNumber</span><span style="color:#cd5555">）&#34;</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#228b22">// 保存构建信息
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><hr>
 <p>进行到这里，我们就做到了之前说的目标，应用知道自己是怎么来的（保留了构建相关信息），我们排查问题也有个大概方向。</p>
-<section class="footnotes" role="doc-endnotes">
+<div class="footnotes" role="doc-endnotes">
 <hr>
 <ol>
-<li id="fn:1" role="doc-endnote">
-<p><a href="https://developer.android.com/studio/build/gradle-tips#share-custom-fields-and-resource-values-with-your-app-code">与应用代码共享自定义字段和资源值 </a> <a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<li id="fn:1">
+<p><a href="https://developer.android.com/studio/build/gradle-tips#share-custom-fields-and-resource-values-with-your-app-code">与应用代码共享自定义字段和资源值 </a>&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
-</section>
+</div>
 
                     
                     <HR width="100%" id="EOF">

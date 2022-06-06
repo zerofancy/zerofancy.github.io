@@ -19,9 +19,10 @@
 <meta property="og:title" content="ViewBinding、ViewModel和LiveData" />
 <meta property="og:description" content="毕设项目是没啥历史包袱的，我可以尽情实践。" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://ntutn.top/posts/viewbindingviewmodel%E5%92%8Clivedata/" />
+<meta property="og:url" content="https://ntutn.top/posts/viewbindingviewmodel%E5%92%8Clivedata/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2021-02-22T03:11:37+08:00" />
 <meta property="article:modified_time" content="2021-02-22T03:11:37+08:00" /><meta property="og:site_name" content="归零幻想" />
+
 
 
 
@@ -44,11 +45,11 @@
 
 
 
-<link rel="stylesheet" href="https://ntutn.top/scss/journal.min.d8d9f81b896882733c41896750adbefbf9319ca02ccccefd461650898975c3af.css" integrity="sha256-2Nn4G4lognM8QYlnUK2&#43;&#43;/kxnKAszM79RhZQiYl1w68=" media="screen">
+<link rel="stylesheet" href="https://ntutn.top/scss/journal.min.0f46f98b723f2aad4b02d9370bb6aa7848b5c2b2a5579642014082283683d2d8.css" integrity="sha256-D0b5i3I/Kq1LAtk3C7aqeEi1wrKlV5ZCAUCCKDaD0tg=" media="screen">
 
 
 
-<link rel="stylesheet" href="https://ntutn.top/scss/dark-mode.min.60f86847da9fc0724177ccfd0bf7c5997b0b41f1e58d5a293cfb3723c497c422.css" integrity="sha256-YPhoR9qfwHJBd8z9C/fFmXsLQfHljVopPPs3I8SXxCI=" media="screen">
+<link rel="stylesheet" href="https://ntutn.top/scss/dark-mode.min.79c34391dbcff20df8b4dac718e2606701efcbfdb9f3b08447ac39ac9dc7b463.css" integrity="sha256-ecNDkdvP8g34tNrHGOJgZwHvy/2587CER6w5rJ3HtGM=" media="screen">
 
 
 <script src="/vendor/js/loadCSS.js"></script>
@@ -677,220 +678,220 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <p>其实与ViewBinding相似的，还有一个DataBinding，但我不太喜欢，感觉在xml里面写代码不是一个好主意。</p>
 <h3 id="使用">使用</h3>
 <p>首先在build.gradle（或build.gradle.kts）中的android块添加</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-groovy" data-lang="groovy">buildFeatures {
-    viewBinding = <span style="color:#8b008b;font-weight:bold">true</span>
-}
-</code></pre></div><p>在xml中正常定义你的布局</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#1e889b">&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;</span>
-<span style="color:#8b008b;font-weight:bold">&lt;LinearLayout</span> <span style="color:#658b00">xmlns:android=</span><span style="color:#cd5555">&#34;http://schemas.android.com/apk/res/android&#34;</span>
-    <span style="color:#658b00">xmlns:tools=</span><span style="color:#cd5555">&#34;http://schemas.android.com/tools&#34;</span>
-    <span style="color:#658b00">android:layout_width=</span><span style="color:#cd5555">&#34;match_parent&#34;</span>
-    <span style="color:#658b00">android:layout_height=</span><span style="color:#cd5555">&#34;match_parent&#34;</span>
-    <span style="color:#658b00">android:orientation=</span><span style="color:#cd5555">&#34;vertical&#34;</span>
-    <span style="color:#658b00">tools:context=</span><span style="color:#cd5555">&#34;.MainActivity&#34;</span><span style="color:#8b008b;font-weight:bold">&gt;</span>
-
-    <span style="color:#8b008b;font-weight:bold">&lt;TextView</span>
-        <span style="color:#658b00">android:id=</span><span style="color:#cd5555">&#34;@+id/text_view&#34;</span>
-        <span style="color:#658b00">android:layout_width=</span><span style="color:#cd5555">&#34;match_parent&#34;</span>
-        <span style="color:#658b00">android:layout_height=</span><span style="color:#cd5555">&#34;wrap_content&#34;</span>
-        <span style="color:#658b00">android:text=</span><span style="color:#cd5555">&#34;Hello World!&#34;</span> <span style="color:#8b008b;font-weight:bold">/&gt;</span>
-
-    <span style="color:#8b008b;font-weight:bold">&lt;Button</span>
-        <span style="color:#658b00">android:id=</span><span style="color:#cd5555">&#34;@+id/test_button&#34;</span>
-        <span style="color:#658b00">android:layout_width=</span><span style="color:#cd5555">&#34;match_parent&#34;</span>
-        <span style="color:#658b00">android:layout_height=</span><span style="color:#cd5555">&#34;wrap_content&#34;</span>
-        <span style="color:#658b00">android:text=</span><span style="color:#cd5555">&#34;toast&#34;</span> <span style="color:#8b008b;font-weight:bold">/&gt;</span>
-
-    <span style="color:#8b008b;font-weight:bold">&lt;Button</span>
-        <span style="color:#658b00">android:id=</span><span style="color:#cd5555">&#34;@+id/change_button&#34;</span>
-        <span style="color:#658b00">android:layout_width=</span><span style="color:#cd5555">&#34;match_parent&#34;</span>
-        <span style="color:#658b00">android:layout_height=</span><span style="color:#cd5555">&#34;wrap_content&#34;</span>
-        <span style="color:#658b00">android:text=</span><span style="color:#cd5555">&#34;change&#34;</span> <span style="color:#8b008b;font-weight:bold">/&gt;</span>
-<span style="color:#8b008b;font-weight:bold">&lt;/LinearLayout&gt;</span>
-</code></pre></div><p>接下来就可以愉快使用了</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.viewmodeldemo</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.os.Bundle</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.widget.Toast</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">androidx.appcompat.app.AppCompatActivity</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.viewmodeldemo.databinding.ActivityMainBinding</span>
-<span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">MainActivity</span> : AppCompatActivity() {
-    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">lateinit</span> <span style="color:#8b008b;font-weight:bold">var</span> binding: ActivityMainBinding
-    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onCreate</span>(savedInstanceState: Bundle?) {
-        <span style="color:#8b008b;font-weight:bold">super</span>.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        initView()
-    }
-    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">initView</span>() {
-        binding.apply {
-            changeButton.setOnClickListener { textView.text = <span style="color:#cd5555">&#34;Changed!&#34;</span> }
-            testButton.setOnClickListener {
-                Toast.makeText(
-                    <span style="color:#8b008b;font-weight:bold">this</span><span style="color:#707a7c">@MainActivity</span>,
-                    <span style="color:#cd5555">&#34;Test&#34;</span>,
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-        }
-    }
-}
-</code></pre></div><p>我们在xml里面用下划线分隔的id在这里就直接变成了binding里面的字段，相当舒服。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-groovy" data-lang="groovy"><span style="display:flex;"><span>buildFeatures {
+</span></span><span style="display:flex;"><span>    viewBinding = <span style="color:#8b008b;font-weight:bold">true</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>在xml中正常定义你的布局</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#1e889b">&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">&lt;LinearLayout</span> <span style="color:#658b00">xmlns:android=</span><span style="color:#cd5555">&#34;http://schemas.android.com/apk/res/android&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#658b00">xmlns:tools=</span><span style="color:#cd5555">&#34;http://schemas.android.com/tools&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#658b00">android:layout_width=</span><span style="color:#cd5555">&#34;match_parent&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#658b00">android:layout_height=</span><span style="color:#cd5555">&#34;match_parent&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#658b00">android:orientation=</span><span style="color:#cd5555">&#34;vertical&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#658b00">tools:context=</span><span style="color:#cd5555">&#34;.MainActivity&#34;</span><span style="color:#8b008b;font-weight:bold">&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">&lt;TextView</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#658b00">android:id=</span><span style="color:#cd5555">&#34;@+id/text_view&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#658b00">android:layout_width=</span><span style="color:#cd5555">&#34;match_parent&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#658b00">android:layout_height=</span><span style="color:#cd5555">&#34;wrap_content&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#658b00">android:text=</span><span style="color:#cd5555">&#34;Hello World!&#34;</span> <span style="color:#8b008b;font-weight:bold">/&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">&lt;Button</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#658b00">android:id=</span><span style="color:#cd5555">&#34;@+id/test_button&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#658b00">android:layout_width=</span><span style="color:#cd5555">&#34;match_parent&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#658b00">android:layout_height=</span><span style="color:#cd5555">&#34;wrap_content&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#658b00">android:text=</span><span style="color:#cd5555">&#34;toast&#34;</span> <span style="color:#8b008b;font-weight:bold">/&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">&lt;Button</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#658b00">android:id=</span><span style="color:#cd5555">&#34;@+id/change_button&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#658b00">android:layout_width=</span><span style="color:#cd5555">&#34;match_parent&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#658b00">android:layout_height=</span><span style="color:#cd5555">&#34;wrap_content&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#658b00">android:text=</span><span style="color:#cd5555">&#34;change&#34;</span> <span style="color:#8b008b;font-weight:bold">/&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">&lt;/LinearLayout&gt;</span>
+</span></span></code></pre></div><p>接下来就可以愉快使用了</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.viewmodeldemo</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.os.Bundle</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.widget.Toast</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">androidx.appcompat.app.AppCompatActivity</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.viewmodeldemo.databinding.ActivityMainBinding</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">MainActivity</span> : AppCompatActivity() {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">lateinit</span> <span style="color:#8b008b;font-weight:bold">var</span> binding: ActivityMainBinding
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onCreate</span>(savedInstanceState: Bundle?) {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">super</span>.onCreate(savedInstanceState)
+</span></span><span style="display:flex;"><span>        binding = ActivityMainBinding.inflate(layoutInflater)
+</span></span><span style="display:flex;"><span>        setContentView(binding.root)
+</span></span><span style="display:flex;"><span>        initView()
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">initView</span>() {
+</span></span><span style="display:flex;"><span>        binding.apply {
+</span></span><span style="display:flex;"><span>            changeButton.setOnClickListener { textView.text = <span style="color:#cd5555">&#34;Changed!&#34;</span> }
+</span></span><span style="display:flex;"><span>            testButton.setOnClickListener {
+</span></span><span style="display:flex;"><span>                Toast.makeText(
+</span></span><span style="display:flex;"><span>                    <span style="color:#8b008b;font-weight:bold">this</span><span style="color:#707a7c">@MainActivity</span>,
+</span></span><span style="display:flex;"><span>                    <span style="color:#cd5555">&#34;Test&#34;</span>,
+</span></span><span style="display:flex;"><span>                    Toast.LENGTH_LONG
+</span></span><span style="display:flex;"><span>                ).show()
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>我们在xml里面用下划线分隔的id在这里就直接变成了binding里面的字段，相当舒服。</p>
 <h3 id="在recyclerview中的使用">在RecyclerView中的使用</h3>
 <p>在RecyclerView中代码要稍微发生一点变化，因为我们是在onCreateViewHolder时反射创建布局的。</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.viewmodeldemo</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.view.LayoutInflater</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.view.ViewGroup</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">androidx.recyclerview.widget.RecyclerView</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.viewmodeldemo.databinding.ItemTestBinding</span>
-<span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">MyAdapter</span> : RecyclerView.Adapter&lt;MyAdapter.ViewHolder&gt;() {
-    <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">ViewHolder</span>(<span style="color:#8b008b;font-weight:bold">val</span> binding: ItemTestBinding) : RecyclerView.ViewHolder(binding.root)
-    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onCreateViewHolder</span>(parent: ViewGroup, viewType: Int): ViewHolder {
-        <span style="color:#8b008b;font-weight:bold">return</span> ViewHolder(
-            ItemTestBinding.inflate(LayoutInflater.from(parent.context), parent, <span style="color:#8b008b;font-weight:bold">false</span>)
-        )
-    }
-    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onBindViewHolder</span>(holder: ViewHolder, position: Int) {
-        holder.binding.textView.text = TODO(<span style="color:#cd5555">&#34;Not yet implemented&#34;</span>)
-    }
-    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">getItemCount</span>(): Int {
-        TODO(<span style="color:#cd5555">&#34;Not yet implemented&#34;</span>)
-    }
-}
-</code></pre></div><p>仍然不需要findViewById！</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.viewmodeldemo</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.view.LayoutInflater</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.view.ViewGroup</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">androidx.recyclerview.widget.RecyclerView</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.viewmodeldemo.databinding.ItemTestBinding</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">MyAdapter</span> : RecyclerView.Adapter&lt;MyAdapter.ViewHolder&gt;() {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">ViewHolder</span>(<span style="color:#8b008b;font-weight:bold">val</span> binding: ItemTestBinding) : RecyclerView.ViewHolder(binding.root)
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onCreateViewHolder</span>(parent: ViewGroup, viewType: Int): ViewHolder {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span> ViewHolder(
+</span></span><span style="display:flex;"><span>            ItemTestBinding.inflate(LayoutInflater.from(parent.context), parent, <span style="color:#8b008b;font-weight:bold">false</span>)
+</span></span><span style="display:flex;"><span>        )
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onBindViewHolder</span>(holder: ViewHolder, position: Int) {
+</span></span><span style="display:flex;"><span>        holder.binding.textView.text = TODO(<span style="color:#cd5555">&#34;Not yet implemented&#34;</span>)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">getItemCount</span>(): Int {
+</span></span><span style="display:flex;"><span>        TODO(<span style="color:#cd5555">&#34;Not yet implemented&#34;</span>)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>仍然不需要findViewById！</p>
 <!-- raw HTML omitted -->
 <h2 id="viewmodel和livedata">ViewModel和LiveData</h2>
 <p>应用MVVM模式更好管理代码，使之便于拓展和测试，好处不多说。</p>
 <p>首先引入ViewModel、LiveData和Kotlin Coroutines的拓展包和Retrofit的依赖包。</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-groovy" data-lang="groovy">implementation(<span style="color:#cd5555">&#39;org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1&#39;</span>)
-implementation(<span style="color:#cd5555">&#39;androidx.core:core-ktx:1.3.2&#39;</span>)
-implementation(<span style="color:#cd5555">&#39;androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0&#39;</span>)
-implementation(<span style="color:#cd5555">&#39;androidx.lifecycle:lifecycle-livedata-ktx:2.3.0&#39;</span>)
-implementation(<span style="color:#cd5555">&#39;com.squareup.retrofit2:retrofit:2.9.0&#39;</span>)
-implementation <span style="color:#cd5555">&#34;androidx.fragment:fragment-ktx:1.3.0&#34;</span>
-</code></pre></div><p>准备ViewModel</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.viewmodeldemo</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">androidx.lifecycle.LiveData</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">androidx.lifecycle.MutableLiveData</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">androidx.lifecycle.ViewModel</span>
-<span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">MainViewModel</span> : ViewModel() {
-    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> _text = MutableLiveData&lt;String&gt;().apply {
-        value = <span style="color:#cd5555">&#34;我的&#34;</span>
-    }
-    <span style="color:#8b008b;font-weight:bold">val</span> text: LiveData&lt;String&gt; = _text
-    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">changeText</span>() {
-        _text.value = <span style="color:#cd5555">&#34;修改过的&#34;</span>
-    }
-}
-</code></pre></div><p>在MainActivity中</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> mainViewModel <span style="color:#8b008b;font-weight:bold">by</span> viewModels&lt;MainViewModel&gt;()
-<span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">initView</span>() {
-    binding.apply {
-        changeButton.setOnClickListener { mainViewModel.changeText() }
-        testButton.setOnClickListener {
-            Toast.makeText(
-                <span style="color:#8b008b;font-weight:bold">this</span><span style="color:#707a7c">@MainActivity</span>,
-                <span style="color:#cd5555">&#34;Test&#34;</span>,
-                Toast.LENGTH_LONG
-            ).show()
-        }
-    }
-    mainViewModel.text.observe(<span style="color:#8b008b;font-weight:bold">this</span>) {
-        binding.textView.text = <span style="color:#8b008b;font-weight:bold">it</span>
-    }
-}
-</code></pre></div><p>这样，VC负责视图层的展示逻辑，VM负责业务逻辑，清晰了许多。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-groovy" data-lang="groovy"><span style="display:flex;"><span>implementation(<span style="color:#cd5555">&#39;org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1&#39;</span>)
+</span></span><span style="display:flex;"><span>implementation(<span style="color:#cd5555">&#39;androidx.core:core-ktx:1.3.2&#39;</span>)
+</span></span><span style="display:flex;"><span>implementation(<span style="color:#cd5555">&#39;androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0&#39;</span>)
+</span></span><span style="display:flex;"><span>implementation(<span style="color:#cd5555">&#39;androidx.lifecycle:lifecycle-livedata-ktx:2.3.0&#39;</span>)
+</span></span><span style="display:flex;"><span>implementation(<span style="color:#cd5555">&#39;com.squareup.retrofit2:retrofit:2.9.0&#39;</span>)
+</span></span><span style="display:flex;"><span>implementation <span style="color:#cd5555">&#34;androidx.fragment:fragment-ktx:1.3.0&#34;</span>
+</span></span></code></pre></div><p>准备ViewModel</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.viewmodeldemo</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">androidx.lifecycle.LiveData</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">androidx.lifecycle.MutableLiveData</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">androidx.lifecycle.ViewModel</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">MainViewModel</span> : ViewModel() {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> _text = MutableLiveData&lt;String&gt;().apply {
+</span></span><span style="display:flex;"><span>        value = <span style="color:#cd5555">&#34;我的&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> text: LiveData&lt;String&gt; = _text
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">changeText</span>() {
+</span></span><span style="display:flex;"><span>        _text.value = <span style="color:#cd5555">&#34;修改过的&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>在MainActivity中</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> mainViewModel <span style="color:#8b008b;font-weight:bold">by</span> viewModels&lt;MainViewModel&gt;()
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">initView</span>() {
+</span></span><span style="display:flex;"><span>    binding.apply {
+</span></span><span style="display:flex;"><span>        changeButton.setOnClickListener { mainViewModel.changeText() }
+</span></span><span style="display:flex;"><span>        testButton.setOnClickListener {
+</span></span><span style="display:flex;"><span>            Toast.makeText(
+</span></span><span style="display:flex;"><span>                <span style="color:#8b008b;font-weight:bold">this</span><span style="color:#707a7c">@MainActivity</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#cd5555">&#34;Test&#34;</span>,
+</span></span><span style="display:flex;"><span>                Toast.LENGTH_LONG
+</span></span><span style="display:flex;"><span>            ).show()
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    mainViewModel.text.observe(<span style="color:#8b008b;font-weight:bold">this</span>) {
+</span></span><span style="display:flex;"><span>        binding.textView.text = <span style="color:#8b008b;font-weight:bold">it</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>这样，VC负责视图层的展示逻辑，VM负责业务逻辑，清晰了许多。</p>
 <p>LiveData具有生命周期感知功能，随时监听修改并更新视图。它有setValue()和postValue()两个方法设置值，相对于前者，后者将setValue放到了下一个消息循环，可以在非UI线程调用。</p>
 <h3 id="initedlivedata">InitedLiveData</h3>
 <p>然而自带的LiveData和MutableLiveData用多了总感觉难受，因为getValue()返回的是一个可空的数据，当我写了n多次<code>_field.value?.key?:&quot;&quot;</code>后，我爆发了。很多场景下这个value都可以定义成不可空的，所以还是简单封装一个不需要判空的更好。</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.viewmodeldemo</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">androidx.lifecycle.LiveData</span>
-<span style="color:#228b22">/**
-</span><span style="color:#228b22"> * 解决LiveData的空安全问题
-</span><span style="color:#228b22"> *
-</span><span style="color:#228b22"> */</span>
-<span style="color:#8b008b;font-weight:bold">abstract</span> <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">CheckedLiveData</span>&lt;T&gt; : LiveData&lt;T&gt;() {
-    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">getValue</span>(): T {
-        <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">super</span>.getValue() ?: run {
-            <span style="color:#8b008b;font-weight:bold">val</span> res = initValue()
-            value = res
-            initValue()
-        }
-    }
-    <span style="color:#8b008b;font-weight:bold">protected</span> <span style="color:#8b008b;font-weight:bold">abstract</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">initValue</span>(): T
-}
-<span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">InitedLiveData</span>&lt;E&gt;(<span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> initBlock: () -&gt; E) : CheckedLiveData&lt;E&gt;() {
-    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">initValue</span>() = initBlock.invoke()
-    <span style="color:#8b008b;font-weight:bold">public</span> <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">setValue</span>(value: E) {
-        <span style="color:#8b008b;font-weight:bold">super</span>.setValue(value)
-    }
-    <span style="color:#8b008b;font-weight:bold">public</span> <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">postValue</span>(value: E) {
-        <span style="color:#8b008b;font-weight:bold">super</span>.postValue(value)
-    }
-}
-</code></pre></div><p>如此这般，上面的代码就可以这样表示了</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.viewmodeldemo</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">androidx.lifecycle.ViewModel</span>
-<span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">MainViewModel</span> : ViewModel() {
-    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> _text = InitedLiveData { <span style="color:#cd5555">&#34;我的&#34;</span> }
-    <span style="color:#8b008b;font-weight:bold">val</span> text: CheckedLiveData&lt;String&gt; = _text
-    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">changeText</span>() {
-        _text.value = <span style="color:#cd5555">&#34;修改过的&#34;</span>
-    }
-}
-</code></pre></div><h3 id="kotlin协程与retrofit更搭">Kotlin协程与Retrofit更搭</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.viewmodeldemo</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">androidx.lifecycle.LiveData</span>
+</span></span><span style="display:flex;"><span><span style="color:#228b22">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"> * 解决LiveData的空安全问题
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"> *
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">abstract</span> <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">CheckedLiveData</span>&lt;T&gt; : LiveData&lt;T&gt;() {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">getValue</span>(): T {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">super</span>.getValue() ?: run {
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">val</span> res = initValue()
+</span></span><span style="display:flex;"><span>            value = res
+</span></span><span style="display:flex;"><span>            initValue()
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">protected</span> <span style="color:#8b008b;font-weight:bold">abstract</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">initValue</span>(): T
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">InitedLiveData</span>&lt;E&gt;(<span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> initBlock: () -&gt; E) : CheckedLiveData&lt;E&gt;() {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">initValue</span>() = initBlock.invoke()
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">public</span> <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">setValue</span>(value: E) {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">super</span>.setValue(value)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">public</span> <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">postValue</span>(value: E) {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">super</span>.postValue(value)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>如此这般，上面的代码就可以这样表示了</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.viewmodeldemo</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">androidx.lifecycle.ViewModel</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">MainViewModel</span> : ViewModel() {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> _text = InitedLiveData { <span style="color:#cd5555">&#34;我的&#34;</span> }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> text: CheckedLiveData&lt;String&gt; = _text
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">changeText</span>() {
+</span></span><span style="display:flex;"><span>        _text.value = <span style="color:#cd5555">&#34;修改过的&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="kotlin协程与retrofit更搭">Kotlin协程与Retrofit更搭</h3>
 <p>首先Retrofit也值得我们封装一个工具类来创建Service：</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#008b45;font-weight:bold">RetrofitUtil</span> {
-    ...
-    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> retrofit <span style="color:#8b008b;font-weight:bold">by</span> lazy {
-        Retrofit.Builder()
-            .baseUrl(retrofitConfig?.baseUrl ?: BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(okHttpClient)
-            .build()
-    }
-    
-    <span style="color:#8b008b;font-weight:bold">fun</span> &lt;<span style="color:#008b45;font-weight:bold">T</span>&gt; <span style="color:#008b45">create</span>(serviceClass: Class&lt;T&gt;): T = retrofit.create(serviceClass)
-    
-    <span style="color:#8b008b;font-weight:bold">inline</span> <span style="color:#8b008b;font-weight:bold">fun</span> &lt;<span style="color:#8b008b;font-weight:bold">reified</span> <span style="color:#008b45;font-weight:bold">T</span>&gt; <span style="color:#008b45">create</span>(): T = create(T::<span style="color:#8b008b;font-weight:bold">class</span>.java)
-}
-</code></pre></div><p>前文提到，我们主要业务逻辑写到VM中，所以</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.novelrecommend.ui.viewmodel.main</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">androidx.lifecycle.ViewModel</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">androidx.lifecycle.viewModelScope</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">kotlinx.coroutines.Dispatchers</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">kotlinx.coroutines.launch</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">kotlinx.coroutines.withContext</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">retrofit2.await</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">timber.log.Timber</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.novelrecommend.NovelService</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.novelrecommend.arch.CheckedLiveData</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.novelrecommend.arch.InitedLiveData</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.novelrecommend.model.NovelModel</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.novelrecommend.utils.RetrofitUtil</span>
-<span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">DiscoverViewModel</span> : ViewModel() {
-    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> _novelList =
-        InitedLiveData&lt;MutableList&lt;NovelModel&gt;&gt; { mutableListOf() }
-    <span style="color:#8b008b;font-weight:bold">val</span> novelList: CheckedLiveData&lt;MutableList&lt;NovelModel&gt;&gt; = _novelList
-    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">suspend</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">getNovel</span>(): List&lt;NovelModel&gt; {
-        <span style="color:#8b008b;font-weight:bold">return</span> RetrofitUtil.create&lt;NovelService&gt;()
-            .getNovel(deviceInfo = DeviceUtil.getDeviceInfoMap())
-            .await()
-            .map { <span style="color:#8b008b;font-weight:bold">it</span>.copy(localId = (<span style="color:#b452cd">0.</span>.Long.MAX_VALUE).random()) }
-    }
-    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">loadMore</span>() {
-        viewModelScope.launch {
-            _novelList.value = withContext(Dispatchers.IO) {
-                <span style="color:#8b008b;font-weight:bold">try</span> {
-                    _novelList.value.addAll(getNovel())
-                } <span style="color:#8b008b;font-weight:bold">catch</span> (e: Exception) {
-                    Timber.e(e, <span style="color:#cd5555">&#34;获取小说失败&#34;</span>)
-                }
-                _novelList.value
-            }
-        }
-    }
-}
-</code></pre></div><p>是不是很舒服？</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#008b45;font-weight:bold">RetrofitUtil</span> {
+</span></span><span style="display:flex;"><span>    ...
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> retrofit <span style="color:#8b008b;font-weight:bold">by</span> lazy {
+</span></span><span style="display:flex;"><span>        Retrofit.Builder()
+</span></span><span style="display:flex;"><span>            .baseUrl(retrofitConfig?.baseUrl ?: BASE_URL)
+</span></span><span style="display:flex;"><span>            .addConverterFactory(GsonConverterFactory.create())
+</span></span><span style="display:flex;"><span>            .client(okHttpClient)
+</span></span><span style="display:flex;"><span>            .build()
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">fun</span> &lt;<span style="color:#008b45;font-weight:bold">T</span>&gt; <span style="color:#008b45">create</span>(serviceClass: Class&lt;T&gt;): T = retrofit.create(serviceClass)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">inline</span> <span style="color:#8b008b;font-weight:bold">fun</span> &lt;<span style="color:#8b008b;font-weight:bold">reified</span> <span style="color:#008b45;font-weight:bold">T</span>&gt; <span style="color:#008b45">create</span>(): T = create(T::<span style="color:#8b008b;font-weight:bold">class</span>.java)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>前文提到，我们主要业务逻辑写到VM中，所以</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.novelrecommend.ui.viewmodel.main</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">androidx.lifecycle.ViewModel</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">androidx.lifecycle.viewModelScope</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">kotlinx.coroutines.Dispatchers</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">kotlinx.coroutines.launch</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">kotlinx.coroutines.withContext</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">retrofit2.await</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">timber.log.Timber</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.novelrecommend.NovelService</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.novelrecommend.arch.CheckedLiveData</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.novelrecommend.arch.InitedLiveData</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.novelrecommend.model.NovelModel</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.novelrecommend.utils.RetrofitUtil</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">DiscoverViewModel</span> : ViewModel() {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> _novelList =
+</span></span><span style="display:flex;"><span>        InitedLiveData&lt;MutableList&lt;NovelModel&gt;&gt; { mutableListOf() }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> novelList: CheckedLiveData&lt;MutableList&lt;NovelModel&gt;&gt; = _novelList
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">suspend</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">getNovel</span>(): List&lt;NovelModel&gt; {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span> RetrofitUtil.create&lt;NovelService&gt;()
+</span></span><span style="display:flex;"><span>            .getNovel(deviceInfo = DeviceUtil.getDeviceInfoMap())
+</span></span><span style="display:flex;"><span>            .await()
+</span></span><span style="display:flex;"><span>            .map { <span style="color:#8b008b;font-weight:bold">it</span>.copy(localId = (<span style="color:#b452cd">0.</span>.Long.MAX_VALUE).random()) }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">loadMore</span>() {
+</span></span><span style="display:flex;"><span>        viewModelScope.launch {
+</span></span><span style="display:flex;"><span>            _novelList.value = withContext(Dispatchers.IO) {
+</span></span><span style="display:flex;"><span>                <span style="color:#8b008b;font-weight:bold">try</span> {
+</span></span><span style="display:flex;"><span>                    _novelList.value.addAll(getNovel())
+</span></span><span style="display:flex;"><span>                } <span style="color:#8b008b;font-weight:bold">catch</span> (e: Exception) {
+</span></span><span style="display:flex;"><span>                    Timber.e(e, <span style="color:#cd5555">&#34;获取小说失败&#34;</span>)
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>                _novelList.value
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>是不是很舒服？</p>
 
                     
                     <HR width="100%" id="EOF">

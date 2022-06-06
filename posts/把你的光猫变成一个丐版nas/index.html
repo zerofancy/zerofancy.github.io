@@ -19,9 +19,10 @@
 <meta property="og:title" content="把你的光猫变成一个丐版nas" />
 <meta property="og:description" content="我的初衷是调研下光猫改桥接的可行性，结果拿到超级管理员密码后还是没有这个选项。但在这个过程中发现直接在光猫上跑个下载服务却是可行的。" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://ntutn.top/posts/%E6%8A%8A%E4%BD%A0%E7%9A%84%E5%85%89%E7%8C%AB%E5%8F%98%E6%88%90%E4%B8%80%E4%B8%AA%E4%B8%90%E7%89%88nas/" />
+<meta property="og:url" content="https://ntutn.top/posts/%E6%8A%8A%E4%BD%A0%E7%9A%84%E5%85%89%E7%8C%AB%E5%8F%98%E6%88%90%E4%B8%80%E4%B8%AA%E4%B8%90%E7%89%88nas/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2022-04-12T01:21:54+08:00" />
 <meta property="article:modified_time" content="2022-04-12T01:21:54+08:00" /><meta property="og:site_name" content="归零幻想" />
+
 
 
 
@@ -44,11 +45,11 @@
 
 
 
-<link rel="stylesheet" href="https://ntutn.top/scss/journal.min.d8d9f81b896882733c41896750adbefbf9319ca02ccccefd461650898975c3af.css" integrity="sha256-2Nn4G4lognM8QYlnUK2&#43;&#43;/kxnKAszM79RhZQiYl1w68=" media="screen">
+<link rel="stylesheet" href="https://ntutn.top/scss/journal.min.0f46f98b723f2aad4b02d9370bb6aa7848b5c2b2a5579642014082283683d2d8.css" integrity="sha256-D0b5i3I/Kq1LAtk3C7aqeEi1wrKlV5ZCAUCCKDaD0tg=" media="screen">
 
 
 
-<link rel="stylesheet" href="https://ntutn.top/scss/dark-mode.min.60f86847da9fc0724177ccfd0bf7c5997b0b41f1e58d5a293cfb3723c497c422.css" integrity="sha256-YPhoR9qfwHJBd8z9C/fFmXsLQfHljVopPPs3I8SXxCI=" media="screen">
+<link rel="stylesheet" href="https://ntutn.top/scss/dark-mode.min.79c34391dbcff20df8b4dac718e2606701efcbfdb9f3b08447ac39ac9dc7b463.css" integrity="sha256-ecNDkdvP8g34tNrHGOJgZwHvy/2587CER6w5rJ3HtGM=" media="screen">
 
 
 <script src="/vendor/js/loadCSS.js"></script>
@@ -816,11 +817,11 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <p><code>telnet 192.168.1.1</code> 成功后执行<code>sh</code>。然后<code>uname -a</code>看下。这里我就不记录查看管理员密码步骤了，反正这个型号管理员面板也没有设置桥接的选项。</p>
 <h2 id="开始整活">开始整活</h2>
 <p><code>top</code>，发现占用内存最高的是个两个 java 进程。<code>java -version</code>，发现安装了 java8 。</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-plain" data-lang="plain"># java -version
-openjdk version &#34;1.8.0-internal&#34;
-OpenJDK Runtime Environment (build 1.8.0-internal-jenkinsang_2022_01_15_04_03-b00)
-JamVM (build 2.0.0, inline-threaded interpreter with stack-caching)
-</code></pre></div><p><code>free</code>命令可知总内存约二十多兆，剩余仅 3 兆。这点空间是搞不了什么事情的，因此我尝试干掉前述两个 java 进程。<code>ps -aux | grep java</code>，发现除了存在两个 java 进程，还写了脚本自动把这两个进程拉起来，即<code>/etc/monitor_java.sh</code> 。统统 kill 掉。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-plain" data-lang="plain"><span style="display:flex;"><span># java -version
+</span></span><span style="display:flex;"><span>openjdk version &#34;1.8.0-internal&#34;
+</span></span><span style="display:flex;"><span>OpenJDK Runtime Environment (build 1.8.0-internal-jenkinsang_2022_01_15_04_03-b00)
+</span></span><span style="display:flex;"><span>JamVM (build 2.0.0, inline-threaded interpreter with stack-caching)
+</span></span></code></pre></div><p><code>free</code>命令可知总内存约二十多兆，剩余仅 3 兆。这点空间是搞不了什么事情的，因此我尝试干掉前述两个 java 进程。<code>ps -aux | grep java</code>，发现除了存在两个 java 进程，还写了脚本自动把这两个进程拉起来，即<code>/etc/monitor_java.sh</code> 。统统 kill 掉。</p>
 <p>现在有 10 兆左右的内存了，对于 java 来说可能还是不太能搞事，但跑个 aria2 足够了！尝试插入 U 盘，发现在<code>/mnt/usb1_1</code>自动挂载。</p>
 <p>交叉编译 aria2c ，这里我用的是这个脚本：https://gitee.com/logic_2050/auto-build-aria2-mips32-static 。在我的 debian11 编译过程中只遇到一个问题，手动<code>sudo apt install autoreconf</code>即可。</p>
 <p>如何把文件弄到光猫里，以及取出来？每次插拔 U 盘也太麻烦了。于是我找到一个支持上传的简单文件服务器：https://github.com/mayth/go-simple-upload-server。仍然交叉编译到 mips 静态包。<code>env GOOS=linux GOARCH=mips GOMIPS=softfloat go build -trimpath -ldflags=&quot;-s -w -extldflags=-static&quot;</code></p>
@@ -836,7 +837,7 @@ JamVM (build 2.0.0, inline-threaded interpreter with stack-caching)
 <p>我选择把整活用的程序放到<code>/fhconf/</code>下，因为光猫自己的配置文件备份就放在这里，显然这里是不会重置的。</p>
 <h3 id="支持-https">支持 https</h3>
 <p>只要将你的电脑下的<code>/etc/ssl/certs/ca-certificates.crt</code>文件复制到光猫下，并在aria2的配置文件中指定就可以了。</p>
-<pre><code>ca-certificate=/fhconf/custom/aria2/ca-certificates.crt
+<pre tabindex="0"><code>ca-certificate=/fhconf/custom/aria2/ca-certificates.crt
 </code></pre><h3 id="oom">OOM</h3>
 <p>尽管aria2确实已经很省资源了，但当尝试BT下载一个比较大的文件时（超过2GB）还是很容易占用超过10M内存，然后关键进程OOM就巴比Q了。我尝试过修改配置文件，关闭disk-cache、关闭预分配甚至限制下载速度等均无法解决。所以该方案的实用性其实并不是很高。</p>
 <blockquote>

@@ -19,9 +19,10 @@
 <meta property="og:title" content="连续正整数" />
 <meta property="og:description" content="还是数据结构的网上作业，将一个整数分解为连续正整数之和，找对方向倒是也不算难……" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://ntutn.top/posts/%E8%BF%9E%E7%BB%AD%E6%AD%A3%E6%95%B4%E6%95%B0/" />
+<meta property="og:url" content="https://ntutn.top/posts/%E8%BF%9E%E7%BB%AD%E6%AD%A3%E6%95%B4%E6%95%B0/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2019-04-06T03:11:37+08:00" />
 <meta property="article:modified_time" content="2019-04-06T03:11:37+08:00" /><meta property="og:site_name" content="归零幻想" />
+
 
 
 
@@ -44,11 +45,11 @@
 
 
 
-<link rel="stylesheet" href="https://ntutn.top/scss/journal.min.d8d9f81b896882733c41896750adbefbf9319ca02ccccefd461650898975c3af.css" integrity="sha256-2Nn4G4lognM8QYlnUK2&#43;&#43;/kxnKAszM79RhZQiYl1w68=" media="screen">
+<link rel="stylesheet" href="https://ntutn.top/scss/journal.min.0f46f98b723f2aad4b02d9370bb6aa7848b5c2b2a5579642014082283683d2d8.css" integrity="sha256-D0b5i3I/Kq1LAtk3C7aqeEi1wrKlV5ZCAUCCKDaD0tg=" media="screen">
 
 
 
-<link rel="stylesheet" href="https://ntutn.top/scss/dark-mode.min.60f86847da9fc0724177ccfd0bf7c5997b0b41f1e58d5a293cfb3723c497c422.css" integrity="sha256-YPhoR9qfwHJBd8z9C/fFmXsLQfHljVopPPs3I8SXxCI=" media="screen">
+<link rel="stylesheet" href="https://ntutn.top/scss/dark-mode.min.79c34391dbcff20df8b4dac718e2606701efcbfdb9f3b08447ac39ac9dc7b463.css" integrity="sha256-ecNDkdvP8g34tNrHGOJgZwHvy/2587CER6w5rJ3HtGM=" media="screen">
 
 
 <script src="/vendor/js/loadCSS.js"></script>
@@ -537,7 +538,7 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <p>还是数据结构的网上作业，将一个整数分解为连续正整数之和，找对方向倒是也不算难……</p>
 </blockquote>
 <p>有些正整数可以表示为 n (n&gt;1) 个连续正整数的和，如：</p>
-<pre><code>15=1+2+3+4+5
+<pre tabindex="0"><code>15=1+2+3+4+5
     =4+5+6
     =7+8
 </code></pre><p>给定一个正整数 N，判断其是否可以表示为一组连续正整数的和，输出符合条件的解的组数。</p>
@@ -577,25 +578,25 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 </table>
 <p><strong>单点时限: 2.0 sec</strong>
 <strong>内存限制: 256 MB</strong></p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;iostream&gt;</span><span style="color:#1e889b">
-</span><span style="color:#1e889b"></span><span style="color:#8b008b;font-weight:bold">using</span> <span style="color:#8b008b;font-weight:bold">namespace</span> std;
-<span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">main</span>()
-{
-    <span style="color:#00688b;font-weight:bold">int</span> n;
-    cin&gt;&gt;n;
-    <span style="color:#00688b;font-weight:bold">int</span> counter=<span style="color:#b452cd">0</span>;
-    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">2</span>; i&lt;(<span style="color:#b452cd">100000</span>&lt;n?<span style="color:#b452cd">100000</span>:n); i++) <span style="color:#228b22">//n/i-i/2+1&gt;=1
-</span><span style="color:#228b22"></span>    {
-        <span style="color:#8b008b;font-weight:bold">if</span>(n/i-i/<span style="color:#b452cd">2</span>-i%<span style="color:#b452cd">2</span>+<span style="color:#b452cd">1</span>&gt;=<span style="color:#b452cd">1</span>&amp;&amp;(n/i-i/<span style="color:#b452cd">2</span>-i%<span style="color:#b452cd">2</span>+<span style="color:#b452cd">1</span>+n/i-i/<span style="color:#b452cd">2</span>-i%<span style="color:#b452cd">2</span>+<span style="color:#b452cd">1</span>+i-<span style="color:#b452cd">1</span>)*i==n*<span style="color:#b452cd">2</span>)
-        {
-            counter++;
-        }
-        <span style="color:#228b22">//cout&lt;&lt;&#34;test-&#34;&lt;&lt;i&lt;&lt;endl;
-</span><span style="color:#228b22"></span>    }
-    cout &lt;&lt; counter &lt;&lt; endl;
-    <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>;
-}
-</code></pre></div><p>枚举就好了。需要根据分成的整数的个数i讨论，但为了显得更牛X我就写到一起了，上面的<code>n/i-i/2-i%2+1</code>无论在奇偶情况下都是拆分得到的整数的第一个<em>理应</em>是多少。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;iostream&gt;</span><span style="color:#1e889b">
+</span></span></span><span style="display:flex;"><span><span style="color:#1e889b"></span><span style="color:#8b008b;font-weight:bold">using</span> <span style="color:#8b008b;font-weight:bold">namespace</span> std;
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">main</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> n;
+</span></span><span style="display:flex;"><span>    cin&gt;&gt;n;
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> counter=<span style="color:#b452cd">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">2</span>; i&lt;(<span style="color:#b452cd">100000</span>&lt;n?<span style="color:#b452cd">100000</span>:n); i++) <span style="color:#228b22">//n/i-i/2+1&gt;=1
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span>(n/i-i/<span style="color:#b452cd">2</span>-i%<span style="color:#b452cd">2</span>+<span style="color:#b452cd">1</span>&gt;=<span style="color:#b452cd">1</span>&amp;&amp;(n/i-i/<span style="color:#b452cd">2</span>-i%<span style="color:#b452cd">2</span>+<span style="color:#b452cd">1</span>+n/i-i/<span style="color:#b452cd">2</span>-i%<span style="color:#b452cd">2</span>+<span style="color:#b452cd">1</span>+i-<span style="color:#b452cd">1</span>)*i==n*<span style="color:#b452cd">2</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            counter++;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#228b22">//cout&lt;&lt;&#34;test-&#34;&lt;&lt;i&lt;&lt;endl;
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    }
+</span></span><span style="display:flex;"><span>    cout &lt;&lt; counter &lt;&lt; endl;
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>枚举就好了。需要根据分成的整数的个数i讨论，但为了显得更牛X我就写到一起了，上面的<code>n/i-i/2-i%2+1</code>无论在奇偶情况下都是拆分得到的整数的第一个<em>理应</em>是多少。</p>
 <p>判断的主要逻辑：</p>
 <ul>
 <li>第一个数字大于等于1</li>

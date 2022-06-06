@@ -15,10 +15,10 @@
       
       <guid>https://ntutn.top/posts/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AC%AC%E4%B8%89%E6%AC%A1%E6%B5%8B%E8%AF%95/</guid>
       <description>数据结构测试，树部分，水题
- 一 假设二叉树的数据元素为字符，采用二叉链式存储结构。二叉树ADT实现的大部分代码已经给出，其中采用完全前序序列创建二叉树。请补充写出下列两个操作函数。
- 注意： 答案区只写出两个函数，其他代码不允许修改和重写、提交！
-  计算以某结点为根的二叉树的高度； 以前序顺序输出各个元素结点为根的子树的高度；  例如：有如右图的二叉树 输入 ABD@@E@@C@F@@ 输出 Height(A)=3 Height(B)=2 Height(D)=1 Height(E)=1 Height(C)=2 Height(F)=1 已给出的代码如下：
-#include &amp;lt;iostream&amp;gt;#include &amp;lt;stdlib.h&amp;gt;using namespace std; //数据元素类型 typedef char ElemType; //二叉树结点定义 typedef struct TreeNode {	ElemType data; struct TreeNode *lson, *rson; } TreeNode; //二叉树类 class BinaryTree { private: TreeNode *root; public: BinaryTree() { root = NULL; }; ~BinaryTree() { MakeEmpty(root); } void MakeEmpty(TreeNode *t); void create( ) { root = cp_create(root); }; //完全前序建立二叉树，空指针用@表示 	TreeNode *cp_create(TreeNode *t); //****** 要补充的函数height ******** 	int height(TreeNode *t) ; //求二叉树的高度 	void output() { Pro_height(root); }; //****** 要补充的函数 Pro_height ********** 	void Pro_height(TreeNode *t); // 前序顺序输出各个元素结点为根的子树的高度 }; //二叉树置空 void BinaryTree::MakeEmpty(TreeNode *t) {	if (t !</description>
+一 假设二叉树的数据元素为字符，采用二叉链式存储结构。二叉树ADT实现的大部分代码已经给出，其中采用完全前序序列创建二叉树。请补充写出下列两个操作函数。
+注意： 答案区只写出两个函数，其他代码不允许修改和重写、提交！
+计算以某结点为根的二叉树的高度； 以前序顺序输出各个元素结点为根的子树的高度； 例如：有如右图的二叉树 输入 ABD@@E@@C@F@@ 输出 Height(A)=3 Height(B)=2 Height(D)=1 Height(E)=1 Height(C)=2 Height(F)=1 已给出的代码如下：
+#include &amp;lt;iostream&amp;gt; #include &amp;lt;stdlib.h&amp;gt; using namespace std; //数据元素类型 typedef char ElemType; //二叉树结点定义 typedef struct TreeNode {	ElemType data; struct TreeNode *lson, *rson; } TreeNode; //二叉树类 class BinaryTree { private: TreeNode *root; public: BinaryTree() { root = NULL; }; ~BinaryTree() { MakeEmpty(root); } void MakeEmpty(TreeNode *t); void create( ) { root = cp_create(root); }; //完全前序建立二叉树，空指针用@表示 TreeNode *cp_create(TreeNode *t); //****** 要补充的函数height ******** int height(TreeNode *t) ; //求二叉树的高度 void output() { Pro_height(root); }; //****** 要补充的函数 Pro_height ********** void Pro_height(TreeNode *t); // 前序顺序输出各个元素结点为根的子树的高度 }; //二叉树置空 void BinaryTree::MakeEmpty(TreeNode *t) {	if (t !</description>
     </item>
     
     <item>
@@ -28,10 +28,12 @@
       
       <guid>https://ntutn.top/posts/%E8%BF%9E%E7%BB%AD%E6%AD%A3%E6%95%B4%E6%95%B0/</guid>
       <description>还是数据结构的网上作业，将一个整数分解为连续正整数之和，找对方向倒是也不算难……
- 有些正整数可以表示为 n (n&amp;gt;1) 个连续正整数的和，如：
+有些正整数可以表示为 n (n&amp;gt;1) 个连续正整数的和，如：
 15=1+2+3+4+5 =4+5+6 =7+8 给定一个正整数 N，判断其是否可以表示为一组连续正整数的和，输出符合条件的解的组数。
-Input 输入有一行，包含一个正整数 n (3≤n≤1000000000)。  Output 输出有一行，正整数n的符合条件的解的组数。  Example    Input Output     15 3   99 5   6 1   9 2    单点时限: 2.0 sec 内存限制: 256 MB
-#include &amp;lt;iostream&amp;gt;using namespace std; int main() { int n; cin&amp;gt;&amp;gt;n; int counter=0; for(int i=2; i&amp;lt;(100000&amp;lt;n?100000:n); i++) //n/i-i/2+1&amp;gt;=1  { if(n/i-i/2-i%2+1&amp;gt;=1&amp;amp;&amp;amp;(n/i-i/2-i%2+1+n/i-i/2-i%2+1+i-1)*i==n*2) { counter++; } //cout&amp;lt;&amp;lt;&amp;#34;test-&amp;#34;&amp;lt;&amp;lt;i&amp;lt;&amp;lt;endl;  } cout &amp;lt;&amp;lt; counter &amp;lt;&amp;lt; endl; return 0; } 枚举就好了。需要根据分成的整数的个数i讨论，但为了显得更牛X我就写到一起了，上面的n/i-i/2-i%2+1无论在奇偶情况下都是拆分得到的整数的第一个理应是多少。</description>
+Input 输入有一行，包含一个正整数 n (3≤n≤1000000000)。 Output 输出有一行，正整数n的符合条件的解的组数。 Example Input Output 15 3 99 5 6 1 9 2 单点时限: 2.0 sec 内存限制: 256 MB
+#include &amp;lt;iostream&amp;gt; using namespace std; int main() { int n; cin&amp;gt;&amp;gt;n; int counter=0; for(int i=2; i&amp;lt;(100000&amp;lt;n?100000:n); i++) //n/i-i/2+1&amp;gt;=1 { if(n/i-i/2-i%2+1&amp;gt;=1&amp;amp;&amp;amp;(n/i-i/2-i%2+1+n/i-i/2-i%2+1+i-1)*i==n*2) { counter++; } //cout&amp;lt;&amp;lt;&amp;#34;test-&amp;#34;&amp;lt;&amp;lt;i&amp;lt;&amp;lt;endl; } cout &amp;lt;&amp;lt; counter &amp;lt;&amp;lt; endl; return 0; } 枚举就好了。需要根据分成的整数的个数i讨论，但为了显得更牛X我就写到一起了，上面的n/i-i/2-i%2+1无论在奇偶情况下都是拆分得到的整数的第一个理应是多少。
+判断的主要逻辑：
+第一个数字大于等于1 所有数之和等于原数 求和在这里就不必用循环了，用等差数列明显更高效。注意这里计算时为了防止整数除法运算截断的问题，将除法移动到了等式的右边。</description>
     </item>
     
     <item>
@@ -41,7 +43,7 @@ Input 输入有一行，包含一个正整数 n (3≤n≤1000000000)。  Output 
       
       <guid>https://ntutn.top/posts/%E5%A0%86%E6%A0%88adt%E5%AE%9E%E7%8E%B0%E5%8F%8A%E5%BA%94%E7%94%A8/</guid>
       <description>假设栈ADT的数据元素为整数，栈ADT的实现采用顺序存储结构。现要用栈来辅助完成任意非负十进制整数到Base(Base不大于35)进制的转换。部分代码已经给出，请补充完善栈溢出处理函数和主函数。 注意：只提交需要补充的函数，其他代码不允许自己重写和修改。
- 栈溢出处理函数overflowProcess：当栈满时，将栈的空间在原来基础上扩大1倍。
+栈溢出处理函数overflowProcess：当栈满时，将栈的空间在原来基础上扩大1倍。
 主函数： 输入一个非负十进制整数n及要转换的进制Base，输出其转换后的进制形式，以及长度。输出格式如下：
 ($...$)10=(#...#)Base Length=转换进制后数的位数 其中$...$是输入的十进制数n，#...#是转换得到的Base进制数，如果转换后位码多于1位，则用大写字母A,B,&amp;hellip;等表示，10-A, 11-B,&amp;hellip;&amp;hellip;
 例如，输入：
@@ -49,7 +51,7 @@ Input 输入有一行，包含一个正整数 n (3≤n≤1000000000)。  Output 
 (1024)10=(10000000000)2 Length=11 再如，输入：
 25 30 输出：
 (25)10=(P)30 Length=1 预置代码如下：
-#include &amp;lt;iostream&amp;gt;using namespace std; #include &amp;lt;stdio.h&amp;gt;#include &amp;lt;stdlib.h&amp;gt;typedef int ElemType; class SeqStack { //顺序栈类定义  private: ElemType *elements; //数组存放栈元素  int top; //栈顶指示器  int maxSize; //栈最大容量  void overflowProcess(); //栈的溢出处理  public: SeqStack(int sz); //构造函数  ~SeqStack() { delete []elements; }; //析构函数  void Push(ElemType x); //进栈  int Pop(ElemType &amp;amp;x); //出栈  int IsEmpty() const { return top == -1; } int IsFull() const { return top == maxSize-1; } int GetSize() const {return top+1;} }; SeqStack::SeqStack(int sz) { elements=new ElemType[sz]; //申请连续空间  if(elements==NULL) {cout&amp;lt;&amp;lt;&amp;#34;空间申请错误！&amp;#34;&amp;lt;&amp;lt;endl;exit(1);} else { top=-1; //栈顶指示器指向栈底  maxSize=sz; //栈的最大空间  }; }; /* ********************************************************** 补充overflowProcess() 函数 ********************************************************** */ void SeqStack::Push(ElemType x) { //若栈满,则溢出处理，将元素x插入该栈栈顶  if (IsFull() == 1) overflowProcess(); //栈满  elements[++top] = x; //栈顶指针先加1, 再元素进栈 }; int SeqStack::Pop(ElemType &amp;amp; x) {//若栈不空，函数退出栈顶元素并将栈顶元素的值赋给x,  //返回true，否则返回false  if (IsEmpty() == 1) return 0; x = elements[top--]; //先取元素，栈顶指针退1  return 1; //退栈成功 }; /* ************************************************************** 补充mian()函数 ************************************************************** */ 分析和错误 OverflowProcess，用于栈溢出处理，一般申请原长度二倍的存储空间。</description>
+#include &amp;lt;iostream&amp;gt; using namespace std; #include &amp;lt;stdio.h&amp;gt; #include &amp;lt;stdlib.h&amp;gt; typedef int ElemType; class SeqStack { //顺序栈类定义 private: ElemType *elements; //数组存放栈元素 int top; //栈顶指示器 int maxSize; //栈最大容量 void overflowProcess(); //栈的溢出处理 public: SeqStack(int sz); //构造函数 ~SeqStack() { delete []elements; }; //析构函数 void Push(ElemType x); //进栈 int Pop(ElemType &amp;amp;x); //出栈 int IsEmpty() const { return top == -1; } int IsFull() const { return top == maxSize-1; } int GetSize() const {return top+1;} }; SeqStack::SeqStack(int sz) { elements=new ElemType[sz]; //申请连续空间 if(elements==NULL) {cout&amp;lt;&amp;lt;&amp;#34;空间申请错误！&amp;#34;&amp;lt;&amp;lt;endl;exit(1);} else { top=-1; //栈顶指示器指向栈底 maxSize=sz; //栈的最大空间 }; }; /* ********************************************************** 补充overflowProcess() 函数 ********************************************************** */ void SeqStack::Push(ElemType x) { //若栈满,则溢出处理，将元素x插入该栈栈顶 if (IsFull() == 1) overflowProcess(); //栈满 elements[++top] = x; //栈顶指针先加1, 再元素进栈 }; int SeqStack::Pop(ElemType &amp;amp; x) {//若栈不空，函数退出栈顶元素并将栈顶元素的值赋给x, //返回true，否则返回false if (IsEmpty() == 1) return 0; x = elements[top--]; //先取元素，栈顶指针退1 return 1; //退栈成功 }; /* ************************************************************** 补充mian()函数 ************************************************************** */ 分析和错误 OverflowProcess，用于栈溢出处理，一般申请原长度二倍的存储空间。</description>
     </item>
     
     <item>
@@ -59,7 +61,7 @@ Input 输入有一行，包含一个正整数 n (3≤n≤1000000000)。  Output 
       
       <guid>https://ntutn.top/posts/%E6%97%A5%E6%9C%9F%E7%9B%B8%E5%85%B3%E7%9A%84%E8%AE%A1%E7%AE%97/</guid>
       <description>今天（Sun, 16 Sep 2018 06:34:57 +0000）帮同学写一个日期相关的c++题，竟然耗费了很多时间，不得不感叹自己真是老了。 首先定义类用年月日(yy,mm,dd)存储日期 日期±天数，直接加减到“天”上，然后“多退少补”。 两日期之间相差天数。我是先计算两日前距元年元月元日的天数，然后直接相减。但我这么算，老是差几天，调试了好久，甚至我都一度打算放弃，直接调用上面做的日期加天数一天一天往上累加（可以预料到这会用多长时间）。 最后才检查出，竟然是判断闰年出错了，我把取余弄成了整除，闰年哭晕在厕所。 老了，真的老了。
- #include &amp;lt;iostream&amp;gt;using namespace std; class TMyDate { private: int yy,mm,dd; bool isrn(int year)//判断闰年  { if((year%4==0&amp;amp;&amp;amp;year%100!=0)||(year%400==0)) { return true; } return false; } int getDaysofmonth(int y,int m)//某年某月有多少天  { switch(m) { case 1: case 3: case 5: case 7: case 8: case 10: case 12: return 31; case 2: if(isrn(y)){ return 29; } return 28; default: return 30; } } int getTotaldays(int y,int m,int d){//某年月日距元年元月元日天数  int sum=0; sum+=d; m--; while(m--){ sum+=getDaysofmonth(y,m); } y--; while(y--){ sum+=isrn(y)?</description>
+#include &amp;lt;iostream&amp;gt; using namespace std; class TMyDate { private: int yy,mm,dd; bool isrn(int year)//判断闰年 { if((year%4==0&amp;amp;&amp;amp;year%100!=0)||(year%400==0)) { return true; } return false; } int getDaysofmonth(int y,int m)//某年某月有多少天 { switch(m) { case 1: case 3: case 5: case 7: case 8: case 10: case 12: return 31; case 2: if(isrn(y)){ return 29; } return 28; default: return 30; } } int getTotaldays(int y,int m,int d){//某年月日距元年元月元日天数 int sum=0; sum+=d; m--; while(m--){ sum+=getDaysofmonth(y,m); } y--; while(y--){ sum+=isrn(y)?</description>
     </item>
     
   </channel>
