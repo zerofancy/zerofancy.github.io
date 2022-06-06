@@ -30,8 +30,8 @@ EventBus.getDefault().unregister(this) 然后就可以接收那个Event了。
 @Subscribe注解有一个参数threadMode，有以下取值：
 ThreadMode.POSTING 默认值，在同一线程中调用，开销最小。
 ThreadMode.MAIN 在主线程中调用。
-如果发送事件的是主线程，则直接调用。
-ThreadMode.MAIN_ORDERED 在主线程中调用，同步调用（排队）。
+ 如果发送事件的是主线程，则直接调用。
+ ThreadMode.MAIN_ORDERED 在主线程中调用，同步调用（排队）。
 ThreadMode.BACKGROUND 在后台线程中调用。
 ThreadMode.ASYNC 在单独线程中调用，用于耗时操作。
 对于EventBus更新UI，我同样写了demo：

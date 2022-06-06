@@ -23,7 +23,7 @@
 幸运的是，我找到了这么一套免费的图片素材，Mahjong Icons，只要提供一个指向这个页面的超链接就可以免费用。
 另外还需要一个应用图标，这个我是直接在Icon Park上找了一个。
 接下来将素材导入到项目，为了随处使用方便，我还定义到了一个类中：
-package top.ntutn.match /** * 麻将牌 */ object Mahjong { val bamboos = listOf( R.drawable.bamboo1, R.drawable.bamboo2, R.drawable.bamboo3, R.drawable.bamboo4, R.drawable.bamboo5, R.drawable.bamboo6, R.drawable.bamboo7, R.drawable.bamboo8, R.drawable.bamboo9 ) val dragons = listOf( R.drawable.dragon_chun, R.drawable.dragon_green, R.drawable.dragon_haku ) val faceDown = R.drawable.face_down val mans = listOf( R.drawable.man1, R.drawable.man2, R.drawable.man3, R.drawable.man4, R.drawable.man5, R.drawable.man6, R.drawable.man7, R.drawable.man8, R.drawable.man9 ) val pins = listOf( R.drawable.pin1, R.drawable.pin2, R.drawable.pin3, R.</description>
+package top.ntutn.match /** * 麻将牌 */ object Mahjong { val bamboos = listOf( R.drawable.bamboo1, R.drawable.bamboo2, R.drawable.bamboo3, R.drawable.bamboo4, R.drawable.bamboo5, R.drawable.bamboo6, R.drawable.bamboo7, R.drawable.bamboo8, R.drawable.bamboo9 ) val dragons = listOf( R.drawable.dragon_chun, R.drawable.dragon_green, R.drawable.dragon_haku ) val faceDown = R.drawable.face_down val mans = listOf( R.drawable.man1, R.drawable.man2, R.drawable.man3, R.drawable.man4, R.drawable.man5, R.drawable.man6, R.drawable.man7, R.drawable.man8, R.drawable.man9 ) val pins = listOf( R.drawable.pin1, R.drawable.pin2, R.drawable.pin3, R.drawable.pin4, R.</description>
     </item>
     
     <item>
@@ -34,8 +34,8 @@ package top.ntutn.match /** * 麻将牌 */ object Mahjong { val bamboos = listOf
       <guid>https://ntutn.top/posts/%E5%9C%A8windows10%E4%B8%8A%E5%AE%89%E8%A3%85%E8%A1%80%E6%88%98%E4%B8%8A%E6%B5%B7%E6%BB%A9/</guid>
       <description>《血战上海滩》是由北京欢乐亿派科技有限公司开发的单机FPS游戏，发行于2003年，是一个非常经典的老游戏了。 近来我打算把这个游戏找出来再玩一遍，可是在Windows10上安装还是有些问题……
 下载 下载不用多说，自己找资源吧，一共三百多兆的单机游戏。
-现在很多单机游戏下载时网站都会给你带上一个“启动器”来显示广告，恶心的很。找到文件夹中，注意血战上海滩的游戏文件是一个帽子的图标，大小为1.87M，SHA1为FE5A102AA9DE633FB6E388EAAEEA38BC43E8E7E4
-启动 直接双击exe，然后……它免费帮你调了一下分辨率，就没反应了。
+ 现在很多单机游戏下载时网站都会给你带上一个“启动器”来显示广告，恶心的很。找到文件夹中，注意血战上海滩的游戏文件是一个帽子的图标，大小为1.87M，SHA1为FE5A102AA9DE633FB6E388EAAEEA38BC43E8E7E4
+ 启动 直接双击exe，然后……它免费帮你调了一下分辨率，就没反应了。
 貌似兼容性是个比较大的问题……于是在网上找了好久，终于知道，可以用命令行控制游戏窗口运行：
 shanghai.exe -windows 修改屏幕分辨率实现全屏 倒是能运行了，只是……画面都在左上角，没法玩啊……
 所以再加上自动修改屏幕分辨率就可以全屏了。修改屏幕分辨率可以用setres
@@ -43,7 +43,7 @@ shanghai.exe -windows 修改屏幕分辨率实现全屏 倒是能运行了，只
 于是用下面的命令：
 setres h800 v600 shanghai.exe -windows setres h1920 v1080 1920*1080是我电脑的屏幕分辨率，注意换成自己的。
 隐藏显示任务栏 然而，这样还是有问题，就是这样“全屏”后任务栏并没有消失，虽然可以设置自动隐藏任务栏但总归还是不爽，于是写了个简单C#程序在启动游戏隐藏任务栏（虽然很简单，但没找到只用命令实现的方法）
-using System; using System.Collections.Generic; using System.Linq; using System.Text; using System.Threading.Tasks; using System.Runtime.InteropServices; namespace ShowTaskBar { class Program { private const int SW_HIDE = 0; //隐藏任务栏 private const int SW_RESTORE = 9;//显示任务栏 [DllImport(&amp;#34;user32.dll&amp;#34;)] public static extern int ShowWindow(int hwnd, int nCmdShow); [DllImport(&amp;#34;user32.dll&amp;#34;)] public static extern int FindWindow(string lpClassName, string lpWindowName); static void Main(string[] args) { ShowWindow(FindWindow(&amp;#34;Shell_TrayWnd&amp;#34;, null), SW_HIDE); } } } using System; using System.</description>
+using System; using System.Collections.Generic; using System.Linq; using System.Text; using System.Threading.Tasks; using System.Runtime.InteropServices; namespace ShowTaskBar { class Program { private const int SW_HIDE = 0; //隐藏任务栏  private const int SW_RESTORE = 9;//显示任务栏 [DllImport(&amp;#34;user32.dll&amp;#34;)] public static extern int ShowWindow(int hwnd, int nCmdShow); [DllImport(&amp;#34;user32.dll&amp;#34;)] public static extern int FindWindow(string lpClassName, string lpWindowName); static void Main(string[] args) { ShowWindow(FindWindow(&amp;#34;Shell_TrayWnd&amp;#34;, null), SW_HIDE); } } } using System; using System.</description>
     </item>
     
     <item>
@@ -55,46 +55,35 @@ using System; using System.Collections.Generic; using System.Linq; using System.
       <description>拉多：梦的起点 主角，一个满脑子都是不切实际的想法的负气出走的小毛孩，开始了他伟大的征途。这里就按照后面作品的称号吧。
 首先回家，箱子里面有5G，聊胜于无吧。去买几个参丸，准备，走。
 找到战车 出镇，去东南方向的山洞，需要逃跑的怪物类型：
-仿生蜗牛 生物炮 加农炮 基本是一路逃跑到了山洞最深处，喝个参丸，与挡路的狗对话。
+ 仿生蜗牛 生物炮 加农炮  基本是一路逃跑到了山洞最深处，喝个参丸，与挡路的狗对话。
 硬抗战狗一发攻击，然后狼会出现，并帮你打败战狗。
 山洞的战车太破，狼看不上，只拿走了副炮（徒手拆副炮啊）。于是这就是咱的第一辆战车了。
 将山洞里稍微搜刮一下，也许去找开始打不过的怪物报个仇。相当舒服。
 拉多有个规矩，就是战车不允许开进镇子，虽然没啥影响，但总是很不爽，毕竟好不容易找到战车总是想找人显摆一下啊。貌似这破规矩一直延续到第四部，香泽丽舍也有类似规矩。
-BUG：给战车吃个参丸，然后人的HP就变成一个极大的值……
-水怪 作为赏金猎人，当然只有猎杀赏金首获得赏金才是最有趣的。可惜第一代这些元素不是很多，如果是第四代，任务系统是很重要的。
+ BUG：给战车吃个参丸，然后人的HP就变成一个极大的值……
+ 水怪 作为赏金猎人，当然只有猎杀赏金首获得赏金才是最有趣的。可惜第一代这些元素不是很多，如果是第四代，任务系统是很重要的。
 水怪不是很强，基本拿到战车后就可以直接开BOSS了。
 首先去加满弹药和装甲，然后先向西走，再向北走，路上会看到一个山洞。进入，顺着箭头走，然后……就掉坑了。第一次玩的玩家基本都被坑过。在掉下来的这层到处走走，遇到水怪的概率很高。基本只用主炮输出就能打过。
 顺着坡爬上去，在另一个方向小心去拿那个箱子，是副炮。由于打水怪消耗不少装甲片，现在基本可以直接装备。副炮是无限弹药的，对于清小怪很有帮助。
 回镇补充一下，准备去下一个镇子。
 关卡，只要开着战车去，就会让你通过。
-打赢后记得去情报处领赏金。
-麦基 第一次玩我就没进入麦基镇，直接错过去了。在你向东走，路过一个小屋的标志，那就是麦基镇了。
+ 打赢后记得去情报处领赏金。
+ 麦基 第一次玩我就没进入麦基镇，直接错过去了。在你向东走，路过一个小屋的标志，那就是麦基镇了。
 宝石镜 进入麦基，首先看到一片白薯地，耕会儿地吧，不要每天都打打杀杀的【滑稽】。在耕地过程中会找到一枚戒指，拿到屋里可以换得宝石镜，虽然现在暂时没用，但是是最强人类装备的四个零件之一。
 传送装置（时空隧道） 坐传送装置到拉多镇，与门口一直堵门的人对话他就会让开，以后拉多也就可以使用传真了。我个人认为这个设计是为了避免BUG，毕竟这个游戏传真使用有一定概率穿送到生命科学研究所，而在拉多这样肯定是不合理的，于是大概程序员灵机一动……
-在梦想起飞版本中的确有这个BUG，可以借此避免探测器球体和气息屏蔽仪被回收
-生命科学研究所 既然前面提到了，就在这里说一说吧。在传真出错时会传送到生命科学研究所，里面一个人都没有，设备都是故障。到自动售货机面前调查一下，可以找到一个再生丸，可以让死人复活，而且使用后这里会再出现一个。实际用处不大，因为完全可以去直接找明奇博士复活。
+ 在梦想起飞版本中的确有这个BUG，可以借此避免探测器球体和气息屏蔽仪被回收
+ 生命科学研究所 既然前面提到了，就在这里说一说吧。在传真出错时会传送到生命科学研究所，里面一个人都没有，设备都是故障。到自动售货机面前调查一下，可以找到一个再生丸，可以让死人复活，而且使用后这里会再出现一个。实际用处不大，因为完全可以去直接找明奇博士复活。
 波布 从麦基继续向东，可以到达波布。
 给学校捐款与BUG 在波布给学校捐款一定数量后会在镇子中央给主角立个雕像，然而当你捐款数额超过了自己实际拥有的钱数，钱没扣，但雕像立起来了……
 伙伴以及复制战车BUG 在波布南边有一个房子，开着战车进去，然后走进屋里。这时屋里跑出来一个熊孩子，开上你的战车就到处乱逛。这熊孩子就是我们诱拐的目标，未来的机械师克里夫。走上前与他对话就可以让他加入了。
-他开车开的挺快，可以去树那里堵他 克里夫上自己的战车，于是就有人想，如果自己先一步上车，会怎样？
-于是就有人进行了实验。结果表明：
-如果你先上车，克里夫会停在你面前，对话也得不到什么结果 如果克里夫先上车，参照前文 如果同时上车，结果…… 两人都上车了，战车变成了两辆！当然这只是一个BUG，如果此时下车，复制的战车也会消失。这时，两辆车用的是同一套数据，这就造成一些判定也就可以被绕过。比如买一发特殊炮弹（铁弹）理应只能发射一枚炮弹的，但却发射两枚，于是就溢出，然后弹仓多了256枚特殊炮弹（没有名字的，价格还特别贵），然后卖掉，基本就不愁钱了。
+ 他开车开的挺快，可以去树那里堵他 克里夫上自己的战车，于是就有人想，如果自己先一步上车，会怎样？
+ 于是就有人进行了实验。结果表明：
+ 如果你先上车，克里夫会停在你面前，对话也得不到什么结果 如果克里夫先上车，参照前文 如果同时上车，结果……  两人都上车了，战车变成了两辆！当然这只是一个BUG，如果此时下车，复制的战车也会消失。这时，两辆车用的是同一套数据，这就造成一些判定也就可以被绕过。比如买一发特殊炮弹（铁弹）理应只能发射一枚炮弹的，但却发射两枚，于是就溢出，然后弹仓多了256枚特殊炮弹（没有名字的，价格还特别贵），然后卖掉，基本就不愁钱了。
 水鬼 找到伙伴后，去波布进行一波修整，基本就可以开第二个BOSS了。需要进行的准备有：
-对武器进行一次升级 买一个传真 说实话即使到现在我都感觉这游戏有些翻译很诡异，“传真”是一个传送装置（在第二部翻译叫“犬系统”），“金甲”被打烂会变成“金靴”……
-去给伙伴租一辆战车 补充弹药和装甲片 第二个BOSS水鬼在波布东边的桥上出没，在上面多转转就能遇到。
+ 对武器进行一次升级 买一个传真  说实话即使到现在我都感觉这游戏有些翻译很诡异，“传真”是一个传送装置（在第二部翻译叫“犬系统”），“金甲”被打烂会变成“金靴”……
+ 去给伙伴租一辆战车 补充弹药和装甲片  第二个BOSS水鬼在波布东边的桥上出没，在上面多转转就能遇到。
 没什么要注意的，记得先打蛙人，后打水鬼。你可能在波布见到过有卖特种炮弹“榴弹”，估计本来按照设计应该是用来打蛙人的，但是实际发现好像根本用不到，直接主炮硬刚就行。
-打水鬼时，水鬼在HP比较低时有概率潜入水中恢复HP。这里要看运气了，一般是没问题，但要是你脸黑，也存在炮弹打完还没死的情况。
-找到战车 虽然出租战车也挺舒服的，但是价格比较高，长期租很不合算（土豪随意）。出租战车收费是按照你租了多少战车，直接在你打怪得到的报酬中按照比例扣除。所以，在不用的时候，一定要按时归还，因为就算不用也是收钱的。
-准备：因为有人类战，买最好的人类装备，准备好恢复道具等。
-穿过水怪所在的大桥，就到了一家在偷偷排放污水的工厂。这可能与作品主题有点关系吧。有个大叔说不要踩花，虽然想吐槽他自己就站在花上，但这里想表现的大概是人们只注意自己身边的环境整洁，实质上并不注重环保。
-去找社长要战车，社长说要让花儿决定，然后，他拿出来花，“给，不给，给……”。虽然知道花儿都是三瓣的是因为画质问题，但果然还是好像吐槽。
-巨型炮 拉多的事情到这里基本就结束了，可以准备去下一个镇子了。
-要准备的有：
-弹药和装甲片的补充 购买8枚“铁弹” 巨型炮算是我们前期遇到的一个比较不好打的敌人了，攻防都很高，尤其你走到他面前基本就没弹药了。
-雷班纳每回合都用铁弹，机械师随意（就是打酱油的）。
-等铁弹用完，基本巨型炮的装备就全坏了，主炮解决掉就好了。
-不过经验倒是超级多，也算是挺合算的了。
-这时基本战车就坏的差不多了，回拉多修修车吧。</description>
+打水鬼时，水鬼在HP比较低时有概率潜入水中恢复HP。这里要看运气了，一般是没问题，但要是你脸黑，也存在炮弹打完还没死的情况。</description>
     </item>
     
   </channel>

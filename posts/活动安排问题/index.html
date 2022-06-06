@@ -19,10 +19,9 @@
 <meta property="og:title" content="活动安排问题" />
 <meta property="og:description" content="活动安排问题" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://ntutn.top/posts/%E6%B4%BB%E5%8A%A8%E5%AE%89%E6%8E%92%E9%97%AE%E9%A2%98/" /><meta property="article:section" content="posts" />
+<meta property="og:url" content="https://ntutn.top/posts/%E6%B4%BB%E5%8A%A8%E5%AE%89%E6%8E%92%E9%97%AE%E9%A2%98/" />
 <meta property="article:published_time" content="2019-05-13T03:11:37+08:00" />
 <meta property="article:modified_time" content="2019-05-13T03:11:37+08:00" /><meta property="og:site_name" content="归零幻想" />
-
 
 
 
@@ -45,11 +44,11 @@
 
 
 
-<link rel="stylesheet" href="https://ntutn.top/scss/journal.min.0f46f98b723f2aad4b02d9370bb6aa7848b5c2b2a5579642014082283683d2d8.css" integrity="sha256-D0b5i3I/Kq1LAtk3C7aqeEi1wrKlV5ZCAUCCKDaD0tg=" media="screen">
+<link rel="stylesheet" href="https://ntutn.top/scss/journal.min.d8d9f81b896882733c41896750adbefbf9319ca02ccccefd461650898975c3af.css" integrity="sha256-2Nn4G4lognM8QYlnUK2&#43;&#43;/kxnKAszM79RhZQiYl1w68=" media="screen">
 
 
 
-<link rel="stylesheet" href="https://ntutn.top/scss/dark-mode.min.79c34391dbcff20df8b4dac718e2606701efcbfdb9f3b08447ac39ac9dc7b463.css" integrity="sha256-ecNDkdvP8g34tNrHGOJgZwHvy/2587CER6w5rJ3HtGM=" media="screen">
+<link rel="stylesheet" href="https://ntutn.top/scss/dark-mode.min.60f86847da9fc0724177ccfd0bf7c5997b0b41f1e58d5a293cfb3723c497c422.css" integrity="sha256-YPhoR9qfwHJBd8z9C/fFmXsLQfHljVopPPs3I8SXxCI=" media="screen">
 
 
 <script src="/vendor/js/loadCSS.js"></script>
@@ -673,7 +672,7 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <p>输出，选出的最大活动子集，即有多行，每行包括活动的编号、开始时间、结束时间。</p>
 <h2 id="example">Example</h2>
 <h3 id="input">Input</h3>
-<pre tabindex="0"><code>11
+<pre><code>11
 1 3 8
 2 2 13
 3 1 4
@@ -686,7 +685,7 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 10 0 6
 11 8 12
 </code></pre><h3 id="output">Output</h3>
-<pre tabindex="0"><code>3：1-4
+<pre><code>3：1-4
 4：5-7
 6：8-11
 7：12-14
@@ -696,60 +695,60 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <p>掉坑：在选择活动时只处理了前24小时的活动，而事实证明我画蛇添足了。</p>
 </blockquote>
 <h2 id="answer">Answer</h2>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;iostream&gt;</span><span style="color:#1e889b">
-</span></span></span><span style="display:flex;"><span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;stdio.h&gt;</span><span style="color:#1e889b">
-</span></span></span><span style="display:flex;"><span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;stdlib.h&gt;</span><span style="color:#1e889b">
-</span></span></span><span style="display:flex;"><span><span style="color:#1e889b"></span><span style="color:#8b008b;font-weight:bold">using</span> <span style="color:#8b008b;font-weight:bold">namespace</span> std;
-</span></span><span style="display:flex;"><span><span style="color:#228b22">//定义允许的最大活动数
-</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span><span style="color:#1e889b">#define Maxn  100
-</span></span></span><span style="display:flex;"><span><span style="color:#1e889b"></span><span style="color:#228b22">//定义活动的类型
-</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">typedef</span>  <span style="color:#8b008b;font-weight:bold">struct</span> <span style="color:#008b45;font-weight:bold">act_Node</span>
-</span></span><span style="display:flex;"><span>{  <span style="color:#00688b;font-weight:bold">int</span> Id;       <span style="color:#228b22">//活动ID
-</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>   <span style="color:#00688b;font-weight:bold">int</span> s_Time;   <span style="color:#228b22">//活动开始时间
-</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>   <span style="color:#00688b;font-weight:bold">int</span> f_Time;   <span style="color:#228b22">//活动结束时间
-</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>} ACND;
-</span></span><span style="display:flex;"><span><span style="color:#228b22">//对活动按贪心准则排序
-</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span><span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">Sort</span>(<span style="color:#00688b;font-weight:bold">int</span> n,ACND arr[])
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>;i&lt;n;i++){
-</span></span><span style="display:flex;"><span>        <span style="color:#00688b;font-weight:bold">int</span> tmp=i;
-</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> j=i+<span style="color:#b452cd">1</span>;j&lt;n;j++){
-</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">if</span>(arr[j].f_Time&lt;arr[tmp].f_Time){
-</span></span><span style="display:flex;"><span>                tmp=j;
-</span></span><span style="display:flex;"><span>            }
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>        ACND tmpSwap=arr[i];
-</span></span><span style="display:flex;"><span>        arr[i]=arr[tmp];
-</span></span><span style="display:flex;"><span>        arr[tmp]=tmpSwap;
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span><span style="color:#228b22">//进行贪心选择，得到最大相容的活动集合输出
-</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span><span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">Select</span>(<span style="color:#00688b;font-weight:bold">int</span> n,ACND arr[])
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> nTime=<span style="color:#b452cd">0</span>;
-</span></span><span style="display:flex;"><span>    ACND*p=arr;
-</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">while</span>(p-arr&lt;n){
-</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span>(p-&gt;s_Time&gt;=nTime){
-</span></span><span style="display:flex;"><span>            cout&lt;&lt;p-&gt;Id&lt;&lt;<span style="color:#cd5555">&#34;:&#34;</span>&lt;&lt;p-&gt;s_Time&lt;&lt;<span style="color:#cd5555">&#34;-&#34;</span>&lt;&lt;p-&gt;f_Time&lt;&lt;endl;
-</span></span><span style="display:flex;"><span>            nTime=p-&gt;f_Time;
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>        p++;
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">main</span>()
-</span></span><span style="display:flex;"><span>{  ACND arr[Maxn];
-</span></span><span style="display:flex;"><span>   <span style="color:#00688b;font-weight:bold">int</span> an,i;
-</span></span><span style="display:flex;"><span>   cin&gt;&gt;an;           <span style="color:#228b22">//读入活动个数
-</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>   <span style="color:#228b22">//读入各个活动的编号和占用资源的起止时间
-</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>   <span style="color:#8b008b;font-weight:bold">for</span>(i=<span style="color:#b452cd">0</span>;i&lt;an;i++)
-</span></span><span style="display:flex;"><span>     cin&gt;&gt;arr[i].Id&gt;&gt;arr[i].s_Time&gt;&gt;arr[i].f_Time;
-</span></span><span style="display:flex;"><span>   <span style="color:#228b22">//对活动按贪心准则进行排序
-</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>   Sort(an,arr);
-</span></span><span style="display:flex;"><span>   <span style="color:#228b22">//进行贪心选择，获得最优解并输出
-</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>   Select(an,arr);
-</span></span><span style="display:flex;"><span>  <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>;
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;iostream&gt;</span><span style="color:#1e889b">
+</span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;stdio.h&gt;</span><span style="color:#1e889b">
+</span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;stdlib.h&gt;</span><span style="color:#1e889b">
+</span><span style="color:#1e889b"></span><span style="color:#8b008b;font-weight:bold">using</span> <span style="color:#8b008b;font-weight:bold">namespace</span> std;
+<span style="color:#228b22">//定义允许的最大活动数
+</span><span style="color:#228b22"></span><span style="color:#1e889b">#define Maxn  100
+</span><span style="color:#1e889b"></span><span style="color:#228b22">//定义活动的类型
+</span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">typedef</span>  <span style="color:#8b008b;font-weight:bold">struct</span> <span style="color:#008b45;font-weight:bold">act_Node</span>
+{  <span style="color:#00688b;font-weight:bold">int</span> Id;       <span style="color:#228b22">//活动ID
+</span><span style="color:#228b22"></span>   <span style="color:#00688b;font-weight:bold">int</span> s_Time;   <span style="color:#228b22">//活动开始时间
+</span><span style="color:#228b22"></span>   <span style="color:#00688b;font-weight:bold">int</span> f_Time;   <span style="color:#228b22">//活动结束时间
+</span><span style="color:#228b22"></span>} ACND;
+<span style="color:#228b22">//对活动按贪心准则排序
+</span><span style="color:#228b22"></span><span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">Sort</span>(<span style="color:#00688b;font-weight:bold">int</span> n,ACND arr[])
+{
+    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>;i&lt;n;i++){
+        <span style="color:#00688b;font-weight:bold">int</span> tmp=i;
+        <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> j=i+<span style="color:#b452cd">1</span>;j&lt;n;j++){
+            <span style="color:#8b008b;font-weight:bold">if</span>(arr[j].f_Time&lt;arr[tmp].f_Time){
+                tmp=j;
+            }
+        }
+        ACND tmpSwap=arr[i];
+        arr[i]=arr[tmp];
+        arr[tmp]=tmpSwap;
+    }
+}
+<span style="color:#228b22">//进行贪心选择，得到最大相容的活动集合输出
+</span><span style="color:#228b22"></span><span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">Select</span>(<span style="color:#00688b;font-weight:bold">int</span> n,ACND arr[])
+{
+    <span style="color:#00688b;font-weight:bold">int</span> nTime=<span style="color:#b452cd">0</span>;
+    ACND*p=arr;
+    <span style="color:#8b008b;font-weight:bold">while</span>(p-arr&lt;n){
+        <span style="color:#8b008b;font-weight:bold">if</span>(p-&gt;s_Time&gt;=nTime){
+            cout&lt;&lt;p-&gt;Id&lt;&lt;<span style="color:#cd5555">&#34;:&#34;</span>&lt;&lt;p-&gt;s_Time&lt;&lt;<span style="color:#cd5555">&#34;-&#34;</span>&lt;&lt;p-&gt;f_Time&lt;&lt;endl;
+            nTime=p-&gt;f_Time;
+        }
+        p++;
+    }
+}
+<span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">main</span>()
+{  ACND arr[Maxn];
+   <span style="color:#00688b;font-weight:bold">int</span> an,i;
+   cin&gt;&gt;an;           <span style="color:#228b22">//读入活动个数
+</span><span style="color:#228b22"></span>   <span style="color:#228b22">//读入各个活动的编号和占用资源的起止时间
+</span><span style="color:#228b22"></span>   <span style="color:#8b008b;font-weight:bold">for</span>(i=<span style="color:#b452cd">0</span>;i&lt;an;i++)
+     cin&gt;&gt;arr[i].Id&gt;&gt;arr[i].s_Time&gt;&gt;arr[i].f_Time;
+   <span style="color:#228b22">//对活动按贪心准则进行排序
+</span><span style="color:#228b22"></span>   Sort(an,arr);
+   <span style="color:#228b22">//进行贪心选择，获得最优解并输出
+</span><span style="color:#228b22"></span>   Select(an,arr);
+  <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>;
+}
+</code></pre></div>
                     
                     <HR width="100%" id="EOF">
 		    <p style="color:#777;">最后修改于 2019-05-13</p>
@@ -767,8 +766,8 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
                 
                 
                 
-                <a class="older-posts" href="https://ntutn.top/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86%E7%AC%94%E8%AE%B0/">
-			上回<br>计算机组成原理笔记
+                <a class="older-posts" href="https://ntutn.top/posts/%E7%BA%BF%E6%80%A7%E8%A1%A8adt%E7%9A%84%E5%AE%9E%E7%8E%B0/">
+			上回<br>线性表ADT的实现
                 </a>
                 
             </nav>

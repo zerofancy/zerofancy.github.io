@@ -23,7 +23,8 @@
 回到我这个Issue，虽然从业务逻辑的角度看用户操作后这个变量是不会为null的，但仍然应该有判空，有兜底的逻辑，这样你的程序才会更加健壮。
 Kotlin的空安全 与Java不同，Kotlin的类型系统在设计时就考虑了变量是否可空1，其用一个?表示变量是否能为空。
 var a: String = &amp;#34;abc&amp;#34; // 默认情况下，常规初始化意味着非空 a = null // 编译错误 var b: String? = &amp;#34;abc&amp;#34; // 可以设置为空 b = null // ok print(b) 判空 Kotlin有一定的类型推断能力，判空后进行赋值操作前能识别出变量是非空的类型。
-val b: String? = &amp;#34;Kotlin&amp;#34; if (b != null &amp;amp;&amp;amp; b.length &amp;gt; 0) { print(&amp;#34;String of length ${b.length}&amp;#34;) } else { print(&amp;#34;Empty string&amp;#34;) } 安全调用 Kotlin中提供了?.来安全调用一个可能为空的变量。b?.test()相当于if (b != null) b.test()。</description>
+val b: String? = &amp;#34;Kotlin&amp;#34; if (b != null &amp;amp;&amp;amp; b.length &amp;gt; 0) { print(&amp;#34;String of length ${b.length}&amp;#34;) } else { print(&amp;#34;Empty string&amp;#34;) } 安全调用 Kotlin中提供了?.来安全调用一个可能为空的变量。b?.test()相当于if (b != null) b.test()。
+值得注意的是，这个操作符是可以和赋值语句一起用的。如：</description>
     </item>
     
   </channel>

@@ -19,10 +19,9 @@
 <meta property="og:title" content="数据结构与算法 C&#43;&#43;编程能力评估" />
 <meta property="og:description" content="C&#43;&#43;编程能力评估" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://ntutn.top/posts/c&#43;&#43;%E7%BC%96%E7%A8%8B%E8%83%BD%E5%8A%9B%E8%AF%84%E4%BC%B0/" /><meta property="article:section" content="posts" />
+<meta property="og:url" content="https://ntutn.top/posts/c&#43;&#43;%E7%BC%96%E7%A8%8B%E8%83%BD%E5%8A%9B%E8%AF%84%E4%BC%B0/" />
 <meta property="article:published_time" content="2019-03-28T03:11:37+08:00" />
 <meta property="article:modified_time" content="2019-03-28T03:11:37+08:00" /><meta property="og:site_name" content="归零幻想" />
-
 
 
 
@@ -45,11 +44,11 @@
 
 
 
-<link rel="stylesheet" href="https://ntutn.top/scss/journal.min.0f46f98b723f2aad4b02d9370bb6aa7848b5c2b2a5579642014082283683d2d8.css" integrity="sha256-D0b5i3I/Kq1LAtk3C7aqeEi1wrKlV5ZCAUCCKDaD0tg=" media="screen">
+<link rel="stylesheet" href="https://ntutn.top/scss/journal.min.d8d9f81b896882733c41896750adbefbf9319ca02ccccefd461650898975c3af.css" integrity="sha256-2Nn4G4lognM8QYlnUK2&#43;&#43;/kxnKAszM79RhZQiYl1w68=" media="screen">
 
 
 
-<link rel="stylesheet" href="https://ntutn.top/scss/dark-mode.min.79c34391dbcff20df8b4dac718e2606701efcbfdb9f3b08447ac39ac9dc7b463.css" integrity="sha256-ecNDkdvP8g34tNrHGOJgZwHvy/2587CER6w5rJ3HtGM=" media="screen">
+<link rel="stylesheet" href="https://ntutn.top/scss/dark-mode.min.60f86847da9fc0724177ccfd0bf7c5997b0b41f1e58d5a293cfb3723c497c422.css" integrity="sha256-YPhoR9qfwHJBd8z9C/fFmXsLQfHljVopPPs3I8SXxCI=" media="screen">
 
 
 <script src="/vendor/js/loadCSS.js"></script>
@@ -553,7 +552,7 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
                             
                             5 min
                             
-                            34 s.
+                            32 s.
                         
                     </div>
                 </div>
@@ -570,93 +569,93 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <ul>
 <li>Input</li>
 </ul>
-<pre tabindex="0"><code>    5
+<pre><code>    5
     1 2 3 4 5
     2 9
 </code></pre><ul>
 <li>Output</li>
 </ul>
-<pre tabindex="0"><code>1 2 3 4 5
+<pre><code>1 2 3 4 5
 1 2 9 3 4 5
 </code></pre><ul>
 <li>Answer</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#1e889b">#include</span><span style="color:#1e889b">&lt;iostream&gt;</span><span style="color:#1e889b">
-</span></span></span><span style="display:flex;"><span><span style="color:#1e889b">#include</span><span style="color:#1e889b">&lt;stdlib.h&gt;</span><span style="color:#1e889b">
-</span></span></span><span style="display:flex;"><span><span style="color:#1e889b"></span><span style="color:#8b008b;font-weight:bold">using</span> <span style="color:#8b008b;font-weight:bold">namespace</span> std;
-</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">SeqList</span>
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">private</span>:
-</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> * data;
-</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> last; <span style="color:#228b22">// index of the last element
-</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">public</span>:
-</span></span><span style="display:flex;"><span>    SeqList ( <span style="color:#00688b;font-weight:bold">int</span> sz );
-</span></span><span style="display:flex;"><span>    ~SeqList ( )
-</span></span><span style="display:flex;"><span>    {
-</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">delete</span> [ ] data;
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">input</span> ();
-</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">output</span>() ;
-</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">Insert</span>   ( <span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#00688b;font-weight:bold">int</span> &amp;x, <span style="color:#00688b;font-weight:bold">int</span> i);
-</span></span><span style="display:flex;"><span>}  ;
-</span></span><span style="display:flex;"><span>SeqList::SeqList ( <span style="color:#00688b;font-weight:bold">int</span> sz )
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">if</span> ( sz &gt; <span style="color:#b452cd">0</span> )
-</span></span><span style="display:flex;"><span>    {
-</span></span><span style="display:flex;"><span>        data = <span style="color:#8b008b;font-weight:bold">new</span> <span style="color:#00688b;font-weight:bold">int</span>[sz];
-</span></span><span style="display:flex;"><span>        last = -<span style="color:#b452cd">1</span>;
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">void</span> SeqList:: input()
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    cin &gt;&gt;last;
-</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">for</span> (<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;last; i++)
-</span></span><span style="display:flex;"><span>        cin&gt;&gt;data [i];
-</span></span><span style="display:flex;"><span>    last--;
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">void</span> SeqList::output()
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">bool</span> fi=<span style="color:#658b00">false</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;=last; i++)
-</span></span><span style="display:flex;"><span>    {
-</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span>(!fi)
-</span></span><span style="display:flex;"><span>        {
-</span></span><span style="display:flex;"><span>            fi=!fi;
-</span></span><span style="display:flex;"><span>            cout&lt;&lt;data[i];
-</span></span><span style="display:flex;"><span>        }<span style="color:#8b008b;font-weight:bold">else</span>{
-</span></span><span style="display:flex;"><span>            cout&lt;&lt;<span style="color:#cd5555">&#39; &#39;</span>&lt;&lt;data[i];
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    cout&lt;&lt;endl;
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">void</span> SeqList::Insert(<span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#00688b;font-weight:bold">int</span>&amp; x, <span style="color:#00688b;font-weight:bold">int</span> i)
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i1=last;i1&gt;=i;i1--){
-</span></span><span style="display:flex;"><span>        data[i1+<span style="color:#b452cd">1</span>]=data[i1];
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    data[i]=x;
-</span></span><span style="display:flex;"><span>    last++;
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">main</span>()
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    SeqList myList(<span style="color:#b452cd">50</span>);
-</span></span><span style="display:flex;"><span>    myList.input();
-</span></span><span style="display:flex;"><span>    myList.output();
-</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> where,value;
-</span></span><span style="display:flex;"><span>    cin &gt;&gt;where;
-</span></span><span style="display:flex;"><span>    cin &gt;&gt;value;
-</span></span><span style="display:flex;"><span>    myList.Insert(value,where);
-</span></span><span style="display:flex;"><span>    myList.output ();
-</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">1</span>;
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><h2 id="题目2">题目2</h2>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#1e889b">#include</span><span style="color:#1e889b">&lt;iostream&gt;</span><span style="color:#1e889b">
+</span><span style="color:#1e889b">#include</span><span style="color:#1e889b">&lt;stdlib.h&gt;</span><span style="color:#1e889b">
+</span><span style="color:#1e889b"></span><span style="color:#8b008b;font-weight:bold">using</span> <span style="color:#8b008b;font-weight:bold">namespace</span> std;
+<span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">SeqList</span>
+{
+<span style="color:#8b008b;font-weight:bold">private</span>:
+    <span style="color:#00688b;font-weight:bold">int</span> * data;
+    <span style="color:#00688b;font-weight:bold">int</span> last; <span style="color:#228b22">// index of the last element
+</span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">public</span>:
+    SeqList ( <span style="color:#00688b;font-weight:bold">int</span> sz );
+    ~SeqList ( )
+    {
+        <span style="color:#8b008b;font-weight:bold">delete</span> [ ] data;
+    }
+    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">input</span> ();
+    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">output</span>() ;
+    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">Insert</span>   ( <span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#00688b;font-weight:bold">int</span> &amp;x, <span style="color:#00688b;font-weight:bold">int</span> i);
+}  ;
+SeqList::SeqList ( <span style="color:#00688b;font-weight:bold">int</span> sz )
+{
+    <span style="color:#8b008b;font-weight:bold">if</span> ( sz &gt; <span style="color:#b452cd">0</span> )
+    {
+        data = <span style="color:#8b008b;font-weight:bold">new</span> <span style="color:#00688b;font-weight:bold">int</span>[sz];
+        last = -<span style="color:#b452cd">1</span>;
+    }
+}
+<span style="color:#00688b;font-weight:bold">void</span> SeqList:: input()
+{
+    cin &gt;&gt;last;
+    <span style="color:#8b008b;font-weight:bold">for</span> (<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;last; i++)
+        cin&gt;&gt;data [i];
+    last--;
+}
+<span style="color:#00688b;font-weight:bold">void</span> SeqList::output()
+{
+    <span style="color:#00688b;font-weight:bold">bool</span> fi=<span style="color:#658b00">false</span>;
+    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;=last; i++)
+    {
+        <span style="color:#8b008b;font-weight:bold">if</span>(!fi)
+        {
+            fi=!fi;
+            cout&lt;&lt;data[i];
+        }<span style="color:#8b008b;font-weight:bold">else</span>{
+            cout&lt;&lt;<span style="color:#cd5555">&#39; &#39;</span>&lt;&lt;data[i];
+        }
+    }
+    cout&lt;&lt;endl;
+}
+<span style="color:#00688b;font-weight:bold">void</span> SeqList::Insert(<span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#00688b;font-weight:bold">int</span>&amp; x, <span style="color:#00688b;font-weight:bold">int</span> i)
+{
+    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i1=last;i1&gt;=i;i1--){
+        data[i1+<span style="color:#b452cd">1</span>]=data[i1];
+    }
+    data[i]=x;
+    last++;
+}
+<span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">main</span>()
+{
+    SeqList myList(<span style="color:#b452cd">50</span>);
+    myList.input();
+    myList.output();
+    <span style="color:#00688b;font-weight:bold">int</span> where,value;
+    cin &gt;&gt;where;
+    cin &gt;&gt;value;
+    myList.Insert(value,where);
+    myList.output ();
+    <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">1</span>;
+}
+</code></pre></div><h2 id="题目2">题目2</h2>
 <p>已知一块靶场大小为m*n（m行n列），每个点上都有一面旗子，我们的炮兵发射炮弹，炮弹一次只能炸掉一面旗子，每次炮弹的落点坐标都有记录，问你几炮过后，靶场还剩下几面旗子呢？</p>
 <ul>
 <li>Input</li>
 </ul>
 <p>有若干行，第一行为两个整数m,n，以空格分隔，都是整数，且1&lt;=m&lt;=n&lt;=100；</p>
 <p>接下来有若干行，每行有两个整数x,y，代表炮弹落点的坐标（行、列坐标，编号从0开始）。</p>
-<pre tabindex="0"><code>3 3
+<pre><code>3 3
 1 1
 1 1
 99 99
@@ -665,92 +664,92 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 </ul>
 <p>一个整数，代表最后靶场上剩余的旗子数。</p>
 <p>提示：炮弹可能打在同一个位置，也可能脱靶，但保证在100*100的范围内。</p>
-<pre tabindex="0"><code>8
+<pre><code>8
 </code></pre><ul>
 <li>Answer</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;iostream&gt;</span><span style="color:#1e889b">
-</span></span></span><span style="display:flex;"><span><span style="color:#1e889b">#define N 105
-</span></span></span><span style="display:flex;"><span><span style="color:#1e889b"></span><span style="color:#8b008b;font-weight:bold">using</span> <span style="color:#8b008b;font-weight:bold">namespace</span> std;
-</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">main</span>()
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">bool</span> data[N][N];
-</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>;i&lt;N;i++){
-</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i2=<span style="color:#b452cd">0</span>;i2&lt;N;i2++){
-</span></span><span style="display:flex;"><span>            data[i][i2]=<span style="color:#658b00">false</span>;
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> m,n;
-</span></span><span style="display:flex;"><span>    cin&gt;&gt;m&gt;&gt;n;
-</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> res=m*n;
-</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> x,y;
-</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">while</span>(cin&gt;&gt;x&gt;&gt;y){
-</span></span><span style="display:flex;"><span>        data[x][y]=<span style="color:#658b00">true</span>;
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>;i&lt;m;i++){
-</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i2=<span style="color:#b452cd">0</span>;i2&lt;n;i2++){
-</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">if</span>(data[i][i2]){
-</span></span><span style="display:flex;"><span>                res--;
-</span></span><span style="display:flex;"><span>            }
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    cout&lt;&lt;res&lt;&lt;endl;
-</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>;
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><h2 id="题目3">题目3</h2>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;iostream&gt;</span><span style="color:#1e889b">
+</span><span style="color:#1e889b">#define N 105
+</span><span style="color:#1e889b"></span><span style="color:#8b008b;font-weight:bold">using</span> <span style="color:#8b008b;font-weight:bold">namespace</span> std;
+<span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">main</span>()
+{
+    <span style="color:#00688b;font-weight:bold">bool</span> data[N][N];
+    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>;i&lt;N;i++){
+        <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i2=<span style="color:#b452cd">0</span>;i2&lt;N;i2++){
+            data[i][i2]=<span style="color:#658b00">false</span>;
+        }
+    }
+    <span style="color:#00688b;font-weight:bold">int</span> m,n;
+    cin&gt;&gt;m&gt;&gt;n;
+    <span style="color:#00688b;font-weight:bold">int</span> res=m*n;
+    <span style="color:#00688b;font-weight:bold">int</span> x,y;
+    <span style="color:#8b008b;font-weight:bold">while</span>(cin&gt;&gt;x&gt;&gt;y){
+        data[x][y]=<span style="color:#658b00">true</span>;
+    }
+    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>;i&lt;m;i++){
+        <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i2=<span style="color:#b452cd">0</span>;i2&lt;n;i2++){
+            <span style="color:#8b008b;font-weight:bold">if</span>(data[i][i2]){
+                res--;
+            }
+        }
+    }
+    cout&lt;&lt;res&lt;&lt;endl;
+    <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>;
+}
+</code></pre></div><h2 id="题目3">题目3</h2>
 <p>买房面积不要求太大，环境不要求太好，只要单价够便宜就已经很满足啦~现在挑选了一些房源，请你帮忙选一选，哪个最适合呢？小本本上记录了房子的名称（字母和数字组成，无空格）、面积和总价，你来帮编个程序自动计算一下吧。</p>
 <ul>
 <li>Input</li>
 </ul>
 <p>第一行为一个整数N(1&lt;=N&lt;=100)，表示接下来有N套房源信息；</p>
 <p>接下来有N行，每行包括房源名称(不超过100个字符)、面积和总价（double类型，小数点后保留两位），以空格分隔。</p>
-<pre tabindex="0"><code>3
+<pre><code>3
 Tangdaowan0101 50 50
 Jiangshan1314 49 50
 Jinshatan1111 51 50
 </code></pre><ul>
 <li>Output</li>
 </ul>
-<pre tabindex="0"><code>Jinshatan1111 51.00 50.00
+<pre><code>Jinshatan1111 51.00 50.00
 </code></pre><p>仅一行，为最适合的房源信息，以空格分隔，末尾换行。</p>
 <p>测试用例保证没有单价重复的情况。</p>
 <ul>
 <li>Answer</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;stdio.h&gt;</span><span style="color:#1e889b">
-</span></span></span><span style="display:flex;"><span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;string.h&gt;</span><span style="color:#1e889b">
-</span></span></span><span style="display:flex;"><span><span style="color:#1e889b">#include</span><span style="color:#1e889b">&lt;limits.h&gt;</span><span style="color:#1e889b">
-</span></span></span><span style="display:flex;"><span><span style="color:#1e889b"></span><span style="color:#8b008b;font-weight:bold">typedef</span> <span style="color:#8b008b;font-weight:bold">struct</span>
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">char</span> name[<span style="color:#b452cd">101</span>];
-</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">double</span> area;
-</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">double</span> sum;
-</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">double</span> avg;
-</span></span><span style="display:flex;"><span>} House;
-</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">Gethouse</span>(House*h,<span style="color:#00688b;font-weight:bold">int</span> n){
-</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">double</span> res=INT_MAX;
-</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> res_num=<span style="color:#b452cd">0</span>;
-</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>;i&lt;n;i++){
-</span></span><span style="display:flex;"><span>        h[i].avg=h[i].sum/h[i].area;
-</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span>(h[i].avg&lt;res){
-</span></span><span style="display:flex;"><span>            res=h[i].avg;
-</span></span><span style="display:flex;"><span>            res_num=i;
-</span></span><span style="display:flex;"><span>       }
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">return</span> res_num;
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">main</span>()
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> n,i,flag = <span style="color:#b452cd">0</span>;<span style="color:#228b22">//n有几行
-</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    scanf(<span style="color:#cd5555">&#34;%d&#34;</span>,&amp;n);
-</span></span><span style="display:flex;"><span>    House h[n];
-</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">for</span> (i = <span style="color:#b452cd">0</span>; i &lt; n; i ++)
-</span></span><span style="display:flex;"><span>      scanf(<span style="color:#cd5555">&#34;%s%lf%lf&#34;</span>,h[i].name,&amp;h[i].area,&amp;h[i].sum);
-</span></span><span style="display:flex;"><span>    flag= Gethouse(h,n);
-</span></span><span style="display:flex;"><span>    printf(<span style="color:#cd5555">&#34;%s %.2f %.2f</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>,h[flag].name, h[flag].area, h[flag].sum);
-</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>;
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><h2 id="题目4">题目4</h2>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;stdio.h&gt;</span><span style="color:#1e889b">
+</span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;string.h&gt;</span><span style="color:#1e889b">
+</span><span style="color:#1e889b">#include</span><span style="color:#1e889b">&lt;limits.h&gt;</span><span style="color:#1e889b">
+</span><span style="color:#1e889b"></span><span style="color:#8b008b;font-weight:bold">typedef</span> <span style="color:#8b008b;font-weight:bold">struct</span>
+{
+    <span style="color:#00688b;font-weight:bold">char</span> name[<span style="color:#b452cd">101</span>];
+    <span style="color:#00688b;font-weight:bold">double</span> area;
+    <span style="color:#00688b;font-weight:bold">double</span> sum;
+    <span style="color:#00688b;font-weight:bold">double</span> avg;
+} House;
+<span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">Gethouse</span>(House*h,<span style="color:#00688b;font-weight:bold">int</span> n){
+    <span style="color:#00688b;font-weight:bold">double</span> res=INT_MAX;
+    <span style="color:#00688b;font-weight:bold">int</span> res_num=<span style="color:#b452cd">0</span>;
+    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>;i&lt;n;i++){
+        h[i].avg=h[i].sum/h[i].area;
+        <span style="color:#8b008b;font-weight:bold">if</span>(h[i].avg&lt;res){
+            res=h[i].avg;
+            res_num=i;
+       }
+    }
+    <span style="color:#8b008b;font-weight:bold">return</span> res_num;
+}
+<span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">main</span>()
+{
+    <span style="color:#00688b;font-weight:bold">int</span> n,i,flag = <span style="color:#b452cd">0</span>;<span style="color:#228b22">//n有几行
+</span><span style="color:#228b22"></span>    scanf(<span style="color:#cd5555">&#34;%d&#34;</span>,&amp;n);
+    House h[n];
+    <span style="color:#8b008b;font-weight:bold">for</span> (i = <span style="color:#b452cd">0</span>; i &lt; n; i ++)
+      scanf(<span style="color:#cd5555">&#34;%s%lf%lf&#34;</span>,h[i].name,&amp;h[i].area,&amp;h[i].sum);
+    flag= Gethouse(h,n);
+    printf(<span style="color:#cd5555">&#34;%s %.2f %.2f</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>,h[flag].name, h[flag].area, h[flag].sum);
+    <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>;
+}
+</code></pre></div><h2 id="题目4">题目4</h2>
 <p>实现链表的输入（已实现）、输出和删除成员函数。</p>
 <p>输入时，根据endtag确定是否结束输入；</p>
 <p>删除时，根据下标（从0开始）。</p>
@@ -758,121 +757,121 @@ Jinshatan1111 51 50
 <ul>
 <li>Input</li>
 </ul>
-<pre tabindex="0"><code>1 2 3 4 5 0
+<pre><code>1 2 3 4 5 0
 2
 </code></pre><ul>
 <li>Output</li>
 </ul>
-<pre tabindex="0"><code>5 4 3 2 1
+<pre><code>5 4 3 2 1
 5 4 2 1
 </code></pre><ul>
 <li>Answer</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&#34;stdlib.h&#34;</span><span style="color:#1e889b">
-</span></span></span><span style="display:flex;"><span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&#34;iostream&#34;</span><span style="color:#1e889b">
-</span></span></span><span style="display:flex;"><span><span style="color:#1e889b">#include</span><span style="color:#1e889b">&lt;cstdlib&gt;</span><span style="color:#1e889b">
-</span></span></span><span style="display:flex;"><span><span style="color:#1e889b"></span><span style="color:#8b008b;font-weight:bold">using</span> <span style="color:#8b008b;font-weight:bold">namespace</span> std ;
-</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">List</span>; <span style="color:#228b22">//前视定义,否则友元无法定义
-</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">LinkNode</span>
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">friend</span>  List; <span style="color:#228b22">//链表结点类的定义
-</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">private</span>:
-</span></span><span style="display:flex;"><span>    LinkNode *link;
-</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> data;
-</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">public</span>:
-</span></span><span style="display:flex;"><span>    LinkNode(<span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#00688b;font-weight:bold">int</span> &amp; item, LinkNode *ptr = <span style="color:#658b00">NULL</span>)
-</span></span><span style="display:flex;"><span>    {
-</span></span><span style="display:flex;"><span>        data=item;
-</span></span><span style="display:flex;"><span>        link=ptr;
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    LinkNode (LinkNode *ptr = <span style="color:#658b00">NULL</span>)
-</span></span><span style="display:flex;"><span>    {
-</span></span><span style="display:flex;"><span>        link=ptr;
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    ~LinkNode() {};
-</span></span><span style="display:flex;"><span>};
-</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">List</span>
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#228b22">//单链表类的定义
-</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">private</span>:
-</span></span><span style="display:flex;"><span>    LinkNode *first; <span style="color:#228b22">//指向首结点的指针
-</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">public</span>:
-</span></span><span style="display:flex;"><span>    List ()
-</span></span><span style="display:flex;"><span>    {
-</span></span><span style="display:flex;"><span>        first = <span style="color:#8b008b;font-weight:bold">new</span> LinkNode ();   <span style="color:#228b22">// 带头结点
-</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    }
-</span></span><span style="display:flex;"><span>    ~List ()
-</span></span><span style="display:flex;"><span>    {
-</span></span><span style="display:flex;"><span>        MakeEmpty();   <span style="color:#228b22">//析构函数
-</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    }
-</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">MakeEmpty</span> ( );      <span style="color:#228b22">//链表置空
-</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    <span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">Remove</span> ( <span style="color:#00688b;font-weight:bold">int</span> i );
-</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">input</span>(<span style="color:#00688b;font-weight:bold">int</span>  endTag);
-</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">output</span>();
-</span></span><span style="display:flex;"><span>};
-</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">void</span> List:: MakeEmpty ( )
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    LinkNode *q;
-</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">while</span> (  first-&gt;link != <span style="color:#658b00">NULL</span> )
-</span></span><span style="display:flex;"><span>    {
-</span></span><span style="display:flex;"><span>        q = first-&gt;link;
-</span></span><span style="display:flex;"><span>        first-&gt;link = q-&gt;link;
-</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">delete</span> q;
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>};
-</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">void</span> List :: input (<span style="color:#00688b;font-weight:bold">int</span> endTag)
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    LinkNode  *newnode;
-</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> val;
-</span></span><span style="display:flex;"><span>    cin&gt;&gt;val;
-</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">while</span>(val!=endTag)
-</span></span><span style="display:flex;"><span>    {
-</span></span><span style="display:flex;"><span>        newnode=<span style="color:#8b008b;font-weight:bold">new</span> LinkNode (val);
-</span></span><span style="display:flex;"><span>        newnode-&gt;link=first-&gt;link;
-</span></span><span style="display:flex;"><span>        first-&gt;link=newnode;
-</span></span><span style="display:flex;"><span>        cin&gt;&gt;val;
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">int</span> List::Remove(<span style="color:#00688b;font-weight:bold">int</span> i)
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    LinkNode*tmp=first;
-</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i2=<span style="color:#b452cd">0</span>;i2&lt;i;i2++){
-</span></span><span style="display:flex;"><span>        tmp=tmp-&gt;link;
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    LinkNode*tmp1=tmp-&gt;link;
-</span></span><span style="display:flex;"><span>    tmp-&gt;link=tmp-&gt;link-&gt;link;
-</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">delete</span>(tmp1);
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">void</span> List::output()
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> fi=<span style="color:#b452cd">0</span>;
-</span></span><span style="display:flex;"><span>    LinkNode*tmp=first-&gt;link;
-</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">while</span>(tmp!=<span style="color:#658b00">NULL</span>)
-</span></span><span style="display:flex;"><span>    {
-</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span>(fi++)
-</span></span><span style="display:flex;"><span>        {
-</span></span><span style="display:flex;"><span>            cout&lt;&lt;<span style="color:#cd5555">&#39; &#39;</span>&lt;&lt;tmp-&gt;data;
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">else</span>
-</span></span><span style="display:flex;"><span>        {
-</span></span><span style="display:flex;"><span>            cout&lt;&lt;tmp-&gt;data;
-</span></span><span style="display:flex;"><span>        }
-</span></span><span style="display:flex;"><span>        tmp=tmp-&gt;link;
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>    cout&lt;&lt;endl;
-</span></span><span style="display:flex;"><span>}
-</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">main</span>()
-</span></span><span style="display:flex;"><span>{
-</span></span><span style="display:flex;"><span>    List l;
-</span></span><span style="display:flex;"><span>    l.input(<span style="color:#b452cd">0</span>); <span style="color:#228b22">//0为输入的结束数字
-</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    l.output ();
-</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> index;
-</span></span><span style="display:flex;"><span>    cin&gt;&gt;index; <span style="color:#228b22">//要删除的元素的下标，下标从0 开始
-</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    l.Remove(index);
-</span></span><span style="display:flex;"><span>    l.output (); <span style="color:#228b22">//删除后输出
-</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>;
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&#34;stdlib.h&#34;</span><span style="color:#1e889b">
+</span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&#34;iostream&#34;</span><span style="color:#1e889b">
+</span><span style="color:#1e889b">#include</span><span style="color:#1e889b">&lt;cstdlib&gt;</span><span style="color:#1e889b">
+</span><span style="color:#1e889b"></span><span style="color:#8b008b;font-weight:bold">using</span> <span style="color:#8b008b;font-weight:bold">namespace</span> std ;
+<span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">List</span>; <span style="color:#228b22">//前视定义,否则友元无法定义
+</span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">LinkNode</span>
+{
+    <span style="color:#8b008b;font-weight:bold">friend</span>  List; <span style="color:#228b22">//链表结点类的定义
+</span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">private</span>:
+    LinkNode *link;
+    <span style="color:#00688b;font-weight:bold">int</span> data;
+<span style="color:#8b008b;font-weight:bold">public</span>:
+    LinkNode(<span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#00688b;font-weight:bold">int</span> &amp; item, LinkNode *ptr = <span style="color:#658b00">NULL</span>)
+    {
+        data=item;
+        link=ptr;
+    }
+    LinkNode (LinkNode *ptr = <span style="color:#658b00">NULL</span>)
+    {
+        link=ptr;
+    }
+    ~LinkNode() {};
+};
+<span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">List</span>
+{
+    <span style="color:#228b22">//单链表类的定义
+</span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">private</span>:
+    LinkNode *first; <span style="color:#228b22">//指向首结点的指针
+</span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">public</span>:
+    List ()
+    {
+        first = <span style="color:#8b008b;font-weight:bold">new</span> LinkNode ();   <span style="color:#228b22">// 带头结点
+</span><span style="color:#228b22"></span>    }
+    ~List ()
+    {
+        MakeEmpty();   <span style="color:#228b22">//析构函数
+</span><span style="color:#228b22"></span>    }
+    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">MakeEmpty</span> ( );      <span style="color:#228b22">//链表置空
+</span><span style="color:#228b22"></span>    <span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">Remove</span> ( <span style="color:#00688b;font-weight:bold">int</span> i );
+    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">input</span>(<span style="color:#00688b;font-weight:bold">int</span>  endTag);
+    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">output</span>();
+};
+<span style="color:#00688b;font-weight:bold">void</span> List:: MakeEmpty ( )
+{
+    LinkNode *q;
+    <span style="color:#8b008b;font-weight:bold">while</span> (  first-&gt;link != <span style="color:#658b00">NULL</span> )
+    {
+        q = first-&gt;link;
+        first-&gt;link = q-&gt;link;
+        <span style="color:#8b008b;font-weight:bold">delete</span> q;
+    }
+};
+<span style="color:#00688b;font-weight:bold">void</span> List :: input (<span style="color:#00688b;font-weight:bold">int</span> endTag)
+{
+    LinkNode  *newnode;
+    <span style="color:#00688b;font-weight:bold">int</span> val;
+    cin&gt;&gt;val;
+    <span style="color:#8b008b;font-weight:bold">while</span>(val!=endTag)
+    {
+        newnode=<span style="color:#8b008b;font-weight:bold">new</span> LinkNode (val);
+        newnode-&gt;link=first-&gt;link;
+        first-&gt;link=newnode;
+        cin&gt;&gt;val;
+    }
+}
+<span style="color:#00688b;font-weight:bold">int</span> List::Remove(<span style="color:#00688b;font-weight:bold">int</span> i)
+{
+    LinkNode*tmp=first;
+    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i2=<span style="color:#b452cd">0</span>;i2&lt;i;i2++){
+        tmp=tmp-&gt;link;
+    }
+    LinkNode*tmp1=tmp-&gt;link;
+    tmp-&gt;link=tmp-&gt;link-&gt;link;
+    <span style="color:#8b008b;font-weight:bold">delete</span>(tmp1);
+}
+<span style="color:#00688b;font-weight:bold">void</span> List::output()
+{
+    <span style="color:#00688b;font-weight:bold">int</span> fi=<span style="color:#b452cd">0</span>;
+    LinkNode*tmp=first-&gt;link;
+    <span style="color:#8b008b;font-weight:bold">while</span>(tmp!=<span style="color:#658b00">NULL</span>)
+    {
+        <span style="color:#8b008b;font-weight:bold">if</span>(fi++)
+        {
+            cout&lt;&lt;<span style="color:#cd5555">&#39; &#39;</span>&lt;&lt;tmp-&gt;data;
+        }
+        <span style="color:#8b008b;font-weight:bold">else</span>
+        {
+            cout&lt;&lt;tmp-&gt;data;
+        }
+        tmp=tmp-&gt;link;
+    }
+    cout&lt;&lt;endl;
+}
+<span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">main</span>()
+{
+    List l;
+    l.input(<span style="color:#b452cd">0</span>); <span style="color:#228b22">//0为输入的结束数字
+</span><span style="color:#228b22"></span>    l.output ();
+    <span style="color:#00688b;font-weight:bold">int</span> index;
+    cin&gt;&gt;index; <span style="color:#228b22">//要删除的元素的下标，下标从0 开始
+</span><span style="color:#228b22"></span>    l.Remove(index);
+    l.output (); <span style="color:#228b22">//删除后输出
+</span><span style="color:#228b22"></span>    <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>;
+}
+</code></pre></div>
                     
                     <HR width="100%" id="EOF">
 		    <p style="color:#777;">最后修改于 2019-03-28</p>

@@ -21,9 +21,9 @@ DebugConfig 因为字节自己的ABManager用着挺顺手，感觉自己项目�
 使用 先看使用：
 @ZeroConfig(key = &amp;#34;retrofit_config&amp;#34;, title = &amp;#34;Retrofit配置&amp;#34;, owner = &amp;#34;liuhaixin.zero&amp;#34;) data class RetrofitConfig(val baseUrl: String = RetrofitUtil.BASE_URL) private val retrofitConfig by zeroConfig&amp;lt;RetrofitConfig&amp;gt;() private val retrofit by lazy { Retrofit.Builder() .baseUrl(retrofitConfig?.baseUrl ?: BASE_URL) .addConverterFactory(GsonConverterFactory.create()) .client(okHttpClient) .build() } 看上去还是有点让人心动的吧。
 属性委托、泛型实化 首先是一段来自菜鸟教程的描述：
-属性委托指的是一个类的某个属性值不是在类中直接进行定义，而是将其托付给一个代理类，从而实现对该类属性的统一管理。
+ 属性委托指的是一个类的某个属性值不是在类中直接进行定义，而是将其托付给一个代理类，从而实现对该类属性的统一管理。
 val/var &amp;lt;属性名&amp;gt;: &amp;lt;类型&amp;gt; by &amp;lt;表达式&amp;gt; by 关键字之后的表达式就是委托, 属性的 get() 方法(以及set() 方法)将被委托给这个对象的 getValue() 和 setValue() 方法。属性委托不必实现任何接口, 但必须提供 getValue() 函数(对于 var属性,还需要 setValue() 函数)。
-借助这个特征，我们可以定义这样一个委托类：</description>
+ 借助这个特征，我们可以定义这样一个委托类：</description>
     </item>
     
   </channel>

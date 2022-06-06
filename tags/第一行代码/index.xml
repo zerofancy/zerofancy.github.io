@@ -28,9 +28,8 @@ private fun saveText(inputText: String) { try { val output = openFileOutput(&amp
       <description>Kotlin 变量和函数 变量 用var和val定义变量，并有类型自动推导的支持。
 val用来声明一个不可变的变量，var用来声明一个可变的变量。
 val a = 10 var b: Int = 12 Kotlin完全抛弃了java中的基本数据类型，完全使用对象数据类型。
-java基本数据类型 Kotlin对象数据类型 数据类型说明 int Int 整型 long Long 长整型 short Short 短整型 float Float 单精度浮点型 double Double 双精度浮点型 boolean Boolean 布尔型 char Char 字符型 byte Byte 字节型 函数 语法：
-fun main(args: Array&amp;lt;String&amp;gt;) { println(&amp;#34;Hello World!&amp;#34;) } Kotlin中的函数在无必要时可以省略很多东西：
-import kotlin.math.max fun largerNumber(a: Int, b: Int) = max(a, b) fun main(args: Array&amp;lt;String&amp;gt;) { val a = 3 val b = 5 println(&amp;#34;The larger number of a and b is ${largerNumber(a, b)}&amp;#34;) } 程序的逻辑控制 if 与java中的if语句相比，Kotlin中的if是可以有返回值的。</description>
+   java基本数据类型 Kotlin对象数据类型 数据类型说明     int Int 整型   long Long 长整型   short Short 短整型   float Float 单精度浮点型   double Double 双精度浮点型   boolean Boolean 布尔型   char Char 字符型   byte Byte 字节型    函数 语法：
+fun main(args: Array&amp;lt;String&amp;gt;) { println(&amp;#34;Hello World!</description>
     </item>
     
     <item>
@@ -44,7 +43,7 @@ import kotlin.math.max fun largerNumber(a: Int, b: Int) = max(a, b) fun main(arg
 通知渠道在8.0（O）引入。要求APP将通知分类，通过不同渠道进行分发，用户可以选择性禁用某个渠道的通知，或者调整优先等级。
 通知可以有不同的重要等级，有四种：IMPORTANCE_HIGH、IMPORTANCE_DEFAULT、IMPORTANCE_LOW、IMPORTANCE_MIN。根据重要等级不同，通知可能有不同的展现策略，比如在前台提示甚至播放声音。
 在通知渠道创建时通知的重要等级也就确定了，之后不能再被APP修改。
-通知dmeo package top.ntutn.notificationtest import android.app.NotificationChannel import android.app.NotificationManager import android.app.PendingIntent import android.content.Context import android.content.Intent import android.graphics.BitmapFactory import android.os.Build import androidx.appcompat.app.AppCompatActivity import android.os.Bundle import androidx.core.app.NotificationCompat import top.ntutn.notificationtest.databinding.ActivityMainBinding class MainActivity : AppCompatActivity() { private lateinit var binding: ActivityMainBinding override fun onCreate(savedInstanceState: Bundle?) { super.onCreate(savedInstanceState) binding = ActivityMainBinding.inflate(layoutInflater) setContentView(binding.root) initView() } private fun initView(){ val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager if(Build.VERSION.SDK_INT &amp;gt;= Build.VERSION_CODES.O){ // 通知渠道 val channel = NotificationChannel(&amp;#34;normal&amp;#34;,&amp;#34;Normal&amp;#34;,NotificationManager.</description>
+通知dmeo package top.ntutn.notificationtest import android.app.NotificationChannel import android.app.NotificationManager import android.app.PendingIntent import android.content.Context import android.content.Intent import android.graphics.BitmapFactory import android.os.Build import androidx.appcompat.app.AppCompatActivity import android.os.Bundle import androidx.core.app.NotificationCompat import top.ntutn.notificationtest.databinding.ActivityMainBinding class MainActivity : AppCompatActivity() { private lateinit var binding: ActivityMainBinding override fun onCreate(savedInstanceState: Bundle?) { super.onCreate(savedInstanceState) binding = ActivityMainBinding.inflate(layoutInflater) setContentView(binding.root) initView() } private fun initView(){ val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager if(Build.VERSION.SDK_INT &amp;gt;= Build.VERSION_CODES.O){ // 通知渠道  val channel = NotificationChannel(&amp;#34;normal&amp;#34;,&amp;#34;Normal&amp;#34;,NotificationManager.</description>
     </item>
     
     <item>
@@ -56,7 +55,7 @@ import kotlin.math.max fun largerNumber(a: Int, b: Int) = max(a, b) fun main(arg
       <description>仍然是《第一行代码》的学习笔记，安卓内置广播机制。
 Android中每个应用程序都可以对自己感兴趣的广播进行注册，包括来自系统的，和其他应用程序的。
 广播分为标准广播和有序广播。
-标准广播异步执行，所有BroadcastReceiver几乎同时收到广播的消息。 有序广播 同步执行，只有前一个Receiver逻辑执行完后才会传递给下一个，且可以将广播截断。 接收系统广播 BroadcastReceiver的onReceive()方法是在主线程调用的，不应执行耗时操作。但开一个新线程操作也是不可靠的1。
+ 标准广播异步执行，所有BroadcastReceiver几乎同时收到广播的消息。 有序广播 同步执行，只有前一个Receiver逻辑执行完后才会传递给下一个，且可以将广播截断。  接收系统广播 BroadcastReceiver的onReceive()方法是在主线程调用的，不应执行耗时操作。但开一个新线程操作也是不可靠的1。
 监听时间变化（动态注册） class MainActivity : AppCompatActivity() { private val timeReceiver = object : BroadcastReceiver() { override fun onReceive(context: Context?, intent: Intent?) { text.text = Date(System.currentTimeMillis()).toString() } } override fun onCreate(savedInstanceState: Bundle?) { super.onCreate(savedInstanceState) setContentView(R.layout.activity_main) val intentFilter = IntentFilter() intentFilter.addAction(Intent.ACTION_TIME_TICK) registerReceiver(timeReceiver, intentFilter) } override fun onDestroy() { super.onDestroy() unregisterReceiver(timeReceiver) } } 开机启动（静态注册） &amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt; &amp;lt;manifest xmlns:android=&amp;#34;http://schemas.android.com/apk/res/android&amp;#34; package=&amp;#34;top.ntutn.broadcasttest&amp;#34;&amp;gt; &amp;lt;uses-permission android:name=&amp;#34;android.permission.RECEIVE_BOOT_COMPLETED&amp;#34; /&amp;gt; &amp;lt;application android:allowBackup=&amp;#34;true&amp;#34; android:icon=&amp;#34;@mipmap/ic_launcher&amp;#34; android:label=&amp;#34;@string/app_name&amp;#34; android:roundIcon=&amp;#34;@mipmap/ic_launcher_round&amp;#34; android:supportsRtl=&amp;#34;true&amp;#34; android:theme=&amp;#34;@style/Theme.</description>
     </item>
     
@@ -85,9 +84,9 @@ android:gravity指定控件内的内容对齐方式，有top、bottom、start、
 基本布局 LinearLayout 线性布局，通过android:orientation指定方向。
 有一个重要属性：android:layout_weight，它将控件已经占用的空间减掉后按照比重分给各个控件。一般我们直接指定android:layout_width为0dp，而给它指定一个比重，这样控件的尺寸将占满剩余空间。
 RelativeLayout 相对布局，复杂，但有迹可循。
-&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt; &amp;lt;RelativeLayout xmlns:android=&amp;#34;http://schemas.android.com/apk/res/android&amp;#34; xmlns:tools=&amp;#34;http://schemas.android.com/tools&amp;#34; android:layout_width=&amp;#34;match_parent&amp;#34; android:layout_height=&amp;#34;match_parent&amp;#34; tools:context=&amp;#34;.MainActivity&amp;#34;&amp;gt; &amp;lt;Button android:id=&amp;#34;@+id/button1&amp;#34; android:layout_width=&amp;#34;wrap_content&amp;#34; android:layout_height=&amp;#34;wrap_content&amp;#34; android:layout_alignParentLeft=&amp;#34;true&amp;#34; android:layout_alignParentTop=&amp;#34;true&amp;#34; android:text=&amp;#34;Button1&amp;#34; /&amp;gt; &amp;lt;Button android:id=&amp;#34;@+id/button2&amp;#34; android:layout_width=&amp;#34;wrap_content&amp;#34; android:layout_height=&amp;#34;wrap_content&amp;#34; android:layout_alignParentTop=&amp;#34;true&amp;#34; android:layout_alignParentRight=&amp;#34;true&amp;#34; android:text=&amp;#34;Button2&amp;#34; /&amp;gt; &amp;lt;Button android:id=&amp;#34;@+id/button3&amp;#34; android:layout_width=&amp;#34;wrap_content&amp;#34; android:layout_height=&amp;#34;wrap_content&amp;#34; android:layout_centerInParent=&amp;#34;true&amp;#34; android:text=&amp;#34;Button3&amp;#34; /&amp;gt; &amp;lt;Button android:id=&amp;#34;@+id/button4&amp;#34; android:layout_width=&amp;#34;wrap_content&amp;#34; android:layout_height=&amp;#34;wrap_content&amp;#34; android:layout_alignParentLeft=&amp;#34;true&amp;#34; android:layout_alignParentBottom=&amp;#34;true&amp;#34; android:text=&amp;#34;Button4&amp;#34; /&amp;gt; &amp;lt;Button android:id=&amp;#34;@+id/button5&amp;#34; android:layout_width=&amp;#34;wrap_content&amp;#34; android:layout_height=&amp;#34;wrap_content&amp;#34; android:layout_alignParentRight=&amp;#34;true&amp;#34; android:layout_alignParentBottom=&amp;#34;true&amp;#34; android:text=&amp;#34;Button5&amp;#34; /&amp;gt; &amp;lt;/RelativeLayout&amp;gt; 以上这段布局文件描述的就是一个相对布局，共有5个按钮，分别在父布局的左上、右上、中间、左下、右下位置。
+&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;utf-8&amp;quot;?&amp;gt; &amp;lt;RelativeLayout xmlns:android=&amp;quot;http://schemas.android.com/apk/res/android&amp;quot; xmlns:tools=&amp;quot;http://schemas.android.com/tools&amp;quot; android:layout_width=&amp;quot;match_parent&amp;quot; android:layout_height=&amp;quot;match_parent&amp;quot; tools:context=&amp;quot;.MainActivity&amp;quot;&amp;gt; &amp;lt;Button android:id=&amp;quot;@+id/button1&amp;quot; android:layout_width=&amp;quot;wrap_content&amp;quot; android:layout_height=&amp;quot;wrap_content&amp;quot; android:layout_alignParentLeft=&amp;quot;true&amp;quot; android:layout_alignParentTop=&amp;quot;true&amp;quot; android:text=&amp;quot;Button1&amp;quot; /&amp;gt; &amp;lt;Button android:id=&amp;quot;@+id/button2&amp;quot; android:layout_width=&amp;quot;wrap_content&amp;quot; android:layout_height=&amp;quot;wrap_content&amp;quot; android:layout_alignParentTop=&amp;quot;true&amp;quot; android:layout_alignParentRight=&amp;quot;true&amp;quot; android:text=&amp;quot;Button2&amp;quot; /&amp;gt; &amp;lt;Button android:id=&amp;quot;@+id/button3&amp;quot; android:layout_width=&amp;quot;wrap_content&amp;quot; android:layout_height=&amp;quot;wrap_content&amp;quot; android:layout_centerInParent=&amp;quot;true&amp;quot; android:text=&amp;quot;Button3&amp;quot; /&amp;gt; &amp;lt;Button android:id=&amp;quot;@+id/button4&amp;quot; android:layout_width=&amp;quot;wrap_content&amp;quot; android:layout_height=&amp;quot;wrap_content&amp;quot; android:layout_alignParentLeft=&amp;quot;true&amp;quot; android:layout_alignParentBottom=&amp;quot;true&amp;quot; android:text=&amp;quot;Button4&amp;quot; /&amp;gt; &amp;lt;Button android:id=&amp;quot;@+id/button5&amp;quot; android:layout_width=&amp;quot;wrap_content&amp;quot; android:layout_height=&amp;quot;wrap_content&amp;quot; android:layout_alignParentRight=&amp;quot;true&amp;quot; android:layout_alignParentBottom=&amp;quot;true&amp;quot; android:text=&amp;quot;Button5&amp;quot; /&amp;gt; &amp;lt;/RelativeLayout&amp;gt; 以上这段布局文件描述的就是一个相对布局，共有5个按钮，分别在父布局的左上、右上、中间、左下、右下位置。
 相对布局不仅可以相对于父布局，也可以相对于控件。以下描述了button3在中间，左上button1，右上button2，左下button4，右下button5的布局场景。
-&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt; &amp;lt;RelativeLayout xmlns:android=&amp;#34;http://schemas.android.com/apk/res/android&amp;#34; xmlns:tools=&amp;#34;http://schemas.android.com/tools&amp;#34; android:layout_width=&amp;#34;match_parent&amp;#34; android:layout_height=&amp;#34;match_parent&amp;#34; tools:context=&amp;#34;.</description>
+&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;utf-8&amp;quot;?&amp;gt; &amp;lt;RelativeLayout xmlns:android=&amp;quot;http://schemas.android.com/apk/res/android&amp;quot; xmlns:tools=&amp;quot;http://schemas.android.com/tools&amp;quot; android:layout_width=&amp;quot;match_parent&amp;quot; android:layout_height=&amp;quot;match_parent&amp;quot; tools:context=&amp;quot;.</description>
     </item>
     
     <item>
@@ -97,8 +96,8 @@ RelativeLayout 相对布局，复杂，但有迹可循。
       
       <guid>https://ntutn.top/posts/activity/</guid>
       <description>title: android项目开发：Activity author: 归零幻想 publishDate: 2020-12-15 editDate: 2020-12-15 tags: [android, 第一行代码, Kotlin, Activity]
-仍然是《第一行代码》的读书笔记，可能引用原书的定义和描述，或代码案例。
-Activity Activity基本用法 Android讲究设计逻辑与视图分离，一般Activity都会对应一个布局文件（XML文件）。
+ 仍然是《第一行代码》的读书笔记，可能引用原书的定义和描述，或代码案例。
+ Activity Activity基本用法 Android讲究设计逻辑与视图分离，一般Activity都会对应一个布局文件（XML文件）。
 所有的Activity都要在AndroidManifest中注册才生效。
 Activity可以创建菜单。首先在res/menu下创建一个xml文件（Android Studio中也提供了可视化编辑的方法）：
 &amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt; &amp;lt;menu xmlns:app=&amp;#34;http://schemas.android.com/apk/res-auto&amp;#34; xmlns:android=&amp;#34;http://schemas.android.com/apk/res/android&amp;#34;&amp;gt; &amp;lt;item android:id=&amp;#34;@+id/add_item&amp;#34; android:title=&amp;#34;Add&amp;#34;/&amp;gt; &amp;lt;item android:id=&amp;#34;@+id/remove_item&amp;#34; android:title=&amp;#34;Remove&amp;#34;/&amp;gt; &amp;lt;/menu&amp;gt; 重写两个方法
@@ -120,10 +119,10 @@ app 项目中的代码、资源等内容。
 build 编译时自动生成的文件，不需要关心。
 libs 存放项目中的第三方jar包，这个目录下的jar包会自动添加到项目的构建路径下。
 src androidTest Android Test测试用例，可以对项目进行一些自动化测试。
-实际上在公司里发现基本不写测试用例，全靠QA瞎几把点。
-test 用来编写单元测试用例，对项目进行自动化测试。
-这里的测试用例是不依赖安卓框架的。
-main java 存放所有java代码（和Kotlin代码）的地方。
+ 实际上在公司里发现基本不写测试用例，全靠QA瞎几把点。
+ test 用来编写单元测试用例，对项目进行自动化测试。
+ 这里的测试用例是不依赖安卓框架的。
+ main java 存放所有java代码（和Kotlin代码）的地方。
 res 项目的资源文件夹，项目中使用到的所有图片、布局、字符串等资源都存在这个目录下。
 图片存放在drawable目录下，布局存放在layout目录下，字符串存放在values目录下。
 mipmap存放图标，之所以有很多mipmap目录是为了适配各种设备。若只有一份图片，那么放在xxhdpi下就可以了。
@@ -135,14 +134,15 @@ proguard-rules.pro 指定项目代码的混淆方式。
 build 编译时自动生成的内容。
 gradle gradle wrapper的配置文件。Android Studio会根据本地的缓存i去=情况决定是否需要联网下载gradle。
 .gitignore 排除文件或文件夹的git版本控制。
-对于所有项目都会用到的.gitignore条目，不妨加入~/.gitignore全局配置。
-build.gradle 项目全局的构建脚本。
+ 对于所有项目都会用到的.gitignore条目，不妨加入~/.gitignore全局配置。
+ build.gradle 项目全局的构建脚本。
 repositories中，google()对应谷歌自家代码仓库依赖，jcenter()中则是很多第三方开源库。
 gradle.properties 全局gradle的配置文件。
 gradlew和gradlew.bat 这两个文件是用来在命令行界面执行gradle命令的，其中gradlew是在Linux或Mac系统中使用的，gradlew.bat是在Windows系统中使用的。
 local.properties 用于指定本机中的Android SDK路径。
 settings.gradle 用来指定项目中所有引入的模块。
-《第一行代码》&amp;#160;&amp;#x21a9;&amp;#xfe0e;</description>
+  《第一行代码》 &amp;#x21a9;&amp;#xfe0e;
+   </description>
     </item>
     
     <item>
@@ -152,8 +152,8 @@ settings.gradle 用来指定项目中所有引入的模块。
       
       <guid>https://ntutn.top/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B/</guid>
       <description>仍然是《第一行代码》的笔记，不过略过了deprated的内容，并探究了下Handler的工作机制。
-上班了，果然没有那么多大块时间写博客了。
-Handler 主线程不能进行耗时处理，子线程不能访问UI，所以我们需要异步消息处理机制。
+ 上班了，果然没有那么多大块时间写博客了。
+ Handler 主线程不能进行耗时处理，子线程不能访问UI，所以我们需要异步消息处理机制。
 使用 class MainActivity : AppCompatActivity() { private lateinit var binding: ActivityMainBinding private val handler = object : Handler(Looper.getMainLooper()) { override fun handleMessage(msg: Message) { when(msg.what){ MSG_UPDATE_TEXT -&amp;gt; binding.textView.text = &amp;#34;Nice to meet you. &amp;#34; } } } override fun onCreate(savedInstanceState: Bundle?) { super.onCreate(savedInstanceState) binding = ActivityMainBinding.inflate(layoutInflater) setContentView(binding.root) initView() } private fun initView() { binding.apply { changeTextButton.setOnClickListener { thread { val msg = Message() msg.what = MSG_UPDATE_TEXT handler.</description>
     </item>
     

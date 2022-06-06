@@ -7,7 +7,25 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Tue, 12 Apr 2022 01:21:54 +0800</lastBuildDate><atom:link href="https://ntutn.top/tags/%E6%8A%98%E8%85%BE/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 06 Jun 2022 12:28:23 +0800</lastBuildDate><atom:link href="https://ntutn.top/tags/%E6%8A%98%E8%85%BE/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>使用自动操作修改壁纸</title>
+      <link>https://ntutn.top/posts/%E4%BD%BF%E7%94%A8%E8%87%AA%E5%8A%A8%E6%93%8D%E4%BD%9C%E4%BF%AE%E6%94%B9%E5%A3%81%E7%BA%B8/</link>
+      <pubDate>Mon, 06 Jun 2022 12:28:23 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E4%BD%BF%E7%94%A8%E8%87%AA%E5%8A%A8%E6%93%8D%E4%BD%9C%E4%BF%AE%E6%94%B9%E5%A3%81%E7%BA%B8/</guid>
+      <description>好久没水博客了，今天折腾折腾一个一直在系统里但是没用过的工具：自动操作（Automator）.
+首先打开自动操作，新建一个文稿。选择“应用程序”最终可以像其他app一样，点击就执行。但我希望的是每天自动更换，所以这里我选择“日历提醒”。
+下载壁纸 “自动操作”的使用方法还是很简单的，把左边的命令拖动过来稍加编辑就可以了。所以，我们得到了
+这里用的是Unsplash提供的随机壁纸服务，壁纸还是很合我的胃口的。图中URL：https://source.unsplash.com/random/3584x2240。这里的“3584x2240”根据你的显示器分辨率填写。
+设置壁纸 虽然“自动操作”的资源库中有“设置壁纸”这个能力，但我实际测试发现它只能改当前屏幕的壁纸，对于我用双屏的来说就比较难受了。因而这里要用Apple Script来实现：
+图中的脚本为：
+on run {input, parameters} set theFile to first item of input set filename to the POSIX path of theFile tell application &amp;quot;System Events&amp;quot; tell every desktop set picture to filename end tell end tell return filename end run 清理垃圾 这个简单，删除所有不是今天创建的图片就行了。
+每天执行 保存后，打开日程应用，可以看到出现了一条刚刚添加的日程。使用Command+E快捷键修改日程，“重复”改为每天。最终结果：
+ 最后效果
+摸鱼结束，我去搬砖了。</description>
+    </item>
+    
     <item>
       <title>把你的光猫变成一个丐版nas</title>
       <link>https://ntutn.top/posts/%E6%8A%8A%E4%BD%A0%E7%9A%84%E5%85%89%E7%8C%AB%E5%8F%98%E6%88%90%E4%B8%80%E4%B8%AA%E4%B8%90%E7%89%88nas/</link>

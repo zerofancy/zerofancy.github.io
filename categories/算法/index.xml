@@ -28,7 +28,7 @@ Question 矩阵采用“压缩”存储，实现矩阵的常用操作，如输�
       <pubDate>Fri, 17 May 2019 03:11:37 +0800</pubDate>
       
       <guid>https://ntutn.top/posts/%E7%BB%9F%E8%AE%A1%E9%80%92%E5%BD%92%E5%AD%90%E9%97%AE%E9%A2%98%E4%B8%AA%E6%95%B0/</guid>
-      <description> 分治策略是算法设计的重要策略之一，该策略的基本思想是把问题进行分解成一些子问题，通过子问题的求解完成对原问题的求解。其关键是分解和合并，好的分解或合并方法才会产生高效的分治算法。
+      <description>分治策略是算法设计的重要策略之一，该策略的基本思想是把问题进行分解成一些子问题，通过子问题的求解完成对原问题的求解。其关键是分解和合并，好的分解或合并方法才会产生高效的分治算法。
 分治策略设计出的算法最常见的就是递归算法。但是如果在分解时，分解出的子问题有很多是重复的，那么这样的分治（递归）算法求解问题的效率就非常低。例如斐波那契数问题，如果采用递归求解，算法效率非常低：O(2^n)。而如果采用递推求解(动态规划自底向上求解)，算法效率非常高：O(n)。
 Question 现在请你编写程序，统计计算一个斐波那契数时分解出的各子问题的个数。
 斐波那契数的定义如下：
@@ -38,7 +38,7 @@ Example Input 5 Output Fib(0)=0,spn=3 Fib(1)=1,spn=5 Fib(2)=1,spn=3 Fib(3)=2,spn
 这题要统计子问题个数，递推或者递归加备忘录根本没重复的计算怎么统计……
 不死心的我又仔细研究递推子问题个数的规律，发现子问题个数正好是一个反着的斐波那契数列（结尾元素特殊处理），所以可以正向递推求数列，反向递推求子问题个数。
 不过特殊情况研究的有点头疼，暂时就不搞了，下面给出的是老老实实递归求解的程序。
-Answer #include &amp;lt;iostream&amp;gt; #include &amp;lt;cstring&amp;gt; using namespace std; int*spn; int*data; int fib(int n){ spn[n]++; if(n==0){ data[0]=0; return 0; } if(n==1){ data[1]=1; return 1; } int res=fib(n-1)+fib(n-2); data[n]=res; return res; } int main() { int n; cin&amp;gt;&amp;gt;n; spn=new int[n+1]; data=new int[n+1]; memset(spn,0,(n+1)*sizeof(int)); memset(data,-1,(n+1)*sizeof(int)); data[0]=0; data[1]=1; fib(n); for(int i=0;i&amp;lt;=n;i++){ cout&amp;lt;&amp;lt;&amp;#34;Fib(&amp;#34;&amp;lt;&amp;lt;i&amp;lt;&amp;lt;&amp;#34;)=&amp;#34;&amp;lt;&amp;lt;data[i]&amp;lt;&amp;lt;&amp;#34;,spn=&amp;#34;&amp;lt;&amp;lt;spn[i]&amp;lt;&amp;lt;endl; } return 0; } </description>
+Answer #include &amp;lt;iostream&amp;gt;#include &amp;lt;cstring&amp;gt;using namespace std; int*spn; int*data; int fib(int n){ spn[n]++; if(n==0){ data[0]=0; return 0; } if(n==1){ data[1]=1; return 1; } int res=fib(n-1)+fib(n-2); data[n]=res; return res; } int main() { int n; cin&amp;gt;&amp;gt;n; spn=new int[n+1]; data=new int[n+1]; memset(spn,0,(n+1)*sizeof(int)); memset(data,-1,(n+1)*sizeof(int)); data[0]=0; data[1]=1; fib(n); for(int i=0;i&amp;lt;=n;i++){ cout&amp;lt;&amp;lt;&amp;#34;Fib(&amp;#34;&amp;lt;&amp;lt;i&amp;lt;&amp;lt;&amp;#34;)=&amp;#34;&amp;lt;&amp;lt;data[i]&amp;lt;&amp;lt;&amp;#34;,spn=&amp;#34;&amp;lt;&amp;lt;spn[i]&amp;lt;&amp;lt;endl; } return 0; } </description>
     </item>
     
   </channel>

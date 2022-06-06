@@ -17,7 +17,8 @@
       <description>问题描述 和工具线配合完成某个需求，我这边的改动很少，但一鼓作气搞完后却遇到了奇怪的报错。已知工具线的代码大多是java的，而我这边自然是力推Kotlin。我们的代码参考如下：
 代码参考 工具线定义了一个接口用于callback
 package a; interface IPublishCallback { void onFinish(); } 工具线在执行完发布逻辑后无论成功还是失败都会调用我们的callback
-package a; public class PublishUtil { public static void publishVideo(String videoName, IPublishCallback callback) { Runnable runnable = () -&amp;gt; { try { System.out.println(&amp;#34;[&amp;#34; + videoName + &amp;#34;]开始执行耗时发布操作……&amp;#34;); Thread.sleep(1000L); } catch (InterruptedException e) { e.printStackTrace(); } callback.onFinish(); }; Thread thread = new Thread(runnable); thread.start(); try { thread.join(); } catch (InterruptedException e) { e.printStackTrace(); } } } 我们这边的实现是Kotlin的，就是调用了下工具线的方法</description>
+package a; public class PublishUtil { public static void publishVideo(String videoName, IPublishCallback callback) { Runnable runnable = () -&amp;gt; { try { System.out.println(&amp;#34;[&amp;#34; + videoName + &amp;#34;]开始执行耗时发布操作……&amp;#34;); Thread.sleep(1000L); } catch (InterruptedException e) { e.printStackTrace(); } callback.onFinish(); }; Thread thread = new Thread(runnable); thread.start(); try { thread.join(); } catch (InterruptedException e) { e.printStackTrace(); } } } 我们这边的实现是Kotlin的，就是调用了下工具线的方法
+package b import a.</description>
     </item>
     
   </channel>
