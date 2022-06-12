@@ -7,9 +7,176 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Mon, 06 Jun 2022 12:28:23 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 09 Jun 2022 17:02:54 +0800</lastBuildDate>
     
         <atom:link href="https://ntutn.top/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>android项目开发：多线程编程</title>
+        <link>https://ntutn.top/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B/</link>
+        <pubDate>Fri, 21 Aug 2020 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B/</guid>
+        <description>归零幻想 https://ntutn.top/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B/ -&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;仍然是《第一行代码》的笔记，不过略过了deprated的内容，并探究了下Handler的工作机制。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;上班了，果然没有那么多大块时间写博客了。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;handler&#34;&gt;Handler&lt;/h2&gt;
+&lt;p&gt;主线程不能进行耗时处理，子线程不能访问UI，所以我们需要异步消息处理机制。&lt;/p&gt;
+&lt;h3 id=&#34;使用&#34;&gt;使用&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MainActivity&lt;/span&gt; : AppCompatActivity() {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;lateinit&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; binding: ActivityMainBinding
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; handler = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;: &lt;/span&gt;&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Handler&lt;/span&gt;(Looper.getMainLooper()) {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;handleMessage&lt;/span&gt;(msg: Message) {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;when&lt;/span&gt;(msg.what){
+                MSG_UPDATE_TEXT -&amp;gt; binding.textView.text = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Nice to meet you. &amp;#34;&lt;/span&gt;
+            }
+        }
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onCreate&lt;/span&gt;(savedInstanceState: Bundle?) {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        initView()
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;initView&lt;/span&gt;() {
+        binding.apply {
+            changeTextButton.setOnClickListener {
+                thread {
+                    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; msg = Message()
+                    msg.what = MSG_UPDATE_TEXT
+                    handler.sendMessage(msg)
+                }
+            }
+        }
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;companion&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; MSG_UPDATE_TEXT = &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;原理&#34;&gt;原理&lt;/h3&gt;
+&lt;p&gt;图片有点多，懒得一张张转移了，去我整理的文档看吧：&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://bytedance.feishu.cn/docs/doccnRaxHFiTJDYLBuYMzpSSJAd&#34;&gt;安卓Handler异步消息处理机制&lt;/a&gt;&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;h2 id=&#34;service&#34;&gt;Service&lt;/h2&gt;
+&lt;p&gt;三个回调：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;onCreate()&lt;/code&gt; 在Service创建时调用&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;onStartCommand()&lt;/code&gt;在Service每次启动时被调用&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;onDestory()&lt;/code&gt;在Service销毁时调用&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;通过&lt;code&gt;startService(intent)&lt;/code&gt;和&lt;code&gt;stopService(intent)&lt;/code&gt;的方式启动和停止Service。&lt;/p&gt;
+&lt;p&gt;Binder用于和View绑定通信。Binder和前台Service具体参见下面例子。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.servicetest&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.app.NotificationChannel&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.app.NotificationManager&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.app.PendingIntent&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.app.Service&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.content.Context&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.content.Intent&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.graphics.BitmapFactory&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.os.Binder&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.os.Build&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.util.Log&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;androidx.core.app.NotificationCompat&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MyService&lt;/span&gt; : Service() {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; mBinder = DownloadBinder()
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;DownloadBinder&lt;/span&gt; : Binder() {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;startDownload&lt;/span&gt;() {
+            Log.d(javaClass.simpleName, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;startDownload() executed&amp;#34;&lt;/span&gt;)
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;getProcess&lt;/span&gt;(): Int {
+            Log.d(javaClass.simpleName, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;getProcess() executed&amp;#34;&lt;/span&gt;)
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;
+        }
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onBind&lt;/span&gt;(intent: Intent) = mBinder
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onCreate&lt;/span&gt;() {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onCreate()
+        Log.d(javaClass.simpleName, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;onCreate() executed&amp;#34;&lt;/span&gt;)
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; manager = getSystemService(Context.NOTIFICATION_SERVICE) &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;as&lt;/span&gt; NotificationManager
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (Build.VERSION.SDK_INT &amp;gt;= Build.VERSION_CODES.O) {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; channel = NotificationChannel(
+                &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;my_service&amp;#34;&lt;/span&gt;,
+                &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;前台Service通知&amp;#34;&lt;/span&gt;,
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+            manager.createNotificationChannel(channel)
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; intent = Intent(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;, MainActivity::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;.java)
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; pi = PendingIntent.getActivity(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;, REQ_MY_SERVICE, intent, &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;)
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; notification = NotificationCompat.Builder(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;my_service&amp;#34;&lt;/span&gt;)
+            .setContentTitle(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;This is content title&amp;#34;&lt;/span&gt;)
+            .setContentText(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;This is content text. &amp;#34;&lt;/span&gt;)
+            .setContentIntent(pi)
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setLargeIcon(BitmapFactory.decodeResource(resources,R.drawable.ic_launcher_foreground))
+            .build()
+        startForeground(&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;, notification)
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onStartCommand&lt;/span&gt;(intent: Intent?, flags: Int, startId: Int): Int {
+        Log.d(javaClass.simpleName, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;onStartCommand() executed&amp;#34;&lt;/span&gt;)
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onStartCommand(intent, flags, startId)
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onDestroy&lt;/span&gt;() {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onDestroy()
+        Log.d(javaClass.simpleName, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;onDestroy() executed&amp;#34;&lt;/span&gt;)
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;companion&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; REQ_MY_SERVICE = &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.servicetest&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.content.ComponentName&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.content.Context&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.content.Intent&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.content.ServiceConnection&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.os.Bundle&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.os.IBinder&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;androidx.appcompat.app.AppCompatActivity&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.servicetest.databinding.ActivityMainBinding&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MainActivity&lt;/span&gt; : AppCompatActivity() {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;lateinit&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; binding: ActivityMainBinding
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;lateinit&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; downloadBinder: MyService.DownloadBinder
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; connection = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;: &lt;/span&gt;&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;ServiceConnection&lt;/span&gt; {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onServiceConnected&lt;/span&gt;(name: ComponentName, service: IBinder) {
+            downloadBinder = service &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;as&lt;/span&gt; MyService.DownloadBinder
+            downloadBinder.startDownload()
+            downloadBinder.getProcess()
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onServiceDisconnected&lt;/span&gt;(name: ComponentName?) = Unit
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onCreate&lt;/span&gt;(savedInstanceState: Bundle?) {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        initView()
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;initView&lt;/span&gt;() {
+        binding.apply {
+            startServiceButton.setOnClickListener {
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; intent = Intent(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;&lt;span style=&#34;color:#707a7c&#34;&gt;@MainActivity&lt;/span&gt;, MyService::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;.java)
+                startService(intent)
+            }
+            stopServiceButton.setOnClickListener {
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; intent = Intent(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;&lt;span style=&#34;color:#707a7c&#34;&gt;@MainActivity&lt;/span&gt;, MyService::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;.java)
+                stopService(intent)
+            }
+            bindServiceButton.setOnClickListener {
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; intent = Intent(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;&lt;span style=&#34;color:#707a7c&#34;&gt;@MainActivity&lt;/span&gt;, MyService::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;.java)
+                bindService(intent, connection, Context.BIND_AUTO_CREATE)
+            }
+            unbindServiceButton.setOnClickListener {
+                unbindService(connection)
+            }
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://ntutn.top/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B/ - CC BY-SA 4.0</description>
+        </item>
     
     
     
@@ -1648,93 +1815,6 @@ fltmc &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;&amp;gt;nul &lt;sp
 &lt;p&gt;&lt;img src=&#34;https://i.loli.net/2020/08/20/Ybuwv4RO5ITsEoH.png&#34; alt=&#34;5.png&#34;&gt;&lt;/p&gt;
 &lt;p&gt;美滋滋。&lt;/p&gt;
 - https://ntutn.top/posts/%E9%97%B7%E5%A3%B0%E4%BD%9C%E5%A4%A7%E6%AD%BB%E5%88%A0%E9%99%A4%E7%94%B5%E8%84%91%E5%86%85%E7%9A%84%E7%A9%BA%E6%96%87%E4%BB%B6%E5%A4%B9/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>在Windows10上安装血战上海滩</title>
-        <link>https://ntutn.top/posts/%E5%9C%A8windows10%E4%B8%8A%E5%AE%89%E8%A3%85%E8%A1%80%E6%88%98%E4%B8%8A%E6%B5%B7%E6%BB%A9/</link>
-        <pubDate>Sat, 01 Jun 2019 03:11:37 +0800</pubDate>
-        
-        <guid>https://ntutn.top/posts/%E5%9C%A8windows10%E4%B8%8A%E5%AE%89%E8%A3%85%E8%A1%80%E6%88%98%E4%B8%8A%E6%B5%B7%E6%BB%A9/</guid>
-        <description>归零幻想 https://ntutn.top/posts/%E5%9C%A8windows10%E4%B8%8A%E5%AE%89%E8%A3%85%E8%A1%80%E6%88%98%E4%B8%8A%E6%B5%B7%E6%BB%A9/ -&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;《血战上海滩》是由北京欢乐亿派科技有限公司开发的单机FPS游戏，发行于2003年，是一个非常经典的老游戏了。
-近来我打算把这个游戏找出来再玩一遍，可是在Windows10上安装还是有些问题……&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2022/04/cae87d561f3a723b0187e837e3e63ab0.gif&#34; alt=&#34;血战上海滩&#34;&gt;&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;h2 id=&#34;下载&#34;&gt;下载&lt;/h2&gt;
-&lt;p&gt;下载不用多说，自己找资源吧，一共三百多兆的单机游戏。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;现在很多单机游戏下载时网站都会给你带上一个“启动器”来显示广告，恶心的很。找到文件夹中，注意血战上海滩的游戏文件是一个帽子的图标，大小为&lt;code&gt;1.87M&lt;/code&gt;，SHA1为&lt;code&gt;FE5A102AA9DE633FB6E388EAAEEA38BC43E8E7E4&lt;/code&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&#34;启动&#34;&gt;启动&lt;/h2&gt;
-&lt;p&gt;直接双击exe，然后……它免费帮你调了一下分辨率，就没反应了。&lt;/p&gt;
-&lt;p&gt;貌似兼容性是个比较大的问题……于是在网上找了好久，终于知道，可以用命令行控制游戏窗口运行：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cmd&#34; data-lang=&#34;cmd&#34;&gt;shanghai.exe -windows
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;修改屏幕分辨率实现全屏&#34;&gt;修改屏幕分辨率实现全屏&lt;/h2&gt;
-&lt;p&gt;倒是能运行了，只是……画面都在左上角，没法玩啊……&lt;/p&gt;
-&lt;p&gt;所以再加上自动修改屏幕分辨率就可以全屏了。修改屏幕分辨率可以用&lt;code&gt;setres&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.majorgeeks.com/files/details/setres.html&#34;&gt;下载链接&lt;/a&gt;下载并将exe文件放到血战上海滩的游戏文件夹。&lt;/p&gt;
-&lt;p&gt;于是用下面的命令：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cmd&#34; data-lang=&#34;cmd&#34;&gt;setres h800 v600
-shanghai.exe -windows
-setres h1920 v1080
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;1920*1080&lt;/code&gt;是我电脑的屏幕分辨率，注意换成自己的。&lt;/p&gt;
-&lt;h2 id=&#34;隐藏显示任务栏&#34;&gt;隐藏显示任务栏&lt;/h2&gt;
-&lt;p&gt;然而，这样还是有问题，就是这样“全屏”后任务栏并没有消失，虽然可以设置自动隐藏任务栏但总归还是不爽，于是写了个简单C#程序在启动游戏隐藏任务栏（虽然很简单，但没找到只用命令实现的方法）&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-C#&#34; data-lang=&#34;C#&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System&lt;/span&gt;;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System.Collections.Generic&lt;/span&gt;;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System.Linq&lt;/span&gt;;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System.Text&lt;/span&gt;;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System.Threading.Tasks&lt;/span&gt;;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System.Runtime.InteropServices&lt;/span&gt;;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;namespace&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;ShowTaskBar&lt;/span&gt;
-{
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Program&lt;/span&gt;
-    {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; SW_HIDE = &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;  &lt;span style=&#34;color:#228b22&#34;&gt;//隐藏任务栏
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; SW_RESTORE = &lt;span style=&#34;color:#b452cd&#34;&gt;9&lt;/span&gt;;&lt;span style=&#34;color:#228b22&#34;&gt;//显示任务栏
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#658b00&#34;&gt;        [DllImport(&amp;#34;user32.dll&amp;#34;)]&lt;/span&gt;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;extern&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; ShowWindow(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; hwnd, &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; nCmdShow);
-&lt;span style=&#34;color:#658b00&#34;&gt;        [DllImport(&amp;#34;user32.dll&amp;#34;)]&lt;/span&gt;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;extern&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; FindWindow(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;string&lt;/span&gt; lpClassName, &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;string&lt;/span&gt; lpWindowName);
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;void&lt;/span&gt; Main(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;string&lt;/span&gt;[] args)
-        {
-            ShowWindow(FindWindow(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Shell_TrayWnd&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;), SW_HIDE);
-        }
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-C#&#34; data-lang=&#34;C#&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System&lt;/span&gt;;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System.Collections.Generic&lt;/span&gt;;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System.Linq&lt;/span&gt;;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System.Text&lt;/span&gt;;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System.Threading.Tasks&lt;/span&gt;;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System.Runtime.InteropServices&lt;/span&gt;;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;namespace&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;ShowTaskBar&lt;/span&gt;
-{
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Program&lt;/span&gt;
-    {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; SW_HIDE = &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;  &lt;span style=&#34;color:#228b22&#34;&gt;//隐藏任务栏
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; SW_RESTORE = &lt;span style=&#34;color:#b452cd&#34;&gt;9&lt;/span&gt;;&lt;span style=&#34;color:#228b22&#34;&gt;//显示任务栏
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#658b00&#34;&gt;        [DllImport(&amp;#34;user32.dll&amp;#34;)]&lt;/span&gt;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;extern&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; ShowWindow(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; hwnd, &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; nCmdShow);
-&lt;span style=&#34;color:#658b00&#34;&gt;        [DllImport(&amp;#34;user32.dll&amp;#34;)]&lt;/span&gt;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;extern&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; FindWindow(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;string&lt;/span&gt; lpClassName, &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;string&lt;/span&gt; lpWindowName);
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;void&lt;/span&gt; Main(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;string&lt;/span&gt;[] args)
-        {
-            ShowWindow(FindWindow(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Shell_TrayWnd&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;), SW_RESTORE);
-        }
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;编译并将生成文件也放到游戏文件夹。这样我们就可以用一个&lt;code&gt;start.cmd&lt;/code&gt;打开游戏：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cmd&#34; data-lang=&#34;cmd&#34;&gt;setres h800 v600
-hidetaskbar
-shanghai.exe -windows
-showtaskbar
-setres h1920 v1080
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;体验相当完美。&lt;/p&gt;
-- https://ntutn.top/posts/%E5%9C%A8windows10%E4%B8%8A%E5%AE%89%E8%A3%85%E8%A1%80%E6%88%98%E4%B8%8A%E6%B5%B7%E6%BB%A9/ - CC BY-SA 4.0</description>
         </item>
     
     

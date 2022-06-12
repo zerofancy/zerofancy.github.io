@@ -7,9 +7,86 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Mon, 06 Jun 2022 12:28:23 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 09 Jun 2022 17:02:54 +0800</lastBuildDate>
     
         <atom:link href="https://ntutn.top/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>Retrofit源码阅读</title>
+        <link>https://ntutn.top/posts/retrofit%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/</link>
+        <pubDate>Thu, 09 Jun 2022 17:02:54 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/retrofit%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/</guid>
+        <description>归零幻想 https://ntutn.top/posts/retrofit%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/ -&lt;p&gt;Retrofit是一个相当简洁的网络请求框架，其本质上只是对Okhttp的封装，实际上底层还是用Okhttp来执行网络请求。这两天终于比较闲一些，于是又想起了被我束之高阁的前辈的&lt;a href=&#34;https://www.jianshu.com/p/5fa78ef8e096&#34;&gt;武功秘籍&lt;/a&gt;。&lt;/p&gt;
+&lt;h2 id=&#34;retrofit的使用&#34;&gt;Retrofit的使用&lt;/h2&gt;
+&lt;p&gt;参考官方例子，定义接口并使用&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;interface&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;GitHub&lt;/span&gt; {
+    &lt;span style=&#34;color:#707a7c&#34;&gt;@GET&lt;/span&gt;(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;/repos/{owner}/{repo}/contributors&amp;#34;&lt;/span&gt;)
+    Call&amp;lt;List&amp;lt;Contributor&amp;gt;&amp;gt; contributors(&lt;span style=&#34;color:#707a7c&#34;&gt;@Path&lt;/span&gt;(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;owner&amp;#34;&lt;/span&gt;) String owner, &lt;span style=&#34;color:#707a7c&#34;&gt;@Path&lt;/span&gt;(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;repo&amp;#34;&lt;/span&gt;) String repo);
+  }
+
+    &lt;span style=&#34;color:#228b22&#34;&gt;// Create a very simple REST adapter which points the GitHub API.
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    Retrofit retrofit =
+        new Retrofit.Builder()
+            .baseUrl(API_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build();
+
+    &lt;span style=&#34;color:#228b22&#34;&gt;// Create an instance of our GitHub API interface.
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    GitHub github = retrofit.create(GitHub.&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;);
+
+    &lt;span style=&#34;color:#228b22&#34;&gt;// Create a call instance for looking up Retrofit contributors.
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    Call&amp;lt;List&amp;lt;Contributor&amp;gt;&amp;gt; call = github.contributors(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;square&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;retrofit&amp;#34;&lt;/span&gt;);
+
+    &lt;span style=&#34;color:#228b22&#34;&gt;// Fetch and print a list of the contributors to the library.
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    List&amp;lt;Contributor&amp;gt; contributors = call.execute().body();
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;源码阅读&#34;&gt;源码阅读&lt;/h2&gt;
+&lt;p&gt;首先来到梦的开始&lt;code&gt;retrofit2.Retrofit#create&lt;/code&gt;，可以看到这里是个动态代理，后续的处理交给&lt;code&gt;retrofit2.ServiceMethod#parseAnnotations&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2022/06/f5567d8937f9eb382f6f298e8221998f.png&#34; alt=&#34;image-20220607204925036&#34;&gt;&lt;/p&gt;
+&lt;p&gt;而后ServiceMethod中解析注解中的信息&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2022/06/f8c181aff8fc7bd2e1d83a3b104431cb.png&#34; alt=&#34;image-20220607205316353&#34;&gt;&lt;/p&gt;
+&lt;p&gt;继续阅读，果然在requestFactory的Builder中找到了&lt;code&gt;@GET&lt;/code&gt;、&lt;code&gt;@POST&lt;/code&gt;等注解的处理。&lt;/p&gt;
+&lt;p&gt;继续HttpServiceMethod，暂时不看Kotlin Suspend Function部分，还是比较清晰的：就是处理了下call adapter，让请求的call对象转换到指定的线程工具上，如RxJava。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2022/06/f379ca7e8aa24bbe79701e55f95a83af.png&#34; alt=&#34;image-20220612235658307&#34;&gt;&lt;/p&gt;
+&lt;p&gt;CallAdapted继承自HttpServiceMethod，而在HttpServiceMethod我们找到了网络请求对象OkhttpCall。&lt;/p&gt;
+&lt;p&gt;然而OkhttpCall还是发起请求和处理响应的，发起请求还是用的RequestFactory。requestFactory是在上面解析注解时赋值的，很快找到了实际创建Okhttp对象的位置。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2022/06/f26b6c55e29d1ba59ed6325bb8a5bcd8.png&#34; alt=&#34;image-20220608152000407&#34;&gt;&lt;/p&gt;
+&lt;p&gt;然后Response对象的解析&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2022/06/2e1af538596b09334e0f511ddce3d322.png&#34; alt=&#34;image-20220608152330130&#34;&gt;&lt;/p&gt;
+&lt;p&gt;这里用responseConverter将原始的Response的body转换为解析好的Response对象。&lt;/p&gt;
+&lt;p&gt;啪，没了。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;核心问题&#34;&gt;核心问题&lt;/h2&gt;
+&lt;h3 id=&#34;如何自定义注解&#34;&gt;如何自定义注解?&lt;/h3&gt;
+&lt;p&gt;读取注解信息，用于请求参数。处理方法参考：&lt;code&gt;retrofit2.RequestFactory.Builder#parseMethodAnnotation&lt;/code&gt;。&lt;/p&gt;
+&lt;h3 id=&#34;如何将方法转化成request对象&#34;&gt;如何将方法转化成Request对象？&lt;/h3&gt;
+&lt;p&gt;借助动态代理实现接口定义方法，借助反射读取到方法形参和注解，借助形参类型和注解确定请求参数，最终在&lt;code&gt;retrofit2.RequestFactory#create&lt;/code&gt;构建出实际的OkhttpRequest。&lt;/p&gt;
+&lt;h3 id=&#34;servicemethod的作用&#34;&gt;ServiceMethod的作用？&lt;/h3&gt;
+&lt;p&gt;实现Okhttp Call到call adapter的委托。&lt;/p&gt;
+&lt;h3 id=&#34;adapterconverter的设计思路如果想要实现将okhttp也变成可替换的应该如何设计代码&#34;&gt;adapter，converter的设计思路，如果想要实现将okhttp也变成可替换的应该如何设计代码？&lt;/h3&gt;
+&lt;p&gt;Retrofit对象作为context，维护了各种所需参数和构造方法（factory）。在后续实际需要的位置创建出adapter。如可以定义NetlibAdapterFactory，RequestFactory中用到Okhttp的地方替换为由retrofit.netlibAdapterFactory创建。&lt;/p&gt;
+&lt;h3 id=&#34;invocationhandler与泛型的使用&#34;&gt;InvocationHandler与泛型的使用？&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;StubHelper&lt;/span&gt; {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; TAG = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;StubHelper&amp;#34;&lt;/span&gt;
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &amp;lt;&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;T&lt;/span&gt;&amp;gt; &lt;span style=&#34;color:#008b45&#34;&gt;create&lt;/span&gt;(service: Class&amp;lt;T&amp;gt;): T {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; Proxy.newProxyInstance(
+            service.classLoader, arrayOf&amp;lt;Class&amp;lt;*&amp;gt;&amp;gt;(service),
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;: &lt;/span&gt;&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;InvocationHandler&lt;/span&gt; {
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; emptyArgs = arrayOfNulls&amp;lt;Any&amp;gt;(&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;)
+
+                &lt;span style=&#34;color:#707a7c&#34;&gt;@Throws&lt;/span&gt;(Throwable::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;)
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;invoke&lt;/span&gt;(proxy: Any, method: Method, args: Array&amp;lt;Any&amp;gt;?): Any? {
+                    Log.d(TAG, method.toGenericString())
+                    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;
+                }
+            }) &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;as&lt;/span&gt; T
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://ntutn.top/posts/retrofit%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/ - CC BY-SA 4.0</description>
+        </item>
     
     
     
@@ -1100,44 +1177,6 @@ Process finished with exit code 1
 &lt;/ol&gt;
 &lt;/section&gt;
 - https://ntutn.top/posts/java%E9%BB%98%E8%AE%A4%E4%BF%AE%E9%A5%B0%E7%AC%A6%E9%97%AE%E9%A2%98/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>作为一名男性，你愿意和丁真互换人生吗</title>
-        <link>https://ntutn.top/posts/%E4%BD%9C%E4%B8%BA%E4%B8%80%E5%90%8D%E7%94%B7%E6%80%A7%E4%BD%A0%E6%84%BF%E6%84%8F%E5%92%8C%E4%B8%81%E7%9C%9F%E4%BA%92%E6%8D%A2%E4%BA%BA%E7%94%9F%E5%90%97/</link>
-        <pubDate>Sun, 22 Aug 2021 03:11:37 +0800</pubDate>
-        
-        <guid>https://ntutn.top/posts/%E4%BD%9C%E4%B8%BA%E4%B8%80%E5%90%8D%E7%94%B7%E6%80%A7%E4%BD%A0%E6%84%BF%E6%84%8F%E5%92%8C%E4%B8%81%E7%9C%9F%E4%BA%92%E6%8D%A2%E4%BA%BA%E7%94%9F%E5%90%97/</guid>
-        <description>归零幻想 https://ntutn.top/posts/%E4%BD%9C%E4%B8%BA%E4%B8%80%E5%90%8D%E7%94%B7%E6%80%A7%E4%BD%A0%E6%84%BF%E6%84%8F%E5%92%8C%E4%B8%81%E7%9C%9F%E4%BA%92%E6%8D%A2%E4%BA%BA%E7%94%9F%E5%90%97/ -&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;忘记是哪一天了，一个叫『丁真』的人突然刷屏，热搜十条有6条都是他。但我见怪不怪了，微博热搜本来就是个笑话。&lt;/p&gt;
-&lt;p&gt;然后看看贴吧，知乎……全是他。&lt;/p&gt;
-&lt;p&gt;那就看看，这回是谁，为啥火了。一个放牛小伙，正巧被摄影师拍了，眼睛澄澈，笑容阳光，剩下的全是营销。&lt;/p&gt;
-&lt;p&gt;『为何贴吧男性普遍仇视辱骂丁真？』我玩贴吧，但对丁真没啥恶感，只是对这一堆热搜有恶感：**明明这两天有更值得关注的事情的。**好吧，咱也不知道，咱也不敢问，你们知道有几条热搜被盖过去了就行了。&lt;/p&gt;
-&lt;p&gt;『作为一名男性，你愿意和丁真互换人生吗？』好么，没完没了了，还不惜故意挑起性别对立。我就引用某个网友&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;的回答&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;pre&gt;&lt;code&gt;碰到问题，不想跟爱因斯坦换脑子
-兜里没钱，也没想过跟王思聪换爹
-现在更不可能跟丁真换运气
-一无所有，就是一无所有的人生
-百病缠身，就是百病缠身的人生
-腰缠万贯，就是腰缠万贯的人生
-我的成功是我的，谁也夺不走
-我的失败也是我的，不想跟谁换
-说白了，我只想做好自己，好好过独属自己的独一无二的无法复刻的人生
-不管这人生多么操蛋
-也不想成为一个无穷欲望堆积成的肉块
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;我小时候也放牛来着，还不是一步步卷过来的。&lt;/p&gt;
-&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
-&lt;hr&gt;
-&lt;ol&gt;
-&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.zhihu.com/people/geng-liang-jia&#34;&gt;@在下头不是很铁了&lt;/a&gt;，原回答在&lt;a href=&#34;https://www.zhihu.com/question/433944124/answer/1620271267&#34;&gt;某回答&lt;/a&gt;的回复里，但无法直接通过链接打开，大概是被限流了。转载已获授权。 &lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/section&gt;
-- https://ntutn.top/posts/%E4%BD%9C%E4%B8%BA%E4%B8%80%E5%90%8D%E7%94%B7%E6%80%A7%E4%BD%A0%E6%84%BF%E6%84%8F%E5%92%8C%E4%B8%81%E7%9C%9F%E4%BA%92%E6%8D%A2%E4%BA%BA%E7%94%9F%E5%90%97/ - CC BY-SA 4.0</description>
         </item>
     
     

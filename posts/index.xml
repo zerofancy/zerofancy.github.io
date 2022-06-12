@@ -7,7 +7,18 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Mon, 06 Jun 2022 12:28:23 +0800</lastBuildDate><atom:link href="https://ntutn.top/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 09 Jun 2022 17:02:54 +0800</lastBuildDate><atom:link href="https://ntutn.top/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Retrofit源码阅读</title>
+      <link>https://ntutn.top/posts/retrofit%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/</link>
+      <pubDate>Thu, 09 Jun 2022 17:02:54 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/retrofit%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/</guid>
+      <description>Retrofit是一个相当简洁的网络请求框架，其本质上只是对Okhttp的封装，实际上底层还是用Okhttp来执行网络请求。这两天终于比较闲一些，于是又想起了被我束之高阁的前辈的武功秘籍。
+Retrofit的使用 参考官方例子，定义接口并使用
+public interface GitHub { @GET(&amp;#34;/repos/{owner}/{repo}/contributors&amp;#34;) Call&amp;lt;List&amp;lt;Contributor&amp;gt;&amp;gt; contributors(@Path(&amp;#34;owner&amp;#34;) String owner, @Path(&amp;#34;repo&amp;#34;) String repo); } // Create a very simple REST adapter which points the GitHub API.  Retrofit retrofit = new Retrofit.Builder() .baseUrl(API_URL) .addConverterFactory(GsonConverterFactory.create()) .build(); // Create an instance of our GitHub API interface.  GitHub github = retrofit.create(GitHub.class); // Create a call instance for looking up Retrofit contributors.  Call&amp;lt;List&amp;lt;Contributor&amp;gt;&amp;gt; call = github.contributors(&amp;#34;square&amp;#34;, &amp;#34;retrofit&amp;#34;); // Fetch and print a list of the contributors to the library.</description>
+    </item>
+    
     <item>
       <title>使用自动操作修改壁纸</title>
       <link>https://ntutn.top/posts/%E4%BD%BF%E7%94%A8%E8%87%AA%E5%8A%A8%E6%93%8D%E4%BD%9C%E4%BF%AE%E6%94%B9%E5%A3%81%E7%BA%B8/</link>
