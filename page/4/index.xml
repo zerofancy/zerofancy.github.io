@@ -27,7 +27,7 @@
 &lt;h2 id=&#34;handler&#34;&gt;Handler&lt;/h2&gt;
 &lt;p&gt;主线程不能进行耗时处理，子线程不能访问UI，所以我们需要异步消息处理机制。&lt;/p&gt;
 &lt;h3 id=&#34;使用&#34;&gt;使用&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MainActivity&lt;/span&gt; : AppCompatActivity() {
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MainActivity&lt;/span&gt; : AppCompatActivity() {
     &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;lateinit&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; binding: ActivityMainBinding
     &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; handler = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;: &lt;/span&gt;&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Handler&lt;/span&gt;(Looper.getMainLooper()) {
         &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;handleMessage&lt;/span&gt;(msg: Message) {
@@ -70,7 +70,7 @@
 &lt;/ol&gt;
 &lt;p&gt;通过&lt;code&gt;startService(intent)&lt;/code&gt;和&lt;code&gt;stopService(intent)&lt;/code&gt;的方式启动和停止Service。&lt;/p&gt;
 &lt;p&gt;Binder用于和View绑定通信。Binder和前台Service具体参见下面例子。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.servicetest&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.servicetest&lt;/span&gt;
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.app.NotificationChannel&lt;/span&gt;
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.app.NotificationManager&lt;/span&gt;
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.app.PendingIntent&lt;/span&gt;
@@ -129,7 +129,7 @@
         &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; REQ_MY_SERVICE = &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;
     }
 }
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.servicetest&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.servicetest&lt;/span&gt;
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.content.ComponentName&lt;/span&gt;
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.content.Context&lt;/span&gt;
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.content.Intent&lt;/span&gt;
@@ -194,23 +194,23 @@
 &lt;!-- raw HTML omitted --&gt;
 &lt;h2 id=&#34;eventbus的使用&#34;&gt;EventBus的使用&lt;/h2&gt;
 &lt;p&gt;首先当然是添加依赖&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-groovy&#34; data-lang=&#34;groovy&#34;&gt;implementation &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;org.greenrobot:eventbus:3.2.0&amp;#39;&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-groovy&#34; data-lang=&#34;groovy&#34;&gt;implementation &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;org.greenrobot:eventbus:3.2.0&amp;#39;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;写个demo展示下：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://i.loli.net/2020/09/08/CzpLZxPkrJiqaDm.jpg&#34; alt=&#34;photo_2020-09-08_15-58-48.jpg&#34;&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://i.loli.net/2020/09/08/SwM6ljRtPkgdGLT.jpg&#34; alt=&#34;photo_2020-09-08_15-59-12.jpg&#34;&gt;&lt;/p&gt;
 &lt;p&gt;点击按钮后，将两处文本的值修改为文本框中的值。注意：上面的那个红色的文本处于一个fragment中。&lt;/p&gt;
 &lt;p&gt;为此，我们先准备一个Event：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;data&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;ButtonEvent&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; text: String)
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;data&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;ButtonEvent&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; text: String)
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;点击按钮时，发送这个Event：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;        button.setOnClickListener {
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;        button.setOnClickListener {
             EventBus.getDefault().post(ButtonEvent(editTextTextPersonName.text.toString()))
         }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然后在需要接收这个请求的地方，比如我们在&lt;code&gt;MainActivity&lt;/code&gt;的&lt;code&gt;onCreate()&lt;/code&gt;中注册EventBus：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;EventBus.getDefault().register(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;)
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;EventBus.getDefault().register(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;)
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;在&lt;code&gt;onDestory()&lt;/code&gt;中解除&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;EventBus.getDefault().unregister(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;)
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;EventBus.getDefault().unregister(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;)
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然后就可以接收那个Event了。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;    &lt;span style=&#34;color:#707a7c&#34;&gt;@Subscribe&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;    &lt;span style=&#34;color:#707a7c&#34;&gt;@Subscribe&lt;/span&gt;
     &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onButtonEvent&lt;/span&gt;(buttonEvent: ButtonEvent){
         textView.text=buttonEvent.text
     }
@@ -232,7 +232,7 @@
 &lt;h3 id=&#34;threadmodeasync&#34;&gt;ThreadMode.ASYNC&lt;/h3&gt;
 &lt;p&gt;在单独线程中调用，用于耗时操作。&lt;/p&gt;
 &lt;p&gt;对于EventBus更新UI，我同样写了demo：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;com.example.eventbustimerdemo&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;com.example.eventbustimerdemo&lt;/span&gt;
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.os.Bundle&lt;/span&gt;
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;androidx.appcompat.app.AppCompatActivity&lt;/span&gt;
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;kotlinx.android.synthetic.main.activity_main.*&lt;/span&gt;
@@ -267,7 +267,7 @@
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;TickEvent&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;stickyevent&#34;&gt;StickyEvent&lt;/h2&gt;
 &lt;p&gt;『粘性事件』&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;，即在事件被广播后将长时间存在，新的订阅者仍然能收到。在一些场景下还是有用的，比如我们可能在一个详情页进行投票操作，在返回主页后才进行统计。这时粘性事件会带来帮助。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;        button.setOnClickListener {
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;        button.setOnClickListener {
             EventBus.getDefault().postSticky(VoteEvent(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;))
             finish()
         }
@@ -275,7 +275,7 @@
             EventBus.getDefault().postSticky(VoteEvent(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;))
             finish()
         }
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onResume&lt;/span&gt;() {
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onResume&lt;/span&gt;() {
         &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onResume()
         EventBus.getDefault().register(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;)
     }
@@ -292,16 +292,16 @@
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://github.com/greenrobot/EventBus&#34;&gt;EventBus&lt;/a&gt; &lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/greenrobot/EventBus&#34;&gt;EventBus&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.jianshu.com/p/0f5ed338feeb&#34;&gt;Android UI线程和非UI线程 &lt;/a&gt; &lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.jianshu.com/p/0f5ed338feeb&#34;&gt;Android UI线程和非UI线程 &lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:3&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://blog.csdn.net/haoyuegongzi/article/details/78406342&#34;&gt;Android开发中更新UI的几种常用方式 &lt;/a&gt; &lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://blog.csdn.net/haoyuegongzi/article/details/78406342&#34;&gt;Android开发中更新UI的几种常用方式 &lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:4&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://blog.csdn.net/IO_Field/article/details/52185717&#34;&gt;深入理解EventBus - ThreadMode、Sticky Event等&lt;/a&gt; &lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://blog.csdn.net/IO_Field/article/details/52185717&#34;&gt;深入理解EventBus - ThreadMode、Sticky Event等&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/section&gt;
@@ -324,13 +324,13 @@
 &lt;p&gt;springboot可以使用&lt;code&gt;@ResponseBody&lt;/code&gt;返回对象自动转换json，而转换成的json属性名首字母会被转换成小写。&lt;/p&gt;
 &lt;h2 id=&#34;解决方案&#34;&gt;解决方案&lt;/h2&gt;
 &lt;h3 id=&#34;引入fastjson&#34;&gt;引入&lt;code&gt;fastjson&lt;/code&gt;&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;		&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;		&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
 			&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;com.alibaba&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
 			&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;fastjson&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
 			&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;1.2.66&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
 		&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;注入bean&#34;&gt;注入&lt;code&gt;bean&lt;/code&gt;&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;    &lt;span style=&#34;color:#707a7c&#34;&gt;@Bean&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;    &lt;span style=&#34;color:#707a7c&#34;&gt;@Bean&lt;/span&gt;
     &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; HttpMessageConverters &lt;span style=&#34;color:#008b45&#34;&gt;httpMessageConverters&lt;/span&gt;() {
         FastJsonHttpMessageConverter fastJsonHttpMessageConverter = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; FastJsonHttpMessageConverter(); &lt;span style=&#34;color:#228b22&#34;&gt;// 添加fastJson的配置信息
 &lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        FastJsonConfig fastJsonConfig = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; FastJsonConfig();
@@ -343,7 +343,7 @@
         &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; HttpMessageConverters(converter);
     }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;在属性上加注解&#34;&gt;在属性上加注解&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;edu.upc.mishuserver.vo&lt;/span&gt;;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;edu.upc.mishuserver.vo&lt;/span&gt;;
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;com.alibaba.fastjson.annotation.JSONField&lt;/span&gt;;
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;lombok.AllArgsConstructor&lt;/span&gt;;
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;lombok.Builder&lt;/span&gt;;
@@ -401,7 +401,7 @@
 &lt;!-- raw HTML omitted --&gt;
 &lt;h3 id=&#34;安装&#34;&gt;安装&lt;/h3&gt;
 &lt;p&gt;在Ubuntu下安装还是非常方便的：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;# or run:&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;# or run:&lt;/span&gt;
 &lt;span style=&#34;color:#228b22&#34;&gt;# sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA300B7755AFCFAE&lt;/span&gt;
 wget -qO - https://typora.io/linux/public-key.asc | sudo apt-key add -
 &lt;span style=&#34;color:#228b22&#34;&gt;# add Typora&amp;#39;s repository&lt;/span&gt;
@@ -463,7 +463,7 @@ sudo apt-get install typora
 &lt;p&gt;怎么注册账号，怎么建立仓库我就不说了。clone下来，这就是以后笔记安家的地方了。&lt;/p&gt;
 &lt;h2 id=&#34;自动同步笔记&#34;&gt;自动同步笔记&lt;/h2&gt;
 &lt;p&gt;然而，我们还是需要运行&lt;code&gt;git add&lt;/code&gt;、&lt;code&gt;git commit&lt;/code&gt;、&lt;code&gt;git push&lt;/code&gt;，而且在别处修改了笔记还得手动pull一下。执行的命令这么固定，肯定是要写成脚本(.sync.sh)了。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#658b00&#34;&gt;cd&lt;/span&gt; /home/zero/Documents/Notes
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#658b00&#34;&gt;cd&lt;/span&gt; /home/zero/Documents/Notes
 git pull &amp;amp;
 typora . TODO.md
 git add .
@@ -472,7 +472,7 @@ git push
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;注意上面的路径改为你自己笔记文件夹的路径。第二行的&lt;code&gt;&amp;amp;&lt;/code&gt;不要省，我们没必要等pull完才打开Typora，这样可以加快一点启动速度。&lt;/p&gt;
 &lt;p&gt;好了，现在我们执行脚本就能打开Typora，而且所有编辑还能自动同步。由于git默认不允许保留空提交，没有修改的时候也不会产生大量无用的记录，完美。&lt;/p&gt;
 &lt;p&gt;最后写个桌面启动器就大功告成了：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ini&#34; data-lang=&#34;ini&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[Desktop Entry]&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ini&#34; data-lang=&#34;ini&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[Desktop Entry]&lt;/span&gt;
 &lt;span style=&#34;color:#658b00&#34;&gt;Type&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;Application&lt;/span&gt;
 &lt;span style=&#34;color:#658b00&#34;&gt;Icon&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;typora&lt;/span&gt;
 &lt;span style=&#34;color:#658b00&#34;&gt;Name&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;笔记&lt;/span&gt;
@@ -486,7 +486,7 @@ git push
 &lt;p&gt;Windows下的Typora并没有默认添加环境变量，请手动添加。添加后需要重启。
 首先对应上面的sh，写个cmd(.sync.cmd)：&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cmd&#34; data-lang=&#34;cmd&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;start&lt;/span&gt; /b git pull
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cmd&#34; data-lang=&#34;cmd&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;start&lt;/span&gt; /b git pull
 typora . TODO.md
 git add .
 git commit -m &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Sync&amp;#34;&lt;/span&gt;
@@ -494,7 +494,7 @@ git push
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;第一行不一样，这是因为cmd后台执行是用&lt;code&gt;start /b&lt;/code&gt;的，与shell脚本的&lt;code&gt;&amp;amp;&lt;/code&gt;效果是一样的。&lt;/p&gt;
 &lt;p&gt;此时双击这个cmd已经能看到效果了。&lt;/p&gt;
 &lt;p&gt;但cmd执行时会有黑窗口，很影响美观，我们写个vbs脚本(.sync.vbs)来调用它，这样可以不显示黑窗口。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-vbs&#34; data-lang=&#34;vbs&#34;&gt;WScript.CreateObject(&amp;quot;WScript.Shell&amp;quot;).Run &amp;quot;.sync.cmd&amp;quot;,0
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-vbs&#34; data-lang=&#34;vbs&#34;&gt;WScript.CreateObject(&amp;quot;WScript.Shell&amp;quot;).Run &amp;quot;.sync.cmd&amp;quot;,0
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;最后创建个桌面快捷方式，指向&lt;code&gt;.sync.vbs&lt;/code&gt;，就大功告成了。&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;注意：快捷方式的起始目录要指向笔记的目录。&lt;/p&gt;
@@ -520,16 +520,16 @@ git push
 &lt;p&gt;不要使用额外的数组空间，你必须在原地修改输入数组并在使用 O(1) 额外空间的条件下完成。&lt;/p&gt;
 &lt;!-- raw HTML omitted --&gt;
 &lt;h3 id=&#34;示例-1&#34;&gt;示例 1:&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;给定 nums = [1,1,1,2,2,3],
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;给定 nums = [1,1,1,2,2,3],
 函数应返回新长度 length = 5, 并且原数组的前五个元素被修改为 1, 1, 2, 2, 3 。
 你不需要考虑数组中超出新长度后面的元素。
 &lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;示例-2&#34;&gt;示例 2:&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;给定 nums = [0,0,1,1,1,1,2,3,3],
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;给定 nums = [0,0,1,1,1,1,2,3,3],
 函数应返回新长度 length = 7, 并且原数组的前五个元素被修改为 0, 0, 1, 1, 2, 3, 3 。
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;你不需要考虑数组中超出新长度后面的元素。&lt;/p&gt;
 &lt;h3 id=&#34;answer&#34;&gt;Answer&lt;/h3&gt;
 &lt;p&gt;针对这个题目，我写出了这样的代码：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;/*
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;/*
 &lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * @lc app=leetcode.cn id=80 lang=java
 &lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; *
 &lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * [80] 删除排序数组中的重复项 II
@@ -559,9 +559,9 @@ git push
 &lt;p&gt;懒得处理开头特殊情况，但貌似运气不好，出题人是想让我处理一下的。&lt;/p&gt;
 &lt;p&gt;但作为懒癌患者我立马想到了新的偷懒方案，即用Integer代替int，这样用&lt;code&gt;null&lt;/code&gt;表示没有就正好了。&lt;/p&gt;
 &lt;p&gt;于是改变如上语句，&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;        Integer ans1 = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;, ans2 = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;        Integer ans1 = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;, ans2 = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;和，&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (ans1!=&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;&amp;amp;&amp;amp;ans1== ans2&amp;amp;&amp;amp; ans2 == nums[r]) {
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (ans1!=&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;&amp;amp;&amp;amp;ans1== ans2&amp;amp;&amp;amp; ans2 == nums[r]) {
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然而又WA了。那组样例输出是&lt;code&gt;[-2147483648,-2147483648,-2147483648,1,1,2]&lt;/code&gt;。&lt;/p&gt;
 &lt;h2 id=&#34;问题原因&#34;&gt;问题原因&lt;/h2&gt;
 &lt;p&gt;打开&lt;code&gt;jshell&lt;/code&gt;，
@@ -577,7 +577,7 @@ jshell&amp;gt;
 成功复现问题。
 a与b直接比较，&lt;code&gt;a==b&lt;/code&gt;，两者不是同一对象。与基本数据类型比较，&lt;code&gt;a==-2147483648&lt;/code&gt;，发生自动拆箱，两者值相等。
 所以，上述代码只需要修改&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (ans1 != &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt; &amp;amp;&amp;amp; ans1.&lt;span style=&#34;color:#658b00&#34;&gt;intValue&lt;/span&gt;() == ans2.&lt;span style=&#34;color:#658b00&#34;&gt;intValue&lt;/span&gt;() &amp;amp; ans2 == nums[r]) {
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (ans1 != &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt; &amp;amp;&amp;amp; ans1.&lt;span style=&#34;color:#658b00&#34;&gt;intValue&lt;/span&gt;() == ans2.&lt;span style=&#34;color:#658b00&#34;&gt;intValue&lt;/span&gt;() &amp;amp; ans2 == nums[r]) {
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;AC。&lt;/p&gt;
 &lt;h2 id=&#34;另一个处坑&#34;&gt;另一个处坑&lt;/h2&gt;
 &lt;p&gt;这不是&lt;em&gt;自动装箱/自动拆箱&lt;/em&gt;第一次坑我，曾经有这样一段代码：&lt;/p&gt;
@@ -837,7 +837,7 @@ a与b直接比较，&lt;code&gt;a==b&lt;/code&gt;，两者不是同一对象。�
 &lt;p&gt;整型信号量是表示共享资源状态 &lt;strong&gt;只能由特殊的原子操作(wait和signal)改变&lt;/strong&gt; 的整型量。&lt;/p&gt;
 &lt;p&gt;整型量&amp;gt;0说明有可用资源。&lt;/p&gt;
 &lt;h4 id=&#34;wait和signal操作pv操作&#34;&gt;wait和signal操作（P－V操作）&lt;/h4&gt;
-&lt;pre&gt;&lt;code&gt;var s:integer;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;var s:integer;
 wait(s){
 	while s&amp;lt;=0 do no-op;//申请不到资源做空操作
 	s=s-1;
@@ -855,7 +855,7 @@ signal(s){
 &lt;/blockquote&gt;
 &lt;h3 id=&#34;记录型信号量机制&#34;&gt;记录型信号量机制&lt;/h3&gt;
 &lt;h4 id=&#34;数据类型&#34;&gt;数据类型&lt;/h4&gt;
-&lt;pre&gt;&lt;code&gt;Type semaphore=record
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Type semaphore=record
 	Value:integer//资源数量
 	L:list of process//阻塞队列（PCB）
 end
@@ -863,7 +863,7 @@ end
 &lt;p&gt;考：记录型信号量、wait和singial操作&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h4 id=&#34;wait和signal操作&#34;&gt;wait和signal操作&lt;/h4&gt;
-&lt;pre&gt;&lt;code&gt;prodcedure wait(s)
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;prodcedure wait(s)
 	var s:semaphore;
 	begin
 		s.value=s.value-1;
@@ -879,7 +879,7 @@ procedure signal(s)
 &lt;p&gt;被阻塞的是调用wait申请资源的进程（自我阻塞）。&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h4 id=&#34;利用记录型信号量实现互斥&#34;&gt;利用记录型信号量实现互斥&lt;/h4&gt;
-&lt;pre&gt;&lt;code&gt;var s:semaphore;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;var s:semaphore;
 	s.value=1;
 begin
 	repat
@@ -893,7 +893,7 @@ end
 &lt;h4 id=&#34;利用记录型信号量实现协调的应用举例&#34;&gt;利用记录型信号量实现“协调”的应用举例&lt;/h4&gt;
 &lt;p&gt;设置两个信号量&lt;code&gt;var empty,full:semaphore&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;初始：empty.value=2,full.value=0&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;输入进程：
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;输入进程：
 {
 	从外存读数据;
 	wait(empty)
@@ -1594,7 +1594,7 @@ OS内核会做些什么
 &lt;h2 id=&#34;程序模拟&#34;&gt;程序模拟&lt;/h2&gt;
 &lt;p&gt;有点绕，咱学软件的，就干脆让电脑跑一跑。&lt;/p&gt;
 &lt;h3 id=&#34;代码&#34;&gt;代码&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;java.util.Random&lt;/span&gt;;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;java.util.Random&lt;/span&gt;;
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Test&lt;/span&gt;{
     &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;(String[] args) {
         Random ran=&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; Random();
@@ -1619,7 +1619,7 @@ OS内核会做些什么
     }
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;运行结果&#34;&gt;运行结果&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;0.332419
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;0.332419
 0.667581
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;看来是更换比较好了。&lt;/p&gt;
 - https://ntutn.top/posts/%E4%B8%89%E9%97%A8%E9%97%AE%E9%A2%98/ - CC BY-SA 4.0</description>
@@ -1646,7 +1646,7 @@ OS内核会做些什么
 &lt;p&gt;70000×70000我电脑在默认情况下开不下，我这里用20000×20000测试&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h3 id=&#34;按行遍历&#34;&gt;按行遍历&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;/**
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;/**
 &lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * M1
 &lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; */&lt;/span&gt;
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;M1&lt;/span&gt; {
@@ -1664,7 +1664,7 @@ OS内核会做些什么
     }
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;按列遍历&#34;&gt;按列遍历&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;/**
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;/**
 &lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * M2
 &lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; */&lt;/span&gt;
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;M2&lt;/span&gt; {
@@ -1734,9 +1734,9 @@ OS内核会做些什么
 &lt;/table&gt;
 &lt;/blockquote&gt;
 &lt;/blockquote&gt;
-&lt;pre&gt;&lt;code&gt;x+1,x+2,x+3,……,x+n,x+n+1……
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;x+1,x+2,x+3,……,x+n,x+n+1……
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;而按列遍历访问的顺序是&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;x+1,x+n+1,x+2n+1,……,x+n(n-1)+1,x+2,x+n+2,……
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;x+1,x+n+1,x+2n+1,……,x+n(n-1)+1,x+2,x+n+2,……
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;cache的命中率基本为0，结合几种存储器的速度，不难分析出原因了。&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;所以，针对这个问题，在回答时要说明前提，即数组在内存中的实际的编址方式是怎样的。&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;在我机器java这例子，就是按行遍历快了。&lt;/p&gt;
@@ -1763,9 +1763,9 @@ OS内核会做些什么
 &lt;p&gt;&lt;img src=&#34;https://i.loli.net/2020/08/20/az9OYcHf3nmdLID.png&#34; alt=&#34;1.png&#34;&gt;&lt;/p&gt;
 &lt;p&gt;但是这程序执行比较慢，而且占用内存不少……&lt;/p&gt;
 &lt;p&gt;在网上搜索了下，果然不能闭门造车啊，有大佬写过批处理：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cmd&#34; data-lang=&#34;cmd&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/f&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;tokens=*&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;%%&lt;/span&gt;a &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;in&lt;/span&gt; (&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;dir /b /ad /s C:\^|sort /r&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;do&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;rd&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;%%&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;a&amp;#34;&lt;/span&gt; /q &lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;&amp;gt;nul
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cmd&#34; data-lang=&#34;cmd&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/f&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;tokens=*&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;%%&lt;/span&gt;a &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;in&lt;/span&gt; (&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;dir /b /ad /s C:\^|sort /r&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;do&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;rd&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;%%&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;a&amp;#34;&lt;/span&gt; /q &lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;&amp;gt;nul
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;试用了下，效果相当不错。于是稍微修改使它能申请管理员权限，顺便修改下控制台颜色，看上去炫一点：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cmd&#34; data-lang=&#34;cmd&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;title&lt;/span&gt; 删除空文件夹
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cmd&#34; data-lang=&#34;cmd&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;title&lt;/span&gt; 删除空文件夹
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;color&lt;/span&gt; 03
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;echo&lt;/span&gt; 程序需要管理员权限……
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;set&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/a&lt;/span&gt; &lt;span style=&#34;color:#00688b&#34;&gt;_Debug&lt;/span&gt;=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;
@@ -1810,7 +1810,7 @@ fltmc &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;&amp;gt;nul &lt;sp
 &lt;li&gt;输入&lt;code&gt;Get-AppxPackage *WindowsStore* | Remove-AppxPackage&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;输入&lt;/li&gt;
 &lt;/ol&gt;
-&lt;pre&gt;&lt;code&gt;Get-AppXPackage *WindowsStore* -AllUsers | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register &amp;quot;$($_.InstallLocation)\AppXManifest.xml&amp;quot;}
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Get-AppXPackage *WindowsStore* -AllUsers | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register &amp;quot;$($_.InstallLocation)\AppXManifest.xml&amp;quot;}
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;刚装完可能是英文的，更新后语言就自动匹配了。&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://i.loli.net/2020/08/20/Ybuwv4RO5ITsEoH.png&#34; alt=&#34;5.png&#34;&gt;&lt;/p&gt;
 &lt;p&gt;美滋滋。&lt;/p&gt;

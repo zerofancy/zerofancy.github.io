@@ -19,7 +19,7 @@
 <meta property="og:title" content="EventBus初探" />
 <meta property="og:description" content="公司项目中大量运用了EventBus，这两天在做的需求相关的代码也用到了，于是还是要先去研究下这个EventBus是什么。 EventBus，顾名思义，事件总线，是一个安卓上的事件管理平台。用事件驱动的机制来简化事件传递的逻辑。在这层意义上也许可以类比`Qt`的信号槽机制，或者安卓的广播。当你需要把一个事件传递给多个对象，EventBus就变得非常有用。" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://ntutn.top/posts/eventbus%E5%88%9D%E6%8E%A2/" />
+<meta property="og:url" content="https://ntutn.top/posts/eventbus%E5%88%9D%E6%8E%A2/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2020-08-21T03:11:37+08:00" />
 <meta property="article:modified_time" content="2020-08-21T03:11:37+08:00" /><meta property="og:site_name" content="归零幻想" />
 
@@ -32,7 +32,8 @@
 
 
 
-<link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+
 
 
   
@@ -44,17 +45,19 @@
 
 
 
-<link rel="stylesheet" href="https://ntutn.top/scss/journal.min.d8d9f81b896882733c41896750adbefbf9319ca02ccccefd461650898975c3af.css" integrity="sha256-2Nn4G4lognM8QYlnUK2&#43;&#43;/kxnKAszM79RhZQiYl1w68=" media="screen">
+<link rel="stylesheet" href="/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
 
 
 
-<link rel="stylesheet" href="https://ntutn.top/scss/dark-mode.min.60f86847da9fc0724177ccfd0bf7c5997b0b41f1e58d5a293cfb3723c497c422.css" integrity="sha256-YPhoR9qfwHJBd8z9C/fFmXsLQfHljVopPPs3I8SXxCI=" media="screen">
+<link rel="stylesheet" href="/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
 
 
-<script src="/vendor/js/loadCSS.js"></script>
-<script>
-  loadCSS("https://fonts.googleapis.com/css?family=Fira+Mono|Material+Icons");
-</script>
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css"><link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
 
 
 
@@ -67,8 +70,6 @@
 
 
 
-
-  <script src="/js/toc.js"></script>
 
 
 
@@ -729,7 +730,7 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
                             
                             4 min
                             
-                            46 s.
+                            52 s.
                         
                     </div>
                 </div>
@@ -747,23 +748,23 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <!-- raw HTML omitted -->
 <h2 id="eventbus的使用">EventBus的使用</h2>
 <p>首先当然是添加依赖</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-groovy" data-lang="groovy">implementation <span style="color:#cd5555">&#39;org.greenrobot:eventbus:3.2.0&#39;</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-groovy" data-lang="groovy">implementation <span style="color:#cd5555">&#39;org.greenrobot:eventbus:3.2.0&#39;</span>
 </code></pre></div><p>写个demo展示下：</p>
 <p><img src="https://i.loli.net/2020/09/08/CzpLZxPkrJiqaDm.jpg" alt="photo_2020-09-08_15-58-48.jpg"></p>
 <p><img src="https://i.loli.net/2020/09/08/SwM6ljRtPkgdGLT.jpg" alt="photo_2020-09-08_15-59-12.jpg"></p>
 <p>点击按钮后，将两处文本的值修改为文本框中的值。注意：上面的那个红色的文本处于一个fragment中。</p>
 <p>为此，我们先准备一个Event：</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">data</span> <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">ButtonEvent</span>(<span style="color:#8b008b;font-weight:bold">val</span> text: String)
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">data</span> <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">ButtonEvent</span>(<span style="color:#8b008b;font-weight:bold">val</span> text: String)
 </code></pre></div><p>点击按钮时，发送这个Event：</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">        button.setOnClickListener {
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">        button.setOnClickListener {
             EventBus.getDefault().post(ButtonEvent(editTextTextPersonName.text.toString()))
         }
 </code></pre></div><p>然后在需要接收这个请求的地方，比如我们在<code>MainActivity</code>的<code>onCreate()</code>中注册EventBus：</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">EventBus.getDefault().register(<span style="color:#8b008b;font-weight:bold">this</span>)
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">EventBus.getDefault().register(<span style="color:#8b008b;font-weight:bold">this</span>)
 </code></pre></div><p>在<code>onDestory()</code>中解除</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">EventBus.getDefault().unregister(<span style="color:#8b008b;font-weight:bold">this</span>)
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">EventBus.getDefault().unregister(<span style="color:#8b008b;font-weight:bold">this</span>)
 </code></pre></div><p>然后就可以接收那个Event了。</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">    <span style="color:#707a7c">@Subscribe</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">    <span style="color:#707a7c">@Subscribe</span>
     <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onButtonEvent</span>(buttonEvent: ButtonEvent){
         textView.text=buttonEvent.text
     }
@@ -785,7 +786,7 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <h3 id="threadmodeasync">ThreadMode.ASYNC</h3>
 <p>在单独线程中调用，用于耗时操作。</p>
 <p>对于EventBus更新UI，我同样写了demo：</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">com.example.eventbustimerdemo</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">com.example.eventbustimerdemo</span>
 <span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.os.Bundle</span>
 <span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">androidx.appcompat.app.AppCompatActivity</span>
 <span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">kotlinx.android.synthetic.main.activity_main.*</span>
@@ -820,7 +821,7 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">TickEvent</span>
 </code></pre></div><h2 id="stickyevent">StickyEvent</h2>
 <p>『粘性事件』<sup id="fnref:4"><a href="#fn:4" class="footnote-ref" role="doc-noteref">4</a></sup>，即在事件被广播后将长时间存在，新的订阅者仍然能收到。在一些场景下还是有用的，比如我们可能在一个详情页进行投票操作，在返回主页后才进行统计。这时粘性事件会带来帮助。</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">        button.setOnClickListener {
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">        button.setOnClickListener {
             EventBus.getDefault().postSticky(VoteEvent(<span style="color:#8b008b;font-weight:bold">true</span>))
             finish()
         }
@@ -828,7 +829,7 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
             EventBus.getDefault().postSticky(VoteEvent(<span style="color:#8b008b;font-weight:bold">false</span>))
             finish()
         }
-</code></pre></div><div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onResume</span>() {
+</code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onResume</span>() {
         <span style="color:#8b008b;font-weight:bold">super</span>.onResume()
         EventBus.getDefault().register(<span style="color:#8b008b;font-weight:bold">this</span>)
     }
@@ -845,16 +846,16 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <hr>
 <ol>
 <li id="fn:1" role="doc-endnote">
-<p><a href="https://github.com/greenrobot/EventBus">EventBus</a> <a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p><a href="https://github.com/greenrobot/EventBus">EventBus</a>&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:2" role="doc-endnote">
-<p><a href="https://www.jianshu.com/p/0f5ed338feeb">Android UI线程和非UI线程 </a> <a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p><a href="https://www.jianshu.com/p/0f5ed338feeb">Android UI线程和非UI线程 </a>&#160;<a href="#fnref:2" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:3" role="doc-endnote">
-<p><a href="https://blog.csdn.net/haoyuegongzi/article/details/78406342">Android开发中更新UI的几种常用方式 </a> <a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p><a href="https://blog.csdn.net/haoyuegongzi/article/details/78406342">Android开发中更新UI的几种常用方式 </a>&#160;<a href="#fnref:3" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 <li id="fn:4" role="doc-endnote">
-<p><a href="https://blog.csdn.net/IO_Field/article/details/52185717">深入理解EventBus - ThreadMode、Sticky Event等</a> <a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
+<p><a href="https://blog.csdn.net/IO_Field/article/details/52185717">深入理解EventBus - ThreadMode、Sticky Event等</a>&#160;<a href="#fnref:4" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
 </section>
@@ -870,13 +871,13 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
             <nav class="post-pagination">
 
                 
-                <a class="newer-posts" href="https://ntutn.top/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B/">
+                <a class="newer-posts" href="/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B/">
 			下回<br>android项目开发：多线程编程
                 </a>
                 
                 
                 
-                <a class="older-posts" href="https://ntutn.top/posts/%E6%8E%89%E5%9D%91%E7%9A%84%E6%97%A5%E5%B8%B8springboot%E7%9A%84json%E5%B1%9E%E6%80%A7%E5%90%8D%E5%A4%A7%E5%B0%8F%E5%86%99%E9%97%AE%E9%A2%98/">
+                <a class="older-posts" href="/posts/%E6%8E%89%E5%9D%91%E7%9A%84%E6%97%A5%E5%B8%B8springboot%E7%9A%84json%E5%B1%9E%E6%80%A7%E5%90%8D%E5%A4%A7%E5%B0%8F%E5%86%99%E9%97%AE%E9%A2%98/">
 			上回<br>掉坑的日常：springboot的json属性名大小写问题
                 </a>
                 
@@ -921,6 +922,5 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 </div>
             </div>
     
-    <script src="/js/journal.js"></script>
-    </body>
+    <script src="/js/journal.js"></script></body>
 </html>

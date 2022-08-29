@@ -19,7 +19,7 @@
 <meta property="og:title" content="数据结构第三次测试" />
 <meta property="og:description" content="数据结构第三次测试" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://ntutn.top/posts/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AC%AC%E4%B8%89%E6%AC%A1%E6%B5%8B%E8%AF%95/" />
+<meta property="og:url" content="https://ntutn.top/posts/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AC%AC%E4%B8%89%E6%AC%A1%E6%B5%8B%E8%AF%95/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2019-06-01T03:11:37+08:00" />
 <meta property="article:modified_time" content="2019-06-01T03:11:37+08:00" /><meta property="og:site_name" content="归零幻想" />
 
@@ -32,7 +32,8 @@
 
 
 
-<link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+
 
 
   
@@ -44,17 +45,19 @@
 
 
 
-<link rel="stylesheet" href="https://ntutn.top/scss/journal.min.d8d9f81b896882733c41896750adbefbf9319ca02ccccefd461650898975c3af.css" integrity="sha256-2Nn4G4lognM8QYlnUK2&#43;&#43;/kxnKAszM79RhZQiYl1w68=" media="screen">
+<link rel="stylesheet" href="/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
 
 
 
-<link rel="stylesheet" href="https://ntutn.top/scss/dark-mode.min.60f86847da9fc0724177ccfd0bf7c5997b0b41f1e58d5a293cfb3723c497c422.css" integrity="sha256-YPhoR9qfwHJBd8z9C/fFmXsLQfHljVopPPs3I8SXxCI=" media="screen">
+<link rel="stylesheet" href="/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
 
 
-<script src="/vendor/js/loadCSS.js"></script>
-<script>
-  loadCSS("https://fonts.googleapis.com/css?family=Fira+Mono|Material+Icons");
-</script>
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css"><link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
 
 
 
@@ -67,8 +70,6 @@
 
 
 
-
-  <script src="/js/toc.js"></script>
 
 
 
@@ -775,9 +776,9 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 </ol>
 <p>例如：有如右图的二叉树   <img src="https://i.loli.net/2020/08/20/axyNCbMzRcpDtY7.jpg" alt="1559400741461.jpg"></p>
 <h3 id="输入">输入</h3>
-<pre><code>ABD@@E@@C@F@@
+<pre tabindex="0"><code>ABD@@E@@C@F@@
 </code></pre><h3 id="输出">输出</h3>
-<pre><code>Height(A)=3
+<pre tabindex="0"><code>Height(A)=3
 Height(B)=2
 Height(D)=1
 Height(E)=1
@@ -785,7 +786,7 @@ Height(C)=2
 Height(F)=1
 </code></pre><!-- raw HTML omitted -->
 <p>已给出的代码如下：</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;iostream&gt;</span><span style="color:#1e889b">
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;iostream&gt;</span><span style="color:#1e889b">
 </span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;stdlib.h&gt;</span><span style="color:#1e889b">
 </span><span style="color:#1e889b"></span><span style="color:#8b008b;font-weight:bold">using</span> <span style="color:#8b008b;font-weight:bold">namespace</span> std;
 <span style="color:#228b22">//数据元素类型
@@ -844,7 +845,7 @@ Height(F)=1
 }
 </code></pre></div><h3 id="answer">Answer</h3>
 <p>求树高度，递归。貌似没有必要判断lson和rson是否为空，不过凑合着吧……</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#00688b;font-weight:bold">int</span> BinaryTree::height(TreeNode* t)
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#00688b;font-weight:bold">int</span> BinaryTree::height(TreeNode* t)
 {
     <span style="color:#8b008b;font-weight:bold">if</span>(t==<span style="color:#658b00">NULL</span>){
         <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>;
@@ -874,16 +875,16 @@ Height(F)=1
 例如：有如右图的二叉树   <img src="/file/down/1559400741461.jpg" alt="二叉树" title="二叉树"></p>
 </blockquote>
 <h3 id="输入-1">输入</h3>
-<pre><code>ABD@@E@@C@F@@
+<pre tabindex="0"><code>ABD@@E@@C@F@@
 </code></pre><h3 id="输出-1">输出：</h3>
-<pre><code> 1A
+<pre tabindex="0"><code> 1A
           2B
                    3D
                    3E
          2C
                    3F
 </code></pre><p>给出的代码如下：</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;iostream&gt;</span><span style="color:#1e889b">
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;iostream&gt;</span><span style="color:#1e889b">
 </span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;stdlib.h&gt;</span><span style="color:#1e889b">
 </span><span style="color:#1e889b">#include</span><span style="color:#1e889b">&lt;stdio.h&gt;</span><span style="color:#1e889b">
 </span><span style="color:#1e889b"></span><span style="color:#8b008b;font-weight:bold">using</span> <span style="color:#8b008b;font-weight:bold">namespace</span> std;
@@ -941,7 +942,7 @@ Height(F)=1
 }
 </code></pre></div><h3 id="answer-1">Answer</h3>
 <p>完全前序遍历，递归，注意输出格式。</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#00688b;font-weight:bold">void</span> BinaryTree::Index_print(TreeNode* t, <span style="color:#00688b;font-weight:bold">int</span> l)
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#00688b;font-weight:bold">void</span> BinaryTree::Index_print(TreeNode* t, <span style="color:#00688b;font-weight:bold">int</span> l)
 {
     <span style="color:#8b008b;font-weight:bold">if</span>(t==<span style="color:#658b00">NULL</span>){
         <span style="color:#8b008b;font-weight:bold">return</span>;
@@ -966,13 +967,13 @@ Height(F)=1
             <nav class="post-pagination">
 
                 
-                <a class="newer-posts" href="https://ntutn.top/posts/%E5%9C%A8windows10%E4%B8%8A%E5%AE%89%E8%A3%85%E8%A1%80%E6%88%98%E4%B8%8A%E6%B5%B7%E6%BB%A9/">
+                <a class="newer-posts" href="/posts/%E5%9C%A8windows10%E4%B8%8A%E5%AE%89%E8%A3%85%E8%A1%80%E6%88%98%E4%B8%8A%E6%B5%B7%E6%BB%A9/">
 			下回<br>在Windows10上安装血战上海滩
                 </a>
                 
                 
                 
-                <a class="older-posts" href="https://ntutn.top/posts/%E7%A8%80%E7%96%8F%E7%9F%A9%E9%98%B5%E7%9A%84%E5%8E%8B%E7%BC%A9%E5%AD%98%E5%82%A8/">
+                <a class="older-posts" href="/posts/%E7%A8%80%E7%96%8F%E7%9F%A9%E9%98%B5%E7%9A%84%E5%8E%8B%E7%BC%A9%E5%AD%98%E5%82%A8/">
 			上回<br>稀疏矩阵的压缩存储
                 </a>
                 
@@ -1017,6 +1018,5 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 </div>
             </div>
     
-    <script src="/js/journal.js"></script>
-    </body>
+    <script src="/js/journal.js"></script></body>
 </html>

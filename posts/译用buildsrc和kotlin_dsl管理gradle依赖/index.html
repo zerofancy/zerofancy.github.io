@@ -19,7 +19,7 @@
 <meta property="og:title" content="【译】用BuildSrc和Kotlin_DSL管理Gradle依赖" />
 <meta property="og:description" content="一篇medium文章的翻译，咱英语水平还是不行啊" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://ntutn.top/posts/%E8%AF%91%E7%94%A8buildsrc%E5%92%8Ckotlin_dsl%E7%AE%A1%E7%90%86gradle%E4%BE%9D%E8%B5%96/" />
+<meta property="og:url" content="https://ntutn.top/posts/%E8%AF%91%E7%94%A8buildsrc%E5%92%8Ckotlin_dsl%E7%AE%A1%E7%90%86gradle%E4%BE%9D%E8%B5%96/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2021-02-21T03:00:37+08:00" />
 <meta property="article:modified_time" content="2021-02-21T03:00:37+08:00" /><meta property="og:site_name" content="归零幻想" />
 
@@ -32,7 +32,8 @@
 
 
 
-<link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+
 
 
   
@@ -44,17 +45,19 @@
 
 
 
-<link rel="stylesheet" href="https://ntutn.top/scss/journal.min.d8d9f81b896882733c41896750adbefbf9319ca02ccccefd461650898975c3af.css" integrity="sha256-2Nn4G4lognM8QYlnUK2&#43;&#43;/kxnKAszM79RhZQiYl1w68=" media="screen">
+<link rel="stylesheet" href="/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
 
 
 
-<link rel="stylesheet" href="https://ntutn.top/scss/dark-mode.min.60f86847da9fc0724177ccfd0bf7c5997b0b41f1e58d5a293cfb3723c497c422.css" integrity="sha256-YPhoR9qfwHJBd8z9C/fFmXsLQfHljVopPPs3I8SXxCI=" media="screen">
+<link rel="stylesheet" href="/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
 
 
-<script src="/vendor/js/loadCSS.js"></script>
-<script>
-  loadCSS("https://fonts.googleapis.com/css?family=Fira+Mono|Material+Icons");
-</script>
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css"><link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
 
 
 
@@ -67,8 +70,6 @@
 
 
 
-
-  <script src="/js/toc.js"></script>
 
 
 
@@ -662,8 +663,8 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <p>如果你仍然不懂怎么创建这个目录，请看这里：</p>
 <p><img src="https://miro.medium.com/max/1400/1*rDhflrwxcwwr4mcefTrQEg.gif" alt=""></p>
 <p>然后我们需要在这个目录里创建一个叫做<code>build.gradle.kts</code>的文件，在这个文件里导入插件和存储库。</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">plugins{
-    <span style="color:#707a7c">`kotlin</span>-dsl<span style="color:#a61717;background-color:#e3d2d2">`</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">plugins{
+    `kotlin-dsl<span style="color:#a61717;background-color:#e3d2d2">`</span>
 }
 repositories {
     jcenter()
@@ -675,7 +676,7 @@ repositories {
 <p>现在我们的目标是实现一个依赖管理系统，所以我们创建一个叫做<code>Dependencies.kt</code>的文件（你可以用你喜欢的任何名字）。</p>
 <p>完成后我们就可以通过Kotlin代码来声明依赖库和版本了。这里我们用object来声明特定的类型，例如版本号、AndroidX依赖库等。</p>
 <p>首先我们创建一个用来用Kotlin风格定义所有依赖库版本号的object。</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#008b45;font-weight:bold">Versions</span>{
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#008b45;font-weight:bold">Versions</span>{
     <span style="color:#8b008b;font-weight:bold">val</span> constraint_layout_version = <span style="color:#cd5555">&#34;1.1.3&#34;</span>
     <span style="color:#8b008b;font-weight:bold">val</span> lifecycle_version = <span style="color:#cd5555">&#34;2.2.0&#34;</span>
     <span style="color:#8b008b;font-weight:bold">val</span> coroutines_version = <span style="color:#cd5555">&#34;1.3.8&#34;</span>
@@ -690,7 +691,7 @@ repositories {
     <span style="color:#8b008b;font-weight:bold">val</span> play_core_version = <span style="color:#cd5555">&#34;1.8.0&#34;</span>
 }
 </code></pre></div><p>下一步我们创建各种依赖库类型的专属object文件，例如Kotlinlibraries、AndroidXLibraries和UiLibraries等。</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#008b45;font-weight:bold">kotlinDependencies</span> {
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#008b45;font-weight:bold">kotlinDependencies</span> {
     <span style="color:#8b008b;font-weight:bold">val</span> kotlin = <span style="color:#cd5555">&#34;org.jetbrains.kotlin:kotlin-stdlib-jdk7:</span><span style="color:#cd5555">${Versions.kotlin_version}</span><span style="color:#cd5555">&#34;</span>
     <span style="color:#8b008b;font-weight:bold">val</span> coroutines = <span style="color:#cd5555">&#34;org.jetbrains.kotlinx:kotlinx-coroutines-android:</span><span style="color:#cd5555">${Versions.coroutines_version}</span><span style="color:#cd5555">&#34;</span>
 }
@@ -708,7 +709,7 @@ repositories {
     <span style="color:#8b008b;font-weight:bold">val</span> play_core =  <span style="color:#cd5555">&#34;com.google.android.play:core:</span><span style="color:#cd5555">${Versions.play_core_version}</span><span style="color:#cd5555">&#34;</span>
 }
 </code></pre></div><p>最后把完整代码片段放到这里</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#008b45;font-weight:bold">Versions</span>{
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#008b45;font-weight:bold">Versions</span>{
     <span style="color:#8b008b;font-weight:bold">val</span> constraint_layout_version = <span style="color:#cd5555">&#34;1.1.3&#34;</span>
     <span style="color:#8b008b;font-weight:bold">val</span> lifecycle_version = <span style="color:#cd5555">&#34;2.2.0&#34;</span>
     <span style="color:#8b008b;font-weight:bold">val</span> coroutines_version = <span style="color:#cd5555">&#34;1.3.8&#34;</span>
@@ -740,7 +741,7 @@ repositories {
     <span style="color:#8b008b;font-weight:bold">val</span> play_core =  <span style="color:#cd5555">&#34;com.google.android.play:core:</span><span style="color:#cd5555">${Versions.play_core_version}</span><span style="color:#cd5555">&#34;</span>
 }
 </code></pre></div><p>最后一步就是在project、app和模块级的build.gradle文件中使用这些object了。这相当简单，只要object的name和成员变量的name就行了。</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">dependencies {
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">dependencies {
     <span style="color:#228b22">/** Kotlin */</span>
     implementation( kotlinDependencies.kotlin)
     <span style="color:#228b22">/** Coroutines */</span>
@@ -762,7 +763,7 @@ repositories {
 <p>此外，我们可以在整个项目的所有模块中使用这些定义的依赖。</p>
 <h2 id="更多">更多</h2>
 <p>目前为止，我们实现了与依赖有关的所有东西，但我们确实可以在编译脚本中做更多事情，比如替换掉defaultConfig块，它看上去这样</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">compileSdkVersion(<span style="color:#b452cd">29</span>)
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">compileSdkVersion(<span style="color:#b452cd">29</span>)
 defaultConfig {
     applicationId = <span style="color:#cd5555">&#34;com.example.app&#34;</span>
     minSdkVersion(<span style="color:#b452cd">16</span>)
@@ -774,7 +775,7 @@ defaultConfig {
     vectorDrawables.useSupportLibrary = <span style="color:#8b008b;font-weight:bold">true</span>
 }
 </code></pre></div><p>如我所说，把常量移到编译脚本外更安全。所以我们可以在下面另外创建一个Kotlin文件，或者在Dependencies.kt文件中创建一个新的object。然后声明所有常量，比如min、编译SDK版本等。</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#008b45;font-weight:bold">buildConfigVersions</span> {
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#008b45;font-weight:bold">buildConfigVersions</span> {
     <span style="color:#8b008b;font-weight:bold">val</span> compileSdkVersion = <span style="color:#b452cd">29</span>
     <span style="color:#8b008b;font-weight:bold">val</span> buildToolsVersion = <span style="color:#cd5555">&#34;29.0.3&#34;</span>
     <span style="color:#8b008b;font-weight:bold">val</span> minSdkVersion = <span style="color:#b452cd">16</span>
@@ -783,7 +784,7 @@ defaultConfig {
     <span style="color:#8b008b;font-weight:bold">val</span> versionName = <span style="color:#cd5555">&#34;2.0&#34;</span>
 }
 </code></pre></div><p>现在我们可以在block中使用这个object了</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">compileSdkVersion(buildConfigVersions.compileSdkVersion)
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">compileSdkVersion(buildConfigVersions.compileSdkVersion)
 defaultConfig {
     applicationId = <span style="color:#cd5555">&#34;com.example.app&#34;</span>
     minSdkVersion(buildConfigVersions.minSdkVersion)
@@ -808,13 +809,13 @@ defaultConfig {
             <nav class="post-pagination">
 
                 
-                <a class="newer-posts" href="https://ntutn.top/posts/%E5%B9%B2%E6%8E%89macos%E7%9A%84ocsp/">
+                <a class="newer-posts" href="/posts/%E5%B9%B2%E6%8E%89macos%E7%9A%84ocsp/">
 			下回<br>干掉macOS的OCSP
                 </a>
                 
                 
                 
-                <a class="older-posts" href="https://ntutn.top/posts/%E6%88%91%E7%9A%84%E9%BB%91%E5%8E%86%E5%8F%B2%E8%A2%ABgithub%E5%9F%8B%E5%88%B0%E5%8C%97%E6%9E%81%E4%BA%86/">
+                <a class="older-posts" href="/posts/%E6%88%91%E7%9A%84%E9%BB%91%E5%8E%86%E5%8F%B2%E8%A2%ABgithub%E5%9F%8B%E5%88%B0%E5%8C%97%E6%9E%81%E4%BA%86/">
 			上回<br>我的黑历史被github埋到北极了
                 </a>
                 
@@ -844,6 +845,5 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 </div>
             </div>
     
-    <script src="/js/journal.js"></script>
-    </body>
+    <script src="/js/journal.js"></script></body>
 </html>

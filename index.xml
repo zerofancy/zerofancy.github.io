@@ -22,7 +22,7 @@
         <description>归零幻想 https://ntutn.top/posts/retrofit%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/ -&lt;p&gt;Retrofit是一个相当简洁的网络请求框架，其本质上只是对Okhttp的封装，实际上底层还是用Okhttp来执行网络请求。这两天终于比较闲一些，于是又想起了被我束之高阁的前辈的&lt;a href=&#34;https://www.jianshu.com/p/5fa78ef8e096&#34;&gt;武功秘籍&lt;/a&gt;。&lt;/p&gt;
 &lt;h2 id=&#34;retrofit的使用&#34;&gt;Retrofit的使用&lt;/h2&gt;
 &lt;p&gt;参考官方例子，定义接口并使用&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;interface&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;GitHub&lt;/span&gt; {
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;interface&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;GitHub&lt;/span&gt; {
     &lt;span style=&#34;color:#707a7c&#34;&gt;@GET&lt;/span&gt;(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;/repos/{owner}/{repo}/contributors&amp;#34;&lt;/span&gt;)
     Call&amp;lt;List&amp;lt;Contributor&amp;gt;&amp;gt; contributors(&lt;span style=&#34;color:#707a7c&#34;&gt;@Path&lt;/span&gt;(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;owner&amp;#34;&lt;/span&gt;) String owner, &lt;span style=&#34;color:#707a7c&#34;&gt;@Path&lt;/span&gt;(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;repo&amp;#34;&lt;/span&gt;) String repo);
   }
@@ -68,7 +68,7 @@
 &lt;h3 id=&#34;adapterconverter的设计思路如果想要实现将okhttp也变成可替换的应该如何设计代码&#34;&gt;adapter，converter的设计思路，如果想要实现将okhttp也变成可替换的应该如何设计代码？&lt;/h3&gt;
 &lt;p&gt;Retrofit对象作为context，维护了各种所需参数和构造方法（factory）。在后续实际需要的位置创建出adapter。如可以定义NetlibAdapterFactory，RequestFactory中用到Okhttp的地方替换为由retrofit.netlibAdapterFactory创建。&lt;/p&gt;
 &lt;h3 id=&#34;invocationhandler与泛型的使用&#34;&gt;InvocationHandler与泛型的使用？&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;StubHelper&lt;/span&gt; {
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;StubHelper&lt;/span&gt; {
     &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; TAG = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;StubHelper&amp;#34;&lt;/span&gt;
 
     &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &amp;lt;&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;T&lt;/span&gt;&amp;gt; &lt;span style=&#34;color:#008b45&#34;&gt;create&lt;/span&gt;(service: Class&amp;lt;T&amp;gt;): T {
@@ -107,7 +107,7 @@
 &lt;p&gt;虽然“自动操作”的资源库中有“设置壁纸”这个能力，但我实际测试发现它只能改当前屏幕的壁纸，对于我用双屏的来说就比较难受了。因而这里要用Apple Script来实现：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2022/06/12dd80f59b1dc9aee5923c92d81da6fe.png&#34; alt=&#34;image-20220606144009000&#34;&gt;&lt;/p&gt;
 &lt;p&gt;图中的脚本为：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-script&#34; data-lang=&#34;script&#34;&gt;on run {input, parameters}
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-script&#34; data-lang=&#34;script&#34;&gt;on run {input, parameters}
 	
 	set theFile to first item of input
 	set filename to the POSIX path of theFile
@@ -152,7 +152,7 @@ end run
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;第一个版本是很遥远的过去了，&lt;a href=&#34;https://github.com/zerofancy/blogSystem&#34;&gt;第二个版本&lt;/a&gt;是用springboot写的，颇有杀鸡用牛刀之嫌。一方面不想继续交服务器租金了，另一方面原来部分代码写得很烂，当真懒得改了。加上新学了Kotlin，正想练手，这就有了&lt;a href=&#34;https://github.com/zerofancy/kmdblog&#34;&gt;第三个版本&lt;/a&gt;。 &lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;第一个版本是很遥远的过去了，&lt;a href=&#34;https://github.com/zerofancy/blogSystem&#34;&gt;第二个版本&lt;/a&gt;是用springboot写的，颇有杀鸡用牛刀之嫌。一方面不想继续交服务器租金了，另一方面原来部分代码写得很烂，当真懒得改了。加上新学了Kotlin，正想练手，这就有了&lt;a href=&#34;https://github.com/zerofancy/kmdblog&#34;&gt;第三个版本&lt;/a&gt;。&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/section&gt;
@@ -209,7 +209,7 @@ end run
 &lt;p&gt;&lt;code&gt;telnet 192.168.1.1&lt;/code&gt; 成功后执行&lt;code&gt;sh&lt;/code&gt;。然后&lt;code&gt;uname -a&lt;/code&gt;看下。这里我就不记录查看管理员密码步骤了，反正这个型号管理员面板也没有设置桥接的选项。&lt;/p&gt;
 &lt;h2 id=&#34;开始整活&#34;&gt;开始整活&lt;/h2&gt;
 &lt;p&gt;&lt;code&gt;top&lt;/code&gt;，发现占用内存最高的是个两个 java 进程。&lt;code&gt;java -version&lt;/code&gt;，发现安装了 java8 。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-plain&#34; data-lang=&#34;plain&#34;&gt;# java -version
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-plain&#34; data-lang=&#34;plain&#34;&gt;# java -version
 openjdk version &amp;#34;1.8.0-internal&amp;#34;
 OpenJDK Runtime Environment (build 1.8.0-internal-jenkinsang_2022_01_15_04_03-b00)
 JamVM (build 2.0.0, inline-threaded interpreter with stack-caching)
@@ -229,7 +229,7 @@ JamVM (build 2.0.0, inline-threaded interpreter with stack-caching)
 &lt;p&gt;我选择把整活用的程序放到&lt;code&gt;/fhconf/&lt;/code&gt;下，因为光猫自己的配置文件备份就放在这里，显然这里是不会重置的。&lt;/p&gt;
 &lt;h3 id=&#34;支持-https&#34;&gt;支持 https&lt;/h3&gt;
 &lt;p&gt;只要将你的电脑下的&lt;code&gt;/etc/ssl/certs/ca-certificates.crt&lt;/code&gt;文件复制到光猫下，并在aria2的配置文件中指定就可以了。&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;ca-certificate=/fhconf/custom/aria2/ca-certificates.crt
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;ca-certificate=/fhconf/custom/aria2/ca-certificates.crt
 &lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;oom&#34;&gt;OOM&lt;/h3&gt;
 &lt;p&gt;尽管aria2确实已经很省资源了，但当尝试BT下载一个比较大的文件时（超过2GB）还是很容易占用超过10M内存，然后关键进程OOM就巴比Q了。我尝试过修改配置文件，关闭disk-cache、关闭预分配甚至限制下载速度等均无法解决。所以该方案的实用性其实并不是很高。&lt;/p&gt;
 &lt;blockquote&gt;
@@ -314,7 +314,7 @@ JamVM (build 2.0.0, inline-threaded interpreter with stack-caching)
 &lt;/ol&gt;
 &lt;p&gt;看上去前者更优雅，但一个commit id上并不一定只有一个成功的构建，比如你做一应用叫“快音”，测试通过后调整了一些编译选项打出线上包，此时只根据commit id就无法确定是对应测试包的构建还是线上包了。&lt;/p&gt;
 &lt;p&gt;所以，最实在的方法还是后者。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;runShellCommand&lt;/span&gt;(command: String): String {
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;runShellCommand&lt;/span&gt;(command: String): String {
     &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; byteOut = ByteArrayOutputStream()
     project.exec {
         commandLine = command.split(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34; &amp;#34;&lt;/span&gt;)
@@ -328,12 +328,12 @@ JamVM (build 2.0.0, inline-threaded interpreter with stack-caching)
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; buildTimeMILLIS = System.currentTimeMillis()
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;将信息传给应用&#34;&gt;将信息传给应用&lt;/h2&gt;
 &lt;p&gt;不知道大家有没有这种习惯，在开发时加一些测试代码时判断只在Debug版本生效，即&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (BuildConfig.DEBUG) {
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (BuildConfig.DEBUG) {
     Toast.makeText(applicationContext, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;test&amp;#34;&lt;/span&gt;, Toast.LENGTH_SHORT).show()
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这样即使我真的忘记删除这段代码也不会影响到线上，让用户看到个“test”感到莫名其妙。这里用的&lt;code&gt;BuildConfig&lt;/code&gt;就是在Gradle构建时生成的一个类，里面包含了一些有关当前构建的信息&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;。&lt;/p&gt;
 &lt;p&gt;而幸运的是，官方也提供了方法让我们可以往&lt;code&gt;BuildConfig&lt;/code&gt;里面自己加东西，于是&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;android {
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;android {
     defaultConfig {
         buildConfigField(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;String&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;BUILD_NUMBER&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$buildNumber&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;)
         buildConfigField(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;String&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;GIT_BRANCH&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$gitBranch&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;)
@@ -346,7 +346,7 @@ JamVM (build 2.0.0, inline-threaded interpreter with stack-caching)
 &lt;p&gt;我们在报告崩溃信息时就可以带上，这样排查时就知道从何开始找起了。&lt;/p&gt;
 &lt;h2 id=&#34;保存构建信息&#34;&gt;保存构建信息&lt;/h2&gt;
 &lt;p&gt;自定义一个task来进行发布，反正都是Kotlin代码，怎么保存这里不展开了。最终我们的服务端不但记录每一次构建时的最终产物，还记录了&lt;code&gt;mapping.txt&lt;/code&gt;文件，记录了buildNumber，当后面排查问题时就能比较简单复现场景了。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;tasks.create(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;apkReleaseAndUpload&amp;#34;&lt;/span&gt;) {
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;tasks.create(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;apkReleaseAndUpload&amp;#34;&lt;/span&gt;) {
     dependsOn(tasks[&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;assemble&amp;#34;&lt;/span&gt;])
     doLast {
         println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;发布任务开始（构建版本号&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$buildNumber&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;）&amp;#34;&lt;/span&gt;)
@@ -359,7 +359,7 @@ JamVM (build 2.0.0, inline-threaded interpreter with stack-caching)
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://developer.android.com/studio/build/gradle-tips#share-custom-fields-and-resource-values-with-your-app-code&#34;&gt;与应用代码共享自定义字段和资源值 &lt;/a&gt; &lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://developer.android.com/studio/build/gradle-tips#share-custom-fields-and-resource-values-with-your-app-code&#34;&gt;与应用代码共享自定义字段和资源值 &lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/section&gt;
@@ -379,7 +379,7 @@ JamVM (build 2.0.0, inline-threaded interpreter with stack-caching)
 &lt;h1 id=&#34;持久化&#34;&gt;持久化&lt;/h1&gt;
 &lt;h2 id=&#34;文件存储&#34;&gt;文件存储&lt;/h2&gt;
 &lt;p&gt;先暂时只是写了个demo，有需要再深入看。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;saveText&lt;/span&gt;(inputText: String) {
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;saveText&lt;/span&gt;(inputText: String) {
         &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;try&lt;/span&gt; {
             &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; output = openFileOutput(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;data&amp;#34;&lt;/span&gt;, Context.MODE_PRIVATE)
             &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; writer = BufferedWriter(OutputStreamWriter(output))
@@ -406,7 +406,7 @@ JamVM (build 2.0.0, inline-threaded interpreter with stack-caching)
         &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; content.toString()
     }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;sharedpreference&#34;&gt;SharedPreference&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;            saveButton.setOnClickListener {
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;            saveButton.setOnClickListener {
                 getSharedPreferences(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;data&amp;#34;&lt;/span&gt;, Context.MODE_PRIVATE).edit {
                     putString(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;name&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Tom&amp;#34;&lt;/span&gt;)
                     putInt(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;age&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#b452cd&#34;&gt;28&lt;/span&gt;)
@@ -427,7 +427,7 @@ JamVM (build 2.0.0, inline-threaded interpreter with stack-caching)
             }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;数据库&#34;&gt;数据库&lt;/h2&gt;
 &lt;p&gt;基本用法demo&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.databasetest&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.databasetest&lt;/span&gt;
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.content.ContentValues&lt;/span&gt;
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.content.Context&lt;/span&gt;
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.database.Cursor&lt;/span&gt;
@@ -489,7 +489,7 @@ JamVM (build 2.0.0, inline-threaded interpreter with stack-caching)
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;Cursor&lt;/span&gt;.getString(name: String): String = getString(getColumnIndex(name))
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;Cursor&lt;/span&gt;.getInt(name: String): Int = getInt(getColumnIndex(name))
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;Cursor&lt;/span&gt;.getDouble(name: String): Double = getDouble(getColumnIndex(name))
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.databasetest&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.databasetest&lt;/span&gt;
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.os.Bundle&lt;/span&gt;
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.util.Log&lt;/span&gt;
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;androidx.appcompat.app.AppCompatActivity&lt;/span&gt;
@@ -567,7 +567,7 @@ JamVM (build 2.0.0, inline-threaded interpreter with stack-caching)
 &lt;h3 id=&#34;变量&#34;&gt;变量&lt;/h3&gt;
 &lt;p&gt;用&lt;code&gt;var&lt;/code&gt;和&lt;code&gt;val&lt;/code&gt;定义变量，并有类型自动推导的支持。&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;val&lt;/code&gt;用来声明一个不可变的变量，&lt;code&gt;var&lt;/code&gt;用来声明一个可变的变量。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; a = &lt;span style=&#34;color:#b452cd&#34;&gt;10&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; a = &lt;span style=&#34;color:#b452cd&#34;&gt;10&lt;/span&gt;
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; b: Int = &lt;span style=&#34;color:#b452cd&#34;&gt;12&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Kotlin完全抛弃了java中的基本数据类型，完全使用对象数据类型。&lt;/p&gt;
 &lt;table&gt;
@@ -623,11 +623,11 @@ JamVM (build 2.0.0, inline-threaded interpreter with stack-caching)
 &lt;/table&gt;
 &lt;h3 id=&#34;函数&#34;&gt;函数&lt;/h3&gt;
 &lt;p&gt;语法：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;(args: Array&amp;lt;String&amp;gt;) {
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;(args: Array&amp;lt;String&amp;gt;) {
     println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Hello World!&amp;#34;&lt;/span&gt;)
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Kotlin中的函数在无必要时可以省略很多东西：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;kotlin.math.max&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;kotlin.math.max&lt;/span&gt;
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;largerNumber&lt;/span&gt;(a: Int, b: Int) = max(a, b)
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;(args: Array&amp;lt;String&amp;gt;) {
     &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; a = &lt;span style=&#34;color:#b452cd&#34;&gt;3&lt;/span&gt;
@@ -637,7 +637,7 @@ JamVM (build 2.0.0, inline-threaded interpreter with stack-caching)
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;程序的逻辑控制&#34;&gt;程序的逻辑控制&lt;/h2&gt;
 &lt;h3 id=&#34;if&#34;&gt;if&lt;/h3&gt;
 &lt;p&gt;与java中的if语句相比，Kotlin中的if是可以有返回值的。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;judge&lt;/span&gt;(score: Int) = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (score &amp;gt;= &lt;span style=&#34;color:#b452cd&#34;&gt;60&lt;/span&gt;) &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;你及格了&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;你还需要多努力&amp;#34;&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;judge&lt;/span&gt;(score: Int) = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (score &amp;gt;= &lt;span style=&#34;color:#b452cd&#34;&gt;60&lt;/span&gt;) &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;你及格了&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;你还需要多努力&amp;#34;&lt;/span&gt;
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;() {
     println(judge(&lt;span style=&#34;color:#b452cd&#34;&gt;55&lt;/span&gt;))
     println(judge(&lt;span style=&#34;color:#b452cd&#34;&gt;66&lt;/span&gt;))
@@ -645,7 +645,7 @@ JamVM (build 2.0.0, inline-threaded interpreter with stack-caching)
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;与此同时，Kotlin不再有java中的三元运算符&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;，语义上清晰了很多。&lt;/p&gt;
 &lt;h3 id=&#34;when条件语句&#34;&gt;when条件语句&lt;/h3&gt;
 &lt;p&gt;类似于java中的switch语句，根据变量的值执行不同的逻辑。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;judge&lt;/span&gt;(score: Int) = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (score &amp;gt;= &lt;span style=&#34;color:#b452cd&#34;&gt;60&lt;/span&gt;) &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;你及格了&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;你还需要多努力&amp;#34;&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;judge&lt;/span&gt;(score: Int) = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (score &amp;gt;= &lt;span style=&#34;color:#b452cd&#34;&gt;60&lt;/span&gt;) &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;你及格了&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;你还需要多努力&amp;#34;&lt;/span&gt;
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;getScore&lt;/span&gt;(name: String) = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;when&lt;/span&gt; (name) {
     &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Tom&amp;#34;&lt;/span&gt; -&amp;gt; &lt;span style=&#34;color:#b452cd&#34;&gt;78&lt;/span&gt;
     &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Jack&amp;#34;&lt;/span&gt; -&amp;gt; &lt;span style=&#34;color:#b452cd&#34;&gt;35&lt;/span&gt;
@@ -660,7 +660,7 @@ JamVM (build 2.0.0, inline-threaded interpreter with stack-caching)
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;对我来说，最令人振奋的是再也不需要在每个分支里面都写个break了。其次when也是有返回值的，这和其他特性组合写出来的代码非常简洁优雅。&lt;/p&gt;
 &lt;p&gt;写个小demo吧。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;interface&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Speakable&lt;/span&gt; {
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;interface&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Speakable&lt;/span&gt; {
     &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;speak&lt;/span&gt;()
 }
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Dog&lt;/span&gt; : Speakable {
@@ -699,27 +699,27 @@ JamVM (build 2.0.0, inline-threaded interpreter with stack-caching)
 &lt;p&gt;Kotlin中有两类循环，其中&lt;code&gt;while&lt;/code&gt;循环与java学过的while循环非常相似，只说下有差异的&lt;code&gt;for&lt;/code&gt;循环吧。&lt;/p&gt;
 &lt;p&gt;Kotlin的for循环只有for..in式的了，如&lt;code&gt;for(i in list)&lt;/code&gt;。&lt;/p&gt;
 &lt;p&gt;但有时对数组下标进行遍历还是有必要的。于是我们要先了解下Kotlin的&lt;code&gt;区间&lt;/code&gt;的概念。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; range = &lt;span style=&#34;color:#b452cd&#34;&gt;1.&lt;/span&gt;.&lt;span style=&#34;color:#b452cd&#34;&gt;10&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; range = &lt;span style=&#34;color:#b452cd&#34;&gt;1.&lt;/span&gt;.&lt;span style=&#34;color:#b452cd&#34;&gt;10&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这表示&lt;code&gt;[1,10]&lt;/code&gt;。但很多时候，我们需要左开右闭区间，比如数组有三个元素，我们需要&lt;code&gt;[0,3)&lt;/code&gt;表示数组的下标。此时可以使用&lt;code&gt;util&lt;/code&gt;关键字。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; indexRange = &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt; util &lt;span style=&#34;color:#b452cd&#34;&gt;3&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; indexRange = &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt; util &lt;span style=&#34;color:#b452cd&#34;&gt;3&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;有了range再和前面的for配合就完全可以替代之前java里面的for的作用了：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; array = arrayOf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Bob&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;John&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Jackson&amp;#34;&lt;/span&gt;)
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; array = arrayOf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Bob&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;John&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Jackson&amp;#34;&lt;/span&gt;)
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; (i &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt; util array.size) {
     println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$i&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${array[i]}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;)
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;此外，还可以用&lt;code&gt;step&lt;/code&gt;指定步长值，实现”隔几个输出一次“的效果：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; (i &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt; util &lt;span style=&#34;color:#b452cd&#34;&gt;10&lt;/span&gt; step &lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;) {
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; (i &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt; util &lt;span style=&#34;color:#b452cd&#34;&gt;10&lt;/span&gt; step &lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;) {
     println(i)
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果需要10循环到1,则需要&lt;code&gt;downTo&lt;/code&gt;关键字，&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; (i &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;10&lt;/span&gt; downTo &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;) {
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; (i &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;10&lt;/span&gt; downTo &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;) {
     println(i)
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;!-- raw HTML omitted --&gt;
 &lt;h2 id=&#34;面向对象编程&#34;&gt;面向对象编程&lt;/h2&gt;
 &lt;h3 id=&#34;类与对象&#34;&gt;类与对象&lt;/h3&gt;
 &lt;p&gt;与java的class相比Kotlin的class看上去没有多少改变，但创建对象不用new了。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Person&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; name: String) {
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Person&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; name: String) {
     &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;speak&lt;/span&gt;() = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$name&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt; is speaking.&amp;#34;&lt;/span&gt;
 }
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;() {
@@ -727,7 +727,7 @@ JamVM (build 2.0.0, inline-threaded interpreter with stack-caching)
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;继承与构造函数&#34;&gt;继承与构造函数&lt;/h3&gt;
 &lt;p&gt;与java类似，Kotlin仍然是单继承，可以继承一个类实现多个接口。但继承的写法与java略有不同。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;open&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Animal&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;//非抽象类只有带了open才可以继承
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;open&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Animal&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;//非抽象类只有带了open才可以继承
 &lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;interface&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Speakable&lt;/span&gt; {
     &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;speak&lt;/span&gt;()
 }
@@ -745,7 +745,7 @@ JamVM (build 2.0.0, inline-threaded interpreter with stack-caching)
     }
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Kotlin中的构造函数分为主构造函数和次构造函数。如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Student&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; sno: String, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; grade: Int, name: String, age: Int) {
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Student&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; sno: String, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; grade: Int, name: String, age: Int) {
     &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;constructor&lt;/span&gt;(name: String, age: Int) : &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;, name, age)
     &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;constructor&lt;/span&gt;() : &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;)
     &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;init&lt;/span&gt; {
@@ -759,7 +759,7 @@ JamVM (build 2.0.0, inline-threaded interpreter with stack-caching)
 &lt;/blockquote&gt;
 &lt;h3 id=&#34;接口&#34;&gt;接口&lt;/h3&gt;
 &lt;p&gt;接口与java的接口是类似的。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;interface&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Study&lt;/span&gt; {
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;interface&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Study&lt;/span&gt; {
     &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;readBooks&lt;/span&gt;()
     &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;doHomework&lt;/span&gt;() {
         println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Do homework default implementation&amp;#34;&lt;/span&gt;)
@@ -806,14 +806,14 @@ JamVM (build 2.0.0, inline-threaded interpreter with stack-caching)
 &lt;p&gt;数据类在当今的系统设计中占据了重要的地位，他们格式非常固定，一般实现各种构造函数、getter和setter，重写&lt;code&gt;equals()&lt;/code&gt;、&lt;code&gt;hashCode()&lt;/code&gt;、&lt;code&gt;toString()&lt;/code&gt;
 这几个方法，真的写腻了。很多ide都提供了一键生成这些样板代码的方法，更有项目Lombok添加个注解在编译时生成这些方法&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;。&lt;/p&gt;
 &lt;p&gt;而Kotlin中对于数据类有了专门的支持。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;data&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Student&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; sno: String, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; name: String, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; age: Int)
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;data&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Student&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; sno: String, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; name: String, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; age: Int)
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;idea对于Kotlin有很好的支持。我们用下面的步骤将上面的代码转换为java形式：&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;Tools-&amp;gt;Kotlin-&amp;gt;Show Kotlin ByteCode&lt;/li&gt;
 &lt;li&gt;Decompile&lt;/li&gt;
 &lt;/ol&gt;
 &lt;p&gt;得到的代码如下：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;kotlin.Metadata&lt;/span&gt;;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;kotlin.Metadata&lt;/span&gt;;
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;kotlin.jvm.internal.Intrinsics&lt;/span&gt;;
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;org.jetbrains.annotations.NotNull&lt;/span&gt;;
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;org.jetbrains.annotations.Nullable&lt;/span&gt;;
@@ -908,13 +908,13 @@ JamVM (build 2.0.0, inline-threaded interpreter with stack-caching)
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;孰优孰劣，一目了然。&lt;/p&gt;
 &lt;p&gt;类似的，Kotlin也对单例类提供了支持。如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Singleton&lt;/span&gt; {
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Singleton&lt;/span&gt; {
     &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;singletonTest&lt;/span&gt;() {
         println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Singleton test is called.&amp;#34;&lt;/span&gt;)
     }
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这和你费了半天劲写出来的java代码作用是一样的：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;kotlin.Metadata&lt;/span&gt;;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;kotlin.Metadata&lt;/span&gt;;
 &lt;span style=&#34;color:#707a7c&#34;&gt;@Metadata&lt;/span&gt;(
         mv = {1, 4, 0},
         bv = {1, 0, 3},
@@ -937,7 +937,7 @@ JamVM (build 2.0.0, inline-threaded interpreter with stack-caching)
     }
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;lambda编程&#34;&gt;Lambda编程&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;() {
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;() {
     &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; map = mapOf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Apple&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Banana&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Orange&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#b452cd&#34;&gt;3&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Pear&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#b452cd&#34;&gt;4&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Grape&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#b452cd&#34;&gt;5&lt;/span&gt;)
     &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; ((fruit, number) &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;in&lt;/span&gt; map) {
         println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;fruit is &lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$fruit&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;, number is &lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$number&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;)
@@ -956,31 +956,31 @@ JamVM (build 2.0.0, inline-threaded interpreter with stack-caching)
 &lt;p&gt;所有元素都满足条件。&lt;/p&gt;
 &lt;h3 id=&#34;java函数式api&#34;&gt;Java函数式API&lt;/h3&gt;
 &lt;p&gt;对于java中的单抽象方法可使用函数式API。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;Thread {
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;Thread {
     println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Thread is running&amp;#34;&lt;/span&gt;)
 }.start()
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;空指针检查&#34;&gt;空指针检查&lt;/h2&gt;
 &lt;p&gt;写java时最常见的错误就是&lt;code&gt;java.lang.NullPointerException&lt;/code&gt;了吧。在Kotlin中，情况有一些改善。&lt;/p&gt;
 &lt;p&gt;与java不同，Kotlin中的变量默认是不可空的。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;doStudy&lt;/span&gt;(study: Study) {
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;doStudy&lt;/span&gt;(study: Study) {
     study.readBooks()
     study.doHomework()
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果你给这个函数传一个可能为null的值，在编译期间就会得到错误提示。&lt;/p&gt;
 &lt;p&gt;当然，很多情况我们还是需要让我们的函数接受一个可空的值的，则可以用这样的写法：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;doStudy&lt;/span&gt;(study: Study?) {
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;doStudy&lt;/span&gt;(study: Study?) {
     &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (study != &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;) {
         study.readBooks()
         study.doHomework()
     }
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;但在Kotlin中还有更好的方法：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;doStudy&lt;/span&gt;(study: Study?) {
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;doStudy&lt;/span&gt;(study: Study?) {
     study?.readBooks()
     study?.doHomework()
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;用上&lt;code&gt;let&lt;/code&gt;我们还可以写得更优雅：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;doStudy&lt;/span&gt;(study: Study?) {
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;doStudy&lt;/span&gt;(study: Study?) {
     study?.let {
         &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt;.readBooks()
         &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt;.doHomework()
@@ -988,17 +988,17 @@ JamVM (build 2.0.0, inline-threaded interpreter with stack-caching)
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;?.&lt;/code&gt;表示只有不为空时才正常调用。&lt;/p&gt;
 &lt;p&gt;有时我们需要这样的逻辑：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;getTextLength&lt;/span&gt;(text: String?): Int {
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;getTextLength&lt;/span&gt;(text: String?): Int {
     &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (text != &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;) {
         &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; text.length
     }
     &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Kotlin也有个方便的操作符：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;getTextLength&lt;/span&gt;(text: String?) = text?.length ?: &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;getTextLength&lt;/span&gt;(text: String?) = text?.length ?: &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;?:&lt;/code&gt;表示前面为空时返回后面的值。&lt;/p&gt;
 &lt;p&gt;当然，有些业务逻辑中Kotlin不一定能正确推断出你的变量是否可能为空，这时Kotlin也提供了让你自己操纵它的机会：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; content: String? = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; content: String? = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;initContent&lt;/span&gt;() {
     content = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;https://ntutn.top&amp;#34;&lt;/span&gt;
 }
@@ -1015,10 +1015,10 @@ JamVM (build 2.0.0, inline-threaded interpreter with stack-caching)
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;参考&lt;a href=&#34;https://www.w3cschool.cn/java/java-ternary-operator.html&#34;&gt;Java中的三元运算符&lt;/a&gt; &lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;参考&lt;a href=&#34;https://www.w3cschool.cn/java/java-ternary-operator.html&#34;&gt;Java中的三元运算符&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://projectlombok.org/&#34;&gt;Lombok&lt;/a&gt;，用注解的方式简化java代码，但要求使用的ide必须安装lombok插件才能正确识别lombok生成的代码，有人认为这是在”强奸队友“。另外lombok的实现调用了jdk未公开的方法也引发争议。 &lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://projectlombok.org/&#34;&gt;Lombok&lt;/a&gt;，用注解的方式简化java代码，但要求使用的ide必须安装lombok插件才能正确识别lombok生成的代码，有人认为这是在”强奸队友“。另外lombok的实现调用了jdk未公开的方法也引发争议。&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/section&gt;
@@ -1038,12 +1038,12 @@ JamVM (build 2.0.0, inline-threaded interpreter with stack-caching)
 &lt;p&gt;和工具线配合完成某个需求，我这边的改动很少，但一鼓作气搞完后却遇到了奇怪的报错。已知工具线的代码大多是java的，而我这边自然是力推Kotlin。我们的代码参考如下：&lt;/p&gt;
 &lt;h3 id=&#34;代码参考&#34;&gt;代码参考&lt;/h3&gt;
 &lt;p&gt;工具线定义了一个接口用于callback&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;a&lt;/span&gt;;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;a&lt;/span&gt;;
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;interface&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;IPublishCallback&lt;/span&gt; {
     &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onFinish&lt;/span&gt;();
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;工具线在执行完发布逻辑后无论成功还是失败都会调用我们的callback&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;a&lt;/span&gt;;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;a&lt;/span&gt;;
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;PublishUtil&lt;/span&gt; {
     &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;publishVideo&lt;/span&gt;(String videoName, IPublishCallback callback) {
         Runnable runnable = () -&amp;gt; {
@@ -1065,7 +1065,7 @@ JamVM (build 2.0.0, inline-threaded interpreter with stack-caching)
     }
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;我们这边的实现是Kotlin的，就是调用了下工具线的方法&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;b&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;b&lt;/span&gt;
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;a.PublishUtil&lt;/span&gt;
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;ShareFromSdkImpl&lt;/span&gt; {
     &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;doShare&lt;/span&gt;() {
@@ -1077,13 +1077,13 @@ JamVM (build 2.0.0, inline-threaded interpreter with stack-caching)
     }
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;主函数&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;b.ShareFromSdkImpl&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;b.ShareFromSdkImpl&lt;/span&gt;
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;() {
     ShareFromSdkImpl().doShare()
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;问题&#34;&gt;问题&lt;/h2&gt;
 &lt;p&gt;上述代码在执行后输出如下：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-plain&#34; data-lang=&#34;plain&#34;&gt;系统分享功能测试
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-plain&#34; data-lang=&#34;plain&#34;&gt;系统分享功能测试
 Exception in thread &amp;#34;main&amp;#34; java.lang.NoClassDefFoundError: a/IPublishCallback
 	at b.ShareFromSdkImpl.doShare(ShareFromSdkImpl.kt:8)
 	at MainKt.main(main.kt:4)
@@ -1169,10 +1169,10 @@ Process finished with exit code 1
 &lt;hr&gt;
 &lt;ol&gt;
 &lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.runoob.com/java/java-modifier-types.html&#34;&gt;Java 修饰符&lt;/a&gt; &lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.runoob.com/java/java-modifier-types.html&#34;&gt;Java 修饰符&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.kotlincn.net/docs/reference/visibility-modifiers.html&#34;&gt;可见性修饰符&lt;/a&gt; &lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.kotlincn.net/docs/reference/visibility-modifiers.html&#34;&gt;可见性修饰符&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
 &lt;/section&gt;

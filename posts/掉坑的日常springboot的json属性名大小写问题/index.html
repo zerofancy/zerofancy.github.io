@@ -19,7 +19,7 @@
 <meta property="og:title" content="掉坑的日常：springboot的json属性名大小写问题" />
 <meta property="og:description" content="掉坑的日常：springboot的json属性名大小写问题" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://ntutn.top/posts/%E6%8E%89%E5%9D%91%E7%9A%84%E6%97%A5%E5%B8%B8springboot%E7%9A%84json%E5%B1%9E%E6%80%A7%E5%90%8D%E5%A4%A7%E5%B0%8F%E5%86%99%E9%97%AE%E9%A2%98/" />
+<meta property="og:url" content="https://ntutn.top/posts/%E6%8E%89%E5%9D%91%E7%9A%84%E6%97%A5%E5%B8%B8springboot%E7%9A%84json%E5%B1%9E%E6%80%A7%E5%90%8D%E5%A4%A7%E5%B0%8F%E5%86%99%E9%97%AE%E9%A2%98/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2020-03-24T03:11:37+08:00" />
 <meta property="article:modified_time" content="2020-03-24T03:11:37+08:00" /><meta property="og:site_name" content="归零幻想" />
 
@@ -32,7 +32,8 @@
 
 
 
-<link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+
 
 
   
@@ -44,17 +45,19 @@
 
 
 
-<link rel="stylesheet" href="https://ntutn.top/scss/journal.min.d8d9f81b896882733c41896750adbefbf9319ca02ccccefd461650898975c3af.css" integrity="sha256-2Nn4G4lognM8QYlnUK2&#43;&#43;/kxnKAszM79RhZQiYl1w68=" media="screen">
+<link rel="stylesheet" href="/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
 
 
 
-<link rel="stylesheet" href="https://ntutn.top/scss/dark-mode.min.60f86847da9fc0724177ccfd0bf7c5997b0b41f1e58d5a293cfb3723c497c422.css" integrity="sha256-YPhoR9qfwHJBd8z9C/fFmXsLQfHljVopPPs3I8SXxCI=" media="screen">
+<link rel="stylesheet" href="/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
 
 
-<script src="/vendor/js/loadCSS.js"></script>
-<script>
-  loadCSS("https://fonts.googleapis.com/css?family=Fira+Mono|Material+Icons");
-</script>
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css"><link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
 
 
 
@@ -67,8 +70,6 @@
 
 
 
-
-  <script src="/js/toc.js"></script>
 
 
 
@@ -624,13 +625,13 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <p>springboot可以使用<code>@ResponseBody</code>返回对象自动转换json，而转换成的json属性名首字母会被转换成小写。</p>
 <h2 id="解决方案">解决方案</h2>
 <h3 id="引入fastjson">引入<code>fastjson</code></h3>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml">		<span style="color:#8b008b;font-weight:bold">&lt;dependency&gt;</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml">		<span style="color:#8b008b;font-weight:bold">&lt;dependency&gt;</span>
 			<span style="color:#8b008b;font-weight:bold">&lt;groupId&gt;</span>com.alibaba<span style="color:#8b008b;font-weight:bold">&lt;/groupId&gt;</span>
 			<span style="color:#8b008b;font-weight:bold">&lt;artifactId&gt;</span>fastjson<span style="color:#8b008b;font-weight:bold">&lt;/artifactId&gt;</span>
 			<span style="color:#8b008b;font-weight:bold">&lt;version&gt;</span>1.2.66<span style="color:#8b008b;font-weight:bold">&lt;/version&gt;</span>
 		<span style="color:#8b008b;font-weight:bold">&lt;/dependency&gt;</span>
 </code></pre></div><h3 id="注入bean">注入<code>bean</code></h3>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">    <span style="color:#707a7c">@Bean</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">    <span style="color:#707a7c">@Bean</span>
     <span style="color:#8b008b;font-weight:bold">public</span> HttpMessageConverters <span style="color:#008b45">httpMessageConverters</span>() {
         FastJsonHttpMessageConverter fastJsonHttpMessageConverter = <span style="color:#8b008b;font-weight:bold">new</span> FastJsonHttpMessageConverter(); <span style="color:#228b22">// 添加fastJson的配置信息
 </span><span style="color:#228b22"></span>        FastJsonConfig fastJsonConfig = <span style="color:#8b008b;font-weight:bold">new</span> FastJsonConfig();
@@ -643,7 +644,7 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
         <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">new</span> HttpMessageConverters(converter);
     }
 </code></pre></div><h3 id="在属性上加注解">在属性上加注解</h3>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">edu.upc.mishuserver.vo</span>;
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">edu.upc.mishuserver.vo</span>;
 <span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">com.alibaba.fastjson.annotation.JSONField</span>;
 <span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">lombok.AllArgsConstructor</span>;
 <span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">lombok.Builder</span>;
@@ -688,13 +689,13 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
             <nav class="post-pagination">
 
                 
-                <a class="newer-posts" href="https://ntutn.top/posts/eventbus%E5%88%9D%E6%8E%A2/">
+                <a class="newer-posts" href="/posts/eventbus%E5%88%9D%E6%8E%A2/">
 			下回<br>EventBus初探
                 </a>
                 
                 
                 
-                <a class="older-posts" href="https://ntutn.top/posts/typora&#43;git%E8%87%AA%E5%8A%A8%E5%90%8C%E6%AD%A5%E4%BD%A0%E7%9A%84%E7%AC%94%E8%AE%B0/">
+                <a class="older-posts" href="/posts/typora&#43;git%E8%87%AA%E5%8A%A8%E5%90%8C%E6%AD%A5%E4%BD%A0%E7%9A%84%E7%AC%94%E8%AE%B0/">
 			上回<br>Typora&#43;git自动同步你的笔记
                 </a>
                 
@@ -739,6 +740,5 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 </div>
             </div>
     
-    <script src="/js/journal.js"></script>
-    </body>
+    <script src="/js/journal.js"></script></body>
 </html>

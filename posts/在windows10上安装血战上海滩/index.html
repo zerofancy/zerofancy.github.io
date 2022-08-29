@@ -19,7 +19,7 @@
 <meta property="og:title" content="在Windows10上安装血战上海滩" />
 <meta property="og:description" content="在Windows10上安装血战上海滩" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://ntutn.top/posts/%E5%9C%A8windows10%E4%B8%8A%E5%AE%89%E8%A3%85%E8%A1%80%E6%88%98%E4%B8%8A%E6%B5%B7%E6%BB%A9/" />
+<meta property="og:url" content="https://ntutn.top/posts/%E5%9C%A8windows10%E4%B8%8A%E5%AE%89%E8%A3%85%E8%A1%80%E6%88%98%E4%B8%8A%E6%B5%B7%E6%BB%A9/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2019-06-01T03:11:37+08:00" />
 <meta property="article:modified_time" content="2019-06-01T03:11:37+08:00" /><meta property="og:site_name" content="归零幻想" />
 
@@ -32,7 +32,8 @@
 
 
 
-<link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+
 
 
   
@@ -44,17 +45,19 @@
 
 
 
-<link rel="stylesheet" href="https://ntutn.top/scss/journal.min.d8d9f81b896882733c41896750adbefbf9319ca02ccccefd461650898975c3af.css" integrity="sha256-2Nn4G4lognM8QYlnUK2&#43;&#43;/kxnKAszM79RhZQiYl1w68=" media="screen">
+<link rel="stylesheet" href="/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
 
 
 
-<link rel="stylesheet" href="https://ntutn.top/scss/dark-mode.min.60f86847da9fc0724177ccfd0bf7c5997b0b41f1e58d5a293cfb3723c497c422.css" integrity="sha256-YPhoR9qfwHJBd8z9C/fFmXsLQfHljVopPPs3I8SXxCI=" media="screen">
+<link rel="stylesheet" href="/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
 
 
-<script src="/vendor/js/loadCSS.js"></script>
-<script>
-  loadCSS("https://fonts.googleapis.com/css?family=Fira+Mono|Material+Icons");
-</script>
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css"><link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
 
 
 
@@ -67,8 +70,6 @@
 
 
 
-
-  <script src="/js/toc.js"></script>
 
 
 
@@ -582,19 +583,19 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <h2 id="启动">启动</h2>
 <p>直接双击exe，然后……它免费帮你调了一下分辨率，就没反应了。</p>
 <p>貌似兼容性是个比较大的问题……于是在网上找了好久，终于知道，可以用命令行控制游戏窗口运行：</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cmd" data-lang="cmd">shanghai.exe -windows
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cmd" data-lang="cmd">shanghai.exe -windows
 </code></pre></div><h2 id="修改屏幕分辨率实现全屏">修改屏幕分辨率实现全屏</h2>
 <p>倒是能运行了，只是……画面都在左上角，没法玩啊……</p>
 <p>所以再加上自动修改屏幕分辨率就可以全屏了。修改屏幕分辨率可以用<code>setres</code></p>
 <p><a href="https://www.majorgeeks.com/files/details/setres.html">下载链接</a>下载并将exe文件放到血战上海滩的游戏文件夹。</p>
 <p>于是用下面的命令：</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cmd" data-lang="cmd">setres h800 v600
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cmd" data-lang="cmd">setres h800 v600
 shanghai.exe -windows
 setres h1920 v1080
 </code></pre></div><p><code>1920*1080</code>是我电脑的屏幕分辨率，注意换成自己的。</p>
 <h2 id="隐藏显示任务栏">隐藏显示任务栏</h2>
 <p>然而，这样还是有问题，就是这样“全屏”后任务栏并没有消失，虽然可以设置自动隐藏任务栏但总归还是不爽，于是写了个简单C#程序在启动游戏隐藏任务栏（虽然很简单，但没找到只用命令实现的方法）</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C#" data-lang="C#"><span style="color:#8b008b;font-weight:bold">using</span> <span style="color:#008b45;text-decoration:underline">System</span>;
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C#" data-lang="C#"><span style="color:#8b008b;font-weight:bold">using</span> <span style="color:#008b45;text-decoration:underline">System</span>;
 <span style="color:#8b008b;font-weight:bold">using</span> <span style="color:#008b45;text-decoration:underline">System.Collections.Generic</span>;
 <span style="color:#8b008b;font-weight:bold">using</span> <span style="color:#008b45;text-decoration:underline">System.Linq</span>;
 <span style="color:#8b008b;font-weight:bold">using</span> <span style="color:#008b45;text-decoration:underline">System.Text</span>;
@@ -616,7 +617,7 @@ setres h1920 v1080
         }
     }
 }
-</code></pre></div><div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C#" data-lang="C#"><span style="color:#8b008b;font-weight:bold">using</span> <span style="color:#008b45;text-decoration:underline">System</span>;
+</code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C#" data-lang="C#"><span style="color:#8b008b;font-weight:bold">using</span> <span style="color:#008b45;text-decoration:underline">System</span>;
 <span style="color:#8b008b;font-weight:bold">using</span> <span style="color:#008b45;text-decoration:underline">System.Collections.Generic</span>;
 <span style="color:#8b008b;font-weight:bold">using</span> <span style="color:#008b45;text-decoration:underline">System.Linq</span>;
 <span style="color:#8b008b;font-weight:bold">using</span> <span style="color:#008b45;text-decoration:underline">System.Text</span>;
@@ -639,7 +640,7 @@ setres h1920 v1080
     }
 }
 </code></pre></div><p>编译并将生成文件也放到游戏文件夹。这样我们就可以用一个<code>start.cmd</code>打开游戏：</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cmd" data-lang="cmd">setres h800 v600
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cmd" data-lang="cmd">setres h800 v600
 hidetaskbar
 shanghai.exe -windows
 showtaskbar
@@ -657,13 +658,13 @@ setres h1920 v1080
             <nav class="post-pagination">
 
                 
-                <a class="newer-posts" href="https://ntutn.top/posts/%E9%97%B7%E5%A3%B0%E4%BD%9C%E5%A4%A7%E6%AD%BB%E5%88%A0%E9%99%A4%E7%94%B5%E8%84%91%E5%86%85%E7%9A%84%E7%A9%BA%E6%96%87%E4%BB%B6%E5%A4%B9/">
+                <a class="newer-posts" href="/posts/%E9%97%B7%E5%A3%B0%E4%BD%9C%E5%A4%A7%E6%AD%BB%E5%88%A0%E9%99%A4%E7%94%B5%E8%84%91%E5%86%85%E7%9A%84%E7%A9%BA%E6%96%87%E4%BB%B6%E5%A4%B9/">
 			下回<br>闷声作大死：删除电脑内的空文件夹
                 </a>
                 
                 
                 
-                <a class="older-posts" href="https://ntutn.top/posts/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AC%AC%E4%B8%89%E6%AC%A1%E6%B5%8B%E8%AF%95/">
+                <a class="older-posts" href="/posts/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AC%AC%E4%B8%89%E6%AC%A1%E6%B5%8B%E8%AF%95/">
 			上回<br>数据结构第三次测试
                 </a>
                 
@@ -708,6 +709,5 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 </div>
             </div>
     
-    <script src="/js/journal.js"></script>
-    </body>
+    <script src="/js/journal.js"></script></body>
 </html>

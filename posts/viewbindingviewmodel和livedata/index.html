@@ -19,7 +19,7 @@
 <meta property="og:title" content="ViewBinding、ViewModel和LiveData" />
 <meta property="og:description" content="毕设项目是没啥历史包袱的，我可以尽情实践。" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://ntutn.top/posts/viewbindingviewmodel%E5%92%8Clivedata/" />
+<meta property="og:url" content="https://ntutn.top/posts/viewbindingviewmodel%E5%92%8Clivedata/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2021-02-22T03:11:37+08:00" />
 <meta property="article:modified_time" content="2021-02-22T03:11:37+08:00" /><meta property="og:site_name" content="归零幻想" />
 
@@ -32,7 +32,8 @@
 
 
 
-<link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+
 
 
   
@@ -44,17 +45,19 @@
 
 
 
-<link rel="stylesheet" href="https://ntutn.top/scss/journal.min.d8d9f81b896882733c41896750adbefbf9319ca02ccccefd461650898975c3af.css" integrity="sha256-2Nn4G4lognM8QYlnUK2&#43;&#43;/kxnKAszM79RhZQiYl1w68=" media="screen">
+<link rel="stylesheet" href="/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
 
 
 
-<link rel="stylesheet" href="https://ntutn.top/scss/dark-mode.min.60f86847da9fc0724177ccfd0bf7c5997b0b41f1e58d5a293cfb3723c497c422.css" integrity="sha256-YPhoR9qfwHJBd8z9C/fFmXsLQfHljVopPPs3I8SXxCI=" media="screen">
+<link rel="stylesheet" href="/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
 
 
-<script src="/vendor/js/loadCSS.js"></script>
-<script>
-  loadCSS("https://fonts.googleapis.com/css?family=Fira+Mono|Material+Icons");
-</script>
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css"><link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
 
 
 
@@ -67,8 +70,6 @@
 
 
 
-
-  <script src="/js/toc.js"></script>
 
 
 
@@ -677,11 +678,11 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <p>其实与ViewBinding相似的，还有一个DataBinding，但我不太喜欢，感觉在xml里面写代码不是一个好主意。</p>
 <h3 id="使用">使用</h3>
 <p>首先在build.gradle（或build.gradle.kts）中的android块添加</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-groovy" data-lang="groovy">buildFeatures {
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-groovy" data-lang="groovy">buildFeatures {
     viewBinding = <span style="color:#8b008b;font-weight:bold">true</span>
 }
 </code></pre></div><p>在xml中正常定义你的布局</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#1e889b">&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#1e889b">&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;</span>
 <span style="color:#8b008b;font-weight:bold">&lt;LinearLayout</span> <span style="color:#658b00">xmlns:android=</span><span style="color:#cd5555">&#34;http://schemas.android.com/apk/res/android&#34;</span>
     <span style="color:#658b00">xmlns:tools=</span><span style="color:#cd5555">&#34;http://schemas.android.com/tools&#34;</span>
     <span style="color:#658b00">android:layout_width=</span><span style="color:#cd5555">&#34;match_parent&#34;</span>
@@ -708,7 +709,7 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
         <span style="color:#658b00">android:text=</span><span style="color:#cd5555">&#34;change&#34;</span> <span style="color:#8b008b;font-weight:bold">/&gt;</span>
 <span style="color:#8b008b;font-weight:bold">&lt;/LinearLayout&gt;</span>
 </code></pre></div><p>接下来就可以愉快使用了</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.viewmodeldemo</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.viewmodeldemo</span>
 <span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.os.Bundle</span>
 <span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.widget.Toast</span>
 <span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">androidx.appcompat.app.AppCompatActivity</span>
@@ -737,7 +738,7 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 </code></pre></div><p>我们在xml里面用下划线分隔的id在这里就直接变成了binding里面的字段，相当舒服。</p>
 <h3 id="在recyclerview中的使用">在RecyclerView中的使用</h3>
 <p>在RecyclerView中代码要稍微发生一点变化，因为我们是在onCreateViewHolder时反射创建布局的。</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.viewmodeldemo</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.viewmodeldemo</span>
 <span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.view.LayoutInflater</span>
 <span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.view.ViewGroup</span>
 <span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">androidx.recyclerview.widget.RecyclerView</span>
@@ -761,14 +762,14 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <h2 id="viewmodel和livedata">ViewModel和LiveData</h2>
 <p>应用MVVM模式更好管理代码，使之便于拓展和测试，好处不多说。</p>
 <p>首先引入ViewModel、LiveData和Kotlin Coroutines的拓展包和Retrofit的依赖包。</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-groovy" data-lang="groovy">implementation(<span style="color:#cd5555">&#39;org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1&#39;</span>)
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-groovy" data-lang="groovy">implementation(<span style="color:#cd5555">&#39;org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1&#39;</span>)
 implementation(<span style="color:#cd5555">&#39;androidx.core:core-ktx:1.3.2&#39;</span>)
 implementation(<span style="color:#cd5555">&#39;androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0&#39;</span>)
 implementation(<span style="color:#cd5555">&#39;androidx.lifecycle:lifecycle-livedata-ktx:2.3.0&#39;</span>)
 implementation(<span style="color:#cd5555">&#39;com.squareup.retrofit2:retrofit:2.9.0&#39;</span>)
 implementation <span style="color:#cd5555">&#34;androidx.fragment:fragment-ktx:1.3.0&#34;</span>
 </code></pre></div><p>准备ViewModel</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.viewmodeldemo</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.viewmodeldemo</span>
 <span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">androidx.lifecycle.LiveData</span>
 <span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">androidx.lifecycle.MutableLiveData</span>
 <span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">androidx.lifecycle.ViewModel</span>
@@ -782,7 +783,7 @@ implementation <span style="color:#cd5555">&#34;androidx.fragment:fragment-ktx:1
     }
 }
 </code></pre></div><p>在MainActivity中</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> mainViewModel <span style="color:#8b008b;font-weight:bold">by</span> viewModels&lt;MainViewModel&gt;()
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> mainViewModel <span style="color:#8b008b;font-weight:bold">by</span> viewModels&lt;MainViewModel&gt;()
 <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">initView</span>() {
     binding.apply {
         changeButton.setOnClickListener { mainViewModel.changeText() }
@@ -802,7 +803,7 @@ implementation <span style="color:#cd5555">&#34;androidx.fragment:fragment-ktx:1
 <p>LiveData具有生命周期感知功能，随时监听修改并更新视图。它有setValue()和postValue()两个方法设置值，相对于前者，后者将setValue放到了下一个消息循环，可以在非UI线程调用。</p>
 <h3 id="initedlivedata">InitedLiveData</h3>
 <p>然而自带的LiveData和MutableLiveData用多了总感觉难受，因为getValue()返回的是一个可空的数据，当我写了n多次<code>_field.value?.key?:&quot;&quot;</code>后，我爆发了。很多场景下这个value都可以定义成不可空的，所以还是简单封装一个不需要判空的更好。</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.viewmodeldemo</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.viewmodeldemo</span>
 <span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">androidx.lifecycle.LiveData</span>
 <span style="color:#228b22">/**
 </span><span style="color:#228b22"> * 解决LiveData的空安全问题
@@ -828,7 +829,7 @@ implementation <span style="color:#cd5555">&#34;androidx.fragment:fragment-ktx:1
     }
 }
 </code></pre></div><p>如此这般，上面的代码就可以这样表示了</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.viewmodeldemo</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.viewmodeldemo</span>
 <span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">androidx.lifecycle.ViewModel</span>
 <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">MainViewModel</span> : ViewModel() {
     <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> _text = InitedLiveData { <span style="color:#cd5555">&#34;我的&#34;</span> }
@@ -839,7 +840,7 @@ implementation <span style="color:#cd5555">&#34;androidx.fragment:fragment-ktx:1
 }
 </code></pre></div><h3 id="kotlin协程与retrofit更搭">Kotlin协程与Retrofit更搭</h3>
 <p>首先Retrofit也值得我们封装一个工具类来创建Service：</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#008b45;font-weight:bold">RetrofitUtil</span> {
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#008b45;font-weight:bold">RetrofitUtil</span> {
     ...
     <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> retrofit <span style="color:#8b008b;font-weight:bold">by</span> lazy {
         Retrofit.Builder()
@@ -854,7 +855,7 @@ implementation <span style="color:#cd5555">&#34;androidx.fragment:fragment-ktx:1
     <span style="color:#8b008b;font-weight:bold">inline</span> <span style="color:#8b008b;font-weight:bold">fun</span> &lt;<span style="color:#8b008b;font-weight:bold">reified</span> <span style="color:#008b45;font-weight:bold">T</span>&gt; <span style="color:#008b45">create</span>(): T = create(T::<span style="color:#8b008b;font-weight:bold">class</span>.java)
 }
 </code></pre></div><p>前文提到，我们主要业务逻辑写到VM中，所以</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.novelrecommend.ui.viewmodel.main</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.novelrecommend.ui.viewmodel.main</span>
 <span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">androidx.lifecycle.ViewModel</span>
 <span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">androidx.lifecycle.viewModelScope</span>
 <span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">kotlinx.coroutines.Dispatchers</span>
@@ -903,13 +904,13 @@ implementation <span style="color:#cd5555">&#34;androidx.fragment:fragment-ktx:1
             <nav class="post-pagination">
 
                 
-                <a class="newer-posts" href="https://ntutn.top/posts/debugentrance%E5%92%8Cdebugconfig/">
+                <a class="newer-posts" href="/posts/debugentrance%E5%92%8Cdebugconfig/">
 			下回<br>DebugEntrance和DebugConfig
                 </a>
                 
                 
                 
-                <a class="older-posts" href="https://ntutn.top/posts/%E5%B9%B2%E6%8E%89macos%E7%9A%84ocsp/">
+                <a class="older-posts" href="/posts/%E5%B9%B2%E6%8E%89macos%E7%9A%84ocsp/">
 			上回<br>干掉macOS的OCSP
                 </a>
                 
@@ -954,6 +955,5 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 </div>
             </div>
     
-    <script src="/js/journal.js"></script>
-    </body>
+    <script src="/js/journal.js"></script></body>
 </html>

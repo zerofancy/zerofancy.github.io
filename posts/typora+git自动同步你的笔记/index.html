@@ -19,7 +19,7 @@
 <meta property="og:title" content="Typora&#43;git自动同步你的笔记" />
 <meta property="og:description" content="这两天看了群里某个大佬的笔记，突然觉得自己用VSCode记笔记的方案不香了。VSCode虽然对markdown的支持不错，但毕竟本职工作不是这个，直接拿来做笔记还是不够方便，太笨重了。于是我终于想起之前同学给我安利的markdown编辑器：Typora。" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://ntutn.top/posts/typora&#43;git%E8%87%AA%E5%8A%A8%E5%90%8C%E6%AD%A5%E4%BD%A0%E7%9A%84%E7%AC%94%E8%AE%B0/" />
+<meta property="og:url" content="https://ntutn.top/posts/typora&#43;git%E8%87%AA%E5%8A%A8%E5%90%8C%E6%AD%A5%E4%BD%A0%E7%9A%84%E7%AC%94%E8%AE%B0/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2020-03-02T03:11:37+08:00" />
 <meta property="article:modified_time" content="2020-03-02T03:11:37+08:00" /><meta property="og:site_name" content="归零幻想" />
 
@@ -32,7 +32,8 @@
 
 
 
-<link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+
 
 
   
@@ -44,17 +45,19 @@
 
 
 
-<link rel="stylesheet" href="https://ntutn.top/scss/journal.min.d8d9f81b896882733c41896750adbefbf9319ca02ccccefd461650898975c3af.css" integrity="sha256-2Nn4G4lognM8QYlnUK2&#43;&#43;/kxnKAszM79RhZQiYl1w68=" media="screen">
+<link rel="stylesheet" href="/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
 
 
 
-<link rel="stylesheet" href="https://ntutn.top/scss/dark-mode.min.60f86847da9fc0724177ccfd0bf7c5997b0b41f1e58d5a293cfb3723c497c422.css" integrity="sha256-YPhoR9qfwHJBd8z9C/fFmXsLQfHljVopPPs3I8SXxCI=" media="screen">
+<link rel="stylesheet" href="/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
 
 
-<script src="/vendor/js/loadCSS.js"></script>
-<script>
-  loadCSS("https://fonts.googleapis.com/css?family=Fira+Mono|Material+Icons");
-</script>
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css"><link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
 
 
 
@@ -67,8 +70,6 @@
 
 
 
-
-  <script src="/js/toc.js"></script>
 
 
 
@@ -753,7 +754,7 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <!-- raw HTML omitted -->
 <h3 id="安装">安装</h3>
 <p>在Ubuntu下安装还是非常方便的：</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#228b22"># or run:</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#228b22"># or run:</span>
 <span style="color:#228b22"># sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA300B7755AFCFAE</span>
 wget -qO - https://typora.io/linux/public-key.asc | sudo apt-key add -
 <span style="color:#228b22"># add Typora&#39;s repository</span>
@@ -815,7 +816,7 @@ sudo apt-get install typora
 <p>怎么注册账号，怎么建立仓库我就不说了。clone下来，这就是以后笔记安家的地方了。</p>
 <h2 id="自动同步笔记">自动同步笔记</h2>
 <p>然而，我们还是需要运行<code>git add</code>、<code>git commit</code>、<code>git push</code>，而且在别处修改了笔记还得手动pull一下。执行的命令这么固定，肯定是要写成脚本(.sync.sh)了。</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#658b00">cd</span> /home/zero/Documents/Notes
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#658b00">cd</span> /home/zero/Documents/Notes
 git pull &amp;
 typora . TODO.md
 git add .
@@ -824,7 +825,7 @@ git push
 </code></pre></div><p>注意上面的路径改为你自己笔记文件夹的路径。第二行的<code>&amp;</code>不要省，我们没必要等pull完才打开Typora，这样可以加快一点启动速度。</p>
 <p>好了，现在我们执行脚本就能打开Typora，而且所有编辑还能自动同步。由于git默认不允许保留空提交，没有修改的时候也不会产生大量无用的记录，完美。</p>
 <p>最后写个桌面启动器就大功告成了：</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ini" data-lang="ini"><span style="color:#8b008b;font-weight:bold">[Desktop Entry]</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ini" data-lang="ini"><span style="color:#8b008b;font-weight:bold">[Desktop Entry]</span>
 <span style="color:#658b00">Type</span>=<span style="color:#cd5555">Application</span>
 <span style="color:#658b00">Icon</span>=<span style="color:#cd5555">typora</span>
 <span style="color:#658b00">Name</span>=<span style="color:#cd5555">笔记</span>
@@ -838,7 +839,7 @@ git push
 <p>Windows下的Typora并没有默认添加环境变量，请手动添加。添加后需要重启。
 首先对应上面的sh，写个cmd(.sync.cmd)：</p>
 </blockquote>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cmd" data-lang="cmd"><span style="color:#8b008b;font-weight:bold">start</span> /b git pull
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cmd" data-lang="cmd"><span style="color:#8b008b;font-weight:bold">start</span> /b git pull
 typora . TODO.md
 git add .
 git commit -m <span style="color:#cd5555">&#34;Sync&#34;</span>
@@ -846,7 +847,7 @@ git push
 </code></pre></div><p>第一行不一样，这是因为cmd后台执行是用<code>start /b</code>的，与shell脚本的<code>&amp;</code>效果是一样的。</p>
 <p>此时双击这个cmd已经能看到效果了。</p>
 <p>但cmd执行时会有黑窗口，很影响美观，我们写个vbs脚本(.sync.vbs)来调用它，这样可以不显示黑窗口。</p>
-<pre><code class="language-vbs" data-lang="vbs">WScript.CreateObject(&quot;WScript.Shell&quot;).Run &quot;.sync.cmd&quot;,0
+<pre tabindex="0"><code class="language-vbs" data-lang="vbs">WScript.CreateObject(&quot;WScript.Shell&quot;).Run &quot;.sync.cmd&quot;,0
 </code></pre><p>最后创建个桌面快捷方式，指向<code>.sync.vbs</code>，就大功告成了。</p>
 <blockquote>
 <p>注意：快捷方式的起始目录要指向笔记的目录。</p>
@@ -865,13 +866,13 @@ git push
             <nav class="post-pagination">
 
                 
-                <a class="newer-posts" href="https://ntutn.top/posts/%E6%8E%89%E5%9D%91%E7%9A%84%E6%97%A5%E5%B8%B8springboot%E7%9A%84json%E5%B1%9E%E6%80%A7%E5%90%8D%E5%A4%A7%E5%B0%8F%E5%86%99%E9%97%AE%E9%A2%98/">
+                <a class="newer-posts" href="/posts/%E6%8E%89%E5%9D%91%E7%9A%84%E6%97%A5%E5%B8%B8springboot%E7%9A%84json%E5%B1%9E%E6%80%A7%E5%90%8D%E5%A4%A7%E5%B0%8F%E5%86%99%E9%97%AE%E9%A2%98/">
 			下回<br>掉坑的日常：springboot的json属性名大小写问题
                 </a>
                 
                 
                 
-                <a class="older-posts" href="https://ntutn.top/posts/java%E8%87%AA%E5%8A%A8%E8%A3%85%E7%AE%B1%E8%87%AA%E5%8A%A8%E6%8B%86%E7%AE%B1%E8%B8%A9%E5%9D%91/">
+                <a class="older-posts" href="/posts/java%E8%87%AA%E5%8A%A8%E8%A3%85%E7%AE%B1%E8%87%AA%E5%8A%A8%E6%8B%86%E7%AE%B1%E8%B8%A9%E5%9D%91/">
 			上回<br>Java自动装箱自动拆箱踩坑
                 </a>
                 
@@ -916,6 +917,5 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 </div>
             </div>
     
-    <script src="/js/journal.js"></script>
-    </body>
+    <script src="/js/journal.js"></script></body>
 </html>

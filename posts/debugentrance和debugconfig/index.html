@@ -19,7 +19,7 @@
 <meta property="og:title" content="DebugEntrance和DebugConfig" />
 <meta property="og:description" content="工欲善其事，必先利其器。毕设是一个相对复杂的项目了，我觉得要想顺利完成肯定是需要一些手段帮助我调试的。于是这里我准备了debug页面，主要功能就两个：提供某个功能的入口以及存储配置（最好能直接在手机上修改）" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://ntutn.top/posts/debugentrance%E5%92%8Cdebugconfig/" />
+<meta property="og:url" content="https://ntutn.top/posts/debugentrance%E5%92%8Cdebugconfig/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2021-02-22T03:11:37+08:00" />
 <meta property="article:modified_time" content="2021-02-22T03:11:37+08:00" /><meta property="og:site_name" content="归零幻想" />
 
@@ -32,7 +32,8 @@
 
 
 
-<link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+
 
 
   
@@ -44,17 +45,19 @@
 
 
 
-<link rel="stylesheet" href="https://ntutn.top/scss/journal.min.d8d9f81b896882733c41896750adbefbf9319ca02ccccefd461650898975c3af.css" integrity="sha256-2Nn4G4lognM8QYlnUK2&#43;&#43;/kxnKAszM79RhZQiYl1w68=" media="screen">
+<link rel="stylesheet" href="/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
 
 
 
-<link rel="stylesheet" href="https://ntutn.top/scss/dark-mode.min.60f86847da9fc0724177ccfd0bf7c5997b0b41f1e58d5a293cfb3723c497c422.css" integrity="sha256-YPhoR9qfwHJBd8z9C/fFmXsLQfHljVopPPs3I8SXxCI=" media="screen">
+<link rel="stylesheet" href="/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
 
 
-<script src="/vendor/js/loadCSS.js"></script>
-<script>
-  loadCSS("https://fonts.googleapis.com/css?family=Fira+Mono|Material+Icons");
-</script>
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css"><link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
 
 
 
@@ -67,8 +70,6 @@
 
 
 
-
-  <script src="/js/toc.js"></script>
 
 
 
@@ -900,7 +901,7 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <p><img src="https://i.loli.net/2021/02/22/Mi8lCJdZBcjnYmO.jpg" alt="2.jpg"> <img src="https://i.loli.net/2021/02/22/cEAfgMVPzrSXmuY.jpg" alt="3.jpg"></p>
 <h3 id="使用">使用</h3>
 <p>先看使用：</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#707a7c">@ZeroConfig</span>(key = <span style="color:#cd5555">&#34;retrofit_config&#34;</span>, title = <span style="color:#cd5555">&#34;Retrofit配置&#34;</span>, owner = <span style="color:#cd5555">&#34;liuhaixin.zero&#34;</span>)
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#707a7c">@ZeroConfig</span>(key = <span style="color:#cd5555">&#34;retrofit_config&#34;</span>, title = <span style="color:#cd5555">&#34;Retrofit配置&#34;</span>, owner = <span style="color:#cd5555">&#34;liuhaixin.zero&#34;</span>)
 <span style="color:#8b008b;font-weight:bold">data</span> <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">RetrofitConfig</span>(<span style="color:#8b008b;font-weight:bold">val</span> baseUrl: String = RetrofitUtil.BASE_URL)
 <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> retrofitConfig <span style="color:#8b008b;font-weight:bold">by</span> zeroConfig&lt;RetrofitConfig&gt;()
 <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> retrofit <span style="color:#8b008b;font-weight:bold">by</span> lazy {
@@ -916,44 +917,44 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <p>首先是一段来自<a href="https://www.runoob.com/kotlin/kotlin-delegated.html">菜鸟教程</a>的描述：</p>
 <hr>
 <p>属性委托指的是一个类的某个属性值不是在类中直接进行定义，而是将其托付给一个代理类，从而实现对该类属性的统一管理。</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">val</span>/<span style="color:#8b008b;font-weight:bold">var</span> <span style="color:#a61717;background-color:#e3d2d2">&lt;属性名&gt;: &lt;类型&gt; </span>by &lt;<span style="color:#a61717;background-color:#e3d2d2">表达式</span>&gt;
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">val</span>/<span style="color:#8b008b;font-weight:bold">var</span> <span style="color:#a61717;background-color:#e3d2d2">&lt;</span>属性名&gt;: &lt;类型&gt; <span style="color:#8b008b;font-weight:bold">by</span> &lt;表达式&gt;
 </code></pre></div><p>by 关键字之后的表达式就是委托, 属性的 get() 方法(以及set() 方法)将被委托给这个对象的 getValue() 和 setValue() 方法。属性委托不必实现任何接口, 但必须提供 getValue() 函数(对于 var属性,还需要 setValue() 函数)。</p>
 <hr>
 <p>借助这个特征，我们可以定义这样一个委托类：</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">ZeroConfigDelegate</span>&lt;T&gt;(<span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> clazz: Class&lt;T&gt;) {
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">ZeroConfigDelegate</span>&lt;T&gt;(<span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> clazz: Class&lt;T&gt;) {
     <span style="color:#8b008b;font-weight:bold">operator</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">getValue</span>(thisRef: Any?, <span style="color:#8b008b;font-weight:bold">property</span>: KProperty&lt;*&gt;): T? =
         ZeroConfigHelper.readConfig(clazz)
     <span style="color:#8b008b;font-weight:bold">operator</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">setValue</span>(thisRef: Any?, <span style="color:#8b008b;font-weight:bold">property</span>: KProperty&lt;*&gt;, value: T?) =
         ZeroConfigHelper.saveConfig(clazz, value)
 }
 </code></pre></div><p>这样我们需要存取配置的时候只要</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">var</span> config <span style="color:#8b008b;font-weight:bold">by</span> ZeroConfigDelegate(ConfigClass::<span style="color:#8b008b;font-weight:bold">class</span>.java)
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">var</span> config <span style="color:#8b008b;font-weight:bold">by</span> ZeroConfigDelegate(ConfigClass::<span style="color:#8b008b;font-weight:bold">class</span>.java)
 <span style="color:#228b22">// 存
 </span><span style="color:#228b22"></span>config = ConfigClass(arg)
 <span style="color:#228b22">// 取
 </span><span style="color:#228b22"></span>println(config.key1)
 </code></pre></div><p>接下来定义一个顶级函数（<em>我也不知道这样有啥好处，但看Kotlin库lazy函数就是这样实现的</em>）：</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#228b22">/**
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#228b22">/**
 </span><span style="color:#228b22"> * 委托获取配置值
 </span><span style="color:#228b22"> * @param clazz 配置类型
 </span><span style="color:#228b22"> */</span>
 <span style="color:#8b008b;font-weight:bold">fun</span> &lt;<span style="color:#008b45;font-weight:bold">T</span>&gt; <span style="color:#008b45">zeroConfig</span>(clazz: Class&lt;T&gt;): ZeroConfigDelegate&lt;T&gt; = ZeroConfigDelegate(clazz)
 </code></pre></div><p>相对java的泛型，Kotlin还提供了一个叫做“泛型实化”的东西，可以进一步让我们上面写法更优雅：</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#228b22">/**
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#228b22">/**
 </span><span style="color:#228b22"> * 委托获取配置值
 </span><span style="color:#228b22"> * 泛型实化，调用更方便
 </span><span style="color:#228b22"> */</span>
 <span style="color:#8b008b;font-weight:bold">inline</span> <span style="color:#8b008b;font-weight:bold">fun</span> &lt;<span style="color:#8b008b;font-weight:bold">reified</span> <span style="color:#008b45;font-weight:bold">T</span>&gt; <span style="color:#008b45">zeroConfig</span>(): ZeroConfigDelegate&lt;T&gt; =
     zeroConfig(T::<span style="color:#8b008b;font-weight:bold">class</span>.java)
 </code></pre></div><p>现在调用时就是开始的那个例子那样了：</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">var</span> config <span style="color:#8b008b;font-weight:bold">by</span> zeroConfig&lt;ConfigClass&gt;()
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">var</span> config <span style="color:#8b008b;font-weight:bold">by</span> zeroConfig&lt;ConfigClass&gt;()
 <span style="color:#228b22">// 存
 </span><span style="color:#228b22"></span>config = ConfigClass(arg)
 <span style="color:#228b22">// 取
 </span><span style="color:#228b22"></span>println(config.key1)
 </code></pre></div><h3 id="配置的存取">配置的存取</h3>
 <p>这里代码目前实现很简单，就是直接转换成json然后存到sp里。</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">fun</span> &lt;<span style="color:#008b45;font-weight:bold">T</span>&gt; <span style="color:#008b45">saveConfig</span>(clazz: Class&lt;*&gt;, value: T) {
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">fun</span> &lt;<span style="color:#008b45;font-weight:bold">T</span>&gt; <span style="color:#008b45">saveConfig</span>(clazz: Class&lt;*&gt;, value: T) {
     bufferMap[clazz] = value
     sp.edit {
         putString(getKeyOfClass(clazz), gson.toJson(value))
@@ -972,7 +973,7 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <p>其实如果照目前为止，只要保证定义的配置字段key互不相同就行了，那么可以直接用<code>clazz.canonicalName</code>。不过我们这里的需求还希望实现一个能直接在手机操作的管理界面，所以用注解去定义下配置字段相关的信息会比较好。</p>
 <p>首先新建一个kotlin模块（注意不是安卓模块），叫做libzeroconfig，用来放我们的注解，这样后面用到的地方直接导入这个模块就行了。</p>
 <p>参考字节的ABManager，我这样定义我的注解</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.libzeroconfig</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.libzeroconfig</span>
 <span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">kotlin.reflect.KClass</span>
 <span style="color:#228b22">/**
 </span><span style="color:#228b22"> * 标注于配置实体类之上，指定配置字段名
@@ -1008,7 +1009,7 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <p>对于第二步，Google提供了一个叫<code>auto service</code>的东西可以帮我们生成这个文件，只要引入后在你的Annotation Processor类上加上<code>@AutoService(Processor.class)</code>就可以了。</p>
 <p>至于这个注解处理类的实现，建议还是别看我代码了，有两个我认为很值得参考的项目：一个是前面提到的<a href="https://github.com/google/auto/tree/master/service">Auto Service</a>，另一个是<a href="https://github.com/greenrobot/EventBus/tree/master/EventBusAnnotationProcessor">EventBus的注解处理器</a>。</p>
 <h4 id="日志输出">日志输出</h4>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">note</span>(message: String) {
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">note</span>(message: String) {
     processingEnv.messager.printMessage(Diagnostic.Kind.NOTE, <span style="color:#cd5555">&#34;</span><span style="color:#cd5555">$message</span><span style="color:#cd5555">\r\n</span><span style="color:#cd5555">&#34;</span>)
 }
 <span style="color:#228b22">// \r\n换行 https://medium.com/@cafonsomota/annotation-processor-printing-a-message-and-doing-it-in-a-new-line-1b6609e86e5c
@@ -1020,7 +1021,7 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 }
 </code></pre></div><p>注意：<strong>换行要用\r\n，另外error会让编译终止</strong></p>
 <h4 id="信息收集">信息收集</h4>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">process</span>(
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">process</span>(
     annotations: MutableSet&lt;<span style="color:#8b008b;font-weight:bold">out</span> TypeElement&gt;,
     roundEnvironment: RoundEnvironment
 ): Boolean {
@@ -1063,7 +1064,7 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <p>通过filer写文件是不允许覆盖的，在此前我尝试用了某个有点dirty的方法绕过了这个限制，但后来看了EventBus的实现后改为了现在这个样子。
 注意上面有一个<code>scope = getClassFromAnnotation { annotation.scope.qualifiedName!! }</code>，怎么说呢，又是一个有点dirty的实现：</p>
 </blockquote>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#228b22">/**
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#228b22">/**
 </span><span style="color:#228b22"> * 获取annotation中的Class
 </span><span style="color:#228b22"> * https://www.jianshu.com/p/6822278f4771
 </span><span style="color:#228b22"> */</span>
@@ -1081,18 +1082,18 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <p>其实我们要生成的类很简单，只拼接字符串就能完成，<em>但用KotlinPoet显然逼格高不少。</em></p>
 <h3 id="初始化">初始化</h3>
 <p>前面步骤之后就已经生成了多个类文件了，他们形如</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">public</span> <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">ZeroConfigHolder</span> : IZeroConfigHolder {
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">public</span> <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">ZeroConfigHolder</span> : IZeroConfigHolder {
   <span style="color:#8b008b;font-weight:bold">public</span> <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">getValue</span>(): Map&lt;String, ZeroConfigInformation&gt; = mapOf(<span style="color:#cd5555">&#34;metrics_config&#34;</span> to
       top.ntutn.libzeroconfig.ZeroConfigInformation(key=<span style="color:#cd5555">&#34;metrics_config&#34;</span>,title=<span style="color:#cd5555">&#34;埋点配置&#34;</span>,clazz=<span style="color:#cd5555">&#34;top.ntutn.commonutil.MetricsConfig&#34;</span>,scope=<span style="color:#cd5555">&#34;top.ntutn.libzeroconfig.DefaultScope&#34;</span>,owner=<span style="color:#cd5555">&#34;liuhaixin.zero&#34;</span>))
 }
 </code></pre></div><p>但我们还是要在启动时注册一下，这样就可以在管理面板枚举出所有配置项了。</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">ZeroConfigHelper.<span style="color:#8b008b;font-weight:bold">init</span>(applicationContext)
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">ZeroConfigHelper.<span style="color:#8b008b;font-weight:bold">init</span>(applicationContext)
     .addConfigHolder(top.ntutn.zeroconfigutil.ZeroConfigHolder())
     .addConfigHolder(ZeroConfigHolder())
     .addConfigHolder(top.ntutn.commonutil.ZeroConfigHolder())
 </code></pre></div><h3 id="管理面板">管理面板</h3>
 <p>为了提供一个通用的配置编辑界面，还是准备个json的存取方式比较合理。</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">readRawConfig</span>(key: String): String? {
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">readRawConfig</span>(key: String): String? {
     <span style="color:#8b008b;font-weight:bold">val</span> clazz = getClassByKey(key) ?: <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">null</span>
     <span style="color:#8b008b;font-weight:bold">var</span> rawString = sp.getString(getKeyOfClass(clazz), <span style="color:#8b008b;font-weight:bold">null</span>)
     <span style="color:#228b22">// 正确显示配置的默认值
@@ -1122,13 +1123,13 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
             <nav class="post-pagination">
 
                 
-                <a class="newer-posts" href="https://ntutn.top/posts/classloader%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%89%98%E6%9C%BA%E5%88%B6%E6%8E%A2%E7%A9%B6/">
+                <a class="newer-posts" href="/posts/classloader%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%89%98%E6%9C%BA%E5%88%B6%E6%8E%A2%E7%A9%B6/">
 			下回<br>ClassLoader双亲委托机制探究
                 </a>
                 
                 
                 
-                <a class="older-posts" href="https://ntutn.top/posts/viewbindingviewmodel%E5%92%8Clivedata/">
+                <a class="older-posts" href="/posts/viewbindingviewmodel%E5%92%8Clivedata/">
 			上回<br>ViewBinding、ViewModel和LiveData
                 </a>
                 
@@ -1173,6 +1174,5 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 </div>
             </div>
     
-    <script src="/js/journal.js"></script>
-    </body>
+    <script src="/js/journal.js"></script></body>
 </html>

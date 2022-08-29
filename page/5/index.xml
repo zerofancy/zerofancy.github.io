@@ -32,19 +32,19 @@
 &lt;h2 id=&#34;启动&#34;&gt;启动&lt;/h2&gt;
 &lt;p&gt;直接双击exe，然后……它免费帮你调了一下分辨率，就没反应了。&lt;/p&gt;
 &lt;p&gt;貌似兼容性是个比较大的问题……于是在网上找了好久，终于知道，可以用命令行控制游戏窗口运行：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cmd&#34; data-lang=&#34;cmd&#34;&gt;shanghai.exe -windows
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cmd&#34; data-lang=&#34;cmd&#34;&gt;shanghai.exe -windows
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;修改屏幕分辨率实现全屏&#34;&gt;修改屏幕分辨率实现全屏&lt;/h2&gt;
 &lt;p&gt;倒是能运行了，只是……画面都在左上角，没法玩啊……&lt;/p&gt;
 &lt;p&gt;所以再加上自动修改屏幕分辨率就可以全屏了。修改屏幕分辨率可以用&lt;code&gt;setres&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;&lt;a href=&#34;https://www.majorgeeks.com/files/details/setres.html&#34;&gt;下载链接&lt;/a&gt;下载并将exe文件放到血战上海滩的游戏文件夹。&lt;/p&gt;
 &lt;p&gt;于是用下面的命令：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cmd&#34; data-lang=&#34;cmd&#34;&gt;setres h800 v600
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cmd&#34; data-lang=&#34;cmd&#34;&gt;setres h800 v600
 shanghai.exe -windows
 setres h1920 v1080
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;1920*1080&lt;/code&gt;是我电脑的屏幕分辨率，注意换成自己的。&lt;/p&gt;
 &lt;h2 id=&#34;隐藏显示任务栏&#34;&gt;隐藏显示任务栏&lt;/h2&gt;
 &lt;p&gt;然而，这样还是有问题，就是这样“全屏”后任务栏并没有消失，虽然可以设置自动隐藏任务栏但总归还是不爽，于是写了个简单C#程序在启动游戏隐藏任务栏（虽然很简单，但没找到只用命令实现的方法）&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-C#&#34; data-lang=&#34;C#&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System&lt;/span&gt;;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-C#&#34; data-lang=&#34;C#&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System&lt;/span&gt;;
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System.Collections.Generic&lt;/span&gt;;
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System.Linq&lt;/span&gt;;
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System.Text&lt;/span&gt;;
@@ -66,7 +66,7 @@ setres h1920 v1080
         }
     }
 }
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-C#&#34; data-lang=&#34;C#&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System&lt;/span&gt;;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-C#&#34; data-lang=&#34;C#&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System&lt;/span&gt;;
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System.Collections.Generic&lt;/span&gt;;
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System.Linq&lt;/span&gt;;
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System.Text&lt;/span&gt;;
@@ -89,7 +89,7 @@ setres h1920 v1080
     }
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;编译并将生成文件也放到游戏文件夹。这样我们就可以用一个&lt;code&gt;start.cmd&lt;/code&gt;打开游戏：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cmd&#34; data-lang=&#34;cmd&#34;&gt;setres h800 v600
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cmd&#34; data-lang=&#34;cmd&#34;&gt;setres h800 v600
 hidetaskbar
 shanghai.exe -windows
 showtaskbar
@@ -121,9 +121,9 @@ setres h1920 v1080
 &lt;/ol&gt;
 &lt;p&gt;例如：有如右图的二叉树   &lt;img src=&#34;https://i.loli.net/2020/08/20/axyNCbMzRcpDtY7.jpg&#34; alt=&#34;1559400741461.jpg&#34;&gt;&lt;/p&gt;
 &lt;h3 id=&#34;输入&#34;&gt;输入&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;ABD@@E@@C@F@@
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;ABD@@E@@C@F@@
 &lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;输出&#34;&gt;输出&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;Height(A)=3
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Height(A)=3
 Height(B)=2
 Height(D)=1
 Height(E)=1
@@ -131,7 +131,7 @@ Height(C)=2
 Height(F)=1
 &lt;/code&gt;&lt;/pre&gt;&lt;!-- raw HTML omitted --&gt;
 &lt;p&gt;已给出的代码如下：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-c++&#34; data-lang=&#34;c++&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-c++&#34; data-lang=&#34;c++&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
 &lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;stdlib.h&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
 &lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;namespace&lt;/span&gt; std;
 &lt;span style=&#34;color:#228b22&#34;&gt;//数据元素类型
@@ -190,7 +190,7 @@ Height(F)=1
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;answer&#34;&gt;Answer&lt;/h3&gt;
 &lt;p&gt;求树高度，递归。貌似没有必要判断lson和rson是否为空，不过凑合着吧……&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-c++&#34; data-lang=&#34;c++&#34;&gt;&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; BinaryTree::height(TreeNode* t)
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-c++&#34; data-lang=&#34;c++&#34;&gt;&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; BinaryTree::height(TreeNode* t)
 {
     &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(t==&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;){
         &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
@@ -220,16 +220,16 @@ Height(F)=1
 例如：有如右图的二叉树   &lt;img src=&#34;https://ntutn.top/file/down/1559400741461.jpg&#34; alt=&#34;二叉树&#34; title=&#34;二叉树&#34;&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h3 id=&#34;输入-1&#34;&gt;输入&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;ABD@@E@@C@F@@
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;ABD@@E@@C@F@@
 &lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;输出-1&#34;&gt;输出：&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt; 1A
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt; 1A
           2B
                    3D
                    3E
          2C
                    3F
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;给出的代码如下：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-c++&#34; data-lang=&#34;c++&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-c++&#34; data-lang=&#34;c++&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
 &lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;stdlib.h&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
 &lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;stdio.h&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
 &lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;namespace&lt;/span&gt; std;
@@ -287,7 +287,7 @@ Height(F)=1
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;answer-1&#34;&gt;Answer&lt;/h3&gt;
 &lt;p&gt;完全前序遍历，递归，注意输出格式。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-c++&#34; data-lang=&#34;c++&#34;&gt;&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; BinaryTree::Index_print(TreeNode* t, &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; l)
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-c++&#34; data-lang=&#34;c++&#34;&gt;&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; BinaryTree::Index_print(TreeNode* t, &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; l)
 {
     &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(t==&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;){
         &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;;
@@ -318,7 +318,7 @@ Height(F)=1
 &lt;p&gt;矩阵的输入：有多行，第1行包括三个整数，分别是矩阵的大小m,n及非零元素的个数r。后面r行分别输入各个非零元素的 行、列、值&lt;/p&gt;
 &lt;p&gt;矩阵的输出：按人们习惯的矩阵格式输出，即输出一个&lt;code&gt;m*n&lt;/code&gt;的矩阵，是零元素的输出0，非零元素输出元素值。&lt;/p&gt;
 &lt;p&gt;例如：输入如下：&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;100 90 5 //矩阵的行数为100，列数为90，共5个非零元素。
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;100 90 5 //矩阵的行数为100，列数为90，共5个非零元素。
 1 10 100 //a(1,10)=100
 50 60 200//a(50,60)=200
 50 80 100//a(50,80)=100
@@ -332,7 +332,7 @@ Height(F)=1
 &lt;/code&gt;&lt;/pre&gt;&lt;!-- raw HTML omitted --&gt;
 &lt;h2 id=&#34;example&#34;&gt;Example&lt;/h2&gt;
 &lt;h3 id=&#34;input&#34;&gt;Input&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;100 90 5
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;100 90 5
 1 10 100
 50 60 200
 50 80 100
@@ -344,7 +344,7 @@ Height(F)=1
 50 80 100
 70 70 10
 &lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;output&#34;&gt;Output&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;The transformed matrix  is:
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;The transformed matrix  is:
 10 1 100
 60 50 200
 60 60 200
@@ -365,14 +365,14 @@ The added matrix is:
 &lt;/blockquote&gt;
 &lt;p&gt;所谓矩阵的压缩存储，实际上是在矩阵中元素较少时，只存非零元素的方法。在矩阵比较特殊（如三角阵）或矩阵元素比较稀疏的情况下能大大节省存储空间。但同时，压缩存储也会导致访问效率下降。&lt;/p&gt;
 &lt;p&gt;所以这里我们定义了结构体来存储矩阵中的某个元素：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cpp&#34; data-lang=&#34;cpp&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;typedef&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;struct&lt;/span&gt;{
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cpp&#34; data-lang=&#34;cpp&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;typedef&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;struct&lt;/span&gt;{
     &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; row;
     &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; column;
     &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; data;
 }point;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;此题中第一部分，矩阵转置，通过观察即可知道，行变列列变行，只需交换元素&lt;code&gt;row&lt;/code&gt;和&lt;code&gt;column&lt;/code&gt;即可。&lt;/p&gt;
 &lt;p&gt;但交换后有个问题，即按照题目给出的标准输出，显然先输出行号小的元素，行号相等先输出列号小的元素。这就涉及了结构体数组的二级排序，也不难：&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;int cmp(const void *p1,const void *p2){
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;int cmp(const void *p1,const void *p2){
     if(((point*)p1)-&amp;gt;row==((point*)p2)-&amp;gt;row){
         return ((point*)p1)-&amp;gt;column-((point*)p2)-&amp;gt;column;
     }
@@ -381,7 +381,7 @@ The added matrix is:
 qsort(res,pA,sizeof(point),cmp);
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;至于第二问，两矩阵相加，类似归并的思想，每次找到小的拿过来，两者相等就相加。不过这里注意，两者相加有可能结果为0，要消去这组数据。&lt;/p&gt;
 &lt;h2 id=&#34;anwser&#34;&gt;Anwser&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cpp&#34; data-lang=&#34;cpp&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cpp&#34; data-lang=&#34;cpp&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
 &lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;cstdlib&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
 &lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;namespace&lt;/span&gt; std;
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;typedef&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;struct&lt;/span&gt;{
@@ -490,7 +490,7 @@ qsort(res,pA,sizeof(point),cmp);
 &lt;h2 id=&#34;question&#34;&gt;Question&lt;/h2&gt;
 &lt;p&gt;现在请你编写程序，统计计算一个斐波那契数时分解出的各子问题的个数。&lt;/p&gt;
 &lt;p&gt;斐波那契数的定义如下：&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;Fib(0)=0
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Fib(0)=0
 Fib(1)=1
 Fib(n)=Fib(n-1)+Fib(n-2)
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;输入：一个整数n，即计算&lt;code&gt;Fib(n)&lt;/code&gt;&lt;/p&gt;
@@ -498,9 +498,9 @@ Fib(n)=Fib(n-1)+Fib(n-2)
 &lt;!-- raw HTML omitted --&gt;
 &lt;h2 id=&#34;example&#34;&gt;Example&lt;/h2&gt;
 &lt;h3 id=&#34;input&#34;&gt;Input&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;5
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;5
 &lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;output&#34;&gt;Output&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;Fib(0)=0,spn=3
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Fib(0)=0,spn=3
 Fib(1)=1,spn=5
 Fib(2)=1,spn=3
 Fib(3)=2,spn=2
@@ -512,7 +512,7 @@ Fib(5)=5,spn=1
 &lt;p&gt;不死心的我又仔细研究递推子问题个数的规律，发现子问题个数正好是一个反着的斐波那契数列（结尾元素特殊处理），所以可以正向递推求数列，反向递推求子问题个数。&lt;/p&gt;
 &lt;p&gt;不过特殊情况研究的有点头疼，暂时就不搞了，下面给出的是老老实实递归求解的程序。&lt;/p&gt;
 &lt;h2 id=&#34;answer&#34;&gt;Answer&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-c++&#34; data-lang=&#34;c++&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-c++&#34; data-lang=&#34;c++&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
 &lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;cstring&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
 &lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;namespace&lt;/span&gt; std;
 &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;*spn;
@@ -578,7 +578,7 @@ Fib(5)=5,spn=1
 &lt;!-- raw HTML omitted --&gt;
 &lt;h2 id=&#34;example&#34;&gt;Example&lt;/h2&gt;
 &lt;h3 id=&#34;input&#34;&gt;Input&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;C
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;C
 ABC##DE#G##F###
 H
 L
@@ -592,7 +592,7 @@ A
 P
 X
 &lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;output&#34;&gt;Output&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;Created success!
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Created success!
 Height=5
 Leaves=3
 Nodes=7
@@ -619,7 +619,7 @@ A
 &lt;p&gt;我一开始写程序&lt;code&gt;Leaves=&lt;/code&gt;写成了&lt;code&gt;Leaf=&lt;/code&gt;，这鬼畜的错误半天没检查出来。顺便推荐个文本差异对比工具吧，这样找起来也容易：&lt;a href=&#34;http://www.jq22.com/textDifference&#34; title=&#34;在线文本差异对比&#34;&gt;在线文本差异对比&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;算上空行都300行了，真是够麻烦的。&lt;/p&gt;
 &lt;h2 id=&#34;answer&#34;&gt;Answer&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-c++&#34; data-lang=&#34;c++&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-c++&#34; data-lang=&#34;c++&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
 &lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;namespace&lt;/span&gt; std;
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;template&lt;/span&gt;&amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;T&lt;/span&gt;&amp;gt;
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;QueueNode&lt;/span&gt;{
@@ -912,7 +912,7 @@ A
 &lt;p&gt;输出，选出的最大活动子集，即有多行，每行包括活动的编号、开始时间、结束时间。&lt;/p&gt;
 &lt;h2 id=&#34;example&#34;&gt;Example&lt;/h2&gt;
 &lt;h3 id=&#34;input&#34;&gt;Input&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;11
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;11
 1 3 8
 2 2 13
 3 1 4
@@ -925,7 +925,7 @@ A
 10 0 6
 11 8 12
 &lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;output&#34;&gt;Output&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;3：1-4
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;3：1-4
 4：5-7
 6：8-11
 7：12-14
@@ -935,7 +935,7 @@ A
 &lt;p&gt;掉坑：在选择活动时只处理了前24小时的活动，而事实证明我画蛇添足了。&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h2 id=&#34;answer&#34;&gt;Answer&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cpp&#34; data-lang=&#34;cpp&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cpp&#34; data-lang=&#34;cpp&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
 &lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;stdio.h&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
 &lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;stdlib.h&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
 &lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;namespace&lt;/span&gt; std;
@@ -1009,11 +1009,11 @@ A
 &lt;p&gt;线性表元素输入时，以 &lt;code&gt;endTag&lt;/code&gt; 作为结束标志。&lt;/p&gt;
 &lt;!-- raw HTML omitted --&gt;
 &lt;p&gt;例如输入：&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;3 8 7 2 4 9 1 6 5 0
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;3 8 7 2 4 9 1 6 5 0
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;则输出：&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;9 8 7 6 5 4 3 2 1
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;9 8 7 6 5 4 3 2 1
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;预置代码如下： （其中/*   */ 部分是要补充的&lt;code&gt;insert&lt;/code&gt;和&lt;code&gt;reverse&lt;/code&gt;函数）&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cpp&#34; data-lang=&#34;cpp&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cpp&#34; data-lang=&#34;cpp&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
 &lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;stdlib.h&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
 &lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;namespace&lt;/span&gt; std;
 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;typedef&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; ElemType;  &lt;span style=&#34;color:#228b22&#34;&gt;//数据元素类型
@@ -1084,7 +1084,7 @@ A
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;分析&#34;&gt;分析&lt;/h2&gt;
 &lt;p&gt;基础题，注意边界的判断和特例的处理。&lt;/p&gt;
 &lt;h2 id=&#34;answer&#34;&gt;Answer&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cpp&#34; data-lang=&#34;cpp&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;/*
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cpp&#34; data-lang=&#34;cpp&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;/*
 &lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;**************************************************
 &lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;请写出 insert 成员函数
 &lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;**************************************************
@@ -1209,7 +1209,7 @@ ISA处于硬件和软件交界面，是计算机系统核心部分。&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h2 id=&#34;程序开发与执行过程&#34;&gt;程序开发与执行过程&lt;/h2&gt;
 &lt;p&gt;对于&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;stdio.h&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;stdio.h&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
 &lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;(){
     printf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Hello World!&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;);
 }
@@ -1217,7 +1217,7 @@ ISA处于硬件和软件交界面，是计算机系统核心部分。&lt;/p&gt;
 &lt;li&gt;通过程序编辑软件得到&lt;code&gt;hello.c&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;将&lt;code&gt;hello.c&lt;/code&gt;预处理、编译、汇编、链接，生成可执行目标程序&lt;/li&gt;
 &lt;/ol&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;gcc -o hello hello.c
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;gcc -o hello hello.c
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;预处理：将以&lt;code&gt;#&lt;/code&gt;开头的命令进行处理
 编译：编译得到汇编语言源程序
 汇编：得到（二进制）可重定位目标文件
@@ -1453,14 +1453,14 @@ $$CPU执行时间=CPI\times 程序总指令条数\times 时钟周期$$&lt;/p&gt;
 &lt;h3 id=&#34;算数逻辑部件&#34;&gt;算数逻辑部件&lt;/h3&gt;
 &lt;h2 id=&#34;定点数运算&#34;&gt;定点数运算&lt;/h2&gt;
 &lt;h3 id=&#34;补码加减运算&#34;&gt;补码加减运算&lt;/h3&gt;
-&lt;pre&gt;&lt;code&gt;Latex公式无法显示，反而导致后面排版错位……
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Latex公式无法显示，反而导致后面排版错位……
 $$
 \begin{cases}
 [x+y]_补=[x]_补+[y]_补(mod 2^n)\\\\
 [x-y]_补=[x]_补+[-y]_补(mod 2^n)
 \end{cases}
 $$
-&lt;/code&gt;&lt;/pre&gt;&lt;pre&gt;&lt;code&gt;    CF—进位标志，加法时的最高位（D7或D15）产生进位或减法时最高位出现借位，则CF=1，否则CF=0；
+&lt;/code&gt;&lt;/pre&gt;&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;    CF—进位标志，加法时的最高位（D7或D15）产生进位或减法时最高位出现借位，则CF=1，否则CF=0；
     AF—辅助进位标志，供BCD码使用。当D3位出现进位或借位时AF=1，否则AF=0；
     OF—溢出标志，带符号数进行算术运算时，其结果超出了8位或16位的表示范围，产生溢出，则OF=1，否则OF=0；
     ZF—零标志，运算结果各位都为零，则ZF=1，否则ZF=0；
@@ -2087,7 +2087,7 @@ $B=W*F/N$&lt;/li&gt;
 遇到左括号入栈，遇到右括号出栈。如果字符串结束栈不空，输出栈内左括号对应右括号。&lt;/p&gt;
 &lt;h2 id=&#34;question&#34;&gt;Question&lt;/h2&gt;
 &lt;p&gt;用栈实现：输入一行符号,以#结束，判断其中的括号是否匹配。括号包括：&lt;/p&gt;
-&lt;pre&gt;&lt;code&gt;{ } 、 [ ] 、 ( )、  &amp;lt; &amp;gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;{ } 、 [ ] 、 ( )、  &amp;lt; &amp;gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;如果匹配，输出 &lt;code&gt;right&lt;/code&gt;&lt;/p&gt;
 &lt;p&gt;如果不匹配，给出错误提示。包括：&lt;/p&gt;
 &lt;p&gt;第几个符号处理时出现错误；哪几个符号失配等&lt;/p&gt;
@@ -2109,7 +2109,7 @@ $B=W*F/N$&lt;/li&gt;
 &lt;blockquote&gt;
 &lt;p&gt;指定初始&lt;code&gt;maxsize=1&lt;/code&gt;是我某种程度上的强迫症，反正这题时间限制很宽松。&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-c++&#34; data-lang=&#34;c++&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-c++&#34; data-lang=&#34;c++&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
 &lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;cstring&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
 &lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;string&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
 &lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;namespace&lt;/span&gt; std;
@@ -2250,11 +2250,11 @@ $B=W*F/N$&lt;/li&gt;
 &lt;ul&gt;
 &lt;li&gt;输入：一行，即表达式，以“=”结束。例如：&lt;/li&gt;
 &lt;/ul&gt;
-&lt;pre&gt;&lt;code&gt;5*(8-3)+6/5=
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;5*(8-3)+6/5=
 &lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
 &lt;li&gt;输出：一行，即表达式的值。结果值为整数时输出为整数，如果有小数时保留5位小数。&lt;/li&gt;
 &lt;/ul&gt;
-&lt;pre&gt;&lt;code&gt;26.20000
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;26.20000
 &lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;问题与分析&#34;&gt;问题与分析&lt;/h2&gt;
 &lt;h3 id=&#34;栈&#34;&gt;栈&lt;/h3&gt;
 &lt;p&gt;栈是特殊的线性表，其一端固定，只允许在另一端插入或删除。其特性是“先进后出”。&lt;/p&gt;
@@ -2288,7 +2288,7 @@ $B=W*F/N$&lt;/li&gt;
 &lt;li&gt;通过&lt;code&gt;cin&lt;/code&gt;的&lt;code&gt;setiosflags&lt;/code&gt;和&lt;code&gt;setprecision&lt;/code&gt;格式化提交也会有问题，因为这样竟然是进行四舍五入的……&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h2 id=&#34;answer&#34;&gt;Answer&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cpp&#34; data-lang=&#34;cpp&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cpp&#34; data-lang=&#34;cpp&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
 &lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;string&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
 &lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;sstream&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
 &lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;cmath&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
