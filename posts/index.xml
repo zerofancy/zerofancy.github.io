@@ -7,7 +7,22 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Thu, 09 Jun 2022 17:02:54 +0800</lastBuildDate><atom:link href="https://ntutn.top/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 30 Aug 2022 02:49:11 +0800</lastBuildDate><atom:link href="https://ntutn.top/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>从头开始制作一个tg机器人</title>
+      <link>https://ntutn.top/posts/%E4%BB%8E%E5%A4%B4%E5%BC%80%E5%A7%8B%E5%88%B6%E4%BD%9C%E4%B8%80%E4%B8%AAtg%E6%9C%BA%E5%99%A8%E4%BA%BA/</link>
+      <pubDate>Tue, 30 Aug 2022 02:49:11 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E4%BB%8E%E5%A4%B4%E5%BC%80%E5%A7%8B%E5%88%B6%E4%BD%9C%E4%B8%80%E4%B8%AAtg%E6%9C%BA%E5%99%A8%E4%BA%BA/</guid>
+      <description>工作之外，总想折腾点什么东西。最近看朋友搞的QQ摸鱼机器人有点意思，就想自己也搞一个。tg提供的API比较全面，所以就想搞个tg版。
+直接贴代码：https://github.com/rfkhx/starsea
+基本消息处理和分发 其实仅就这个需求而言，并没有用多线程的必要性，一个死循环中拉取消息，拉到后交给对应模块处理，处理完继续下一次循环拉下一条消息就可以了。不过为了把代码结构写得更清楚一点，并希望能在这个过程中学到点东西，我决定仿照安卓的线程机制组织，将安卓中的 Handler、Looper 移植到我的项目中，借助这个过程更深入理解整个机制。
+类似安卓，我在后台线程进行网络请求，主线程进行结果的分发处理。
+Message Message 就是消息对象。我对消息对象的定义如下：
+data class Message( val what: Int, val arg: Int = -1, val payload: Any? = null, var time: Long = 0L, var target: Handler? = null, val callback: Runnable? = null ) 要理解整个消息机制，还是得先看这几个参数。
+ what 表示这是一条什么样的消息。一个 Handler 中可能定义和处理多种不同的消息，通过这个参数进行区分。 arg、payload 表示消息携带的参数。 arg 是简单的， Int 类型的参数，而 payload 则用于传递复杂对象。按需使用 time 表示 Message 预期被处理的时间。只有到了这个时间之后消息才可以被取出处理。这对应我们经常用的 handler.postDelayed 方法 target 处理消息的 Handler callback 消息处理时执行特定回调。实际上和继承相关 Handler 并在相关方法中处理消息是等同的  MessageQueue 记得安卓中有个比较经典和基础的问题，主线程实际执行了 Looper.</description>
+    </item>
+    
     <item>
       <title>Retrofit源码阅读</title>
       <link>https://ntutn.top/posts/retrofit%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/</link>

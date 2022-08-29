@@ -7,9 +7,580 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Thu, 09 Jun 2022 17:02:54 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 30 Aug 2022 02:49:11 +0800</lastBuildDate>
     
         <atom:link href="https://ntutn.top/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>从头开始制作一个tg机器人</title>
+        <link>https://ntutn.top/posts/%E4%BB%8E%E5%A4%B4%E5%BC%80%E5%A7%8B%E5%88%B6%E4%BD%9C%E4%B8%80%E4%B8%AAtg%E6%9C%BA%E5%99%A8%E4%BA%BA/</link>
+        <pubDate>Tue, 30 Aug 2022 02:49:11 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/%E4%BB%8E%E5%A4%B4%E5%BC%80%E5%A7%8B%E5%88%B6%E4%BD%9C%E4%B8%80%E4%B8%AAtg%E6%9C%BA%E5%99%A8%E4%BA%BA/</guid>
+        <description>归零幻想 https://ntutn.top/posts/%E4%BB%8E%E5%A4%B4%E5%BC%80%E5%A7%8B%E5%88%B6%E4%BD%9C%E4%B8%80%E4%B8%AAtg%E6%9C%BA%E5%99%A8%E4%BA%BA/ -&lt;p&gt;工作之外，总想折腾点什么东西。最近看朋友搞的QQ摸鱼机器人有点意思，就想自己也搞一个。tg提供的API比较全面，所以就想搞个tg版。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2022/08/4fcad14a68f078ea886d454f9173e0d0.png&#34; alt=&#34;image-20220830032946945&#34;&gt;&lt;/p&gt;
+&lt;p&gt;直接贴代码：&lt;a href=&#34;https://github.com/rfkhx/starsea&#34;&gt;https://github.com/rfkhx/starsea&lt;/a&gt;&lt;/p&gt;
+&lt;h1 id=&#34;基本消息处理和分发&#34;&gt;基本消息处理和分发&lt;/h1&gt;
+&lt;p&gt;其实仅就这个需求而言，并没有用多线程的必要性，一个死循环中拉取消息，拉到后交给对应模块处理，处理完继续下一次循环拉下一条消息就可以了。不过为了把代码结构写得更清楚一点，并希望能在这个过程中学到点东西，我决定仿照安卓的线程机制组织，将安卓中的 &lt;code&gt;Handler&lt;/code&gt;、&lt;code&gt;Looper&lt;/code&gt; 移植到我的项目中，借助这个过程更深入理解整个机制。&lt;/p&gt;
+&lt;p&gt;类似安卓，我在后台线程进行网络请求，主线程进行结果的分发处理。&lt;/p&gt;
+&lt;h2 id=&#34;message&#34;&gt;Message&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;Message&lt;/code&gt; 就是消息对象。我对消息对象的定义如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;data&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Message&lt;/span&gt;(  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; what: Int,  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; arg: Int = -&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;,  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; payload: Any? = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;,  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; time: Long = &lt;span style=&#34;color:#b452cd&#34;&gt;0L&lt;/span&gt;,  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; target: Handler? = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;,  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; callback: Runnable? = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;  
+)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;要理解整个消息机制，还是得先看这几个参数。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;what 表示这是一条什么样的消息。一个 &lt;code&gt;Handler&lt;/code&gt; 中可能定义和处理多种不同的消息，通过这个参数进行区分。&lt;/li&gt;
+&lt;li&gt;arg、payload 表示消息携带的参数。 &lt;code&gt;arg&lt;/code&gt; 是简单的， &lt;code&gt;Int&lt;/code&gt; 类型的参数，而 &lt;code&gt;payload&lt;/code&gt; 则用于传递复杂对象。按需使用&lt;/li&gt;
+&lt;li&gt;time 表示 &lt;code&gt;Message&lt;/code&gt; 预期被处理的时间。只有到了这个时间之后消息才可以被取出处理。这对应我们经常用的 &lt;code&gt;handler.postDelayed&lt;/code&gt; 方法&lt;/li&gt;
+&lt;li&gt;target 处理消息的 &lt;code&gt;Handler&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;callback 消息处理时执行特定回调。实际上和继承相关 &lt;code&gt;Handler&lt;/code&gt; 并在相关方法中处理消息是等同的&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;messagequeue&#34;&gt;MessageQueue&lt;/h2&gt;
+&lt;p&gt;记得安卓中有个比较经典和基础的问题，主线程实际执行了 &lt;code&gt;Looper.loop()&lt;/code&gt; ，为什么不会卡死？&lt;/p&gt;
+&lt;p&gt;首先我们看 &lt;code&gt;Looper&lt;/code&gt; 的实现。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2022/08/9af555bdbc0e5ef42784eed8e8219aac.png&#34; alt=&#34;Pasted image 20220825043217&#34;&gt;&lt;/p&gt;
+&lt;p&gt;确认这里确实是个死循环，继续看单次循环 &lt;code&gt;loopOnce&lt;/code&gt; 方法做了什么。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2022/08/bd6595d2f86b8d42798042706166a27b.png&#34; alt=&#34;Pasted image 20220825043457&#34;&gt;&lt;/p&gt;
+&lt;p&gt;首先从 &lt;code&gt;MessageQueue&lt;/code&gt; 中取到一条消息，一些判断后实际走了 &lt;code&gt;Message&lt;/code&gt; 对应 &lt;code&gt;Handler&lt;/code&gt; 来处理消息。似乎看不到哪里处理了这个问题，但我们可以在取消息处看到一条注释“might block”。&lt;/p&gt;
+&lt;p&gt;是的，这个队列有个特性，就是没有可用消息时，线程会阻塞在这里，就像我们用 &lt;code&gt;Scanner&lt;/code&gt; 读用户输入一样，只有有了输入程序才会继续运行，所以不会占满CPU资源。而用户感受到的卡顿发生实际上是主线程堆积的消息过多，无法及时处理导致的，与这里用一个死循环处理消息没有直接关系。这里更多拓展探讨可以参考 &lt;a href=&#34;https://www.wanandroid.com/wenda/show/8685&#34;&gt;每日一问 Looper.loop为什么不会阻塞掉UI线程？&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;幸运的是，java已经有具有这样功能的队列实现了，它就是 &lt;code&gt;java.util.concurrent.DelayQueue&lt;/code&gt; 。只要让我们的 &lt;code&gt;Message&lt;/code&gt; 类实现 &lt;code&gt;Delayed&lt;/code&gt; 接口&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;data&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Message&lt;/span&gt;(  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; what: Int,  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; arg: Int = -&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;,  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; payload: Any? = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;,  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; time: Long = &lt;span style=&#34;color:#b452cd&#34;&gt;0L&lt;/span&gt;,  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; target: Handler? = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;,  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; callback: Runnable? = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;  
+): Delayed {  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;compareTo&lt;/span&gt;(other: Delayed?): Int {  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; value1 = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.getDelay(TimeUnit.MILLISECONDS)  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; value2 = (other?.getDelay(TimeUnit.MILLISECONDS)?: &lt;span style=&#34;color:#b452cd&#34;&gt;0L&lt;/span&gt;)  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; (value1 - value2).getSymbolInt()  
+    }  
+  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;getDelay&lt;/span&gt;(unit: TimeUnit): Long {  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; diffTime = time - System.currentTimeMillis()  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; unit.convert(diffTime, TimeUnit.MILLISECONDS)  
+    }  
+  
+    &lt;span style=&#34;color:#228b22&#34;&gt;/*  
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     * 安全地提取符号，将long转换成 -1 0 1     */&lt;/span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;Long&lt;/span&gt;.getSymbolInt(): Int {  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; value = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (value == &lt;span style=&#34;color:#b452cd&#34;&gt;0L&lt;/span&gt;) {  
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;  
+        }  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; (value / abs(value)).toInt()  
+    }  
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然后我们就可以直接用这个 &lt;code&gt;DelayQueue&lt;/code&gt; 作为我们的 &lt;code&gt;MessageQueue&lt;/code&gt; 了。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MessageQueue&lt;/span&gt; {  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; mQueue = DelayQueue&amp;lt;Message&amp;gt;()  
+  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;enqueue&lt;/span&gt;(msg: Message) {  
+        msg.time = &lt;span style=&#34;color:#b452cd&#34;&gt;0L&lt;/span&gt;  
+        mQueue.put(msg)  
+    }  
+  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;enqueue&lt;/span&gt;(msg: Message, time: Long) {  
+        msg.time = time  
+        mQueue.put(msg)  
+    }  
+  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;poll&lt;/span&gt;(): Message {  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; mQueue.take()  
+    }  
+  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;clearMessages&lt;/span&gt;(handler: Handler) {  
+        mQueue.removeIf { &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt;.target == handler }  
+    }  
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;looper&#34;&gt;Looper&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;Looper&lt;/code&gt; 的核心代码抽离出来比较简单，我就直接贴出来了。 &lt;code&gt;Looper&lt;/code&gt; 中持有 &lt;code&gt;MessageQueue&lt;/code&gt; ，是整个消息循环的核心。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Looper&lt;/span&gt; {  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; mQueue = MessageQueue()  
+  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;companion&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; {  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; sThreadLocal = ThreadLocal&amp;lt;Looper&amp;gt;()  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; sMainLooper: Looper? = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;  
+  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;myLooper&lt;/span&gt;() = sThreadLocal.&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;get&lt;/span&gt;()  
+  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;mainLooper&lt;/span&gt;() = sMainLooper!!  
+  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;prepare&lt;/span&gt;() {  
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (sThreadLocal.&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;get&lt;/span&gt;() != &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;) {  
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;throw&lt;/span&gt; IllegalStateException(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;looper prepared&amp;#34;&lt;/span&gt;)  
+            }  
+            sThreadLocal.&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;set&lt;/span&gt;(Looper())  
+        }  
+  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;prepareMainLooper&lt;/span&gt;() {  
+            prepare()  
+            synchronized(Looper::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;) {  
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (sMainLooper != &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;) {  
+                    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;throw&lt;/span&gt; IllegalStateException(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;main looper prepared&amp;#34;&lt;/span&gt;)  
+                }  
+                sMainLooper = myLooper()  
+            }  
+        }  
+  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;loop&lt;/span&gt;() {  
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; me = myLooper() ?: &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;throw&lt;/span&gt; IllegalStateException(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;you should call prepare first&amp;#34;&lt;/span&gt;)  
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt; (&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;) {  
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; message = me.mQueue.poll()  
+                message.target?.dispatchMessage(message)  
+            }  
+        }  
+    }  
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这里唯一一个知识点就是 &lt;code&gt;ThreadLocal&lt;/code&gt; 的使用。这里借用 &lt;a href=&#34;https://www.liaoxuefeng.com/wiki/1252599548343744/1306581251653666&#34;&gt;廖雪峰的教程&lt;/a&gt; 中的一句话：“实际上，可以把&lt;code&gt;ThreadLocal&lt;/code&gt;看成一个全局&lt;code&gt;Map&amp;lt;Thread, Object&amp;gt;&lt;/code&gt;：每个线程获取&lt;code&gt;ThreadLocal&lt;/code&gt;变量时，总是使用&lt;code&gt;Thread&lt;/code&gt;自身作为key”。&lt;/p&gt;
+&lt;p&gt;每个线程 &lt;code&gt;prepare&lt;/code&gt; 后都绑定了一个 &lt;code&gt;Looper&lt;/code&gt; ，这个 &lt;code&gt;Looper&lt;/code&gt; 就是放在 &lt;code&gt;ThreadLocal&lt;/code&gt; 中的，此后我们在某一线程执行 &lt;code&gt;sThreadLocal.get()&lt;/code&gt; 拿到的就是这个线程的 &lt;code&gt;Looper&lt;/code&gt; 。&lt;/p&gt;
+&lt;h2 id=&#34;handler&#34;&gt;Handler&lt;/h2&gt;
+&lt;p&gt;终于到了激动人心的时刻了，我们理到了最常使用和打交道的 &lt;code&gt;Handler&lt;/code&gt; 。核心逻辑实际上要比我想象的简单。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;open&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Handler&lt;/span&gt;(looper: Looper? = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;) {  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;companion&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; {  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; EMPTY_MESSAGE = Message(-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;)  
+    }  
+  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; mLooper: Looper  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; mQueue: MessageQueue  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; mCallback: ((Message) -&amp;gt; Unit)? = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;  
+  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;init&lt;/span&gt; {  
+        mLooper = looper ?: Looper.myLooper() ?: &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;throw&lt;/span&gt; IllegalStateException(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;looper not prepared&amp;#34;&lt;/span&gt;)  
+        mQueue = mLooper.mQueue  
+    }  
+  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;sendMessage&lt;/span&gt;(msg: Message) = sendMessageDelay(msg, &lt;span style=&#34;color:#b452cd&#34;&gt;0L&lt;/span&gt;)  
+  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;sendMessageDelay&lt;/span&gt;(msg: Message, delay: Long) {  
+        require(delay &amp;gt;= &lt;span style=&#34;color:#b452cd&#34;&gt;0L&lt;/span&gt;) { &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;delay cannot be negative&amp;#34;&lt;/span&gt; }  
+        msg.target = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;  
+        mQueue.enqueue(msg, System.currentTimeMillis() + delay)  
+    }  
+  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;sendEmptyMessage&lt;/span&gt;() = sendMessage(EMPTY_MESSAGE)  
+  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;sendEmptyMessageDelayed&lt;/span&gt;(delay: Long) = sendMessageDelay(EMPTY_MESSAGE, delay)  
+  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;post&lt;/span&gt;(block: () -&amp;gt; Unit) {  
+        sendMessage(Message(&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;, callback = block))  
+    }  
+  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;postDelayed&lt;/span&gt;(block: () -&amp;gt; Unit, delay: Long) {  
+        sendMessageDelay(Message(&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;, callback = block), delay)  
+    }  
+  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;dispatchMessage&lt;/span&gt;(message: Message) {  
+        message.callback?.run() ?: mCallback?.invoke(message) ?: handleMessage(message)  
+    }  
+  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;clearMessages&lt;/span&gt;() {  
+        mQueue.clearMessages(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;)  
+    }  
+  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;protected&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;open&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;handleMessage&lt;/span&gt;(message: Message) {}  
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;一个 &lt;code&gt;Handler&lt;/code&gt; 对应一个 &lt;code&gt;Looper&lt;/code&gt; ，&lt;code&gt;sendMessage&lt;/code&gt; 实际上就是把对应的 &lt;code&gt;Message&lt;/code&gt; 插入到了对应的 &lt;code&gt;MessageQueue&lt;/code&gt; 中。而后阻塞在 &lt;code&gt;Looper.loop&lt;/code&gt; 取下一条消息位置的线程被唤醒，并根据 &lt;code&gt;Message.target&lt;/code&gt; 找到了发送消息的 &lt;code&gt;Handler.dispatchMessage&lt;/code&gt; 来执行，而后实际执行对应callback或handleMessage方法。&lt;/p&gt;
+&lt;h2 id=&#34;kotlin协程兼容&#34;&gt;Kotlin协程兼容&lt;/h2&gt;
+&lt;p&gt;根据我们前面的设计，我们有主线程和后台线程之分。Kotlin协程的实现上， &lt;code&gt;Dispatchers.IO&lt;/code&gt; 实际上是个未设置上限的线程池，但 &lt;code&gt;Dispatchers.Main&lt;/code&gt; 可是需要切换回主线程来执行对应代码的。我们怎么做这里的兼容，使之能切换回我们定义的“主线程”呢？&lt;/p&gt;
+&lt;p&gt;继续看代码，通过SPI加载了MainDispatcherFactory。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2022/08/9f27357e82b119c6fa75ef49d5696302.png&#34; alt=&#34;Pasted image 20220825052152&#34;&gt;&lt;/p&gt;
+&lt;p&gt;继续找，很快找到了安卓对应的实现&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2022/08/516a7a7b328ae08f0b23911258fcbd73.png&#34; alt=&#34;Pasted image 20220825052357&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2022/08/0c622b2059b0ec440cfc3fcf882a6d91.png&#34; alt=&#34;Pasted image 20220825052541&#34;&gt;&lt;/p&gt;
+&lt;p&gt;其实就是将对应的代码post到了主线程去处理。所以仿照它，我的“青春版”实现也有了&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#707a7c&#34;&gt;@OptIn&lt;/span&gt;(InternalCoroutinesApi::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;)  
+&lt;span style=&#34;color:#707a7c&#34;&gt;@AutoService&lt;/span&gt;(MainDispatcherFactory::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;)  
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MainDispatcherFactoryImpl&lt;/span&gt;: MainDispatcherFactory {  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; loadPriority: Int  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;get&lt;/span&gt;() = &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;  
+  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;createDispatcher&lt;/span&gt;(allFactories: List&amp;lt;MainDispatcherFactory&amp;gt;): MainCoroutineDispatcher {  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; MainDispatcher()  
+    }  
+}  
+  
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MainDispatcher&lt;/span&gt;: MainCoroutineDispatcher() {  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; handler = Handler(Looper.mainLooper())  
+  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; immediate: MainCoroutineDispatcher  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;get&lt;/span&gt;() = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;  
+  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;dispatch&lt;/span&gt;(context: CoroutineContext, block: Runnable) {  
+        handler.sendMessage(Message(&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;, callback = block))  
+    }  
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;消息的拉取&#34;&gt;消息的拉取&lt;/h1&gt;
+&lt;h2 id=&#34;长轮询的实现&#34;&gt;长轮询的实现&lt;/h2&gt;
+&lt;p&gt;tg的消息都是由一个叫做 &lt;code&gt;getUpdate&lt;/code&gt; 的接口拉取的，而通过这个接口获取消息要做&lt;a href=&#34;https://zh.javascript.info/long-polling&#34;&gt;长轮询&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;长轮询是什么？与普通的轮询方式不同，长轮询在发出请求后如果没有消息返回，服务端将不会立即返回，而是等有消息或超时再返回，而后客户端发起下一个请求。这一是能在有消息到达时让客户端及时收到通知，二是在没有消息时不会浪费太多无用请求。&lt;/p&gt;
+&lt;p&gt;我的网络请求部分是 &lt;code&gt;Retrofit&lt;/code&gt; ，我发现单独给某个请求设置不同的超时时间还挺麻烦的。我参考 &lt;a href=&#34;https://github.com/square/retrofit/issues/2982&#34;&gt;这里的讨论&lt;/a&gt; 总结如下：&lt;/p&gt;
+&lt;p&gt;首先将 &lt;code&gt;OkHttp&lt;/code&gt; 的超时时间设置为一个很大的值，保证不会影响到我们后面的设置。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; okHttpClient: OkHttpClient &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;by&lt;/span&gt; lazy {  
+    OkHttpClient.Builder()  
+        .connectTimeout(&lt;span style=&#34;color:#b452cd&#34;&gt;1L&lt;/span&gt;, TimeUnit.DAYS) &lt;span style=&#34;color:#228b22&#34;&gt;// 超时相关逻辑由 [top.ntutn.starsea.network.TimeoutCallAdapterFactory] 控制  
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        .readTimeout(&lt;span style=&#34;color:#b452cd&#34;&gt;1L&lt;/span&gt;, TimeUnit.DAYS)  
+        .writeTimeout(&lt;span style=&#34;color:#b452cd&#34;&gt;1L&lt;/span&gt;, TimeUnit.DAYS)  
+        .build()  
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;声明一个注解，用于指定单个连接的超时时间。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#707a7c&#34;&gt;@Retention&lt;/span&gt;(AnnotationRetention.RUNTIME)  
+&lt;span style=&#34;color:#707a7c&#34;&gt;@Target&lt;/span&gt;(AnnotationTarget.FUNCTION, AnnotationTarget.PROPERTY_GETTER, AnnotationTarget.PROPERTY_SETTER)  
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;annotation&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Timeout&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; value: Long, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; unit: TimeUnit)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;创建 &lt;code&gt;Retrofit&lt;/code&gt; 对象时，添加一个 &lt;code&gt;CallAdapterFactory&lt;/code&gt; ，读取注解设置超时时间。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; retrofit: Retrofit &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;by&lt;/span&gt; lazy {  
+    Retrofit.Builder()  
+        .baseUrl(BASE_URL)  
+        .addConverterFactory(KotlinSerializeUtil.json.asConverterFactory(MediaType.parse(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;application/json&amp;#34;&lt;/span&gt;)!!))  
+        .addCallAdapterFactory(TimeoutCallAdapterFactory())  
+        .client(okHttpClient)  
+        .build()  
+}
+
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;TimeoutCallAdapterFactory&lt;/span&gt; : CallAdapter.Factory(), LoggerOwner &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;by&lt;/span&gt; slf4jLoggerOwner&amp;lt;TimeoutCallAdapterFactory&amp;gt;() {  
+  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;get&lt;/span&gt;(returnType: Type, annotations: Array&amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;out&lt;/span&gt; Annotation&amp;gt;, retrofit: Retrofit): CallAdapter&amp;lt;*, *&amp;gt;? {  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; timeout = annotations.firstOrNull { &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;is&lt;/span&gt; Timeout } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;as&lt;/span&gt;? Timeout  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; delegate = retrofit.nextCallAdapter(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;, returnType, annotations)  
+  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (getRawType(returnType) != Call::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;.java) {  
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;  
+        }  
+  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;: &lt;/span&gt;&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;CallAdapter&lt;/span&gt;&amp;lt;Any, Call&amp;lt;Any&amp;gt;&amp;gt; {  
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;responseType&lt;/span&gt;(): Type {  
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;delegate&lt;/span&gt;.responseType()  
+            }  
+  
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;adapt&lt;/span&gt;(call: Call&amp;lt;Any&amp;gt;): Call&amp;lt;Any&amp;gt; {  
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; path = call.request().url().url().path  
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (timeout != &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;) {  
+                    logger.debug(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请求{}的超时时间被设置为{} {}&amp;#34;&lt;/span&gt;, path, timeout.value, timeout.unit)  
+                    call.timeout().timeout(timeout.value, timeout.unit)  
+                } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; {  
+                    logger.debug(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请求{}的超时时间被设置为默认值{} s&amp;#34;&lt;/span&gt;, path, RetrofitManager.DEFAULT_TIMEOUT.toLong())  
+                    call.timeout().timeout(RetrofitManager.DEFAULT_TIMEOUT.toLong(), TimeUnit.SECONDS)  
+                }  
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; call  
+            }  
+        }  
+    }  
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然后就可以借助注解便捷地指定某单个请求的超时时间了。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;/**  
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * [Telegram Bot API](https://core.telegram.org/bots/api) */&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;interface&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;BotApi&lt;/span&gt; {  
+  
+    &lt;span style=&#34;color:#707a7c&#34;&gt;@GET&lt;/span&gt;(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;/bot{token}/getMe&amp;#34;&lt;/span&gt;)  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;suspend&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;getMe&lt;/span&gt;(&lt;span style=&#34;color:#707a7c&#34;&gt;@Path&lt;/span&gt;(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;token&amp;#34;&lt;/span&gt;) token: BotToken): ResultWrapperBean&amp;lt;UserBean&amp;gt;  
+  
+    &lt;span style=&#34;color:#228b22&#34;&gt;/**  
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     * 获取更新消息，长连接  
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     */&lt;/span&gt;  
+    &lt;span style=&#34;color:#707a7c&#34;&gt;@Headers&lt;/span&gt;(  
+        &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${RetrofitManager.READ_TIMEOUT}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;: 6000&amp;#34;&lt;/span&gt;,  
+        &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${RetrofitManager.WRITE_TIMEOUT}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;: 6000&amp;#34;&lt;/span&gt;,  
+        &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${RetrofitManager.CONNECT_TIMEOUT}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;: 6000&amp;#34;&lt;/span&gt;  
+    )  
+    &lt;span style=&#34;color:#707a7c&#34;&gt;@Timeout&lt;/span&gt;(value = &lt;span style=&#34;color:#b452cd&#34;&gt;60L&lt;/span&gt;, unit = TimeUnit.SECONDS)  
+    &lt;span style=&#34;color:#707a7c&#34;&gt;@GET&lt;/span&gt;(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;/bot{token}/getUpdates?timeout=30&amp;amp;allowed_updates=message,edited_message&amp;#34;&lt;/span&gt;) &lt;span style=&#34;color:#228b22&#34;&gt;// timeout单位秒  
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;suspend&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;getUpdates&lt;/span&gt;(&lt;span style=&#34;color:#707a7c&#34;&gt;@Path&lt;/span&gt;(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;token&amp;#34;&lt;/span&gt;) token: BotToken, &lt;span style=&#34;color:#707a7c&#34;&gt;@Query&lt;/span&gt;(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;offset&amp;#34;&lt;/span&gt;) offset: Long? = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;): ResultWrapperBean&amp;lt;List&amp;lt;UpdateBean&amp;gt;&amp;gt;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;消息循环实现&#34;&gt;消息循环实现&lt;/h2&gt;
+&lt;p&gt;前面我们已经实现了安卓 &lt;code&gt;Handler&lt;/code&gt; 机制的简单移植和协程的支持，这里就写个 &lt;code&gt;Handler&lt;/code&gt; 来实现吧。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2022/08/d6cebada8649392ee9578f282fea2b1e.png&#34; alt=&#34;Pasted image 20220827025958&#34;&gt;&lt;/p&gt;
+&lt;p&gt;当开始获取消息时发送了一条 &lt;code&gt;Message&lt;/code&gt; ，而后就开始执行单条消息的获取和处理了。注意不要捕获 &lt;code&gt;CancellationException&lt;/code&gt; 时重试，否则job取消时就死循环了。&lt;/p&gt;
+&lt;h1 id=&#34;消息发送&#34;&gt;消息发送&lt;/h1&gt;
+&lt;p&gt;简单消息的发送就不说了，唯一麻烦点的是用tg发送文件。接口定义：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;interface&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;BotApi&lt;/span&gt; {
+&lt;span style=&#34;color:#228b22&#34;&gt;/**  
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * Use this method to send photos. On success, the sent Message is returned. * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)  
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * @param photo Photo to send. Pass a file_id as String to send a photo that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a photo from the Internet. The photo must be at most 10 MB in size. The photo&amp;#39;s width and height must not exceed 10000 in total. Width and height ratio must be at most 20. More information on Sending Files »  
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; */&lt;/span&gt;&lt;span style=&#34;color:#707a7c&#34;&gt;@POST&lt;/span&gt;(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;/bot{token}/sendPhoto&amp;#34;&lt;/span&gt;)  
+&lt;span style=&#34;color:#707a7c&#34;&gt;@Multipart&lt;/span&gt;  
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;suspend&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;sendPhoto&lt;/span&gt;(&lt;span style=&#34;color:#707a7c&#34;&gt;@Path&lt;/span&gt;(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;token&amp;#34;&lt;/span&gt;) token: BotToken, &lt;span style=&#34;color:#707a7c&#34;&gt;@Part&lt;/span&gt;(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;chat_id&amp;#34;&lt;/span&gt;) chatId: RequestBody, &lt;span style=&#34;color:#707a7c&#34;&gt;@Part&lt;/span&gt; photo: MultipartBody.Part): ResultWrapperBean&amp;lt;MessageBean&amp;gt;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;使用&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;String&lt;/span&gt;.toRequestBody(): RequestBody {  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; RequestBody.create(MediaType.parse(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;text/plain&amp;#34;&lt;/span&gt;), &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;)  
+}  
+  
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;File&lt;/span&gt;.toMultiplePart(parameter: String): MultipartBody.Part {  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; MultipartBody.Part.createFormData(parameter, name, RequestBody.create(MediaType.parse(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;multipart/form-data&amp;#34;&lt;/span&gt;), &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;))  
+}
+
+BotScope.launch(Dispatchers.IO) {  
+    kotlin.runCatching {  
+        BotApi.&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;get&lt;/span&gt;().sendPhoto(ConfigUtil.botToken, chatId.toRequestBody(), photoFile.toMultiplePart(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;photo&amp;#34;&lt;/span&gt;))  
+    }.onFailure {  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt;.printStackTrace()  
+    }  
+}
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;插件功能支持&#34;&gt;插件功能支持&lt;/h1&gt;
+&lt;p&gt;因为 &lt;a href=&#34;https://www.ruiovo.top/&#34;&gt;我朋友&lt;/a&gt; 已经做了一个QQ摸鱼机器人，所以我想可以做个插件支持，“为了这碟醋做顿饺子”，生命在于折腾嘛。&lt;/p&gt;
+&lt;h2 id=&#34;基本插件化原理&#34;&gt;基本插件化原理&lt;/h2&gt;
+&lt;p&gt;java本身有加载外部jar的 &lt;code&gt;ClassLoader&lt;/code&gt; —— &lt;code&gt;URLClassLoader&lt;/code&gt; ，因此插件可以定义为单个外部jar包，插件与宿主之间借助SPI进行通信。&lt;/p&gt;
+&lt;p&gt;因而，我首先定义插件API：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;/**  
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * 机器人功能接口，需要插件来实现  
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; */&lt;/span&gt;  
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;interface&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;BotContentProvider&lt;/span&gt; {  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; pluginName: String  
+  
+    &lt;span style=&#34;color:#228b22&#34;&gt;/**  
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     * 插件加载事件  
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     */&lt;/span&gt;  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onPluginLoaded&lt;/span&gt;() {}  
+  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onTextMessage&lt;/span&gt;(context: TextChatContext): Boolean = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;  
+}
+
+  
+&lt;span style=&#34;color:#228b22&#34;&gt;/**  
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * 机器人收到消息上下文对象，可以在此取到一些相关信息或进行一些操作  
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; */&lt;/span&gt;  
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;interface&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;ChatContext&lt;/span&gt; {  
+    &lt;span style=&#34;color:#228b22&#34;&gt;/**  
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     * 发送方chat_id  
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     */&lt;/span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; chatId: String  
+  
+    &lt;span style=&#34;color:#228b22&#34;&gt;/**  
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     * 使用文本进行直接回复  
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     * @param text 回复内容  
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     */&lt;/span&gt;  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;replyWithText&lt;/span&gt;(text: String)  
+}  
+  
+&lt;span style=&#34;color:#228b22&#34;&gt;/**  
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * 文本消息上下文  
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; */&lt;/span&gt;  
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;interface&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;TextChatContext&lt;/span&gt;: ChatContext {  
+    &lt;span style=&#34;color:#228b22&#34;&gt;/**  
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     * 收到的文本内容  
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     */&lt;/span&gt;  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; text: String  
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;宿主通过implementation方式引入，插件通过compileOnly方式引入。当一条新消息到达时，宿主将调用插件的 &lt;code&gt;onTextMessage()&lt;/code&gt; 方法，如果插件进行了处理则返回true，消息不再传递给下一个插件。&lt;/p&gt;
+&lt;p&gt;一个简单的EchoBot如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;EchoBot&lt;/span&gt;: BotContentProvider {
+
+	&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onTextMessage&lt;/span&gt;(context: TextChatContext) {
+		context.replyWithText(context.text)
+	}
+}
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;插件版本兼容&#34;&gt;插件版本兼容&lt;/h2&gt;
+&lt;p&gt;然而这样的方案遇到一个问题，就是不同版本插件API的jar包不是ABI兼容的。如果API中新增了一个方法如 &lt;code&gt;onPhotoMessage&lt;/code&gt; ，即使这个方法有默认实现，第三方插件也是要重新编译才能被我们的新版本机器人使用的。这是因为Kotlin的接口默认实现是编译期间的魔法，它将类未实现接口的默认方法指向一个叫 &lt;code&gt;DefaultsImpls&lt;/code&gt; 的类。所以只有重新编译，第三方插件才能使用，因为他们没有实现我们新增的方法。&lt;/p&gt;
+&lt;p&gt;我目前的方法是，给接口包名中加入版本号，每次升级时复制一份。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2022/08/18fd51b47d64a36b59035df69fa4fe3d.png&#34; alt=&#34;Pasted image 20220829014314&#34;&gt;&lt;/p&gt;
+&lt;p&gt;然后加载插件时同时查找旧版本实现，通过适配器适配为新版本接口实现。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;BotContentProviderAdapter&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; adaptee: V1Adapter): V2Provider, LoggerOwner &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;by&lt;/span&gt; slf4jLoggerOwner&amp;lt;BotContentProviderAdapter&amp;gt;() {  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;init&lt;/span&gt; {  
+        logger.warn(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;{} 插件使用了旧版本API，现通过兼容方式装入，请联系开发者进行升级适配！&amp;#34;&lt;/span&gt;, adaptee.pluginName)  
+    }  
+  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; pluginName: String = adaptee.pluginName  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onPluginLoaded&lt;/span&gt;() {  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onPluginLoaded()  
+        adaptee.onPluginLoaded()  
+    }  
+  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onTextMessage&lt;/span&gt;(context: ITextChatContext): Boolean {  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; adaptee.onTextMessage(TextChatContextAdapter(context))  
+    }  
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;其实还是很麻烦，不知道有没有更简单的方法。&lt;/p&gt;
+&lt;h1 id=&#34;部署和运行&#34;&gt;部署和运行&lt;/h1&gt;
+&lt;h2 id=&#34;基本部署&#34;&gt;基本部署&lt;/h2&gt;
+&lt;p&gt;使用 &lt;a href=&#34;https://docs.gradle.org/current/userguide/application_plugin.html&#34;&gt;The Application Plugin&lt;/a&gt; 进行打包。tar包复制到服务器上，然后&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;tar -xvf ./starsea.tar
+nohup starsea/starsea &amp;amp;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;偶然崩溃自动重启&#34;&gt;偶然崩溃自动重启&lt;/h2&gt;
+&lt;p&gt;作为一个想要长期运行的机器人服务，偶尔崩掉一两次也是正常的，写一个脚本在程序崩溃时自动再次拉起来还是有必要的。当然我认为系统得至少稳定运行了一段时间，才能走崩溃自动拉起来的逻辑，否则万一发生了启动崩溃，拉起来就崩，崩了就拉起来，服务器：听我说谢谢你～&lt;/p&gt;
+&lt;p&gt;我的策略是，启动时脚本创建一个标志文件，系统稳定运行一段时间如5分钟后就把这个文件删掉。如果发生崩溃且未找到这个文件，脚本就尝试再次把机器人拉起来。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#!/bin/sh  
+&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&lt;/span&gt;  
+&lt;span style=&#34;color:#228b22&#34;&gt;#  &lt;/span&gt;
+&lt;span style=&#34;color:#228b22&#34;&gt;# Copyright © 2015-2021 the original authors.  &lt;/span&gt;
+&lt;span style=&#34;color:#228b22&#34;&gt;#  &lt;/span&gt;
+&lt;span style=&#34;color:#228b22&#34;&gt;# Licensed under the Apache License, Version 2.0 (the &amp;#34;License&amp;#34;);  &lt;/span&gt;
+&lt;span style=&#34;color:#228b22&#34;&gt;# you may not use this file except in compliance with the License.  &lt;/span&gt;
+&lt;span style=&#34;color:#228b22&#34;&gt;# You may obtain a copy of the License at  &lt;/span&gt;
+&lt;span style=&#34;color:#228b22&#34;&gt;#  &lt;/span&gt;
+&lt;span style=&#34;color:#228b22&#34;&gt;#      https://www.apache.org/licenses/LICENSE-2.0  &lt;/span&gt;
+&lt;span style=&#34;color:#228b22&#34;&gt;#  &lt;/span&gt;
+&lt;span style=&#34;color:#228b22&#34;&gt;# Unless required by applicable law or agreed to in writing, software  &lt;/span&gt;
+&lt;span style=&#34;color:#228b22&#34;&gt;# distributed under the License is distributed on an &amp;#34;AS IS&amp;#34; BASIS,  &lt;/span&gt;
+&lt;span style=&#34;color:#228b22&#34;&gt;# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  &lt;/span&gt;
+&lt;span style=&#34;color:#228b22&#34;&gt;# See the License for the specific language governing permissions and  &lt;/span&gt;
+&lt;span style=&#34;color:#228b22&#34;&gt;# limitations under the License.  &lt;/span&gt;
+&lt;span style=&#34;color:#228b22&#34;&gt;#  &lt;/span&gt;
+  
+&lt;span style=&#34;color:#228b22&#34;&gt;# Attempt to set APP_HOME  &lt;/span&gt;
+  
+&lt;span style=&#34;color:#228b22&#34;&gt;# Resolve links: $0 may be a link  &lt;/span&gt;
+&lt;span style=&#34;color:#00688b&#34;&gt;app_path&lt;/span&gt;=&lt;span style=&#34;color:#00688b&#34;&gt;$0&lt;/span&gt;  
+  
+&lt;span style=&#34;color:#228b22&#34;&gt;# Need this for daisy-chained symlinks.  &lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt;  
+    &lt;span style=&#34;color:#00688b&#34;&gt;APP_HOME&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#00688b&#34;&gt;app_path&lt;/span&gt;%&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#00688b&#34;&gt;app_path&lt;/span&gt;##*/&lt;span style=&#34;color:#cd5555&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;}&lt;/span&gt;  &lt;span style=&#34;color:#228b22&#34;&gt;# leaves a trailing /; empty if no leading path  &lt;/span&gt;
+    [ -h &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#00688b&#34;&gt;$app_path&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt; ]  
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;do&lt;/span&gt;  
+    &lt;span style=&#34;color:#00688b&#34;&gt;ls&lt;/span&gt;=&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;$(&lt;/span&gt; ls -ld &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#00688b&#34;&gt;$app_path&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;)&lt;/span&gt;  
+    &lt;span style=&#34;color:#00688b&#34;&gt;link&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#00688b&#34;&gt;ls&lt;/span&gt;#*&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39; -&amp;gt; &amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;}&lt;/span&gt;  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#00688b&#34;&gt;$link&lt;/span&gt; in             &lt;span style=&#34;color:#228b22&#34;&gt;#(  &lt;/span&gt;
+      /*)   &lt;span style=&#34;color:#00688b&#34;&gt;app_path&lt;/span&gt;=&lt;span style=&#34;color:#00688b&#34;&gt;$link&lt;/span&gt; ;; &lt;span style=&#34;color:#228b22&#34;&gt;#(  &lt;/span&gt;
+      *)    &lt;span style=&#34;color:#00688b&#34;&gt;app_path&lt;/span&gt;=&lt;span style=&#34;color:#00688b&#34;&gt;$APP_HOME$link&lt;/span&gt; ;;  
+    esacdone  
+  
+&lt;span style=&#34;color:#00688b&#34;&gt;APP_HOME&lt;/span&gt;=&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;$(&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;cd&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${&lt;/span&gt;&lt;span style=&#34;color:#00688b&#34;&gt;APP_HOME&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;:-&lt;/span&gt;./&lt;span style=&#34;color:#cd5555&#34;&gt;}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt; &amp;amp;&amp;amp; &lt;span style=&#34;color:#658b00&#34;&gt;pwd&lt;/span&gt; -P &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;)&lt;/span&gt; || &lt;span style=&#34;color:#658b00&#34;&gt;exit&lt;/span&gt;  
+&lt;span style=&#34;color:#00688b&#34;&gt;DEMAND_LOCK&lt;/span&gt;=demand_lock.lock  
+  
+rm &lt;span style=&#34;color:#00688b&#34;&gt;$DEMAND_LOCK&lt;/span&gt;  
+  
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;true&lt;/span&gt;  
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;do&lt;/span&gt;  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; [ -f &lt;span style=&#34;color:#00688b&#34;&gt;$DEMAND_LOCK&lt;/span&gt; ]  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;then&lt;/span&gt;  
+        &lt;span style=&#34;color:#658b00&#34;&gt;break&lt;/span&gt;  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fi&lt;/span&gt;  
+    touch &lt;span style=&#34;color:#00688b&#34;&gt;$DEMAND_LOCK&lt;/span&gt;  
+    &lt;span style=&#34;color:#658b00&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;demand starting system...&amp;#34;&lt;/span&gt;  
+    &lt;span style=&#34;color:#00688b&#34;&gt;$APP_HOME&lt;/span&gt;/starsea &lt;span style=&#34;color:#228b22&#34;&gt;# 启动一段时间后会删除这个文件 $DEMAND_LOCK    echo &amp;#34;system exited.&amp;#34;  &lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;done&lt;/span&gt;  
+  
+&lt;span style=&#34;color:#658b00&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;It seems that app exited in a short time. Please check and restart again.&amp;#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然后在机器人启动时&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;// 运行5分钟后删除demand lock，这表示系统可以进入稳定运行阶段。如果刚启动就退出脚本不会重启程序  
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;handler.postDelayed({  
+    File(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;demand_lock.lock&amp;#34;&lt;/span&gt;).takeIf { &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt;.exists() }?.delete() 
+}, &lt;span style=&#34;color:#b452cd&#34;&gt;5&lt;/span&gt; * &lt;span style=&#34;color:#b452cd&#34;&gt;60&lt;/span&gt; * &lt;span style=&#34;color:#b452cd&#34;&gt;1000&lt;/span&gt;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;主线程崩溃长时间未响应检测&#34;&gt;主线程崩溃/长时间未响应检测&lt;/h2&gt;
+&lt;p&gt;与安卓上不同，java默认一个线程的崩溃并不会导致整个程序的退出。于去我们的需求讲这并不合适。&lt;/p&gt;
+&lt;p&gt;按照我们现在的设计，主线程是相当重要的，崩溃或者严重卡顿是一定要退出的，否则都不会继续拉取和分发消息了，继续跑着也没有意义，不如直接崩掉，还能被我们上一步写的脚本重启。&lt;/p&gt;
+&lt;p&gt;现有比较流行的ANR检测方法可以给我提供不错的参考：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;单独启动一个后台线程用于检测。&lt;/li&gt;
+&lt;li&gt;首先设置一个陷阱flag，称bomb，同时向主线程post一个job去移除这个flag。&lt;/li&gt;
+&lt;li&gt;后台线程休眠较长一段时间。&lt;/li&gt;
+&lt;li&gt;后台线程判断flag是否还在，如果主线程没能及时“拆弹”，就说明他已经挂了或者严重卡顿了，此时让系统挂掉就好了。&lt;/li&gt;
+&lt;li&gt;重复上面步骤。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;最终这部分代码如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;ApplicationContext&lt;/span&gt;: Thread.UncaughtExceptionHandler, LoggerOwner &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;by&lt;/span&gt; slf4jLoggerOwner&amp;lt;ApplicationContext&amp;gt;() {  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; handler &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;by&lt;/span&gt; lazy { Handler(Looper.mainLooper()) }  
+  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; exiting = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;  
+  
+    &lt;span style=&#34;color:#228b22&#34;&gt;/**  
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     * 将系统标记为稳定运行状态。demand_lock.lock文件是由启动脚本生成的。  
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     */&lt;/span&gt;  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;markStable&lt;/span&gt;() {  
+        File(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;demand_lock.lock&amp;#34;&lt;/span&gt;).takeIf { &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt;.exists() }?.delete()  
+    }  
+  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;init&lt;/span&gt;() {  
+        &lt;span style=&#34;color:#228b22&#34;&gt;// 主线程挂掉立即终止运行  
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        Thread.setDefaultUncaughtExceptionHandler(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;)  
+  
+        &lt;span style=&#34;color:#228b22&#34;&gt;// 主线程长期无响应终止运行  
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; bomb: Boolean  
+        thread {  
+            Thread.currentThread().name = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;main-watcher&amp;#34;&lt;/span&gt;  
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt; (&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;) {  
+                bomb = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;  
+                handler.post { bomb = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt; }  
+                Thread.sleep(&lt;span style=&#34;color:#b452cd&#34;&gt;600&lt;/span&gt;_000)  
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (bomb) {  
+                    logger.error(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;主线程长时间未响应！&amp;#34;&lt;/span&gt;)  
+                    Thread.getAllStackTraces().forEach {  
+                        logger.error(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;dump thread {}, {}&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt;.key, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt;.value)  
+                    }  
+                    exitProcess(&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;)  
+                }  
+            }  
+        }  
+  
+        &lt;span style=&#34;color:#228b22&#34;&gt;// 运行5分钟后删除demand lock，这表示系统可以进入稳定运行阶段。如果刚启动就退出脚本不会重启程序  
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        handler.postDelayed({  
+            markStable()  
+        }, &lt;span style=&#34;color:#b452cd&#34;&gt;5&lt;/span&gt; * &lt;span style=&#34;color:#b452cd&#34;&gt;60&lt;/span&gt; * &lt;span style=&#34;color:#b452cd&#34;&gt;1000&lt;/span&gt;)  
+    }  
+  
+    &lt;span style=&#34;color:#228b22&#34;&gt;/**  
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     * 将当前系统状态标记为稳定并停机。如果因为意外问题停机请exitProcess。  
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     */&lt;/span&gt;  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;shutdown&lt;/span&gt;(delay: Long = &lt;span style=&#34;color:#b452cd&#34;&gt;3000L&lt;/span&gt;) {  
+        markStable()  
+        exiting = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;  
+        handler.postDelayed({  
+            exitProcess(&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;)  
+        }, delay)  
+    }  
+  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;uncaughtException&lt;/span&gt;(thread: Thread, tr: Throwable) {  
+        logger.error(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;exception in thread {}&amp;#34;&lt;/span&gt;, thread, tr)  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (thread.name == &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;main&amp;#34;&lt;/span&gt;) {  
+            logger.error(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Main thread crashed!&amp;#34;&lt;/span&gt;)  
+            exitProcess(&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;)  
+        }  
+    }  
+}
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;其他&#34;&gt;其他&lt;/h1&gt;
+&lt;h2 id=&#34;logger的封装&#34;&gt;Logger的封装&lt;/h2&gt;
+&lt;p&gt;直接上代码。目的就是少写一点模板代码，没什么复杂的。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;interface&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;LoggerOwner&lt;/span&gt; {  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; logger: Logger  
+}  
+  
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Slf4jLoggerOwner&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; tag: String) : LoggerOwner {  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; _logger &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;by&lt;/span&gt; lazy {  
+        LoggerFactory.getLogger(tag)  
+    }  
+  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; logger: Logger  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;get&lt;/span&gt;() = _logger  
+}  
+  
+&lt;span style=&#34;color:#228b22&#34;&gt;/**  
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * 创建logger对象。  
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * 用于方法委托使用。  
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; */&lt;/span&gt;  
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;inline&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;reified&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;T&lt;/span&gt;&amp;gt; &lt;span style=&#34;color:#008b45&#34;&gt;slf4jLoggerOwner&lt;/span&gt;(): Slf4jLoggerOwner = Slf4jLoggerOwner(T::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;.java.canonicalName?:&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;NO_NAME&amp;#34;&lt;/span&gt;)  
+  
+&lt;span style=&#34;color:#228b22&#34;&gt;/**  
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * 创建logger对象  
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * 用于直接使用  
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; */&lt;/span&gt;  
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;inline&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;reified&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;T&lt;/span&gt;&amp;gt; &lt;span style=&#34;color:#008b45&#34;&gt;slf4jLogger&lt;/span&gt;(): Logger = slf4jLoggerOwner&amp;lt;T&amp;gt;().logger
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;使用方法一（类文件中）：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Demo1&lt;/span&gt;: LoggerOwner &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;by&lt;/span&gt; slf4jLoggerOwner&amp;lt;Demo1&amp;gt;() {
+	&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;demo1&lt;/span&gt;() {
+		logger.info(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;demo 1&amp;#34;&lt;/span&gt;)
+	}
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;使用方法2（单个方法中）：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Demo2&lt;/span&gt;
+
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;demo2&lt;/span&gt;() {
+	&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; logger = slf4jLogger&amp;lt;Demo2&amp;gt;()
+	logger.info(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;demo 2&amp;#34;&lt;/span&gt;)
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://ntutn.top/posts/%E4%BB%8E%E5%A4%B4%E5%BC%80%E5%A7%8B%E5%88%B6%E4%BD%9C%E4%B8%80%E4%B8%AAtg%E6%9C%BA%E5%99%A8%E4%BA%BA/ - CC BY-SA 4.0</description>
+        </item>
     
     
     
@@ -1023,160 +1594,6 @@ JamVM (build 2.0.0, inline-threaded interpreter with stack-caching)
 &lt;/ol&gt;
 &lt;/section&gt;
 - https://ntutn.top/posts/kotlin/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>Java默认修饰符问题</title>
-        <link>https://ntutn.top/posts/java%E9%BB%98%E8%AE%A4%E4%BF%AE%E9%A5%B0%E7%AC%A6%E9%97%AE%E9%A2%98/</link>
-        <pubDate>Tue, 12 Oct 2021 03:11:37 +0800</pubDate>
-        
-        <guid>https://ntutn.top/posts/java%E9%BB%98%E8%AE%A4%E4%BF%AE%E9%A5%B0%E7%AC%A6%E9%97%AE%E9%A2%98/</guid>
-        <description>归零幻想 https://ntutn.top/posts/java%E9%BB%98%E8%AE%A4%E4%BF%AE%E9%A5%B0%E7%AC%A6%E9%97%AE%E9%A2%98/ -&lt;!-- raw HTML omitted --&gt;
-&lt;h2 id=&#34;问题描述&#34;&gt;问题描述&lt;/h2&gt;
-&lt;p&gt;和工具线配合完成某个需求，我这边的改动很少，但一鼓作气搞完后却遇到了奇怪的报错。已知工具线的代码大多是java的，而我这边自然是力推Kotlin。我们的代码参考如下：&lt;/p&gt;
-&lt;h3 id=&#34;代码参考&#34;&gt;代码参考&lt;/h3&gt;
-&lt;p&gt;工具线定义了一个接口用于callback&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;a&lt;/span&gt;;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;interface&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;IPublishCallback&lt;/span&gt; {
-    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onFinish&lt;/span&gt;();
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;工具线在执行完发布逻辑后无论成功还是失败都会调用我们的callback&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;a&lt;/span&gt;;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;PublishUtil&lt;/span&gt; {
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;publishVideo&lt;/span&gt;(String videoName, IPublishCallback callback) {
-        Runnable runnable = () -&amp;gt; {
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;try&lt;/span&gt; {
-                System.&lt;span style=&#34;color:#658b00&#34;&gt;out&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;println&lt;/span&gt;(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;[&amp;#34;&lt;/span&gt; + videoName + &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;]开始执行耗时发布操作……&amp;#34;&lt;/span&gt;);
-                Thread.&lt;span style=&#34;color:#658b00&#34;&gt;sleep&lt;/span&gt;(1000L);
-            } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;catch&lt;/span&gt; (InterruptedException e) {
-                e.&lt;span style=&#34;color:#658b00&#34;&gt;printStackTrace&lt;/span&gt;();
-            }
-            callback.&lt;span style=&#34;color:#658b00&#34;&gt;onFinish&lt;/span&gt;();
-        };
-        Thread thread = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; Thread(runnable);
-        thread.&lt;span style=&#34;color:#658b00&#34;&gt;start&lt;/span&gt;();
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;try&lt;/span&gt; {
-            thread.&lt;span style=&#34;color:#658b00&#34;&gt;join&lt;/span&gt;();
-        } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;catch&lt;/span&gt; (InterruptedException e) {
-            e.&lt;span style=&#34;color:#658b00&#34;&gt;printStackTrace&lt;/span&gt;();
-        }
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;我们这边的实现是Kotlin的，就是调用了下工具线的方法&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;b&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;a.PublishUtil&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;ShareFromSdkImpl&lt;/span&gt; {
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;doShare&lt;/span&gt;() {
-        println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;系统分享功能测试&amp;#34;&lt;/span&gt;)
-        PublishUtil.publishVideo(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;测试视频&amp;#34;&lt;/span&gt;) {
-            println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;发布视频完成回调&amp;#34;&lt;/span&gt;)
-        }
-        println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;完成系统分享方法&amp;#34;&lt;/span&gt;)
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;主函数&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;b.ShareFromSdkImpl&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;() {
-    ShareFromSdkImpl().doShare()
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;问题&#34;&gt;问题&lt;/h2&gt;
-&lt;p&gt;上述代码在执行后输出如下：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-plain&#34; data-lang=&#34;plain&#34;&gt;系统分享功能测试
-Exception in thread &amp;#34;main&amp;#34; java.lang.NoClassDefFoundError: a/IPublishCallback
-	at b.ShareFromSdkImpl.doShare(ShareFromSdkImpl.kt:8)
-	at MainKt.main(main.kt:4)
-	at MainKt.main(main.kt)
-Caused by: java.lang.ClassNotFoundException: a.IPublishCallback
-	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:581)
-	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:178)
-	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:522)
-	... 3 more
-Process finished with exit code 1
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;在安卓中略有不同，异常类型为&lt;/p&gt;
-&lt;p&gt;java.lang.IllegalAccessError: Interface a.IPublishCallback implemented by class com.ss.android.ugc.aweme.plugin.xground.player……&lt;/p&gt;
-&lt;h2 id=&#34;排查&#34;&gt;排查&lt;/h2&gt;
-&lt;p&gt;注意报错中提到的&lt;code&gt;a/IPublishCallback&lt;/code&gt;，是我们前面定义的回调接口。&lt;/p&gt;
-&lt;p&gt;我们将lambda改为匿名内部类的写法，这才发现确实是找不到。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2021/08/06/nrZt3QkqDLojcf5.png&#34; alt=&#34;2021-08-06_01-33.png&#34;&gt;&lt;/p&gt;
-&lt;p&gt;在使用Lambda形式实现回调时这个错误没有被编译器检查出来，运行时才报出来。&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;那么它为什么会找不到呢？&lt;/p&gt;
-&lt;h2 id=&#34;类可访问性修饰符&#34;&gt;类可访问性修饰符&lt;/h2&gt;
-&lt;p&gt;Java中，可以使用访问控制符来保护对类、变量、方法和构造方法的访问。Java 支持 4 种不同的访问权限。&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;级别&lt;/th&gt;
-&lt;th&gt;当前类&lt;/th&gt;
-&lt;th&gt;同一包中的其他类&lt;/th&gt;
-&lt;th&gt;同一包中的子孙类&lt;/th&gt;
-&lt;th&gt;不同包中的子孙类&lt;/th&gt;
-&lt;th&gt;不同包中的其他类&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;public&lt;/td&gt;
-&lt;td&gt;是&lt;/td&gt;
-&lt;td&gt;是&lt;/td&gt;
-&lt;td&gt;是&lt;/td&gt;
-&lt;td&gt;是&lt;/td&gt;
-&lt;td&gt;是&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;protected（不能用于修饰类）&lt;/td&gt;
-&lt;td&gt;是&lt;/td&gt;
-&lt;td&gt;是&lt;/td&gt;
-&lt;td&gt;是&lt;/td&gt;
-&lt;td&gt;可访问继承来的方法，不能访问基类实例的protected方法&lt;/td&gt;
-&lt;td&gt;否&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;package-private（不需要修饰符）&lt;/td&gt;
-&lt;td&gt;是&lt;/td&gt;
-&lt;td&gt;是&lt;/td&gt;
-&lt;td&gt;是&lt;/td&gt;
-&lt;td&gt;否&lt;/td&gt;
-&lt;td&gt;否&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;private&lt;/td&gt;
-&lt;td&gt;是&lt;/td&gt;
-&lt;td&gt;否&lt;/td&gt;
-&lt;td&gt;否&lt;/td&gt;
-&lt;td&gt;否&lt;/td&gt;
-&lt;td&gt;否&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;p&gt;类、接口的默认级别为package-private，类中的方法和属性默认是package-private，接口中的为&lt;code&gt;public static final&lt;/code&gt;。&lt;/p&gt;
-&lt;p&gt;在这里我们就可以看出来了，前面&lt;code&gt;a.IPublishCallback&lt;/code&gt;是package-private的，在b包下的&lt;code&gt;ShareFromSdkImpl&lt;/code&gt;就访问不到它。因为写Kotlin多了（默认public），我一时间没有很快认识到这一点。&lt;/p&gt;
-&lt;p&gt;Kotlin中的修饰符有四个级别&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;private 意味着只在这个类内部（包含其所有成员）可见；&lt;/li&gt;
-&lt;li&gt;protected—— 和 private一样 + 在子类中可见。&lt;/li&gt;
-&lt;li&gt;internal —— 能见到类声明的 本模块内 的任何客户端都可见其 internal 成员；&lt;/li&gt;
-&lt;li&gt;public —— 能见到类声明的任何客户端都可见其 public 成员。&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;基本和java那边是对应的，不过不同的是&lt;code&gt;internal&lt;/code&gt;级别，标识可以在当前模块中使用。与java那边默认的package-private不同，internal不是根据包名验证的，所以也不存在另外一个模块中的类通过定义在相同包下绕过限制的情况。&lt;/p&gt;
-&lt;p&gt;另外，Kotlin中的类和方法不写修饰符默认是public final的，要继承需要手动加上open。&lt;/p&gt;
-&lt;h2 id=&#34;so&#34;&gt;So？&lt;/h2&gt;
-&lt;p&gt;所以问题就是工具线那边定义的时候忘记将回调接口设置成public了，我们与他们的类不在同一包下访问不到，但Kotlin的语法糖让我们用lambda写回调，很简单但却正好掩盖了这个问题。&lt;/p&gt;
-&lt;p&gt;排查花了比较多的时间，其实还是基础知识没掌握牢。&lt;/p&gt;
-&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
-&lt;hr&gt;
-&lt;ol&gt;
-&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.runoob.com/java/java-modifier-types.html&#34;&gt;Java 修饰符&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.kotlincn.net/docs/reference/visibility-modifiers.html&#34;&gt;可见性修饰符&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/section&gt;
-- https://ntutn.top/posts/java%E9%BB%98%E8%AE%A4%E4%BF%AE%E9%A5%B0%E7%AC%A6%E9%97%AE%E9%A2%98/ - CC BY-SA 4.0</description>
         </item>
     
     

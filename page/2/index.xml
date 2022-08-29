@@ -7,9 +7,163 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Thu, 09 Jun 2022 17:02:54 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 30 Aug 2022 02:49:11 +0800</lastBuildDate>
     
         <atom:link href="https://ntutn.top/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>Java默认修饰符问题</title>
+        <link>https://ntutn.top/posts/java%E9%BB%98%E8%AE%A4%E4%BF%AE%E9%A5%B0%E7%AC%A6%E9%97%AE%E9%A2%98/</link>
+        <pubDate>Tue, 12 Oct 2021 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/java%E9%BB%98%E8%AE%A4%E4%BF%AE%E9%A5%B0%E7%AC%A6%E9%97%AE%E9%A2%98/</guid>
+        <description>归零幻想 https://ntutn.top/posts/java%E9%BB%98%E8%AE%A4%E4%BF%AE%E9%A5%B0%E7%AC%A6%E9%97%AE%E9%A2%98/ -&lt;!-- raw HTML omitted --&gt;
+&lt;h2 id=&#34;问题描述&#34;&gt;问题描述&lt;/h2&gt;
+&lt;p&gt;和工具线配合完成某个需求，我这边的改动很少，但一鼓作气搞完后却遇到了奇怪的报错。已知工具线的代码大多是java的，而我这边自然是力推Kotlin。我们的代码参考如下：&lt;/p&gt;
+&lt;h3 id=&#34;代码参考&#34;&gt;代码参考&lt;/h3&gt;
+&lt;p&gt;工具线定义了一个接口用于callback&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;a&lt;/span&gt;;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;interface&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;IPublishCallback&lt;/span&gt; {
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onFinish&lt;/span&gt;();
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;工具线在执行完发布逻辑后无论成功还是失败都会调用我们的callback&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;a&lt;/span&gt;;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;PublishUtil&lt;/span&gt; {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;publishVideo&lt;/span&gt;(String videoName, IPublishCallback callback) {
+        Runnable runnable = () -&amp;gt; {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;try&lt;/span&gt; {
+                System.&lt;span style=&#34;color:#658b00&#34;&gt;out&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;println&lt;/span&gt;(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;[&amp;#34;&lt;/span&gt; + videoName + &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;]开始执行耗时发布操作……&amp;#34;&lt;/span&gt;);
+                Thread.&lt;span style=&#34;color:#658b00&#34;&gt;sleep&lt;/span&gt;(1000L);
+            } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;catch&lt;/span&gt; (InterruptedException e) {
+                e.&lt;span style=&#34;color:#658b00&#34;&gt;printStackTrace&lt;/span&gt;();
+            }
+            callback.&lt;span style=&#34;color:#658b00&#34;&gt;onFinish&lt;/span&gt;();
+        };
+        Thread thread = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; Thread(runnable);
+        thread.&lt;span style=&#34;color:#658b00&#34;&gt;start&lt;/span&gt;();
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;try&lt;/span&gt; {
+            thread.&lt;span style=&#34;color:#658b00&#34;&gt;join&lt;/span&gt;();
+        } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;catch&lt;/span&gt; (InterruptedException e) {
+            e.&lt;span style=&#34;color:#658b00&#34;&gt;printStackTrace&lt;/span&gt;();
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;我们这边的实现是Kotlin的，就是调用了下工具线的方法&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;b&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;a.PublishUtil&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;ShareFromSdkImpl&lt;/span&gt; {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;doShare&lt;/span&gt;() {
+        println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;系统分享功能测试&amp;#34;&lt;/span&gt;)
+        PublishUtil.publishVideo(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;测试视频&amp;#34;&lt;/span&gt;) {
+            println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;发布视频完成回调&amp;#34;&lt;/span&gt;)
+        }
+        println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;完成系统分享方法&amp;#34;&lt;/span&gt;)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;主函数&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;b.ShareFromSdkImpl&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;() {
+    ShareFromSdkImpl().doShare()
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;问题&#34;&gt;问题&lt;/h2&gt;
+&lt;p&gt;上述代码在执行后输出如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-plain&#34; data-lang=&#34;plain&#34;&gt;系统分享功能测试
+Exception in thread &amp;#34;main&amp;#34; java.lang.NoClassDefFoundError: a/IPublishCallback
+	at b.ShareFromSdkImpl.doShare(ShareFromSdkImpl.kt:8)
+	at MainKt.main(main.kt:4)
+	at MainKt.main(main.kt)
+Caused by: java.lang.ClassNotFoundException: a.IPublishCallback
+	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:581)
+	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:178)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:522)
+	... 3 more
+Process finished with exit code 1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;在安卓中略有不同，异常类型为&lt;/p&gt;
+&lt;p&gt;java.lang.IllegalAccessError: Interface a.IPublishCallback implemented by class com.ss.android.ugc.aweme.plugin.xground.player……&lt;/p&gt;
+&lt;h2 id=&#34;排查&#34;&gt;排查&lt;/h2&gt;
+&lt;p&gt;注意报错中提到的&lt;code&gt;a/IPublishCallback&lt;/code&gt;，是我们前面定义的回调接口。&lt;/p&gt;
+&lt;p&gt;我们将lambda改为匿名内部类的写法，这才发现确实是找不到。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2021/08/06/nrZt3QkqDLojcf5.png&#34; alt=&#34;2021-08-06_01-33.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;在使用Lambda形式实现回调时这个错误没有被编译器检查出来，运行时才报出来。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;那么它为什么会找不到呢？&lt;/p&gt;
+&lt;h2 id=&#34;类可访问性修饰符&#34;&gt;类可访问性修饰符&lt;/h2&gt;
+&lt;p&gt;Java中，可以使用访问控制符来保护对类、变量、方法和构造方法的访问。Java 支持 4 种不同的访问权限。&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;级别&lt;/th&gt;
+&lt;th&gt;当前类&lt;/th&gt;
+&lt;th&gt;同一包中的其他类&lt;/th&gt;
+&lt;th&gt;同一包中的子孙类&lt;/th&gt;
+&lt;th&gt;不同包中的子孙类&lt;/th&gt;
+&lt;th&gt;不同包中的其他类&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;public&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;protected（不能用于修饰类）&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;可访问继承来的方法，不能访问基类实例的protected方法&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;package-private（不需要修饰符）&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;private&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;类、接口的默认级别为package-private，类中的方法和属性默认是package-private，接口中的为&lt;code&gt;public static final&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;在这里我们就可以看出来了，前面&lt;code&gt;a.IPublishCallback&lt;/code&gt;是package-private的，在b包下的&lt;code&gt;ShareFromSdkImpl&lt;/code&gt;就访问不到它。因为写Kotlin多了（默认public），我一时间没有很快认识到这一点。&lt;/p&gt;
+&lt;p&gt;Kotlin中的修饰符有四个级别&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;private 意味着只在这个类内部（包含其所有成员）可见；&lt;/li&gt;
+&lt;li&gt;protected—— 和 private一样 + 在子类中可见。&lt;/li&gt;
+&lt;li&gt;internal —— 能见到类声明的 本模块内 的任何客户端都可见其 internal 成员；&lt;/li&gt;
+&lt;li&gt;public —— 能见到类声明的任何客户端都可见其 public 成员。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;基本和java那边是对应的，不过不同的是&lt;code&gt;internal&lt;/code&gt;级别，标识可以在当前模块中使用。与java那边默认的package-private不同，internal不是根据包名验证的，所以也不存在另外一个模块中的类通过定义在相同包下绕过限制的情况。&lt;/p&gt;
+&lt;p&gt;另外，Kotlin中的类和方法不写修饰符默认是public final的，要继承需要手动加上open。&lt;/p&gt;
+&lt;h2 id=&#34;so&#34;&gt;So？&lt;/h2&gt;
+&lt;p&gt;所以问题就是工具线那边定义的时候忘记将回调接口设置成public了，我们与他们的类不在同一包下访问不到，但Kotlin的语法糖让我们用lambda写回调，很简单但却正好掩盖了这个问题。&lt;/p&gt;
+&lt;p&gt;排查花了比较多的时间，其实还是基础知识没掌握牢。&lt;/p&gt;
+&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.runoob.com/java/java-modifier-types.html&#34;&gt;Java 修饰符&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.kotlincn.net/docs/reference/visibility-modifiers.html&#34;&gt;可见性修饰符&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/section&gt;
+- https://ntutn.top/posts/java%E9%BB%98%E8%AE%A4%E4%BF%AE%E9%A5%B0%E7%AC%A6%E9%97%AE%E9%A2%98/ - CC BY-SA 4.0</description>
+        </item>
     
     
     
@@ -1529,72 +1683,6 @@ defaultConfig {
 &lt;/ol&gt;
 &lt;/section&gt;
 - https://ntutn.top/posts/%E6%88%91%E7%9A%84%E9%BB%91%E5%8E%86%E5%8F%B2%E8%A2%ABgithub%E5%9F%8B%E5%88%B0%E5%8C%97%E6%9E%81%E4%BA%86/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>android项目开发：通知</title>
-        <link>https://ntutn.top/posts/%E9%80%9A%E7%9F%A5/</link>
-        <pubDate>Tue, 12 Jan 2021 03:11:37 +0800</pubDate>
-        
-        <guid>https://ntutn.top/posts/%E9%80%9A%E7%9F%A5/</guid>
-        <description>归零幻想 https://ntutn.top/posts/%E9%80%9A%E7%9F%A5/ -&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;仍然是第一行代码的笔记，这篇是有关通知的，最基本的用法。&lt;/p&gt;
-&lt;h2 id=&#34;通知的相关知识&#34;&gt;通知的相关知识&lt;/h2&gt;
-&lt;p&gt;通知是什么不再赘述，这里只记录些重要但没接触的概念。&lt;/p&gt;
-&lt;p&gt;通知渠道在8.0（O）引入。要求APP将通知分类，通过不同&lt;em&gt;渠道&lt;/em&gt;进行分发，用户可以选择性禁用某个渠道的通知，或者调整优先等级。&lt;/p&gt;
-&lt;p&gt;通知可以有不同的重要等级，有四种：&lt;code&gt;IMPORTANCE_HIGH&lt;/code&gt;、&lt;code&gt;IMPORTANCE_DEFAULT&lt;/code&gt;、&lt;code&gt;IMPORTANCE_LOW&lt;/code&gt;、&lt;code&gt;IMPORTANCE_MIN&lt;/code&gt;。根据重要等级不同，通知可能有不同的展现策略，比如在前台提示甚至播放声音。&lt;/p&gt;
-&lt;p&gt;在通知渠道创建时通知的重要等级也就确定了，之后不能再被APP修改。&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;h2 id=&#34;通知dmeo&#34;&gt;通知dmeo&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.notificationtest&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.app.NotificationChannel&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.app.NotificationManager&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.app.PendingIntent&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.content.Context&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.content.Intent&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.graphics.BitmapFactory&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.os.Build&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;androidx.appcompat.app.AppCompatActivity&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.os.Bundle&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;androidx.core.app.NotificationCompat&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.notificationtest.databinding.ActivityMainBinding&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MainActivity&lt;/span&gt; : AppCompatActivity() {
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;lateinit&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; binding: ActivityMainBinding
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onCreate&lt;/span&gt;(savedInstanceState: Bundle?) {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        initView()
-    }
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;initView&lt;/span&gt;(){
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; manager = getSystemService(Context.NOTIFICATION_SERVICE) &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;as&lt;/span&gt; NotificationManager
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(Build.VERSION.SDK_INT &amp;gt;= Build.VERSION_CODES.O){
-            &lt;span style=&#34;color:#228b22&#34;&gt;// 通知渠道
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; channel = NotificationChannel(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;normal&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Normal&amp;#34;&lt;/span&gt;,NotificationManager.IMPORTANCE_DEFAULT)
-            manager.createNotificationChannel(channel)
-        }
-        binding.sendNotice.setOnClickListener {
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; intent = Intent(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;,NotificationActivity::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;.java)
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; pi = PendingIntent.getActivity(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;,REQUEST_NOTIFICATION_ACTIVITY,intent,&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;)
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; notification = NotificationCompat.Builder(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;,&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;normal&amp;#34;&lt;/span&gt;)
-                    .setContentTitle(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;This is content title&amp;#34;&lt;/span&gt;)
-                    .setContentText(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;This is content text. &amp;#34;&lt;/span&gt;)
-                    .setSmallIcon(R.drawable.ic_launcher_foreground)
-                    .setLargeIcon(BitmapFactory.decodeResource(resources,R.drawable.ic_launcher_foreground))
-                    .setContentIntent(pi)
-                    .setAutoCancel(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;)
-                    .build()
-            manager.notify(CHANNEL,notification)
-        }
-    }
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;companion&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; CHANNEL = &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; REQUEST_NOTIFICATION_ACTIVITY = &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://ntutn.top/posts/%E9%80%9A%E7%9F%A5/ - CC BY-SA 4.0</description>
         </item>
     
     
