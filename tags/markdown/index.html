@@ -85,6 +85,27 @@
         -comment: "感谢评论区 https://github.com/lx200916 指出博客代码块深色模式问题";
     }
 </style>
+<script src="https://unpkg.com/zoomtastic@2.2.1"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function(event) { 
+        document.querySelectorAll("div.post-body-wrapper img").forEach(function(element){
+            element.setAttribute("zoomtastic", true)
+            element.style.maxWidth="60%"
+        })
+		
+		Zoomtastic.mount({
+			size: '95%',
+			easing: 'ease',
+			duration: 300,
+			background: 'rgba(0, 0, 0, 0.9)',
+			filter: 'drop-shadow(0 2px 16px rgba(0, 0, 0, 0.3))',
+			animation: 'slide' 
+		});
+		
+		Zoomtastic.listen('[zoomtastic]', 'src');
+    });
+
+</script>
 
 </head>
 <body>
