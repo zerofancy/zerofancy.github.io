@@ -7,9 +7,166 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Tue, 30 Aug 2022 02:49:11 +0800</lastBuildDate>
+    <lastBuildDate>Mon, 05 Sep 2022 02:18:57 +0800</lastBuildDate>
     
         <atom:link href="https://ntutn.top/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>数据结构 栈应用 1 括号匹配</title>
+        <link>https://ntutn.top/posts/%E6%8B%AC%E5%8F%B7%E5%8C%B9%E9%85%8D/</link>
+        <pubDate>Thu, 25 Apr 2019 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/%E6%8B%AC%E5%8F%B7%E5%8C%B9%E9%85%8D/</guid>
+        <description>归零幻想 https://ntutn.top/posts/%E6%8B%AC%E5%8F%B7%E5%8C%B9%E9%85%8D/ -&lt;!-- raw HTML omitted --&gt;
+&lt;blockquote&gt;
+&lt;p&gt;大概是一道栈的应用的水题吧。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;输入一行符号,以&lt;code&gt;#&lt;/code&gt;结束，判断其中的括号是否匹配。
+遇到左括号入栈，遇到右括号出栈。如果字符串结束栈不空，输出栈内左括号对应右括号。&lt;/p&gt;
+&lt;h2 id=&#34;question&#34;&gt;Question&lt;/h2&gt;
+&lt;p&gt;用栈实现：输入一行符号,以#结束，判断其中的括号是否匹配。括号包括：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;{ } 、 [ ] 、 ( )、  &amp;lt; &amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;如果匹配，输出 &lt;code&gt;right&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;如果不匹配，给出错误提示。包括：&lt;/p&gt;
+&lt;p&gt;第几个符号处理时出现错误；哪几个符号失配等&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;h2 id=&#34;example&#34;&gt;Example&lt;/h2&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;h2 id=&#34;思路&#34;&gt;思路&lt;/h2&gt;
+&lt;p&gt;遇到左括号入栈，遇到右括号出栈。如果字符串结束栈不空，输出栈内左括号对应右括号。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;没有一遍过，因为题目中没说如果出错就不再继续处理。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;相关&#34;&gt;相关&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;栈：顺序表，只允许在一端输入输出。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;getline(cin,str);&lt;/code&gt;可输入整行，支持空格。&lt;/li&gt;
+&lt;li&gt;如果用数组实现栈，则其存储空间必须是一次性申请得到的。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;answer&#34;&gt;Answer&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;指定初始&lt;code&gt;maxsize=1&lt;/code&gt;是我某种程度上的强迫症，反正这题时间限制很宽松。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-c++&#34; data-lang=&#34;c++&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;cstring&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;string&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;namespace&lt;/span&gt; std;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;mystack&lt;/span&gt;{
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt;:
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; *data;
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; maxsize;
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; top;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt;:
+    mystack(){
+        maxsize=&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;;
+        data=&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt;[maxsize];
+        top=-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;;
+    }
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;isEmpty&lt;/span&gt;(){
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; top==-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;;
+    }
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;getTop&lt;/span&gt;(){
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(top&amp;gt;-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;){
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; data[top];
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;\0&amp;#39;&lt;/span&gt;;
+    }
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;pop&lt;/span&gt;(){
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(top&amp;gt;=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;){
+            top--;
+        }
+    }
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;expand&lt;/span&gt;(){
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt;*tmp=&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt;[maxsize*&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;];
+        strncpy(tmp,data,maxsize);
+        maxsize*=&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;delete&lt;/span&gt;[] data;
+        data=tmp;
+    }
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;push&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; x){
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(top+&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;==maxsize){
+            expand();
+        }
+        data[++top]=x;
+    }
+    ~mystack(){
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;delete&lt;/span&gt;[] data;
+    }
+};
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;getPar&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; x){
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;switch&lt;/span&gt;(x){
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;{&amp;#39;&lt;/span&gt;:
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;}&amp;#39;&lt;/span&gt;;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;[&amp;#39;&lt;/span&gt;:
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;]&amp;#39;&lt;/span&gt;;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;(&amp;#39;&lt;/span&gt;:
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;)&amp;#39;&lt;/span&gt;;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;&amp;lt;&amp;#39;&lt;/span&gt;:
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;&amp;gt;&amp;#39;&lt;/span&gt;;
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;\0&amp;#39;&lt;/span&gt;;
+}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;isKH&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; x){
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;switch&lt;/span&gt;(x){
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;{&amp;#39;&lt;/span&gt;:
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;[&amp;#39;&lt;/span&gt;:
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;(&amp;#39;&lt;/span&gt;:
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;&amp;lt;&amp;#39;&lt;/span&gt;:
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;}&amp;#39;&lt;/span&gt;:
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;]&amp;#39;&lt;/span&gt;:
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;)&amp;#39;&lt;/span&gt;:
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;&amp;gt;&amp;#39;&lt;/span&gt;:
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;;
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;()
+{
+    string tmp;
+    getline(cin,tmp);
+    mystack*stk=&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; mystack();
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt; erred=&lt;span style=&#34;color:#658b00&#34;&gt;false&lt;/span&gt;;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;i&amp;lt;tmp.size();i++){
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; x=tmp.at(i);
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(x==&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;#&amp;#39;&lt;/span&gt;){
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(!stk-&amp;gt;isEmpty()){
+                cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;loss of right character &amp;#34;&lt;/span&gt;;
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt;(!stk-&amp;gt;isEmpty()){
+                    cout&amp;lt;&amp;lt;getPar(stk-&amp;gt;getTop());
+                    stk-&amp;gt;pop();
+                }
+                cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;.&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+                &lt;span style=&#34;color:#228b22&#34;&gt;//erred=true;
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+            }
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(!erred){
+                cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;right&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+            }
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(isKH(x)==&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;){
+            stk-&amp;gt;push(x);
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;continue&lt;/span&gt;;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(isKH(x)==&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;){
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(getPar(stk-&amp;gt;getTop())==x){
+                stk-&amp;gt;pop();
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;continue&lt;/span&gt;;
+            }&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt;{
+                cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;The &amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;i+&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34; character &amp;#39;&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;x&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&amp;#39; is wrong.&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+                &lt;span style=&#34;color:#228b22&#34;&gt;//erred=true;
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+            }
+        }
+    }
+    &lt;span style=&#34;color:#228b22&#34;&gt;//cout &amp;lt;&amp;lt; &amp;#34;Hello world!&amp;#34; &amp;lt;&amp;lt; endl;
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://ntutn.top/posts/%E6%8B%AC%E5%8F%B7%E5%8C%B9%E9%85%8D/ - CC BY-SA 4.0</description>
+        </item>
     
     
     
@@ -2804,43 +2961,6 @@ SeqStack::SeqStack(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;in
 &lt;p&gt;在诺亚基地（地球拯救中心）可以找到很多装备，找到激光炮的最后一枚镜片&lt;strong&gt;太阳镜&lt;/strong&gt;。建议第一次去先解决每个楼层的巨型炮。按照咱现在战车的配置，基本是一炮一个或者两炮一个，很有复仇的感觉。&lt;/p&gt;
 &lt;p&gt;完。&lt;/p&gt;
 - https://ntutn.top/posts/%E9%87%8D%E8%A3%85%E6%9C%BA%E5%85%B5/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>我的理想——我的一篇日记</title>
-        <link>https://ntutn.top/posts/%E6%88%91%E7%9A%84%E7%90%86%E6%83%B3%E6%88%91%E7%9A%84%E4%B8%80%E7%AF%87%E6%97%A5%E8%AE%B0/</link>
-        <pubDate>Sun, 24 Mar 2019 03:11:37 +0800</pubDate>
-        
-        <guid>https://ntutn.top/posts/%E6%88%91%E7%9A%84%E7%90%86%E6%83%B3%E6%88%91%E7%9A%84%E4%B8%80%E7%AF%87%E6%97%A5%E8%AE%B0/</guid>
-        <description>归零幻想 https://ntutn.top/posts/%E6%88%91%E7%9A%84%E7%90%86%E6%83%B3%E6%88%91%E7%9A%84%E4%B8%80%E7%AF%87%E6%97%A5%E8%AE%B0/ -&lt;!-- raw HTML omitted --&gt;
-&lt;h1 id=&#34;我的理想我的一篇日记&#34;&gt;我的理想——我的一篇日记&lt;/h1&gt;
-&lt;p&gt;一不小心翻到了以前初中写的一篇日记，为了装X还是用英文写的，羞耻度爆表……&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;Wednesday, December 26, 2012
-Sunday&lt;/p&gt;
-&lt;p&gt;Today we learned how to talk about future intentions. Iwant to be a programmer when I grow up. So how am I going to do it? I’m goingto study computer science and English when I have free time. It’s veryimportant. I learned Visual Basic. It was made by Microsoft. I can make someprogram now. On my last summer vacation, I made some programs, like notepad. Forexample, the program was made for a math problem:&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-vb&#34; data-lang=&#34;vb&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;Private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;Sub&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;Main&lt;/span&gt;()
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;Const&lt;/span&gt; 兔脚数 &lt;span style=&#34;color:#8b008b&#34;&gt;As&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;Integer&lt;/span&gt; = 4, 鸡脚数 &lt;span style=&#34;color:#8b008b&#34;&gt;As&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;Integer&lt;/span&gt; = 2
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;Dim&lt;/span&gt; 总头数 &lt;span style=&#34;color:#8b008b&#34;&gt;As&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;Long&lt;/span&gt;, 总脚数 &lt;span style=&#34;color:#8b008b&#34;&gt;As&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;Long&lt;/span&gt;, 鸡的数量 &lt;span style=&#34;color:#8b008b&#34;&gt;As&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;Long&lt;/span&gt;, 兔的数量 &lt;span style=&#34;color:#8b008b&#34;&gt;As&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;Long&lt;/span&gt;
-总头数 =Val(InputBox(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;从上面看一共有多少个头？&amp;#34;&lt;/span&gt;))
-总脚数 =Val(InputBox(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;从下面看一共有多少只脚？&amp;#34;&lt;/span&gt;))
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;If&lt;/span&gt; (总头数 &amp;lt; 0) &lt;span style=&#34;color:#8b008b&#34;&gt;Or&lt;/span&gt; (总脚数 &amp;lt; 0) &lt;span style=&#34;color:#8b008b&#34;&gt;Or&lt;/span&gt; (总头数 * 2 &amp;gt; 总脚数) &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;Then&lt;/span&gt;
-    MsgBox &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;输入有误！&amp;#34;&lt;/span&gt;, vbExclamation
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;Exit&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;Sub&lt;/span&gt;
-&lt;span style=&#34;color:#008b45&#34;&gt;End&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;If&lt;/span&gt;
-鸡的数量 = (兔脚数 * 总头数 - 总脚数) / (总脚数 - 鸡脚数)
-兔的数量 = 总头数 - 鸡的数量
-计算结果 = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;鸡有&amp;#34;&lt;/span&gt; &amp;amp; 鸡的数量 &amp;amp; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;只，兔有&amp;#34;&lt;/span&gt; &amp;amp; 兔的数量 &amp;amp; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;只。&amp;#34;&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;Call&lt;/span&gt; bcjg
-MsgBox 计算结果, vbInformation
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;End&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;Sub&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;You can see a form on the screen if the program isrunning. Input the number of heads and click the button “OK”. Then you can seeanother form on the screen. You can input the number of feet. Click the button “OK”again. Finally, you can see the result.&lt;/p&gt;
-&lt;p&gt;I sent my programs to my friends by e-mail.&lt;/p&gt;
-&lt;p&gt;I want to make a company. I call it WonderfulSoft. Iknow it’s very difficult. But I hope one day my dream can be true.&lt;/p&gt;
-&lt;p&gt;My IT teacher said: “Java is more useful than VisualBasic. Because the program was made by it can run on the many systems.” I alsowant to learn it. But it is too difficult to learn. I think I’ll learn to makeprograms by Java.&lt;/p&gt;
-- https://ntutn.top/posts/%E6%88%91%E7%9A%84%E7%90%86%E6%83%B3%E6%88%91%E7%9A%84%E4%B8%80%E7%AF%87%E6%97%A5%E8%AE%B0/ - CC BY-SA 4.0</description>
         </item>
     
     

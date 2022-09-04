@@ -7,9 +7,481 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Tue, 30 Aug 2022 02:49:11 +0800</lastBuildDate>
+    <lastBuildDate>Mon, 05 Sep 2022 02:18:57 +0800</lastBuildDate>
     
         <atom:link href="https://ntutn.top/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>android项目开发：Kotlin</title>
+        <link>https://ntutn.top/posts/kotlin/</link>
+        <pubDate>Tue, 12 Oct 2021 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/kotlin/</guid>
+        <description>归零幻想 https://ntutn.top/posts/kotlin/ -&lt;!-- raw HTML omitted --&gt;
+&lt;h1 id=&#34;kotlin&#34;&gt;Kotlin&lt;/h1&gt;
+&lt;h2 id=&#34;变量和函数&#34;&gt;变量和函数&lt;/h2&gt;
+&lt;h3 id=&#34;变量&#34;&gt;变量&lt;/h3&gt;
+&lt;p&gt;用&lt;code&gt;var&lt;/code&gt;和&lt;code&gt;val&lt;/code&gt;定义变量，并有类型自动推导的支持。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;val&lt;/code&gt;用来声明一个不可变的变量，&lt;code&gt;var&lt;/code&gt;用来声明一个可变的变量。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; a = &lt;span style=&#34;color:#b452cd&#34;&gt;10&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; b: Int = &lt;span style=&#34;color:#b452cd&#34;&gt;12&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Kotlin完全抛弃了java中的基本数据类型，完全使用对象数据类型。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;java基本数据类型&lt;/th&gt;
+&lt;th&gt;Kotlin对象数据类型&lt;/th&gt;
+&lt;th&gt;数据类型说明&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;int&lt;/td&gt;
+&lt;td&gt;Int&lt;/td&gt;
+&lt;td&gt;整型&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;long&lt;/td&gt;
+&lt;td&gt;Long&lt;/td&gt;
+&lt;td&gt;长整型&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;short&lt;/td&gt;
+&lt;td&gt;Short&lt;/td&gt;
+&lt;td&gt;短整型&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;float&lt;/td&gt;
+&lt;td&gt;Float&lt;/td&gt;
+&lt;td&gt;单精度浮点型&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;double&lt;/td&gt;
+&lt;td&gt;Double&lt;/td&gt;
+&lt;td&gt;双精度浮点型&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;boolean&lt;/td&gt;
+&lt;td&gt;Boolean&lt;/td&gt;
+&lt;td&gt;布尔型&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;char&lt;/td&gt;
+&lt;td&gt;Char&lt;/td&gt;
+&lt;td&gt;字符型&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;byte&lt;/td&gt;
+&lt;td&gt;Byte&lt;/td&gt;
+&lt;td&gt;字节型&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;函数&#34;&gt;函数&lt;/h3&gt;
+&lt;p&gt;语法：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;(args: Array&amp;lt;String&amp;gt;) {
+    println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Hello World!&amp;#34;&lt;/span&gt;)
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Kotlin中的函数在无必要时可以省略很多东西：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;kotlin.math.max&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;largerNumber&lt;/span&gt;(a: Int, b: Int) = max(a, b)
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;(args: Array&amp;lt;String&amp;gt;) {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; a = &lt;span style=&#34;color:#b452cd&#34;&gt;3&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; b = &lt;span style=&#34;color:#b452cd&#34;&gt;5&lt;/span&gt;
+    println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;The larger number of a and b is &lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${largerNumber(a, b)}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;)
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;程序的逻辑控制&#34;&gt;程序的逻辑控制&lt;/h2&gt;
+&lt;h3 id=&#34;if&#34;&gt;if&lt;/h3&gt;
+&lt;p&gt;与java中的if语句相比，Kotlin中的if是可以有返回值的。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;judge&lt;/span&gt;(score: Int) = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (score &amp;gt;= &lt;span style=&#34;color:#b452cd&#34;&gt;60&lt;/span&gt;) &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;你及格了&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;你还需要多努力&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;() {
+    println(judge(&lt;span style=&#34;color:#b452cd&#34;&gt;55&lt;/span&gt;))
+    println(judge(&lt;span style=&#34;color:#b452cd&#34;&gt;66&lt;/span&gt;))
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;与此同时，Kotlin不再有java中的三元运算符&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;，语义上清晰了很多。&lt;/p&gt;
+&lt;h3 id=&#34;when条件语句&#34;&gt;when条件语句&lt;/h3&gt;
+&lt;p&gt;类似于java中的switch语句，根据变量的值执行不同的逻辑。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;judge&lt;/span&gt;(score: Int) = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (score &amp;gt;= &lt;span style=&#34;color:#b452cd&#34;&gt;60&lt;/span&gt;) &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;你及格了&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;你还需要多努力&amp;#34;&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;getScore&lt;/span&gt;(name: String) = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;when&lt;/span&gt; (name) {
+    &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Tom&amp;#34;&lt;/span&gt; -&amp;gt; &lt;span style=&#34;color:#b452cd&#34;&gt;78&lt;/span&gt;
+    &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Jack&amp;#34;&lt;/span&gt; -&amp;gt; &lt;span style=&#34;color:#b452cd&#34;&gt;35&lt;/span&gt;
+    &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Jerry&amp;#34;&lt;/span&gt; -&amp;gt; &lt;span style=&#34;color:#b452cd&#34;&gt;84&lt;/span&gt;
+    &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Lee&amp;#34;&lt;/span&gt; -&amp;gt; &lt;span style=&#34;color:#b452cd&#34;&gt;57&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; -&amp;gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;
+}
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;() {
+    println(judge(getScore(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Tom&amp;#34;&lt;/span&gt;)))
+    println(judge(getScore(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Jack&amp;#34;&lt;/span&gt;)))
+    println(judge(getScore(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Bill&amp;#34;&lt;/span&gt;)))
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;对我来说，最令人振奋的是再也不需要在每个分支里面都写个break了。其次when也是有返回值的，这和其他特性组合写出来的代码非常简洁优雅。&lt;/p&gt;
+&lt;p&gt;写个小demo吧。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;interface&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Speakable&lt;/span&gt; {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;speak&lt;/span&gt;()
+}
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Dog&lt;/span&gt; : Speakable {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;speak&lt;/span&gt;() {
+        println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;汪汪汪&amp;#34;&lt;/span&gt;)
+    }
+}
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Cat&lt;/span&gt; : Speakable {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;speak&lt;/span&gt;() {
+        println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;喵喵喵&amp;#34;&lt;/span&gt;)
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;climb&lt;/span&gt;() {
+        println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;小猫会爬树&amp;#34;&lt;/span&gt;)
+    }
+}
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;generateAnimal&lt;/span&gt;(): Speakable? = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;when&lt;/span&gt; ((&lt;span style=&#34;color:#b452cd&#34;&gt;1.&lt;/span&gt;.&lt;span style=&#34;color:#b452cd&#34;&gt;3&lt;/span&gt;).random()) {
+    &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt; -&amp;gt; Dog()
+    &lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt; -&amp;gt; Cat()
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; -&amp;gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;
+}
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;() {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;when&lt;/span&gt; (&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; animal = generateAnimal()) {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;is&lt;/span&gt; Dog -&amp;gt; {
+            println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;生成的动物是小狗&amp;#34;&lt;/span&gt;)
+            animal.speak()
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;is&lt;/span&gt; Cat -&amp;gt; {
+            println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;生成的动物是小猫&amp;#34;&lt;/span&gt;)
+            animal.speak()
+            animal.climb()
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; -&amp;gt; println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;生成动物时出现问题&amp;#34;&lt;/span&gt;)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;循环语句&#34;&gt;循环语句&lt;/h3&gt;
+&lt;p&gt;Kotlin中有两类循环，其中&lt;code&gt;while&lt;/code&gt;循环与java学过的while循环非常相似，只说下有差异的&lt;code&gt;for&lt;/code&gt;循环吧。&lt;/p&gt;
+&lt;p&gt;Kotlin的for循环只有for..in式的了，如&lt;code&gt;for(i in list)&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;但有时对数组下标进行遍历还是有必要的。于是我们要先了解下Kotlin的&lt;code&gt;区间&lt;/code&gt;的概念。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; range = &lt;span style=&#34;color:#b452cd&#34;&gt;1.&lt;/span&gt;.&lt;span style=&#34;color:#b452cd&#34;&gt;10&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这表示&lt;code&gt;[1,10]&lt;/code&gt;。但很多时候，我们需要左开右闭区间，比如数组有三个元素，我们需要&lt;code&gt;[0,3)&lt;/code&gt;表示数组的下标。此时可以使用&lt;code&gt;util&lt;/code&gt;关键字。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; indexRange = &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt; util &lt;span style=&#34;color:#b452cd&#34;&gt;3&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;有了range再和前面的for配合就完全可以替代之前java里面的for的作用了：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; array = arrayOf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Bob&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;John&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Jackson&amp;#34;&lt;/span&gt;)
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; (i &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt; util array.size) {
+    println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$i&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${array[i]}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;)
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;此外，还可以用&lt;code&gt;step&lt;/code&gt;指定步长值，实现”隔几个输出一次“的效果：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; (i &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt; util &lt;span style=&#34;color:#b452cd&#34;&gt;10&lt;/span&gt; step &lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;) {
+    println(i)
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果需要10循环到1,则需要&lt;code&gt;downTo&lt;/code&gt;关键字，&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; (i &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;10&lt;/span&gt; downTo &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;) {
+    println(i)
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;!-- raw HTML omitted --&gt;
+&lt;h2 id=&#34;面向对象编程&#34;&gt;面向对象编程&lt;/h2&gt;
+&lt;h3 id=&#34;类与对象&#34;&gt;类与对象&lt;/h3&gt;
+&lt;p&gt;与java的class相比Kotlin的class看上去没有多少改变，但创建对象不用new了。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Person&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; name: String) {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;speak&lt;/span&gt;() = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$name&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt; is speaking.&amp;#34;&lt;/span&gt;
+}
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;() {
+    Person(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Jack&amp;#34;&lt;/span&gt;).speak()
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;继承与构造函数&#34;&gt;继承与构造函数&lt;/h3&gt;
+&lt;p&gt;与java类似，Kotlin仍然是单继承，可以继承一个类实现多个接口。但继承的写法与java略有不同。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;open&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Animal&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;//非抽象类只有带了open才可以继承
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;interface&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Speakable&lt;/span&gt; {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;speak&lt;/span&gt;()
+}
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Dog&lt;/span&gt; : Animal(), Speakable {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;speak&lt;/span&gt;() {
+        println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;汪汪汪&amp;#34;&lt;/span&gt;)
+    }
+}
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Cat&lt;/span&gt; : Animal(), Speakable {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;speak&lt;/span&gt;() {
+        println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;喵喵喵&amp;#34;&lt;/span&gt;)
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;climb&lt;/span&gt;() {
+        println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;小猫会爬树&amp;#34;&lt;/span&gt;)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Kotlin中的构造函数分为主构造函数和次构造函数。如：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Student&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; sno: String, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; grade: Int, name: String, age: Int) {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;constructor&lt;/span&gt;(name: String, age: Int) : &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;, name, age)
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;constructor&lt;/span&gt;() : &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;)
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;init&lt;/span&gt; {
+        println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$age&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt; 的 &lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$name&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt; 被初始化了。&amp;#34;&lt;/span&gt;)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;次构造函数必须调用主构造函数（如果有），继承一个类必须调用他的构造函数（这也是为什么常常继承的类后面带着个括号）。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Kotlin函数的参数可以有默认值的，大多数情况根本不需要使用多个构造函数。
+主构造函数中&lt;code&gt;val&lt;/code&gt;和&lt;code&gt;var&lt;/code&gt;标记的变量将直接成为类的属性，没有这个标记的变量则只能在init block中访问。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;接口&#34;&gt;接口&lt;/h3&gt;
+&lt;p&gt;接口与java的接口是类似的。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;interface&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Study&lt;/span&gt; {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;readBooks&lt;/span&gt;()
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;doHomework&lt;/span&gt;() {
+        println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Do homework default implementation&amp;#34;&lt;/span&gt;)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;java与Kotlin中的可见性修饰略有不同。&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;修饰符&lt;/th&gt;
+&lt;th&gt;java&lt;/th&gt;
+&lt;th&gt;Kotlin&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;public&lt;/td&gt;
+&lt;td&gt;所有类可见&lt;/td&gt;
+&lt;td&gt;所有类可见（默认）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;private&lt;/td&gt;
+&lt;td&gt;当前类可见&lt;/td&gt;
+&lt;td&gt;当前类可见&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;protected&lt;/td&gt;
+&lt;td&gt;当前类、子类、同一包路径下的类可见&lt;/td&gt;
+&lt;td&gt;当前类、子类可见&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;default&lt;/td&gt;
+&lt;td&gt;同一包路径下的类可见&lt;/td&gt;
+&lt;td&gt;无&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;internal&lt;/td&gt;
+&lt;td&gt;无&lt;/td&gt;
+&lt;td&gt;同一模块中的类可见&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;数据类与单例类&#34;&gt;数据类与单例类&lt;/h3&gt;
+&lt;p&gt;数据类在当今的系统设计中占据了重要的地位，他们格式非常固定，一般实现各种构造函数、getter和setter，重写&lt;code&gt;equals()&lt;/code&gt;、&lt;code&gt;hashCode()&lt;/code&gt;、&lt;code&gt;toString()&lt;/code&gt;
+这几个方法，真的写腻了。很多ide都提供了一键生成这些样板代码的方法，更有项目Lombok添加个注解在编译时生成这些方法&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;。&lt;/p&gt;
+&lt;p&gt;而Kotlin中对于数据类有了专门的支持。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;data&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Student&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; sno: String, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; name: String, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; age: Int)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;idea对于Kotlin有很好的支持。我们用下面的步骤将上面的代码转换为java形式：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Tools-&amp;gt;Kotlin-&amp;gt;Show Kotlin ByteCode&lt;/li&gt;
+&lt;li&gt;Decompile&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;得到的代码如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;kotlin.Metadata&lt;/span&gt;;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;kotlin.jvm.internal.Intrinsics&lt;/span&gt;;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;org.jetbrains.annotations.NotNull&lt;/span&gt;;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;org.jetbrains.annotations.Nullable&lt;/span&gt;;
+&lt;span style=&#34;color:#707a7c&#34;&gt;@Metadata&lt;/span&gt;(
+        mv = {1, 4, 0},
+        bv = {1, 0, 3},
+        k = 1,
+        d1 = {&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;\u0000\&amp;#34;\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0000\n\u0002\u0010\u000e\n\u0002\b\u0002\n\u0002\u0010\b\n\u0002\b\r\n\u0002\u0010\u000b\n\u0002\b\u0004\b\u0086\b\u0018\u00002\u00020\u0001B\u001d\u0012\u0006\u0010\u0002\u001a\u00020\u0003\u0012\u0006\u0010\u0004\u001a\u00020\u0003\u0012\u0006\u0010\u0005\u001a\u00020\u0006¢\u0006\u0002\u0010\u0007J\t\u0010\u000f\u001a\u00020\u0003HÆ\u0003J\t\u0010\u0010\u001a\u00020\u0003HÆ\u0003J\t\u0010\u0011\u001a\u00020\u0006HÆ\u0003J&amp;#39;\u0010\u0012\u001a\u00020\u00002\b\b\u0002\u0010\u0002\u001a\u00020\u00032\b\b\u0002\u0010\u0004\u001a\u00020\u00032\b\b\u0002\u0010\u0005\u001a\u00020\u0006HÆ\u0001J\u0013\u0010\u0013\u001a\u00020\u00142\b\u0010\u0015\u001a\u0004\u0018\u00010\u0001HÖ\u0003J\t\u0010\u0016\u001a\u00020\u0006HÖ\u0001J\t\u0010\u0017\u001a\u00020\u0003HÖ\u0001R\u001a\u0010\u0005\u001a\u00020\u0006X\u0086\u000e¢\u0006\u000e\n\u0000\u001a\u0004\b\b\u0010\t\&amp;#34;\u0004\b\n\u0010\u000bR\u0011\u0010\u0004\u001a\u00020\u0003¢\u0006\b\n\u0000\u001a\u0004\b\f\u0010\rR\u0011\u0010\u0002\u001a\u00020\u0003¢\u0006\b\n\u0000\u001a\u0004\b\u000e\u0010\r¨\u0006\u0018&amp;#34;&lt;/span&gt;},
+        d2 = {&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;LStudent;&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;sno&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;name&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;age&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;(Ljava/lang/String;Ljava/lang/String;I)V&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;getAge&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;()I&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;setAge&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;(I)V&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;getName&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;()Ljava/lang/String;&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;getSno&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;component1&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;component2&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;component3&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;copy&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;equals&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;other&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;hashCode&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;toString&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;kotlin-learning.main&amp;#34;&lt;/span&gt;}
+)
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;final&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Student&lt;/span&gt; {
+    &lt;span style=&#34;color:#707a7c&#34;&gt;@NotNull&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;final&lt;/span&gt; String sno;
+    &lt;span style=&#34;color:#707a7c&#34;&gt;@NotNull&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;final&lt;/span&gt; String name;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; age;
+    &lt;span style=&#34;color:#707a7c&#34;&gt;@NotNull&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;final&lt;/span&gt; String &lt;span style=&#34;color:#008b45&#34;&gt;getSno&lt;/span&gt;() {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;sno&lt;/span&gt;;
+    }
+    &lt;span style=&#34;color:#707a7c&#34;&gt;@NotNull&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;final&lt;/span&gt; String &lt;span style=&#34;color:#008b45&#34;&gt;getName&lt;/span&gt;() {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;name&lt;/span&gt;;
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;final&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;getAge&lt;/span&gt;() {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;age&lt;/span&gt;;
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;final&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;setAge&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; var1) {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;age&lt;/span&gt; = var1;
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;Student&lt;/span&gt;(&lt;span style=&#34;color:#707a7c&#34;&gt;@NotNull&lt;/span&gt; String sno, &lt;span style=&#34;color:#707a7c&#34;&gt;@NotNull&lt;/span&gt; String name, &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; age) {
+        Intrinsics.&lt;span style=&#34;color:#658b00&#34;&gt;checkNotNullParameter&lt;/span&gt;(sno, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;sno&amp;#34;&lt;/span&gt;);
+        Intrinsics.&lt;span style=&#34;color:#658b00&#34;&gt;checkNotNullParameter&lt;/span&gt;(name, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;name&amp;#34;&lt;/span&gt;);
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;();
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;sno&lt;/span&gt; = sno;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;name&lt;/span&gt; = name;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;age&lt;/span&gt; = age;
+    }
+    &lt;span style=&#34;color:#707a7c&#34;&gt;@NotNull&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;final&lt;/span&gt; String &lt;span style=&#34;color:#008b45&#34;&gt;component1&lt;/span&gt;() {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;sno&lt;/span&gt;;
+    }
+    &lt;span style=&#34;color:#707a7c&#34;&gt;@NotNull&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;final&lt;/span&gt; String &lt;span style=&#34;color:#008b45&#34;&gt;component2&lt;/span&gt;() {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;name&lt;/span&gt;;
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;final&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;component3&lt;/span&gt;() {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;age&lt;/span&gt;;
+    }
+    &lt;span style=&#34;color:#707a7c&#34;&gt;@NotNull&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;final&lt;/span&gt; Student &lt;span style=&#34;color:#008b45&#34;&gt;copy&lt;/span&gt;(&lt;span style=&#34;color:#707a7c&#34;&gt;@NotNull&lt;/span&gt; String sno, &lt;span style=&#34;color:#707a7c&#34;&gt;@NotNull&lt;/span&gt; String name, &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; age) {
+        Intrinsics.&lt;span style=&#34;color:#658b00&#34;&gt;checkNotNullParameter&lt;/span&gt;(sno, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;sno&amp;#34;&lt;/span&gt;);
+        Intrinsics.&lt;span style=&#34;color:#658b00&#34;&gt;checkNotNullParameter&lt;/span&gt;(name, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;name&amp;#34;&lt;/span&gt;);
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; Student(sno, name, age);
+    }
+    &lt;span style=&#34;color:#228b22&#34;&gt;// $FF: synthetic method
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;static&lt;/span&gt; Student &lt;span style=&#34;color:#008b45&#34;&gt;copy$default&lt;/span&gt;(Student var0, String var1, String var2, &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; var3, &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; var4, Object var5) {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; ((var4 &amp;amp; 1) != 0) {
+            var1 = var0.&lt;span style=&#34;color:#658b00&#34;&gt;sno&lt;/span&gt;;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; ((var4 &amp;amp; 2) != 0) {
+            var2 = var0.&lt;span style=&#34;color:#658b00&#34;&gt;name&lt;/span&gt;;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; ((var4 &amp;amp; 4) != 0) {
+            var3 = var0.&lt;span style=&#34;color:#658b00&#34;&gt;age&lt;/span&gt;;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; var0.&lt;span style=&#34;color:#658b00&#34;&gt;copy&lt;/span&gt;(var1, var2, var3);
+    }
+    &lt;span style=&#34;color:#707a7c&#34;&gt;@NotNull&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; String &lt;span style=&#34;color:#008b45&#34;&gt;toString&lt;/span&gt;() {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Student(sno=&amp;#34;&lt;/span&gt; + &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;sno&lt;/span&gt; + &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;, name=&amp;#34;&lt;/span&gt; + &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;name&lt;/span&gt; + &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;, age=&amp;#34;&lt;/span&gt; + &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;age&lt;/span&gt; + &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;)&amp;#34;&lt;/span&gt;;
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;hashCode&lt;/span&gt;() {
+        String var10000 = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;sno&lt;/span&gt;;
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; var1 = (var10000 != &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt; ? var10000.&lt;span style=&#34;color:#658b00&#34;&gt;hashCode&lt;/span&gt;() : 0) * 31;
+        String var10001 = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;name&lt;/span&gt;;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; (var1 + (var10001 != &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt; ? var10001.&lt;span style=&#34;color:#658b00&#34;&gt;hashCode&lt;/span&gt;() : 0)) * 31 + &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;age&lt;/span&gt;;
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;boolean&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;equals&lt;/span&gt;(&lt;span style=&#34;color:#707a7c&#34;&gt;@Nullable&lt;/span&gt; Object var1) {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt; != var1) {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (var1 &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;instanceof&lt;/span&gt; Student) {
+                Student var2 = (Student) var1;
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (Intrinsics.&lt;span style=&#34;color:#658b00&#34;&gt;areEqual&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;sno&lt;/span&gt;, var2.&lt;span style=&#34;color:#658b00&#34;&gt;sno&lt;/span&gt;) &amp;amp;&amp;amp; Intrinsics.&lt;span style=&#34;color:#658b00&#34;&gt;areEqual&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;name&lt;/span&gt;, var2.&lt;span style=&#34;color:#658b00&#34;&gt;name&lt;/span&gt;) &amp;amp;&amp;amp; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;age&lt;/span&gt; == var2.&lt;span style=&#34;color:#658b00&#34;&gt;age&lt;/span&gt;) {
+                    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;;
+                }
+            }
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;;
+        } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;;
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;孰优孰劣，一目了然。&lt;/p&gt;
+&lt;p&gt;类似的，Kotlin也对单例类提供了支持。如：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Singleton&lt;/span&gt; {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;singletonTest&lt;/span&gt;() {
+        println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Singleton test is called.&amp;#34;&lt;/span&gt;)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这和你费了半天劲写出来的java代码作用是一样的：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;kotlin.Metadata&lt;/span&gt;;
+&lt;span style=&#34;color:#707a7c&#34;&gt;@Metadata&lt;/span&gt;(
+        mv = {1, 4, 0},
+        bv = {1, 0, 3},
+        k = 1,
+        d1 = {&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;\u0000\u0012\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0002\b\u0002\n\u0002\u0010\u0002\n\u0000\bÆ\u0002\u0018\u00002\u00020\u0001B\u0007\b\u0002¢\u0006\u0002\u0010\u0002J\u0006\u0010\u0003\u001a\u00020\u0004¨\u0006\u0005&amp;#34;&lt;/span&gt;},
+        d2 = {&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;LSingleton;&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;()V&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;singletonTest&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;kotlin-learning.main&amp;#34;&lt;/span&gt;}
+)
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;final&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Singleton&lt;/span&gt; {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;final&lt;/span&gt; Singleton INSTANCE;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;final&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;singletonTest&lt;/span&gt;() {
+        String var1 = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Singleton test is called.&amp;#34;&lt;/span&gt;;
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;boolean&lt;/span&gt; var2 = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;;
+        System.&lt;span style=&#34;color:#658b00&#34;&gt;out&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;println&lt;/span&gt;(var1);
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;Singleton&lt;/span&gt;() {
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;static&lt;/span&gt; {
+        Singleton var0 = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; Singleton();
+        INSTANCE = var0;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;lambda编程&#34;&gt;Lambda编程&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;() {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; map = mapOf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Apple&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Banana&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Orange&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#b452cd&#34;&gt;3&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Pear&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#b452cd&#34;&gt;4&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Grape&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#b452cd&#34;&gt;5&lt;/span&gt;)
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; ((fruit, number) &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;in&lt;/span&gt; map) {
+        println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;fruit is &lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$fruit&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;, number is &lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$number&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;函数式api&#34;&gt;函数式API&lt;/h3&gt;
+&lt;h4 id=&#34;maxby&#34;&gt;maxBy&lt;/h4&gt;
+&lt;p&gt;集合中最长的字符串。&lt;/p&gt;
+&lt;h3 id=&#34;map&#34;&gt;map&lt;/h3&gt;
+&lt;p&gt;将集合中每个元素都映射到另一个元素。&lt;/p&gt;
+&lt;h4 id=&#34;filter&#34;&gt;filter&lt;/h4&gt;
+&lt;p&gt;过滤集合中的数据。&lt;/p&gt;
+&lt;h4 id=&#34;any&#34;&gt;any&lt;/h4&gt;
+&lt;p&gt;至少有一个元素满足条件。&lt;/p&gt;
+&lt;h4 id=&#34;all&#34;&gt;all&lt;/h4&gt;
+&lt;p&gt;所有元素都满足条件。&lt;/p&gt;
+&lt;h3 id=&#34;java函数式api&#34;&gt;Java函数式API&lt;/h3&gt;
+&lt;p&gt;对于java中的单抽象方法可使用函数式API。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;Thread {
+    println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Thread is running&amp;#34;&lt;/span&gt;)
+}.start()
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;空指针检查&#34;&gt;空指针检查&lt;/h2&gt;
+&lt;p&gt;写java时最常见的错误就是&lt;code&gt;java.lang.NullPointerException&lt;/code&gt;了吧。在Kotlin中，情况有一些改善。&lt;/p&gt;
+&lt;p&gt;与java不同，Kotlin中的变量默认是不可空的。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;doStudy&lt;/span&gt;(study: Study) {
+    study.readBooks()
+    study.doHomework()
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果你给这个函数传一个可能为null的值，在编译期间就会得到错误提示。&lt;/p&gt;
+&lt;p&gt;当然，很多情况我们还是需要让我们的函数接受一个可空的值的，则可以用这样的写法：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;doStudy&lt;/span&gt;(study: Study?) {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (study != &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;) {
+        study.readBooks()
+        study.doHomework()
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;但在Kotlin中还有更好的方法：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;doStudy&lt;/span&gt;(study: Study?) {
+    study?.readBooks()
+    study?.doHomework()
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;用上&lt;code&gt;let&lt;/code&gt;我们还可以写得更优雅：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;doStudy&lt;/span&gt;(study: Study?) {
+    study?.let {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt;.readBooks()
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt;.doHomework()
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;?.&lt;/code&gt;表示只有不为空时才正常调用。&lt;/p&gt;
+&lt;p&gt;有时我们需要这样的逻辑：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;getTextLength&lt;/span&gt;(text: String?): Int {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (text != &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;) {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; text.length
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;Kotlin也有个方便的操作符：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;getTextLength&lt;/span&gt;(text: String?) = text?.length ?: &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;?:&lt;/code&gt;表示前面为空时返回后面的值。&lt;/p&gt;
+&lt;p&gt;当然，有些业务逻辑中Kotlin不一定能正确推断出你的变量是否可能为空，这时Kotlin也提供了让你自己操纵它的机会：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; content: String? = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;initContent&lt;/span&gt;() {
+    content = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;https://ntutn.top&amp;#34;&lt;/span&gt;
+}
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;() {
+    initContent()
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (content != &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;) {
+        printContent()
+    }
+}
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;printContent&lt;/span&gt;() {
+    println(content!!)
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;参考&lt;a href=&#34;https://www.w3cschool.cn/java/java-ternary-operator.html&#34;&gt;Java中的三元运算符&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://projectlombok.org/&#34;&gt;Lombok&lt;/a&gt;，用注解的方式简化java代码，但要求使用的ide必须安装lombok插件才能正确识别lombok生成的代码，有人认为这是在”强奸队友“。另外lombok的实现调用了jdk未公开的方法也引发争议。&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/section&gt;
+- https://ntutn.top/posts/kotlin/ - CC BY-SA 4.0</description>
+        </item>
     
     
     
@@ -1620,69 +2092,6 @@ defaultConfig {
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果你的工程中有任何顶级字符串或常量需要维护，你可以创建一个单独的文件，而不是在编译脚本中写的一团糟。&lt;/p&gt;
 &lt;p&gt;（Youtube视频见&lt;a href=&#34;https://youtu.be/w5qCmvS9JGE&#34;&gt;https://youtu.be/w5qCmvS9JGE&lt;/a&gt; ）&lt;/p&gt;
 - https://ntutn.top/posts/%E8%AF%91%E7%94%A8buildsrc%E5%92%8Ckotlin_dsl%E7%AE%A1%E7%90%86gradle%E4%BE%9D%E8%B5%96/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>我的黑历史被github埋到北极了</title>
-        <link>https://ntutn.top/posts/%E6%88%91%E7%9A%84%E9%BB%91%E5%8E%86%E5%8F%B2%E8%A2%ABgithub%E5%9F%8B%E5%88%B0%E5%8C%97%E6%9E%81%E4%BA%86/</link>
-        <pubDate>Tue, 26 Jan 2021 03:11:37 +0800</pubDate>
-        
-        <guid>https://ntutn.top/posts/%E6%88%91%E7%9A%84%E9%BB%91%E5%8E%86%E5%8F%B2%E8%A2%ABgithub%E5%9F%8B%E5%88%B0%E5%8C%97%E6%9E%81%E4%BA%86/</guid>
-        <description>归零幻想 https://ntutn.top/posts/%E6%88%91%E7%9A%84%E9%BB%91%E5%8E%86%E5%8F%B2%E8%A2%ABgithub%E5%9F%8B%E5%88%B0%E5%8C%97%E6%9E%81%E4%BA%86/ -&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;昨天整理自己的github仓库的时候发现自己的个人主页多了个徽章：&lt;code&gt;Arctic Code Vault Contributor&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2021/01/26/CJOcmPn12o734KQ.png&#34; alt=&#34;QQ20210126-143812@2x.png&#34;&gt;&lt;/p&gt;
-&lt;p&gt;So what happened?&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;h2 id=&#34;github-code-vault是什么&#34;&gt;GitHub Code Vault是什么&lt;/h2&gt;
-&lt;blockquote&gt;
-&lt;p&gt;GitHub Code Vault（GitHub 代码保险库）是由 GitHub Archive Program（GitHub 代码永久保存计划）设立的代码档案库，旨在保存开源软件以供未来使用。&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;天灾人祸，世界末日，地球回到原始时代重新发展，或者&lt;a href=&#34;https://code2048.com/series/betacat/&#34;&gt;betacat&lt;/a&gt;污染了所有开源代码库啦，人类就可以找到这份代码库，重建网络世界。&lt;/p&gt;
-&lt;p&gt;该项目给github上活跃的开源代码库建立&lt;code&gt;快照&lt;/code&gt;，将他们存储在胶片上运往北极。据称这些代码将被保存至少1000年。&lt;/p&gt;
-&lt;p&gt;每个细节都充满了科幻的味道，比如考虑一前年后的人类不一定读懂今天的代码，在&lt;a href=&#34;https://github.com/github/archive-program/blob/master/GUIDE_zh.md&#34;&gt;《GitHub Code Vault 指南》&lt;/a&gt;中介绍了二进制、计算机、软件、编译等基本概念，以及如何解码胶片上的信息。 &lt;strong&gt;当然，这个指南本身并没有被压缩和编码，他们没有犯某些网站的&lt;code&gt;RARSetup.rar&lt;/code&gt;的错误。&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;考虑到地球文明重建，人类不一定造出了计算机，于是还放了一份&lt;a href=&#34;https://github.com/github/archive-program/blob/master/TheTechTree.md&#34;&gt;科技树&lt;/a&gt;指南，包含理解软件所需的多层技术基础，如微处理器、网络、电子、半导体，甚至工业社会前的技术。有了这些技术，让人类可以重新造出现代计算机。&lt;/p&gt;
-&lt;h2 id=&#34;我的被选中的代码库&#34;&gt;我的被选中的代码库&lt;/h2&gt;
-&lt;h3 id=&#34;ctodo&#34;&gt;ctodo&lt;/h3&gt;
-&lt;p&gt;&lt;a href=&#34;https://github.com/zerofancy/ctodo&#34;&gt;https://github.com/zerofancy/ctodo&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;一个终端todo工具。c不是指C语言，而是&lt;code&gt;console&lt;/code&gt;（事实上这个项目是java写的）。&lt;/p&gt;
-&lt;p&gt;项目代码本身写的很垃圾，也就这个主意有点意思。在终端直接管理TODO List，听上去不错，但我没有坚持用太久。后来还是觉得有GUI的todo工具更好，比如微软的待办事项。&lt;/p&gt;
-&lt;p&gt;然而即使是这个主意，我也找到了更好的实现：&lt;a href=&#34;https://swapoff.org/devtodo.html&#34;&gt;devtodo&lt;/a&gt;，所以我的那个仓库也就不再维护了。&lt;/p&gt;
-&lt;h3 id=&#34;noveldownloader&#34;&gt;noveldownloader&lt;/h3&gt;
-&lt;p&gt;&lt;a href=&#34;https://github.com/zerofancy/noveldownloader&#34;&gt;https://github.com/zerofancy/noveldownloader&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;一个用Java+selenium写的小说下载器，基本原理就是模仿用户不断点“下一页”&lt;/p&gt;
-&lt;p&gt;没错，这个项目就是我看小说不想买正版又忍受不了盗版的广告时写的。当然因为是自用所以代码写的很随意，这不说放到1000年后，就是一两年后也是妥妥的黑历史啊……&lt;/p&gt;
-&lt;h2 id=&#34;吃瓜&#34;&gt;吃瓜&lt;/h2&gt;
-&lt;h3 id=&#34;dress被选中了&#34;&gt;Dress被选中了&lt;/h3&gt;
-&lt;p&gt;&lt;a href=&#34;https://github.com/komeiji-satori/Dress/issues/910&#34;&gt;你们的照片现在已经被冰封在北极了。。。&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;女装一时爽，破照留千年。坦白讲，除了公司的项目，我克隆过的最大的项目就是&lt;a href=&#34;https://github.com/komeiji-satori/Dress&#34;&gt;Dress&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;虽然该项目会忽略大于100KB的二进制文件，但这个限制会随着star数逐渐解除。考虑到这个项目的star数……为1000年后的考古学家的头发默哀3秒。&lt;/p&gt;
-&lt;h3 id=&#34;996icu被选中了&#34;&gt;996.icu被选中了&lt;/h3&gt;
-&lt;p&gt;&lt;a href=&#34;https://996.icu/#/zh_CN&#34;&gt;https://996.icu/#/zh_CN&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;我的代码留点bug给后世解决不算什么，但996.icu也被选中了。这下真的被钉到历史的耻辱柱上了……&lt;/p&gt;
-&lt;h3 id=&#34;面向stackoverflow编程&#34;&gt;面向Stackoverflow编程&lt;/h3&gt;
-&lt;p&gt;不同时快照一份 stackoverflow ，后代也不会抄啊。&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
-&lt;h3 id=&#34;大家还贡献了什么&#34;&gt;大家还贡献了什么&lt;/h3&gt;
-&lt;p&gt;dotfile、Github Pages、个人演讲库和个人网站、给女朋友的信，听说鸿蒙的ppt也在里面……&lt;/p&gt;
-&lt;h2 id=&#34;参考&#34;&gt;参考&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://zhuanlan.zhihu.com/p/162808193&#34;&gt;除了bug，GitHub可能还把你的女装照冻到了北极，1000年后还能读那种&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://archiveprogram.github.com/&#34;&gt;https://archiveprogram.github.com/&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.blog/2020-07-16-github-archive-program-the-journey-of-the-worlds-open-source-code-to-the-arctic/&#34;&gt;GitHub Archive Program: the journey of the world’s open source code to the Arctic&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
-&lt;hr&gt;
-&lt;ol&gt;
-&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://github.com/github/archive-program/blob/master/GUIDE_zh.md&#34;&gt;GitHub Code Vault 指南&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.zhihu.com/question/355902523/answer/894681961&#34;&gt;如何看待 GitHub 将公共存储库快照保存到北极地下？ - est的回答 - 知乎&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/section&gt;
-- https://ntutn.top/posts/%E6%88%91%E7%9A%84%E9%BB%91%E5%8E%86%E5%8F%B2%E8%A2%ABgithub%E5%9F%8B%E5%88%B0%E5%8C%97%E6%9E%81%E4%BA%86/ - CC BY-SA 4.0</description>
         </item>
     
     
