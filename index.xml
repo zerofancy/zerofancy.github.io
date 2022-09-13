@@ -379,7 +379,7 @@
     }  
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;用户正在拖动，或者用户刚刚松手我们是不能切换的，否则会干扰用户操作。这里我们通过监听dispatchTouchEvent来实现。&lt;/p&gt;
-&lt;p&gt;为什么不是 &lt;code&gt;onInterceptTouchEvent&lt;/code&gt; 回调呢？因为触摸事件是连续的，我们的目的是记录触摸事件而不进行拦截，但如果不拦截ACTION&lt;em&gt;DOWN事件，后续的ACTION&lt;/em&gt;UP事件就不会分发给我们这一层级的onInterceptTouchEvent了。&lt;/p&gt;
+&lt;p&gt;为什么不是 &lt;code&gt;onInterceptTouchEvent&lt;/code&gt; 回调呢？因为触摸事件是连续的，我们的目的是记录触摸事件而不进行拦截，但如果不拦截ACTION_DOWN事件，后续的ACTION_UP事件就不会分发给我们这一层级的onInterceptTouchEvent了。&lt;/p&gt;
 &lt;p&gt;实现上，用户未松手检查不通过，用户松手时补充一次检查即可。&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;BannerView&lt;/span&gt; &lt;span style=&#34;color:#707a7c&#34;&gt;@JvmOverloads&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;constructor&lt;/span&gt;(  
     context: Context,  
