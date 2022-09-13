@@ -7,7 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Mon, 05 Sep 2022 02:18:57 +0800</lastBuildDate><atom:link href="https://ntutn.top/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 14 Sep 2022 02:55:44 +0800</lastBuildDate><atom:link href="https://ntutn.top/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>打造一个接入简单的通用banner组件</title>
+      <link>https://ntutn.top/posts/%E6%89%93%E9%80%A0%E4%B8%80%E4%B8%AA%E6%8E%A5%E5%85%A5%E7%AE%80%E5%8D%95%E7%9A%84%E9%80%9A%E7%94%A8banner%E7%BB%84%E4%BB%B6/</link>
+      <pubDate>Wed, 14 Sep 2022 02:55:44 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E6%89%93%E9%80%A0%E4%B8%80%E4%B8%AA%E6%8E%A5%E5%85%A5%E7%AE%80%E5%8D%95%E7%9A%84%E9%80%9A%E7%94%A8banner%E7%BB%84%E4%BB%B6/</guid>
+      <description>banner是一个常见的活动入口形式，给我们的印象一般是一些不断轮播的图片。但，有些事情，远没有看上去那么简单。
+banner使用 特点：
+ 支持不同类型卡片混排 支持比较复杂的轮播逻辑 布局和展示逻辑完全交给业务方ViewHolder控制，可以灵活定制。  先看最终使用效果，也许你能提起一些兴趣。
+https://www.bilibili.com/video/BV1Ed4y137T7/
+ 将banner添加到你的布局中，  &amp;lt;top.ntutn.zerohelper.view.banner.BannerView android:id=&amp;#34;@+id/banner_view&amp;#34; android:layout_width=&amp;#34;match_parent&amp;#34; android:layout_height=&amp;#34;300dp&amp;#34; android:layout_gravity=&amp;#34;center&amp;#34; android:layout_margin=&amp;#34;16dp&amp;#34; tools:background=&amp;#34;@tools:sample/backgrounds/scenic&amp;#34; app:cardCornerRadius=&amp;#34;8dp&amp;#34;/&amp;gt;  准备一个或多个ViewHolder，实现业务展示和播控逻辑。  class ImageBannerData(var url: String = &amp;#34;&amp;#34;): BannerData { override val holderKey: String get() = ImageBannerViewHolder.key } class ImageBannerViewHolder(val binding: ItemImageBannerBinding) : BannerViewHolder(binding.root) { companion object: IBannerViewHolderFactory { override val key: String get() = &amp;#34;_image&amp;#34; override fun newInstance(parent: ViewGroup): BannerViewHolder { val inflater = LayoutInflater.from(parent.context) return ImageBannerViewHolder( ItemImageBannerBinding.</description>
+    </item>
+    
     <item>
       <title>Xfermode踩坑小结</title>
       <link>https://ntutn.top/posts/xfermode%E8%B8%A9%E5%9D%91%E5%B0%8F%E7%BB%93/</link>

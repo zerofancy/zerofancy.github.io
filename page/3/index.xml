@@ -7,9 +7,185 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Mon, 05 Sep 2022 02:18:57 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 14 Sep 2022 02:55:44 +0800</lastBuildDate>
     
         <atom:link href="https://ntutn.top/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>【译】用BuildSrc和Kotlin_DSL管理Gradle依赖</title>
+        <link>https://ntutn.top/posts/%E8%AF%91%E7%94%A8buildsrc%E5%92%8Ckotlin_dsl%E7%AE%A1%E7%90%86gradle%E4%BE%9D%E8%B5%96/</link>
+        <pubDate>Sun, 21 Feb 2021 03:00:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/%E8%AF%91%E7%94%A8buildsrc%E5%92%8Ckotlin_dsl%E7%AE%A1%E7%90%86gradle%E4%BE%9D%E8%B5%96/</guid>
+        <description>归零幻想 https://ntutn.top/posts/%E8%AF%91%E7%94%A8buildsrc%E5%92%8Ckotlin_dsl%E7%AE%A1%E7%90%86gradle%E4%BE%9D%E8%B5%96/ -&lt;blockquote&gt;
+&lt;p&gt;多模块工程中一个更好的引入依赖的方法
+翻译自&lt;a href=&#34;https://medium.com/better-programming/gradle-dependency-management-with-buildsrc-and-kotlin-dsl-1de958eab166&#34;&gt;Gradle Dependency Management With BuildSrc and Kotlin DSL&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;第一次尝试翻译英文文章……&lt;/p&gt;
+&lt;h2 id=&#34;要点&#34;&gt;要点&lt;/h2&gt;
+&lt;p&gt;主要集中在如何用&lt;code&gt;buildSrc&lt;/code&gt;目录和Kotlin DSL脚本构建一个Gradle依赖管理系统，你也会学到这样做相对使用传统Groovy代码的好处。&lt;/p&gt;
+&lt;p&gt;如果你倾向于通过视频来看这篇博客，文末附有一个Youtube视频。&lt;/p&gt;
+&lt;h2 id=&#34;问题&#34;&gt;问题&lt;/h2&gt;
+&lt;p&gt;众所周知在一个快速发展的项目中维护依赖是一个乏味的工作，而传统的Groovy脚本没有code navigation、自动补全，再加上性能问题和运行时错误让这一切变得更糟糕。&lt;/p&gt;
+&lt;p&gt;更重要的是，多数安卓开发者不懂Groovy，甚至我也不知道我之前在用Groovy做啥。&lt;/p&gt;
+&lt;p&gt;感谢Gradle团队和社区的工作提供了一个顺畅安全的构建流程，他们提出的最棒的主意之一就是用Kotlin DSL脚本写buildSrc目录。&lt;/p&gt;
+&lt;h1 id=&#34;解决&#34;&gt;解决&lt;/h1&gt;
+&lt;p&gt;依赖库引入和自定义task不应该放到构建脚本中，它们应该被声明到一个独立文件中再被构建脚本使用。在这个实现的早期，开发者习惯于创建一个Gradle文件来声明所有库并在构建脚本中使用。&lt;/p&gt;
+&lt;p&gt;这确实在一定程度上解决了问题，你可以在&lt;a href=&#34;https://medium.com/@sgkantamani/next-level-of-dependencies-declaration-with-kotlin-dsl-scripits-48bfe1cb1f10&#34;&gt;这篇文章&lt;/a&gt;读到这种方法。但这个简单方案不能解决类似自动补全和code navigation的问题，这使得在长远上看这个方案不够可靠。在这之外，buildSrc似乎有希望解决这个问题。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;这个目录被当作一个&lt;a href=&#34;https://docs.gradle.org/current/userguide/composite_builds.html#composite_build_intro&#34;&gt;included build&lt;/a&gt;看待。在发现这个目录之后，Gradle自动编译和测试它的代码，并将编译结果放到你的构建脚本的class path中。在一个多模块的工程中只能有一个这样的目录，并且要放到工程的顶级目录中。应该优先通过&lt;a href=&#34;https://docs.gradle.org/current/userguide/plugins.html#sec:script_plugins&#34;&gt;script plugins&lt;/a&gt;因为这样更便于管理、重构和测试代码。
+——Gradle团队&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;创建buildsrc目录&#34;&gt;创建buildSrc目录&lt;/h2&gt;
+&lt;p&gt;使用Kotlin DSL脚本不但能解决构建脚本中的这些问题，还能得到先进的IDE支持，包括code navigation、编译时错误提示等。最重要的，我们再也不用使用Groovy了。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;我们要做的第一件事是创建一个buildSrc目录：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;在工程上右键&lt;/li&gt;
+&lt;li&gt;点击New并选择Directory&lt;/li&gt;
+&lt;li&gt;把它命名为&lt;code&gt;buildSrc&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;如果你仍然不懂怎么创建这个目录，请看这里：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://miro.medium.com/max/1400/1*rDhflrwxcwwr4mcefTrQEg.gif&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;然后我们需要在这个目录里创建一个叫做&lt;code&gt;build.gradle.kts&lt;/code&gt;的文件，在这个文件里导入插件和存储库。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;plugins{
+    `kotlin-dsl&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;`&lt;/span&gt;
+}
+repositories {
+    jcenter()
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;完成后你还需要点击gradle的“sync now”按钮，因为gradle把它当作了一个新建目录中的普通文件。现在你可以实现Kotlin DSL脚本了。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://miro.medium.com/max/870/1*L1zYKShhvKrrgTyn07S3aw.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;下一步是创建一个类似这样的目录结构&lt;code&gt;src&amp;gt;main&amp;gt;java&lt;/code&gt;，完成后如上图所示。&lt;/p&gt;
+&lt;p&gt;现在我们可以创建Kotlin文件来声明依赖库，管理版本或者实现自定义task。&lt;/p&gt;
+&lt;p&gt;现在我们的目标是实现一个依赖管理系统，所以我们创建一个叫做&lt;code&gt;Dependencies.kt&lt;/code&gt;的文件（你可以用你喜欢的任何名字）。&lt;/p&gt;
+&lt;p&gt;完成后我们就可以通过Kotlin代码来声明依赖库和版本了。这里我们用object来声明特定的类型，例如版本号、AndroidX依赖库等。&lt;/p&gt;
+&lt;p&gt;首先我们创建一个用来用Kotlin风格定义所有依赖库版本号的object。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Versions&lt;/span&gt;{
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; constraint_layout_version = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.1.3&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; lifecycle_version = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;2.2.0&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; coroutines_version = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.3.8&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; kotlin_version = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.3.41&amp;#34;&lt;/span&gt;
+  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; appcompat = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.1.0&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; recycelerview_version = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.0.0&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; material_design_version = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.2.0&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; cardview_version = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.0.0&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; viewpager2_version = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.0.0&amp;#34;&lt;/span&gt;
+  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; play_core_version = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.8.0&amp;#34;&lt;/span&gt;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;下一步我们创建各种依赖库类型的专属object文件，例如Kotlinlibraries、AndroidXLibraries和UiLibraries等。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;kotlinDependencies&lt;/span&gt; {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; kotlin = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;org.jetbrains.kotlin:kotlin-stdlib-jdk7:&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${Versions.kotlin_version}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; coroutines = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;org.jetbrains.kotlinx:kotlinx-coroutines-android:&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${Versions.coroutines_version}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;
+}
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;androidxsupportDependencies&lt;/span&gt;{
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; appcompat = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;androidx.appcompat:appcompat:&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${Versions.appcompat}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; cardview = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;androidx.cardview:cardview:&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${Versions.cardview_version}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; contraintLayout = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;androidx.constraintlayout:constraintlayout:&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${Versions.constraint_layout_version}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; recyclerview = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;androidx.recyclerview:recyclerview:&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${Versions.recycelerview_version}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; viewpager2 = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;androidx.viewpager2:viewpager2:&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${Versions.viewpager2_version}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;
+}
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;materialDesignDependencies&lt;/span&gt;{
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; materialDesign = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;com.google.android.material:material:&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${Versions.material_design_version}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;
+}
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;playcoreDependencies&lt;/span&gt;{
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; play_core =  &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;com.google.android.play:core:&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${Versions.play_core_version}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;最后把完整代码片段放到这里&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Versions&lt;/span&gt;{
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; constraint_layout_version = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.1.3&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; lifecycle_version = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;2.2.0&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; coroutines_version = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.3.8&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; kotlin_version = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.3.41&amp;#34;&lt;/span&gt;
+  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; appcompat = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.1.0&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; recycelerview_version = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.0.0&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; material_design_version = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.2.0&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; cardview_version = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.0.0&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; viewpager2_version = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.0.0&amp;#34;&lt;/span&gt;
+  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; play_core_version = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.8.0&amp;#34;&lt;/span&gt;
+}
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;kotlinDependencies&lt;/span&gt; {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; kotlin = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;org.jetbrains.kotlin:kotlin-stdlib-jdk7:&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${Versions.kotlin_version}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; coroutines = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;org.jetbrains.kotlinx:kotlinx-coroutines-android:&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${Versions.coroutines_version}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;
+}
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;androidxsupportDependencies&lt;/span&gt;{
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; appcompat = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;androidx.appcompat:appcompat:&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${Versions.appcompat}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; cardview = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;androidx.cardview:cardview:&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${Versions.cardview_version}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; contraintLayout = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;androidx.constraintlayout:constraintlayout:&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${Versions.constraint_layout_version}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; recyclerview = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;androidx.recyclerview:recyclerview:&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${Versions.recycelerview_version}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; viewpager2 = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;androidx.viewpager2:viewpager2:&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${Versions.viewpager2_version}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;
+}
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;materialDesignDependencies&lt;/span&gt;{
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; materialDesign = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;com.google.android.material:material:&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${Versions.material_design_version}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;
+}
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;playcoreDependencies&lt;/span&gt;{
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; play_core =  &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;com.google.android.play:core:&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${Versions.play_core_version}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;最后一步就是在project、app和模块级的build.gradle文件中使用这些object了。这相当简单，只要object的name和成员变量的name就行了。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;dependencies {
+    &lt;span style=&#34;color:#228b22&#34;&gt;/** Kotlin */&lt;/span&gt;
+    implementation( kotlinDependencies.kotlin)
+    &lt;span style=&#34;color:#228b22&#34;&gt;/** Coroutines */&lt;/span&gt;
+    implementation( coroutineDependencies.coroutines)
+    
+    &lt;span style=&#34;color:#228b22&#34;&gt;/** support androidx ibraries */&lt;/span&gt;
+    implementation( androidxsupportDependencies.appcompat)
+    implementation( androidxsupportDependencies.contraintLayout)
+    implementation( androidxsupportDependencies.recyclerview)
+    implementation( androidxsupportDependencies.cardview)
+    implementation( androidxsupportDependencies.viewpager2)
+    &lt;span style=&#34;color:#228b22&#34;&gt;/*** Material design */&lt;/span&gt;
+    implementation( materialDesignDependencies.materialDesign)
+    
+    &lt;span style=&#34;color:#228b22&#34;&gt;/** Playcore */&lt;/span&gt;
+    implementation( playcoreDependencies.play_core)
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这种方法看上去简单，但拥有很多优点，比如code navigation、自动补全、运行时错误提示等。看下面的gif。（gif见原文）&lt;/p&gt;
+&lt;p&gt;此外，我们可以在整个项目的所有模块中使用这些定义的依赖。&lt;/p&gt;
+&lt;h2 id=&#34;更多&#34;&gt;更多&lt;/h2&gt;
+&lt;p&gt;目前为止，我们实现了与依赖有关的所有东西，但我们确实可以在编译脚本中做更多事情，比如替换掉defaultConfig块，它看上去这样&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;compileSdkVersion(&lt;span style=&#34;color:#b452cd&#34;&gt;29&lt;/span&gt;)
+defaultConfig {
+    applicationId = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;com.example.app&amp;#34;&lt;/span&gt;
+    minSdkVersion(&lt;span style=&#34;color:#b452cd&#34;&gt;16&lt;/span&gt;)
+    targetSdkVersion (&lt;span style=&#34;color:#b452cd&#34;&gt;29&lt;/span&gt;)
+    multiDexEnabled = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
+    versionCode = &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;
+    versionName = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.0&amp;#34;&lt;/span&gt;
+    testInstrumentationRunner = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;androidx.test.runner.AndroidJUnitRunner&amp;#34;&lt;/span&gt;
+    vectorDrawables.useSupportLibrary = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如我所说，把常量移到编译脚本外更安全。所以我们可以在下面另外创建一个Kotlin文件，或者在Dependencies.kt文件中创建一个新的object。然后声明所有常量，比如min、编译SDK版本等。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;buildConfigVersions&lt;/span&gt; {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; compileSdkVersion = &lt;span style=&#34;color:#b452cd&#34;&gt;29&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; buildToolsVersion = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;29.0.3&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; minSdkVersion = &lt;span style=&#34;color:#b452cd&#34;&gt;16&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; targetSdkVersion = &lt;span style=&#34;color:#b452cd&#34;&gt;29&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; versionCode = &lt;span style=&#34;color:#b452cd&#34;&gt;6&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; versionName = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;2.0&amp;#34;&lt;/span&gt;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;现在我们可以在block中使用这个object了&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;compileSdkVersion(buildConfigVersions.compileSdkVersion)
+defaultConfig {
+    applicationId = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;com.example.app&amp;#34;&lt;/span&gt;
+    minSdkVersion(buildConfigVersions.minSdkVersion)
+    targetSdkVersion (buildConfigVersions.targetSdkVersion)
+    multiDexEnabled = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
+    versionCode = buildConfigVersions.versionCode
+    versionName = buildConfigVersions.versionName
+    testInstrumentationRunner = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;androidx.test.runner.AndroidJUnitRunner&amp;#34;&lt;/span&gt;
+    vectorDrawables.useSupportLibrary = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果你的工程中有任何顶级字符串或常量需要维护，你可以创建一个单独的文件，而不是在编译脚本中写的一团糟。&lt;/p&gt;
+&lt;p&gt;（Youtube视频见&lt;a href=&#34;https://youtu.be/w5qCmvS9JGE&#34;&gt;https://youtu.be/w5qCmvS9JGE&lt;/a&gt; ）&lt;/p&gt;
+- https://ntutn.top/posts/%E8%AF%91%E7%94%A8buildsrc%E5%92%8Ckotlin_dsl%E7%AE%A1%E7%90%86gradle%E4%BE%9D%E8%B5%96/ - CC BY-SA 4.0</description>
+        </item>
     
     
     
@@ -911,86 +1087,6 @@ finish()
 &lt;/ol&gt;
 &lt;/section&gt;
 - https://ntutn.top/posts/%E5%86%99%E4%BA%A7%E5%93%81%E5%92%8C%E5%86%99demo%E7%9A%84%E5%8C%BA%E5%88%AB/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>android项目开发：项目结构</title>
-        <link>https://ntutn.top/posts/%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/</link>
-        <pubDate>Tue, 08 Dec 2020 03:11:37 +0800</pubDate>
-        
-        <guid>https://ntutn.top/posts/%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/</guid>
-        <description>归零幻想 https://ntutn.top/posts/%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/ -&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;虽然已经在字节实习并拿到转正offer，但实际我自己感受我现在对安卓基础知识掌握的程度还差很多，感觉写业务代码本身并不能带来多少提升。&lt;/p&gt;
-&lt;p&gt;恰逢前两天看到黄正楠那里有一本看上去不错的书&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;，而在淘宝也在打折，就买了一本。&lt;/p&gt;
-&lt;p&gt;那么从Hello Wrold开始，先看看安卓项目的项目结构。&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;[TOC]&lt;/p&gt;
-&lt;h2 id=&#34;gradle和idea&#34;&gt;.gradle和.idea&lt;/h2&gt;
-&lt;p&gt;Android Studio自动生成的文件，无需关心。&lt;/p&gt;
-&lt;h2 id=&#34;app&#34;&gt;app&lt;/h2&gt;
-&lt;p&gt;项目中的代码、资源等内容。&lt;/p&gt;
-&lt;h3 id=&#34;build&#34;&gt;build&lt;/h3&gt;
-&lt;p&gt;编译时自动生成的文件，不需要关心。&lt;/p&gt;
-&lt;h3 id=&#34;libs&#34;&gt;libs&lt;/h3&gt;
-&lt;p&gt;存放项目中的第三方jar包，这个目录下的jar包会自动添加到项目的构建路径下。&lt;/p&gt;
-&lt;h3 id=&#34;src&#34;&gt;src&lt;/h3&gt;
-&lt;h4 id=&#34;androidtest&#34;&gt;androidTest&lt;/h4&gt;
-&lt;p&gt;Android Test测试用例，可以对项目进行一些自动化测试。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;实际上在公司里发现基本不写测试用例，全靠QA瞎几把点。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h4 id=&#34;test&#34;&gt;test&lt;/h4&gt;
-&lt;p&gt;用来编写单元测试用例，对项目进行自动化测试。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;这里的测试用例是不依赖安卓框架的。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h4 id=&#34;main&#34;&gt;main&lt;/h4&gt;
-&lt;h5 id=&#34;java&#34;&gt;java&lt;/h5&gt;
-&lt;p&gt;存放所有java代码（和Kotlin代码）的地方。&lt;/p&gt;
-&lt;h5 id=&#34;res&#34;&gt;res&lt;/h5&gt;
-&lt;p&gt;项目的资源文件夹，项目中使用到的所有图片、布局、字符串等资源都存在这个目录下。&lt;/p&gt;
-&lt;p&gt;图片存放在&lt;code&gt;drawable&lt;/code&gt;目录下，布局存放在&lt;code&gt;layout&lt;/code&gt;目录下，字符串存放在&lt;code&gt;values&lt;/code&gt;目录下。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;mipmap&lt;/code&gt;存放图标，之所以有很多&lt;code&gt;mipmap&lt;/code&gt;目录是为了适配各种设备。若只有一份图片，那么放在&lt;code&gt;xxhdpi&lt;/code&gt;下就可以了。&lt;/p&gt;
-&lt;h5 id=&#34;androidmanifestxml&#34;&gt;AndroidManifest.xml&lt;/h5&gt;
-&lt;p&gt;整个Android项目的配置文件，程序中定义的四大组件都需要在这个文件中注册。此外，还可以在这个文件中添加应用程序的权限声明。&lt;/p&gt;
-&lt;h3 id=&#34;gitignore&#34;&gt;.gitignore&lt;/h3&gt;
-&lt;p&gt;类似外层的&lt;code&gt;.gitignore&lt;/code&gt;，用来在版本控制系统中排除app模块中的指定文件。&lt;/p&gt;
-&lt;h3 id=&#34;buildgradle&#34;&gt;build.gradle&lt;/h3&gt;
-&lt;p&gt;app模块的gradle构建脚本，指定很多项目构建相关的配置。&lt;/p&gt;
-&lt;p&gt;插件&lt;code&gt;com.android.application&lt;/code&gt;用于应用程序模块，&lt;code&gt;com.android.library&lt;/code&gt;表示库模块。前者可以直接运行，后者只能作为代码库依附于应用程序模块运行。&lt;/p&gt;
-&lt;h3 id=&#34;proguard-rulespro&#34;&gt;proguard-rules.pro&lt;/h3&gt;
-&lt;p&gt;指定项目代码的混淆方式。&lt;/p&gt;
-&lt;h2 id=&#34;build-1&#34;&gt;build&lt;/h2&gt;
-&lt;p&gt;编译时自动生成的内容。&lt;/p&gt;
-&lt;h2 id=&#34;gradle&#34;&gt;gradle&lt;/h2&gt;
-&lt;p&gt;gradle wrapper的配置文件。Android Studio会根据本地的缓存i去=情况决定是否需要联网下载gradle。&lt;/p&gt;
-&lt;h2 id=&#34;gitignore-1&#34;&gt;.gitignore&lt;/h2&gt;
-&lt;p&gt;排除文件或文件夹的git版本控制。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;对于所有项目都会用到的&lt;code&gt;.gitignore&lt;/code&gt;条目，不妨加入&lt;code&gt;~/.gitignore&lt;/code&gt;全局配置。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&#34;buildgradle-1&#34;&gt;build.gradle&lt;/h2&gt;
-&lt;p&gt;项目全局的构建脚本。&lt;/p&gt;
-&lt;p&gt;repositories中，&lt;code&gt;google()&lt;/code&gt;对应谷歌自家代码仓库依赖，&lt;code&gt;jcenter()&lt;/code&gt;中则是很多第三方开源库。&lt;/p&gt;
-&lt;h2 id=&#34;gradleproperties&#34;&gt;gradle.properties&lt;/h2&gt;
-&lt;p&gt;全局gradle的配置文件。&lt;/p&gt;
-&lt;h2 id=&#34;gradlew和gradlewbat&#34;&gt;gradlew和gradlew.bat&lt;/h2&gt;
-&lt;p&gt;这两个文件是用来在命令行界面执行gradle命令的，其中&lt;code&gt;gradlew&lt;/code&gt;是在Linux或Mac系统中使用的，&lt;code&gt;gradlew.bat&lt;/code&gt;是在Windows系统中使用的。&lt;/p&gt;
-&lt;h2 id=&#34;localproperties&#34;&gt;local.properties&lt;/h2&gt;
-&lt;p&gt;用于指定本机中的Android SDK路径。&lt;/p&gt;
-&lt;h2 id=&#34;settingsgradle&#34;&gt;settings.gradle&lt;/h2&gt;
-&lt;p&gt;用来指定项目中所有引入的模块。&lt;/p&gt;
-&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
-&lt;hr&gt;
-&lt;ol&gt;
-&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;《第一行代码》&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/section&gt;
-- https://ntutn.top/posts/%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/ - CC BY-SA 4.0</description>
         </item>
     
     

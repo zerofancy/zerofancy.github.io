@@ -7,9 +7,494 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Mon, 05 Sep 2022 02:18:57 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 14 Sep 2022 02:55:44 +0800</lastBuildDate>
     
         <atom:link href="https://ntutn.top/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>打造一个接入简单的通用banner组件</title>
+        <link>https://ntutn.top/posts/%E6%89%93%E9%80%A0%E4%B8%80%E4%B8%AA%E6%8E%A5%E5%85%A5%E7%AE%80%E5%8D%95%E7%9A%84%E9%80%9A%E7%94%A8banner%E7%BB%84%E4%BB%B6/</link>
+        <pubDate>Wed, 14 Sep 2022 02:55:44 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/%E6%89%93%E9%80%A0%E4%B8%80%E4%B8%AA%E6%8E%A5%E5%85%A5%E7%AE%80%E5%8D%95%E7%9A%84%E9%80%9A%E7%94%A8banner%E7%BB%84%E4%BB%B6/</guid>
+        <description>归零幻想 https://ntutn.top/posts/%E6%89%93%E9%80%A0%E4%B8%80%E4%B8%AA%E6%8E%A5%E5%85%A5%E7%AE%80%E5%8D%95%E7%9A%84%E9%80%9A%E7%94%A8banner%E7%BB%84%E4%BB%B6/ -&lt;p&gt;banner是一个常见的活动入口形式，给我们的印象一般是一些不断轮播的图片。但，有些事情，远没有看上去那么简单。&lt;/p&gt;
+&lt;h1 id=&#34;banner使用&#34;&gt;banner使用&lt;/h1&gt;
+&lt;p&gt;特点：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;支持不同类型卡片混排&lt;/li&gt;
+&lt;li&gt;支持比较复杂的轮播逻辑&lt;/li&gt;
+&lt;li&gt;布局和展示逻辑完全交给业务方ViewHolder控制，可以灵活定制。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;先看最终使用效果，也许你能提起一些兴趣。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.bilibili.com/video/BV1Ed4y137T7/&#34;&gt;https://www.bilibili.com/video/BV1Ed4y137T7/&lt;/a&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;将banner添加到你的布局中，&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;top.ntutn.zerohelper.view.banner.BannerView&lt;/span&gt;  
+    &lt;span style=&#34;color:#658b00&#34;&gt;android:id=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;@+id/banner_view&amp;#34;&lt;/span&gt;  
+    &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_width=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;match_parent&amp;#34;&lt;/span&gt;  
+    &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_height=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;300dp&amp;#34;&lt;/span&gt;  
+    &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_gravity=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;center&amp;#34;&lt;/span&gt;  
+    &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_margin=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;16dp&amp;#34;&lt;/span&gt;  
+    &lt;span style=&#34;color:#658b00&#34;&gt;tools:background=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;@tools:sample/backgrounds/scenic&amp;#34;&lt;/span&gt;  
+    &lt;span style=&#34;color:#658b00&#34;&gt;app:cardCornerRadius=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;8dp&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ol&gt;
+&lt;li&gt;准备一个或多个ViewHolder，实现业务展示和播控逻辑。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;ImageBannerData&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; url: String = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;): BannerData {  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; holderKey: String  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;get&lt;/span&gt;() = ImageBannerViewHolder.key  
+}  
+
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;ImageBannerViewHolder&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; binding: ItemImageBannerBinding) : BannerViewHolder(binding.root) {  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;companion&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt;: IBannerViewHolderFactory {  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; key: String  
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;get&lt;/span&gt;() = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;_image&amp;#34;&lt;/span&gt;  
+
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;newInstance&lt;/span&gt;(parent: ViewGroup): BannerViewHolder {  
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; inflater = LayoutInflater.from(parent.context)  
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; ImageBannerViewHolder(  
+                ItemImageBannerBinding.inflate(inflater, parent, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;)  
+            )  
+        }  
+    }  
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onBind&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;data&lt;/span&gt;: BannerData) {  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;data&lt;/span&gt; !is ImageBannerData) {  
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;  
+        }  
+        Glide.with(binding.bannerImageView)  
+            .load(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;data&lt;/span&gt;.url)  
+            .placeholder(R.drawable.ic_baseline_photo_24)  
+            .into(binding.bannerImageView)  
+    }  
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onSelect&lt;/span&gt;() {  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onSelect()  
+        &lt;span style=&#34;color:#228b22&#34;&gt;// 3s后标记播放完成
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        selectScope.launch {  
+            delay(&lt;span style=&#34;color:#b452cd&#34;&gt;3000L&lt;/span&gt;)  
+            playDone()  
+        }  
+    }  
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ol&gt;
+&lt;li&gt;初始化Banner和绑定数据，记得最后要销毁哦&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;BannerViewActivity&lt;/span&gt; : AppCompatActivity() {  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;lateinit&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; binding: ActivityBannerViewBinding  
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onCreate&lt;/span&gt;(savedInstanceState: Bundle?) {  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onCreate(savedInstanceState)  
+        binding = ActivityBannerViewBinding.inflate(layoutInflater)  
+        setContentView(binding.root)  
+        bindView()  
+        bindData()  
+    }  
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;bindView&lt;/span&gt;() {  
+        &lt;span style=&#34;color:#228b22&#34;&gt;// 初始化banner
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        binding.bannerView.initViewPager2()  
+        &lt;span style=&#34;color:#228b22&#34;&gt;// 注册VH
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        binding.bannerView.registerViewHolder(ImageBannerViewHolder.Companion)  
+        binding.bannerView.registerViewHolder(TextBannerViewHolder.Companion)  
+    }  
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;bindData&lt;/span&gt;() { 
+        &lt;span style=&#34;color:#228b22&#34;&gt;// 绑定数据 
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        binding.bannerView.setData(  
+            buildList {  
+                repeat(&lt;span style=&#34;color:#b452cd&#34;&gt;20&lt;/span&gt;) {  
+                    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (listOf(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;).random()) {  
+                        add(ImageBannerData(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;https://fakeimg.pl/400x300/&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${randomColor()}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;/?text=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$it&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;))  
+                    } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; {  
+                        add(TextBannerData(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;This is #&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$it&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt; ViewHolder.&amp;#34;&lt;/span&gt;))  
+                    }  
+                }  
+            }        )  
+    }  
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;randomColor&lt;/span&gt;(): String {  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; characters = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;0123456789ABCDEF&amp;#34;&lt;/span&gt;  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; buildString { repeat(&lt;span style=&#34;color:#b452cd&#34;&gt;6&lt;/span&gt;) { append(characters.random()) } }  
+    }  
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onStart&lt;/span&gt;() {  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onStart()  
+        &lt;span style=&#34;color:#228b22&#34;&gt;// 开启自动轮播
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        binding.bannerView.enableAutoSwitch()  
+    }  
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onStop&lt;/span&gt;() {  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onStop()  
+        &lt;span style=&#34;color:#228b22&#34;&gt;// 禁止自动轮播
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        binding.bannerView.disableAutoSwitch()  
+    }  
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onDestroy&lt;/span&gt;() {  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onDestroy()
+        &lt;span style=&#34;color:#228b22&#34;&gt;// 记得销毁控件  
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        binding.bannerView.release()  
+    }  
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;banner设计&#34;&gt;banner设计&lt;/h1&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2022/09/46cd2e16328c8030e8be7b2473eba6c7.png&#34; alt=&#34;banner结构&#34;&gt;&lt;/p&gt;
+&lt;p&gt;banner整体上使用一个自定义ViewGroup嵌套一个ViewPager2实现。每张图片是一个ViewHolder，业务方可以实现自己需要的任何布局。&lt;/p&gt;
+&lt;h2 id=&#34;vh创建解耦&#34;&gt;VH创建解耦&lt;/h2&gt;
+&lt;p&gt;我们知道ViewPager2实际上就是用RecyclerView实现的，而ViewHolder要交给业务方实现，那么ViewHolder的创建逻辑就要从我们的BannerAdapter中分离出去了。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2022/09/eaebc18f4dc6808a518176f4793259dc.png&#34; alt=&#34;ViewHolder创建解耦&#34;&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;interface&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;BannerData&lt;/span&gt; {  
+    &lt;span style=&#34;color:#228b22&#34;&gt;// holderFactory.key  
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; holderKey: String  
+}
+
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;interface&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;IBannerViewHolderFactory&lt;/span&gt; {  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; key: String  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;newInstance&lt;/span&gt;(parent: ViewGroup): BannerViewHolder  
+}
+
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;BannerAdapter&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; bannerOperator: BannerOperator) :  
+    RecyclerView.Adapter&amp;lt;BannerViewHolder&amp;gt;() {  
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; viewHolderFactoryMap = mutableMapOf&amp;lt;String, IBannerViewHolderFactory&amp;gt;()  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; viewHolderFactoryList = mutableListOf&amp;lt;IBannerViewHolderFactory&amp;gt;()  
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; dataSet: List&amp;lt;BannerData&amp;gt; = listOf()  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;set&lt;/span&gt;(value) {  
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;field&lt;/span&gt; = value  
+            notifyDataSetChanged()  
+        }  
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;registerViewHolder&lt;/span&gt;(factory: IBannerViewHolderFactory) {  
+        viewHolderFactoryMap[factory.key] = factory  
+        viewHolderFactoryList.add(factory)  
+    }  
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onCreateViewHolder&lt;/span&gt;(parent: ViewGroup, viewType: Int): BannerViewHolder {  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; viewHolder = viewHolderFactoryList[viewType].newInstance(parent)  
+        viewHolder.bannerOperator = bannerOperator  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; viewHolder  
+    }  
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;getItemViewType&lt;/span&gt;(position: Int): Int {  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; key = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (dataSet.isEmpty()) {  
+            StubViewHolder.key  
+        } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; {  
+            dataSet[position % dataSet.size].holderKey  
+        }  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; factory = viewHolderFactoryMap[key]  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; viewHolderFactoryList.indexOf(factory)  
+    }  
+
+    ...
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;无限横滑&#34;&gt;无限横滑&lt;/h2&gt;
+&lt;p&gt;这个实现并不难，只要理解RecyclerView.Adapter的几个回调就可以。只要 &lt;code&gt;getItemCount()&lt;/code&gt; 返回 &lt;code&gt;Int.MAX_VALUE&lt;/code&gt; ，然后所有用到position的地方替换为 &lt;code&gt;position % dataSet.size&lt;/code&gt; 即可。我不相信我会遇到头铁滑了2147483647次的头铁用户。&lt;/p&gt;
+&lt;h2 id=&#34;卡片选中事件传递&#34;&gt;卡片选中事件传递&lt;/h2&gt;
+&lt;p&gt;我预期一个ViewHolder要拿到自己被选中/取消选中状态的回调，用来处理播控状态。&lt;/p&gt;
+&lt;h3 id=&#34;选中事件产生&#34;&gt;选中事件产生&lt;/h3&gt;
+&lt;p&gt;选中事件是通过对ViewPager2页面事件监听来实现的。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; pagerChangeCallback = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;: &lt;/span&gt;&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;ViewPager2&lt;/span&gt;.OnPageChangeCallback() {  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onPageSelected&lt;/span&gt;(position: Int) {  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onPageSelected(position)  
+        &lt;span style=&#34;color:#228b22&#34;&gt;// 选中页面发生变化
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    }  
+}  
+
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;initViewPager2&lt;/span&gt;() {  
+    ...
+    viewPager2.registerOnPageChangeCallback(pagerChangeCallback)  
+}  
+
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;release&lt;/span&gt;() {  
+    ...
+    viewPager2.unregisterOnPageChangeCallback(pagerChangeCallback)  
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;使用livedata传递选中事件&#34;&gt;使用LiveData传递选中事件&lt;/h3&gt;
+&lt;p&gt;为了将选中事件传递给VH，我决定让VH监听一个在BannerView中的LiveData来实现。但ViewHolder并不是LifecycleOwner，我们需要手动注册和取消监听。这里我们通常是写在attach和detach回调中来实现的。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;// ViewHolder
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;DemoViewHolder&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; liveData) {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; observer = ...
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onAttach&lt;/span&gt;() {
+        liveData.observeForever(observer)
+    }
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onDetach&lt;/span&gt;() {
+        liveData.removeObserver(observer)
+    }
+}
+
+&lt;span style=&#34;color:#228b22&#34;&gt;// Adapter
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;DemoAdapter&lt;/span&gt; {
+    ...
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onViewAttachedToWindow&lt;/span&gt;(holder: BannerViewHolder) {  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onViewAttachedToWindow(holder)  
+        holder.onAttach()  
+    }  
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onViewDetachedFromWindow&lt;/span&gt;(holder: BannerViewHolder) {  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onViewDetachedFromWindow(holder)  
+        holder.onDetach()  
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;但这样其实是有问题的， &lt;strong&gt;如果Activity直接退出，onViewDetachedFromWindow其实并不会执行，这样就会带来潜在问题。&lt;/strong&gt; 参考 &lt;a href=&#34;https://www.jianshu.com/p/4f66c2c71d8c&#34;&gt;# RecyclerView#Adapter使用中的两个陷阱&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;我的办法是使用 &lt;code&gt;WeakHashMap&lt;/code&gt;，不影响holder销毁的同时记录未detach的holder。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;BannerAdapter&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; bannerOperator: BannerOperator) :  
+    RecyclerView.Adapter&amp;lt;BannerViewHolder&amp;gt;() {
+
+    ...
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; detachHolderTasks = WeakHashMap&amp;lt;RecyclerView.ViewHolder, Runnable&amp;gt;()
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onViewAttachedToWindow&lt;/span&gt;(holder: BannerViewHolder) {  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onViewAttachedToWindow(holder)  
+        holder.onAttach()  
+        detachHolderTasks[holder] = Runnable { holder.onDetach() }  
+    }  
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onViewDetachedFromWindow&lt;/span&gt;(holder: BannerViewHolder) {  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onViewDetachedFromWindow(holder)  
+        holder.onDetach()  
+        detachHolderTasks.remove(holder)  
+    }  
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;release&lt;/span&gt;() {  
+        detachHolderTasks.forEach {  
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt;.value.run()  
+        }  
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;接下来就是实际监听LiveData并转换为事件了。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;abstract&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;BannerViewHolder&lt;/span&gt;(view: View) : RecyclerView.ViewHolder(view) {  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;protected&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; isSelected = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; bannerOperator: BannerOperator? = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt; &lt;span style=&#34;color:#228b22&#34;&gt;// 实际上就是BannerView  
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; currentPosition = -&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;  
+
+    ...
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; selectPositionObserver = Observer&amp;lt;Int&amp;gt; {  
+        checkSelectStatus()  
+    }  
+
+    &lt;span style=&#34;color:#707a7c&#34;&gt;@CallSuper&lt;/span&gt;  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onBind&lt;/span&gt;(position: Int, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;data&lt;/span&gt;: BannerData) {  
+        currentPosition = position  
+
+        onBind(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;data&lt;/span&gt;)  
+
+        checkSelectStatus(force = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;)  
+    }  
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;abstract&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onBind&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;data&lt;/span&gt;: BannerData)  
+
+    &lt;span style=&#34;color:#228b22&#34;&gt;/**  
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     * @param force 重新bind后，必定触发一次选择事件  
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     */&lt;/span&gt;  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;checkSelectStatus&lt;/span&gt;(force: Boolean = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;) {  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (bannerOperator?.selectedPosition?.value == currentPosition) {  
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (force || !isSelected) {  
+                onSelect()  
+            }  
+        }  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (bannerOperator?.selectedPosition?.value != currentPosition) {  
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (force || isSelected) {  
+                onUnSelect()  
+            }  
+        }  
+    }  
+
+    &lt;span style=&#34;color:#707a7c&#34;&gt;@CallSuper&lt;/span&gt;  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;open&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onSelect&lt;/span&gt;() {  
+        isSelected = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;  
+    }  
+
+    &lt;span style=&#34;color:#707a7c&#34;&gt;@CallSuper&lt;/span&gt;  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;open&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onUnSelect&lt;/span&gt;() {  
+        isSelected = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;  
+    }   
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这里写这么啰嗦是为了处理两个特殊情况：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;数据未走到onBind，但position先发生了变化。&lt;/li&gt;
+&lt;li&gt;position未发生变化，但重新bind了不一样的数据。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;保证select事件总在bind之后，且只触发一次。&lt;/p&gt;
+&lt;h2 id=&#34;卡片完播事件传递&#34;&gt;卡片完播事件传递&lt;/h2&gt;
+&lt;p&gt;卡片完播是banner切换的前置条件，完播时机由VH决定，因而又要将这个事件传递到BannerView，以决定是否切换。&lt;/p&gt;
+&lt;p&gt;这里也是我这个banner组件的最大特点， &lt;strong&gt;完播事件产生交给业务方灵活控制，消费则回到组件进行统一管理。&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id=&#34;完播事件产生&#34;&gt;完播事件产生&lt;/h3&gt;
+&lt;p&gt;卡片可以认为自己是在onSelect时开始播放，即每次onSelect触发一次playDone。具体何时完播就可以进行灵活的业务逻辑控制了，如5s后完播，视频播放完成后完播，甚至第一次曝光10s完播第二次5s完播等。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;ImageBannerViewHolder&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; binding: ItemImageBannerBinding) : BannerViewHolder(binding.root) {  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onBind&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;data&lt;/span&gt;: BannerData) {  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;data&lt;/span&gt; !is ImageBannerData) {  
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;  
+        }  
+        ...
+    }  
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onSelect&lt;/span&gt;() {  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onSelect()  
+        ThreadUtils.postDelayed({ playDone() }, &lt;span style=&#34;color:#b452cd&#34;&gt;5&lt;/span&gt;_000L)  
+    }  
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;因为VH持有BannerView的引用，所以检查下当前是选中卡片就可以直接把完播事件传递给BannerView了。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;abstract&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;BannerViewHolder&lt;/span&gt;(view: View) : RecyclerView.ViewHolder(view) {  
+    ...
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;protected&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;playDone&lt;/span&gt;() {  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (isSelected) {  
+            bannerOperator?.currentItemPlayDone()  
+        }  
+    }  
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;完播事件的消费&#34;&gt;完播事件的消费&lt;/h3&gt;
+&lt;p&gt;我用一个变量标识当前卡片已经完播，并有一个方法来检查并切换到下一张卡片。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;BannerView&lt;/span&gt; &lt;span style=&#34;color:#707a7c&#34;&gt;@JvmOverloads&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;constructor&lt;/span&gt;(  
+    context: Context,  
+    attrs: AttributeSet? = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;,  
+    defStyleAttr: Int = &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;  
+) : CardView(context, attrs, defStyleAttr), BannerOperator {  
+
+    ...
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; pageInvalid = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;  
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;switchNext&lt;/span&gt;() {  
+        viewPager2.setCurrentItem(viewPager2.currentItem + &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;)  
+    }  
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;currentItemPlayDone&lt;/span&gt;() {  
+        pageInvalid = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;  
+        checkAndSwitchPage()  
+    }  
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;checkAndSwitchPage&lt;/span&gt;() {  
+        ...
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (pageInvalid) {  
+            switchNext()  
+        }
+    }  
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;用户正在拖动，或者用户刚刚松手我们是不能切换的，否则会干扰用户操作。这里我们通过监听dispatchTouchEvent来实现。&lt;/p&gt;
+&lt;p&gt;为什么不是 &lt;code&gt;onInterceptTouchEvent&lt;/code&gt; 回调呢？因为触摸事件是连续的，我们的目的是记录触摸事件而不进行拦截，但如果不拦截ACTION&lt;em&gt;DOWN事件，后续的ACTION&lt;/em&gt;UP事件就不会分发给我们这一层级的onInterceptTouchEvent了。&lt;/p&gt;
+&lt;p&gt;实现上，用户未松手检查不通过，用户松手时补充一次检查即可。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;BannerView&lt;/span&gt; &lt;span style=&#34;color:#707a7c&#34;&gt;@JvmOverloads&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;constructor&lt;/span&gt;(  
+    context: Context,  
+    attrs: AttributeSet? = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;,  
+    defStyleAttr: Int = &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;  
+) : CardView(context, attrs, defStyleAttr), BannerOperator {  
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; lastUserTouchTime = -&lt;span style=&#34;color:#b452cd&#34;&gt;1L&lt;/span&gt;  
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; delayAfterUserTouch = &lt;span style=&#34;color:#b452cd&#34;&gt;5000L&lt;/span&gt;  
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;release&lt;/span&gt;() {  
+        clearCheckTask()  
+        ...
+    }  
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;dispatchTouchEvent&lt;/span&gt;(ev: MotionEvent?): Boolean {  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;when&lt;/span&gt; (ev?.action) {  
+            MotionEvent.ACTION_DOWN -&amp;gt; {  
+                userDragging = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;  
+            }  
+            MotionEvent.ACTION_UP -&amp;gt; {  
+                userDragging = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;  
+                lastUserTouchTime = SystemClock.uptimeMillis()  
+                checkAndSwitchPage()  
+            }  
+        }  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.dispatchTouchEvent(ev)  
+    }  
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;checkAndSwitchPage&lt;/span&gt;() {  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (userDragging) {  
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;  
+        }  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; timeAfterLastTouch = SystemClock.uptimeMillis() - lastUserTouchTime  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (timeAfterLastTouch &amp;lt; delayAfterUserTouch) {  
+            &lt;span style=&#34;color:#228b22&#34;&gt;// 用户拖动松手5000 ms内，不自动切换，并规划下一次检查  
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;            handler.postDelayed(checkAutoPlayRunnable, delayAfterUserTouch - timeAfterLastTouch)  
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;  
+        }  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (pageInvalid) {  
+            switchNext()  
+        }  
+    }  
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;clearCheckTask&lt;/span&gt;() {  
+        handler.removeCallbacks(checkAutoPlayRunnable)  
+    }  
+
+    ...
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;我们还可以把是否开启轮播交给外部控制，实现锁屏停止轮播，解锁后又恢复轮播的效果。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;BannerView&lt;/span&gt; &lt;span style=&#34;color:#707a7c&#34;&gt;@JvmOverloads&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;constructor&lt;/span&gt;(  
+    context: Context,  
+    attrs: AttributeSet? = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;,  
+    defStyleAttr: Int = &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;  
+) : CardView(context, attrs, defStyleAttr), BannerOperator { 
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; isAutoSwitchEnabled = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;enableAutoSwitch&lt;/span&gt;() {  
+        isAutoSwitchEnabled = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;  
+        checkAndSwitchPage()  
+    }  
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;disableAutoSwitch&lt;/span&gt;() {  
+        clearCheckTask()  
+        isAutoSwitchEnabled = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;  
+    }  
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;checkAndSwitchPage&lt;/span&gt;() {  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (userDragging) {  
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;  
+        }  
+        ...
+    }  
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;clearCheckTask&lt;/span&gt;() {  
+        handler.removeCallbacks(checkAutoPlayRunnable)  
+    }  
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;selectscope&#34;&gt;selectScope&lt;/h3&gt;
+&lt;p&gt;上述完播事件产生中标记完播时使用了这样的代码 &lt;code&gt;ThreadUtils.postDelayed({ playDone() }, 5_000L)&lt;/code&gt; ，其实还是在取消播放时取消下比较严谨。因此可以提供一个CoroutineScope，取消选中状态后自动取消。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;abstract&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;BannerViewHolder&lt;/span&gt;(view: View) : RecyclerView.ViewHolder(view) {  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;protected&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; isSelected = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;protected&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;lateinit&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; selectScope: CoroutineScope  
+
+    &lt;span style=&#34;color:#707a7c&#34;&gt;@CallSuper&lt;/span&gt;  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;open&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onSelect&lt;/span&gt;() {  
+        selectScope = CoroutineScope(Dispatchers.Main + SupervisorJob())  
+        isSelected = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;  
+    }  
+
+    &lt;span style=&#34;color:#707a7c&#34;&gt;@CallSuper&lt;/span&gt;  
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;open&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onUnSelect&lt;/span&gt;() {  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (::selectScope.isInitialized) {  
+            selectScope.cancel()  
+        }  
+        isSelected = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;  
+    }  
+    ...
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这样使用方就比较方便了&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;ImageBannerViewHolder&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; binding: ItemImageBannerBinding) : BannerViewHolder(binding.root) {  
+    ...
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onSelect&lt;/span&gt;() {  
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onSelect()  
+        selectScope.launch {  
+            delay(&lt;span style=&#34;color:#b452cd&#34;&gt;3000L&lt;/span&gt;)  
+            playDone()  
+        }  
+    }  
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://ntutn.top/posts/%E6%89%93%E9%80%A0%E4%B8%80%E4%B8%AA%E6%8E%A5%E5%85%A5%E7%AE%80%E5%8D%95%E7%9A%84%E9%80%9A%E7%94%A8banner%E7%BB%84%E4%BB%B6/ - CC BY-SA 4.0</description>
+        </item>
     
     
     
@@ -1104,193 +1589,6 @@ JamVM (build 2.0.0, inline-threaded interpreter with stack-caching)
 &lt;/ol&gt;
 &lt;/section&gt;
 - https://ntutn.top/posts/%E7%BB%99app%E6%B7%BB%E5%8A%A0%E6%9E%84%E5%BB%BA%E4%BF%A1%E6%81%AF/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>android项目开发：持久化</title>
-        <link>https://ntutn.top/posts/%E6%8C%81%E4%B9%85%E5%8C%96/</link>
-        <pubDate>Sun, 24 Oct 2021 03:11:37 +0800</pubDate>
-        
-        <guid>https://ntutn.top/posts/%E6%8C%81%E4%B9%85%E5%8C%96/</guid>
-        <description>归零幻想 https://ntutn.top/posts/%E6%8C%81%E4%B9%85%E5%8C%96/ -&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;《第一行代码》阅读记录，有关数据持久化存储，略过了数据库的方式。&lt;/p&gt;
-&lt;h1 id=&#34;持久化&#34;&gt;持久化&lt;/h1&gt;
-&lt;h2 id=&#34;文件存储&#34;&gt;文件存储&lt;/h2&gt;
-&lt;p&gt;先暂时只是写了个demo，有需要再深入看。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;saveText&lt;/span&gt;(inputText: String) {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;try&lt;/span&gt; {
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; output = openFileOutput(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;data&amp;#34;&lt;/span&gt;, Context.MODE_PRIVATE)
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; writer = BufferedWriter(OutputStreamWriter(output))
-            writer.use {
-                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt;.write(inputText)
-            }
-        } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;catch&lt;/span&gt; (e: IOException) {
-            e.printStackTrace()
-        }
-    }
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;loadText&lt;/span&gt;(): String {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; content = StringBuilder()
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;try&lt;/span&gt; {
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; input = openFileInput(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;data&amp;#34;&lt;/span&gt;)
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; reader = BufferedReader(InputStreamReader(input))
-            reader.use { r -&amp;gt;
-                r.forEachLine {
-                    content.appendLine(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt;)
-                }
-            }
-        } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;catch&lt;/span&gt; (e: IOException) {
-            e.printStackTrace()
-        }
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; content.toString()
-    }
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;sharedpreference&#34;&gt;SharedPreference&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;            saveButton.setOnClickListener {
-                getSharedPreferences(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;data&amp;#34;&lt;/span&gt;, Context.MODE_PRIVATE).edit {
-                    putString(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;name&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Tom&amp;#34;&lt;/span&gt;)
-                    putInt(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;age&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#b452cd&#34;&gt;28&lt;/span&gt;)
-                    putBoolean(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;married&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;)
-                }
-            }
-            restoreButton.setOnClickListener {
-                getSharedPreferences(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;data&amp;#34;&lt;/span&gt;, Context.MODE_PRIVATE).apply {
-                    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; name = getString(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;name&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;苏珊&amp;#34;&lt;/span&gt;)
-                    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; age = getInt(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;age&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#b452cd&#34;&gt;15&lt;/span&gt;)
-                    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; isMarried = getBoolean(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;married&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;)
-                    Toast.makeText(
-                        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;&lt;span style=&#34;color:#707a7c&#34;&gt;@MainActivity&lt;/span&gt;,
-                        &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${name}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;年龄&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${age}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;岁&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${if (isMarried) &amp;#34;已婚&amp;#34; else &amp;#34;未婚&amp;#34;}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;,
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
-            }
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;数据库&#34;&gt;数据库&lt;/h2&gt;
-&lt;p&gt;基本用法demo&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.databasetest&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.content.ContentValues&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.content.Context&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.database.Cursor&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.database.sqlite.SQLiteDatabase&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.database.sqlite.SQLiteOpenHelper&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.util.Log&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.widget.Toast&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MyDatabaseHelper&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; context: Context, name: String, version: Int) :
-    SQLiteOpenHelper(context, name, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;, version) {
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; createBook = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&amp;#34;&amp;#34;
-&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;        create table Book (
-&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;            id integer primary key autoincrement,
-&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;            author text,
-&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;            price real,
-&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;            pages integer,
-&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;            name text
-&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;        )
-&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;    &amp;#34;&amp;#34;&amp;#34;&lt;/span&gt;.trimIndent()
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; createCategory = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&amp;#34;&amp;#34;
-&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;        create table Category (
-&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;            id integer primary key autoincrement,
-&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;            category_name text,
-&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;            category_code integer
-&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;        )
-&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;    &amp;#34;&amp;#34;&amp;#34;&lt;/span&gt;.trimIndent()
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onCreate&lt;/span&gt;(db: SQLiteDatabase) {
-        db.execSQL(createBook)
-        db.execSQL(createCategory)
-        Toast.makeText(context, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;建立数据库完成&amp;#34;&lt;/span&gt;, Toast.LENGTH_LONG).show()
-    }
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onUpgrade&lt;/span&gt;(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (oldVersion == newVersion) &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;
-        Log.d(javaClass.simpleName, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;旧版是&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${oldVersion}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;，新版是&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${newVersion}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;，数据库升级开始&amp;#34;&lt;/span&gt;)
-        db.execSQL(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;drop table if exists Book&amp;#34;&lt;/span&gt;)
-        db.execSQL(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;drop table if exists Category&amp;#34;&lt;/span&gt;)
-        onCreate(db)
-    }
-}
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;cvOf&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;vararg&lt;/span&gt; pairs: Pair&amp;lt;String, Any?&amp;gt;): ContentValues {
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; cv = ContentValues()
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; (pair &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;in&lt;/span&gt; pairs) {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; key = pair.first
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;when&lt;/span&gt; (&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; value = pair.second) {
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;is&lt;/span&gt; Int -&amp;gt; cv.put(key, value)
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;is&lt;/span&gt; Long -&amp;gt; cv.put(key, value)
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;is&lt;/span&gt; Short -&amp;gt; cv.put(key, value)
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;is&lt;/span&gt; Float -&amp;gt; cv.put(key, value)
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;is&lt;/span&gt; Double -&amp;gt; cv.put(key, value)
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;is&lt;/span&gt; Boolean -&amp;gt; cv.put(key, value)
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;is&lt;/span&gt; String -&amp;gt; cv.put(key, value)
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;is&lt;/span&gt; Byte -&amp;gt; cv.put(key, value)
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;is&lt;/span&gt; ByteArray -&amp;gt; cv.put(key, value)
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt; -&amp;gt; cv.putNull(key)
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; -&amp;gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;throw&lt;/span&gt; IllegalArgumentException(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;不支持的cv类型&amp;#34;&lt;/span&gt;)
-        }
-    }
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; cv
-}
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;Cursor&lt;/span&gt;.getString(name: String): String = getString(getColumnIndex(name))
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;Cursor&lt;/span&gt;.getInt(name: String): Int = getInt(getColumnIndex(name))
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;Cursor&lt;/span&gt;.getDouble(name: String): Double = getDouble(getColumnIndex(name))
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.databasetest&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.os.Bundle&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.util.Log&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;androidx.appcompat.app.AppCompatActivity&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.databasetest.databinding.ActivityMainBinding&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MainActivity&lt;/span&gt; : AppCompatActivity() {
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;lateinit&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; binding: ActivityMainBinding
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onCreate&lt;/span&gt;(savedInstanceState: Bundle?) {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; dbHelper = MyDatabaseHelper(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;BookStore.db&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#b452cd&#34;&gt;6&lt;/span&gt;)
-        binding.createDatabaseButton.setOnClickListener {
-            dbHelper.writableDatabase
-        }
-        binding.addDataButton.setOnClickListener {
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; db = dbHelper.writableDatabase
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; values1 = cvOf(
-                &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;name&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;The Da Vinci Code&amp;#34;&lt;/span&gt;,
-                &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;author&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Dan Brown&amp;#34;&lt;/span&gt;,
-                &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;pages&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#b452cd&#34;&gt;454&lt;/span&gt;,
-                &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;price&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#b452cd&#34;&gt;16.96&lt;/span&gt;
-            )
-            db.insert(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Book&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;, values1)
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; values2 = cvOf(
-                &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;name&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;The Lost Symbol&amp;#34;&lt;/span&gt;,
-                &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;author&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Dan Brown&amp;#34;&lt;/span&gt;,
-                &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;pages&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#b452cd&#34;&gt;510&lt;/span&gt;,
-                &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;price&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#b452cd&#34;&gt;19.95&lt;/span&gt;
-            )
-            db.insert(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Book&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;, values2)
-        }
-        binding.updateDataButton.setOnClickListener {
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; db = dbHelper.writableDatabase
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; values = cvOf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;price&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#b452cd&#34;&gt;10.99&lt;/span&gt;)
-            db.update(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Book&amp;#34;&lt;/span&gt;, values, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;name=?&amp;#34;&lt;/span&gt;, arrayOf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;The Da Vinci Code&amp;#34;&lt;/span&gt;))
-        }
-        binding.deleteDataButton.setOnClickListener {
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; db = dbHelper.writableDatabase
-            db.delete(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Book&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;pages &amp;gt; ?&amp;#34;&lt;/span&gt;, arrayOf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;500&amp;#34;&lt;/span&gt;))
-        }
-        binding.queryDataButton.setOnClickListener {
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; db = dbHelper.writableDatabase
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; cursor = db.query(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Book&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;)
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (cursor.moveToFirst()) {
-                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;do&lt;/span&gt; {
-                    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; name = cursor.getString(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;name&amp;#34;&lt;/span&gt;)
-                    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; author = cursor.getString(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;author&amp;#34;&lt;/span&gt;)
-                    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; pages = cursor.getInt(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;pages&amp;#34;&lt;/span&gt;)
-                    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; price = cursor.getDouble(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;price&amp;#34;&lt;/span&gt;)
-                    Log.d(
-                        javaClass.simpleName,
-                        &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;name: &lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$name&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;, author: &lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$author&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;, pages: &lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$pages&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;, price: &lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$price&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;
-                    )
-                } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt; (cursor.moveToNext())
-            }
-            cursor.close()
-        }
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;!-- raw HTML omitted --&gt;
-- https://ntutn.top/posts/%E6%8C%81%E4%B9%85%E5%8C%96/ - CC BY-SA 4.0</description>
         </item>
     
     

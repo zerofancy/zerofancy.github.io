@@ -7,9 +7,196 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Mon, 05 Sep 2022 02:18:57 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 14 Sep 2022 02:55:44 +0800</lastBuildDate>
     
         <atom:link href="https://ntutn.top/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>android项目开发：持久化</title>
+        <link>https://ntutn.top/posts/%E6%8C%81%E4%B9%85%E5%8C%96/</link>
+        <pubDate>Sun, 24 Oct 2021 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/%E6%8C%81%E4%B9%85%E5%8C%96/</guid>
+        <description>归零幻想 https://ntutn.top/posts/%E6%8C%81%E4%B9%85%E5%8C%96/ -&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;《第一行代码》阅读记录，有关数据持久化存储，略过了数据库的方式。&lt;/p&gt;
+&lt;h1 id=&#34;持久化&#34;&gt;持久化&lt;/h1&gt;
+&lt;h2 id=&#34;文件存储&#34;&gt;文件存储&lt;/h2&gt;
+&lt;p&gt;先暂时只是写了个demo，有需要再深入看。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;saveText&lt;/span&gt;(inputText: String) {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;try&lt;/span&gt; {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; output = openFileOutput(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;data&amp;#34;&lt;/span&gt;, Context.MODE_PRIVATE)
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; writer = BufferedWriter(OutputStreamWriter(output))
+            writer.use {
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt;.write(inputText)
+            }
+        } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;catch&lt;/span&gt; (e: IOException) {
+            e.printStackTrace()
+        }
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;loadText&lt;/span&gt;(): String {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; content = StringBuilder()
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;try&lt;/span&gt; {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; input = openFileInput(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;data&amp;#34;&lt;/span&gt;)
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; reader = BufferedReader(InputStreamReader(input))
+            reader.use { r -&amp;gt;
+                r.forEachLine {
+                    content.appendLine(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt;)
+                }
+            }
+        } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;catch&lt;/span&gt; (e: IOException) {
+            e.printStackTrace()
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; content.toString()
+    }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;sharedpreference&#34;&gt;SharedPreference&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;            saveButton.setOnClickListener {
+                getSharedPreferences(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;data&amp;#34;&lt;/span&gt;, Context.MODE_PRIVATE).edit {
+                    putString(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;name&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Tom&amp;#34;&lt;/span&gt;)
+                    putInt(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;age&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#b452cd&#34;&gt;28&lt;/span&gt;)
+                    putBoolean(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;married&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;)
+                }
+            }
+            restoreButton.setOnClickListener {
+                getSharedPreferences(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;data&amp;#34;&lt;/span&gt;, Context.MODE_PRIVATE).apply {
+                    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; name = getString(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;name&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;苏珊&amp;#34;&lt;/span&gt;)
+                    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; age = getInt(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;age&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#b452cd&#34;&gt;15&lt;/span&gt;)
+                    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; isMarried = getBoolean(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;married&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;)
+                    Toast.makeText(
+                        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;&lt;span style=&#34;color:#707a7c&#34;&gt;@MainActivity&lt;/span&gt;,
+                        &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${name}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;年龄&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${age}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;岁&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${if (isMarried) &amp;#34;已婚&amp;#34; else &amp;#34;未婚&amp;#34;}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;,
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;数据库&#34;&gt;数据库&lt;/h2&gt;
+&lt;p&gt;基本用法demo&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.databasetest&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.content.ContentValues&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.content.Context&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.database.Cursor&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.database.sqlite.SQLiteDatabase&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.database.sqlite.SQLiteOpenHelper&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.util.Log&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.widget.Toast&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MyDatabaseHelper&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; context: Context, name: String, version: Int) :
+    SQLiteOpenHelper(context, name, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;, version) {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; createBook = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&amp;#34;&amp;#34;
+&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;        create table Book (
+&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;            id integer primary key autoincrement,
+&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;            author text,
+&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;            price real,
+&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;            pages integer,
+&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;            name text
+&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;        )
+&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;    &amp;#34;&amp;#34;&amp;#34;&lt;/span&gt;.trimIndent()
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; createCategory = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&amp;#34;&amp;#34;
+&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;        create table Category (
+&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;            id integer primary key autoincrement,
+&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;            category_name text,
+&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;            category_code integer
+&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;        )
+&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;    &amp;#34;&amp;#34;&amp;#34;&lt;/span&gt;.trimIndent()
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onCreate&lt;/span&gt;(db: SQLiteDatabase) {
+        db.execSQL(createBook)
+        db.execSQL(createCategory)
+        Toast.makeText(context, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;建立数据库完成&amp;#34;&lt;/span&gt;, Toast.LENGTH_LONG).show()
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onUpgrade&lt;/span&gt;(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (oldVersion == newVersion) &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;
+        Log.d(javaClass.simpleName, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;旧版是&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${oldVersion}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;，新版是&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${newVersion}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;，数据库升级开始&amp;#34;&lt;/span&gt;)
+        db.execSQL(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;drop table if exists Book&amp;#34;&lt;/span&gt;)
+        db.execSQL(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;drop table if exists Category&amp;#34;&lt;/span&gt;)
+        onCreate(db)
+    }
+}
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;cvOf&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;vararg&lt;/span&gt; pairs: Pair&amp;lt;String, Any?&amp;gt;): ContentValues {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; cv = ContentValues()
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; (pair &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;in&lt;/span&gt; pairs) {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; key = pair.first
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;when&lt;/span&gt; (&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; value = pair.second) {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;is&lt;/span&gt; Int -&amp;gt; cv.put(key, value)
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;is&lt;/span&gt; Long -&amp;gt; cv.put(key, value)
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;is&lt;/span&gt; Short -&amp;gt; cv.put(key, value)
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;is&lt;/span&gt; Float -&amp;gt; cv.put(key, value)
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;is&lt;/span&gt; Double -&amp;gt; cv.put(key, value)
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;is&lt;/span&gt; Boolean -&amp;gt; cv.put(key, value)
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;is&lt;/span&gt; String -&amp;gt; cv.put(key, value)
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;is&lt;/span&gt; Byte -&amp;gt; cv.put(key, value)
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;is&lt;/span&gt; ByteArray -&amp;gt; cv.put(key, value)
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt; -&amp;gt; cv.putNull(key)
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; -&amp;gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;throw&lt;/span&gt; IllegalArgumentException(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;不支持的cv类型&amp;#34;&lt;/span&gt;)
+        }
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; cv
+}
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;Cursor&lt;/span&gt;.getString(name: String): String = getString(getColumnIndex(name))
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;Cursor&lt;/span&gt;.getInt(name: String): Int = getInt(getColumnIndex(name))
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;Cursor&lt;/span&gt;.getDouble(name: String): Double = getDouble(getColumnIndex(name))
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.databasetest&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.os.Bundle&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.util.Log&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;androidx.appcompat.app.AppCompatActivity&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.databasetest.databinding.ActivityMainBinding&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MainActivity&lt;/span&gt; : AppCompatActivity() {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;lateinit&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; binding: ActivityMainBinding
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onCreate&lt;/span&gt;(savedInstanceState: Bundle?) {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; dbHelper = MyDatabaseHelper(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;BookStore.db&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#b452cd&#34;&gt;6&lt;/span&gt;)
+        binding.createDatabaseButton.setOnClickListener {
+            dbHelper.writableDatabase
+        }
+        binding.addDataButton.setOnClickListener {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; db = dbHelper.writableDatabase
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; values1 = cvOf(
+                &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;name&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;The Da Vinci Code&amp;#34;&lt;/span&gt;,
+                &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;author&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Dan Brown&amp;#34;&lt;/span&gt;,
+                &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;pages&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#b452cd&#34;&gt;454&lt;/span&gt;,
+                &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;price&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#b452cd&#34;&gt;16.96&lt;/span&gt;
+            )
+            db.insert(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Book&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;, values1)
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; values2 = cvOf(
+                &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;name&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;The Lost Symbol&amp;#34;&lt;/span&gt;,
+                &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;author&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Dan Brown&amp;#34;&lt;/span&gt;,
+                &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;pages&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#b452cd&#34;&gt;510&lt;/span&gt;,
+                &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;price&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#b452cd&#34;&gt;19.95&lt;/span&gt;
+            )
+            db.insert(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Book&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;, values2)
+        }
+        binding.updateDataButton.setOnClickListener {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; db = dbHelper.writableDatabase
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; values = cvOf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;price&amp;#34;&lt;/span&gt; to &lt;span style=&#34;color:#b452cd&#34;&gt;10.99&lt;/span&gt;)
+            db.update(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Book&amp;#34;&lt;/span&gt;, values, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;name=?&amp;#34;&lt;/span&gt;, arrayOf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;The Da Vinci Code&amp;#34;&lt;/span&gt;))
+        }
+        binding.deleteDataButton.setOnClickListener {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; db = dbHelper.writableDatabase
+            db.delete(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Book&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;pages &amp;gt; ?&amp;#34;&lt;/span&gt;, arrayOf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;500&amp;#34;&lt;/span&gt;))
+        }
+        binding.queryDataButton.setOnClickListener {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; db = dbHelper.writableDatabase
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; cursor = db.query(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Book&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;)
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (cursor.moveToFirst()) {
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;do&lt;/span&gt; {
+                    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; name = cursor.getString(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;name&amp;#34;&lt;/span&gt;)
+                    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; author = cursor.getString(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;author&amp;#34;&lt;/span&gt;)
+                    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; pages = cursor.getInt(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;pages&amp;#34;&lt;/span&gt;)
+                    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; price = cursor.getDouble(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;price&amp;#34;&lt;/span&gt;)
+                    Log.d(
+                        javaClass.simpleName,
+                        &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;name: &lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$name&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;, author: &lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$author&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;, pages: &lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$pages&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;, price: &lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$price&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;
+                    )
+                } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt; (cursor.moveToNext())
+            }
+            cursor.close()
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;!-- raw HTML omitted --&gt;
+- https://ntutn.top/posts/%E6%8C%81%E4%B9%85%E5%8C%96/ - CC BY-SA 4.0</description>
+        </item>
     
     
     
@@ -1916,182 +2103,6 @@ implementation &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;androidx.fragm
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;反正还有SEP把门呢。&lt;/p&gt;
 &lt;!-- raw HTML omitted --&gt;
 - https://ntutn.top/posts/%E5%B9%B2%E6%8E%89macos%E7%9A%84ocsp/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>【译】用BuildSrc和Kotlin_DSL管理Gradle依赖</title>
-        <link>https://ntutn.top/posts/%E8%AF%91%E7%94%A8buildsrc%E5%92%8Ckotlin_dsl%E7%AE%A1%E7%90%86gradle%E4%BE%9D%E8%B5%96/</link>
-        <pubDate>Sun, 21 Feb 2021 03:00:37 +0800</pubDate>
-        
-        <guid>https://ntutn.top/posts/%E8%AF%91%E7%94%A8buildsrc%E5%92%8Ckotlin_dsl%E7%AE%A1%E7%90%86gradle%E4%BE%9D%E8%B5%96/</guid>
-        <description>归零幻想 https://ntutn.top/posts/%E8%AF%91%E7%94%A8buildsrc%E5%92%8Ckotlin_dsl%E7%AE%A1%E7%90%86gradle%E4%BE%9D%E8%B5%96/ -&lt;blockquote&gt;
-&lt;p&gt;多模块工程中一个更好的引入依赖的方法
-翻译自&lt;a href=&#34;https://medium.com/better-programming/gradle-dependency-management-with-buildsrc-and-kotlin-dsl-1de958eab166&#34;&gt;Gradle Dependency Management With BuildSrc and Kotlin DSL&lt;/a&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;第一次尝试翻译英文文章……&lt;/p&gt;
-&lt;h2 id=&#34;要点&#34;&gt;要点&lt;/h2&gt;
-&lt;p&gt;主要集中在如何用&lt;code&gt;buildSrc&lt;/code&gt;目录和Kotlin DSL脚本构建一个Gradle依赖管理系统，你也会学到这样做相对使用传统Groovy代码的好处。&lt;/p&gt;
-&lt;p&gt;如果你倾向于通过视频来看这篇博客，文末附有一个Youtube视频。&lt;/p&gt;
-&lt;h2 id=&#34;问题&#34;&gt;问题&lt;/h2&gt;
-&lt;p&gt;众所周知在一个快速发展的项目中维护依赖是一个乏味的工作，而传统的Groovy脚本没有code navigation、自动补全，再加上性能问题和运行时错误让这一切变得更糟糕。&lt;/p&gt;
-&lt;p&gt;更重要的是，多数安卓开发者不懂Groovy，甚至我也不知道我之前在用Groovy做啥。&lt;/p&gt;
-&lt;p&gt;感谢Gradle团队和社区的工作提供了一个顺畅安全的构建流程，他们提出的最棒的主意之一就是用Kotlin DSL脚本写buildSrc目录。&lt;/p&gt;
-&lt;h1 id=&#34;解决&#34;&gt;解决&lt;/h1&gt;
-&lt;p&gt;依赖库引入和自定义task不应该放到构建脚本中，它们应该被声明到一个独立文件中再被构建脚本使用。在这个实现的早期，开发者习惯于创建一个Gradle文件来声明所有库并在构建脚本中使用。&lt;/p&gt;
-&lt;p&gt;这确实在一定程度上解决了问题，你可以在&lt;a href=&#34;https://medium.com/@sgkantamani/next-level-of-dependencies-declaration-with-kotlin-dsl-scripits-48bfe1cb1f10&#34;&gt;这篇文章&lt;/a&gt;读到这种方法。但这个简单方案不能解决类似自动补全和code navigation的问题，这使得在长远上看这个方案不够可靠。在这之外，buildSrc似乎有希望解决这个问题。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;这个目录被当作一个&lt;a href=&#34;https://docs.gradle.org/current/userguide/composite_builds.html#composite_build_intro&#34;&gt;included build&lt;/a&gt;看待。在发现这个目录之后，Gradle自动编译和测试它的代码，并将编译结果放到你的构建脚本的class path中。在一个多模块的工程中只能有一个这样的目录，并且要放到工程的顶级目录中。应该优先通过&lt;a href=&#34;https://docs.gradle.org/current/userguide/plugins.html#sec:script_plugins&#34;&gt;script plugins&lt;/a&gt;因为这样更便于管理、重构和测试代码。
-——Gradle团队&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&#34;创建buildsrc目录&#34;&gt;创建buildSrc目录&lt;/h2&gt;
-&lt;p&gt;使用Kotlin DSL脚本不但能解决构建脚本中的这些问题，还能得到先进的IDE支持，包括code navigation、编译时错误提示等。最重要的，我们再也不用使用Groovy了。&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;我们要做的第一件事是创建一个buildSrc目录：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;在工程上右键&lt;/li&gt;
-&lt;li&gt;点击New并选择Directory&lt;/li&gt;
-&lt;li&gt;把它命名为&lt;code&gt;buildSrc&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;如果你仍然不懂怎么创建这个目录，请看这里：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://miro.medium.com/max/1400/1*rDhflrwxcwwr4mcefTrQEg.gif&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;p&gt;然后我们需要在这个目录里创建一个叫做&lt;code&gt;build.gradle.kts&lt;/code&gt;的文件，在这个文件里导入插件和存储库。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;plugins{
-    `kotlin-dsl&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;`&lt;/span&gt;
-}
-repositories {
-    jcenter()
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;完成后你还需要点击gradle的“sync now”按钮，因为gradle把它当作了一个新建目录中的普通文件。现在你可以实现Kotlin DSL脚本了。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://miro.medium.com/max/870/1*L1zYKShhvKrrgTyn07S3aw.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
-&lt;p&gt;下一步是创建一个类似这样的目录结构&lt;code&gt;src&amp;gt;main&amp;gt;java&lt;/code&gt;，完成后如上图所示。&lt;/p&gt;
-&lt;p&gt;现在我们可以创建Kotlin文件来声明依赖库，管理版本或者实现自定义task。&lt;/p&gt;
-&lt;p&gt;现在我们的目标是实现一个依赖管理系统，所以我们创建一个叫做&lt;code&gt;Dependencies.kt&lt;/code&gt;的文件（你可以用你喜欢的任何名字）。&lt;/p&gt;
-&lt;p&gt;完成后我们就可以通过Kotlin代码来声明依赖库和版本了。这里我们用object来声明特定的类型，例如版本号、AndroidX依赖库等。&lt;/p&gt;
-&lt;p&gt;首先我们创建一个用来用Kotlin风格定义所有依赖库版本号的object。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Versions&lt;/span&gt;{
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; constraint_layout_version = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.1.3&amp;#34;&lt;/span&gt;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; lifecycle_version = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;2.2.0&amp;#34;&lt;/span&gt;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; coroutines_version = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.3.8&amp;#34;&lt;/span&gt;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; kotlin_version = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.3.41&amp;#34;&lt;/span&gt;
-  
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; appcompat = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.1.0&amp;#34;&lt;/span&gt;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; recycelerview_version = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.0.0&amp;#34;&lt;/span&gt;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; material_design_version = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.2.0&amp;#34;&lt;/span&gt;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; cardview_version = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.0.0&amp;#34;&lt;/span&gt;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; viewpager2_version = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.0.0&amp;#34;&lt;/span&gt;
-  
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; play_core_version = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.8.0&amp;#34;&lt;/span&gt;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;下一步我们创建各种依赖库类型的专属object文件，例如Kotlinlibraries、AndroidXLibraries和UiLibraries等。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;kotlinDependencies&lt;/span&gt; {
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; kotlin = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;org.jetbrains.kotlin:kotlin-stdlib-jdk7:&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${Versions.kotlin_version}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; coroutines = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;org.jetbrains.kotlinx:kotlinx-coroutines-android:&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${Versions.coroutines_version}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;
-}
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;androidxsupportDependencies&lt;/span&gt;{
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; appcompat = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;androidx.appcompat:appcompat:&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${Versions.appcompat}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; cardview = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;androidx.cardview:cardview:&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${Versions.cardview_version}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; contraintLayout = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;androidx.constraintlayout:constraintlayout:&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${Versions.constraint_layout_version}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; recyclerview = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;androidx.recyclerview:recyclerview:&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${Versions.recycelerview_version}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; viewpager2 = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;androidx.viewpager2:viewpager2:&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${Versions.viewpager2_version}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;
-}
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;materialDesignDependencies&lt;/span&gt;{
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; materialDesign = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;com.google.android.material:material:&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${Versions.material_design_version}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;
-}
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;playcoreDependencies&lt;/span&gt;{
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; play_core =  &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;com.google.android.play:core:&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${Versions.play_core_version}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;最后把完整代码片段放到这里&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Versions&lt;/span&gt;{
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; constraint_layout_version = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.1.3&amp;#34;&lt;/span&gt;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; lifecycle_version = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;2.2.0&amp;#34;&lt;/span&gt;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; coroutines_version = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.3.8&amp;#34;&lt;/span&gt;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; kotlin_version = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.3.41&amp;#34;&lt;/span&gt;
-  
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; appcompat = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.1.0&amp;#34;&lt;/span&gt;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; recycelerview_version = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.0.0&amp;#34;&lt;/span&gt;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; material_design_version = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.2.0&amp;#34;&lt;/span&gt;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; cardview_version = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.0.0&amp;#34;&lt;/span&gt;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; viewpager2_version = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.0.0&amp;#34;&lt;/span&gt;
-  
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; play_core_version = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.8.0&amp;#34;&lt;/span&gt;
-}
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;kotlinDependencies&lt;/span&gt; {
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; kotlin = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;org.jetbrains.kotlin:kotlin-stdlib-jdk7:&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${Versions.kotlin_version}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; coroutines = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;org.jetbrains.kotlinx:kotlinx-coroutines-android:&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${Versions.coroutines_version}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;
-}
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;androidxsupportDependencies&lt;/span&gt;{
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; appcompat = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;androidx.appcompat:appcompat:&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${Versions.appcompat}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; cardview = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;androidx.cardview:cardview:&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${Versions.cardview_version}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; contraintLayout = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;androidx.constraintlayout:constraintlayout:&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${Versions.constraint_layout_version}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; recyclerview = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;androidx.recyclerview:recyclerview:&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${Versions.recycelerview_version}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; viewpager2 = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;androidx.viewpager2:viewpager2:&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${Versions.viewpager2_version}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;
-}
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;materialDesignDependencies&lt;/span&gt;{
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; materialDesign = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;com.google.android.material:material:&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${Versions.material_design_version}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;
-}
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;playcoreDependencies&lt;/span&gt;{
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; play_core =  &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;com.google.android.play:core:&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${Versions.play_core_version}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;最后一步就是在project、app和模块级的build.gradle文件中使用这些object了。这相当简单，只要object的name和成员变量的name就行了。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;dependencies {
-    &lt;span style=&#34;color:#228b22&#34;&gt;/** Kotlin */&lt;/span&gt;
-    implementation( kotlinDependencies.kotlin)
-    &lt;span style=&#34;color:#228b22&#34;&gt;/** Coroutines */&lt;/span&gt;
-    implementation( coroutineDependencies.coroutines)
-    
-    &lt;span style=&#34;color:#228b22&#34;&gt;/** support androidx ibraries */&lt;/span&gt;
-    implementation( androidxsupportDependencies.appcompat)
-    implementation( androidxsupportDependencies.contraintLayout)
-    implementation( androidxsupportDependencies.recyclerview)
-    implementation( androidxsupportDependencies.cardview)
-    implementation( androidxsupportDependencies.viewpager2)
-    &lt;span style=&#34;color:#228b22&#34;&gt;/*** Material design */&lt;/span&gt;
-    implementation( materialDesignDependencies.materialDesign)
-    
-    &lt;span style=&#34;color:#228b22&#34;&gt;/** Playcore */&lt;/span&gt;
-    implementation( playcoreDependencies.play_core)
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这种方法看上去简单，但拥有很多优点，比如code navigation、自动补全、运行时错误提示等。看下面的gif。（gif见原文）&lt;/p&gt;
-&lt;p&gt;此外，我们可以在整个项目的所有模块中使用这些定义的依赖。&lt;/p&gt;
-&lt;h2 id=&#34;更多&#34;&gt;更多&lt;/h2&gt;
-&lt;p&gt;目前为止，我们实现了与依赖有关的所有东西，但我们确实可以在编译脚本中做更多事情，比如替换掉defaultConfig块，它看上去这样&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;compileSdkVersion(&lt;span style=&#34;color:#b452cd&#34;&gt;29&lt;/span&gt;)
-defaultConfig {
-    applicationId = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;com.example.app&amp;#34;&lt;/span&gt;
-    minSdkVersion(&lt;span style=&#34;color:#b452cd&#34;&gt;16&lt;/span&gt;)
-    targetSdkVersion (&lt;span style=&#34;color:#b452cd&#34;&gt;29&lt;/span&gt;)
-    multiDexEnabled = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
-    versionCode = &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;
-    versionName = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.0&amp;#34;&lt;/span&gt;
-    testInstrumentationRunner = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;androidx.test.runner.AndroidJUnitRunner&amp;#34;&lt;/span&gt;
-    vectorDrawables.useSupportLibrary = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如我所说，把常量移到编译脚本外更安全。所以我们可以在下面另外创建一个Kotlin文件，或者在Dependencies.kt文件中创建一个新的object。然后声明所有常量，比如min、编译SDK版本等。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;buildConfigVersions&lt;/span&gt; {
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; compileSdkVersion = &lt;span style=&#34;color:#b452cd&#34;&gt;29&lt;/span&gt;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; buildToolsVersion = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;29.0.3&amp;#34;&lt;/span&gt;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; minSdkVersion = &lt;span style=&#34;color:#b452cd&#34;&gt;16&lt;/span&gt;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; targetSdkVersion = &lt;span style=&#34;color:#b452cd&#34;&gt;29&lt;/span&gt;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; versionCode = &lt;span style=&#34;color:#b452cd&#34;&gt;6&lt;/span&gt;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; versionName = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;2.0&amp;#34;&lt;/span&gt;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;现在我们可以在block中使用这个object了&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;compileSdkVersion(buildConfigVersions.compileSdkVersion)
-defaultConfig {
-    applicationId = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;com.example.app&amp;#34;&lt;/span&gt;
-    minSdkVersion(buildConfigVersions.minSdkVersion)
-    targetSdkVersion (buildConfigVersions.targetSdkVersion)
-    multiDexEnabled = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
-    versionCode = buildConfigVersions.versionCode
-    versionName = buildConfigVersions.versionName
-    testInstrumentationRunner = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;androidx.test.runner.AndroidJUnitRunner&amp;#34;&lt;/span&gt;
-    vectorDrawables.useSupportLibrary = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果你的工程中有任何顶级字符串或常量需要维护，你可以创建一个单独的文件，而不是在编译脚本中写的一团糟。&lt;/p&gt;
-&lt;p&gt;（Youtube视频见&lt;a href=&#34;https://youtu.be/w5qCmvS9JGE&#34;&gt;https://youtu.be/w5qCmvS9JGE&lt;/a&gt; ）&lt;/p&gt;
-- https://ntutn.top/posts/%E8%AF%91%E7%94%A8buildsrc%E5%92%8Ckotlin_dsl%E7%AE%A1%E7%90%86gradle%E4%BE%9D%E8%B5%96/ - CC BY-SA 4.0</description>
         </item>
     
     

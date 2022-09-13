@@ -1,0 +1,1425 @@
+<!DOCTYPE html>
+<html><head>
+<title>打造一个接入简单的通用banner组件</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="最近需求需要搞个banner组件，已有的不满足要求。组件本身不涉及业务逻辑，所以可以放心拿出来水博客。">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+<meta property="og:title" content="打造一个接入简单的通用banner组件" />
+<meta property="og:description" content="最近需求需要搞个banner组件，已有的不满足要求。组件本身不涉及业务逻辑，所以可以放心拿出来水博客。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ntutn.top/posts/%E6%89%93%E9%80%A0%E4%B8%80%E4%B8%AA%E6%8E%A5%E5%85%A5%E7%AE%80%E5%8D%95%E7%9A%84%E9%80%9A%E7%94%A8banner%E7%BB%84%E4%BB%B6/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-09-14T02:55:44+08:00" />
+<meta property="article:modified_time" content="2022-09-14T02:55:44+08:00" /><meta property="og:site_name" content="归零幻想" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+<link rel="icon" href="//images.ntutn.top/favicon.ico">
+
+
+
+<link rel="stylesheet" href="/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
+
+
+
+<link rel="stylesheet" href="/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
+
+
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css"><link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+<script defer
+	src='https://static.cloudflareinsights.com/beacon.min.js'
+	data-cf-beacon='{"token": 5a03d307f5214109a1e7c8b2cf306a3d'>
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+    pre code {
+        color: black;
+        -comment: "感谢评论区 https://github.com/lx200916 指出博客代码块深色模式问题";
+    }
+</style>
+<script src="https://unpkg.com/zoomtastic@2.2.1"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function(event) { 
+        document.querySelectorAll("div.post-body-wrapper img").forEach(function(element){
+            element.setAttribute("zoomtastic", true)
+            element.style.maxWidth="60%"
+        })
+		
+		Zoomtastic.mount({
+			size: '95%',
+			easing: 'ease',
+			duration: 300,
+			background: 'rgba(0, 0, 0, 0.9)',
+			filter: 'drop-shadow(0 2px 16px rgba(0, 0, 0, 0.3))',
+			animation: 'slide' 
+		});
+		
+		Zoomtastic.listen('[zoomtastic]', 'src');
+    });
+
+</script>
+
+</head>
+<body>
+    	<div id="app"><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://ntutn.top/">
+    
+        <div class="nav-title">
+            归零幻想
+        </div>
+        
+        <div class="nav-subtitle">
+            零点还不算熬夜
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                归档
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/categories">
+                分类
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
+                标签
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/friends">
+                友链
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/about">
+                关于
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/index.xml">
+                RSS
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	CC BY-SA 4.0
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    
+    
+    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#banner%e4%bd%bf%e7%94%a8" onclick="onNavClick(`#banner使用-nav`)" id="banner使用-nav">
+									banner使用
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#banner%e8%ae%be%e8%ae%a1" onclick="onNavClick(`#banner设计-nav`)" id="banner设计-nav">
+									banner设计
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#vh%e5%88%9b%e5%bb%ba%e8%a7%a3%e8%80%a6" onclick="onNavClick(`#vh创建解耦-nav`)" id="vh创建解耦-nav">
+									VH创建解耦
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%97%a0%e9%99%90%e6%a8%aa%e6%bb%91" onclick="onNavClick(`#无限横滑-nav`)" id="无限横滑-nav">
+									无限横滑
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%8d%a1%e7%89%87%e9%80%89%e4%b8%ad%e4%ba%8b%e4%bb%b6%e4%bc%a0%e9%80%92" onclick="onNavClick(`#卡片选中事件传递-nav`)" id="卡片选中事件传递-nav">
+									卡片选中事件传递
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e9%80%89%e4%b8%ad%e4%ba%8b%e4%bb%b6%e4%ba%a7%e7%94%9f" onclick="onNavClick(`#选中事件产生-nav`)" id="选中事件产生-nav">
+									选中事件产生
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e4%bd%bf%e7%94%a8livedata%e4%bc%a0%e9%80%92%e9%80%89%e4%b8%ad%e4%ba%8b%e4%bb%b6" onclick="onNavClick(`#使用livedata传递选中事件-nav`)" id="使用livedata传递选中事件-nav">
+									使用LiveData传递选中事件
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%8d%a1%e7%89%87%e5%ae%8c%e6%92%ad%e4%ba%8b%e4%bb%b6%e4%bc%a0%e9%80%92" onclick="onNavClick(`#卡片完播事件传递-nav`)" id="卡片完播事件传递-nav">
+									卡片完播事件传递
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%ae%8c%e6%92%ad%e4%ba%8b%e4%bb%b6%e4%ba%a7%e7%94%9f" onclick="onNavClick(`#完播事件产生-nav`)" id="完播事件产生-nav">
+									完播事件产生
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%ae%8c%e6%92%ad%e4%ba%8b%e4%bb%b6%e7%9a%84%e6%b6%88%e8%b4%b9" onclick="onNavClick(`#完播事件的消费-nav`)" id="完播事件的消费-nav">
+									完播事件的消费
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#selectscope" onclick="onNavClick(`#selectscope-nav`)" id="selectscope-nav">
+									selectScope
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+    
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+<div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    归档
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/categories">
+                    分类
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
+                    标签
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/friends">
+                    友链
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/about">
+                    关于
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/index.xml">
+                    RSS
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#banner%e4%bd%bf%e7%94%a8" onclick="onNavClick(`#banner使用-nav`)" id="banner使用-nav">
+									banner使用
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#banner%e8%ae%be%e8%ae%a1" onclick="onNavClick(`#banner设计-nav`)" id="banner设计-nav">
+									banner设计
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#vh%e5%88%9b%e5%bb%ba%e8%a7%a3%e8%80%a6" onclick="onNavClick(`#vh创建解耦-nav`)" id="vh创建解耦-nav">
+									VH创建解耦
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%97%a0%e9%99%90%e6%a8%aa%e6%bb%91" onclick="onNavClick(`#无限横滑-nav`)" id="无限横滑-nav">
+									无限横滑
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%8d%a1%e7%89%87%e9%80%89%e4%b8%ad%e4%ba%8b%e4%bb%b6%e4%bc%a0%e9%80%92" onclick="onNavClick(`#卡片选中事件传递-nav`)" id="卡片选中事件传递-nav">
+									卡片选中事件传递
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e9%80%89%e4%b8%ad%e4%ba%8b%e4%bb%b6%e4%ba%a7%e7%94%9f" onclick="onNavClick(`#选中事件产生-nav`)" id="选中事件产生-nav">
+									选中事件产生
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e4%bd%bf%e7%94%a8livedata%e4%bc%a0%e9%80%92%e9%80%89%e4%b8%ad%e4%ba%8b%e4%bb%b6" onclick="onNavClick(`#使用livedata传递选中事件-nav`)" id="使用livedata传递选中事件-nav">
+									使用LiveData传递选中事件
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#%e5%8d%a1%e7%89%87%e5%ae%8c%e6%92%ad%e4%ba%8b%e4%bb%b6%e4%bc%a0%e9%80%92" onclick="onNavClick(`#卡片完播事件传递-nav`)" id="卡片完播事件传递-nav">
+									卡片完播事件传递
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%ae%8c%e6%92%ad%e4%ba%8b%e4%bb%b6%e4%ba%a7%e7%94%9f" onclick="onNavClick(`#完播事件产生-nav`)" id="完播事件产生-nav">
+									完播事件产生
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%ae%8c%e6%92%ad%e4%ba%8b%e4%bb%b6%e7%9a%84%e6%b6%88%e8%b4%b9" onclick="onNavClick(`#完播事件的消费-nav`)" id="完播事件的消费-nav">
+									完播事件的消费
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#selectscope" onclick="onNavClick(`#selectscope-nav`)" id="selectscope-nav">
+									selectScope
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://ntutn.top/">
+            归零幻想
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://ntutn.top/">
+        <div class="single-column-header-title">归零幻想</div>
+        
+        <div class="single-column-header-subtitle">零点还不算熬夜</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+                
+            
+
+            <div class="post-head-wrapper"
+                
+                    
+                    
+                    style="background-image: url('https://images.ntutn.top/2022/09/46cd2e16328c8030e8be7b2473eba6c7.png')"
+                    
+                
+            >
+                <div class="post-title">
+                    打造一个接入简单的通用banner组件
+                    
+                    <div class="post-subtitle">
+                        最近需求需要搞个banner组件，已有的不满足要求。组件本身不涉及业务逻辑，所以可以放心拿出来水博客。
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2022-09-14 02:55
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/%E5%AE%89%E5%8D%93">安卓</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/%E5%AE%89%E5%8D%93">安卓</a>
+                                &nbsp;
+                            
+                                <a href="/tags/viewpager2">ViewPager2</a>
+                                &nbsp;
+                            
+                                <a href="/tags/banner">banner</a>
+                                &nbsp;
+                            
+                        
+                        
+                            <i class="material-icons" style="">schedule</i>
+                            
+
+                            
+                            
+
+                            
+                            12 min
+                            
+                            4 s.
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <p>banner是一个常见的活动入口形式，给我们的印象一般是一些不断轮播的图片。但，有些事情，远没有看上去那么简单。</p>
+<h1 id="banner使用">banner使用</h1>
+<p>特点：</p>
+<ol>
+<li>支持不同类型卡片混排</li>
+<li>支持比较复杂的轮播逻辑</li>
+<li>布局和展示逻辑完全交给业务方ViewHolder控制，可以灵活定制。</li>
+</ol>
+<p>先看最终使用效果，也许你能提起一些兴趣。</p>
+<p><a href="https://www.bilibili.com/video/BV1Ed4y137T7/">https://www.bilibili.com/video/BV1Ed4y137T7/</a></p>
+<ol>
+<li>将banner添加到你的布局中，</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#8b008b;font-weight:bold">&lt;top.ntutn.zerohelper.view.banner.BannerView</span>  
+    <span style="color:#658b00">android:id=</span><span style="color:#cd5555">&#34;@+id/banner_view&#34;</span>  
+    <span style="color:#658b00">android:layout_width=</span><span style="color:#cd5555">&#34;match_parent&#34;</span>  
+    <span style="color:#658b00">android:layout_height=</span><span style="color:#cd5555">&#34;300dp&#34;</span>  
+    <span style="color:#658b00">android:layout_gravity=</span><span style="color:#cd5555">&#34;center&#34;</span>  
+    <span style="color:#658b00">android:layout_margin=</span><span style="color:#cd5555">&#34;16dp&#34;</span>  
+    <span style="color:#658b00">tools:background=</span><span style="color:#cd5555">&#34;@tools:sample/backgrounds/scenic&#34;</span>  
+    <span style="color:#658b00">app:cardCornerRadius=</span><span style="color:#cd5555">&#34;8dp&#34;</span><span style="color:#8b008b;font-weight:bold">/&gt;</span>
+</code></pre></div><ol>
+<li>准备一个或多个ViewHolder，实现业务展示和播控逻辑。</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">ImageBannerData</span>(<span style="color:#8b008b;font-weight:bold">var</span> url: String = <span style="color:#cd5555">&#34;&#34;</span>): BannerData {  
+    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">val</span> holderKey: String  
+        <span style="color:#8b008b;font-weight:bold">get</span>() = ImageBannerViewHolder.key  
+}  
+
+<span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">ImageBannerViewHolder</span>(<span style="color:#8b008b;font-weight:bold">val</span> binding: ItemImageBannerBinding) : BannerViewHolder(binding.root) {  
+    <span style="color:#8b008b;font-weight:bold">companion</span> <span style="color:#8b008b;font-weight:bold">object</span>: IBannerViewHolderFactory {  
+        <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">val</span> key: String  
+            <span style="color:#8b008b;font-weight:bold">get</span>() = <span style="color:#cd5555">&#34;_image&#34;</span>  
+
+        <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">newInstance</span>(parent: ViewGroup): BannerViewHolder {  
+            <span style="color:#8b008b;font-weight:bold">val</span> inflater = LayoutInflater.from(parent.context)  
+            <span style="color:#8b008b;font-weight:bold">return</span> ImageBannerViewHolder(  
+                ItemImageBannerBinding.inflate(inflater, parent, <span style="color:#8b008b;font-weight:bold">false</span>)  
+            )  
+        }  
+    }  
+
+    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onBind</span>(<span style="color:#8b008b;font-weight:bold">data</span>: BannerData) {  
+        <span style="color:#8b008b;font-weight:bold">if</span> (<span style="color:#8b008b;font-weight:bold">data</span> !is ImageBannerData) {  
+            <span style="color:#8b008b;font-weight:bold">return</span>  
+        }  
+        Glide.with(binding.bannerImageView)  
+            .load(<span style="color:#8b008b;font-weight:bold">data</span>.url)  
+            .placeholder(R.drawable.ic_baseline_photo_24)  
+            .into(binding.bannerImageView)  
+    }  
+
+    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onSelect</span>() {  
+        <span style="color:#8b008b;font-weight:bold">super</span>.onSelect()  
+        <span style="color:#228b22">// 3s后标记播放完成
+</span><span style="color:#228b22"></span>        selectScope.launch {  
+            delay(<span style="color:#b452cd">3000L</span>)  
+            playDone()  
+        }  
+    }  
+}
+</code></pre></div><ol>
+<li>初始化Banner和绑定数据，记得最后要销毁哦</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">BannerViewActivity</span> : AppCompatActivity() {  
+    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">lateinit</span> <span style="color:#8b008b;font-weight:bold">var</span> binding: ActivityBannerViewBinding  
+
+    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onCreate</span>(savedInstanceState: Bundle?) {  
+        <span style="color:#8b008b;font-weight:bold">super</span>.onCreate(savedInstanceState)  
+        binding = ActivityBannerViewBinding.inflate(layoutInflater)  
+        setContentView(binding.root)  
+        bindView()  
+        bindData()  
+    }  
+
+    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">bindView</span>() {  
+        <span style="color:#228b22">// 初始化banner
+</span><span style="color:#228b22"></span>        binding.bannerView.initViewPager2()  
+        <span style="color:#228b22">// 注册VH
+</span><span style="color:#228b22"></span>        binding.bannerView.registerViewHolder(ImageBannerViewHolder.Companion)  
+        binding.bannerView.registerViewHolder(TextBannerViewHolder.Companion)  
+    }  
+
+    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">bindData</span>() { 
+        <span style="color:#228b22">// 绑定数据 
+</span><span style="color:#228b22"></span>        binding.bannerView.setData(  
+            buildList {  
+                repeat(<span style="color:#b452cd">20</span>) {  
+                    <span style="color:#8b008b;font-weight:bold">if</span> (listOf(<span style="color:#8b008b;font-weight:bold">true</span>, <span style="color:#8b008b;font-weight:bold">false</span>).random()) {  
+                        add(ImageBannerData(<span style="color:#cd5555">&#34;https://fakeimg.pl/400x300/</span><span style="color:#cd5555">${randomColor()}</span><span style="color:#cd5555">/?text=</span><span style="color:#cd5555">$it</span><span style="color:#cd5555">&#34;</span>))  
+                    } <span style="color:#8b008b;font-weight:bold">else</span> {  
+                        add(TextBannerData(<span style="color:#cd5555">&#34;This is #</span><span style="color:#cd5555">$it</span><span style="color:#cd5555"> ViewHolder.&#34;</span>))  
+                    }  
+                }  
+            }        )  
+    }  
+
+    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">randomColor</span>(): String {  
+        <span style="color:#8b008b;font-weight:bold">val</span> characters = <span style="color:#cd5555">&#34;0123456789ABCDEF&#34;</span>  
+        <span style="color:#8b008b;font-weight:bold">return</span> buildString { repeat(<span style="color:#b452cd">6</span>) { append(characters.random()) } }  
+    }  
+
+    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onStart</span>() {  
+        <span style="color:#8b008b;font-weight:bold">super</span>.onStart()  
+        <span style="color:#228b22">// 开启自动轮播
+</span><span style="color:#228b22"></span>        binding.bannerView.enableAutoSwitch()  
+    }  
+
+    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onStop</span>() {  
+        <span style="color:#8b008b;font-weight:bold">super</span>.onStop()  
+        <span style="color:#228b22">// 禁止自动轮播
+</span><span style="color:#228b22"></span>        binding.bannerView.disableAutoSwitch()  
+    }  
+
+    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onDestroy</span>() {  
+        <span style="color:#8b008b;font-weight:bold">super</span>.onDestroy()
+        <span style="color:#228b22">// 记得销毁控件  
+</span><span style="color:#228b22"></span>        binding.bannerView.release()  
+    }  
+}
+</code></pre></div><h1 id="banner设计">banner设计</h1>
+<p><img src="https://images.ntutn.top/2022/09/46cd2e16328c8030e8be7b2473eba6c7.png" alt="banner结构"></p>
+<p>banner整体上使用一个自定义ViewGroup嵌套一个ViewPager2实现。每张图片是一个ViewHolder，业务方可以实现自己需要的任何布局。</p>
+<h2 id="vh创建解耦">VH创建解耦</h2>
+<p>我们知道ViewPager2实际上就是用RecyclerView实现的，而ViewHolder要交给业务方实现，那么ViewHolder的创建逻辑就要从我们的BannerAdapter中分离出去了。</p>
+<p><img src="https://images.ntutn.top/2022/09/eaebc18f4dc6808a518176f4793259dc.png" alt="ViewHolder创建解耦"></p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">interface</span> <span style="color:#008b45;font-weight:bold">BannerData</span> {  
+    <span style="color:#228b22">// holderFactory.key  
+</span><span style="color:#228b22"></span>    <span style="color:#8b008b;font-weight:bold">val</span> holderKey: String  
+}
+
+<span style="color:#8b008b;font-weight:bold">interface</span> <span style="color:#008b45;font-weight:bold">IBannerViewHolderFactory</span> {  
+    <span style="color:#8b008b;font-weight:bold">val</span> key: String  
+    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">newInstance</span>(parent: ViewGroup): BannerViewHolder  
+}
+
+<span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">BannerAdapter</span>(<span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> bannerOperator: BannerOperator) :  
+    RecyclerView.Adapter&lt;BannerViewHolder&gt;() {  
+
+    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> viewHolderFactoryMap = mutableMapOf&lt;String, IBannerViewHolderFactory&gt;()  
+    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> viewHolderFactoryList = mutableListOf&lt;IBannerViewHolderFactory&gt;()  
+
+    <span style="color:#8b008b;font-weight:bold">var</span> dataSet: List&lt;BannerData&gt; = listOf()  
+        <span style="color:#8b008b;font-weight:bold">set</span>(value) {  
+            <span style="color:#8b008b;font-weight:bold">field</span> = value  
+            notifyDataSetChanged()  
+        }  
+
+    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">registerViewHolder</span>(factory: IBannerViewHolderFactory) {  
+        viewHolderFactoryMap[factory.key] = factory  
+        viewHolderFactoryList.add(factory)  
+    }  
+
+    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onCreateViewHolder</span>(parent: ViewGroup, viewType: Int): BannerViewHolder {  
+        <span style="color:#8b008b;font-weight:bold">val</span> viewHolder = viewHolderFactoryList[viewType].newInstance(parent)  
+        viewHolder.bannerOperator = bannerOperator  
+        <span style="color:#8b008b;font-weight:bold">return</span> viewHolder  
+    }  
+
+    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">getItemViewType</span>(position: Int): Int {  
+        <span style="color:#8b008b;font-weight:bold">val</span> key = <span style="color:#8b008b;font-weight:bold">if</span> (dataSet.isEmpty()) {  
+            StubViewHolder.key  
+        } <span style="color:#8b008b;font-weight:bold">else</span> {  
+            dataSet[position % dataSet.size].holderKey  
+        }  
+        <span style="color:#8b008b;font-weight:bold">val</span> factory = viewHolderFactoryMap[key]  
+        <span style="color:#8b008b;font-weight:bold">return</span> viewHolderFactoryList.indexOf(factory)  
+    }  
+
+    ...
+}
+</code></pre></div><h2 id="无限横滑">无限横滑</h2>
+<p>这个实现并不难，只要理解RecyclerView.Adapter的几个回调就可以。只要 <code>getItemCount()</code> 返回 <code>Int.MAX_VALUE</code> ，然后所有用到position的地方替换为 <code>position % dataSet.size</code> 即可。我不相信我会遇到头铁滑了2147483647次的头铁用户。</p>
+<h2 id="卡片选中事件传递">卡片选中事件传递</h2>
+<p>我预期一个ViewHolder要拿到自己被选中/取消选中状态的回调，用来处理播控状态。</p>
+<h3 id="选中事件产生">选中事件产生</h3>
+<p>选中事件是通过对ViewPager2页面事件监听来实现的。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> pagerChangeCallback = <span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#a61717;background-color:#e3d2d2">: </span><span style="color:#008b45;font-weight:bold">ViewPager2</span>.OnPageChangeCallback() {  
+    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onPageSelected</span>(position: Int) {  
+        <span style="color:#8b008b;font-weight:bold">super</span>.onPageSelected(position)  
+        <span style="color:#228b22">// 选中页面发生变化
+</span><span style="color:#228b22"></span>    }  
+}  
+
+<span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">initViewPager2</span>() {  
+    ...
+    viewPager2.registerOnPageChangeCallback(pagerChangeCallback)  
+}  
+
+<span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">release</span>() {  
+    ...
+    viewPager2.unregisterOnPageChangeCallback(pagerChangeCallback)  
+}
+</code></pre></div><h3 id="使用livedata传递选中事件">使用LiveData传递选中事件</h3>
+<p>为了将选中事件传递给VH，我决定让VH监听一个在BannerView中的LiveData来实现。但ViewHolder并不是LifecycleOwner，我们需要手动注册和取消监听。这里我们通常是写在attach和detach回调中来实现的。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#228b22">// ViewHolder
+</span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">DemoViewHolder</span>(<span style="color:#8b008b;font-weight:bold">val</span> liveData) {
+    <span style="color:#8b008b;font-weight:bold">val</span> observer = ...
+
+    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onAttach</span>() {
+        liveData.observeForever(observer)
+    }
+
+    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onDetach</span>() {
+        liveData.removeObserver(observer)
+    }
+}
+
+<span style="color:#228b22">// Adapter
+</span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">DemoAdapter</span> {
+    ...
+
+    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onViewAttachedToWindow</span>(holder: BannerViewHolder) {  
+        <span style="color:#8b008b;font-weight:bold">super</span>.onViewAttachedToWindow(holder)  
+        holder.onAttach()  
+    }  
+
+    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onViewDetachedFromWindow</span>(holder: BannerViewHolder) {  
+        <span style="color:#8b008b;font-weight:bold">super</span>.onViewDetachedFromWindow(holder)  
+        holder.onDetach()  
+    }
+}
+</code></pre></div><p>但这样其实是有问题的， <strong>如果Activity直接退出，onViewDetachedFromWindow其实并不会执行，这样就会带来潜在问题。</strong> 参考 <a href="https://www.jianshu.com/p/4f66c2c71d8c"># RecyclerView#Adapter使用中的两个陷阱</a></p>
+<p>我的办法是使用 <code>WeakHashMap</code>，不影响holder销毁的同时记录未detach的holder。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">BannerAdapter</span>(<span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> bannerOperator: BannerOperator) :  
+    RecyclerView.Adapter&lt;BannerViewHolder&gt;() {
+
+    ...
+
+    <span style="color:#8b008b;font-weight:bold">var</span> detachHolderTasks = WeakHashMap&lt;RecyclerView.ViewHolder, Runnable&gt;()
+
+    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onViewAttachedToWindow</span>(holder: BannerViewHolder) {  
+        <span style="color:#8b008b;font-weight:bold">super</span>.onViewAttachedToWindow(holder)  
+        holder.onAttach()  
+        detachHolderTasks[holder] = Runnable { holder.onDetach() }  
+    }  
+
+    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onViewDetachedFromWindow</span>(holder: BannerViewHolder) {  
+        <span style="color:#8b008b;font-weight:bold">super</span>.onViewDetachedFromWindow(holder)  
+        holder.onDetach()  
+        detachHolderTasks.remove(holder)  
+    }  
+
+    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">release</span>() {  
+        detachHolderTasks.forEach {  
+            <span style="color:#8b008b;font-weight:bold">it</span>.value.run()  
+        }  
+    }
+}
+</code></pre></div><p>接下来就是实际监听LiveData并转换为事件了。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">abstract</span> <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">BannerViewHolder</span>(view: View) : RecyclerView.ViewHolder(view) {  
+    <span style="color:#8b008b;font-weight:bold">protected</span> <span style="color:#8b008b;font-weight:bold">var</span> isSelected = <span style="color:#8b008b;font-weight:bold">false</span>  
+    <span style="color:#8b008b;font-weight:bold">var</span> bannerOperator: BannerOperator? = <span style="color:#8b008b;font-weight:bold">null</span> <span style="color:#228b22">// 实际上就是BannerView  
+</span><span style="color:#228b22"></span>    <span style="color:#8b008b;font-weight:bold">var</span> currentPosition = -<span style="color:#b452cd">1</span>  
+
+    ...
+
+    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> selectPositionObserver = Observer&lt;Int&gt; {  
+        checkSelectStatus()  
+    }  
+
+    <span style="color:#707a7c">@CallSuper</span>  
+    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onBind</span>(position: Int, <span style="color:#8b008b;font-weight:bold">data</span>: BannerData) {  
+        currentPosition = position  
+
+        onBind(<span style="color:#8b008b;font-weight:bold">data</span>)  
+
+        checkSelectStatus(force = <span style="color:#8b008b;font-weight:bold">true</span>)  
+    }  
+
+    <span style="color:#8b008b;font-weight:bold">abstract</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onBind</span>(<span style="color:#8b008b;font-weight:bold">data</span>: BannerData)  
+
+    <span style="color:#228b22">/**  
+</span><span style="color:#228b22">     * @param force 重新bind后，必定触发一次选择事件  
+</span><span style="color:#228b22">     */</span>  
+    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">checkSelectStatus</span>(force: Boolean = <span style="color:#8b008b;font-weight:bold">false</span>) {  
+        <span style="color:#8b008b;font-weight:bold">if</span> (bannerOperator?.selectedPosition?.value == currentPosition) {  
+            <span style="color:#8b008b;font-weight:bold">if</span> (force || !isSelected) {  
+                onSelect()  
+            }  
+        }  
+        <span style="color:#8b008b;font-weight:bold">if</span> (bannerOperator?.selectedPosition?.value != currentPosition) {  
+            <span style="color:#8b008b;font-weight:bold">if</span> (force || isSelected) {  
+                onUnSelect()  
+            }  
+        }  
+    }  
+
+    <span style="color:#707a7c">@CallSuper</span>  
+    <span style="color:#8b008b;font-weight:bold">open</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onSelect</span>() {  
+        isSelected = <span style="color:#8b008b;font-weight:bold">true</span>  
+    }  
+
+    <span style="color:#707a7c">@CallSuper</span>  
+    <span style="color:#8b008b;font-weight:bold">open</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onUnSelect</span>() {  
+        isSelected = <span style="color:#8b008b;font-weight:bold">false</span>  
+    }   
+}
+</code></pre></div><p>这里写这么啰嗦是为了处理两个特殊情况：</p>
+<ol>
+<li>数据未走到onBind，但position先发生了变化。</li>
+<li>position未发生变化，但重新bind了不一样的数据。</li>
+</ol>
+<p>保证select事件总在bind之后，且只触发一次。</p>
+<h2 id="卡片完播事件传递">卡片完播事件传递</h2>
+<p>卡片完播是banner切换的前置条件，完播时机由VH决定，因而又要将这个事件传递到BannerView，以决定是否切换。</p>
+<p>这里也是我这个banner组件的最大特点， <strong>完播事件产生交给业务方灵活控制，消费则回到组件进行统一管理。</strong></p>
+<h3 id="完播事件产生">完播事件产生</h3>
+<p>卡片可以认为自己是在onSelect时开始播放，即每次onSelect触发一次playDone。具体何时完播就可以进行灵活的业务逻辑控制了，如5s后完播，视频播放完成后完播，甚至第一次曝光10s完播第二次5s完播等。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">ImageBannerViewHolder</span>(<span style="color:#8b008b;font-weight:bold">val</span> binding: ItemImageBannerBinding) : BannerViewHolder(binding.root) {  
+    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onBind</span>(<span style="color:#8b008b;font-weight:bold">data</span>: BannerData) {  
+        <span style="color:#8b008b;font-weight:bold">if</span> (<span style="color:#8b008b;font-weight:bold">data</span> !is ImageBannerData) {  
+            <span style="color:#8b008b;font-weight:bold">return</span>  
+        }  
+        ...
+    }  
+
+    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onSelect</span>() {  
+        <span style="color:#8b008b;font-weight:bold">super</span>.onSelect()  
+        ThreadUtils.postDelayed({ playDone() }, <span style="color:#b452cd">5</span>_000L)  
+    }  
+}
+</code></pre></div><p>因为VH持有BannerView的引用，所以检查下当前是选中卡片就可以直接把完播事件传递给BannerView了。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">abstract</span> <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">BannerViewHolder</span>(view: View) : RecyclerView.ViewHolder(view) {  
+    ...
+
+    <span style="color:#8b008b;font-weight:bold">protected</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">playDone</span>() {  
+        <span style="color:#8b008b;font-weight:bold">if</span> (isSelected) {  
+            bannerOperator?.currentItemPlayDone()  
+        }  
+    }  
+}
+</code></pre></div><h3 id="完播事件的消费">完播事件的消费</h3>
+<p>我用一个变量标识当前卡片已经完播，并有一个方法来检查并切换到下一张卡片。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">BannerView</span> <span style="color:#707a7c">@JvmOverloads</span> <span style="color:#8b008b;font-weight:bold">constructor</span>(  
+    context: Context,  
+    attrs: AttributeSet? = <span style="color:#8b008b;font-weight:bold">null</span>,  
+    defStyleAttr: Int = <span style="color:#b452cd">0</span>  
+) : CardView(context, attrs, defStyleAttr), BannerOperator {  
+
+    ...
+    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">var</span> pageInvalid = <span style="color:#8b008b;font-weight:bold">false</span>  
+
+    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">switchNext</span>() {  
+        viewPager2.setCurrentItem(viewPager2.currentItem + <span style="color:#b452cd">1</span>, <span style="color:#8b008b;font-weight:bold">true</span>)  
+    }  
+
+    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">currentItemPlayDone</span>() {  
+        pageInvalid = <span style="color:#8b008b;font-weight:bold">true</span>  
+        checkAndSwitchPage()  
+    }  
+
+    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">checkAndSwitchPage</span>() {  
+        ...
+        <span style="color:#8b008b;font-weight:bold">if</span> (pageInvalid) {  
+            switchNext()  
+        }
+    }  
+}
+</code></pre></div><p>用户正在拖动，或者用户刚刚松手我们是不能切换的，否则会干扰用户操作。这里我们通过监听dispatchTouchEvent来实现。</p>
+<p>为什么不是 <code>onInterceptTouchEvent</code> 回调呢？因为触摸事件是连续的，我们的目的是记录触摸事件而不进行拦截，但如果不拦截ACTION<em>DOWN事件，后续的ACTION</em>UP事件就不会分发给我们这一层级的onInterceptTouchEvent了。</p>
+<p>实现上，用户未松手检查不通过，用户松手时补充一次检查即可。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">BannerView</span> <span style="color:#707a7c">@JvmOverloads</span> <span style="color:#8b008b;font-weight:bold">constructor</span>(  
+    context: Context,  
+    attrs: AttributeSet? = <span style="color:#8b008b;font-weight:bold">null</span>,  
+    defStyleAttr: Int = <span style="color:#b452cd">0</span>  
+) : CardView(context, attrs, defStyleAttr), BannerOperator {  
+
+    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">var</span> lastUserTouchTime = -<span style="color:#b452cd">1L</span>  
+
+    <span style="color:#8b008b;font-weight:bold">var</span> delayAfterUserTouch = <span style="color:#b452cd">5000L</span>  
+
+    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">release</span>() {  
+        clearCheckTask()  
+        ...
+    }  
+
+    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">dispatchTouchEvent</span>(ev: MotionEvent?): Boolean {  
+        <span style="color:#8b008b;font-weight:bold">when</span> (ev?.action) {  
+            MotionEvent.ACTION_DOWN -&gt; {  
+                userDragging = <span style="color:#8b008b;font-weight:bold">true</span>  
+            }  
+            MotionEvent.ACTION_UP -&gt; {  
+                userDragging = <span style="color:#8b008b;font-weight:bold">false</span>  
+                lastUserTouchTime = SystemClock.uptimeMillis()  
+                checkAndSwitchPage()  
+            }  
+        }  
+        <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">super</span>.dispatchTouchEvent(ev)  
+    }  
+
+    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">checkAndSwitchPage</span>() {  
+        <span style="color:#8b008b;font-weight:bold">if</span> (userDragging) {  
+            <span style="color:#8b008b;font-weight:bold">return</span>  
+        }  
+        <span style="color:#8b008b;font-weight:bold">val</span> timeAfterLastTouch = SystemClock.uptimeMillis() - lastUserTouchTime  
+        <span style="color:#8b008b;font-weight:bold">if</span> (timeAfterLastTouch &lt; delayAfterUserTouch) {  
+            <span style="color:#228b22">// 用户拖动松手5000 ms内，不自动切换，并规划下一次检查  
+</span><span style="color:#228b22"></span>            handler.postDelayed(checkAutoPlayRunnable, delayAfterUserTouch - timeAfterLastTouch)  
+            <span style="color:#8b008b;font-weight:bold">return</span>  
+        }  
+        <span style="color:#8b008b;font-weight:bold">if</span> (pageInvalid) {  
+            switchNext()  
+        }  
+    }  
+
+    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">clearCheckTask</span>() {  
+        handler.removeCallbacks(checkAutoPlayRunnable)  
+    }  
+
+    ...
+}
+</code></pre></div><p>我们还可以把是否开启轮播交给外部控制，实现锁屏停止轮播，解锁后又恢复轮播的效果。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">BannerView</span> <span style="color:#707a7c">@JvmOverloads</span> <span style="color:#8b008b;font-weight:bold">constructor</span>(  
+    context: Context,  
+    attrs: AttributeSet? = <span style="color:#8b008b;font-weight:bold">null</span>,  
+    defStyleAttr: Int = <span style="color:#b452cd">0</span>  
+) : CardView(context, attrs, defStyleAttr), BannerOperator { 
+
+    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">var</span> isAutoSwitchEnabled = <span style="color:#8b008b;font-weight:bold">false</span>
+
+    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">enableAutoSwitch</span>() {  
+        isAutoSwitchEnabled = <span style="color:#8b008b;font-weight:bold">true</span>  
+        checkAndSwitchPage()  
+    }  
+
+    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">disableAutoSwitch</span>() {  
+        clearCheckTask()  
+        isAutoSwitchEnabled = <span style="color:#8b008b;font-weight:bold">false</span>  
+    }  
+
+    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">checkAndSwitchPage</span>() {  
+        <span style="color:#8b008b;font-weight:bold">if</span> (userDragging) {  
+            <span style="color:#8b008b;font-weight:bold">return</span>  
+        }  
+        ...
+    }  
+
+    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">clearCheckTask</span>() {  
+        handler.removeCallbacks(checkAutoPlayRunnable)  
+    }  
+}
+</code></pre></div><h3 id="selectscope">selectScope</h3>
+<p>上述完播事件产生中标记完播时使用了这样的代码 <code>ThreadUtils.postDelayed({ playDone() }, 5_000L)</code> ，其实还是在取消播放时取消下比较严谨。因此可以提供一个CoroutineScope，取消选中状态后自动取消。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"> <span style="color:#8b008b;font-weight:bold">abstract</span> <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">BannerViewHolder</span>(view: View) : RecyclerView.ViewHolder(view) {  
+    <span style="color:#8b008b;font-weight:bold">protected</span> <span style="color:#8b008b;font-weight:bold">var</span> isSelected = <span style="color:#8b008b;font-weight:bold">false</span>  
+    <span style="color:#8b008b;font-weight:bold">protected</span> <span style="color:#8b008b;font-weight:bold">lateinit</span> <span style="color:#8b008b;font-weight:bold">var</span> selectScope: CoroutineScope  
+
+    <span style="color:#707a7c">@CallSuper</span>  
+    <span style="color:#8b008b;font-weight:bold">open</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onSelect</span>() {  
+        selectScope = CoroutineScope(Dispatchers.Main + SupervisorJob())  
+        isSelected = <span style="color:#8b008b;font-weight:bold">true</span>  
+    }  
+
+    <span style="color:#707a7c">@CallSuper</span>  
+    <span style="color:#8b008b;font-weight:bold">open</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onUnSelect</span>() {  
+        <span style="color:#8b008b;font-weight:bold">if</span> (::selectScope.isInitialized) {  
+            selectScope.cancel()  
+        }  
+        isSelected = <span style="color:#8b008b;font-weight:bold">false</span>  
+    }  
+    ...
+}
+</code></pre></div><p>这样使用方就比较方便了</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">ImageBannerViewHolder</span>(<span style="color:#8b008b;font-weight:bold">val</span> binding: ItemImageBannerBinding) : BannerViewHolder(binding.root) {  
+    ...
+    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onSelect</span>() {  
+        <span style="color:#8b008b;font-weight:bold">super</span>.onSelect()  
+        selectScope.launch {  
+            delay(<span style="color:#b452cd">3000L</span>)  
+            playDone()  
+        }  
+    }  
+}
+</code></pre></div>
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">最后修改于 2022-09-14</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts">
+			下回<br>已经到头啦。
+                </a>
+                
+                
+                
+                <a class="older-posts" href="/posts/xfermode%E8%B8%A9%E5%9D%91%E5%B0%8F%E7%BB%93/">
+			上回<br>Xfermode踩坑小结
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+<script src="https://utteranc.es/client.js"
+        repo="zerofancy/zerofancy.github.io"
+        issue-term="title"
+        label=""
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	CC BY-SA 4.0
+	
+</div>
+            </div>
+    
+    <script src="/js/journal.js"></script></body>
+</html>
