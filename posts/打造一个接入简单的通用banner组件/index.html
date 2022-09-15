@@ -883,7 +883,7 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
                             
                             12 min
                             
-                            5 s.
+                            17 s.
                         
                     </div>
                 </div>
@@ -1253,7 +1253,7 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
     }  
 }
 </code></pre></div><p>用户正在拖动，或者用户刚刚松手我们是不能切换的，否则会干扰用户操作。这里我们通过监听dispatchTouchEvent来实现。</p>
-<p>为什么不是 <code>onInterceptTouchEvent</code> 回调呢？因为触摸事件是连续的，我们的目的是记录触摸事件而不进行拦截，但如果不拦截ACTION_DOWN事件，后续的ACTION_UP事件就不会分发给我们这一层级的onInterceptTouchEvent了。</p>
+<p>为什么不是 <code>onInterceptTouchEvent</code> 回调呢？因为ViewPager2父类RecyclerView在onTouch中开始滑动后会调用getParent().requestDisallowInterceptTouchEvent()阻止父布局继续拦截消息。放在dispatchTouchEvent中可以保证被调用到。</p>
 <p>实现上，用户未松手检查不通过，用户松手时补充一次检查即可。</p>
 <div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">BannerView</span> <span style="color:#707a7c">@JvmOverloads</span> <span style="color:#8b008b;font-weight:bold">constructor</span>(  
     context: Context,  
@@ -1276,6 +1276,11 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
                 userDragging = <span style="color:#8b008b;font-weight:bold">true</span>  
             }  
             MotionEvent.ACTION_UP -&gt; {  
+                userDragging = <span style="color:#8b008b;font-weight:bold">false</span>  
+                lastUserTouchTime = SystemClock.uptimeMillis()  
+                checkAndSwitchPage()  
+            }  
+            MotionEvent.ACTION_CANCEL -&gt; {  
                 userDragging = <span style="color:#8b008b;font-weight:bold">false</span>  
                 lastUserTouchTime = SystemClock.uptimeMillis()  
                 checkAndSwitchPage()  
