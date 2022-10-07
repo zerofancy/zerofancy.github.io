@@ -7,9 +7,28 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Wed, 14 Sep 2022 02:55:44 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 07 Oct 2022 23:47:22 +0800</lastBuildDate>
     
         <atom:link href="https://ntutn.top/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>干掉macOS的OCSP</title>
+        <link>https://ntutn.top/posts/%E5%B9%B2%E6%8E%89macos%E7%9A%84ocsp/</link>
+        <pubDate>Sun, 21 Feb 2021 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/%E5%B9%B2%E6%8E%89macos%E7%9A%84ocsp/</guid>
+        <description>归零幻想 https://ntutn.top/posts/%E5%B9%B2%E6%8E%89macos%E7%9A%84ocsp/ -&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;苹果这两天摊上事了，有不少用户说自己的设备打开应用程序会卡好几分钟，然后分析发现是苹果的OCSP校验导致的。&lt;/p&gt;
+&lt;p&gt;当启动一个新应用程序的时候，系统会把其hash发送到&lt;code&gt;ocsp.apple.com&lt;/code&gt;用于校验，而这次是这个服务挂了但是能ping通……&lt;/p&gt;
+&lt;p&gt;这个事情引起不小的讨论，主要集中在有关隐私的担忧上。本来我没有太在意，&lt;strong&gt;但测试发现这好像是我每次休眠恢复后触摸板卡几秒的元凶……&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;那对不起了。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;color:#658b00&#34;&gt;echo&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;127.0.0.1 ocsp.apple.com&amp;#34;&lt;/span&gt; | sudo tee -a /etc/hosts
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;反正还有SEP把门呢。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+- https://ntutn.top/posts/%E5%B9%B2%E6%8E%89macos%E7%9A%84ocsp/ - CC BY-SA 4.0</description>
+        </item>
     
     
     
@@ -1026,67 +1045,6 @@ finish()
 &lt;/ol&gt;
 &lt;/section&gt;
 - https://ntutn.top/posts/activity/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>写产品和写demo的区别</title>
-        <link>https://ntutn.top/posts/%E5%86%99%E4%BA%A7%E5%93%81%E5%92%8C%E5%86%99demo%E7%9A%84%E5%8C%BA%E5%88%AB/</link>
-        <pubDate>Tue, 15 Dec 2020 03:11:37 +0800</pubDate>
-        
-        <guid>https://ntutn.top/posts/%E5%86%99%E4%BA%A7%E5%93%81%E5%92%8C%E5%86%99demo%E7%9A%84%E5%8C%BA%E5%88%AB/</guid>
-        <description>归零幻想 https://ntutn.top/posts/%E5%86%99%E4%BA%A7%E5%93%81%E5%92%8C%E5%86%99demo%E7%9A%84%E5%8C%BA%E5%88%AB/ -&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;上次写的功能灰度报了几例crash，定位是我这里某个变量NPE了。&lt;/p&gt;
-&lt;p&gt;说实话，在Java中NPE是我们最常打交道的异常了，但Kotlin提供的类型机制下，NPE很少了。而这里出现NPE，其实是因为我认定在当前这个流程中这个变量不会为空——你总是要先弹出菜单再点击菜单项吧，所以用了&lt;code&gt;data!!.id&lt;/code&gt;的方式使用。&lt;/p&gt;
-&lt;p&gt;这个变量被赋值的地方只有三处，不存在多线程问题，我想破脑袋也不知道哪里为空了。最后处理只得暂时加上判空，先不崩再说。&lt;/p&gt;
-&lt;p&gt;请教同事，同事说我这是还没有分清 &lt;strong&gt;写产品和写demo的区别&lt;/strong&gt; 。&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;写产品和写demo的区别？仔细一想，的确有道理。『写demo』只要能跑通就行了，而写产品你是要为自己写的每一行代码负责的。我之前写过不少代码，但他们大概都算『写demo』。作业只要演示的时候不崩就行了，考试只要通过样例就行了，练手的项目写起来更是随心，反正自己就是用户，啥时候崩了啥时候debug，方便的很……&lt;/p&gt;
-&lt;p&gt;但『写产品』不同，你的程序不止要能完成需要的功能，还要在用户不按套路出牌的时候不出错。&lt;em&gt;今天你迟到一分钟，咱班四十个学生等你一分钟就是一节课，你浪费了大家一节课时间……&lt;/em&gt; 虽然这么算不对，但也不能算全错。你的产品面向千千万万用户，任何小瑕疵都可能放大成一场事故。记得那个著名的ATM机的bug，就是因为用户选择了取消，然后插入了银行卡……&lt;/p&gt;
-&lt;p&gt;回到我这个Issue，虽然从业务逻辑的角度看用户操作后这个变量是不会为null的，但仍然应该有判空，有兜底的逻辑，这样你的程序才会更加健壮。&lt;/p&gt;
-&lt;h2 id=&#34;kotlin的空安全&#34;&gt;Kotlin的空安全&lt;/h2&gt;
-&lt;p&gt;与Java不同，Kotlin的类型系统在设计时就考虑了变量是否可空&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;，其用一个?表示变量是否能为空。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; a: String = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;abc&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#228b22&#34;&gt;// 默认情况下，常规初始化意味着非空
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;a = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt; &lt;span style=&#34;color:#228b22&#34;&gt;// 编译错误
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; b: String? = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;abc&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#228b22&#34;&gt;// 可以设置为空
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;b = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt; &lt;span style=&#34;color:#228b22&#34;&gt;// ok
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;print(b)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;判空&#34;&gt;判空&lt;/h3&gt;
-&lt;p&gt;Kotlin有一定的类型推断能力，判空后进行赋值操作前能识别出变量是非空的类型。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; b: String? = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Kotlin&amp;#34;&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (b != &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt; &amp;amp;&amp;amp; b.length &amp;gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;) {
-    print(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;String of length &lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${b.length}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;)
-} &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; {
-    print(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Empty string&amp;#34;&lt;/span&gt;)
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;安全调用&#34;&gt;安全调用&lt;/h3&gt;
-&lt;p&gt;Kotlin中提供了&lt;code&gt;?.&lt;/code&gt;来安全调用一个可能为空的变量。&lt;code&gt;b?.test()&lt;/code&gt;相当于&lt;code&gt;if (b != null) b.test()&lt;/code&gt;。&lt;/p&gt;
-&lt;p&gt;值得注意的是，这个操作符是可以和赋值语句一起用的。如：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;b?.name = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;ByteDance&amp;#34;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;换个形式可能更好理解：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (b != &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;) b.setName(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;ByteDance&amp;#34;&lt;/span&gt;)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这个操作符还可以与&lt;code&gt;.let&lt;/code&gt;配合，达到非空时执行特定语句的目的。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;b?.name?.let { println(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt;) }
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;elvis-操作符&#34;&gt;Elvis 操作符&lt;/h3&gt;
-&lt;p&gt;在java中适当使用三元运算符也能让代码写起来更简洁一些：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;String title = article.&lt;span style=&#34;color:#658b00&#34;&gt;title&lt;/span&gt; == &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt; ? &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;未命名&amp;#34;&lt;/span&gt; : article.&lt;span style=&#34;color:#658b00&#34;&gt;title&lt;/span&gt;;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;在Kotlin中没有三元运算符了，但if和when语句可以有返回值了。于是可以写作&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; title = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (article.title == &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;) &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;未命名&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; article.title
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;不过还有更简单的表达方法：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; title = article.title ?: &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;未命名&amp;#34;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;操作符&#34;&gt;!!操作符&lt;/h3&gt;
-&lt;p&gt;终于说到我翻车的地方了。&lt;code&gt;!!&lt;/code&gt;操作符表示“我保证这个变量不为空，否则就抛出NPE吧！”。尽管变量可能的确不会为空，两个感叹号上去IDE就不报错了……&lt;/p&gt;
-&lt;p&gt;这是很不好的，所有Kotlin的书都告诉你要少用这个符号。这从这个符号的设计就看出来了，写起来就像在对编译器咆哮“我知道自己在做什么！！”。&lt;/p&gt;
-&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
-&lt;hr&gt;
-&lt;ol&gt;
-&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.kotlincn.net/docs/reference/null-safety.html&#34;&gt;空安全 - Kotlin 语言中文站&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/section&gt;
-- https://ntutn.top/posts/%E5%86%99%E4%BA%A7%E5%93%81%E5%92%8C%E5%86%99demo%E7%9A%84%E5%8C%BA%E5%88%AB/ - CC BY-SA 4.0</description>
         </item>
     
     

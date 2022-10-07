@@ -7,9 +7,157 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Wed, 14 Sep 2022 02:55:44 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 07 Oct 2022 23:47:22 +0800</lastBuildDate>
     
         <atom:link href="https://ntutn.top/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>堆栈ADT实现及应用</title>
+        <link>https://ntutn.top/posts/%E5%A0%86%E6%A0%88adt%E5%AE%9E%E7%8E%B0%E5%8F%8A%E5%BA%94%E7%94%A8/</link>
+        <pubDate>Tue, 26 Mar 2019 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/%E5%A0%86%E6%A0%88adt%E5%AE%9E%E7%8E%B0%E5%8F%8A%E5%BA%94%E7%94%A8/</guid>
+        <description>归零幻想 https://ntutn.top/posts/%E5%A0%86%E6%A0%88adt%E5%AE%9E%E7%8E%B0%E5%8F%8A%E5%BA%94%E7%94%A8/ -&lt;!-- raw HTML omitted --&gt;
+&lt;blockquote&gt;
+&lt;p&gt;假设栈ADT的数据元素为整数，栈ADT的实现采用顺序存储结构。现要用栈来辅助完成任意非负十进制整数到Base(Base不大于35)进制的转换。部分代码已经给出，请补充完善栈溢出处理函数和主函数。  注意：只提交需要补充的函数，其他代码不允许自己重写和修改。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;栈溢出处理函数&lt;code&gt;overflowProcess&lt;/code&gt;：当栈满时，将栈的空间在原来基础上扩大1倍。&lt;/p&gt;
+&lt;p&gt;主函数： 输入一个非负十进制整数n及要转换的进制&lt;code&gt;Base&lt;/code&gt;，输出其转换后的进制形式，以及长度。输出格式如下：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;($...$)10=(#...#)Base 
+Length=转换进制后数的位数
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;其中&lt;code&gt;$...$&lt;/code&gt;是输入的十进制数n，&lt;code&gt;#...#&lt;/code&gt;是转换得到的&lt;code&gt;Base&lt;/code&gt;进制数，如果转换后位码多于1位，则用大写字母A,B,&amp;hellip;等表示，&lt;code&gt;10-A&lt;/code&gt;, &lt;code&gt;11-B&lt;/code&gt;,&amp;hellip;&amp;hellip;&lt;/p&gt;
+&lt;p&gt;例如，输入：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;1024 2
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;输出：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;(1024)10=(10000000000)2
+Length=11
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;再如，输入：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;25 30
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;输出：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;(25)10=(P)30
+Length=1
+&lt;/code&gt;&lt;/pre&gt;&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;预置代码如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-c++&#34; data-lang=&#34;c++&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;namespace&lt;/span&gt; std;
+&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;stdio.h&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;stdlib.h&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;typedef&lt;/span&gt;  &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;  ElemType;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;SeqStack&lt;/span&gt;  
+{  &lt;span style=&#34;color:#228b22&#34;&gt;//顺序栈类定义
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt;:     
+        ElemType *elements; &lt;span style=&#34;color:#228b22&#34;&gt;//数组存放栈元素
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; top;             &lt;span style=&#34;color:#228b22&#34;&gt;//栈顶指示器
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; maxSize;               &lt;span style=&#34;color:#228b22&#34;&gt;//栈最大容量     
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;overflowProcess&lt;/span&gt;(); &lt;span style=&#34;color:#228b22&#34;&gt;//栈的溢出处理
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt;:
+         SeqStack(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; sz);                    &lt;span style=&#34;color:#228b22&#34;&gt;//构造函数
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;         ~SeqStack() { &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;delete&lt;/span&gt; []elements; };        &lt;span style=&#34;color:#228b22&#34;&gt;//析构函数
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;         &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;Push&lt;/span&gt;(ElemType x);    &lt;span style=&#34;color:#228b22&#34;&gt;//进栈
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;         &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;Pop&lt;/span&gt;(ElemType &amp;amp;x);     &lt;span style=&#34;color:#228b22&#34;&gt;//出栈
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;         &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;IsEmpty&lt;/span&gt;() &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; { &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; top == -&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;; }
+         &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;IsFull&lt;/span&gt;() &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; { &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; top == maxSize-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;; }
+         &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;GetSize&lt;/span&gt;() &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; {&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; top+&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;;}
+};
+SeqStack::SeqStack(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; sz)
+{  elements=&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; ElemType[sz];  &lt;span style=&#34;color:#228b22&#34;&gt;//申请连续空间
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(elements==&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;) {cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;空间申请错误！&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;exit(&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;);}
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; { top=-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;;       &lt;span style=&#34;color:#228b22&#34;&gt;//栈顶指示器指向栈底
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;               maxSize=sz;     &lt;span style=&#34;color:#228b22&#34;&gt;//栈的最大空间
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;               };
+};
+&lt;span style=&#34;color:#228b22&#34;&gt;/*
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;**********************************************************
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;  补充overflowProcess() 函数
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;**********************************************************
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;*/&lt;/span&gt;
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; SeqStack::Push(ElemType x) 
+{   &lt;span style=&#34;color:#228b22&#34;&gt;//若栈满,则溢出处理，将元素x插入该栈栈顶
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (IsFull() == &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;) overflowProcess();   &lt;span style=&#34;color:#228b22&#34;&gt;//栈满
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    elements[++top] = x;       &lt;span style=&#34;color:#228b22&#34;&gt;//栈顶指针先加1, 再元素进栈
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;}; 
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; SeqStack::Pop(ElemType &amp;amp; x) 
+{&lt;span style=&#34;color:#228b22&#34;&gt;//若栈不空，函数退出栈顶元素并将栈顶元素的值赋给x,
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;  &lt;span style=&#34;color:#228b22&#34;&gt;//返回true，否则返回false
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;   &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (IsEmpty() == &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+    x = elements[top--];           &lt;span style=&#34;color:#228b22&#34;&gt;//先取元素，栈顶指针退1
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;      &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;;    &lt;span style=&#34;color:#228b22&#34;&gt;//退栈成功
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;};
+&lt;span style=&#34;color:#228b22&#34;&gt;/*
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;**************************************************************
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;  补充mian()函数
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;**************************************************************
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;*/&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;分析和错误&#34;&gt;分析和错误&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;OverflowProcess&lt;/code&gt;，用于栈溢出处理，一般申请原长度二倍的存储空间。&lt;/p&gt;
+&lt;p&gt;进制转换，10进制转n进制，除n取余法。&lt;/p&gt;
+&lt;p&gt;不能通过隐藏样例，认为是有类似0100之类零开头的结果，写代码排除，还是不行。&lt;/p&gt;
+&lt;p&gt;多次尝试无法通过，与通过的同学对比，发现是溢出处理写错了，在申请完二倍的空间后没让&lt;code&gt;maxSize&lt;/code&gt;乘二。其实他的也写错了，不过因为他开的初始空间足够大这个函数压根没执行到，而强迫症的我就被卡了。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;不得不吐槽的一点是题目中竟然让我补充&lt;code&gt;mian&lt;/code&gt;函数……&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;answer&#34;&gt;Answer&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-c++&#34; data-lang=&#34;c++&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;/*
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;**********************************************************
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;  补充overflowProcess() 函数
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;**********************************************************
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;*/&lt;/span&gt;
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; SeqStack::overflowProcess(){
+    ElemType*tmp=&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; ElemType[maxSize*&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;];
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;i&amp;lt;maxSize;i++){
+        tmp[i]=elements[i];
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;delete&lt;/span&gt;[] elements;
+    elements=tmp;
+    maxSize*=&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;;
+}
+&lt;span style=&#34;color:#228b22&#34;&gt;/*
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;**************************************************************
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;  补充mian()函数
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;**************************************************************
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;*/&lt;/span&gt;
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;(){
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; n,base;
+    SeqStack*stk=&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; SeqStack(&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;);
+    cin&amp;gt;&amp;gt;n&amp;gt;&amp;gt;base;
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; tmp=n;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt;(tmp&amp;gt;=base){
+        stk-&amp;gt;Push(tmp%base);
+        tmp=tmp/base;
+    }
+    stk-&amp;gt;Push(tmp);
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; counter=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+    cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;(&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;n&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;)10=&amp;#34;&lt;/span&gt;;
+    cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;(&amp;#34;&lt;/span&gt;;
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; tmp1;
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt; flag=&lt;span style=&#34;color:#658b00&#34;&gt;true&lt;/span&gt;;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt;(stk-&amp;gt;Pop(tmp1)){
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(flag&amp;amp;&amp;amp;tmp1==&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;){
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;continue&lt;/span&gt;;
+        }&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt;{
+            flag=&lt;span style=&#34;color:#658b00&#34;&gt;false&lt;/span&gt;;
+        }
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; tmp2;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(tmp1&amp;gt;&lt;span style=&#34;color:#b452cd&#34;&gt;9&lt;/span&gt;){
+            tmp2=tmp1-&lt;span style=&#34;color:#b452cd&#34;&gt;10&lt;/span&gt;+&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;A&amp;#39;&lt;/span&gt;;
+        }&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt;{
+            tmp2=tmp1+&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;0&amp;#39;&lt;/span&gt;;
+        }
+        cout&amp;lt;&amp;lt;tmp2;
+        counter++;
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(counter==&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;){
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+        counter++;
+    }
+    cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;)&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;base&amp;lt;&amp;lt;endl;
+    cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Length=&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;counter&amp;lt;&amp;lt;endl;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;delete&lt;/span&gt; stk;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://ntutn.top/posts/%E5%A0%86%E6%A0%88adt%E5%AE%9E%E7%8E%B0%E5%8F%8A%E5%BA%94%E7%94%A8/ - CC BY-SA 4.0</description>
+        </item>
     
     
     
