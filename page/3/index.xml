@@ -7,9 +7,242 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Fri, 07 Oct 2022 23:47:22 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 06 Nov 2022 07:01:29 +0800</lastBuildDate>
     
         <atom:link href="https://ntutn.top/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>ViewBinding、ViewModel和LiveData</title>
+        <link>https://ntutn.top/posts/viewbindingviewmodel%E5%92%8Clivedata/</link>
+        <pubDate>Mon, 22 Feb 2021 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/viewbindingviewmodel%E5%92%8Clivedata/</guid>
+        <description>归零幻想 https://ntutn.top/posts/viewbindingviewmodel%E5%92%8Clivedata/ -&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;毕设项目没有历史包袱，我可以尽量向best practice努力。&lt;/p&gt;
+&lt;h2 id=&#34;viewbinding&#34;&gt;ViewBinding&lt;/h2&gt;
+&lt;p&gt;无数人痛恨findViewById，并且为了干掉它做了许多尝试，比如ButterKnife、kotlin-android-extensions。&lt;/p&gt;
+&lt;p&gt;现在，有了ViewBinding，项目中真的可以不写findViewById了。至少目前为止我的毕设项目还没有一个findViewById。&lt;/p&gt;
+&lt;p&gt;其实与ViewBinding相似的，还有一个DataBinding，但我不太喜欢，感觉在xml里面写代码不是一个好主意。&lt;/p&gt;
+&lt;h3 id=&#34;使用&#34;&gt;使用&lt;/h3&gt;
+&lt;p&gt;首先在build.gradle（或build.gradle.kts）中的android块添加&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-groovy&#34; data-lang=&#34;groovy&#34;&gt;buildFeatures {
+    viewBinding = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;在xml中正常定义你的布局&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;LinearLayout&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;xmlns:android=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;http://schemas.android.com/apk/res/android&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#658b00&#34;&gt;xmlns:tools=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;http://schemas.android.com/tools&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_width=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;match_parent&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_height=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;match_parent&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#658b00&#34;&gt;android:orientation=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;vertical&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#658b00&#34;&gt;tools:context=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;.MainActivity&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;gt;&lt;/span&gt;
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;TextView&lt;/span&gt;
+        &lt;span style=&#34;color:#658b00&#34;&gt;android:id=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;@+id/text_view&amp;#34;&lt;/span&gt;
+        &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_width=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;match_parent&amp;#34;&lt;/span&gt;
+        &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_height=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;wrap_content&amp;#34;&lt;/span&gt;
+        &lt;span style=&#34;color:#658b00&#34;&gt;android:text=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Hello World!&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;Button&lt;/span&gt;
+        &lt;span style=&#34;color:#658b00&#34;&gt;android:id=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;@+id/test_button&amp;#34;&lt;/span&gt;
+        &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_width=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;match_parent&amp;#34;&lt;/span&gt;
+        &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_height=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;wrap_content&amp;#34;&lt;/span&gt;
+        &lt;span style=&#34;color:#658b00&#34;&gt;android:text=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;toast&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;Button&lt;/span&gt;
+        &lt;span style=&#34;color:#658b00&#34;&gt;android:id=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;@+id/change_button&amp;#34;&lt;/span&gt;
+        &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_width=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;match_parent&amp;#34;&lt;/span&gt;
+        &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_height=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;wrap_content&amp;#34;&lt;/span&gt;
+        &lt;span style=&#34;color:#658b00&#34;&gt;android:text=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;change&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/LinearLayout&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;接下来就可以愉快使用了&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.viewmodeldemo&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.os.Bundle&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.widget.Toast&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;androidx.appcompat.app.AppCompatActivity&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.viewmodeldemo.databinding.ActivityMainBinding&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MainActivity&lt;/span&gt; : AppCompatActivity() {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;lateinit&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; binding: ActivityMainBinding
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onCreate&lt;/span&gt;(savedInstanceState: Bundle?) {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        initView()
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;initView&lt;/span&gt;() {
+        binding.apply {
+            changeButton.setOnClickListener { textView.text = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Changed!&amp;#34;&lt;/span&gt; }
+            testButton.setOnClickListener {
+                Toast.makeText(
+                    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;&lt;span style=&#34;color:#707a7c&#34;&gt;@MainActivity&lt;/span&gt;,
+                    &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Test&amp;#34;&lt;/span&gt;,
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;我们在xml里面用下划线分隔的id在这里就直接变成了binding里面的字段，相当舒服。&lt;/p&gt;
+&lt;h3 id=&#34;在recyclerview中的使用&#34;&gt;在RecyclerView中的使用&lt;/h3&gt;
+&lt;p&gt;在RecyclerView中代码要稍微发生一点变化，因为我们是在onCreateViewHolder时反射创建布局的。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.viewmodeldemo&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.view.LayoutInflater&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.view.ViewGroup&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;androidx.recyclerview.widget.RecyclerView&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.viewmodeldemo.databinding.ItemTestBinding&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MyAdapter&lt;/span&gt; : RecyclerView.Adapter&amp;lt;MyAdapter.ViewHolder&amp;gt;() {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;ViewHolder&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; binding: ItemTestBinding) : RecyclerView.ViewHolder(binding.root)
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onCreateViewHolder&lt;/span&gt;(parent: ViewGroup, viewType: Int): ViewHolder {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; ViewHolder(
+            ItemTestBinding.inflate(LayoutInflater.from(parent.context), parent, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;)
+        )
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onBindViewHolder&lt;/span&gt;(holder: ViewHolder, position: Int) {
+        holder.binding.textView.text = TODO(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Not yet implemented&amp;#34;&lt;/span&gt;)
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;getItemCount&lt;/span&gt;(): Int {
+        TODO(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Not yet implemented&amp;#34;&lt;/span&gt;)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;仍然不需要findViewById！&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;h2 id=&#34;viewmodel和livedata&#34;&gt;ViewModel和LiveData&lt;/h2&gt;
+&lt;p&gt;应用MVVM模式更好管理代码，使之便于拓展和测试，好处不多说。&lt;/p&gt;
+&lt;p&gt;首先引入ViewModel、LiveData和Kotlin Coroutines的拓展包和Retrofit的依赖包。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-groovy&#34; data-lang=&#34;groovy&#34;&gt;implementation(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1&amp;#39;&lt;/span&gt;)
+implementation(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;androidx.core:core-ktx:1.3.2&amp;#39;&lt;/span&gt;)
+implementation(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0&amp;#39;&lt;/span&gt;)
+implementation(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;androidx.lifecycle:lifecycle-livedata-ktx:2.3.0&amp;#39;&lt;/span&gt;)
+implementation(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;com.squareup.retrofit2:retrofit:2.9.0&amp;#39;&lt;/span&gt;)
+implementation &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;androidx.fragment:fragment-ktx:1.3.0&amp;#34;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;准备ViewModel&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.viewmodeldemo&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;androidx.lifecycle.LiveData&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;androidx.lifecycle.MutableLiveData&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;androidx.lifecycle.ViewModel&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MainViewModel&lt;/span&gt; : ViewModel() {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; _text = MutableLiveData&amp;lt;String&amp;gt;().apply {
+        value = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;我的&amp;#34;&lt;/span&gt;
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; text: LiveData&amp;lt;String&amp;gt; = _text
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;changeText&lt;/span&gt;() {
+        _text.value = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;修改过的&amp;#34;&lt;/span&gt;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;在MainActivity中&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; mainViewModel &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;by&lt;/span&gt; viewModels&amp;lt;MainViewModel&amp;gt;()
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;initView&lt;/span&gt;() {
+    binding.apply {
+        changeButton.setOnClickListener { mainViewModel.changeText() }
+        testButton.setOnClickListener {
+            Toast.makeText(
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;&lt;span style=&#34;color:#707a7c&#34;&gt;@MainActivity&lt;/span&gt;,
+                &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Test&amp;#34;&lt;/span&gt;,
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+    mainViewModel.text.observe(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;) {
+        binding.textView.text = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这样，VC负责视图层的展示逻辑，VM负责业务逻辑，清晰了许多。&lt;/p&gt;
+&lt;p&gt;LiveData具有生命周期感知功能，随时监听修改并更新视图。它有setValue()和postValue()两个方法设置值，相对于前者，后者将setValue放到了下一个消息循环，可以在非UI线程调用。&lt;/p&gt;
+&lt;h3 id=&#34;initedlivedata&#34;&gt;InitedLiveData&lt;/h3&gt;
+&lt;p&gt;然而自带的LiveData和MutableLiveData用多了总感觉难受，因为getValue()返回的是一个可空的数据，当我写了n多次&lt;code&gt;_field.value?.key?:&amp;quot;&amp;quot;&lt;/code&gt;后，我爆发了。很多场景下这个value都可以定义成不可空的，所以还是简单封装一个不需要判空的更好。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.viewmodeldemo&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;androidx.lifecycle.LiveData&lt;/span&gt;
+&lt;span style=&#34;color:#228b22&#34;&gt;/**
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * 解决LiveData的空安全问题
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; *
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; */&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;abstract&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;CheckedLiveData&lt;/span&gt;&amp;lt;T&amp;gt; : LiveData&amp;lt;T&amp;gt;() {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;getValue&lt;/span&gt;(): T {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.getValue() ?: run {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; res = initValue()
+            value = res
+            initValue()
+        }
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;protected&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;abstract&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;initValue&lt;/span&gt;(): T
+}
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;InitedLiveData&lt;/span&gt;&amp;lt;E&amp;gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; initBlock: () -&amp;gt; E) : CheckedLiveData&amp;lt;E&amp;gt;() {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;initValue&lt;/span&gt;() = initBlock.invoke()
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;setValue&lt;/span&gt;(value: E) {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.setValue(value)
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;postValue&lt;/span&gt;(value: E) {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.postValue(value)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如此这般，上面的代码就可以这样表示了&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.viewmodeldemo&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;androidx.lifecycle.ViewModel&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MainViewModel&lt;/span&gt; : ViewModel() {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; _text = InitedLiveData { &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;我的&amp;#34;&lt;/span&gt; }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; text: CheckedLiveData&amp;lt;String&amp;gt; = _text
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;changeText&lt;/span&gt;() {
+        _text.value = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;修改过的&amp;#34;&lt;/span&gt;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;kotlin协程与retrofit更搭&#34;&gt;Kotlin协程与Retrofit更搭&lt;/h3&gt;
+&lt;p&gt;首先Retrofit也值得我们封装一个工具类来创建Service：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;RetrofitUtil&lt;/span&gt; {
+    ...
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; retrofit &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;by&lt;/span&gt; lazy {
+        Retrofit.Builder()
+            .baseUrl(retrofitConfig?.baseUrl ?: BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(okHttpClient)
+            .build()
+    }
+    
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &amp;lt;&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;T&lt;/span&gt;&amp;gt; &lt;span style=&#34;color:#008b45&#34;&gt;create&lt;/span&gt;(serviceClass: Class&amp;lt;T&amp;gt;): T = retrofit.create(serviceClass)
+    
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;inline&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;reified&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;T&lt;/span&gt;&amp;gt; &lt;span style=&#34;color:#008b45&#34;&gt;create&lt;/span&gt;(): T = create(T::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;.java)
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;前文提到，我们主要业务逻辑写到VM中，所以&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.novelrecommend.ui.viewmodel.main&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;androidx.lifecycle.ViewModel&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;androidx.lifecycle.viewModelScope&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;kotlinx.coroutines.Dispatchers&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;kotlinx.coroutines.launch&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;kotlinx.coroutines.withContext&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;retrofit2.await&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;timber.log.Timber&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.novelrecommend.NovelService&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.novelrecommend.arch.CheckedLiveData&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.novelrecommend.arch.InitedLiveData&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.novelrecommend.model.NovelModel&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.novelrecommend.utils.RetrofitUtil&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;DiscoverViewModel&lt;/span&gt; : ViewModel() {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; _novelList =
+        InitedLiveData&amp;lt;MutableList&amp;lt;NovelModel&amp;gt;&amp;gt; { mutableListOf() }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; novelList: CheckedLiveData&amp;lt;MutableList&amp;lt;NovelModel&amp;gt;&amp;gt; = _novelList
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;suspend&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;getNovel&lt;/span&gt;(): List&amp;lt;NovelModel&amp;gt; {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; RetrofitUtil.create&amp;lt;NovelService&amp;gt;()
+            .getNovel(deviceInfo = DeviceUtil.getDeviceInfoMap())
+            .await()
+            .map { &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt;.copy(localId = (&lt;span style=&#34;color:#b452cd&#34;&gt;0.&lt;/span&gt;.Long.MAX_VALUE).random()) }
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;loadMore&lt;/span&gt;() {
+        viewModelScope.launch {
+            _novelList.value = withContext(Dispatchers.IO) {
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;try&lt;/span&gt; {
+                    _novelList.value.addAll(getNovel())
+                } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;catch&lt;/span&gt; (e: Exception) {
+                    Timber.e(e, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;获取小说失败&amp;#34;&lt;/span&gt;)
+                }
+                _novelList.value
+            }
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;是不是很舒服？&lt;/p&gt;
+- https://ntutn.top/posts/viewbindingviewmodel%E5%92%8Clivedata/ - CC BY-SA 4.0</description>
+        </item>
     
     
     
@@ -749,302 +982,6 @@ transaction.commit()
 在引入&lt;code&gt;kotlin-android-extensions&lt;/code&gt;之后可以比较方便地在&lt;code&gt;onBindViewHolder&lt;/code&gt;方法中给具体的view赋值。&lt;/p&gt;
 &lt;/blockquote&gt;
 - https://ntutn.top/posts/ui%E8%AE%BE%E8%AE%A1/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>android项目开发：Activity</title>
-        <link>https://ntutn.top/posts/activity/</link>
-        <pubDate>Tue, 15 Dec 2020 03:11:37 +0800</pubDate>
-        
-        <guid>https://ntutn.top/posts/activity/</guid>
-        <description>归零幻想 https://ntutn.top/posts/activity/ -&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;title: android项目开发：Activity
-author: 归零幻想
-publishDate: 2020-12-15
-editDate: 2020-12-15
-tags: [android, 第一行代码, Kotlin, Activity]&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;blockquote&gt;
-&lt;p&gt;仍然是《第一行代码》的读书笔记，可能引用原书的定义和描述，或代码案例。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h1 id=&#34;activity&#34;&gt;Activity&lt;/h1&gt;
-&lt;h2 id=&#34;activity基本用法&#34;&gt;Activity基本用法&lt;/h2&gt;
-&lt;p&gt;Android讲究设计逻辑与视图分离，一般Activity都会对应一个布局文件（XML文件）。&lt;/p&gt;
-&lt;p&gt;所有的Activity都要在AndroidManifest中注册才生效。&lt;/p&gt;
-&lt;p&gt;Activity可以创建菜单。首先在&lt;code&gt;res/menu&lt;/code&gt;下创建一个xml文件（Android Studio中也提供了可视化编辑的方法）：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt;&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;menu&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;xmlns:app=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;http://schemas.android.com/apk/res-auto&amp;#34;&lt;/span&gt;
-      &lt;span style=&#34;color:#658b00&#34;&gt;xmlns:android=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;http://schemas.android.com/apk/res/android&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;gt;&lt;/span&gt;
-
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;item&lt;/span&gt;
-            &lt;span style=&#34;color:#658b00&#34;&gt;android:id=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;@+id/add_item&amp;#34;&lt;/span&gt;
-            &lt;span style=&#34;color:#658b00&#34;&gt;android:title=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Add&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;item&lt;/span&gt;
-            &lt;span style=&#34;color:#658b00&#34;&gt;android:id=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;@+id/remove_item&amp;#34;&lt;/span&gt;
-            &lt;span style=&#34;color:#658b00&#34;&gt;android:title=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Remove&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/menu&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;重写两个方法&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onCreateOptionsMenu&lt;/span&gt;(menu: Menu?): Boolean {
-    menuInflater.inflate(R.menu.main, menu)
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
-}
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onOptionsItemSelected&lt;/span&gt;(item: MenuItem): Boolean {
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;when&lt;/span&gt; (item.itemId) {
-        R.id.add_item -&amp;gt; Toast.makeText(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Add a book.&amp;#34;&lt;/span&gt;, Toast.LENGTH_LONG).show()
-        R.id.remove_item -&amp;gt; Toast.makeText(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Remove a book.&amp;#34;&lt;/span&gt;, Toast.LENGTH_LONG).show()
-    }
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2020/12/10/a6wOcTFrHLhS4il.jpg&#34; alt=&#34;photo_2020-12-10_21-00-32.jpg&#34;&gt;&lt;/p&gt;
-&lt;p&gt;用&lt;code&gt;finish()&lt;/code&gt;方法可以关闭一个Activity。&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;h2 id=&#34;在activity之间跳转&#34;&gt;在Activity之间跳转&lt;/h2&gt;
-&lt;h3 id=&#34;显式intent&#34;&gt;显式Intent&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;jumpButton.setOnClickListener {
-    startActivity(Intent(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;, SecondActivity::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;.java))
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;隐式intent&#34;&gt;隐式Intent&lt;/h3&gt;
-&lt;p&gt;首先在&lt;code&gt;AndroidManifest.xml&lt;/code&gt;中注册&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;activity&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;android:name=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;.SecondActivity&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;intent-filter&amp;gt;&lt;/span&gt;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;action&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;android:name=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;com.example.myapplication.ACTION_START&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;category&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;android:name=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;android.intent.category.DEFAULT&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/intent-filter&amp;gt;&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/activity&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;修改启动Activity的代码：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;startActivity(Intent(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;com.example.myapplication.ACTION_START&amp;#34;&lt;/span&gt;))
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;action是动作，category是一些附加信息。只有action和category完全匹配才能正确启动Activity。&lt;/p&gt;
-&lt;p&gt;接下来我们修改上述代码验证这一点。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;activity&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;android:name=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;.SecondActivity&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;intent-filter&amp;gt;&lt;/span&gt;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;action&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;android:name=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;com.example.myapplication.ACTION_START&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;category&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;android:name=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;android.intent.category.DEFAULT&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;category&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;android:name=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;com.example.myapplication.MY_CATEGORY&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/intent-filter&amp;gt;&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/activity&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; myIntent = Intent(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;com.example.myapplication.ACTION_START&amp;#34;&lt;/span&gt;)
-myIntent.addCategory(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;com.example.myapplication.MY_CATEGORY&amp;#34;&lt;/span&gt;)
-startActivity(myIntent)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;启动系统其他activity&#34;&gt;启动系统其他Activity&lt;/h4&gt;
-&lt;p&gt;可以通过这样的代码启动系统浏览器：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; intent = Intent(Intent.ACTION_VIEW)
-intent.&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;data&lt;/span&gt; = Uri.parse(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;https://ntutn.top&amp;#34;&lt;/span&gt;)
-startActivity(intent)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;Intent.ACTION_VIEW&lt;/code&gt;实际上是&lt;code&gt;android.intent.action.VIEW&lt;/code&gt;，如果我们注册下这个action也能冒充系统浏览器。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;intent-filter&amp;gt;&lt;/span&gt;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;action&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;android:name=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;android.intent.action.VIEW&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;category&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;android:name=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;android.intent.category.DEFAULT&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;data&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;android:scheme=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;https&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/intent-filter&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2020/12/10/K7pyaXDeSVzqc8Y.jpg&#34; alt=&#34;photo_2020-12-10_23-21-57.jpg&#34;&gt;&lt;/p&gt;
-&lt;h3 id=&#34;向下一个activity传递数据&#34;&gt;向下一个Activity传递数据&lt;/h3&gt;
-&lt;p&gt;通过Intent的putExtra方法。在第一个Activity中：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;            intent.putExtra(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;extra_data&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;I&amp;#39;m IF. IF 3279. &amp;#34;&lt;/span&gt;)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;在第二个Activity中：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;        Toast.makeText(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;, intent.getStringExtra(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;extra_data&amp;#34;&lt;/span&gt;), Toast.LENGTH_LONG).show()
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;返回数据给上一个activity&#34;&gt;返回数据给上一个Activity&lt;/h3&gt;
-&lt;p&gt;首先看看书上的方法。 第一个Activity中：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; intent = Intent(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;, SecondActivity::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;.java)
-startActivityForResult(intent, REQ_1)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然后重写一个方法接收结果&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onActivityResult&lt;/span&gt;(requestCode: Int, resultCode: Int, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;data&lt;/span&gt;: Intent?) {
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onActivityResult(requestCode, resultCode, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;data&lt;/span&gt;)
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;when&lt;/span&gt; (requestCode) {
-        REQ_1 -&amp;gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (resultCode == RESULT_OK) {
-            Toast.makeText(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;点击按钮返回数据：&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${data?.getStringExtra(&amp;#34;data_return&amp;#34;)}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;。&amp;#34;&lt;/span&gt;, Toast.LENGTH_LONG).show()
-        }
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;用这样的方法在第二个Activity中返回数据&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;intent.putExtra(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;data_return&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Hello FirstActivity&amp;#34;&lt;/span&gt;)
-setResult(RESULT_OK, intent)
-finish()
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;不过不得不说安卓迭代是真的快啊，现在AS已经提示我这种方法过时了。于是去找找现在最新的技术是啥。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; testActivityResult =
-    registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt;.resultCode == Activity.RESULT_OK) {
-            Toast.makeText(
-                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;,
-                &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;点击按钮返回数据：&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${it.data?.getStringExtra(&amp;#34;data_return&amp;#34;)}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;。&amp;#34;&lt;/span&gt;,
-                Toast.LENGTH_LONG
-            ).show()
-        }
-    }
-&lt;span style=&#34;color:#228b22&#34;&gt;//在需要启动另一个Activity的地方
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;testActivityResult.launch(intent)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;activity的生命周期&#34;&gt;Activity的生命周期&lt;/h2&gt;
-&lt;h3 id=&#34;返回栈&#34;&gt;返回栈&lt;/h3&gt;
-&lt;p&gt;Activity可以层叠，每当启动一个Activity它将入栈，位于返回栈的栈顶。而如果销毁Activity，它将出栈，下一个栈顶的Activity则被显示给用户。&lt;/p&gt;
-&lt;h3 id=&#34;activity的状态&#34;&gt;Activity的状态&lt;/h3&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;状态&lt;/th&gt;
-&lt;th&gt;说明&lt;/th&gt;
-&lt;th&gt;回收策略&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;运行状态&lt;/td&gt;
-&lt;td&gt;Activity处于返回栈的栈顶&lt;/td&gt;
-&lt;td&gt;最不倾向于被回收&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;暂停状态&lt;/td&gt;
-&lt;td&gt;不处于栈顶，但仍然可见&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/td&gt;
-&lt;td&gt;只有在内存极低的情况下才会回收&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;停止状态&lt;/td&gt;
-&lt;td&gt;不处于栈顶，且完全不可见&lt;/td&gt;
-&lt;td&gt;可能被回收&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;销毁状态&lt;/td&gt;
-&lt;td&gt;从返回栈移除后&lt;/td&gt;
-&lt;td&gt;最倾向于被回收&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h3 id=&#34;activity的生存期&#34;&gt;Activity的生存期&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2020/12/14/dNqfoY4XOaFC2Es.jpg&#34; alt=&#34;lifecycle.jpg&#34;&gt;&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;方法&lt;/th&gt;
-&lt;th&gt;说明&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;onCreate()&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Activity&lt;strong&gt;第一次&lt;/strong&gt;被创建。应完成初始化操作，创建布局，绑定事件&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;onStart()&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Activity由不可见变为可见。&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;onResume()&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Activity准备好和用户交互。此时Activity处于&lt;strong&gt;运行状态&lt;/strong&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;onPause()&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;系统准备启动或恢复另一个Activity时。应释放资源，保存关键数据。&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;onStop()&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Activity完全不可用时调用。&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;onDestory()&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Activity被销毁前被调用。&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;onRestart()&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;停止状态变为运行状态前被调用。&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;ul&gt;
-&lt;li&gt;完整生存期 &lt;code&gt;onCreate()&lt;/code&gt;——&lt;code&gt;onDestory()&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;可见生存期 &lt;code&gt;onStart()&lt;/code&gt;——&lt;code&gt;onStop()&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;前台生存期 &lt;code&gt;onResume()&lt;/code&gt;——&lt;code&gt;onPause()&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;activity的启动模式&#34;&gt;Activity的启动模式&lt;/h2&gt;
-&lt;p&gt;在&lt;code&gt;AndroidManifest.xml&lt;/code&gt;中指定activity标签的&lt;code&gt;android:launchMode&lt;/code&gt;属性。&lt;/p&gt;
-&lt;h3 id=&#34;standard&#34;&gt;standard&lt;/h3&gt;
-&lt;p&gt;默认模式。总是创建一个新实例。&lt;/p&gt;
-&lt;h3 id=&#34;singletop&#34;&gt;singleTop&lt;/h3&gt;
-&lt;p&gt;若目标Activity已经在栈顶，则直接启动。&lt;/p&gt;
-&lt;h3 id=&#34;singletask&#34;&gt;singleTask&lt;/h3&gt;
-&lt;p&gt;若目标Activity已经在栈中，则将其上Activity出栈并启动。&lt;/p&gt;
-&lt;h3 id=&#34;singleinstance&#34;&gt;singleInstance&lt;/h3&gt;
-&lt;p&gt;启用一个新的返回栈管理Activity，一般用于多个程序共享Activity。&lt;/p&gt;
-&lt;h2 id=&#34;activity最佳实践&#34;&gt;Activity最佳实践&lt;/h2&gt;
-&lt;h3 id=&#34;知道当前在哪个activity&#34;&gt;知道当前在哪个Activity&lt;/h3&gt;
-&lt;p&gt;准备一个&lt;code&gt;BaseActivity&lt;/code&gt;，让其他所有Activity继承自它。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.activcitylifecycletest&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.os.Bundle&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.util.Log&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;androidx.appcompat.app.AppCompatActivity&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;open&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;BaseActivity&lt;/span&gt; : AppCompatActivity() {
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onCreate&lt;/span&gt;(savedInstanceState: Bundle?) {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onCreate(savedInstanceState)
-        Log.d(TAG, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${javaClass.simpleName}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt; onCreate.&amp;#34;&lt;/span&gt;)
-    }
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;companion&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; TAG = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;BaseActivity&amp;#34;&lt;/span&gt;
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;随时随地退出程序&#34;&gt;随时随地退出程序&lt;/h3&gt;
-&lt;p&gt;可以准备一个类将当前所有Activity管理起来。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.activcitylifecycletest&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.app.Activity&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;ActivityHelper&lt;/span&gt; {
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; activities = arrayListOf&amp;lt;Activity&amp;gt;()
-    &lt;span style=&#34;color:#228b22&#34;&gt;/**
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     * onCreate时
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     */&lt;/span&gt;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;addActivity&lt;/span&gt;(activity: Activity) {
-        activities.add(activity)
-    }
-    &lt;span style=&#34;color:#228b22&#34;&gt;/**
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     * onDestory时
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     */&lt;/span&gt;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;removeActivity&lt;/span&gt;(activity: Activity) {
-        activities.remove(activity)
-    }
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;finishAll&lt;/span&gt;() {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; (activity &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;in&lt;/span&gt; activities) {
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (!activity.isFinishing) {
-                activity.finish()
-            }
-        }
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然后，在&lt;code&gt;BaseActivity&lt;/code&gt;中将Activity注册到这里。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onCreate&lt;/span&gt;(savedInstanceState: Bundle?) {
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onCreate(savedInstanceState)
-    Log.d(TAG, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${javaClass.simpleName}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt; onCreate.&amp;#34;&lt;/span&gt;)
-    ActivityHelper.addActivity(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;)
-}
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onDestroy&lt;/span&gt;() {
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onDestroy()
-    Log.d(TAG, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${javaClass.simpleName}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt; onDestory&amp;#34;&lt;/span&gt;)
-    ActivityHelper.removeActivity(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;)
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这样就可以随时使用&lt;code&gt;ActivityHelper.finishAll()&lt;/code&gt;来关闭所有Activity了。&lt;/p&gt;
-&lt;h3 id=&#34;启动activity的最佳写法&#34;&gt;启动Activity的最佳写法&lt;/h3&gt;
-&lt;blockquote&gt;
-&lt;p&gt;作为一个成熟的Activity，你应该会自己启动自己了。
-建议Activity自己实现一个启动Activity的方法，这样外部调用时就能一目了然看出这个Activity需要什么参数。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;companion&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; {
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;actionStart&lt;/span&gt;(context: Context, title: String?, content: String?) {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; intent = Intent(context, DialogActivity::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;.java)
-        intent.putExtra(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;title&amp;#34;&lt;/span&gt;, title)
-        intent.putExtra(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;content&amp;#34;&lt;/span&gt;, content)
-        context.startActivity(intent)
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这样外部调用只需要&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;DialogActivity.actionStart(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;MyDialog&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;作为一个成熟的Activity，你应该会自己启动自己了。&amp;#34;&lt;/span&gt;)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
-&lt;hr&gt;
-&lt;ol&gt;
-&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;Activity不一定会占满整个屏幕，所以下方没有被激活但仍然可见。很多应用用一像素Activity保活就是利用了这一点。&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/section&gt;
-- https://ntutn.top/posts/activity/ - CC BY-SA 4.0</description>
         </item>
     
     

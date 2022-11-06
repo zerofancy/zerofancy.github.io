@@ -7,9 +7,56 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Fri, 07 Oct 2022 23:47:22 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 06 Nov 2022 07:01:29 +0800</lastBuildDate>
     
         <atom:link href="https://ntutn.top/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>AUIL学习</title>
+        <link>https://ntutn.top/posts/auil%E5%AD%A6%E4%B9%A0/</link>
+        <pubDate>Sun, 13 Feb 2022 18:11:08 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/auil%E5%AD%A6%E4%B9%A0/</guid>
+        <description>归零幻想 https://ntutn.top/posts/auil%E5%AD%A6%E4%B9%A0/ -&lt;!-- raw HTML omitted --&gt;
+&lt;h1 id=&#34;auil-源码学习-重点问题&#34;&gt;AUIL 源码学习 重点问题&lt;/h1&gt;
+&lt;p&gt;AUIL是个比较知名的图片加载库，源码结构比较清晰和简单，我在阅读学习中整理了以下内容。&lt;/p&gt;
+&lt;h2 id=&#34;memorycache&#34;&gt;MemoryCache&lt;/h2&gt;
+&lt;p&gt;顾名思义，这个是在内存中缓存Bitmap相关的代码。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2022/02/04ac71a8c8e1622e2bc287f2fd6e92cf.svg&#34; alt=&#34;auil&#34;&gt;&lt;/p&gt;
+&lt;p&gt;MemoryCache结合了策略模式和装饰器模式，初始化时可选择不同缓存策略。&lt;/p&gt;
+&lt;p&gt;一个Cache类内部持有一定量的Bitmap元素，并根据某种策略自动移除未使用的Bitmap。看结构我们应该从BaseMemoryCache开始看起。&lt;/p&gt;
+&lt;p&gt;BaseMemoryCache中持有了所有放入的元素的弱引用，而它的子类根据策略持有了部分缓存对象的强引用。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;h2 id=&#34;整个框架分多少个模块每个模块的作用是什么&#34;&gt;整个框架分多少个模块，每个模块的作用是什么&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;ImageLoader 门面。&lt;/li&gt;
+&lt;li&gt;ImageAware 对最终处理和展示图片操作的封装。&lt;/li&gt;
+&lt;li&gt;MemoryCache bitmap在内存中的缓存。&lt;/li&gt;
+&lt;li&gt;BitmapProcessor 图片处理器，处理原始图片。分为预处理和后处理，预处理的结果会存入缓存，而后处理每次展示都会执行。&lt;/li&gt;
+&lt;li&gt;BitmapDisplayer 控制图片展示，可为其附加一定的展示效果。&lt;/li&gt;
+&lt;li&gt;DiskCache bitmap在磁盘中的缓存&lt;/li&gt;
+&lt;li&gt;ImageDecoder 将图片解码为Bitmap，并缩放到合适尺寸&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;如何仅通过interface就将框架的整个流程串联起来&#34;&gt;如何仅通过interface就将框架的整个流程串联起来&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2022/02/09ba58caadf71408c7a97bc8e1443154.svg&#34; alt=&#34;模块调用顺序&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;如何进行内存管理的lru是种什么算法有没有比lru更好的&#34;&gt;如何进行内存管理的，LRU是种什么算法，有没有比LRU更好的？&lt;/h2&gt;
+&lt;p&gt;AUIL的图片缓存有二级，一是所有缓存过的图片都会持有WeakReference，可能随时回收；二是部分图片会持有强引用，不会被回收。这里的部分图片的总共大小可以设置，达到阈值之后使用一定的算法淘汰一些图片。这里最常用的就是LRU。&lt;/p&gt;
+&lt;p&gt;LRU是淘汰缓存文件的算法，它每次淘汰最久未使用的文件。是一种最常用的页面置换算法。除了LRU之外，AUIL预置的算法还有FIFO（先入先出）、LargestLimitted（淘汰最大的文件）、LFU（淘汰使用频率最低的）。三者各有优劣。&lt;/p&gt;
+&lt;p&gt;如，LRU因为图片展示频率在时间上的不均匀性，可能将一些高频展示的图片淘汰掉，导致缓存命中率下降；LFU对于新图片频率统计无法比较好把控。&lt;/p&gt;
+&lt;h2 id=&#34;用到了多少个线程池这些线程池之间的区别是什么如果只用一个线程池可以么&#34;&gt;用到了多少个线程池，这些线程池之间的区别是什么，如果只用一个线程池可以么？&lt;/h2&gt;
+&lt;p&gt;使用了三个线程池：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;taskExecutor&lt;/li&gt;
+&lt;li&gt;taskExecutorForCachedImages&lt;/li&gt;
+&lt;li&gt;taskDistributor&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;taskExecutor和taskExecutorForCachedImages都是用来执行图片处理和展示任务的，他们处理顺序都是个LIFO（后进先出）的队列，而taskDistributor是个普通的线程池，用于框架内其他任务。&lt;/p&gt;
+&lt;p&gt;taskExecutorForCachedImages是专门为缓存中读取的图片展示用的线程池，因为这类图片响应会很快，所以AUIL专门给他们准备了一个线程池。
+综上，如果用一个线程池则最终效果会大打折扣。&lt;/p&gt;
+- https://ntutn.top/posts/auil%E5%AD%A6%E4%B9%A0/ - CC BY-SA 4.0</description>
+        </item>
     
     
     
@@ -1930,239 +1977,6 @@ Process finished with exit code 1
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;剩下的就是准备一个配置列表和编辑界面，也没什么值得说的了。&lt;/p&gt;
 - https://ntutn.top/posts/debugentrance%E5%92%8Cdebugconfig/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>ViewBinding、ViewModel和LiveData</title>
-        <link>https://ntutn.top/posts/viewbindingviewmodel%E5%92%8Clivedata/</link>
-        <pubDate>Mon, 22 Feb 2021 03:11:37 +0800</pubDate>
-        
-        <guid>https://ntutn.top/posts/viewbindingviewmodel%E5%92%8Clivedata/</guid>
-        <description>归零幻想 https://ntutn.top/posts/viewbindingviewmodel%E5%92%8Clivedata/ -&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;毕设项目没有历史包袱，我可以尽量向best practice努力。&lt;/p&gt;
-&lt;h2 id=&#34;viewbinding&#34;&gt;ViewBinding&lt;/h2&gt;
-&lt;p&gt;无数人痛恨findViewById，并且为了干掉它做了许多尝试，比如ButterKnife、kotlin-android-extensions。&lt;/p&gt;
-&lt;p&gt;现在，有了ViewBinding，项目中真的可以不写findViewById了。至少目前为止我的毕设项目还没有一个findViewById。&lt;/p&gt;
-&lt;p&gt;其实与ViewBinding相似的，还有一个DataBinding，但我不太喜欢，感觉在xml里面写代码不是一个好主意。&lt;/p&gt;
-&lt;h3 id=&#34;使用&#34;&gt;使用&lt;/h3&gt;
-&lt;p&gt;首先在build.gradle（或build.gradle.kts）中的android块添加&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-groovy&#34; data-lang=&#34;groovy&#34;&gt;buildFeatures {
-    viewBinding = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;在xml中正常定义你的布局&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt;&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;LinearLayout&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;xmlns:android=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;http://schemas.android.com/apk/res/android&amp;#34;&lt;/span&gt;
-    &lt;span style=&#34;color:#658b00&#34;&gt;xmlns:tools=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;http://schemas.android.com/tools&amp;#34;&lt;/span&gt;
-    &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_width=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;match_parent&amp;#34;&lt;/span&gt;
-    &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_height=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;match_parent&amp;#34;&lt;/span&gt;
-    &lt;span style=&#34;color:#658b00&#34;&gt;android:orientation=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;vertical&amp;#34;&lt;/span&gt;
-    &lt;span style=&#34;color:#658b00&#34;&gt;tools:context=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;.MainActivity&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;gt;&lt;/span&gt;
-
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;TextView&lt;/span&gt;
-        &lt;span style=&#34;color:#658b00&#34;&gt;android:id=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;@+id/text_view&amp;#34;&lt;/span&gt;
-        &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_width=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;match_parent&amp;#34;&lt;/span&gt;
-        &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_height=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;wrap_content&amp;#34;&lt;/span&gt;
-        &lt;span style=&#34;color:#658b00&#34;&gt;android:text=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Hello World!&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
-
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;Button&lt;/span&gt;
-        &lt;span style=&#34;color:#658b00&#34;&gt;android:id=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;@+id/test_button&amp;#34;&lt;/span&gt;
-        &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_width=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;match_parent&amp;#34;&lt;/span&gt;
-        &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_height=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;wrap_content&amp;#34;&lt;/span&gt;
-        &lt;span style=&#34;color:#658b00&#34;&gt;android:text=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;toast&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
-
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;Button&lt;/span&gt;
-        &lt;span style=&#34;color:#658b00&#34;&gt;android:id=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;@+id/change_button&amp;#34;&lt;/span&gt;
-        &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_width=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;match_parent&amp;#34;&lt;/span&gt;
-        &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_height=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;wrap_content&amp;#34;&lt;/span&gt;
-        &lt;span style=&#34;color:#658b00&#34;&gt;android:text=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;change&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/LinearLayout&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;接下来就可以愉快使用了&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.viewmodeldemo&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.os.Bundle&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.widget.Toast&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;androidx.appcompat.app.AppCompatActivity&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.viewmodeldemo.databinding.ActivityMainBinding&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MainActivity&lt;/span&gt; : AppCompatActivity() {
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;lateinit&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; binding: ActivityMainBinding
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onCreate&lt;/span&gt;(savedInstanceState: Bundle?) {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        initView()
-    }
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;initView&lt;/span&gt;() {
-        binding.apply {
-            changeButton.setOnClickListener { textView.text = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Changed!&amp;#34;&lt;/span&gt; }
-            testButton.setOnClickListener {
-                Toast.makeText(
-                    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;&lt;span style=&#34;color:#707a7c&#34;&gt;@MainActivity&lt;/span&gt;,
-                    &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Test&amp;#34;&lt;/span&gt;,
-                    Toast.LENGTH_LONG
-                ).show()
-            }
-        }
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;我们在xml里面用下划线分隔的id在这里就直接变成了binding里面的字段，相当舒服。&lt;/p&gt;
-&lt;h3 id=&#34;在recyclerview中的使用&#34;&gt;在RecyclerView中的使用&lt;/h3&gt;
-&lt;p&gt;在RecyclerView中代码要稍微发生一点变化，因为我们是在onCreateViewHolder时反射创建布局的。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.viewmodeldemo&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.view.LayoutInflater&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.view.ViewGroup&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;androidx.recyclerview.widget.RecyclerView&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.viewmodeldemo.databinding.ItemTestBinding&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MyAdapter&lt;/span&gt; : RecyclerView.Adapter&amp;lt;MyAdapter.ViewHolder&amp;gt;() {
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;ViewHolder&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; binding: ItemTestBinding) : RecyclerView.ViewHolder(binding.root)
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onCreateViewHolder&lt;/span&gt;(parent: ViewGroup, viewType: Int): ViewHolder {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; ViewHolder(
-            ItemTestBinding.inflate(LayoutInflater.from(parent.context), parent, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;)
-        )
-    }
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onBindViewHolder&lt;/span&gt;(holder: ViewHolder, position: Int) {
-        holder.binding.textView.text = TODO(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Not yet implemented&amp;#34;&lt;/span&gt;)
-    }
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;getItemCount&lt;/span&gt;(): Int {
-        TODO(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Not yet implemented&amp;#34;&lt;/span&gt;)
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;仍然不需要findViewById！&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;h2 id=&#34;viewmodel和livedata&#34;&gt;ViewModel和LiveData&lt;/h2&gt;
-&lt;p&gt;应用MVVM模式更好管理代码，使之便于拓展和测试，好处不多说。&lt;/p&gt;
-&lt;p&gt;首先引入ViewModel、LiveData和Kotlin Coroutines的拓展包和Retrofit的依赖包。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-groovy&#34; data-lang=&#34;groovy&#34;&gt;implementation(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1&amp;#39;&lt;/span&gt;)
-implementation(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;androidx.core:core-ktx:1.3.2&amp;#39;&lt;/span&gt;)
-implementation(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0&amp;#39;&lt;/span&gt;)
-implementation(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;androidx.lifecycle:lifecycle-livedata-ktx:2.3.0&amp;#39;&lt;/span&gt;)
-implementation(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;com.squareup.retrofit2:retrofit:2.9.0&amp;#39;&lt;/span&gt;)
-implementation &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;androidx.fragment:fragment-ktx:1.3.0&amp;#34;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;准备ViewModel&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.viewmodeldemo&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;androidx.lifecycle.LiveData&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;androidx.lifecycle.MutableLiveData&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;androidx.lifecycle.ViewModel&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MainViewModel&lt;/span&gt; : ViewModel() {
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; _text = MutableLiveData&amp;lt;String&amp;gt;().apply {
-        value = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;我的&amp;#34;&lt;/span&gt;
-    }
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; text: LiveData&amp;lt;String&amp;gt; = _text
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;changeText&lt;/span&gt;() {
-        _text.value = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;修改过的&amp;#34;&lt;/span&gt;
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;在MainActivity中&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; mainViewModel &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;by&lt;/span&gt; viewModels&amp;lt;MainViewModel&amp;gt;()
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;initView&lt;/span&gt;() {
-    binding.apply {
-        changeButton.setOnClickListener { mainViewModel.changeText() }
-        testButton.setOnClickListener {
-            Toast.makeText(
-                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;&lt;span style=&#34;color:#707a7c&#34;&gt;@MainActivity&lt;/span&gt;,
-                &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Test&amp;#34;&lt;/span&gt;,
-                Toast.LENGTH_LONG
-            ).show()
-        }
-    }
-    mainViewModel.text.observe(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;) {
-        binding.textView.text = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt;
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这样，VC负责视图层的展示逻辑，VM负责业务逻辑，清晰了许多。&lt;/p&gt;
-&lt;p&gt;LiveData具有生命周期感知功能，随时监听修改并更新视图。它有setValue()和postValue()两个方法设置值，相对于前者，后者将setValue放到了下一个消息循环，可以在非UI线程调用。&lt;/p&gt;
-&lt;h3 id=&#34;initedlivedata&#34;&gt;InitedLiveData&lt;/h3&gt;
-&lt;p&gt;然而自带的LiveData和MutableLiveData用多了总感觉难受，因为getValue()返回的是一个可空的数据，当我写了n多次&lt;code&gt;_field.value?.key?:&amp;quot;&amp;quot;&lt;/code&gt;后，我爆发了。很多场景下这个value都可以定义成不可空的，所以还是简单封装一个不需要判空的更好。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.viewmodeldemo&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;androidx.lifecycle.LiveData&lt;/span&gt;
-&lt;span style=&#34;color:#228b22&#34;&gt;/**
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * 解决LiveData的空安全问题
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; *
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; */&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;abstract&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;CheckedLiveData&lt;/span&gt;&amp;lt;T&amp;gt; : LiveData&amp;lt;T&amp;gt;() {
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;getValue&lt;/span&gt;(): T {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.getValue() ?: run {
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; res = initValue()
-            value = res
-            initValue()
-        }
-    }
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;protected&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;abstract&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;initValue&lt;/span&gt;(): T
-}
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;InitedLiveData&lt;/span&gt;&amp;lt;E&amp;gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; initBlock: () -&amp;gt; E) : CheckedLiveData&amp;lt;E&amp;gt;() {
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;initValue&lt;/span&gt;() = initBlock.invoke()
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;setValue&lt;/span&gt;(value: E) {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.setValue(value)
-    }
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;postValue&lt;/span&gt;(value: E) {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.postValue(value)
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如此这般，上面的代码就可以这样表示了&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.viewmodeldemo&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;androidx.lifecycle.ViewModel&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MainViewModel&lt;/span&gt; : ViewModel() {
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; _text = InitedLiveData { &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;我的&amp;#34;&lt;/span&gt; }
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; text: CheckedLiveData&amp;lt;String&amp;gt; = _text
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;changeText&lt;/span&gt;() {
-        _text.value = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;修改过的&amp;#34;&lt;/span&gt;
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;kotlin协程与retrofit更搭&#34;&gt;Kotlin协程与Retrofit更搭&lt;/h3&gt;
-&lt;p&gt;首先Retrofit也值得我们封装一个工具类来创建Service：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;RetrofitUtil&lt;/span&gt; {
-    ...
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; retrofit &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;by&lt;/span&gt; lazy {
-        Retrofit.Builder()
-            .baseUrl(retrofitConfig?.baseUrl ?: BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(okHttpClient)
-            .build()
-    }
-    
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &amp;lt;&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;T&lt;/span&gt;&amp;gt; &lt;span style=&#34;color:#008b45&#34;&gt;create&lt;/span&gt;(serviceClass: Class&amp;lt;T&amp;gt;): T = retrofit.create(serviceClass)
-    
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;inline&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;reified&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;T&lt;/span&gt;&amp;gt; &lt;span style=&#34;color:#008b45&#34;&gt;create&lt;/span&gt;(): T = create(T::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;.java)
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;前文提到，我们主要业务逻辑写到VM中，所以&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.novelrecommend.ui.viewmodel.main&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;androidx.lifecycle.ViewModel&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;androidx.lifecycle.viewModelScope&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;kotlinx.coroutines.Dispatchers&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;kotlinx.coroutines.launch&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;kotlinx.coroutines.withContext&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;retrofit2.await&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;timber.log.Timber&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.novelrecommend.NovelService&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.novelrecommend.arch.CheckedLiveData&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.novelrecommend.arch.InitedLiveData&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.novelrecommend.model.NovelModel&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.novelrecommend.utils.RetrofitUtil&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;DiscoverViewModel&lt;/span&gt; : ViewModel() {
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; _novelList =
-        InitedLiveData&amp;lt;MutableList&amp;lt;NovelModel&amp;gt;&amp;gt; { mutableListOf() }
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; novelList: CheckedLiveData&amp;lt;MutableList&amp;lt;NovelModel&amp;gt;&amp;gt; = _novelList
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;suspend&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;getNovel&lt;/span&gt;(): List&amp;lt;NovelModel&amp;gt; {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; RetrofitUtil.create&amp;lt;NovelService&amp;gt;()
-            .getNovel(deviceInfo = DeviceUtil.getDeviceInfoMap())
-            .await()
-            .map { &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt;.copy(localId = (&lt;span style=&#34;color:#b452cd&#34;&gt;0.&lt;/span&gt;.Long.MAX_VALUE).random()) }
-    }
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;loadMore&lt;/span&gt;() {
-        viewModelScope.launch {
-            _novelList.value = withContext(Dispatchers.IO) {
-                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;try&lt;/span&gt; {
-                    _novelList.value.addAll(getNovel())
-                } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;catch&lt;/span&gt; (e: Exception) {
-                    Timber.e(e, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;获取小说失败&amp;#34;&lt;/span&gt;)
-                }
-                _novelList.value
-            }
-        }
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;是不是很舒服？&lt;/p&gt;
-- https://ntutn.top/posts/viewbindingviewmodel%E5%92%8Clivedata/ - CC BY-SA 4.0</description>
         </item>
     
     

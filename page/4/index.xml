@@ -7,9 +7,305 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Fri, 07 Oct 2022 23:47:22 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 06 Nov 2022 07:01:29 +0800</lastBuildDate>
     
         <atom:link href="https://ntutn.top/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>android项目开发：Activity</title>
+        <link>https://ntutn.top/posts/activity/</link>
+        <pubDate>Tue, 15 Dec 2020 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/activity/</guid>
+        <description>归零幻想 https://ntutn.top/posts/activity/ -&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;title: android项目开发：Activity
+author: 归零幻想
+publishDate: 2020-12-15
+editDate: 2020-12-15
+tags: [android, 第一行代码, Kotlin, Activity]&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;blockquote&gt;
+&lt;p&gt;仍然是《第一行代码》的读书笔记，可能引用原书的定义和描述，或代码案例。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id=&#34;activity&#34;&gt;Activity&lt;/h1&gt;
+&lt;h2 id=&#34;activity基本用法&#34;&gt;Activity基本用法&lt;/h2&gt;
+&lt;p&gt;Android讲究设计逻辑与视图分离，一般Activity都会对应一个布局文件（XML文件）。&lt;/p&gt;
+&lt;p&gt;所有的Activity都要在AndroidManifest中注册才生效。&lt;/p&gt;
+&lt;p&gt;Activity可以创建菜单。首先在&lt;code&gt;res/menu&lt;/code&gt;下创建一个xml文件（Android Studio中也提供了可视化编辑的方法）：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;menu&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;xmlns:app=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;http://schemas.android.com/apk/res-auto&amp;#34;&lt;/span&gt;
+      &lt;span style=&#34;color:#658b00&#34;&gt;xmlns:android=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;http://schemas.android.com/apk/res/android&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;gt;&lt;/span&gt;
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;item&lt;/span&gt;
+            &lt;span style=&#34;color:#658b00&#34;&gt;android:id=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;@+id/add_item&amp;#34;&lt;/span&gt;
+            &lt;span style=&#34;color:#658b00&#34;&gt;android:title=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Add&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;item&lt;/span&gt;
+            &lt;span style=&#34;color:#658b00&#34;&gt;android:id=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;@+id/remove_item&amp;#34;&lt;/span&gt;
+            &lt;span style=&#34;color:#658b00&#34;&gt;android:title=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Remove&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/menu&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;重写两个方法&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onCreateOptionsMenu&lt;/span&gt;(menu: Menu?): Boolean {
+    menuInflater.inflate(R.menu.main, menu)
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
+}
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onOptionsItemSelected&lt;/span&gt;(item: MenuItem): Boolean {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;when&lt;/span&gt; (item.itemId) {
+        R.id.add_item -&amp;gt; Toast.makeText(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Add a book.&amp;#34;&lt;/span&gt;, Toast.LENGTH_LONG).show()
+        R.id.remove_item -&amp;gt; Toast.makeText(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Remove a book.&amp;#34;&lt;/span&gt;, Toast.LENGTH_LONG).show()
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2020/12/10/a6wOcTFrHLhS4il.jpg&#34; alt=&#34;photo_2020-12-10_21-00-32.jpg&#34;&gt;&lt;/p&gt;
+&lt;p&gt;用&lt;code&gt;finish()&lt;/code&gt;方法可以关闭一个Activity。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;h2 id=&#34;在activity之间跳转&#34;&gt;在Activity之间跳转&lt;/h2&gt;
+&lt;h3 id=&#34;显式intent&#34;&gt;显式Intent&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;jumpButton.setOnClickListener {
+    startActivity(Intent(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;, SecondActivity::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;.java))
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;隐式intent&#34;&gt;隐式Intent&lt;/h3&gt;
+&lt;p&gt;首先在&lt;code&gt;AndroidManifest.xml&lt;/code&gt;中注册&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;activity&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;android:name=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;.SecondActivity&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;intent-filter&amp;gt;&lt;/span&gt;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;action&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;android:name=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;com.example.myapplication.ACTION_START&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;category&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;android:name=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;android.intent.category.DEFAULT&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/intent-filter&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/activity&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;修改启动Activity的代码：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;startActivity(Intent(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;com.example.myapplication.ACTION_START&amp;#34;&lt;/span&gt;))
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;action是动作，category是一些附加信息。只有action和category完全匹配才能正确启动Activity。&lt;/p&gt;
+&lt;p&gt;接下来我们修改上述代码验证这一点。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;activity&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;android:name=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;.SecondActivity&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;intent-filter&amp;gt;&lt;/span&gt;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;action&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;android:name=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;com.example.myapplication.ACTION_START&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;category&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;android:name=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;android.intent.category.DEFAULT&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;category&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;android:name=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;com.example.myapplication.MY_CATEGORY&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/intent-filter&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/activity&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; myIntent = Intent(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;com.example.myapplication.ACTION_START&amp;#34;&lt;/span&gt;)
+myIntent.addCategory(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;com.example.myapplication.MY_CATEGORY&amp;#34;&lt;/span&gt;)
+startActivity(myIntent)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;启动系统其他activity&#34;&gt;启动系统其他Activity&lt;/h4&gt;
+&lt;p&gt;可以通过这样的代码启动系统浏览器：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; intent = Intent(Intent.ACTION_VIEW)
+intent.&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;data&lt;/span&gt; = Uri.parse(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;https://ntutn.top&amp;#34;&lt;/span&gt;)
+startActivity(intent)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;Intent.ACTION_VIEW&lt;/code&gt;实际上是&lt;code&gt;android.intent.action.VIEW&lt;/code&gt;，如果我们注册下这个action也能冒充系统浏览器。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;intent-filter&amp;gt;&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;action&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;android:name=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;android.intent.action.VIEW&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;category&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;android:name=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;android.intent.category.DEFAULT&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;data&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;android:scheme=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;https&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/intent-filter&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2020/12/10/K7pyaXDeSVzqc8Y.jpg&#34; alt=&#34;photo_2020-12-10_23-21-57.jpg&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;向下一个activity传递数据&#34;&gt;向下一个Activity传递数据&lt;/h3&gt;
+&lt;p&gt;通过Intent的putExtra方法。在第一个Activity中：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;            intent.putExtra(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;extra_data&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;I&amp;#39;m IF. IF 3279. &amp;#34;&lt;/span&gt;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;在第二个Activity中：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;        Toast.makeText(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;, intent.getStringExtra(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;extra_data&amp;#34;&lt;/span&gt;), Toast.LENGTH_LONG).show()
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;返回数据给上一个activity&#34;&gt;返回数据给上一个Activity&lt;/h3&gt;
+&lt;p&gt;首先看看书上的方法。 第一个Activity中：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; intent = Intent(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;, SecondActivity::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;.java)
+startActivityForResult(intent, REQ_1)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然后重写一个方法接收结果&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onActivityResult&lt;/span&gt;(requestCode: Int, resultCode: Int, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;data&lt;/span&gt;: Intent?) {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onActivityResult(requestCode, resultCode, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;data&lt;/span&gt;)
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;when&lt;/span&gt; (requestCode) {
+        REQ_1 -&amp;gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (resultCode == RESULT_OK) {
+            Toast.makeText(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;点击按钮返回数据：&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${data?.getStringExtra(&amp;#34;data_return&amp;#34;)}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;。&amp;#34;&lt;/span&gt;, Toast.LENGTH_LONG).show()
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;用这样的方法在第二个Activity中返回数据&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;intent.putExtra(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;data_return&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Hello FirstActivity&amp;#34;&lt;/span&gt;)
+setResult(RESULT_OK, intent)
+finish()
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;不过不得不说安卓迭代是真的快啊，现在AS已经提示我这种方法过时了。于是去找找现在最新的技术是啥。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; testActivityResult =
+    registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt;.resultCode == Activity.RESULT_OK) {
+            Toast.makeText(
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;,
+                &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;点击按钮返回数据：&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${it.data?.getStringExtra(&amp;#34;data_return&amp;#34;)}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;。&amp;#34;&lt;/span&gt;,
+                Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+&lt;span style=&#34;color:#228b22&#34;&gt;//在需要启动另一个Activity的地方
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;testActivityResult.launch(intent)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;activity的生命周期&#34;&gt;Activity的生命周期&lt;/h2&gt;
+&lt;h3 id=&#34;返回栈&#34;&gt;返回栈&lt;/h3&gt;
+&lt;p&gt;Activity可以层叠，每当启动一个Activity它将入栈，位于返回栈的栈顶。而如果销毁Activity，它将出栈，下一个栈顶的Activity则被显示给用户。&lt;/p&gt;
+&lt;h3 id=&#34;activity的状态&#34;&gt;Activity的状态&lt;/h3&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;状态&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;th&gt;回收策略&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;运行状态&lt;/td&gt;
+&lt;td&gt;Activity处于返回栈的栈顶&lt;/td&gt;
+&lt;td&gt;最不倾向于被回收&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;暂停状态&lt;/td&gt;
+&lt;td&gt;不处于栈顶，但仍然可见&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/td&gt;
+&lt;td&gt;只有在内存极低的情况下才会回收&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;停止状态&lt;/td&gt;
+&lt;td&gt;不处于栈顶，且完全不可见&lt;/td&gt;
+&lt;td&gt;可能被回收&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;销毁状态&lt;/td&gt;
+&lt;td&gt;从返回栈移除后&lt;/td&gt;
+&lt;td&gt;最倾向于被回收&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h3 id=&#34;activity的生存期&#34;&gt;Activity的生存期&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2020/12/14/dNqfoY4XOaFC2Es.jpg&#34; alt=&#34;lifecycle.jpg&#34;&gt;&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;方法&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;onCreate()&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Activity&lt;strong&gt;第一次&lt;/strong&gt;被创建。应完成初始化操作，创建布局，绑定事件&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;onStart()&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Activity由不可见变为可见。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;onResume()&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Activity准备好和用户交互。此时Activity处于&lt;strong&gt;运行状态&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;onPause()&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;系统准备启动或恢复另一个Activity时。应释放资源，保存关键数据。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;onStop()&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Activity完全不可用时调用。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;onDestory()&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Activity被销毁前被调用。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;onRestart()&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;停止状态变为运行状态前被调用。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;ul&gt;
+&lt;li&gt;完整生存期 &lt;code&gt;onCreate()&lt;/code&gt;——&lt;code&gt;onDestory()&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;可见生存期 &lt;code&gt;onStart()&lt;/code&gt;——&lt;code&gt;onStop()&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;前台生存期 &lt;code&gt;onResume()&lt;/code&gt;——&lt;code&gt;onPause()&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;activity的启动模式&#34;&gt;Activity的启动模式&lt;/h2&gt;
+&lt;p&gt;在&lt;code&gt;AndroidManifest.xml&lt;/code&gt;中指定activity标签的&lt;code&gt;android:launchMode&lt;/code&gt;属性。&lt;/p&gt;
+&lt;h3 id=&#34;standard&#34;&gt;standard&lt;/h3&gt;
+&lt;p&gt;默认模式。总是创建一个新实例。&lt;/p&gt;
+&lt;h3 id=&#34;singletop&#34;&gt;singleTop&lt;/h3&gt;
+&lt;p&gt;若目标Activity已经在栈顶，则直接启动。&lt;/p&gt;
+&lt;h3 id=&#34;singletask&#34;&gt;singleTask&lt;/h3&gt;
+&lt;p&gt;若目标Activity已经在栈中，则将其上Activity出栈并启动。&lt;/p&gt;
+&lt;h3 id=&#34;singleinstance&#34;&gt;singleInstance&lt;/h3&gt;
+&lt;p&gt;启用一个新的返回栈管理Activity，一般用于多个程序共享Activity。&lt;/p&gt;
+&lt;h2 id=&#34;activity最佳实践&#34;&gt;Activity最佳实践&lt;/h2&gt;
+&lt;h3 id=&#34;知道当前在哪个activity&#34;&gt;知道当前在哪个Activity&lt;/h3&gt;
+&lt;p&gt;准备一个&lt;code&gt;BaseActivity&lt;/code&gt;，让其他所有Activity继承自它。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.activcitylifecycletest&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.os.Bundle&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.util.Log&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;androidx.appcompat.app.AppCompatActivity&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;open&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;BaseActivity&lt;/span&gt; : AppCompatActivity() {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onCreate&lt;/span&gt;(savedInstanceState: Bundle?) {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onCreate(savedInstanceState)
+        Log.d(TAG, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${javaClass.simpleName}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt; onCreate.&amp;#34;&lt;/span&gt;)
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;companion&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; TAG = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;BaseActivity&amp;#34;&lt;/span&gt;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;随时随地退出程序&#34;&gt;随时随地退出程序&lt;/h3&gt;
+&lt;p&gt;可以准备一个类将当前所有Activity管理起来。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.activcitylifecycletest&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.app.Activity&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;ActivityHelper&lt;/span&gt; {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; activities = arrayListOf&amp;lt;Activity&amp;gt;()
+    &lt;span style=&#34;color:#228b22&#34;&gt;/**
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     * onCreate时
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     */&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;addActivity&lt;/span&gt;(activity: Activity) {
+        activities.add(activity)
+    }
+    &lt;span style=&#34;color:#228b22&#34;&gt;/**
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     * onDestory时
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     */&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;removeActivity&lt;/span&gt;(activity: Activity) {
+        activities.remove(activity)
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;finishAll&lt;/span&gt;() {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; (activity &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;in&lt;/span&gt; activities) {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (!activity.isFinishing) {
+                activity.finish()
+            }
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然后，在&lt;code&gt;BaseActivity&lt;/code&gt;中将Activity注册到这里。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onCreate&lt;/span&gt;(savedInstanceState: Bundle?) {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onCreate(savedInstanceState)
+    Log.d(TAG, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${javaClass.simpleName}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt; onCreate.&amp;#34;&lt;/span&gt;)
+    ActivityHelper.addActivity(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;)
+}
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onDestroy&lt;/span&gt;() {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onDestroy()
+    Log.d(TAG, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${javaClass.simpleName}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt; onDestory&amp;#34;&lt;/span&gt;)
+    ActivityHelper.removeActivity(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;)
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这样就可以随时使用&lt;code&gt;ActivityHelper.finishAll()&lt;/code&gt;来关闭所有Activity了。&lt;/p&gt;
+&lt;h3 id=&#34;启动activity的最佳写法&#34;&gt;启动Activity的最佳写法&lt;/h3&gt;
+&lt;blockquote&gt;
+&lt;p&gt;作为一个成熟的Activity，你应该会自己启动自己了。
+建议Activity自己实现一个启动Activity的方法，这样外部调用时就能一目了然看出这个Activity需要什么参数。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;companion&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;actionStart&lt;/span&gt;(context: Context, title: String?, content: String?) {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; intent = Intent(context, DialogActivity::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;.java)
+        intent.putExtra(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;title&amp;#34;&lt;/span&gt;, title)
+        intent.putExtra(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;content&amp;#34;&lt;/span&gt;, content)
+        context.startActivity(intent)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这样外部调用只需要&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;DialogActivity.actionStart(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;MyDialog&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;作为一个成熟的Activity，你应该会自己启动自己了。&amp;#34;&lt;/span&gt;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;Activity不一定会占满整个屏幕，所以下方没有被激活但仍然可见。很多应用用一像素Activity保活就是利用了这一点。&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/section&gt;
+- https://ntutn.top/posts/activity/ - CC BY-SA 4.0</description>
+        </item>
     
     
     
@@ -860,29 +1156,6 @@ a与b直接比较，&lt;code&gt;a==b&lt;/code&gt;，两者不是同一对象。�
 &lt;li&gt;&lt;a href=&#34;http://chanthuang.github.io/2016/09/07/java-autoboxing-and-unboxing/&#34;&gt;Java 的自动装箱(autoboxing)与拆箱(unboxing) &lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 - https://ntutn.top/posts/java%E8%87%AA%E5%8A%A8%E8%A3%85%E7%AE%B1%E8%87%AA%E5%8A%A8%E6%8B%86%E7%AE%B1%E8%B8%A9%E5%9D%91/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>记Lenovo V310 15 IKB的第n次死机</title>
-        <link>https://ntutn.top/posts/%E8%AE%B0lenovo_v310_15_ikb%E7%9A%84%E7%AC%ACn%E6%AC%A1%E6%AD%BB%E6%9C%BA/</link>
-        <pubDate>Wed, 01 Jan 2020 03:11:37 +0800</pubDate>
-        
-        <guid>https://ntutn.top/posts/%E8%AE%B0lenovo_v310_15_ikb%E7%9A%84%E7%AC%ACn%E6%AC%A1%E6%AD%BB%E6%9C%BA/</guid>
-        <description>归零幻想 https://ntutn.top/posts/%E8%AE%B0lenovo_v310_15_ikb%E7%9A%84%E7%AC%ACn%E6%AC%A1%E6%AD%BB%E6%9C%BA/ -&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;今天我的电脑又死机了，首先切一下&lt;strong&gt;tty进不去&lt;/strong&gt;，然后试下&lt;strong&gt;SysRq键没反应&lt;/strong&gt;，熟练地按住电源10秒，松开两秒，再按一下，拿出手机刷会空间。&lt;/p&gt;
-&lt;p&gt;这电脑刚买的时候给我的印象其实是不错的，虽然外壳线条有点&lt;del&gt;丑&lt;/del&gt;粗犷，但整体性能比我预期要好很多。i5的CPU，1T机械硬盘，入门级Radeon独显，毕竟价格摆在那里。&lt;/p&gt;
-&lt;p&gt;因为没有固态硬盘，这电脑慢的很，但我安慰自己&lt;strong&gt;反正我也不怎么打游戏&lt;/strong&gt;。日常尽量不用UWP应用，开机刷会手机，佛系一点也没什么不好。谁说学软件就一定要用好电脑？Code Blocks不香吗？eclipse有几个电脑带不动？实在偶尔想配置安卓开发环境的时候就连自己安卓手机做测试，至于VS就不用想了，虽然号称世界上最好用的IDE，但比较新的版本&lt;strong&gt;没有固态硬盘反应跟不上打字&lt;/strong&gt;……&lt;/p&gt;
-&lt;p&gt;本来也就这样了，一分钱一分货的事。但直到某次电脑毫无征兆死机……&lt;/p&gt;
-&lt;p&gt;死机是正常现象，没什么好怕的。我这样告诉自己。我当时正在浏览网页&lt;del&gt;不要多想，不是那种满屏都是澳门首家线上赌场广告的网页&lt;/del&gt;，毫无征兆就死机了。一般来说，所谓死机多是资源占用过高系统失去响应的原因，根据自己的经验，按组合键尝试调出任务管理器尝试结束进程，然后没有成功。貌似死机很彻底，任务管理器根本无法调出，甚至鼠标都不能动。我放下电脑，看了集哆啦A梦，回头看电脑屏幕没有要变化的征兆。没办法，按住电源键强制关机吧。后面很久这个事情都没有再出现，我也就渐渐忘了。&lt;/p&gt;
-&lt;p&gt;直到又有一天，在我玩《狂野飙车8：极速凌云》正高兴的时候，画面突然不动了。这扫兴的事让我没了继续玩的兴致，而后几天又死机几次，我觉得事情没有那么简单，在网上搜索时，我发现我这不是个例。&lt;/p&gt;
-&lt;p&gt;之后我加固态硬盘装双系统，死机就跟着我到了ubuntu。一般来说，ubuntu死机多是指gnome卡死，直接Alt+F2输入r就能重启，不这样做也可以切tty进入命令操作，直到某次放歌的时候死机了，歌声都停了，别说tty了，连SysRq键都没能正常工作，这表明连linux内核都死掉了。好吧，现在有足够证据表明死机不是Windows的锅。&lt;/p&gt;
-&lt;p&gt;想把电脑送去修，但很麻烦的是，这个问题复现很困难，死机是不定期的，似乎跟资源占用无关，跟电脑温度无关。先不考虑电脑店能不能找到原因，就算电脑店说修好了，我也没办法验证。我觉得就这样送去修最大可能就算店家给你重装了下系统，清了下灰，升级了下BIOS，这些我都试过了没有用。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;后来一直没有解决这件事，只是我养成了随手Ctrl+S的习惯。&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;不管怎样，今天偶发性的连续死机两次惹恼我了，联想会进我的黑名单。&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
-- https://ntutn.top/posts/%E8%AE%B0lenovo_v310_15_ikb%E7%9A%84%E7%AC%ACn%E6%AC%A1%E6%AD%BB%E6%9C%BA/ - CC BY-SA 4.0</description>
         </item>
     
     
