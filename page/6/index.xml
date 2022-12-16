@@ -7,9 +7,83 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Sun, 06 Nov 2022 07:01:29 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 16 Dec 2022 17:42:29 +0800</lastBuildDate>
     
         <atom:link href="https://ntutn.top/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>统计递归子问题个数</title>
+        <link>https://ntutn.top/posts/%E7%BB%9F%E8%AE%A1%E9%80%92%E5%BD%92%E5%AD%90%E9%97%AE%E9%A2%98%E4%B8%AA%E6%95%B0/</link>
+        <pubDate>Fri, 17 May 2019 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/%E7%BB%9F%E8%AE%A1%E9%80%92%E5%BD%92%E5%AD%90%E9%97%AE%E9%A2%98%E4%B8%AA%E6%95%B0/</guid>
+        <description>归零幻想 https://ntutn.top/posts/%E7%BB%9F%E8%AE%A1%E9%80%92%E5%BD%92%E5%AD%90%E9%97%AE%E9%A2%98%E4%B8%AA%E6%95%B0/ -&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;分治策略是算法设计的重要策略之一，该策略的基本思想是把问题进行分解成一些子问题，通过子问题的求解完成对原问题的求解。其关键是分解和合并，好的分解或合并方法才会产生高效的分治算法。&lt;/p&gt;
+&lt;p&gt;分治策略设计出的算法最常见的就是递归算法。但是如果在分解时，分解出的子问题有很多是重复的，那么这样的分治（递归）算法求解问题的效率就非常低。例如斐波那契数问题，如果采用递归求解，算法效率非常低：O(2^n)。而如果采用递推求解(动态规划自底向上求解)，算法效率非常高：O(n)。&lt;/p&gt;
+&lt;h2 id=&#34;question&#34;&gt;Question&lt;/h2&gt;
+&lt;p&gt;现在请你编写程序，统计计算一个斐波那契数时分解出的各子问题的个数。&lt;/p&gt;
+&lt;p&gt;斐波那契数的定义如下：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Fib(0)=0
+Fib(1)=1
+Fib(n)=Fib(n-1)+Fib(n-2)
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;输入：一个整数n，即计算&lt;code&gt;Fib(n)&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;输出：n+1行，即各个子问题的值及该子问题的个数。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;h2 id=&#34;example&#34;&gt;Example&lt;/h2&gt;
+&lt;h3 id=&#34;input&#34;&gt;Input&lt;/h3&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;5
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;output&#34;&gt;Output&lt;/h3&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Fib(0)=0,spn=3
+Fib(1)=1,spn=5
+Fib(2)=1,spn=3
+Fib(3)=2,spn=2
+Fib(4)=3,spn=1
+Fib(5)=5,spn=1
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;分析&#34;&gt;分析&lt;/h2&gt;
+&lt;p&gt;一大段分治思想的介绍，递归与递推的区别，我以为这题用递归会超时，要用递推求解，于是入坑……&lt;/p&gt;
+&lt;p&gt;这题要统计子问题个数，递推或者递归加备忘录根本没重复的计算怎么统计……&lt;/p&gt;
+&lt;p&gt;不死心的我又仔细研究递推子问题个数的规律，发现子问题个数正好是一个反着的斐波那契数列（结尾元素特殊处理），所以可以正向递推求数列，反向递推求子问题个数。&lt;/p&gt;
+&lt;p&gt;不过特殊情况研究的有点头疼，暂时就不搞了，下面给出的是老老实实递归求解的程序。&lt;/p&gt;
+&lt;h2 id=&#34;answer&#34;&gt;Answer&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-c++&#34; data-lang=&#34;c++&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;cstring&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;namespace&lt;/span&gt; std;
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;*spn;
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;*data;
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;fib&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; n){
+    spn[n]++;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(n==&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;){
+        data[&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;]=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(n==&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;){
+        data[&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;]=&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;;
+    }
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; res=fib(n-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;)+fib(n-&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;);
+    data[n]=res;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; res;
+}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;()
+{
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; n;
+    cin&amp;gt;&amp;gt;n;
+    spn=&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;[n+&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;];
+    data=&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;[n+&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;];
+    memset(spn,&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;,(n+&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;)*&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;sizeof&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;));
+    memset(data,-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;,(n+&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;)*&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;sizeof&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;));
+    data[&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;]=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+    data[&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;]=&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;;
+    fib(n);
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;i&amp;lt;=n;i++){
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Fib(&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;i&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;)=&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;data[i]&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;,spn=&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;spn[i]&amp;lt;&amp;lt;endl;
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://ntutn.top/posts/%E7%BB%9F%E8%AE%A1%E9%80%92%E5%BD%92%E5%AD%90%E9%97%AE%E9%A2%98%E4%B8%AA%E6%95%B0/ - CC BY-SA 4.0</description>
+        </item>
     
     
     
@@ -3661,50 +3735,6 @@ end:
 &lt;/ul&gt;
 &lt;p&gt;求和在这里就不必用循环了，用等差数列明显更高效。注意这里计算时为了防止整数除法运算截断的问题，将除法移动到了等式的右边。&lt;/p&gt;
 - https://ntutn.top/posts/%E8%BF%9E%E7%BB%AD%E6%AD%A3%E6%95%B4%E6%95%B0/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>使用映像劫持技术屏蔽电脑中的广告进程</title>
-        <link>https://ntutn.top/posts/%E4%BD%BF%E7%94%A8%E6%98%A0%E5%83%8F%E5%8A%AB%E6%8C%81%E6%8A%80%E6%9C%AF%E5%B1%8F%E8%94%BD%E7%94%B5%E8%84%91%E4%B8%AD%E7%9A%84%E5%B9%BF%E5%91%8A%E8%BF%9B%E7%A8%8B/</link>
-        <pubDate>Thu, 28 Mar 2019 03:11:37 +0800</pubDate>
-        
-        <guid>https://ntutn.top/posts/%E4%BD%BF%E7%94%A8%E6%98%A0%E5%83%8F%E5%8A%AB%E6%8C%81%E6%8A%80%E6%9C%AF%E5%B1%8F%E8%94%BD%E7%94%B5%E8%84%91%E4%B8%AD%E7%9A%84%E5%B9%BF%E5%91%8A%E8%BF%9B%E7%A8%8B/</guid>
-        <description>归零幻想 https://ntutn.top/posts/%E4%BD%BF%E7%94%A8%E6%98%A0%E5%83%8F%E5%8A%AB%E6%8C%81%E6%8A%80%E6%9C%AF%E5%B1%8F%E8%94%BD%E7%94%B5%E8%84%91%E4%B8%AD%E7%9A%84%E5%B9%BF%E5%91%8A%E8%BF%9B%E7%A8%8B/ -&lt;!-- raw HTML omitted --&gt;
-&lt;blockquote&gt;
-&lt;p&gt;映像劫持（Image File Execution Options），简单的说法，就是当你打开的是程序A，而运行的确是程序B。映像劫持其实是Windows内设的用来调试程序的功能，但是现在却往往被病毒恶意利用。当用户双击对应的程序后，操作系统就会给外壳程序（例如“explorer.exe”）发布相应的指令，其中包含有执行程序的路径和文件名，然后由外壳程序来执行该程序。事实上在该过程中，Windows还会在注册表的上述路径中查询所有的映像劫持子键，如果存在和该程序名称完全相同的子键，就查询对应子健中包含的“dubugger”键值名，并用其指定的程序路径来代替原始的程序，之后执行的是遭到“劫持”的虚假程序。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;国内很多软件都有重度广告，“资讯”、“新闻”、“弹窗”，不胜其烦。直接找到广告进程删除掉，结果一自动更新，又回来了。&lt;/p&gt;
-&lt;p&gt;于是，我想到了“映像劫持”：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ini&#34; data-lang=&#34;ini&#34;&gt;&lt;span style=&#34;color:#658b00&#34;&gt;Windows Registry Editor Version 5.00&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SLBService.exe]&lt;/span&gt;
-&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\TsService.exe]&lt;/span&gt;
-&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\FoxitDesktopAd.exe]&lt;/span&gt;
-&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\FoxitProtect.exe]&lt;/span&gt;
-&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\LCServer.exe]&lt;/span&gt;
-&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\LRServer.exe]&lt;/span&gt;
-&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\2345MiniPage.exe]&lt;/span&gt;
-&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SohuNews.exe]&lt;/span&gt;
-&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\PinyinUp.exe]&lt;/span&gt;
-&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SGDownload.exe]&lt;/span&gt;
-&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SGMedalLoader.exe]&lt;/span&gt;
-&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SogouCloud.exe]&lt;/span&gt;
-&lt;span style=&#34;color:#658b00&#34;&gt;&amp;#34;Debugger&amp;#34;&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;winlogon&amp;#34;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;保存为&lt;code&gt;.reg&lt;/code&gt;文件，导入注册表即可。&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
-- https://ntutn.top/posts/%E4%BD%BF%E7%94%A8%E6%98%A0%E5%83%8F%E5%8A%AB%E6%8C%81%E6%8A%80%E6%9C%AF%E5%B1%8F%E8%94%BD%E7%94%B5%E8%84%91%E4%B8%AD%E7%9A%84%E5%B9%BF%E5%91%8A%E8%BF%9B%E7%A8%8B/ - CC BY-SA 4.0</description>
         </item>
     
     

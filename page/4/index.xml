@@ -7,9 +7,141 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Sun, 06 Nov 2022 07:01:29 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 16 Dec 2022 17:42:29 +0800</lastBuildDate>
     
         <atom:link href="https://ntutn.top/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>android项目开发：UI设计</title>
+        <link>https://ntutn.top/posts/ui%E8%AE%BE%E8%AE%A1/</link>
+        <pubDate>Mon, 21 Dec 2020 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/ui%E8%AE%BE%E8%AE%A1/</guid>
+        <description>归零幻想 https://ntutn.top/posts/ui%E8%AE%BE%E8%AE%A1/ -&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;仍然是《第一行代码》的学习笔记，这里记录的东西相对少一点，UI上的东西还是更多在实际项目中感受到。比如我想没有必要写TextView的介绍吧。&lt;/p&gt;
+&lt;h2 id=&#34;控件的使用方法&#34;&gt;控件的使用方法&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;dp&lt;/code&gt;是一种屏幕密度无关的尺寸单位，可以保证在不同分辨率的手机上显示效果尽可能一致。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;match_parent&lt;/code&gt;表示让当前控件大小和父布局的大小一致。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;wrap_content&lt;/code&gt;表示让当前控件的大小能正好包裹里面的内容。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;android:gravity&lt;/code&gt;指定控件内的内容对齐方式，有&lt;code&gt;top&lt;/code&gt;、&lt;code&gt;bottom&lt;/code&gt;、&lt;code&gt;start&lt;/code&gt;、&lt;code&gt;end&lt;/code&gt;、&lt;code&gt;center&lt;/code&gt;等可选，可以用&lt;code&gt;|&lt;/code&gt;指定多个值。比如&lt;code&gt;center&lt;/code&gt;等价于&lt;code&gt;center_vertical|center_horizonal&lt;/code&gt;。&lt;/p&gt;
+&lt;h2 id=&#34;基本布局&#34;&gt;基本布局&lt;/h2&gt;
+&lt;h3 id=&#34;linearlayout&#34;&gt;LinearLayout&lt;/h3&gt;
+&lt;p&gt;线性布局，通过&lt;code&gt;android:orientation&lt;/code&gt;指定方向。&lt;/p&gt;
+&lt;p&gt;有一个重要属性：&lt;code&gt;android:layout_weight&lt;/code&gt;，它将控件已经占用的空间减掉后按照比重分给各个控件。一般我们直接指定&lt;code&gt;android:layout_width&lt;/code&gt;为0dp，而给它指定一个比重，这样控件的尺寸将占满剩余空间。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;h3 id=&#34;relativelayout&#34;&gt;RelativeLayout&lt;/h3&gt;
+&lt;p&gt;相对布局，复杂，但有迹可循。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;utf-8&amp;quot;?&amp;gt;
+&amp;lt;RelativeLayout xmlns:android=&amp;quot;http://schemas.android.com/apk/res/android&amp;quot;
+    xmlns:tools=&amp;quot;http://schemas.android.com/tools&amp;quot;
+    android:layout_width=&amp;quot;match_parent&amp;quot;
+    android:layout_height=&amp;quot;match_parent&amp;quot;
+    tools:context=&amp;quot;.MainActivity&amp;quot;&amp;gt;
+    &amp;lt;Button
+        android:id=&amp;quot;@+id/button1&amp;quot;
+        android:layout_width=&amp;quot;wrap_content&amp;quot;
+        android:layout_height=&amp;quot;wrap_content&amp;quot;
+        android:layout_alignParentLeft=&amp;quot;true&amp;quot;
+        android:layout_alignParentTop=&amp;quot;true&amp;quot;
+        android:text=&amp;quot;Button1&amp;quot; /&amp;gt;
+    &amp;lt;Button
+        android:id=&amp;quot;@+id/button2&amp;quot;
+        android:layout_width=&amp;quot;wrap_content&amp;quot;
+        android:layout_height=&amp;quot;wrap_content&amp;quot;
+        android:layout_alignParentTop=&amp;quot;true&amp;quot;
+        android:layout_alignParentRight=&amp;quot;true&amp;quot;
+        android:text=&amp;quot;Button2&amp;quot; /&amp;gt;
+    &amp;lt;Button
+        android:id=&amp;quot;@+id/button3&amp;quot;
+        android:layout_width=&amp;quot;wrap_content&amp;quot;
+        android:layout_height=&amp;quot;wrap_content&amp;quot;
+        android:layout_centerInParent=&amp;quot;true&amp;quot;
+        android:text=&amp;quot;Button3&amp;quot; /&amp;gt;
+    &amp;lt;Button
+        android:id=&amp;quot;@+id/button4&amp;quot;
+        android:layout_width=&amp;quot;wrap_content&amp;quot;
+        android:layout_height=&amp;quot;wrap_content&amp;quot;
+        android:layout_alignParentLeft=&amp;quot;true&amp;quot;
+        android:layout_alignParentBottom=&amp;quot;true&amp;quot;
+        android:text=&amp;quot;Button4&amp;quot; /&amp;gt;
+    &amp;lt;Button
+        android:id=&amp;quot;@+id/button5&amp;quot;
+        android:layout_width=&amp;quot;wrap_content&amp;quot;
+        android:layout_height=&amp;quot;wrap_content&amp;quot;
+        android:layout_alignParentRight=&amp;quot;true&amp;quot;
+        android:layout_alignParentBottom=&amp;quot;true&amp;quot;
+        android:text=&amp;quot;Button5&amp;quot; /&amp;gt;
+&amp;lt;/RelativeLayout&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;以上这段布局文件描述的就是一个相对布局，共有5个按钮，分别在父布局的左上、右上、中间、左下、右下位置。&lt;/p&gt;
+&lt;p&gt;相对布局不仅可以相对于父布局，也可以相对于控件。以下描述了button3在中间，左上button1，右上button2，左下button4，右下button5的布局场景。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;utf-8&amp;quot;?&amp;gt;
+&amp;lt;RelativeLayout xmlns:android=&amp;quot;http://schemas.android.com/apk/res/android&amp;quot;
+    xmlns:tools=&amp;quot;http://schemas.android.com/tools&amp;quot;
+    android:layout_width=&amp;quot;match_parent&amp;quot;
+    android:layout_height=&amp;quot;match_parent&amp;quot;
+    tools:context=&amp;quot;.MainActivity&amp;quot;&amp;gt;
+    &amp;lt;Button
+        android:id=&amp;quot;@+id/button3&amp;quot;
+        android:layout_width=&amp;quot;wrap_content&amp;quot;
+        android:layout_height=&amp;quot;wrap_content&amp;quot;
+        android:layout_centerInParent=&amp;quot;true&amp;quot;
+        android:text=&amp;quot;Button3&amp;quot; /&amp;gt;
+    &amp;lt;Button
+        android:id=&amp;quot;@+id/button1&amp;quot;
+        android:layout_width=&amp;quot;wrap_content&amp;quot;
+        android:layout_height=&amp;quot;wrap_content&amp;quot;
+        android:layout_above=&amp;quot;@id/button3&amp;quot;
+        android:layout_toLeftOf=&amp;quot;@id/button3&amp;quot;
+        android:text=&amp;quot;Button1&amp;quot; /&amp;gt;
+    &amp;lt;Button
+        android:id=&amp;quot;@+id/button2&amp;quot;
+        android:layout_width=&amp;quot;wrap_content&amp;quot;
+        android:layout_height=&amp;quot;wrap_content&amp;quot;
+        android:layout_above=&amp;quot;@id/button3&amp;quot;
+        android:layout_toRightOf=&amp;quot;@id/button3&amp;quot;
+        android:text=&amp;quot;Button2&amp;quot; /&amp;gt;
+    &amp;lt;Button
+        android:id=&amp;quot;@+id/button4&amp;quot;
+        android:layout_width=&amp;quot;wrap_content&amp;quot;
+        android:layout_height=&amp;quot;wrap_content&amp;quot;
+        android:layout_below=&amp;quot;@id/button3&amp;quot;
+        android:layout_toLeftOf=&amp;quot;@id/button3&amp;quot;
+        android:text=&amp;quot;Button4&amp;quot; /&amp;gt;
+    &amp;lt;Button
+        android:id=&amp;quot;@+id/button5&amp;quot;
+        android:layout_width=&amp;quot;wrap_content&amp;quot;
+        android:layout_height=&amp;quot;wrap_content&amp;quot;
+        android:layout_below=&amp;quot;@id/button3&amp;quot;
+        android:layout_toRightOf=&amp;quot;@id/button3&amp;quot;
+        android:text=&amp;quot;Button5&amp;quot; /&amp;gt;
+&amp;lt;/RelativeLayout&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;framelayout&#34;&gt;FrameLayout&lt;/h3&gt;
+&lt;p&gt;帧布局，其内部组件将按顺序层叠到左上角。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;FrameLayout一直有foreground属性，而View在后续版本才支持，在一些需要做半透明效果的地方可以用FrameLayout的属性实现，减少控件层叠层数，保证兼容性。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;自定义控件&#34;&gt;自定义控件&lt;/h2&gt;
+&lt;p&gt;安卓中所有的控件都是直接或间接继承自View的，而所有的布局都是继承自ViewGroup的。&lt;/p&gt;
+&lt;p&gt;View是安卓中最基本的一种UI组件，可以在屏幕上绘制一块矩形区域，并响应这块区域的各种事件。&lt;/p&gt;
+&lt;p&gt;ViewGroup是一种特殊的View，可以包含很多子View和子ViewGroup。&lt;/p&gt;
+&lt;h2 id=&#34;recyclerview&#34;&gt;RecyclerView&lt;/h2&gt;
+&lt;p&gt;基本用法：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;导入&lt;code&gt;androidx.recyclerview:recyclerview&lt;/code&gt;，&lt;/li&gt;
+&lt;li&gt;定义类继承RecyclerView.Adapter和RecyclerView.ViewHolder。&lt;/li&gt;
+&lt;li&gt;实现。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;使用DiffUtil可以简化数据更新的写法。&lt;/p&gt;
+&lt;p&gt;参考&lt;a href=&#34;https://github.com/zerofancy/ipviewer&#34;&gt;我的一个demo项目&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;常用布局管理器LinearLayoutManager（线性），此外还有GridLayoutManager（网格）和StaggeredGridLayoutManager（瀑布流）。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;LinearLayoutManager和PagerSnapHelper配合可以实现类似抖音的刷视频的效果。
+在引入&lt;code&gt;kotlin-android-extensions&lt;/code&gt;之后可以比较方便地在&lt;code&gt;onBindViewHolder&lt;/code&gt;方法中给具体的view赋值。&lt;/p&gt;
+&lt;/blockquote&gt;
+- https://ntutn.top/posts/ui%E8%AE%BE%E8%AE%A1/ - CC BY-SA 4.0</description>
+        </item>
     
     
     
@@ -1069,93 +1201,6 @@ git push
 &lt;hr&gt;
 &lt;p&gt;美中不足的是，在Android上我没找到比较合适的git客户端。虽然看到有个商用的评价不错，但为了这点笔记花那么多银子还是不值得。Android上的笔记软件倒是找到一个不错的：&lt;a href=&#34;https://github.com/gsantner/markor&#34;&gt;Markor&lt;/a&gt;。虽然没有Typora的所见即所得那么厉害，但他的编辑界面做的很不错，配上蓝牙键盘，非常适合某些科目上课做笔记。&lt;/p&gt;
 - https://ntutn.top/posts/typora&#43;git%E8%87%AA%E5%8A%A8%E5%90%8C%E6%AD%A5%E4%BD%A0%E7%9A%84%E7%AC%94%E8%AE%B0/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>Java自动装箱自动拆箱踩坑</title>
-        <link>https://ntutn.top/posts/java%E8%87%AA%E5%8A%A8%E8%A3%85%E7%AE%B1%E8%87%AA%E5%8A%A8%E6%8B%86%E7%AE%B1%E8%B8%A9%E5%9D%91/</link>
-        <pubDate>Sun, 01 Mar 2020 03:11:37 +0800</pubDate>
-        
-        <guid>https://ntutn.top/posts/java%E8%87%AA%E5%8A%A8%E8%A3%85%E7%AE%B1%E8%87%AA%E5%8A%A8%E6%8B%86%E7%AE%B1%E8%B8%A9%E5%9D%91/</guid>
-        <description>归零幻想 https://ntutn.top/posts/java%E8%87%AA%E5%8A%A8%E8%A3%85%E7%AE%B1%E8%87%AA%E5%8A%A8%E6%8B%86%E7%AE%B1%E8%B8%A9%E5%9D%91/ -&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;int和Integer有什么区别？前者是基础数据类型，后者是封装的Java对象。但在有&lt;code&gt;Autoboxing&lt;/code&gt;和&lt;code&gt;Unboxing&lt;/code&gt;的情况下我们常常就把两者等同看待，无非后者能放&lt;code&gt;null&lt;/code&gt;。&lt;/p&gt;
-&lt;p&gt;事情要首先从一道力扣题目说起：&lt;/p&gt;
-&lt;h2 id=&#34;删除排序数组中的重复项-ii&#34;&gt;删除排序数组中的重复项 II&lt;/h2&gt;
-&lt;p&gt;给定一个排序数组，你需要在原地删除重复出现的元素，使得每个元素最多出现两次，返回移除后数组的新长度。&lt;/p&gt;
-&lt;p&gt;不要使用额外的数组空间，你必须在原地修改输入数组并在使用 O(1) 额外空间的条件下完成。&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;h3 id=&#34;示例-1&#34;&gt;示例 1:&lt;/h3&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;给定 nums = [1,1,1,2,2,3],
-函数应返回新长度 length = 5, 并且原数组的前五个元素被修改为 1, 1, 2, 2, 3 。
-你不需要考虑数组中超出新长度后面的元素。
-&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;示例-2&#34;&gt;示例 2:&lt;/h3&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;给定 nums = [0,0,1,1,1,1,2,3,3],
-函数应返回新长度 length = 7, 并且原数组的前五个元素被修改为 0, 0, 1, 1, 2, 3, 3 。
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;你不需要考虑数组中超出新长度后面的元素。&lt;/p&gt;
-&lt;h3 id=&#34;answer&#34;&gt;Answer&lt;/h3&gt;
-&lt;p&gt;针对这个题目，我写出了这样的代码：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;/*
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * @lc app=leetcode.cn id=80 lang=java
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; *
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * [80] 删除排序数组中的重复项 II
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; */&lt;/span&gt;
-&lt;span style=&#34;color:#228b22&#34;&gt;// @lc code=start
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Solution&lt;/span&gt; {
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;removeDuplicates&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;[] nums) {
-        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; l = 0, r = 0;
-        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; ans1 = Integer.&lt;span style=&#34;color:#658b00&#34;&gt;MIN_VALUE&lt;/span&gt;, ans2 = Integer.&lt;span style=&#34;color:#658b00&#34;&gt;MIN_VALUE&lt;/span&gt;;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt; (r &amp;lt; nums.&lt;span style=&#34;color:#658b00&#34;&gt;length&lt;/span&gt;) {
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (ans1==ans2&amp;amp;&amp;amp; ans2 == nums[r]) {
-                ;
-            } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; {
-                nums[l] = nums[r];
-                ans1 = ans2;
-                ans2 = nums[r];
-                l++;
-            }
-            r++;
-        }
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; l;
-    }
-}
-&lt;span style=&#34;color:#228b22&#34;&gt;// @lc code=end
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;掉坑&#34;&gt;掉坑&lt;/h3&gt;
-&lt;p&gt;这代码在一般情况是没有问题的，但题目有个测试样例是&lt;code&gt;[-2147483648,-2147483648,-2147483648,1,1,1,2]&lt;/code&gt;，WA。&lt;/p&gt;
-&lt;p&gt;懒得处理开头特殊情况，但貌似运气不好，出题人是想让我处理一下的。&lt;/p&gt;
-&lt;p&gt;但作为懒癌患者我立马想到了新的偷懒方案，即用Integer代替int，这样用&lt;code&gt;null&lt;/code&gt;表示没有就正好了。&lt;/p&gt;
-&lt;p&gt;于是改变如上语句，&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;        Integer ans1 = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;, ans2 = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;和，&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (ans1!=&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;&amp;amp;&amp;amp;ans1== ans2&amp;amp;&amp;amp; ans2 == nums[r]) {
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然而又WA了。那组样例输出是&lt;code&gt;[-2147483648,-2147483648,-2147483648,1,1,2]&lt;/code&gt;。&lt;/p&gt;
-&lt;h2 id=&#34;问题原因&#34;&gt;问题原因&lt;/h2&gt;
-&lt;p&gt;打开&lt;code&gt;jshell&lt;/code&gt;，
-jshell&amp;gt; Integer a=-2147483648
-a ==&amp;gt; -2147483648
-jshell&amp;gt; Integer b=-2147483648
-b ==&amp;gt; -2147483648
-jshell&amp;gt; a==b
-$6 ==&amp;gt; false
-jshell&amp;gt; a==-2147483648
-$7 ==&amp;gt; true
-jshell&amp;gt;
-成功复现问题。
-a与b直接比较，&lt;code&gt;a==b&lt;/code&gt;，两者不是同一对象。与基本数据类型比较，&lt;code&gt;a==-2147483648&lt;/code&gt;，发生自动拆箱，两者值相等。
-所以，上述代码只需要修改&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (ans1 != &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt; &amp;amp;&amp;amp; ans1.&lt;span style=&#34;color:#658b00&#34;&gt;intValue&lt;/span&gt;() == ans2.&lt;span style=&#34;color:#658b00&#34;&gt;intValue&lt;/span&gt;() &amp;amp; ans2 == nums[r]) {
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;AC。&lt;/p&gt;
-&lt;h2 id=&#34;另一个处坑&#34;&gt;另一个处坑&lt;/h2&gt;
-&lt;p&gt;这不是&lt;em&gt;自动装箱/自动拆箱&lt;/em&gt;第一次坑我，曾经有这样一段代码：&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;自动装箱自动拆箱配上函数重载，简直法力无边。你以为你删除了元素&lt;code&gt;3&lt;/code&gt;，实际上你的代码是删除第三个元素……&lt;/p&gt;
-&lt;h2 id=&#34;参考&#34;&gt;参考&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://chanthuang.github.io/2016/09/07/java-autoboxing-and-unboxing/&#34;&gt;Java 的自动装箱(autoboxing)与拆箱(unboxing) &lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-- https://ntutn.top/posts/java%E8%87%AA%E5%8A%A8%E8%A3%85%E7%AE%B1%E8%87%AA%E5%8A%A8%E6%8B%86%E7%AE%B1%E8%B8%A9%E5%9D%91/ - CC BY-SA 4.0</description>
         </item>
     
     

@@ -7,9 +7,46 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Sun, 06 Nov 2022 07:01:29 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 16 Dec 2022 17:42:29 +0800</lastBuildDate>
     
         <atom:link href="https://ntutn.top/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>Kotlin的随机数不随机</title>
+        <link>https://ntutn.top/posts/kotlin%E7%9A%84%E9%9A%8F%E6%9C%BA%E6%95%B0%E4%B8%8D%E9%9A%8F%E6%9C%BA/</link>
+        <pubDate>Fri, 16 Dec 2022 17:42:29 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/kotlin%E7%9A%84%E9%9A%8F%E6%9C%BA%E6%95%B0%E4%B8%8D%E9%9A%8F%E6%9C%BA/</guid>
+        <description>归零幻想 https://ntutn.top/posts/kotlin%E7%9A%84%E9%9A%8F%E6%9C%BA%E6%95%B0%E4%B8%8D%E9%9A%8F%E6%9C%BA/ -&lt;p&gt;大学，我们学校有3座餐厅，然后每个餐厅又有多层楼，可以说是条件还不错了。除了考前一周都无所事事的我们，每天面临最大的难题就是去哪儿吃，吃什么。&lt;/p&gt;
+&lt;p&gt;既然大家都是学软件的，那就写个app来解决这个问题吧。另外两个老哥（@ruiOVO、@xyx）主要是写前端、服务端的，于是这个重任就交到了我身上。&lt;/p&gt;
+&lt;p&gt;于是大聪明我一拍脑门就写出来了，&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;// 实际上是写了个安卓app, 这里只是示意
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; list = listOf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;荟萃餐厅&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;玉兰餐厅&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;唐岛湾餐厅&amp;#34;&lt;/span&gt;)
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; floor = listOf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1楼&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;2楼&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;3楼&amp;#34;&lt;/span&gt;)
+println(list.random() + floor.random())
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;简洁优雅，不用算上下界，我们Kotlin真是太厉害辣！&lt;/p&gt;
+&lt;p&gt;然后我们就在荟萃餐厅一楼连续吃了3天……小伙伴们都不相信我的编程水平了。&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;故事就到这里，那么问题在哪里呢？&lt;/p&gt;
+&lt;p&gt;随机数不随机，那么肯定是初始化时没有引入不同seed。&lt;code&gt;list.random()&lt;/code&gt;方法默认使用的&lt;code&gt;Random&lt;/code&gt;对象定义在kotlin stdlib的&lt;code&gt;Random.kt&lt;/code&gt;文件中&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2022/12/75808ea79f529b24c995aeeee704952f.png&#34; alt=&#34;image-20221216183431623&#34;&gt;&lt;/p&gt;
+&lt;p&gt;接下来找到这个&lt;code&gt;defaultPlatformRandom&lt;/code&gt;的实现&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2022/12/cc0e790071ffccc6f37c25618ce37419.png&#34; alt=&#34;image-20221216202117167&#34;&gt;&lt;/p&gt;
+&lt;p&gt;这东西最终用的是&lt;code&gt;PlatformThreadLocalRandom&lt;/code&gt;，而Android的ThreadLocalRandom中出了个bug——他在zygote进程中初始化，所以每个程序打开时都是相同的初始状态。&lt;/p&gt;
+&lt;p&gt;我们可以在网上找到相关的讨论：&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.reddit.com/r/androiddev/comments/x8z9r1/comment/innw882/?utm_source=share&amp;amp;utm_medium=web2x&amp;amp;context=3&#34;&gt;https://www.reddit.com/r/androiddev/comments/x8z9r1/comment/innw882/?utm_source=share&amp;amp;utm_medium=web2x&amp;amp;context=3&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://youtrack.jetbrains.com/issue/KT-52618/ThreadLocalRandom-is-not-a-good-source-of-randomness-on-Android-before-SDK-34-so-dont-use-it-for-Kotlin-Random&#34;&gt;https://youtrack.jetbrains.com/issue/KT-52618/ThreadLocalRandom-is-not-a-good-source-of-randomness-on-Android-before-SDK-34-so-dont-use-it-for-Kotlin-Random&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;解决：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;避免使用List.random、Random.nextXxx之类的方法，他们最终都是调用这个PlatformThreadLocalRandom，每次需要随机数时都创建一个Random对象，传入seed：&lt;code&gt;val random = Random(System.currentTimeMills());random.nextInt()&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;升级Kotlin版本，根据官方的缺陷跟踪器，该问题兜底修复于1.7.20版本&lt;/li&gt;
+&lt;li&gt;使用字节码修改的方法，编译时替换掉相关的调用，比如可以用&lt;a href=&#34;https://github.com/eleme/lancet&#34;&gt;lancet&lt;/a&gt;来处理&lt;/li&gt;
+&lt;/ol&gt;
+- https://ntutn.top/posts/kotlin%E7%9A%84%E9%9A%8F%E6%9C%BA%E6%95%B0%E4%B8%8D%E9%9A%8F%E6%9C%BA/ - CC BY-SA 4.0</description>
+        </item>
     
     
     
@@ -1458,55 +1495,6 @@ end run
 &lt;/li&gt;
 &lt;/ul&gt;
 - https://ntutn.top/friends/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>把你的光猫变成一个丐版nas</title>
-        <link>https://ntutn.top/posts/%E6%8A%8A%E4%BD%A0%E7%9A%84%E5%85%89%E7%8C%AB%E5%8F%98%E6%88%90%E4%B8%80%E4%B8%AA%E4%B8%90%E7%89%88nas/</link>
-        <pubDate>Tue, 12 Apr 2022 01:21:54 +0800</pubDate>
-        
-        <guid>https://ntutn.top/posts/%E6%8A%8A%E4%BD%A0%E7%9A%84%E5%85%89%E7%8C%AB%E5%8F%98%E6%88%90%E4%B8%80%E4%B8%AA%E4%B8%90%E7%89%88nas/</guid>
-        <description>归零幻想 https://ntutn.top/posts/%E6%8A%8A%E4%BD%A0%E7%9A%84%E5%85%89%E7%8C%AB%E5%8F%98%E6%88%90%E4%B8%80%E4%B8%AA%E4%B8%90%E7%89%88nas/ -&lt;!-- raw HTML omitted --&gt;
-&lt;h1 id=&#34;把你的光猫变成一个丐版nas&#34;&gt;把你的光猫变成一个丐版NAS&lt;/h1&gt;
-&lt;p&gt;我的初衷是调研下光猫改桥接的可行性，结果拿到超级管理员密码后还是没有这个选项。但在这个过程中发现直接在光猫上跑个下载服务却是可行的。&lt;/p&gt;
-&lt;h2 id=&#34;允许ftp访问和telnet访问&#34;&gt;允许FTP访问和telnet访问&lt;/h2&gt;
-&lt;p&gt;访问 http://192.168.1.1 ，输入密码后进入光猫管理后台。这里我找到“上网帐号设置”，备份宽带帐号和密码。不得不说他系统还是挺拉的，密码框直接用审查元素功能把 type 改为 input 就可以看到密码了。&lt;/p&gt;
-&lt;p&gt;第一步后台不要退出，访问 http://192.168.1.1/servmngr.html 。这里看到一个空白页面，审查元素后发现大有乾坤。 &lt;img src=&#34;https://images.ntutn.top/2022/04/78e9db7285fda2ee43fd5901902d3208.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
-&lt;p&gt;将这些代码取消注释，此时网页还是空白的，但是用 Ctrl+A 可以看到实际是有内容的。在这个页面开启 telnet 访问，并设置密码。注意用户名为 admin 不要改，否则后面 telnet 登陆不进去。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;telnet 192.168.1.1&lt;/code&gt; 成功后执行&lt;code&gt;sh&lt;/code&gt;。然后&lt;code&gt;uname -a&lt;/code&gt;看下。这里我就不记录查看管理员密码步骤了，反正这个型号管理员面板也没有设置桥接的选项。&lt;/p&gt;
-&lt;h2 id=&#34;开始整活&#34;&gt;开始整活&lt;/h2&gt;
-&lt;p&gt;&lt;code&gt;top&lt;/code&gt;，发现占用内存最高的是个两个 java 进程。&lt;code&gt;java -version&lt;/code&gt;，发现安装了 java8 。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-plain&#34; data-lang=&#34;plain&#34;&gt;# java -version
-openjdk version &amp;#34;1.8.0-internal&amp;#34;
-OpenJDK Runtime Environment (build 1.8.0-internal-jenkinsang_2022_01_15_04_03-b00)
-JamVM (build 2.0.0, inline-threaded interpreter with stack-caching)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;free&lt;/code&gt;命令可知总内存约二十多兆，剩余仅 3 兆。这点空间是搞不了什么事情的，因此我尝试干掉前述两个 java 进程。&lt;code&gt;ps -aux | grep java&lt;/code&gt;，发现除了存在两个 java 进程，还写了脚本自动把这两个进程拉起来，即&lt;code&gt;/etc/monitor_java.sh&lt;/code&gt; 。统统 kill 掉。&lt;/p&gt;
-&lt;p&gt;现在有 10 兆左右的内存了，对于 java 来说可能还是不太能搞事，但跑个 aria2 足够了！尝试插入 U 盘，发现在&lt;code&gt;/mnt/usb1_1&lt;/code&gt;自动挂载。&lt;/p&gt;
-&lt;p&gt;交叉编译 aria2c ，这里我用的是这个脚本：https://gitee.com/logic_2050/auto-build-aria2-mips32-static 。在我的 debian11 编译过程中只遇到一个问题，手动&lt;code&gt;sudo apt install autoreconf&lt;/code&gt;即可。&lt;/p&gt;
-&lt;p&gt;如何把文件弄到光猫里，以及取出来？每次插拔 U 盘也太麻烦了。于是我找到一个支持上传的简单文件服务器：https://github.com/mayth/go-simple-upload-server。仍然交叉编译到 mips 静态包。&lt;code&gt;env GOOS=linux GOARCH=mips GOMIPS=softfloat go build -trimpath -ldflags=&amp;quot;-s -w -extldflags=-static&amp;quot;&lt;/code&gt;&lt;/p&gt;
-&lt;h2 id=&#34;成品&#34;&gt;成品&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2022/04/bc80e51855b842dedd7268113042e378.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
-&lt;h2 id=&#34;拓展&#34;&gt;拓展&lt;/h2&gt;
-&lt;h3 id=&#34;被我干掉的两个-java-进程是做什么的&#34;&gt;被我干掉的两个 java 进程是做什么的&lt;/h3&gt;
-&lt;p&gt;光猫跑 java 属实有点离谱，一半内存都是他们占的，干掉后也不影响上网，甚至也不影响光猫后台管理。嗯，有点耐人寻味。&lt;/p&gt;
-&lt;h3 id=&#34;ftp访问为空白&#34;&gt;FTP访问为空白&lt;/h3&gt;
-&lt;p&gt;经测试，该型号FTP访问根目录是一片空白，但大多数子目录还是可以正常访问的，如&lt;code&gt;/mnt/usb1_1&lt;/code&gt;，完全能满足要求。&lt;/p&gt;
-&lt;h3 id=&#34;无法执行重启后文件丢失&#34;&gt;无法执行/重启后文件丢失&lt;/h3&gt;
-&lt;p&gt;有些目录下是无法写入的，有些虽然可以写入，但是重启会丢失，还有些目录下无法执行程序。&lt;/p&gt;
-&lt;p&gt;我选择把整活用的程序放到&lt;code&gt;/fhconf/&lt;/code&gt;下，因为光猫自己的配置文件备份就放在这里，显然这里是不会重置的。&lt;/p&gt;
-&lt;h3 id=&#34;支持-https&#34;&gt;支持 https&lt;/h3&gt;
-&lt;p&gt;只要将你的电脑下的&lt;code&gt;/etc/ssl/certs/ca-certificates.crt&lt;/code&gt;文件复制到光猫下，并在aria2的配置文件中指定就可以了。&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;ca-certificate=/fhconf/custom/aria2/ca-certificates.crt
-&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;oom&#34;&gt;OOM&lt;/h3&gt;
-&lt;p&gt;尽管aria2确实已经很省资源了，但当尝试BT下载一个比较大的文件时（超过2GB）还是很容易占用超过10M内存，然后关键进程OOM就巴比Q了。我尝试过修改配置文件，关闭disk-cache、关闭预分配甚至限制下载速度等均无法解决。所以该方案的实用性其实并不是很高。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;也无所谓，生命在于折腾嘛。
-也许设置swap可以解决这个问题，但默认没有这个命令，估计还得去编译busybox。唉，算了吧……&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- raw HTML omitted --&gt;
-- https://ntutn.top/posts/%E6%8A%8A%E4%BD%A0%E7%9A%84%E5%85%89%E7%8C%AB%E5%8F%98%E6%88%90%E4%B8%80%E4%B8%AA%E4%B8%90%E7%89%88nas/ - CC BY-SA 4.0</description>
         </item>
     
     

@@ -7,7 +7,29 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Fri, 07 Oct 2022 23:47:22 +0800</lastBuildDate><atom:link href="https://ntutn.top/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 16 Dec 2022 17:42:29 +0800</lastBuildDate><atom:link href="https://ntutn.top/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Kotlin的随机数不随机</title>
+      <link>https://ntutn.top/posts/kotlin%E7%9A%84%E9%9A%8F%E6%9C%BA%E6%95%B0%E4%B8%8D%E9%9A%8F%E6%9C%BA/</link>
+      <pubDate>Fri, 16 Dec 2022 17:42:29 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/kotlin%E7%9A%84%E9%9A%8F%E6%9C%BA%E6%95%B0%E4%B8%8D%E9%9A%8F%E6%9C%BA/</guid>
+      <description>大学，我们学校有3座餐厅，然后每个餐厅又有多层楼，可以说是条件还不错了。除了考前一周都无所事事的我们，每天面临最大的难题就是去哪儿吃，吃什么。
+既然大家都是学软件的，那就写个app来解决这个问题吧。另外两个老哥（@ruiOVO、@xyx）主要是写前端、服务端的，于是这个重任就交到了我身上。
+于是大聪明我一拍脑门就写出来了，
+// 实际上是写了个安卓app, 这里只是示意 val list = listOf(&amp;#34;荟萃餐厅&amp;#34;, &amp;#34;玉兰餐厅&amp;#34;, &amp;#34;唐岛湾餐厅&amp;#34;) val floor = listOf(&amp;#34;1楼&amp;#34;, &amp;#34;2楼&amp;#34;, &amp;#34;3楼&amp;#34;) println(list.random() + floor.random()) 简洁优雅，不用算上下界，我们Kotlin真是太厉害辣！
+然后我们就在荟萃餐厅一楼连续吃了3天……小伙伴们都不相信我的编程水平了。
+ 故事就到这里，那么问题在哪里呢？
+随机数不随机，那么肯定是初始化时没有引入不同seed。list.random()方法默认使用的Random对象定义在kotlin stdlib的Random.kt文件中
+接下来找到这个defaultPlatformRandom的实现
+这东西最终用的是PlatformThreadLocalRandom，而Android的ThreadLocalRandom中出了个bug——他在zygote进程中初始化，所以每个程序打开时都是相同的初始状态。
+我们可以在网上找到相关的讨论：
+https://www.reddit.com/r/androiddev/comments/x8z9r1/comment/innw882/?utm_source=share&amp;amp;utm_medium=web2x&amp;amp;context=3
+https://youtrack.jetbrains.com/issue/KT-52618/ThreadLocalRandom-is-not-a-good-source-of-randomness-on-Android-before-SDK-34-so-dont-use-it-for-Kotlin-Random
+ 解决：
+ 避免使用List.random、Random.nextXxx之类的方法，他们最终都是调用这个PlatformThreadLocalRandom，每次需要随机数时都创建一个Random对象，传入seed：val random = Random(System.currentTimeMills());random.nextInt() 升级Kotlin版本，根据官方的缺陷跟踪器，该问题兜底修复于1.7.20版本 使用字节码修改的方法，编译时替换掉相关的调用，比如可以用lancet来处理  </description>
+    </item>
+    
     <item>
       <title>一个简单的桌面悬浮时钟</title>
       <link>https://ntutn.top/posts/%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E6%A1%8C%E9%9D%A2%E6%82%AC%E6%B5%AE%E6%97%B6%E9%92%9F/</link>

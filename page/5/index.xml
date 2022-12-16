@@ -7,9 +7,96 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Sun, 06 Nov 2022 07:01:29 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 16 Dec 2022 17:42:29 +0800</lastBuildDate>
     
         <atom:link href="https://ntutn.top/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>Java自动装箱自动拆箱踩坑</title>
+        <link>https://ntutn.top/posts/java%E8%87%AA%E5%8A%A8%E8%A3%85%E7%AE%B1%E8%87%AA%E5%8A%A8%E6%8B%86%E7%AE%B1%E8%B8%A9%E5%9D%91/</link>
+        <pubDate>Sun, 01 Mar 2020 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/java%E8%87%AA%E5%8A%A8%E8%A3%85%E7%AE%B1%E8%87%AA%E5%8A%A8%E6%8B%86%E7%AE%B1%E8%B8%A9%E5%9D%91/</guid>
+        <description>归零幻想 https://ntutn.top/posts/java%E8%87%AA%E5%8A%A8%E8%A3%85%E7%AE%B1%E8%87%AA%E5%8A%A8%E6%8B%86%E7%AE%B1%E8%B8%A9%E5%9D%91/ -&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;int和Integer有什么区别？前者是基础数据类型，后者是封装的Java对象。但在有&lt;code&gt;Autoboxing&lt;/code&gt;和&lt;code&gt;Unboxing&lt;/code&gt;的情况下我们常常就把两者等同看待，无非后者能放&lt;code&gt;null&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;事情要首先从一道力扣题目说起：&lt;/p&gt;
+&lt;h2 id=&#34;删除排序数组中的重复项-ii&#34;&gt;删除排序数组中的重复项 II&lt;/h2&gt;
+&lt;p&gt;给定一个排序数组，你需要在原地删除重复出现的元素，使得每个元素最多出现两次，返回移除后数组的新长度。&lt;/p&gt;
+&lt;p&gt;不要使用额外的数组空间，你必须在原地修改输入数组并在使用 O(1) 额外空间的条件下完成。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;h3 id=&#34;示例-1&#34;&gt;示例 1:&lt;/h3&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;给定 nums = [1,1,1,2,2,3],
+函数应返回新长度 length = 5, 并且原数组的前五个元素被修改为 1, 1, 2, 2, 3 。
+你不需要考虑数组中超出新长度后面的元素。
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;示例-2&#34;&gt;示例 2:&lt;/h3&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;给定 nums = [0,0,1,1,1,1,2,3,3],
+函数应返回新长度 length = 7, 并且原数组的前五个元素被修改为 0, 0, 1, 1, 2, 3, 3 。
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;你不需要考虑数组中超出新长度后面的元素。&lt;/p&gt;
+&lt;h3 id=&#34;answer&#34;&gt;Answer&lt;/h3&gt;
+&lt;p&gt;针对这个题目，我写出了这样的代码：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;/*
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * @lc app=leetcode.cn id=80 lang=java
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; *
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * [80] 删除排序数组中的重复项 II
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; */&lt;/span&gt;
+&lt;span style=&#34;color:#228b22&#34;&gt;// @lc code=start
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Solution&lt;/span&gt; {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;removeDuplicates&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;[] nums) {
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; l = 0, r = 0;
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; ans1 = Integer.&lt;span style=&#34;color:#658b00&#34;&gt;MIN_VALUE&lt;/span&gt;, ans2 = Integer.&lt;span style=&#34;color:#658b00&#34;&gt;MIN_VALUE&lt;/span&gt;;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt; (r &amp;lt; nums.&lt;span style=&#34;color:#658b00&#34;&gt;length&lt;/span&gt;) {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (ans1==ans2&amp;amp;&amp;amp; ans2 == nums[r]) {
+                ;
+            } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; {
+                nums[l] = nums[r];
+                ans1 = ans2;
+                ans2 = nums[r];
+                l++;
+            }
+            r++;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; l;
+    }
+}
+&lt;span style=&#34;color:#228b22&#34;&gt;// @lc code=end
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;掉坑&#34;&gt;掉坑&lt;/h3&gt;
+&lt;p&gt;这代码在一般情况是没有问题的，但题目有个测试样例是&lt;code&gt;[-2147483648,-2147483648,-2147483648,1,1,1,2]&lt;/code&gt;，WA。&lt;/p&gt;
+&lt;p&gt;懒得处理开头特殊情况，但貌似运气不好，出题人是想让我处理一下的。&lt;/p&gt;
+&lt;p&gt;但作为懒癌患者我立马想到了新的偷懒方案，即用Integer代替int，这样用&lt;code&gt;null&lt;/code&gt;表示没有就正好了。&lt;/p&gt;
+&lt;p&gt;于是改变如上语句，&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;        Integer ans1 = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;, ans2 = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;和，&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (ans1!=&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;&amp;amp;&amp;amp;ans1== ans2&amp;amp;&amp;amp; ans2 == nums[r]) {
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然而又WA了。那组样例输出是&lt;code&gt;[-2147483648,-2147483648,-2147483648,1,1,2]&lt;/code&gt;。&lt;/p&gt;
+&lt;h2 id=&#34;问题原因&#34;&gt;问题原因&lt;/h2&gt;
+&lt;p&gt;打开&lt;code&gt;jshell&lt;/code&gt;，
+jshell&amp;gt; Integer a=-2147483648
+a ==&amp;gt; -2147483648
+jshell&amp;gt; Integer b=-2147483648
+b ==&amp;gt; -2147483648
+jshell&amp;gt; a==b
+$6 ==&amp;gt; false
+jshell&amp;gt; a==-2147483648
+$7 ==&amp;gt; true
+jshell&amp;gt;
+成功复现问题。
+a与b直接比较，&lt;code&gt;a==b&lt;/code&gt;，两者不是同一对象。与基本数据类型比较，&lt;code&gt;a==-2147483648&lt;/code&gt;，发生自动拆箱，两者值相等。
+所以，上述代码只需要修改&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (ans1 != &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt; &amp;amp;&amp;amp; ans1.&lt;span style=&#34;color:#658b00&#34;&gt;intValue&lt;/span&gt;() == ans2.&lt;span style=&#34;color:#658b00&#34;&gt;intValue&lt;/span&gt;() &amp;amp; ans2 == nums[r]) {
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;AC。&lt;/p&gt;
+&lt;h2 id=&#34;另一个处坑&#34;&gt;另一个处坑&lt;/h2&gt;
+&lt;p&gt;这不是&lt;em&gt;自动装箱/自动拆箱&lt;/em&gt;第一次坑我，曾经有这样一段代码：&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;自动装箱自动拆箱配上函数重载，简直法力无边。你以为你删除了元素&lt;code&gt;3&lt;/code&gt;，实际上你的代码是删除第三个元素……&lt;/p&gt;
+&lt;h2 id=&#34;参考&#34;&gt;参考&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://chanthuang.github.io/2016/09/07/java-autoboxing-and-unboxing/&#34;&gt;Java 的自动装箱(autoboxing)与拆箱(unboxing) &lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+- https://ntutn.top/posts/java%E8%87%AA%E5%8A%A8%E8%A3%85%E7%AE%B1%E8%87%AA%E5%8A%A8%E6%8B%86%E7%AE%B1%E8%B8%A9%E5%9D%91/ - CC BY-SA 4.0</description>
+        </item>
     
     
     
@@ -1721,80 +1808,6 @@ qsort(res,pA,sizeof(point),cmp);
     &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://ntutn.top/posts/%E7%A8%80%E7%96%8F%E7%9F%A9%E9%98%B5%E7%9A%84%E5%8E%8B%E7%BC%A9%E5%AD%98%E5%82%A8/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>统计递归子问题个数</title>
-        <link>https://ntutn.top/posts/%E7%BB%9F%E8%AE%A1%E9%80%92%E5%BD%92%E5%AD%90%E9%97%AE%E9%A2%98%E4%B8%AA%E6%95%B0/</link>
-        <pubDate>Fri, 17 May 2019 03:11:37 +0800</pubDate>
-        
-        <guid>https://ntutn.top/posts/%E7%BB%9F%E8%AE%A1%E9%80%92%E5%BD%92%E5%AD%90%E9%97%AE%E9%A2%98%E4%B8%AA%E6%95%B0/</guid>
-        <description>归零幻想 https://ntutn.top/posts/%E7%BB%9F%E8%AE%A1%E9%80%92%E5%BD%92%E5%AD%90%E9%97%AE%E9%A2%98%E4%B8%AA%E6%95%B0/ -&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;分治策略是算法设计的重要策略之一，该策略的基本思想是把问题进行分解成一些子问题，通过子问题的求解完成对原问题的求解。其关键是分解和合并，好的分解或合并方法才会产生高效的分治算法。&lt;/p&gt;
-&lt;p&gt;分治策略设计出的算法最常见的就是递归算法。但是如果在分解时，分解出的子问题有很多是重复的，那么这样的分治（递归）算法求解问题的效率就非常低。例如斐波那契数问题，如果采用递归求解，算法效率非常低：O(2^n)。而如果采用递推求解(动态规划自底向上求解)，算法效率非常高：O(n)。&lt;/p&gt;
-&lt;h2 id=&#34;question&#34;&gt;Question&lt;/h2&gt;
-&lt;p&gt;现在请你编写程序，统计计算一个斐波那契数时分解出的各子问题的个数。&lt;/p&gt;
-&lt;p&gt;斐波那契数的定义如下：&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Fib(0)=0
-Fib(1)=1
-Fib(n)=Fib(n-1)+Fib(n-2)
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;输入：一个整数n，即计算&lt;code&gt;Fib(n)&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;输出：n+1行，即各个子问题的值及该子问题的个数。&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;h2 id=&#34;example&#34;&gt;Example&lt;/h2&gt;
-&lt;h3 id=&#34;input&#34;&gt;Input&lt;/h3&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;5
-&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;output&#34;&gt;Output&lt;/h3&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Fib(0)=0,spn=3
-Fib(1)=1,spn=5
-Fib(2)=1,spn=3
-Fib(3)=2,spn=2
-Fib(4)=3,spn=1
-Fib(5)=5,spn=1
-&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;分析&#34;&gt;分析&lt;/h2&gt;
-&lt;p&gt;一大段分治思想的介绍，递归与递推的区别，我以为这题用递归会超时，要用递推求解，于是入坑……&lt;/p&gt;
-&lt;p&gt;这题要统计子问题个数，递推或者递归加备忘录根本没重复的计算怎么统计……&lt;/p&gt;
-&lt;p&gt;不死心的我又仔细研究递推子问题个数的规律，发现子问题个数正好是一个反着的斐波那契数列（结尾元素特殊处理），所以可以正向递推求数列，反向递推求子问题个数。&lt;/p&gt;
-&lt;p&gt;不过特殊情况研究的有点头疼，暂时就不搞了，下面给出的是老老实实递归求解的程序。&lt;/p&gt;
-&lt;h2 id=&#34;answer&#34;&gt;Answer&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-c++&#34; data-lang=&#34;c++&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
-&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;cstring&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
-&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;namespace&lt;/span&gt; std;
-&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;*spn;
-&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;*data;
-&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;fib&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; n){
-    spn[n]++;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(n==&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;){
-        data[&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;]=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
-    }
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(n==&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;){
-        data[&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;]=&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;;
-    }
-    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; res=fib(n-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;)+fib(n-&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;);
-    data[n]=res;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; res;
-}
-&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;()
-{
-    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; n;
-    cin&amp;gt;&amp;gt;n;
-    spn=&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;[n+&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;];
-    data=&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;[n+&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;];
-    memset(spn,&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;,(n+&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;)*&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;sizeof&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;));
-    memset(data,-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;,(n+&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;)*&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;sizeof&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;));
-    data[&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;]=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
-    data[&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;]=&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;;
-    fib(n);
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;i&amp;lt;=n;i++){
-        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Fib(&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;i&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;)=&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;data[i]&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;,spn=&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;spn[i]&amp;lt;&amp;lt;endl;
-    }
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://ntutn.top/posts/%E7%BB%9F%E8%AE%A1%E9%80%92%E5%BD%92%E5%AD%90%E9%97%AE%E9%A2%98%E4%B8%AA%E6%95%B0/ - CC BY-SA 4.0</description>
         </item>
     
     

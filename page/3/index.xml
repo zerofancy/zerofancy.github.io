@@ -7,9 +7,241 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Sun, 06 Nov 2022 07:01:29 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 16 Dec 2022 17:42:29 +0800</lastBuildDate>
     
         <atom:link href="https://ntutn.top/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>DebugEntrance和DebugConfig</title>
+        <link>https://ntutn.top/posts/debugentrance%E5%92%8Cdebugconfig/</link>
+        <pubDate>Mon, 22 Feb 2021 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/debugentrance%E5%92%8Cdebugconfig/</guid>
+        <description>归零幻想 https://ntutn.top/posts/debugentrance%E5%92%8Cdebugconfig/ -&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;工欲善其事，必先利其器。毕设是一个相对复杂的项目了，我觉得要想顺利完成肯定是需要一些手段帮助我调试的。于是这里我准备了debug页面，主要功能就两个：提供某个功能的入口以及存储配置（最好能直接在手机上修改）&lt;/p&gt;
+&lt;h2 id=&#34;debugentrance&#34;&gt;DebugEntrance&lt;/h2&gt;
+&lt;p&gt;就是一个各种测试功能的入口。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2021/02/22/gOV6niTxoBfXbWv.jpg&#34; alt=&#34;1.jpg&#34;&gt;&lt;/p&gt;
+&lt;p&gt;这个一看实现就很简单，不细说了。&lt;/p&gt;
+&lt;h2 id=&#34;debugconfig&#34;&gt;DebugConfig&lt;/h2&gt;
+&lt;p&gt;因为字节自己的ABManager用着挺顺手，感觉自己项目调试时有类似这么个东西会比较舒服，于是搞了这么个东西。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2021/02/22/Mi8lCJdZBcjnYmO.jpg&#34; alt=&#34;2.jpg&#34;&gt; &lt;img src=&#34;https://i.loli.net/2021/02/22/cEAfgMVPzrSXmuY.jpg&#34; alt=&#34;3.jpg&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;使用&#34;&gt;使用&lt;/h3&gt;
+&lt;p&gt;先看使用：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#707a7c&#34;&gt;@ZeroConfig&lt;/span&gt;(key = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;retrofit_config&amp;#34;&lt;/span&gt;, title = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Retrofit配置&amp;#34;&lt;/span&gt;, owner = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;liuhaixin.zero&amp;#34;&lt;/span&gt;)
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;data&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;RetrofitConfig&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; baseUrl: String = RetrofitUtil.BASE_URL)
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; retrofitConfig &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;by&lt;/span&gt; zeroConfig&amp;lt;RetrofitConfig&amp;gt;()
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; retrofit &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;by&lt;/span&gt; lazy {
+    Retrofit.Builder()
+        .baseUrl(retrofitConfig?.baseUrl ?: BASE_URL)
+        .addConverterFactory(GsonConverterFactory.create())
+        .client(okHttpClient)
+        .build()
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;看上去还是有点让人心动的吧。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;h3 id=&#34;属性委托泛型实化&#34;&gt;属性委托、泛型实化&lt;/h3&gt;
+&lt;p&gt;首先是一段来自&lt;a href=&#34;https://www.runoob.com/kotlin/kotlin-delegated.html&#34;&gt;菜鸟教程&lt;/a&gt;的描述：&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;属性委托指的是一个类的某个属性值不是在类中直接进行定义，而是将其托付给一个代理类，从而实现对该类属性的统一管理。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt;/&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; &lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;&amp;lt;&lt;/span&gt;属性名&amp;gt;: &amp;lt;类型&amp;gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;by&lt;/span&gt; &amp;lt;表达式&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;by 关键字之后的表达式就是委托, 属性的 get() 方法(以及set() 方法)将被委托给这个对象的 getValue() 和 setValue() 方法。属性委托不必实现任何接口, 但必须提供 getValue() 函数(对于 var属性,还需要 setValue() 函数)。&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;借助这个特征，我们可以定义这样一个委托类：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;ZeroConfigDelegate&lt;/span&gt;&amp;lt;T&amp;gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; clazz: Class&amp;lt;T&amp;gt;) {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;operator&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;getValue&lt;/span&gt;(thisRef: Any?, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;property&lt;/span&gt;: KProperty&amp;lt;*&amp;gt;): T? =
+        ZeroConfigHelper.readConfig(clazz)
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;operator&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;setValue&lt;/span&gt;(thisRef: Any?, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;property&lt;/span&gt;: KProperty&amp;lt;*&amp;gt;, value: T?) =
+        ZeroConfigHelper.saveConfig(clazz, value)
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这样我们需要存取配置的时候只要&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; config &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;by&lt;/span&gt; ZeroConfigDelegate(ConfigClass::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;.java)
+&lt;span style=&#34;color:#228b22&#34;&gt;// 存
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;config = ConfigClass(arg)
+&lt;span style=&#34;color:#228b22&#34;&gt;// 取
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;println(config.key1)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;接下来定义一个顶级函数（&lt;em&gt;我也不知道这样有啥好处，但看Kotlin库lazy函数就是这样实现的&lt;/em&gt;）：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;/**
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * 委托获取配置值
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * @param clazz 配置类型
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; */&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &amp;lt;&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;T&lt;/span&gt;&amp;gt; &lt;span style=&#34;color:#008b45&#34;&gt;zeroConfig&lt;/span&gt;(clazz: Class&amp;lt;T&amp;gt;): ZeroConfigDelegate&amp;lt;T&amp;gt; = ZeroConfigDelegate(clazz)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;相对java的泛型，Kotlin还提供了一个叫做“泛型实化”的东西，可以进一步让我们上面写法更优雅：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;/**
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * 委托获取配置值
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * 泛型实化，调用更方便
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; */&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;inline&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;reified&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;T&lt;/span&gt;&amp;gt; &lt;span style=&#34;color:#008b45&#34;&gt;zeroConfig&lt;/span&gt;(): ZeroConfigDelegate&amp;lt;T&amp;gt; =
+    zeroConfig(T::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;.java)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;现在调用时就是开始的那个例子那样了：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; config &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;by&lt;/span&gt; zeroConfig&amp;lt;ConfigClass&amp;gt;()
+&lt;span style=&#34;color:#228b22&#34;&gt;// 存
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;config = ConfigClass(arg)
+&lt;span style=&#34;color:#228b22&#34;&gt;// 取
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;println(config.key1)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;配置的存取&#34;&gt;配置的存取&lt;/h3&gt;
+&lt;p&gt;这里代码目前实现很简单，就是直接转换成json然后存到sp里。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &amp;lt;&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;T&lt;/span&gt;&amp;gt; &lt;span style=&#34;color:#008b45&#34;&gt;saveConfig&lt;/span&gt;(clazz: Class&amp;lt;*&amp;gt;, value: T) {
+    bufferMap[clazz] = value
+    sp.edit {
+        putString(getKeyOfClass(clazz), gson.toJson(value))
+    }
+}
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &amp;lt;&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;T&lt;/span&gt;&amp;gt; &lt;span style=&#34;color:#008b45&#34;&gt;readConfig&lt;/span&gt;(clazz: Class&amp;lt;*&amp;gt;): T {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (bufferMap.containsKey(clazz)) {
+        bufferMap[clazz]
+    } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; jsonString = sp.getString(getKeyOfClass(clazz), &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;{}&amp;#34;&lt;/span&gt;)
+        gson.fromJson(jsonString, clazz)
+    } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;as&lt;/span&gt; T
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;注解定义&#34;&gt;注解定义&lt;/h3&gt;
+&lt;p&gt;注意上面有一个&lt;code&gt;getKeyOfClass(clazz)&lt;/code&gt;，这个方法是怎么实现的？&lt;/p&gt;
+&lt;p&gt;其实如果照目前为止，只要保证定义的配置字段key互不相同就行了，那么可以直接用&lt;code&gt;clazz.canonicalName&lt;/code&gt;。不过我们这里的需求还希望实现一个能直接在手机操作的管理界面，所以用注解去定义下配置字段相关的信息会比较好。&lt;/p&gt;
+&lt;p&gt;首先新建一个kotlin模块（注意不是安卓模块），叫做libzeroconfig，用来放我们的注解，这样后面用到的地方直接导入这个模块就行了。&lt;/p&gt;
+&lt;p&gt;参考字节的ABManager，我这样定义我的注解&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.libzeroconfig&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;kotlin.reflect.KClass&lt;/span&gt;
+&lt;span style=&#34;color:#228b22&#34;&gt;/**
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * 标注于配置实体类之上，指定配置字段名
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * @param key 配置字段
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * @param title 配置项名（给人看的）
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * @param owner 负责人
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * @param scope 所属的业务线
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; */&lt;/span&gt;
+&lt;span style=&#34;color:#707a7c&#34;&gt;@Target&lt;/span&gt;(AnnotationTarget.CLASS)
+&lt;span style=&#34;color:#707a7c&#34;&gt;@Retention&lt;/span&gt;(AnnotationRetention.SOURCE)
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;annotation&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;ZeroConfig&lt;/span&gt;(
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; key: String,
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; title: String = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;,
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; owner: String,
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; scope: KClass&amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;out&lt;/span&gt; ZeroScope&amp;gt; = DefaultScope::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;
+&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;要求key和owner必须填写，title是这个配置在本地管理面板中显示的名字。一目了然。&lt;/p&gt;
+&lt;p&gt;这个注解要标在定义的配置实体类上，注意如果是data class要求所有字段都提供默认值，因为否则的话gson反射创建对象的时候会因为data class没有默认构造函数遇到问题。虽然这个问题可以通过应用kotlin-noarg插件解决，但我觉得强制要求所有配置类都提供所有字段的默认值也不错。&lt;/p&gt;
+&lt;h3 id=&#34;注解的编译期处理&#34;&gt;注解的编译期处理&lt;/h3&gt;
+&lt;p&gt;Retention指定的合适，注解是可以被带到运行期间的。看springboot的一大票注解，上面指定的都是&lt;code&gt;@Retention(RetentionPolicy.RUNTIME)&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;但你可以注意到我上面注解定义的代码并没有这么做，安卓上大家基本都尽量不这么做。springboot可以在运行时递归扫描注解，但我们安卓手机上来说这个开销就太大了。&lt;/p&gt;
+&lt;p&gt;所以要在编译期间把这个事情（扫描注解信息）办妥，所以就要用到&lt;code&gt;kapt&lt;/code&gt;了（安卓上此前这个事情是用&lt;code&gt;annotationProcessor&lt;/code&gt;处理）&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;kapt 即 Kotlin annotation processing tool（Kotlin 注解处理工具）缩写。通过定义注解处理器可以在编译时对源代码进行检测生成额外的源文件和其他文件，之后编译生成的源文件和原来的源文件一起生成class文件。
+听上去很cool的操作，使人不由自主联想到如果生成的源文件还有这个注解咋办……答案是kapt会执行多次，直到没有新的注解发现为止。虽然这对我们这个需求没啥用处。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;仍然是定义一个kotlin模块，这次叫&lt;code&gt;libzeroconfigcompiler&lt;/code&gt;吧。在这里我们定义我们的注解处理器。&lt;/p&gt;
+&lt;p&gt;其实要做的事情就两件：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;定义一个类继承自AbstractProcessor&lt;/li&gt;
+&lt;li&gt;把你的类名（带包名）写到META-INF/service/javax.annotation.processing.Processor中&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;对于第二步，Google提供了一个叫&lt;code&gt;auto service&lt;/code&gt;的东西可以帮我们生成这个文件，只要引入后在你的Annotation Processor类上加上&lt;code&gt;@AutoService(Processor.class)&lt;/code&gt;就可以了。&lt;/p&gt;
+&lt;p&gt;至于这个注解处理类的实现，建议还是别看我代码了，有两个我认为很值得参考的项目：一个是前面提到的&lt;a href=&#34;https://github.com/google/auto/tree/master/service&#34;&gt;Auto Service&lt;/a&gt;，另一个是&lt;a href=&#34;https://github.com/greenrobot/EventBus/tree/master/EventBusAnnotationProcessor&#34;&gt;EventBus的注解处理器&lt;/a&gt;。&lt;/p&gt;
+&lt;h4 id=&#34;日志输出&#34;&gt;日志输出&lt;/h4&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;note&lt;/span&gt;(message: String) {
+    processingEnv.messager.printMessage(Diagnostic.Kind.NOTE, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$message&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\r\n&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;)
+}
+&lt;span style=&#34;color:#228b22&#34;&gt;// \r\n换行 https://medium.com/@cafonsomota/annotation-processor-printing-a-message-and-doing-it-in-a-new-line-1b6609e86e5c
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;warning&lt;/span&gt;(message: String) {
+    processingEnv.messager.printMessage(Diagnostic.Kind.WARNING, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$message&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\r\n&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;)
+}
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;error&lt;/span&gt;(message: String) {
+    processingEnv.messager.printMessage(Diagnostic.Kind.ERROR, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$message&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\r\n&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;)
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;注意：&lt;strong&gt;换行要用\r\n，另外error会让编译终止&lt;/strong&gt;&lt;/p&gt;
+&lt;h4 id=&#34;信息收集&#34;&gt;信息收集&lt;/h4&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;process&lt;/span&gt;(
+    annotations: MutableSet&amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;out&lt;/span&gt; TypeElement&amp;gt;,
+    roundEnvironment: RoundEnvironment
+): Boolean {
+    counter++
+    note(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Processing round &lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$counter&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;, new annotations: &lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${annotations.isNotEmpty()}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;, processingOver: &lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${roundEnvironment.processingOver()}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;)
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (roundEnvironment.processingOver() &amp;amp;&amp;amp; annotations.isNotEmpty()) {
+        error(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Unexpected processing state: annotations still available after processing over&amp;#34;&lt;/span&gt;)
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (annotations.isEmpty()) {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (wasWrittenToFile) {
+        error(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Unexpected processing state: annotations still available after writing.&amp;#34;&lt;/span&gt;)
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;
+    }
+    &lt;span style=&#34;color:#228b22&#34;&gt;// 收集数据
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    roundEnvironment.getElementsAnnotatedWith(ZeroConfig::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;.java).forEach { element -&amp;gt;
+        &lt;span style=&#34;color:#228b22&#34;&gt;//使用了注解的某个类
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (element !is TypeElement) {
+            error(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;注解只能标记在实体类上：&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$element&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;)
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; annotation = element.getAnnotation(ZeroConfig::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;.java)
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (!checkAnnotationValid(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;annotation&lt;/span&gt;)) &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;
+        classInfoMap[&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;annotation&lt;/span&gt;.key] = ZeroConfigInformation(
+            key = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;annotation&lt;/span&gt;.key,
+            clazz = element.qualifiedName.toString(),
+            title = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;annotation&lt;/span&gt;.title,
+            scope = getClassFromAnnotation { &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;annotation&lt;/span&gt;.scope.qualifiedName!! },
+            owner = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;annotation&lt;/span&gt;.owner
+        )
+    }
+    generateCode()
+    wasWrittenToFile = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;要注意的其实也就是annotationProcessor会多次执行，做好处理。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;通过filer写文件是不允许覆盖的，在此前我尝试用了某个有点dirty的方法绕过了这个限制，但后来看了EventBus的实现后改为了现在这个样子。
+注意上面有一个&lt;code&gt;scope = getClassFromAnnotation { annotation.scope.qualifiedName!! }&lt;/code&gt;，怎么说呢，又是一个有点dirty的实现：&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;/**
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * 获取annotation中的Class
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * https://www.jianshu.com/p/6822278f4771
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; */&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;getClassFromAnnotation&lt;/span&gt;(block: () -&amp;gt; String): String {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;try&lt;/span&gt; {
+        block()
+    } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;catch&lt;/span&gt; (e: MirroredTypeException) {
+        e.typeMirror.toString()
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;因为定义的类还没编译，所以会抛出异常，然后在异常中拿到了这个类名……想到这个方法的人真是鬼才。&lt;/p&gt;
+&lt;h4 id=&#34;kotlin代码生成&#34;&gt;Kotlin代码生成&lt;/h4&gt;
+&lt;p&gt;KotlinPoet，使用方法和javapoet类似。它原来有个slogan挺吸引我的，大意是用最美的Kotlin代码生成最美的Kotlin代码。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://square.github.io/kotlinpoet/&#34;&gt;KotlinPoet - KotlinPoet (square.github.io)&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;其实我们要生成的类很简单，只拼接字符串就能完成，&lt;em&gt;但用KotlinPoet显然逼格高不少。&lt;/em&gt;&lt;/p&gt;
+&lt;h3 id=&#34;初始化&#34;&gt;初始化&lt;/h3&gt;
+&lt;p&gt;前面步骤之后就已经生成了多个类文件了，他们形如&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;ZeroConfigHolder&lt;/span&gt; : IZeroConfigHolder {
+  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;getValue&lt;/span&gt;(): Map&amp;lt;String, ZeroConfigInformation&amp;gt; = mapOf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;metrics_config&amp;#34;&lt;/span&gt; to
+      top.ntutn.libzeroconfig.ZeroConfigInformation(key=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;metrics_config&amp;#34;&lt;/span&gt;,title=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;埋点配置&amp;#34;&lt;/span&gt;,clazz=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;top.ntutn.commonutil.MetricsConfig&amp;#34;&lt;/span&gt;,scope=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;top.ntutn.libzeroconfig.DefaultScope&amp;#34;&lt;/span&gt;,owner=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;liuhaixin.zero&amp;#34;&lt;/span&gt;))
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;但我们还是要在启动时注册一下，这样就可以在管理面板枚举出所有配置项了。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;ZeroConfigHelper.&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;init&lt;/span&gt;(applicationContext)
+    .addConfigHolder(top.ntutn.zeroconfigutil.ZeroConfigHolder())
+    .addConfigHolder(ZeroConfigHolder())
+    .addConfigHolder(top.ntutn.commonutil.ZeroConfigHolder())
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;管理面板&#34;&gt;管理面板&lt;/h3&gt;
+&lt;p&gt;为了提供一个通用的配置编辑界面，还是准备个json的存取方式比较合理。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;readRawConfig&lt;/span&gt;(key: String): String? {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; clazz = getClassByKey(key) ?: &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; rawString = sp.getString(getKeyOfClass(clazz), &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;)
+    &lt;span style=&#34;color:#228b22&#34;&gt;// 正确显示配置的默认值
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (rawString == &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;) {
+        rawString = gson.toJson(clazz.newInstance())
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; rawString
+}
+&lt;span style=&#34;color:#707a7c&#34;&gt;@Throws&lt;/span&gt;(ClassNotFoundException::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;)
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;saveRawConfig&lt;/span&gt;(key: String, value: String) {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; clazz = getClassByKey(key) ?: &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;throw&lt;/span&gt; ClassNotFoundException(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;未找到配置项：&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$key&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;)
+    bufferMap.remove(clazz)
+    sp.edit {
+        putString(getKeyOfClass(clazz), value)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;剩下的就是准备一个配置列表和编辑界面，也没什么值得说的了。&lt;/p&gt;
+- https://ntutn.top/posts/debugentrance%E5%92%8Cdebugconfig/ - CC BY-SA 4.0</description>
+        </item>
     
     
     
@@ -850,138 +1082,6 @@ transaction.commit()
 &lt;li&gt;onDetach() 当Fragment与Activity解除关联时调用&lt;/li&gt;
 &lt;/ul&gt;
 - https://ntutn.top/posts/fragment/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>android项目开发：UI设计</title>
-        <link>https://ntutn.top/posts/ui%E8%AE%BE%E8%AE%A1/</link>
-        <pubDate>Mon, 21 Dec 2020 03:11:37 +0800</pubDate>
-        
-        <guid>https://ntutn.top/posts/ui%E8%AE%BE%E8%AE%A1/</guid>
-        <description>归零幻想 https://ntutn.top/posts/ui%E8%AE%BE%E8%AE%A1/ -&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;仍然是《第一行代码》的学习笔记，这里记录的东西相对少一点，UI上的东西还是更多在实际项目中感受到。比如我想没有必要写TextView的介绍吧。&lt;/p&gt;
-&lt;h2 id=&#34;控件的使用方法&#34;&gt;控件的使用方法&lt;/h2&gt;
-&lt;p&gt;&lt;code&gt;dp&lt;/code&gt;是一种屏幕密度无关的尺寸单位，可以保证在不同分辨率的手机上显示效果尽可能一致。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;match_parent&lt;/code&gt;表示让当前控件大小和父布局的大小一致。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;wrap_content&lt;/code&gt;表示让当前控件的大小能正好包裹里面的内容。&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;android:gravity&lt;/code&gt;指定控件内的内容对齐方式，有&lt;code&gt;top&lt;/code&gt;、&lt;code&gt;bottom&lt;/code&gt;、&lt;code&gt;start&lt;/code&gt;、&lt;code&gt;end&lt;/code&gt;、&lt;code&gt;center&lt;/code&gt;等可选，可以用&lt;code&gt;|&lt;/code&gt;指定多个值。比如&lt;code&gt;center&lt;/code&gt;等价于&lt;code&gt;center_vertical|center_horizonal&lt;/code&gt;。&lt;/p&gt;
-&lt;h2 id=&#34;基本布局&#34;&gt;基本布局&lt;/h2&gt;
-&lt;h3 id=&#34;linearlayout&#34;&gt;LinearLayout&lt;/h3&gt;
-&lt;p&gt;线性布局，通过&lt;code&gt;android:orientation&lt;/code&gt;指定方向。&lt;/p&gt;
-&lt;p&gt;有一个重要属性：&lt;code&gt;android:layout_weight&lt;/code&gt;，它将控件已经占用的空间减掉后按照比重分给各个控件。一般我们直接指定&lt;code&gt;android:layout_width&lt;/code&gt;为0dp，而给它指定一个比重，这样控件的尺寸将占满剩余空间。&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;h3 id=&#34;relativelayout&#34;&gt;RelativeLayout&lt;/h3&gt;
-&lt;p&gt;相对布局，复杂，但有迹可循。&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;utf-8&amp;quot;?&amp;gt;
-&amp;lt;RelativeLayout xmlns:android=&amp;quot;http://schemas.android.com/apk/res/android&amp;quot;
-    xmlns:tools=&amp;quot;http://schemas.android.com/tools&amp;quot;
-    android:layout_width=&amp;quot;match_parent&amp;quot;
-    android:layout_height=&amp;quot;match_parent&amp;quot;
-    tools:context=&amp;quot;.MainActivity&amp;quot;&amp;gt;
-    &amp;lt;Button
-        android:id=&amp;quot;@+id/button1&amp;quot;
-        android:layout_width=&amp;quot;wrap_content&amp;quot;
-        android:layout_height=&amp;quot;wrap_content&amp;quot;
-        android:layout_alignParentLeft=&amp;quot;true&amp;quot;
-        android:layout_alignParentTop=&amp;quot;true&amp;quot;
-        android:text=&amp;quot;Button1&amp;quot; /&amp;gt;
-    &amp;lt;Button
-        android:id=&amp;quot;@+id/button2&amp;quot;
-        android:layout_width=&amp;quot;wrap_content&amp;quot;
-        android:layout_height=&amp;quot;wrap_content&amp;quot;
-        android:layout_alignParentTop=&amp;quot;true&amp;quot;
-        android:layout_alignParentRight=&amp;quot;true&amp;quot;
-        android:text=&amp;quot;Button2&amp;quot; /&amp;gt;
-    &amp;lt;Button
-        android:id=&amp;quot;@+id/button3&amp;quot;
-        android:layout_width=&amp;quot;wrap_content&amp;quot;
-        android:layout_height=&amp;quot;wrap_content&amp;quot;
-        android:layout_centerInParent=&amp;quot;true&amp;quot;
-        android:text=&amp;quot;Button3&amp;quot; /&amp;gt;
-    &amp;lt;Button
-        android:id=&amp;quot;@+id/button4&amp;quot;
-        android:layout_width=&amp;quot;wrap_content&amp;quot;
-        android:layout_height=&amp;quot;wrap_content&amp;quot;
-        android:layout_alignParentLeft=&amp;quot;true&amp;quot;
-        android:layout_alignParentBottom=&amp;quot;true&amp;quot;
-        android:text=&amp;quot;Button4&amp;quot; /&amp;gt;
-    &amp;lt;Button
-        android:id=&amp;quot;@+id/button5&amp;quot;
-        android:layout_width=&amp;quot;wrap_content&amp;quot;
-        android:layout_height=&amp;quot;wrap_content&amp;quot;
-        android:layout_alignParentRight=&amp;quot;true&amp;quot;
-        android:layout_alignParentBottom=&amp;quot;true&amp;quot;
-        android:text=&amp;quot;Button5&amp;quot; /&amp;gt;
-&amp;lt;/RelativeLayout&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;以上这段布局文件描述的就是一个相对布局，共有5个按钮，分别在父布局的左上、右上、中间、左下、右下位置。&lt;/p&gt;
-&lt;p&gt;相对布局不仅可以相对于父布局，也可以相对于控件。以下描述了button3在中间，左上button1，右上button2，左下button4，右下button5的布局场景。&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;utf-8&amp;quot;?&amp;gt;
-&amp;lt;RelativeLayout xmlns:android=&amp;quot;http://schemas.android.com/apk/res/android&amp;quot;
-    xmlns:tools=&amp;quot;http://schemas.android.com/tools&amp;quot;
-    android:layout_width=&amp;quot;match_parent&amp;quot;
-    android:layout_height=&amp;quot;match_parent&amp;quot;
-    tools:context=&amp;quot;.MainActivity&amp;quot;&amp;gt;
-    &amp;lt;Button
-        android:id=&amp;quot;@+id/button3&amp;quot;
-        android:layout_width=&amp;quot;wrap_content&amp;quot;
-        android:layout_height=&amp;quot;wrap_content&amp;quot;
-        android:layout_centerInParent=&amp;quot;true&amp;quot;
-        android:text=&amp;quot;Button3&amp;quot; /&amp;gt;
-    &amp;lt;Button
-        android:id=&amp;quot;@+id/button1&amp;quot;
-        android:layout_width=&amp;quot;wrap_content&amp;quot;
-        android:layout_height=&amp;quot;wrap_content&amp;quot;
-        android:layout_above=&amp;quot;@id/button3&amp;quot;
-        android:layout_toLeftOf=&amp;quot;@id/button3&amp;quot;
-        android:text=&amp;quot;Button1&amp;quot; /&amp;gt;
-    &amp;lt;Button
-        android:id=&amp;quot;@+id/button2&amp;quot;
-        android:layout_width=&amp;quot;wrap_content&amp;quot;
-        android:layout_height=&amp;quot;wrap_content&amp;quot;
-        android:layout_above=&amp;quot;@id/button3&amp;quot;
-        android:layout_toRightOf=&amp;quot;@id/button3&amp;quot;
-        android:text=&amp;quot;Button2&amp;quot; /&amp;gt;
-    &amp;lt;Button
-        android:id=&amp;quot;@+id/button4&amp;quot;
-        android:layout_width=&amp;quot;wrap_content&amp;quot;
-        android:layout_height=&amp;quot;wrap_content&amp;quot;
-        android:layout_below=&amp;quot;@id/button3&amp;quot;
-        android:layout_toLeftOf=&amp;quot;@id/button3&amp;quot;
-        android:text=&amp;quot;Button4&amp;quot; /&amp;gt;
-    &amp;lt;Button
-        android:id=&amp;quot;@+id/button5&amp;quot;
-        android:layout_width=&amp;quot;wrap_content&amp;quot;
-        android:layout_height=&amp;quot;wrap_content&amp;quot;
-        android:layout_below=&amp;quot;@id/button3&amp;quot;
-        android:layout_toRightOf=&amp;quot;@id/button3&amp;quot;
-        android:text=&amp;quot;Button5&amp;quot; /&amp;gt;
-&amp;lt;/RelativeLayout&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;framelayout&#34;&gt;FrameLayout&lt;/h3&gt;
-&lt;p&gt;帧布局，其内部组件将按顺序层叠到左上角。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;FrameLayout一直有foreground属性，而View在后续版本才支持，在一些需要做半透明效果的地方可以用FrameLayout的属性实现，减少控件层叠层数，保证兼容性。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&#34;自定义控件&#34;&gt;自定义控件&lt;/h2&gt;
-&lt;p&gt;安卓中所有的控件都是直接或间接继承自View的，而所有的布局都是继承自ViewGroup的。&lt;/p&gt;
-&lt;p&gt;View是安卓中最基本的一种UI组件，可以在屏幕上绘制一块矩形区域，并响应这块区域的各种事件。&lt;/p&gt;
-&lt;p&gt;ViewGroup是一种特殊的View，可以包含很多子View和子ViewGroup。&lt;/p&gt;
-&lt;h2 id=&#34;recyclerview&#34;&gt;RecyclerView&lt;/h2&gt;
-&lt;p&gt;基本用法：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;导入&lt;code&gt;androidx.recyclerview:recyclerview&lt;/code&gt;，&lt;/li&gt;
-&lt;li&gt;定义类继承RecyclerView.Adapter和RecyclerView.ViewHolder。&lt;/li&gt;
-&lt;li&gt;实现。&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;使用DiffUtil可以简化数据更新的写法。&lt;/p&gt;
-&lt;p&gt;参考&lt;a href=&#34;https://github.com/zerofancy/ipviewer&#34;&gt;我的一个demo项目&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;常用布局管理器LinearLayoutManager（线性），此外还有GridLayoutManager（网格）和StaggeredGridLayoutManager（瀑布流）。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;LinearLayoutManager和PagerSnapHelper配合可以实现类似抖音的刷视频的效果。
-在引入&lt;code&gt;kotlin-android-extensions&lt;/code&gt;之后可以比较方便地在&lt;code&gt;onBindViewHolder&lt;/code&gt;方法中给具体的view赋值。&lt;/p&gt;
-&lt;/blockquote&gt;
-- https://ntutn.top/posts/ui%E8%AE%BE%E8%AE%A1/ - CC BY-SA 4.0</description>
         </item>
     
     
