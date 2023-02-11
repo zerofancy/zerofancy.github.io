@@ -1,87 +1,28 @@
 <!DOCTYPE html>
 <html><head>
 <title>ClassLoader双亲委托机制探究</title>
-
-
-
-
-<meta charset="utf-8">
-<meta name="X-UA-Compatible" content="IE=edge">
-<meta name="google-site-verification" content="">
-<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
-<meta content="telephone=no" name="format-detection">
-<meta name="description" content="最近在研究抖音进入热点内流的耗时问题，种种线索指向了类加载耗时上。为此，我研究了Java类加载的双亲委托机制，并尝试给出了优化建议。">
-<meta name="renderer" content="webkit">
-<meta name="theme-color" content="#ffffff">
-
-
-
-<meta property="og:title" content="ClassLoader双亲委托机制探究" />
-<meta property="og:description" content="最近在研究抖音进入热点内流的耗时问题，种种线索指向了类加载耗时上。为此，我研究了Java类加载的双亲委托机制，并尝试给出了优化建议。" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://ntutn.top/posts/classloader%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%89%98%E6%9C%BA%E5%88%B6%E6%8E%A2%E7%A9%B6/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2021-04-11T03:11:37+08:00" />
-<meta property="article:modified_time" content="2021-04-11T03:11:37+08:00" /><meta property="og:site_name" content="归零幻想" />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-<link rel="icon" href="//images.ntutn.top/favicon.ico">
-
-
-
-      <script src="/js/toc.js"></script>
-    
-    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
-<link rel="stylesheet" href="/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
-
-
-
-<link rel="stylesheet" href="/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
-
-
-<link rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Material+Icons">
-
-
-
-<script defer
-	src='https://static.cloudflareinsights.com/beacon.min.js'
-	data-cf-beacon='{"token": 5a03d307f5214109a1e7c8b2cf306a3d'>
+<meta charset="utf-8"/>
+<meta content="IE=edge" name="X-UA-Compatible"/>
+<meta content="" name="google-site-verification"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"/>
+<meta content="telephone=no" name="format-detection"/>
+<meta content="最近在研究抖音进入热点内流的耗时问题，种种线索指向了类加载耗时上。为此，我研究了Java类加载的双亲委托机制，并尝试给出了优化建议。" name="description"/>
+<meta content="webkit" name="renderer"/>
+<meta content="#ffffff" name="theme-color"/>
+<meta content="ClassLoader双亲委托机制探究" property="og:title"/>
+<meta content="最近在研究抖音进入热点内流的耗时问题，种种线索指向了类加载耗时上。为此，我研究了Java类加载的双亲委托机制，并尝试给出了优化建议。" property="og:description"/>
+<meta content="article" property="og:type"/>
+<meta content="https://ntutn.top/posts/classloader%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%89%98%E6%9C%BA%E5%88%B6%E6%8E%A2%E7%A9%B6/" property="og:url"/><meta content="posts" property="article:section"/>
+<meta content="2021-04-11T03:11:37+08:00" property="article:published_time"/>
+<meta content="2021-04-11T03:11:37+08:00" property="article:modified_time"/><meta content="归零幻想" property="og:site_name"/>
+<link href="//images.ntutn.top/favicon.ico" rel="icon"/>
+<script src="/js/toc.js"></script>
+<link href="/vendor/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen" rel="stylesheet"/>
+<link href="/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css?family=Material+Icons" rel="stylesheet"/>
+<script data-cf-beacon='{"token": 5a03d307f5214109a1e7c8b2cf306a3d' defer="" src="https://static.cloudflareinsights.com/beacon.min.js">
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <style>
     pre code {
         color: black;
@@ -89,7 +30,7 @@
     }
 </style>
 <script src="https://unpkg.com/zoomtastic@2.2.1"></script>
-<script src="https://unpkg.com/kotlin-playground@1" data-selector="code.language-kotlin"></script>
+<script data-selector="code.language-kotlin" src="https://unpkg.com/kotlin-playground@1"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function(event) { 
         document.querySelectorAll("div.post-body-wrapper img").forEach(function(element){
@@ -119,487 +60,207 @@
 	})();
 
 </script>
-
 </head>
 <body>
-    	<div id="app"><div id="sideContainer" class="side-container">
-    
-    <a class="a-block nav-head false" href="https://ntutn.top/">
-    
-        <div class="nav-title">
+<div id="app"><div class="side-container" id="sideContainer">
+<a class="a-block nav-head false" href="https://ntutn.top/">
+<div class="nav-title">
             归零幻想
         </div>
-        
-        <div class="nav-subtitle">
+<div class="nav-subtitle">
             零点还不算熬夜
         </div>
-        
-    </a>
-
-    <div class="nav-link-list">
-        
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="/project">
+</a>
+<div class="nav-link-list">
+<a class="a-block nav-link-item false" href="/project">
                 项目
             </a>
-            
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="/tags">
+<a class="a-block nav-link-item false" href="/tags">
                 标签
             </a>
-            
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="/zwiki">
+<a class="a-block nav-link-item false" href="/zwiki">
                 WIKI
             </a>
-            
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="/friends">
+<a class="a-block nav-link-item false" href="/friends">
                 友链
             </a>
-            
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="/about">
+<a class="a-block nav-link-item false" href="/about">
                 关于
             </a>
-            
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="/index.xml">
+<a class="a-block nav-link-item false" href="/index.xml">
                 RSS
             </a>
-            
-        
-            
-            
-            
-                
-            
-            
-            
-            <a class="a-block nav-link-item active" href="/posts">
+<a class="a-block nav-link-item active" href="/posts">
                 归档
             </a>
-            
-        
-    </div>
-
-    
-
-    <div class="nav-footer">
+</div>
+<div class="nav-footer">
         
 Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
-<br>
-移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
-<br>
+<br/>
+移植自 <a href="https://mak1t0.cc/" rel="noreferrer noopener" target="_blank">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" rel="noreferrer noopener" target="_blank">Journal.</a> <br/>
+<br/>
 
-&copy;
+©
 	
 	CC BY-SA 4.0
 	
 
     </div>
-    
-</div><div id="extraContainer" class="extra-container">
-    
-    
-    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
-
-
-	<div class="toc-content">
-	
-		
-		
-		
-		<center>- 目录 -</center>
-		
-		
-		<ul>
-			
-				
-				
-					
-						
-						
-						
-						
-							
-								
-									<ul>
-								
-							
-						
-						
-							<li>
-								<a href="#%e5%8f%8c%e4%ba%b2%e5%a7%94%e6%89%98%e6%9c%ba%e5%88%b6" onclick="onNavClick(`#双亲委托机制-nav`)" id="双亲委托机制-nav">
+</div><div class="extra-container" id="extraContainer">
+<div :class="{ invisible: scrollY &lt;= 140 }" class="toc animated-visibility">
+<div class="toc-content">
+<center>- 目录 -</center>
+<ul>
+<ul>
+<li>
+<a href="#%e5%8f%8c%e4%ba%b2%e5%a7%94%e6%89%98%e6%9c%ba%e5%88%b6" id="双亲委托机制-nav" onclick="onNavClick(`#双亲委托机制-nav`)">
 									双亲委托机制
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#pathclassloaderproxy%e5%ae%9e%e7%8e%b0" onclick="onNavClick(`#pathclassloaderproxy实现-nav`)" id="pathclassloaderproxy实现-nav">
+</li>
+<li>
+<a href="#pathclassloaderproxy%e5%ae%9e%e7%8e%b0" id="pathclassloaderproxy实现-nav" onclick="onNavClick(`#pathclassloaderproxy实现-nav`)">
 									PathClassLoaderProxy实现
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#%e8%ae%b0%e5%bd%95%e5%8a%a0%e8%bd%bd%e6%97%b6%e9%97%b4" onclick="onNavClick(`#记录加载时间-nav`)" id="记录加载时间-nav">
+</li>
+<li>
+<a href="#%e8%ae%b0%e5%bd%95%e5%8a%a0%e8%bd%bd%e6%97%b6%e9%97%b4" id="记录加载时间-nav" onclick="onNavClick(`#记录加载时间-nav`)">
 									记录加载时间
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#%e5%8f%8d%e5%b0%84%e8%bf%9b%e8%a1%8c%e7%b1%bb%e5%8a%a0%e8%bd%bd" onclick="onNavClick(`#反射进行类加载-nav`)" id="反射进行类加载-nav">
+</li>
+<li>
+<a href="#%e5%8f%8d%e5%b0%84%e8%bf%9b%e8%a1%8c%e7%b1%bb%e5%8a%a0%e8%bd%bd" id="反射进行类加载-nav" onclick="onNavClick(`#反射进行类加载-nav`)">
 									反射进行类加载
 								</a>
-							</li>
-						
-						
-					
-				
-			
-		</ul>
-	</div>
-
+</li>
+</ul>
+</ul></div>
 </div>
-    
-    <div class="pagination">
-        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
-            <i class="material-icons pagination-action-icon">
+<div class="pagination">
+<a :class="{ invisible: scrollY == 0 }" class="pagination-action animated-visibility" href="#top" id="globalBackToTop">
+<i class="material-icons pagination-action-icon">
                 keyboard_arrow_up
             </i>
-        </a>
-        
-        <a type="button" class="pagination-action" id="darkModeToggleButton">
-            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+</a>
+<a class="pagination-action" id="darkModeToggleButton" type="button">
+<span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
                 dark_mode
             </span>
-        </a>
-        
-        
-    </div>
+</a>
 </div>
-<div class="single-column-drawer-container" id="drawer"
-     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
-    <div class="drawer-content">
-        <div class="drawer-menu">
-            
-            
-            
-                
-                
-                
-                
-                
-                <a class="a-block drawer-menu-item false" href="/project">
+</div>
+<div class="single-column-drawer-container" id="drawer" v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+<div class="drawer-content">
+<div class="drawer-menu">
+<a class="a-block drawer-menu-item false" href="/project">
                     项目
                 </a>
-                
-            
-                
-                
-                
-                
-                
-                <a class="a-block drawer-menu-item false" href="/tags">
+<a class="a-block drawer-menu-item false" href="/tags">
                     标签
                 </a>
-                
-            
-                
-                
-                
-                
-                
-                <a class="a-block drawer-menu-item false" href="/zwiki">
+<a class="a-block drawer-menu-item false" href="/zwiki">
                     WIKI
                 </a>
-                
-            
-                
-                
-                
-                
-                
-                <a class="a-block drawer-menu-item false" href="/friends">
+<a class="a-block drawer-menu-item false" href="/friends">
                     友链
                 </a>
-                
-            
-                
-                
-                
-                
-                
-                <a class="a-block drawer-menu-item false" href="/about">
+<a class="a-block drawer-menu-item false" href="/about">
                     关于
                 </a>
-                
-            
-                
-                
-                
-                
-                
-                <a class="a-block drawer-menu-item false" href="/index.xml">
+<a class="a-block drawer-menu-item false" href="/index.xml">
                     RSS
                 </a>
-                
-            
-                
-                
-                
-                    
-                
-                
-                
-                <a class="a-block drawer-menu-item active" href="/posts">
+<a class="a-block drawer-menu-item active" href="/posts">
                     归档
                 </a>
-                
-            
-            
-            <div class="toc">
-
-
-	<div class="toc-content">
-	
-		
-		
-		
-		<center>- 目录 -</center>
-		
-		
-		<ul>
-			
-				
-				
-					
-						
-						
-						
-						
-							
-								
-									<ul>
-								
-							
-						
-						
-							<li>
-								<a href="#%e5%8f%8c%e4%ba%b2%e5%a7%94%e6%89%98%e6%9c%ba%e5%88%b6" onclick="onNavClick(`#双亲委托机制-nav`)" id="双亲委托机制-nav">
+<div class="toc">
+<div class="toc-content">
+<center>- 目录 -</center>
+<ul>
+<ul>
+<li>
+<a href="#%e5%8f%8c%e4%ba%b2%e5%a7%94%e6%89%98%e6%9c%ba%e5%88%b6" id="双亲委托机制-nav" onclick="onNavClick(`#双亲委托机制-nav`)">
 									双亲委托机制
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#pathclassloaderproxy%e5%ae%9e%e7%8e%b0" onclick="onNavClick(`#pathclassloaderproxy实现-nav`)" id="pathclassloaderproxy实现-nav">
+</li>
+<li>
+<a href="#pathclassloaderproxy%e5%ae%9e%e7%8e%b0" id="pathclassloaderproxy实现-nav" onclick="onNavClick(`#pathclassloaderproxy实现-nav`)">
 									PathClassLoaderProxy实现
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#%e8%ae%b0%e5%bd%95%e5%8a%a0%e8%bd%bd%e6%97%b6%e9%97%b4" onclick="onNavClick(`#记录加载时间-nav`)" id="记录加载时间-nav">
+</li>
+<li>
+<a href="#%e8%ae%b0%e5%bd%95%e5%8a%a0%e8%bd%bd%e6%97%b6%e9%97%b4" id="记录加载时间-nav" onclick="onNavClick(`#记录加载时间-nav`)">
 									记录加载时间
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#%e5%8f%8d%e5%b0%84%e8%bf%9b%e8%a1%8c%e7%b1%bb%e5%8a%a0%e8%bd%bd" onclick="onNavClick(`#反射进行类加载-nav`)" id="反射进行类加载-nav">
+</li>
+<li>
+<a href="#%e5%8f%8d%e5%b0%84%e8%bf%9b%e8%a1%8c%e7%b1%bb%e5%8a%a0%e8%bd%bd" id="反射进行类加载-nav" onclick="onNavClick(`#反射进行类加载-nav`)">
 									反射进行类加载
 								</a>
-							</li>
-						
-						
-					
-				
-			
-		</ul>
-	</div>
-
+</li>
+</ul>
+</ul></div>
 </div>
-            
-        </div>
-    </div>
+</div>
+</div>
 </div>
 <transition name="fade">
-    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+<div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
 </transition>
-<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
-    <div id="navBackground" class="nav-background"></div>
-    <div class="container container-narrow nav-content">
-        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
-            <i class="material-icons">
+<nav class="navbar sticky-top navbar-light single-column-nav-container" id="navBar">
+<div class="nav-background" id="navBackground"></div>
+<div class="container container-narrow nav-content">
+<button class="nav-dropdown-toggle" id="nav_dropdown_btn" type="button" v-on:click="toggleDrawer">
+<i class="material-icons">
                 menu
             </i>
-        </button>
-        <a id="navTitle" class="navbar-brand" href="https://ntutn.top/">
+</button>
+<a class="navbar-brand" href="https://ntutn.top/" id="navTitle">
             归零幻想
         </a>
-        
-        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
-            <i class="material-icons" id="darkModeToggleIcon2">
+<button class="nav-darkmode-toggle" id="darkModeToggleButton2" type="button">
+<i class="material-icons" id="darkModeToggleIcon2">
                 dark_mode
             </i>
-        </button>
-        
-    </div>
-</nav>
-<div class="single-column-header-container" id="pageHead"
-     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
-    <a href="https://ntutn.top/">
-        <div class="single-column-header-title">归零幻想</div>
-        
-        <div class="single-column-header-subtitle">零点还不算熬夜</div>
-        
-
-    </a>
+</button>
 </div>
-
-            <div id="content">
-                <div id="streamContainer" class="stream-container">
-
-    <div class="post-list-container post-list-container-shadow">
-        <div class="post">
-            
-            
-            
-
-            <div class="post-head-wrapper-text-only"
-                
-            >
-                <div class="post-title">
+</nav>
+<div class="single-column-header-container" id="pageHead" v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+<a href="https://ntutn.top/">
+<div class="single-column-header-title">归零幻想</div>
+<div class="single-column-header-subtitle">零点还不算熬夜</div>
+</a>
+</div>
+<div id="content">
+<div class="stream-container" id="streamContainer">
+<div class="post-list-container post-list-container-shadow">
+<div class="post">
+<div class="post-head-wrapper-text-only">
+<div class="post-title">
                     ClassLoader双亲委托机制探究
                     
                     <div class="post-subtitle">
                         最近在研究抖音进入热点内流的耗时问题，种种线索指向了类加载耗时上。为此，我研究了Java类加载的双亲委托机制，并尝试给出了优化建议。
                     </div>
-                    
-                    <div class="post-meta">
-                        
-                        <time itemprop="datePublished">
+<div class="post-meta">
+<time itemprop="datePublished">
                             2021-04-11 03:11
                         </time>
-                        
-
-                        
-                            <i class="material-icons" style="">folder</i>
-                                <a href="/categories/%E5%AD%A6%E4%B9%A0">学习</a>
-                                &nbsp;
+<i class="material-icons" style="">folder</i>
+<a href="/categories/%E5%AD%A6%E4%B9%A0">学习</a>
+                                 
                         
 
                         
                             <i class="material-icons" style="">label</i>
-                            
-                                <a href="/tags/java">Java</a>
-                                &nbsp;
+<a href="/tags/java">Java</a>
+                                 
                             
                                 <a href="/tags/%E5%AE%89%E5%8D%93">安卓</a>
-                                &nbsp;
+                                 
                             
                                 <a href="/tags/%E5%8F%8D%E5%B0%84">反射</a>
-                                &nbsp;
+                                 
                             
                         
                         
@@ -615,18 +276,15 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
                             12 s.
                         
                     </div>
-                </div>
-            </div>
-            
-            <div class="post-body-wrapper">
-                
-                <div class="post-body" v-pre>
-                
-                    <!-- raw HTML omitted -->
+</div>
+</div>
+<div class="post-body-wrapper">
+<div class="post-body" v-pre="">
+<!-- raw HTML omitted -->
 <p>最近在研究抖音进入热点内流的耗时问题，种种线索指向了类加载耗时上。为此，我研究了Java类加载的双亲委托机制，并尝试给出了优化建议。</p>
 <h2 id="双亲委托机制">双亲委托机制</h2>
 <p>双亲委托机制中最重要的是loadClass方法，让我们看看它是怎么实现的。</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">    <span style="color:#8b008b;font-weight:bold">protected</span> Class&lt;?&gt; loadClass(String name, <span style="color:#00688b;font-weight:bold">boolean</span> resolve)
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4" tabindex="0"><code class="language-java" data-lang="java">    <span style="color:#8b008b;font-weight:bold">protected</span> Class&lt;?&gt; loadClass(String name, <span style="color:#00688b;font-weight:bold">boolean</span> resolve)
         <span style="color:#8b008b;font-weight:bold">throws</span> ClassNotFoundException
     {
             <span style="color:#228b22">// First, check if the class has already been loaded
@@ -662,7 +320,7 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <blockquote>
 <p>Talk is cheap, show me the code.</p>
 </blockquote>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">ClassLoaderProxy</span> : ClassLoader() {
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4" tabindex="0"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">ClassLoaderProxy</span> : ClassLoader() {
     <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">findClass</span>(name: String?): Class&lt;*&gt; {
         <span style="color:#8b008b;font-weight:bold">if</span> (name != <span style="color:#8b008b;font-weight:bold">null</span> &amp;&amp; recording) loadedClass.add(name)
         <span style="color:#8b008b;font-weight:bold">throw</span> ClassNotFoundException()
@@ -673,30 +331,30 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
         <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">var</span> hooked = <span style="color:#8b008b;font-weight:bold">false</span>
         <span style="color:#707a7c">@JvmStatic</span>
         <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">inject</span>(context: Context): Boolean {
-            Log.w(ClassLoaderWrapper2::<span style="color:#8b008b;font-weight:bold">class</span>.java.simpleName, <span style="color:#cd5555">&#34;Hook开始&#34;</span>)
+            Log.w(ClassLoaderWrapper2::<span style="color:#8b008b;font-weight:bold">class</span>.java.simpleName, <span style="color:#cd5555">"Hook开始"</span>)
             <span style="color:#8b008b;font-weight:bold">try</span> {
                 <span style="color:#8b008b;font-weight:bold">val</span> originClassLoader = context.classLoader
-                Log.d(<span style="color:#cd5555">&#34;ClassLoader类型&#34;</span>, originClassLoader.javaClass.simpleName)
+                Log.d(<span style="color:#cd5555">"ClassLoader类型"</span>, originClassLoader.javaClass.simpleName)
                 <span style="color:#8b008b;font-weight:bold">val</span> delegateClassLoader = ClassLoaderWrapper2()
                 setParent(delegateClassLoader, originClassLoader.parent)
                 setParent(originClassLoader, delegateClassLoader)
-                Log.w(ClassLoaderWrapper2::<span style="color:#8b008b;font-weight:bold">class</span>.java.simpleName, <span style="color:#cd5555">&#34;Hook成功&#34;</span>)
+                Log.w(ClassLoaderWrapper2::<span style="color:#8b008b;font-weight:bold">class</span>.java.simpleName, <span style="color:#cd5555">"Hook成功"</span>)
                 hooked = <span style="color:#8b008b;font-weight:bold">true</span>
                 <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">true</span>
             } <span style="color:#8b008b;font-weight:bold">catch</span> (e: Throwable) {
             }
-            Log.e(ClassLoaderWrapper2::<span style="color:#8b008b;font-weight:bold">class</span>.java.simpleName, <span style="color:#cd5555">&#34;Hook没有成功&#34;</span>)
+            Log.e(ClassLoaderWrapper2::<span style="color:#8b008b;font-weight:bold">class</span>.java.simpleName, <span style="color:#cd5555">"Hook没有成功"</span>)
             <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">false</span>
         }
         <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">setParent</span>(classLoader: ClassLoader, newParent: ClassLoader) {
-            <span style="color:#8b008b;font-weight:bold">val</span> parentField = ClassLoader::<span style="color:#8b008b;font-weight:bold">class</span>.java.getDeclaredField(<span style="color:#cd5555">&#34;parent&#34;</span>)
+            <span style="color:#8b008b;font-weight:bold">val</span> parentField = ClassLoader::<span style="color:#8b008b;font-weight:bold">class</span>.java.getDeclaredField(<span style="color:#cd5555">"parent"</span>)
             parentField.isAccessible = <span style="color:#8b008b;font-weight:bold">true</span>
             parentField.<span style="color:#8b008b;font-weight:bold">set</span>(classLoader, newParent)
         }
         <span style="color:#707a7c">@Throws</span>(IllegalStateException::<span style="color:#8b008b;font-weight:bold">class</span>)
         <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">checkHookState</span>() {
             <span style="color:#8b008b;font-weight:bold">if</span> (!hooked) {
-                <span style="color:#8b008b;font-weight:bold">throw</span> IllegalStateException(<span style="color:#cd5555">&#34;hookPackageClassLoader没有执行成功！&#34;</span>)
+                <span style="color:#8b008b;font-weight:bold">throw</span> IllegalStateException(<span style="color:#cd5555">"hookPackageClassLoader没有执行成功！"</span>)
             }
         }
         <span style="color:#707a7c">@Throws</span>(IllegalStateException::<span style="color:#8b008b;font-weight:bold">class</span>, RuntimeException::<span style="color:#8b008b;font-weight:bold">class</span>)
@@ -704,7 +362,7 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
             checkHookState()
             synchronized(recording) {
                 <span style="color:#8b008b;font-weight:bold">if</span> (recording) {
-                    <span style="color:#8b008b;font-weight:bold">throw</span> RuntimeException(<span style="color:#cd5555">&#34;已经存在正在监听的任务！&#34;</span>)
+                    <span style="color:#8b008b;font-weight:bold">throw</span> RuntimeException(<span style="color:#cd5555">"已经存在正在监听的任务！"</span>)
                 }
                 loadedClass.clear()
                 recording = <span style="color:#8b008b;font-weight:bold">true</span>
@@ -715,7 +373,7 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
             checkHookState()
             synchronized(recording) {
                 <span style="color:#8b008b;font-weight:bold">if</span> (!recording) {
-                    <span style="color:#8b008b;font-weight:bold">throw</span> RuntimeException(<span style="color:#cd5555">&#34;当前没有在监听！&#34;</span>)
+                    <span style="color:#8b008b;font-weight:bold">throw</span> RuntimeException(<span style="color:#cd5555">"当前没有在监听！"</span>)
                 }
                 recording = <span style="color:#8b008b;font-weight:bold">false</span>
                 block.invoke(loadedClass)
@@ -725,12 +383,12 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 }
 </code></pre></div><p>因为我们并不需要做实际的加载，只要抛出异常，加载还是交给我们儿子PathClassLoader就可以了。</p>
 <h2 id="记录加载时间">记录加载时间</h2>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.hookpackageclassloader</span>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4" tabindex="0"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.hookpackageclassloader</span>
 <span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.content.Context</span>
 <span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.util.Log</span>
 <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">ClassLoaderWrapper</span>(<span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> realClassLoader: ClassLoader) : ClassLoader() {
     <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> findClassMethod <span style="color:#8b008b;font-weight:bold">by</span> lazy {
-        ClassLoader::<span style="color:#8b008b;font-weight:bold">class</span>.java.getDeclaredMethod(<span style="color:#cd5555">&#34;findClass&#34;</span>, String::<span style="color:#8b008b;font-weight:bold">class</span>.java).apply {
+        ClassLoader::<span style="color:#8b008b;font-weight:bold">class</span>.java.getDeclaredMethod(<span style="color:#cd5555">"findClass"</span>, String::<span style="color:#8b008b;font-weight:bold">class</span>.java).apply {
             isAccessible = <span style="color:#8b008b;font-weight:bold">true</span>
         }
     }
@@ -747,7 +405,7 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
         <span style="color:#8b008b;font-weight:bold">if</span> (c == <span style="color:#8b008b;font-weight:bold">null</span>) {
             c = findClassMethod.invoke(realClassLoader, name) <span style="color:#8b008b;font-weight:bold">as</span> Class&lt;*&gt;?
         }
-        Log.e(<span style="color:#cd5555">&#34;classloader&#34;</span>, <span style="color:#cd5555">&#34;load class: </span><span style="color:#cd5555">$name</span><span style="color:#cd5555">&#34;</span>)
+        Log.e(<span style="color:#cd5555">"classloader"</span>, <span style="color:#cd5555">"load class: </span><span style="color:#cd5555">$name</span><span style="color:#cd5555">"</span>)
         loadedClasses.add(name.toString() to System.currentTimeMillis() - startTime)
         <span style="color:#8b008b;font-weight:bold">return</span> c!!
     }
@@ -756,10 +414,10 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
         <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">var</span> recording = <span style="color:#8b008b;font-weight:bold">false</span>
         <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">var</span> hooked = <span style="color:#8b008b;font-weight:bold">false</span>
         <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> preloadClasses = setOf(
-            <span style="color:#cd5555">&#34;kotlin.collections.CollectionsKt&#34;</span>,
-            <span style="color:#cd5555">&#34;kotlin.Triple&#34;</span>,
-            <span style="color:#cd5555">&#34;top.ntutn.hookpackageclassloader.ClassLoaderWrapper&#34;</span>,
-            <span style="color:#cd5555">&#34;top.ntutn.hookpackageclassloader.ClassLoaderWrapper</span><span style="color:#cd5555">\$</span><span style="color:#cd5555">Companion&#34;</span>
+            <span style="color:#cd5555">"kotlin.collections.CollectionsKt"</span>,
+            <span style="color:#cd5555">"kotlin.Triple"</span>,
+            <span style="color:#cd5555">"top.ntutn.hookpackageclassloader.ClassLoaderWrapper"</span>,
+            <span style="color:#cd5555">"top.ntutn.hookpackageclassloader.ClassLoaderWrapper</span><span style="color:#cd5555">\$</span><span style="color:#cd5555">Companion"</span>
         )
         <span style="color:#707a7c">@JvmStatic</span>
         <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">inject</span>(context: Context): Boolean {
@@ -776,19 +434,19 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
                 hooked = <span style="color:#8b008b;font-weight:bold">true</span>
                 <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">true</span>
             } <span style="color:#8b008b;font-weight:bold">catch</span> (e: Exception) {
-                Log.e(ClassLoaderWrapper3::<span style="color:#8b008b;font-weight:bold">class</span>.simpleName, <span style="color:#cd5555">&#34;hook失败&#34;</span>)
+                Log.e(ClassLoaderWrapper3::<span style="color:#8b008b;font-weight:bold">class</span>.simpleName, <span style="color:#cd5555">"hook失败"</span>)
             }
             <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">false</span>
         }
         <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">setParent</span>(classLoader: ClassLoader, newParent: ClassLoader) {
-            <span style="color:#8b008b;font-weight:bold">val</span> parentField = ClassLoader::<span style="color:#8b008b;font-weight:bold">class</span>.java.getDeclaredField(<span style="color:#cd5555">&#34;parent&#34;</span>)
+            <span style="color:#8b008b;font-weight:bold">val</span> parentField = ClassLoader::<span style="color:#8b008b;font-weight:bold">class</span>.java.getDeclaredField(<span style="color:#cd5555">"parent"</span>)
             parentField.isAccessible = <span style="color:#8b008b;font-weight:bold">true</span>
             parentField.<span style="color:#8b008b;font-weight:bold">set</span>(classLoader, newParent)
         }
         <span style="color:#707a7c">@Throws</span>(IllegalStateException::<span style="color:#8b008b;font-weight:bold">class</span>)
         <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">checkHookState</span>() {
             <span style="color:#8b008b;font-weight:bold">if</span> (!hooked) {
-                <span style="color:#8b008b;font-weight:bold">throw</span> IllegalStateException(<span style="color:#cd5555">&#34;hook没有执行成功！&#34;</span>)
+                <span style="color:#8b008b;font-weight:bold">throw</span> IllegalStateException(<span style="color:#cd5555">"hook没有执行成功！"</span>)
             }
         }
         <span style="color:#707a7c">@Throws</span>(IllegalStateException::<span style="color:#8b008b;font-weight:bold">class</span>, RuntimeException::<span style="color:#8b008b;font-weight:bold">class</span>)
@@ -796,7 +454,7 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
             checkHookState()
             synchronized(recording) {
                 <span style="color:#8b008b;font-weight:bold">if</span> (recording) {
-                    <span style="color:#8b008b;font-weight:bold">throw</span> RuntimeException(<span style="color:#cd5555">&#34;已经存在正在监听的任务！&#34;</span>)
+                    <span style="color:#8b008b;font-weight:bold">throw</span> RuntimeException(<span style="color:#cd5555">"已经存在正在监听的任务！"</span>)
                 }
                 loadedClasses.clear()
                 recording = <span style="color:#8b008b;font-weight:bold">true</span>
@@ -807,7 +465,7 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
             checkHookState()
             synchronized(recording) {
                 <span style="color:#8b008b;font-weight:bold">if</span> (!recording) {
-                    <span style="color:#8b008b;font-weight:bold">throw</span> RuntimeException(<span style="color:#cd5555">&#34;当前没有在监听！&#34;</span>)
+                    <span style="color:#8b008b;font-weight:bold">throw</span> RuntimeException(<span style="color:#cd5555">"当前没有在监听！"</span>)
                 }
                 recording = <span style="color:#8b008b;font-weight:bold">false</span>
                 block.invoke(loadedClasses)
@@ -819,72 +477,40 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <h2 id="反射进行类加载">反射进行类加载</h2>
 <p>非常简单，就是用<code>Class.forName()</code>去加载了下这些类。</p>
 <p>既然用了反射，混淆问题怎么解决？</p>
-<p>幸运的是，对于一些简单的场景，ProGuard是可以帮我们处理的，其中就包括了直接使用<code>Class.forName(&quot;some class&quot;)</code>的情况。参见<a href="https://www.guardsquare.com/en/products/proguard/manual/introduction">ProGuard manual | Introduction | Guardsquare</a>。</p>
+<p>幸运的是，对于一些简单的场景，ProGuard是可以帮我们处理的，其中就包括了直接使用<code>Class.forName("some class")</code>的情况。参见<a href="https://www.guardsquare.com/en/products/proguard/manual/introduction">ProGuard manual | Introduction | Guardsquare</a>。</p>
 <p>遗憾的是，当这个字符串穿上马夹（比如放到了某个变量里再传给这个函数）似乎ProGuard就不认识了。因而，我只好用笨方法生成一大堆Class.forName()了。</p>
 <p>在demo中，这个方法正常work了，但在抖音的release包多半类会反射失败，此法不可行。按照我的思路之后如果还想继续看就只好看下怎样设计一个gradle插件，编译时从生成的mapping.txt解析出这些Class混淆后的名字再打到抖音的包里。成本很高而且我目前大概没有能力完成。</p>
 <p>一次失败的尝试呢。但总归也算学到一些东西。</p>
-
-                    
-                    <HR width="100%" id="EOF">
-		    <p style="color:#777;">最后修改于 2021-04-11</p>
-                    
-                </div>
-            </div>
-            
-            
-            <nav class="post-pagination">
-
-                
-                <a class="newer-posts" href="/posts/%E5%AE%89%E5%8D%93%E8%BF%9E%E8%BF%9E%E7%9C%8B%E6%B8%B8%E6%88%8F%E8%AE%BE%E8%AE%A1/">
-			下回<br>安卓连连看游戏设计
+<hr id="EOF" width="100%"/>
+<p style="color:#777;">最后修改于 2021-04-11</p>
+</div>
+</div>
+<nav class="post-pagination">
+<a class="newer-posts" href="/posts/%E5%AE%89%E5%8D%93%E8%BF%9E%E8%BF%9E%E7%9C%8B%E6%B8%B8%E6%88%8F%E8%AE%BE%E8%AE%A1/">
+			下回<br/>安卓连连看游戏设计
                 </a>
-                
-                
-                
-                <a class="older-posts" href="/posts/debugentrance%E5%92%8Cdebugconfig/">
-			上回<br>DebugEntrance和DebugConfig
+<a class="older-posts" href="/posts/debugentrance%E5%92%8Cdebugconfig/">
+			上回<br/>DebugEntrance和DebugConfig
                 </a>
-                
-            </nav>
-            <div class="post-comment-wrapper">
-                
-
-
-
-
-
-
-
-
-
-
-<script src="https://utteranc.es/client.js"
-        repo="zerofancy/zerofancy.github.io"
-        issue-term="title"
-        label=""
-        theme="github-light"
-        crossorigin="anonymous"
-        async>
+</nav>
+<div class="post-comment-wrapper">
+<script async="" crossorigin="anonymous" issue-term="title" label="" repo="zerofancy/zerofancy.github.io" src="https://utteranc.es/client.js" theme="github-light">
 </script>
-
-            </div>
-        </div>
-    </div>
-
-
-                    </div>
-            </div><div id="single-column-footer">
+</div>
+</div>
+</div>
+</div>
+</div><div id="single-column-footer">
 Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
-<br>
-移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
-<br>
+<br/>
+移植自 <a href="https://mak1t0.cc/" rel="noreferrer noopener" target="_blank">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" rel="noreferrer noopener" target="_blank">Journal.</a> <br/>
+<br/>
 
-&copy;
+©
 	
 	CC BY-SA 4.0
 	
 </div>
-            </div>
-    
-    <script src="/js/journal.js"></script></body>
+</div>
+<script src="/js/journal.js"></script></body>
 </html>

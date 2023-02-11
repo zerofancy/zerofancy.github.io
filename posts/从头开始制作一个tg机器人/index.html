@@ -1,87 +1,28 @@
 <!DOCTYPE html>
 <html><head>
 <title>从头开始制作一个tg机器人</title>
-
-
-
-
-<meta charset="utf-8">
-<meta name="X-UA-Compatible" content="IE=edge">
-<meta name="google-site-verification" content="">
-<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
-<meta content="telephone=no" name="format-detection">
-<meta name="description" content="工作之外，总想折腾点什么东西。最近看朋友搞的QQ摸鱼机器人有点意思，就想自己也搞一个。tg提供的API比较全面，所以就想搞个tg版。">
-<meta name="renderer" content="webkit">
-<meta name="theme-color" content="#ffffff">
-
-
-
-<meta property="og:title" content="从头开始制作一个tg机器人" />
-<meta property="og:description" content="工作之外，总想折腾点什么东西。最近看朋友搞的QQ摸鱼机器人有点意思，就想自己也搞一个。tg提供的API比较全面，所以就想搞个tg版。" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://ntutn.top/posts/%E4%BB%8E%E5%A4%B4%E5%BC%80%E5%A7%8B%E5%88%B6%E4%BD%9C%E4%B8%80%E4%B8%AAtg%E6%9C%BA%E5%99%A8%E4%BA%BA/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2022-08-30T02:49:11+08:00" />
-<meta property="article:modified_time" content="2022-08-30T02:49:11+08:00" /><meta property="og:site_name" content="归零幻想" />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-<link rel="icon" href="//images.ntutn.top/favicon.ico">
-
-
-
-      <script src="/js/toc.js"></script>
-    
-    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
-<link rel="stylesheet" href="/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
-
-
-
-<link rel="stylesheet" href="/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
-
-
-<link rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Material+Icons">
-
-
-
-<script defer
-	src='https://static.cloudflareinsights.com/beacon.min.js'
-	data-cf-beacon='{"token": 5a03d307f5214109a1e7c8b2cf306a3d'>
+<meta charset="utf-8"/>
+<meta content="IE=edge" name="X-UA-Compatible"/>
+<meta content="" name="google-site-verification"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"/>
+<meta content="telephone=no" name="format-detection"/>
+<meta content="工作之外，总想折腾点什么东西。最近看朋友搞的QQ摸鱼机器人有点意思，就想自己也搞一个。tg提供的API比较全面，所以就想搞个tg版。" name="description"/>
+<meta content="webkit" name="renderer"/>
+<meta content="#ffffff" name="theme-color"/>
+<meta content="从头开始制作一个tg机器人" property="og:title"/>
+<meta content="工作之外，总想折腾点什么东西。最近看朋友搞的QQ摸鱼机器人有点意思，就想自己也搞一个。tg提供的API比较全面，所以就想搞个tg版。" property="og:description"/>
+<meta content="article" property="og:type"/>
+<meta content="https://ntutn.top/posts/%E4%BB%8E%E5%A4%B4%E5%BC%80%E5%A7%8B%E5%88%B6%E4%BD%9C%E4%B8%80%E4%B8%AAtg%E6%9C%BA%E5%99%A8%E4%BA%BA/" property="og:url"/><meta content="posts" property="article:section"/>
+<meta content="2022-08-30T02:49:11+08:00" property="article:published_time"/>
+<meta content="2022-08-30T02:49:11+08:00" property="article:modified_time"/><meta content="归零幻想" property="og:site_name"/>
+<link href="//images.ntutn.top/favicon.ico" rel="icon"/>
+<script src="/js/toc.js"></script>
+<link href="/vendor/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen" rel="stylesheet"/>
+<link href="/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css?family=Material+Icons" rel="stylesheet"/>
+<script data-cf-beacon='{"token": 5a03d307f5214109a1e7c8b2cf306a3d' defer="" src="https://static.cloudflareinsights.com/beacon.min.js">
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <style>
     pre code {
         color: black;
@@ -89,7 +30,7 @@
     }
 </style>
 <script src="https://unpkg.com/zoomtastic@2.2.1"></script>
-<script src="https://unpkg.com/kotlin-playground@1" data-selector="code.language-kotlin"></script>
+<script data-selector="code.language-kotlin" src="https://unpkg.com/kotlin-playground@1"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function(event) { 
         document.querySelectorAll("div.post-body-wrapper img").forEach(function(element){
@@ -119,1117 +60,376 @@
 	})();
 
 </script>
-
 </head>
 <body>
-    	<div id="app"><div id="sideContainer" class="side-container">
-    
-    <a class="a-block nav-head false" href="https://ntutn.top/">
-    
-        <div class="nav-title">
+<div id="app"><div class="side-container" id="sideContainer">
+<a class="a-block nav-head false" href="https://ntutn.top/">
+<div class="nav-title">
             归零幻想
         </div>
-        
-        <div class="nav-subtitle">
+<div class="nav-subtitle">
             零点还不算熬夜
         </div>
-        
-    </a>
-
-    <div class="nav-link-list">
-        
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="/project">
+</a>
+<div class="nav-link-list">
+<a class="a-block nav-link-item false" href="/project">
                 项目
             </a>
-            
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="/tags">
+<a class="a-block nav-link-item false" href="/tags">
                 标签
             </a>
-            
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="/zwiki">
+<a class="a-block nav-link-item false" href="/zwiki">
                 WIKI
             </a>
-            
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="/friends">
+<a class="a-block nav-link-item false" href="/friends">
                 友链
             </a>
-            
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="/about">
+<a class="a-block nav-link-item false" href="/about">
                 关于
             </a>
-            
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="/index.xml">
+<a class="a-block nav-link-item false" href="/index.xml">
                 RSS
             </a>
-            
-        
-            
-            
-            
-                
-            
-            
-            
-            <a class="a-block nav-link-item active" href="/posts">
+<a class="a-block nav-link-item active" href="/posts">
                 归档
             </a>
-            
-        
-    </div>
-
-    
-
-    <div class="nav-footer">
+</div>
+<div class="nav-footer">
         
 Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
-<br>
-移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
-<br>
+<br/>
+移植自 <a href="https://mak1t0.cc/" rel="noreferrer noopener" target="_blank">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" rel="noreferrer noopener" target="_blank">Journal.</a> <br/>
+<br/>
 
-&copy;
+©
 	
 	CC BY-SA 4.0
 	
 
     </div>
-    
-</div><div id="extraContainer" class="extra-container">
-    
-    
-    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
-
-
-	<div class="toc-content">
-	
-		
-		
-		
-		<center>- 目录 -</center>
-		
-		
-		<ul>
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#%e5%9f%ba%e6%9c%ac%e6%b6%88%e6%81%af%e5%a4%84%e7%90%86%e5%92%8c%e5%88%86%e5%8f%91" onclick="onNavClick(`#基本消息处理和分发-nav`)" id="基本消息处理和分发-nav">
+</div><div class="extra-container" id="extraContainer">
+<div :class="{ invisible: scrollY &lt;= 140 }" class="toc animated-visibility">
+<div class="toc-content">
+<center>- 目录 -</center>
+<ul>
+<li>
+<a href="#%e5%9f%ba%e6%9c%ac%e6%b6%88%e6%81%af%e5%a4%84%e7%90%86%e5%92%8c%e5%88%86%e5%8f%91" id="基本消息处理和分发-nav" onclick="onNavClick(`#基本消息处理和分发-nav`)">
 									基本消息处理和分发
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-							
-								
-									<ul>
-								
-							
-						
-						
-							<li>
-								<a href="#message" onclick="onNavClick(`#message-nav`)" id="message-nav">
+</li>
+<ul>
+<li>
+<a href="#message" id="message-nav" onclick="onNavClick(`#message-nav`)">
 									Message
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#messagequeue" onclick="onNavClick(`#messagequeue-nav`)" id="messagequeue-nav">
+</li>
+<li>
+<a href="#messagequeue" id="messagequeue-nav" onclick="onNavClick(`#messagequeue-nav`)">
 									MessageQueue
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#looper" onclick="onNavClick(`#looper-nav`)" id="looper-nav">
+</li>
+<li>
+<a href="#looper" id="looper-nav" onclick="onNavClick(`#looper-nav`)">
 									Looper
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#handler" onclick="onNavClick(`#handler-nav`)" id="handler-nav">
+</li>
+<li>
+<a href="#handler" id="handler-nav" onclick="onNavClick(`#handler-nav`)">
 									Handler
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#kotlin%e5%8d%8f%e7%a8%8b%e5%85%bc%e5%ae%b9" onclick="onNavClick(`#kotlin协程兼容-nav`)" id="kotlin协程兼容-nav">
+</li>
+<li>
+<a href="#kotlin%e5%8d%8f%e7%a8%8b%e5%85%bc%e5%ae%b9" id="kotlin协程兼容-nav" onclick="onNavClick(`#kotlin协程兼容-nav`)">
 									Kotlin协程兼容
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-							
-								</ul>
-							
-						
-						
-						
-							<li>
-								<a href="#%e6%b6%88%e6%81%af%e7%9a%84%e6%8b%89%e5%8f%96" onclick="onNavClick(`#消息的拉取-nav`)" id="消息的拉取-nav">
+</li>
+</ul>
+<li>
+<a href="#%e6%b6%88%e6%81%af%e7%9a%84%e6%8b%89%e5%8f%96" id="消息的拉取-nav" onclick="onNavClick(`#消息的拉取-nav`)">
 									消息的拉取
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-							
-								
-									<ul>
-								
-							
-						
-						
-							<li>
-								<a href="#%e9%95%bf%e8%bd%ae%e8%af%a2%e7%9a%84%e5%ae%9e%e7%8e%b0" onclick="onNavClick(`#长轮询的实现-nav`)" id="长轮询的实现-nav">
+</li>
+<ul>
+<li>
+<a href="#%e9%95%bf%e8%bd%ae%e8%af%a2%e7%9a%84%e5%ae%9e%e7%8e%b0" id="长轮询的实现-nav" onclick="onNavClick(`#长轮询的实现-nav`)">
 									长轮询的实现
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#%e6%b6%88%e6%81%af%e5%be%aa%e7%8e%af%e5%ae%9e%e7%8e%b0" onclick="onNavClick(`#消息循环实现-nav`)" id="消息循环实现-nav">
+</li>
+<li>
+<a href="#%e6%b6%88%e6%81%af%e5%be%aa%e7%8e%af%e5%ae%9e%e7%8e%b0" id="消息循环实现-nav" onclick="onNavClick(`#消息循环实现-nav`)">
 									消息循环实现
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-							
-								</ul>
-							
-						
-						
-						
-							<li>
-								<a href="#%e6%b6%88%e6%81%af%e5%8f%91%e9%80%81" onclick="onNavClick(`#消息发送-nav`)" id="消息发送-nav">
+</li>
+</ul>
+<li>
+<a href="#%e6%b6%88%e6%81%af%e5%8f%91%e9%80%81" id="消息发送-nav" onclick="onNavClick(`#消息发送-nav`)">
 									消息发送
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#%e6%8f%92%e4%bb%b6%e5%8a%9f%e8%83%bd%e6%94%af%e6%8c%81" onclick="onNavClick(`#插件功能支持-nav`)" id="插件功能支持-nav">
+</li>
+<li>
+<a href="#%e6%8f%92%e4%bb%b6%e5%8a%9f%e8%83%bd%e6%94%af%e6%8c%81" id="插件功能支持-nav" onclick="onNavClick(`#插件功能支持-nav`)">
 									插件功能支持
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-							
-								
-									<ul>
-								
-							
-						
-						
-							<li>
-								<a href="#%e5%9f%ba%e6%9c%ac%e6%8f%92%e4%bb%b6%e5%8c%96%e5%8e%9f%e7%90%86" onclick="onNavClick(`#基本插件化原理-nav`)" id="基本插件化原理-nav">
+</li>
+<ul>
+<li>
+<a href="#%e5%9f%ba%e6%9c%ac%e6%8f%92%e4%bb%b6%e5%8c%96%e5%8e%9f%e7%90%86" id="基本插件化原理-nav" onclick="onNavClick(`#基本插件化原理-nav`)">
 									基本插件化原理
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#%e6%8f%92%e4%bb%b6%e7%89%88%e6%9c%ac%e5%85%bc%e5%ae%b9" onclick="onNavClick(`#插件版本兼容-nav`)" id="插件版本兼容-nav">
+</li>
+<li>
+<a href="#%e6%8f%92%e4%bb%b6%e7%89%88%e6%9c%ac%e5%85%bc%e5%ae%b9" id="插件版本兼容-nav" onclick="onNavClick(`#插件版本兼容-nav`)">
 									插件版本兼容
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-							
-								</ul>
-							
-						
-						
-						
-							<li>
-								<a href="#%e9%83%a8%e7%bd%b2%e5%92%8c%e8%bf%90%e8%a1%8c" onclick="onNavClick(`#部署和运行-nav`)" id="部署和运行-nav">
+</li>
+</ul>
+<li>
+<a href="#%e9%83%a8%e7%bd%b2%e5%92%8c%e8%bf%90%e8%a1%8c" id="部署和运行-nav" onclick="onNavClick(`#部署和运行-nav`)">
 									部署和运行
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-							
-								
-									<ul>
-								
-							
-						
-						
-							<li>
-								<a href="#%e5%9f%ba%e6%9c%ac%e9%83%a8%e7%bd%b2" onclick="onNavClick(`#基本部署-nav`)" id="基本部署-nav">
+</li>
+<ul>
+<li>
+<a href="#%e5%9f%ba%e6%9c%ac%e9%83%a8%e7%bd%b2" id="基本部署-nav" onclick="onNavClick(`#基本部署-nav`)">
 									基本部署
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#%e5%81%b6%e7%84%b6%e5%b4%a9%e6%ba%83%e8%87%aa%e5%8a%a8%e9%87%8d%e5%90%af" onclick="onNavClick(`#偶然崩溃自动重启-nav`)" id="偶然崩溃自动重启-nav">
+</li>
+<li>
+<a href="#%e5%81%b6%e7%84%b6%e5%b4%a9%e6%ba%83%e8%87%aa%e5%8a%a8%e9%87%8d%e5%90%af" id="偶然崩溃自动重启-nav" onclick="onNavClick(`#偶然崩溃自动重启-nav`)">
 									偶然崩溃自动重启
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#%e4%b8%bb%e7%ba%bf%e7%a8%8b%e5%b4%a9%e6%ba%83%e9%95%bf%e6%97%b6%e9%97%b4%e6%9c%aa%e5%93%8d%e5%ba%94%e6%a3%80%e6%b5%8b" onclick="onNavClick(`#主线程崩溃长时间未响应检测-nav`)" id="主线程崩溃长时间未响应检测-nav">
+</li>
+<li>
+<a href="#%e4%b8%bb%e7%ba%bf%e7%a8%8b%e5%b4%a9%e6%ba%83%e9%95%bf%e6%97%b6%e9%97%b4%e6%9c%aa%e5%93%8d%e5%ba%94%e6%a3%80%e6%b5%8b" id="主线程崩溃长时间未响应检测-nav" onclick="onNavClick(`#主线程崩溃长时间未响应检测-nav`)">
 									主线程崩溃/长时间未响应检测
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-							
-								</ul>
-							
-						
-						
-						
-							<li>
-								<a href="#%e5%85%b6%e4%bb%96" onclick="onNavClick(`#其他-nav`)" id="其他-nav">
+</li>
+</ul>
+<li>
+<a href="#%e5%85%b6%e4%bb%96" id="其他-nav" onclick="onNavClick(`#其他-nav`)">
 									其他
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-							
-								
-									<ul>
-								
-							
-						
-						
-							<li>
-								<a href="#logger%e7%9a%84%e5%b0%81%e8%a3%85" onclick="onNavClick(`#logger的封装-nav`)" id="logger的封装-nav">
+</li>
+<ul>
+<li>
+<a href="#logger%e7%9a%84%e5%b0%81%e8%a3%85" id="logger的封装-nav" onclick="onNavClick(`#logger的封装-nav`)">
 									Logger的封装
 								</a>
-							</li>
-						
-						
-					
-				
-			
-		</ul>
-	</div>
-
+</li>
+</ul>
+</ul></div>
 </div>
-    
-    <div class="pagination">
-        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
-            <i class="material-icons pagination-action-icon">
+<div class="pagination">
+<a :class="{ invisible: scrollY == 0 }" class="pagination-action animated-visibility" href="#top" id="globalBackToTop">
+<i class="material-icons pagination-action-icon">
                 keyboard_arrow_up
             </i>
-        </a>
-        
-        <a type="button" class="pagination-action" id="darkModeToggleButton">
-            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+</a>
+<a class="pagination-action" id="darkModeToggleButton" type="button">
+<span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
                 dark_mode
             </span>
-        </a>
-        
-        
-    </div>
+</a>
 </div>
-<div class="single-column-drawer-container" id="drawer"
-     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
-    <div class="drawer-content">
-        <div class="drawer-menu">
-            
-            
-            
-                
-                
-                
-                
-                
-                <a class="a-block drawer-menu-item false" href="/project">
+</div>
+<div class="single-column-drawer-container" id="drawer" v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+<div class="drawer-content">
+<div class="drawer-menu">
+<a class="a-block drawer-menu-item false" href="/project">
                     项目
                 </a>
-                
-            
-                
-                
-                
-                
-                
-                <a class="a-block drawer-menu-item false" href="/tags">
+<a class="a-block drawer-menu-item false" href="/tags">
                     标签
                 </a>
-                
-            
-                
-                
-                
-                
-                
-                <a class="a-block drawer-menu-item false" href="/zwiki">
+<a class="a-block drawer-menu-item false" href="/zwiki">
                     WIKI
                 </a>
-                
-            
-                
-                
-                
-                
-                
-                <a class="a-block drawer-menu-item false" href="/friends">
+<a class="a-block drawer-menu-item false" href="/friends">
                     友链
                 </a>
-                
-            
-                
-                
-                
-                
-                
-                <a class="a-block drawer-menu-item false" href="/about">
+<a class="a-block drawer-menu-item false" href="/about">
                     关于
                 </a>
-                
-            
-                
-                
-                
-                
-                
-                <a class="a-block drawer-menu-item false" href="/index.xml">
+<a class="a-block drawer-menu-item false" href="/index.xml">
                     RSS
                 </a>
-                
-            
-                
-                
-                
-                    
-                
-                
-                
-                <a class="a-block drawer-menu-item active" href="/posts">
+<a class="a-block drawer-menu-item active" href="/posts">
                     归档
                 </a>
-                
-            
-            
-            <div class="toc">
-
-
-	<div class="toc-content">
-	
-		
-		
-		
-		<center>- 目录 -</center>
-		
-		
-		<ul>
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#%e5%9f%ba%e6%9c%ac%e6%b6%88%e6%81%af%e5%a4%84%e7%90%86%e5%92%8c%e5%88%86%e5%8f%91" onclick="onNavClick(`#基本消息处理和分发-nav`)" id="基本消息处理和分发-nav">
+<div class="toc">
+<div class="toc-content">
+<center>- 目录 -</center>
+<ul>
+<li>
+<a href="#%e5%9f%ba%e6%9c%ac%e6%b6%88%e6%81%af%e5%a4%84%e7%90%86%e5%92%8c%e5%88%86%e5%8f%91" id="基本消息处理和分发-nav" onclick="onNavClick(`#基本消息处理和分发-nav`)">
 									基本消息处理和分发
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-							
-								
-									<ul>
-								
-							
-						
-						
-							<li>
-								<a href="#message" onclick="onNavClick(`#message-nav`)" id="message-nav">
+</li>
+<ul>
+<li>
+<a href="#message" id="message-nav" onclick="onNavClick(`#message-nav`)">
 									Message
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#messagequeue" onclick="onNavClick(`#messagequeue-nav`)" id="messagequeue-nav">
+</li>
+<li>
+<a href="#messagequeue" id="messagequeue-nav" onclick="onNavClick(`#messagequeue-nav`)">
 									MessageQueue
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#looper" onclick="onNavClick(`#looper-nav`)" id="looper-nav">
+</li>
+<li>
+<a href="#looper" id="looper-nav" onclick="onNavClick(`#looper-nav`)">
 									Looper
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#handler" onclick="onNavClick(`#handler-nav`)" id="handler-nav">
+</li>
+<li>
+<a href="#handler" id="handler-nav" onclick="onNavClick(`#handler-nav`)">
 									Handler
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#kotlin%e5%8d%8f%e7%a8%8b%e5%85%bc%e5%ae%b9" onclick="onNavClick(`#kotlin协程兼容-nav`)" id="kotlin协程兼容-nav">
+</li>
+<li>
+<a href="#kotlin%e5%8d%8f%e7%a8%8b%e5%85%bc%e5%ae%b9" id="kotlin协程兼容-nav" onclick="onNavClick(`#kotlin协程兼容-nav`)">
 									Kotlin协程兼容
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-							
-								</ul>
-							
-						
-						
-						
-							<li>
-								<a href="#%e6%b6%88%e6%81%af%e7%9a%84%e6%8b%89%e5%8f%96" onclick="onNavClick(`#消息的拉取-nav`)" id="消息的拉取-nav">
+</li>
+</ul>
+<li>
+<a href="#%e6%b6%88%e6%81%af%e7%9a%84%e6%8b%89%e5%8f%96" id="消息的拉取-nav" onclick="onNavClick(`#消息的拉取-nav`)">
 									消息的拉取
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-							
-								
-									<ul>
-								
-							
-						
-						
-							<li>
-								<a href="#%e9%95%bf%e8%bd%ae%e8%af%a2%e7%9a%84%e5%ae%9e%e7%8e%b0" onclick="onNavClick(`#长轮询的实现-nav`)" id="长轮询的实现-nav">
+</li>
+<ul>
+<li>
+<a href="#%e9%95%bf%e8%bd%ae%e8%af%a2%e7%9a%84%e5%ae%9e%e7%8e%b0" id="长轮询的实现-nav" onclick="onNavClick(`#长轮询的实现-nav`)">
 									长轮询的实现
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#%e6%b6%88%e6%81%af%e5%be%aa%e7%8e%af%e5%ae%9e%e7%8e%b0" onclick="onNavClick(`#消息循环实现-nav`)" id="消息循环实现-nav">
+</li>
+<li>
+<a href="#%e6%b6%88%e6%81%af%e5%be%aa%e7%8e%af%e5%ae%9e%e7%8e%b0" id="消息循环实现-nav" onclick="onNavClick(`#消息循环实现-nav`)">
 									消息循环实现
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-							
-								</ul>
-							
-						
-						
-						
-							<li>
-								<a href="#%e6%b6%88%e6%81%af%e5%8f%91%e9%80%81" onclick="onNavClick(`#消息发送-nav`)" id="消息发送-nav">
+</li>
+</ul>
+<li>
+<a href="#%e6%b6%88%e6%81%af%e5%8f%91%e9%80%81" id="消息发送-nav" onclick="onNavClick(`#消息发送-nav`)">
 									消息发送
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#%e6%8f%92%e4%bb%b6%e5%8a%9f%e8%83%bd%e6%94%af%e6%8c%81" onclick="onNavClick(`#插件功能支持-nav`)" id="插件功能支持-nav">
+</li>
+<li>
+<a href="#%e6%8f%92%e4%bb%b6%e5%8a%9f%e8%83%bd%e6%94%af%e6%8c%81" id="插件功能支持-nav" onclick="onNavClick(`#插件功能支持-nav`)">
 									插件功能支持
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-							
-								
-									<ul>
-								
-							
-						
-						
-							<li>
-								<a href="#%e5%9f%ba%e6%9c%ac%e6%8f%92%e4%bb%b6%e5%8c%96%e5%8e%9f%e7%90%86" onclick="onNavClick(`#基本插件化原理-nav`)" id="基本插件化原理-nav">
+</li>
+<ul>
+<li>
+<a href="#%e5%9f%ba%e6%9c%ac%e6%8f%92%e4%bb%b6%e5%8c%96%e5%8e%9f%e7%90%86" id="基本插件化原理-nav" onclick="onNavClick(`#基本插件化原理-nav`)">
 									基本插件化原理
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#%e6%8f%92%e4%bb%b6%e7%89%88%e6%9c%ac%e5%85%bc%e5%ae%b9" onclick="onNavClick(`#插件版本兼容-nav`)" id="插件版本兼容-nav">
+</li>
+<li>
+<a href="#%e6%8f%92%e4%bb%b6%e7%89%88%e6%9c%ac%e5%85%bc%e5%ae%b9" id="插件版本兼容-nav" onclick="onNavClick(`#插件版本兼容-nav`)">
 									插件版本兼容
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-							
-								</ul>
-							
-						
-						
-						
-							<li>
-								<a href="#%e9%83%a8%e7%bd%b2%e5%92%8c%e8%bf%90%e8%a1%8c" onclick="onNavClick(`#部署和运行-nav`)" id="部署和运行-nav">
+</li>
+</ul>
+<li>
+<a href="#%e9%83%a8%e7%bd%b2%e5%92%8c%e8%bf%90%e8%a1%8c" id="部署和运行-nav" onclick="onNavClick(`#部署和运行-nav`)">
 									部署和运行
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-							
-								
-									<ul>
-								
-							
-						
-						
-							<li>
-								<a href="#%e5%9f%ba%e6%9c%ac%e9%83%a8%e7%bd%b2" onclick="onNavClick(`#基本部署-nav`)" id="基本部署-nav">
+</li>
+<ul>
+<li>
+<a href="#%e5%9f%ba%e6%9c%ac%e9%83%a8%e7%bd%b2" id="基本部署-nav" onclick="onNavClick(`#基本部署-nav`)">
 									基本部署
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#%e5%81%b6%e7%84%b6%e5%b4%a9%e6%ba%83%e8%87%aa%e5%8a%a8%e9%87%8d%e5%90%af" onclick="onNavClick(`#偶然崩溃自动重启-nav`)" id="偶然崩溃自动重启-nav">
+</li>
+<li>
+<a href="#%e5%81%b6%e7%84%b6%e5%b4%a9%e6%ba%83%e8%87%aa%e5%8a%a8%e9%87%8d%e5%90%af" id="偶然崩溃自动重启-nav" onclick="onNavClick(`#偶然崩溃自动重启-nav`)">
 									偶然崩溃自动重启
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#%e4%b8%bb%e7%ba%bf%e7%a8%8b%e5%b4%a9%e6%ba%83%e9%95%bf%e6%97%b6%e9%97%b4%e6%9c%aa%e5%93%8d%e5%ba%94%e6%a3%80%e6%b5%8b" onclick="onNavClick(`#主线程崩溃长时间未响应检测-nav`)" id="主线程崩溃长时间未响应检测-nav">
+</li>
+<li>
+<a href="#%e4%b8%bb%e7%ba%bf%e7%a8%8b%e5%b4%a9%e6%ba%83%e9%95%bf%e6%97%b6%e9%97%b4%e6%9c%aa%e5%93%8d%e5%ba%94%e6%a3%80%e6%b5%8b" id="主线程崩溃长时间未响应检测-nav" onclick="onNavClick(`#主线程崩溃长时间未响应检测-nav`)">
 									主线程崩溃/长时间未响应检测
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-							
-								</ul>
-							
-						
-						
-						
-							<li>
-								<a href="#%e5%85%b6%e4%bb%96" onclick="onNavClick(`#其他-nav`)" id="其他-nav">
+</li>
+</ul>
+<li>
+<a href="#%e5%85%b6%e4%bb%96" id="其他-nav" onclick="onNavClick(`#其他-nav`)">
 									其他
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-							
-								
-									<ul>
-								
-							
-						
-						
-							<li>
-								<a href="#logger%e7%9a%84%e5%b0%81%e8%a3%85" onclick="onNavClick(`#logger的封装-nav`)" id="logger的封装-nav">
+</li>
+<ul>
+<li>
+<a href="#logger%e7%9a%84%e5%b0%81%e8%a3%85" id="logger的封装-nav" onclick="onNavClick(`#logger的封装-nav`)">
 									Logger的封装
 								</a>
-							</li>
-						
-						
-					
-				
-			
-		</ul>
-	</div>
-
+</li>
+</ul>
+</ul></div>
 </div>
-            
-        </div>
-    </div>
+</div>
+</div>
 </div>
 <transition name="fade">
-    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+<div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
 </transition>
-<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
-    <div id="navBackground" class="nav-background"></div>
-    <div class="container container-narrow nav-content">
-        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
-            <i class="material-icons">
+<nav class="navbar sticky-top navbar-light single-column-nav-container" id="navBar">
+<div class="nav-background" id="navBackground"></div>
+<div class="container container-narrow nav-content">
+<button class="nav-dropdown-toggle" id="nav_dropdown_btn" type="button" v-on:click="toggleDrawer">
+<i class="material-icons">
                 menu
             </i>
-        </button>
-        <a id="navTitle" class="navbar-brand" href="https://ntutn.top/">
+</button>
+<a class="navbar-brand" href="https://ntutn.top/" id="navTitle">
             归零幻想
         </a>
-        
-        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
-            <i class="material-icons" id="darkModeToggleIcon2">
+<button class="nav-darkmode-toggle" id="darkModeToggleButton2" type="button">
+<i class="material-icons" id="darkModeToggleIcon2">
                 dark_mode
             </i>
-        </button>
-        
-    </div>
-</nav>
-<div class="single-column-header-container" id="pageHead"
-     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
-    <a href="https://ntutn.top/">
-        <div class="single-column-header-title">归零幻想</div>
-        
-        <div class="single-column-header-subtitle">零点还不算熬夜</div>
-        
-
-    </a>
+</button>
 </div>
-
-            <div id="content">
-                <div id="streamContainer" class="stream-container">
-
-    <div class="post-list-container post-list-container-shadow">
-        <div class="post">
-            
-            
-            
-                
-            
-
-            <div class="post-head-wrapper"
-                
-                    
-                    
-                    style="background-image: url('https://images.ntutn.top/2022/08/4fcad14a68f078ea886d454f9173e0d0.png')"
-                    
-                
-            >
-                <div class="post-title">
+</nav>
+<div class="single-column-header-container" id="pageHead" v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+<a href="https://ntutn.top/">
+<div class="single-column-header-title">归零幻想</div>
+<div class="single-column-header-subtitle">零点还不算熬夜</div>
+</a>
+</div>
+<div id="content">
+<div class="stream-container" id="streamContainer">
+<div class="post-list-container post-list-container-shadow">
+<div class="post">
+<div class="post-head-wrapper" style="background-image: url('https://images.ntutn.top/2022/08/4fcad14a68f078ea886d454f9173e0d0.png')">
+<div class="post-title">
                     从头开始制作一个tg机器人
                     
                     <div class="post-subtitle">
                         工作之外，总想折腾点什么东西。最近看朋友搞的QQ摸鱼机器人有点意思，就想自己也搞一个。tg提供的API比较全面，所以就想搞个tg版。
                     </div>
-                    
-                    <div class="post-meta">
-                        
-                        <time itemprop="datePublished">
+<div class="post-meta">
+<time itemprop="datePublished">
                             2022-08-30 02:49
                         </time>
-                        
-
-                        
-                            <i class="material-icons" style="">folder</i>
-                                <a href="/categories/todo">Todo</a>
-                                &nbsp;
+<i class="material-icons" style="">folder</i>
+<a href="/categories/todo">Todo</a>
+                                 
                         
 
                         
                             <i class="material-icons" style="">label</i>
-                            
-                                <a href="/tags/telegram">Telegram</a>
-                                &nbsp;
+<a href="/tags/telegram">Telegram</a>
+                                 
                             
                                 <a href="/tags/handler">Handler</a>
-                                &nbsp;
+                                 
                             
                                 <a href="/tags/%E8%BD%AE%E8%AF%A2">轮询</a>
-                                &nbsp;
+                                 
                             
                                 <a href="/tags/%E6%8F%92%E4%BB%B6">插件</a>
-                                &nbsp;
+                                 
                             
                         
                         
@@ -1245,22 +445,19 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
                             30 s.
                         
                     </div>
-                </div>
-            </div>
-            
-            <div class="post-body-wrapper">
-                
-                <div class="post-body" v-pre>
-                
-                    <p>工作之外，总想折腾点什么东西。最近看朋友搞的QQ摸鱼机器人有点意思，就想自己也搞一个。tg提供的API比较全面，所以就想搞个tg版。</p>
-<p><img src="https://images.ntutn.top/2022/08/4fcad14a68f078ea886d454f9173e0d0.png" alt="image-20220830032946945"></p>
+</div>
+</div>
+<div class="post-body-wrapper">
+<div class="post-body" v-pre="">
+<p>工作之外，总想折腾点什么东西。最近看朋友搞的QQ摸鱼机器人有点意思，就想自己也搞一个。tg提供的API比较全面，所以就想搞个tg版。</p>
+<p><img alt="image-20220830032946945" src="https://images.ntutn.top/2022/08/4fcad14a68f078ea886d454f9173e0d0.png"/></p>
 <p>直接贴代码：<a href="https://github.com/rfkhx/starsea">https://github.com/rfkhx/starsea</a></p>
 <h1 id="基本消息处理和分发">基本消息处理和分发</h1>
 <p>其实仅就这个需求而言，并没有用多线程的必要性，一个死循环中拉取消息，拉到后交给对应模块处理，处理完继续下一次循环拉下一条消息就可以了。不过为了把代码结构写得更清楚一点，并希望能在这个过程中学到点东西，我决定仿照安卓的线程机制组织，将安卓中的 <code>Handler</code>、<code>Looper</code> 移植到我的项目中，借助这个过程更深入理解整个机制。</p>
 <p>类似安卓，我在后台线程进行网络请求，主线程进行结果的分发处理。</p>
 <h2 id="message">Message</h2>
 <p><code>Message</code> 就是消息对象。我对消息对象的定义如下：</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">data</span> <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">Message</span>(  
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4" tabindex="0"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">data</span> <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">Message</span>(  
     <span style="color:#8b008b;font-weight:bold">val</span> what: Int,  
     <span style="color:#8b008b;font-weight:bold">val</span> arg: Int = -<span style="color:#b452cd">1</span>,  
     <span style="color:#8b008b;font-weight:bold">val</span> payload: Any? = <span style="color:#8b008b;font-weight:bold">null</span>,  
@@ -1279,13 +476,13 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <h2 id="messagequeue">MessageQueue</h2>
 <p>记得安卓中有个比较经典和基础的问题，主线程实际执行了 <code>Looper.loop()</code> ，为什么不会卡死？</p>
 <p>首先我们看 <code>Looper</code> 的实现。</p>
-<p><img src="https://images.ntutn.top/2022/08/9af555bdbc0e5ef42784eed8e8219aac.png" alt="Pasted image 20220825043217"></p>
+<p><img alt="Pasted image 20220825043217" src="https://images.ntutn.top/2022/08/9af555bdbc0e5ef42784eed8e8219aac.png"/></p>
 <p>确认这里确实是个死循环，继续看单次循环 <code>loopOnce</code> 方法做了什么。</p>
-<p><img src="https://images.ntutn.top/2022/08/bd6595d2f86b8d42798042706166a27b.png" alt="Pasted image 20220825043457"></p>
+<p><img alt="Pasted image 20220825043457" src="https://images.ntutn.top/2022/08/bd6595d2f86b8d42798042706166a27b.png"/></p>
 <p>首先从 <code>MessageQueue</code> 中取到一条消息，一些判断后实际走了 <code>Message</code> 对应 <code>Handler</code> 来处理消息。似乎看不到哪里处理了这个问题，但我们可以在取消息处看到一条注释“might block”。</p>
 <p>是的，这个队列有个特性，就是没有可用消息时，线程会阻塞在这里，就像我们用 <code>Scanner</code> 读用户输入一样，只有有了输入程序才会继续运行，所以不会占满CPU资源。而用户感受到的卡顿发生实际上是主线程堆积的消息过多，无法及时处理导致的，与这里用一个死循环处理消息没有直接关系。这里更多拓展探讨可以参考 <a href="https://www.wanandroid.com/wenda/show/8685">每日一问 Looper.loop为什么不会阻塞掉UI线程？</a></p>
 <p>幸运的是，java已经有具有这样功能的队列实现了，它就是 <code>java.util.concurrent.DelayQueue</code> 。只要让我们的 <code>Message</code> 类实现 <code>Delayed</code> 接口</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">data</span> <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">Message</span>(  
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4" tabindex="0"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">data</span> <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">Message</span>(  
     <span style="color:#8b008b;font-weight:bold">val</span> what: Int,  
     <span style="color:#8b008b;font-weight:bold">val</span> arg: Int = -<span style="color:#b452cd">1</span>,  
     <span style="color:#8b008b;font-weight:bold">val</span> payload: Any? = <span style="color:#8b008b;font-weight:bold">null</span>,  
@@ -1314,7 +511,7 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
     }  
 }
 </code></pre></div><p>然后我们就可以直接用这个 <code>DelayQueue</code> 作为我们的 <code>MessageQueue</code> 了。</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">MessageQueue</span> {  
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4" tabindex="0"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">MessageQueue</span> {  
     <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> mQueue = DelayQueue&lt;Message&gt;()  
   
     <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">enqueue</span>(msg: Message) {  
@@ -1337,7 +534,7 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 }
 </code></pre></div><h2 id="looper">Looper</h2>
 <p><code>Looper</code> 的核心代码抽离出来比较简单，我就直接贴出来了。 <code>Looper</code> 中持有 <code>MessageQueue</code> ，是整个消息循环的核心。</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">Looper</span> {  
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4" tabindex="0"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">Looper</span> {  
     <span style="color:#8b008b;font-weight:bold">val</span> mQueue = MessageQueue()  
   
     <span style="color:#8b008b;font-weight:bold">companion</span> <span style="color:#8b008b;font-weight:bold">object</span> {  
@@ -1350,7 +547,7 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
   
         <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">prepare</span>() {  
             <span style="color:#8b008b;font-weight:bold">if</span> (sThreadLocal.<span style="color:#8b008b;font-weight:bold">get</span>() != <span style="color:#8b008b;font-weight:bold">null</span>) {  
-                <span style="color:#8b008b;font-weight:bold">throw</span> IllegalStateException(<span style="color:#cd5555">&#34;looper prepared&#34;</span>)  
+                <span style="color:#8b008b;font-weight:bold">throw</span> IllegalStateException(<span style="color:#cd5555">"looper prepared"</span>)  
             }  
             sThreadLocal.<span style="color:#8b008b;font-weight:bold">set</span>(Looper())  
         }  
@@ -1359,14 +556,14 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
             prepare()  
             synchronized(Looper::<span style="color:#8b008b;font-weight:bold">class</span>) {  
                 <span style="color:#8b008b;font-weight:bold">if</span> (sMainLooper != <span style="color:#8b008b;font-weight:bold">null</span>) {  
-                    <span style="color:#8b008b;font-weight:bold">throw</span> IllegalStateException(<span style="color:#cd5555">&#34;main looper prepared&#34;</span>)  
+                    <span style="color:#8b008b;font-weight:bold">throw</span> IllegalStateException(<span style="color:#cd5555">"main looper prepared"</span>)  
                 }  
                 sMainLooper = myLooper()  
             }  
         }  
   
         <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">loop</span>() {  
-            <span style="color:#8b008b;font-weight:bold">val</span> me = myLooper() ?: <span style="color:#8b008b;font-weight:bold">throw</span> IllegalStateException(<span style="color:#cd5555">&#34;you should call prepare first&#34;</span>)  
+            <span style="color:#8b008b;font-weight:bold">val</span> me = myLooper() ?: <span style="color:#8b008b;font-weight:bold">throw</span> IllegalStateException(<span style="color:#cd5555">"you should call prepare first"</span>)  
             <span style="color:#8b008b;font-weight:bold">while</span> (<span style="color:#8b008b;font-weight:bold">true</span>) {  
                 <span style="color:#8b008b;font-weight:bold">val</span> message = me.mQueue.poll()  
                 message.target?.dispatchMessage(message)  
@@ -1378,7 +575,7 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <p>每个线程 <code>prepare</code> 后都绑定了一个 <code>Looper</code> ，这个 <code>Looper</code> 就是放在 <code>ThreadLocal</code> 中的，此后我们在某一线程执行 <code>sThreadLocal.get()</code> 拿到的就是这个线程的 <code>Looper</code> 。</p>
 <h2 id="handler">Handler</h2>
 <p>终于到了激动人心的时刻了，我们理到了最常使用和打交道的 <code>Handler</code> 。核心逻辑实际上要比我想象的简单。</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">open</span> <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">Handler</span>(looper: Looper? = <span style="color:#8b008b;font-weight:bold">null</span>) {  
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4" tabindex="0"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">open</span> <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">Handler</span>(looper: Looper? = <span style="color:#8b008b;font-weight:bold">null</span>) {  
     <span style="color:#8b008b;font-weight:bold">companion</span> <span style="color:#8b008b;font-weight:bold">object</span> {  
         <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> EMPTY_MESSAGE = Message(-<span style="color:#b452cd">1</span>)  
     }  
@@ -1388,14 +585,14 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
     <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">var</span> mCallback: ((Message) -&gt; Unit)? = <span style="color:#8b008b;font-weight:bold">null</span>  
   
     <span style="color:#8b008b;font-weight:bold">init</span> {  
-        mLooper = looper ?: Looper.myLooper() ?: <span style="color:#8b008b;font-weight:bold">throw</span> IllegalStateException(<span style="color:#cd5555">&#34;looper not prepared&#34;</span>)  
+        mLooper = looper ?: Looper.myLooper() ?: <span style="color:#8b008b;font-weight:bold">throw</span> IllegalStateException(<span style="color:#cd5555">"looper not prepared"</span>)  
         mQueue = mLooper.mQueue  
     }  
   
     <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">sendMessage</span>(msg: Message) = sendMessageDelay(msg, <span style="color:#b452cd">0L</span>)  
   
     <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">sendMessageDelay</span>(msg: Message, delay: Long) {  
-        require(delay &gt;= <span style="color:#b452cd">0L</span>) { <span style="color:#cd5555">&#34;delay cannot be negative&#34;</span> }  
+        require(delay &gt;= <span style="color:#b452cd">0L</span>) { <span style="color:#cd5555">"delay cannot be negative"</span> }  
         msg.target = <span style="color:#8b008b;font-weight:bold">this</span>  
         mQueue.enqueue(msg, System.currentTimeMillis() + delay)  
     }  
@@ -1426,12 +623,12 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <h2 id="kotlin协程兼容">Kotlin协程兼容</h2>
 <p>根据我们前面的设计，我们有主线程和后台线程之分。Kotlin协程的实现上， <code>Dispatchers.IO</code> 实际上是个未设置上限的线程池，但 <code>Dispatchers.Main</code> 可是需要切换回主线程来执行对应代码的。我们怎么做这里的兼容，使之能切换回我们定义的“主线程”呢？</p>
 <p>继续看代码，通过SPI加载了MainDispatcherFactory。</p>
-<p><img src="https://images.ntutn.top/2022/08/9f27357e82b119c6fa75ef49d5696302.png" alt="Pasted image 20220825052152"></p>
+<p><img alt="Pasted image 20220825052152" src="https://images.ntutn.top/2022/08/9f27357e82b119c6fa75ef49d5696302.png"/></p>
 <p>继续找，很快找到了安卓对应的实现</p>
-<p><img src="https://images.ntutn.top/2022/08/516a7a7b328ae08f0b23911258fcbd73.png" alt="Pasted image 20220825052357"></p>
-<p><img src="https://images.ntutn.top/2022/08/0c622b2059b0ec440cfc3fcf882a6d91.png" alt="Pasted image 20220825052541"></p>
+<p><img alt="Pasted image 20220825052357" src="https://images.ntutn.top/2022/08/516a7a7b328ae08f0b23911258fcbd73.png"/></p>
+<p><img alt="Pasted image 20220825052541" src="https://images.ntutn.top/2022/08/0c622b2059b0ec440cfc3fcf882a6d91.png"/></p>
 <p>其实就是将对应的代码post到了主线程去处理。所以仿照它，我的“青春版”实现也有了</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#707a7c">@OptIn</span>(InternalCoroutinesApi::<span style="color:#8b008b;font-weight:bold">class</span>)  
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4" tabindex="0"><code class="language-kotlin" data-lang="kotlin"><span style="color:#707a7c">@OptIn</span>(InternalCoroutinesApi::<span style="color:#8b008b;font-weight:bold">class</span>)  
 <span style="color:#707a7c">@AutoService</span>(MainDispatcherFactory::<span style="color:#8b008b;font-weight:bold">class</span>)  
 <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">MainDispatcherFactoryImpl</span>: MainDispatcherFactory {  
     <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">val</span> loadPriority: Int  
@@ -1458,7 +655,7 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <p>长轮询是什么？与普通的轮询方式不同，长轮询在发出请求后如果没有消息返回，服务端将不会立即返回，而是等有消息或超时再返回，而后客户端发起下一个请求。这一是能在有消息到达时让客户端及时收到通知，二是在没有消息时不会浪费太多无用请求。</p>
 <p>我的网络请求部分是 <code>Retrofit</code> ，我发现单独给某个请求设置不同的超时时间还挺麻烦的。我参考 <a href="https://github.com/square/retrofit/issues/2982">这里的讨论</a> 总结如下：</p>
 <p>首先将 <code>OkHttp</code> 的超时时间设置为一个很大的值，保证不会影响到我们后面的设置。</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> okHttpClient: OkHttpClient <span style="color:#8b008b;font-weight:bold">by</span> lazy {  
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4" tabindex="0"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> okHttpClient: OkHttpClient <span style="color:#8b008b;font-weight:bold">by</span> lazy {  
     OkHttpClient.Builder()  
         .connectTimeout(<span style="color:#b452cd">1L</span>, TimeUnit.DAYS) <span style="color:#228b22">// 超时相关逻辑由 [top.ntutn.starsea.network.TimeoutCallAdapterFactory] 控制  
 </span><span style="color:#228b22"></span>        .readTimeout(<span style="color:#b452cd">1L</span>, TimeUnit.DAYS)  
@@ -1466,14 +663,14 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
         .build()  
 }
 </code></pre></div><p>声明一个注解，用于指定单个连接的超时时间。</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#707a7c">@Retention</span>(AnnotationRetention.RUNTIME)  
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4" tabindex="0"><code class="language-kotlin" data-lang="kotlin"><span style="color:#707a7c">@Retention</span>(AnnotationRetention.RUNTIME)  
 <span style="color:#707a7c">@Target</span>(AnnotationTarget.FUNCTION, AnnotationTarget.PROPERTY_GETTER, AnnotationTarget.PROPERTY_SETTER)  
 <span style="color:#8b008b;font-weight:bold">annotation</span> <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">Timeout</span>(<span style="color:#8b008b;font-weight:bold">val</span> value: Long, <span style="color:#8b008b;font-weight:bold">val</span> unit: TimeUnit)
 </code></pre></div><p>创建 <code>Retrofit</code> 对象时，添加一个 <code>CallAdapterFactory</code> ，读取注解设置超时时间。</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">val</span> retrofit: Retrofit <span style="color:#8b008b;font-weight:bold">by</span> lazy {  
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4" tabindex="0"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">val</span> retrofit: Retrofit <span style="color:#8b008b;font-weight:bold">by</span> lazy {  
     Retrofit.Builder()  
         .baseUrl(BASE_URL)  
-        .addConverterFactory(KotlinSerializeUtil.json.asConverterFactory(MediaType.parse(<span style="color:#cd5555">&#34;application/json&#34;</span>)!!))  
+        .addConverterFactory(KotlinSerializeUtil.json.asConverterFactory(MediaType.parse(<span style="color:#cd5555">"application/json"</span>)!!))  
         .addCallAdapterFactory(TimeoutCallAdapterFactory())  
         .client(okHttpClient)  
         .build()  
@@ -1497,10 +694,10 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
             <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">adapt</span>(call: Call&lt;Any&gt;): Call&lt;Any&gt; {  
                 <span style="color:#8b008b;font-weight:bold">val</span> path = call.request().url().url().path  
                 <span style="color:#8b008b;font-weight:bold">if</span> (timeout != <span style="color:#8b008b;font-weight:bold">null</span>) {  
-                    logger.debug(<span style="color:#cd5555">&#34;请求{}的超时时间被设置为{} {}&#34;</span>, path, timeout.value, timeout.unit)  
+                    logger.debug(<span style="color:#cd5555">"请求{}的超时时间被设置为{} {}"</span>, path, timeout.value, timeout.unit)  
                     call.timeout().timeout(timeout.value, timeout.unit)  
                 } <span style="color:#8b008b;font-weight:bold">else</span> {  
-                    logger.debug(<span style="color:#cd5555">&#34;请求{}的超时时间被设置为默认值{} s&#34;</span>, path, RetrofitManager.DEFAULT_TIMEOUT.toLong())  
+                    logger.debug(<span style="color:#cd5555">"请求{}的超时时间被设置为默认值{} s"</span>, path, RetrofitManager.DEFAULT_TIMEOUT.toLong())  
                     call.timeout().timeout(RetrofitManager.DEFAULT_TIMEOUT.toLong(), TimeUnit.SECONDS)  
                 }  
                 <span style="color:#8b008b;font-weight:bold">return</span> call  
@@ -1509,50 +706,50 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
     }  
 }
 </code></pre></div><p>然后就可以借助注解便捷地指定某单个请求的超时时间了。</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#228b22">/**  
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4" tabindex="0"><code class="language-kotlin" data-lang="kotlin"><span style="color:#228b22">/**  
 </span><span style="color:#228b22"> * [Telegram Bot API](https://core.telegram.org/bots/api) */</span><span style="color:#8b008b;font-weight:bold">interface</span> <span style="color:#008b45;font-weight:bold">BotApi</span> {  
   
-    <span style="color:#707a7c">@GET</span>(<span style="color:#cd5555">&#34;/bot{token}/getMe&#34;</span>)  
-    <span style="color:#8b008b;font-weight:bold">suspend</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">getMe</span>(<span style="color:#707a7c">@Path</span>(<span style="color:#cd5555">&#34;token&#34;</span>) token: BotToken): ResultWrapperBean&lt;UserBean&gt;  
+    <span style="color:#707a7c">@GET</span>(<span style="color:#cd5555">"/bot{token}/getMe"</span>)  
+    <span style="color:#8b008b;font-weight:bold">suspend</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">getMe</span>(<span style="color:#707a7c">@Path</span>(<span style="color:#cd5555">"token"</span>) token: BotToken): ResultWrapperBean&lt;UserBean&gt;  
   
     <span style="color:#228b22">/**  
 </span><span style="color:#228b22">     * 获取更新消息，长连接  
 </span><span style="color:#228b22">     */</span>  
     <span style="color:#707a7c">@Headers</span>(  
-        <span style="color:#cd5555">&#34;</span><span style="color:#cd5555">${RetrofitManager.READ_TIMEOUT}</span><span style="color:#cd5555">: 6000&#34;</span>,  
-        <span style="color:#cd5555">&#34;</span><span style="color:#cd5555">${RetrofitManager.WRITE_TIMEOUT}</span><span style="color:#cd5555">: 6000&#34;</span>,  
-        <span style="color:#cd5555">&#34;</span><span style="color:#cd5555">${RetrofitManager.CONNECT_TIMEOUT}</span><span style="color:#cd5555">: 6000&#34;</span>  
+        <span style="color:#cd5555">"</span><span style="color:#cd5555">${RetrofitManager.READ_TIMEOUT}</span><span style="color:#cd5555">: 6000"</span>,  
+        <span style="color:#cd5555">"</span><span style="color:#cd5555">${RetrofitManager.WRITE_TIMEOUT}</span><span style="color:#cd5555">: 6000"</span>,  
+        <span style="color:#cd5555">"</span><span style="color:#cd5555">${RetrofitManager.CONNECT_TIMEOUT}</span><span style="color:#cd5555">: 6000"</span>  
     )  
     <span style="color:#707a7c">@Timeout</span>(value = <span style="color:#b452cd">60L</span>, unit = TimeUnit.SECONDS)  
-    <span style="color:#707a7c">@GET</span>(<span style="color:#cd5555">&#34;/bot{token}/getUpdates?timeout=30&amp;allowed_updates=message,edited_message&#34;</span>) <span style="color:#228b22">// timeout单位秒  
-</span><span style="color:#228b22"></span>    <span style="color:#8b008b;font-weight:bold">suspend</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">getUpdates</span>(<span style="color:#707a7c">@Path</span>(<span style="color:#cd5555">&#34;token&#34;</span>) token: BotToken, <span style="color:#707a7c">@Query</span>(<span style="color:#cd5555">&#34;offset&#34;</span>) offset: Long? = <span style="color:#8b008b;font-weight:bold">null</span>): ResultWrapperBean&lt;List&lt;UpdateBean&gt;&gt;
+    <span style="color:#707a7c">@GET</span>(<span style="color:#cd5555">"/bot{token}/getUpdates?timeout=30&amp;allowed_updates=message,edited_message"</span>) <span style="color:#228b22">// timeout单位秒  
+</span><span style="color:#228b22"></span>    <span style="color:#8b008b;font-weight:bold">suspend</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">getUpdates</span>(<span style="color:#707a7c">@Path</span>(<span style="color:#cd5555">"token"</span>) token: BotToken, <span style="color:#707a7c">@Query</span>(<span style="color:#cd5555">"offset"</span>) offset: Long? = <span style="color:#8b008b;font-weight:bold">null</span>): ResultWrapperBean&lt;List&lt;UpdateBean&gt;&gt;
 }
 </code></pre></div><h2 id="消息循环实现">消息循环实现</h2>
 <p>前面我们已经实现了安卓 <code>Handler</code> 机制的简单移植和协程的支持，这里就写个 <code>Handler</code> 来实现吧。</p>
-<p><img src="https://images.ntutn.top/2022/08/d6cebada8649392ee9578f282fea2b1e.png" alt="Pasted image 20220827025958"></p>
+<p><img alt="Pasted image 20220827025958" src="https://images.ntutn.top/2022/08/d6cebada8649392ee9578f282fea2b1e.png"/></p>
 <p>当开始获取消息时发送了一条 <code>Message</code> ，而后就开始执行单条消息的获取和处理了。注意不要捕获 <code>CancellationException</code> 时重试，否则job取消时就死循环了。</p>
 <h1 id="消息发送">消息发送</h1>
 <p>简单消息的发送就不说了，唯一麻烦点的是用tg发送文件。接口定义：</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">interface</span> <span style="color:#008b45;font-weight:bold">BotApi</span> {
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4" tabindex="0"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">interface</span> <span style="color:#008b45;font-weight:bold">BotApi</span> {
 <span style="color:#228b22">/**  
 </span><span style="color:#228b22"> * Use this method to send photos. On success, the sent Message is returned. * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)  
-</span><span style="color:#228b22"> * @param photo Photo to send. Pass a file_id as String to send a photo that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a photo from the Internet. The photo must be at most 10 MB in size. The photo&#39;s width and height must not exceed 10000 in total. Width and height ratio must be at most 20. More information on Sending Files »  
-</span><span style="color:#228b22"> */</span><span style="color:#707a7c">@POST</span>(<span style="color:#cd5555">&#34;/bot{token}/sendPhoto&#34;</span>)  
+</span><span style="color:#228b22"> * @param photo Photo to send. Pass a file_id as String to send a photo that exists on the Telegram servers (recommended), pass an HTTP URL as a String for Telegram to get a photo from the Internet. The photo must be at most 10 MB in size. The photo's width and height must not exceed 10000 in total. Width and height ratio must be at most 20. More information on Sending Files »  
+</span><span style="color:#228b22"> */</span><span style="color:#707a7c">@POST</span>(<span style="color:#cd5555">"/bot{token}/sendPhoto"</span>)  
 <span style="color:#707a7c">@Multipart</span>  
-<span style="color:#8b008b;font-weight:bold">suspend</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">sendPhoto</span>(<span style="color:#707a7c">@Path</span>(<span style="color:#cd5555">&#34;token&#34;</span>) token: BotToken, <span style="color:#707a7c">@Part</span>(<span style="color:#cd5555">&#34;chat_id&#34;</span>) chatId: RequestBody, <span style="color:#707a7c">@Part</span> photo: MultipartBody.Part): ResultWrapperBean&lt;MessageBean&gt;
+<span style="color:#8b008b;font-weight:bold">suspend</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">sendPhoto</span>(<span style="color:#707a7c">@Path</span>(<span style="color:#cd5555">"token"</span>) token: BotToken, <span style="color:#707a7c">@Part</span>(<span style="color:#cd5555">"chat_id"</span>) chatId: RequestBody, <span style="color:#707a7c">@Part</span> photo: MultipartBody.Part): ResultWrapperBean&lt;MessageBean&gt;
 }
 </code></pre></div><p>使用</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">String</span>.toRequestBody(): RequestBody {  
-    <span style="color:#8b008b;font-weight:bold">return</span> RequestBody.create(MediaType.parse(<span style="color:#cd5555">&#34;text/plain&#34;</span>), <span style="color:#8b008b;font-weight:bold">this</span>)  
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4" tabindex="0"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">String</span>.toRequestBody(): RequestBody {  
+    <span style="color:#8b008b;font-weight:bold">return</span> RequestBody.create(MediaType.parse(<span style="color:#cd5555">"text/plain"</span>), <span style="color:#8b008b;font-weight:bold">this</span>)  
 }  
   
 <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">File</span>.toMultiplePart(parameter: String): MultipartBody.Part {  
-    <span style="color:#8b008b;font-weight:bold">return</span> MultipartBody.Part.createFormData(parameter, name, RequestBody.create(MediaType.parse(<span style="color:#cd5555">&#34;multipart/form-data&#34;</span>), <span style="color:#8b008b;font-weight:bold">this</span>))  
+    <span style="color:#8b008b;font-weight:bold">return</span> MultipartBody.Part.createFormData(parameter, name, RequestBody.create(MediaType.parse(<span style="color:#cd5555">"multipart/form-data"</span>), <span style="color:#8b008b;font-weight:bold">this</span>))  
 }
 
 BotScope.launch(Dispatchers.IO) {  
     kotlin.runCatching {  
-        BotApi.<span style="color:#8b008b;font-weight:bold">get</span>().sendPhoto(ConfigUtil.botToken, chatId.toRequestBody(), photoFile.toMultiplePart(<span style="color:#cd5555">&#34;photo&#34;</span>))  
+        BotApi.<span style="color:#8b008b;font-weight:bold">get</span>().sendPhoto(ConfigUtil.botToken, chatId.toRequestBody(), photoFile.toMultiplePart(<span style="color:#cd5555">"photo"</span>))  
     }.onFailure {  
         <span style="color:#8b008b;font-weight:bold">it</span>.printStackTrace()  
     }  
@@ -1563,7 +760,7 @@ BotScope.launch(Dispatchers.IO) {
 <h2 id="基本插件化原理">基本插件化原理</h2>
 <p>java本身有加载外部jar的 <code>ClassLoader</code> —— <code>URLClassLoader</code> ，因此插件可以定义为单个外部jar包，插件与宿主之间借助SPI进行通信。</p>
 <p>因而，我首先定义插件API：</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#228b22">/**  
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4" tabindex="0"><code class="language-kotlin" data-lang="kotlin"><span style="color:#228b22">/**  
 </span><span style="color:#228b22"> * 机器人功能接口，需要插件来实现  
 </span><span style="color:#228b22"> */</span>  
 <span style="color:#8b008b;font-weight:bold">interface</span> <span style="color:#008b45;font-weight:bold">BotContentProvider</span> {  
@@ -1604,7 +801,7 @@ BotScope.launch(Dispatchers.IO) {
 }
 </code></pre></div><p>宿主通过implementation方式引入，插件通过compileOnly方式引入。当一条新消息到达时，宿主将调用插件的 <code>onTextMessage()</code> 方法，如果插件进行了处理则返回true，消息不再传递给下一个插件。</p>
 <p>一个简单的EchoBot如下：</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4" tabindex="0"><code class="language-kotlin" data-lang="kotlin">
 <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">EchoBot</span>: BotContentProvider {
 
 	<span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onTextMessage</span>(context: TextChatContext) {
@@ -1615,11 +812,11 @@ BotScope.launch(Dispatchers.IO) {
 </code></pre></div><h2 id="插件版本兼容">插件版本兼容</h2>
 <p>然而这样的方案遇到一个问题，就是不同版本插件API的jar包不是ABI兼容的。如果API中新增了一个方法如 <code>onPhotoMessage</code> ，即使这个方法有默认实现，第三方插件也是要重新编译才能被我们的新版本机器人使用的。这是因为Kotlin的接口默认实现是编译期间的魔法，它将类未实现接口的默认方法指向一个叫 <code>DefaultsImpls</code> 的类。所以只有重新编译，第三方插件才能使用，因为他们没有实现我们新增的方法。</p>
 <p>我目前的方法是，给接口包名中加入版本号，每次升级时复制一份。</p>
-<p><img src="https://images.ntutn.top/2022/08/18fd51b47d64a36b59035df69fa4fe3d.png" alt="Pasted image 20220829014314"></p>
+<p><img alt="Pasted image 20220829014314" src="https://images.ntutn.top/2022/08/18fd51b47d64a36b59035df69fa4fe3d.png"/></p>
 <p>然后加载插件时同时查找旧版本实现，通过适配器适配为新版本接口实现。</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">BotContentProviderAdapter</span>(<span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> adaptee: V1Adapter): V2Provider, LoggerOwner <span style="color:#8b008b;font-weight:bold">by</span> slf4jLoggerOwner&lt;BotContentProviderAdapter&gt;() {  
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4" tabindex="0"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">BotContentProviderAdapter</span>(<span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> adaptee: V1Adapter): V2Provider, LoggerOwner <span style="color:#8b008b;font-weight:bold">by</span> slf4jLoggerOwner&lt;BotContentProviderAdapter&gt;() {  
     <span style="color:#8b008b;font-weight:bold">init</span> {  
-        logger.warn(<span style="color:#cd5555">&#34;{} 插件使用了旧版本API，现通过兼容方式装入，请联系开发者进行升级适配！&#34;</span>, adaptee.pluginName)  
+        logger.warn(<span style="color:#cd5555">"{} 插件使用了旧版本API，现通过兼容方式装入，请联系开发者进行升级适配！"</span>, adaptee.pluginName)  
     }  
   
     <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">val</span> pluginName: String = adaptee.pluginName  
@@ -1636,24 +833,24 @@ BotScope.launch(Dispatchers.IO) {
 <h1 id="部署和运行">部署和运行</h1>
 <h2 id="基本部署">基本部署</h2>
 <p>使用 <a href="https://docs.gradle.org/current/userguide/application_plugin.html">The Application Plugin</a> 进行打包。tar包复制到服务器上，然后</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">tar -xvf ./starsea.tar
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4" tabindex="0"><code class="language-sh" data-lang="sh">tar -xvf ./starsea.tar
 nohup starsea/starsea &amp;
 </code></pre></div><h2 id="偶然崩溃自动重启">偶然崩溃自动重启</h2>
 <p>作为一个想要长期运行的机器人服务，偶尔崩掉一两次也是正常的，写一个脚本在程序崩溃时自动再次拉起来还是有必要的。当然我认为系统得至少稳定运行了一段时间，才能走崩溃自动拉起来的逻辑，否则万一发生了启动崩溃，拉起来就崩，崩了就拉起来，服务器：听我说谢谢你～</p>
 <p>我的策略是，启动时脚本创建一个标志文件，系统稳定运行一段时间如5分钟后就把这个文件删掉。如果发生崩溃且未找到这个文件，脚本就尝试再次把机器人拉起来。</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#1e889b">#!/bin/sh  
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4" tabindex="0"><code class="language-sh" data-lang="sh"><span style="color:#1e889b">#!/bin/sh  
 </span><span style="color:#1e889b"></span>  
 <span style="color:#228b22">#  </span>
 <span style="color:#228b22"># Copyright © 2015-2021 the original authors.  </span>
 <span style="color:#228b22">#  </span>
-<span style="color:#228b22"># Licensed under the Apache License, Version 2.0 (the &#34;License&#34;);  </span>
+<span style="color:#228b22"># Licensed under the Apache License, Version 2.0 (the "License");  </span>
 <span style="color:#228b22"># you may not use this file except in compliance with the License.  </span>
 <span style="color:#228b22"># You may obtain a copy of the License at  </span>
 <span style="color:#228b22">#  </span>
 <span style="color:#228b22">#      https://www.apache.org/licenses/LICENSE-2.0  </span>
 <span style="color:#228b22">#  </span>
 <span style="color:#228b22"># Unless required by applicable law or agreed to in writing, software  </span>
-<span style="color:#228b22"># distributed under the License is distributed on an &#34;AS IS&#34; BASIS,  </span>
+<span style="color:#228b22"># distributed under the License is distributed on an "AS IS" BASIS,  </span>
 <span style="color:#228b22"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  </span>
 <span style="color:#228b22"># See the License for the specific language governing permissions and  </span>
 <span style="color:#228b22"># limitations under the License.  </span>
@@ -1666,17 +863,17 @@ nohup starsea/starsea &amp;
   
 <span style="color:#228b22"># Need this for daisy-chained symlinks.  </span>
 <span style="color:#8b008b;font-weight:bold">while</span>  
-    <span style="color:#00688b">APP_HOME</span>=<span style="color:#cd5555">${</span><span style="color:#00688b">app_path</span>%<span style="color:#cd5555">&#34;</span><span style="color:#cd5555">${</span><span style="color:#00688b">app_path</span>##*/<span style="color:#cd5555">}</span><span style="color:#cd5555">&#34;</span><span style="color:#cd5555">}</span>  <span style="color:#228b22"># leaves a trailing /; empty if no leading path  </span>
-    [ -h <span style="color:#cd5555">&#34;</span><span style="color:#00688b">$app_path</span><span style="color:#cd5555">&#34;</span> ]  
+    <span style="color:#00688b">APP_HOME</span>=<span style="color:#cd5555">${</span><span style="color:#00688b">app_path</span>%<span style="color:#cd5555">"</span><span style="color:#cd5555">${</span><span style="color:#00688b">app_path</span>##*/<span style="color:#cd5555">}</span><span style="color:#cd5555">"</span><span style="color:#cd5555">}</span>  <span style="color:#228b22"># leaves a trailing /; empty if no leading path  </span>
+    [ -h <span style="color:#cd5555">"</span><span style="color:#00688b">$app_path</span><span style="color:#cd5555">"</span> ]  
 <span style="color:#8b008b;font-weight:bold">do</span>  
-    <span style="color:#00688b">ls</span>=<span style="color:#8b008b;font-weight:bold">$(</span> ls -ld <span style="color:#cd5555">&#34;</span><span style="color:#00688b">$app_path</span><span style="color:#cd5555">&#34;</span> <span style="color:#8b008b;font-weight:bold">)</span>  
-    <span style="color:#00688b">link</span>=<span style="color:#cd5555">${</span><span style="color:#00688b">ls</span>#*<span style="color:#cd5555">&#39; -&gt; &#39;</span><span style="color:#cd5555">}</span>  
+    <span style="color:#00688b">ls</span>=<span style="color:#8b008b;font-weight:bold">$(</span> ls -ld <span style="color:#cd5555">"</span><span style="color:#00688b">$app_path</span><span style="color:#cd5555">"</span> <span style="color:#8b008b;font-weight:bold">)</span>  
+    <span style="color:#00688b">link</span>=<span style="color:#cd5555">${</span><span style="color:#00688b">ls</span>#*<span style="color:#cd5555">' -&gt; '</span><span style="color:#cd5555">}</span>  
     <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#00688b">$link</span> in             <span style="color:#228b22">#(  </span>
       /*)   <span style="color:#00688b">app_path</span>=<span style="color:#00688b">$link</span> ;; <span style="color:#228b22">#(  </span>
       *)    <span style="color:#00688b">app_path</span>=<span style="color:#00688b">$APP_HOME$link</span> ;;  
     esacdone  
   
-<span style="color:#00688b">APP_HOME</span>=<span style="color:#8b008b;font-weight:bold">$(</span> <span style="color:#658b00">cd</span> <span style="color:#cd5555">&#34;</span><span style="color:#cd5555">${</span><span style="color:#00688b">APP_HOME</span><span style="color:#8b008b;font-weight:bold">:-</span>./<span style="color:#cd5555">}</span><span style="color:#cd5555">&#34;</span> &amp;&amp; <span style="color:#658b00">pwd</span> -P <span style="color:#8b008b;font-weight:bold">)</span> || <span style="color:#658b00">exit</span>  
+<span style="color:#00688b">APP_HOME</span>=<span style="color:#8b008b;font-weight:bold">$(</span> <span style="color:#658b00">cd</span> <span style="color:#cd5555">"</span><span style="color:#cd5555">${</span><span style="color:#00688b">APP_HOME</span><span style="color:#8b008b;font-weight:bold">:-</span>./<span style="color:#cd5555">}</span><span style="color:#cd5555">"</span> &amp;&amp; <span style="color:#658b00">pwd</span> -P <span style="color:#8b008b;font-weight:bold">)</span> || <span style="color:#658b00">exit</span>  
 <span style="color:#00688b">DEMAND_LOCK</span>=demand_lock.lock  
   
 rm <span style="color:#00688b">$DEMAND_LOCK</span>  
@@ -1688,15 +885,15 @@ rm <span style="color:#00688b">$DEMAND_LOCK</span>
         <span style="color:#658b00">break</span>  
     <span style="color:#8b008b;font-weight:bold">fi</span>  
     touch <span style="color:#00688b">$DEMAND_LOCK</span>  
-    <span style="color:#658b00">echo</span> <span style="color:#cd5555">&#34;demand starting system...&#34;</span>  
-    <span style="color:#00688b">$APP_HOME</span>/starsea <span style="color:#228b22"># 启动一段时间后会删除这个文件 $DEMAND_LOCK    echo &#34;system exited.&#34;  </span>
+    <span style="color:#658b00">echo</span> <span style="color:#cd5555">"demand starting system..."</span>  
+    <span style="color:#00688b">$APP_HOME</span>/starsea <span style="color:#228b22"># 启动一段时间后会删除这个文件 $DEMAND_LOCK    echo "system exited."  </span>
 <span style="color:#8b008b;font-weight:bold">done</span>  
   
-<span style="color:#658b00">echo</span> <span style="color:#cd5555">&#34;It seems that app exited in a short time. Please check and restart again.&#34;</span>
+<span style="color:#658b00">echo</span> <span style="color:#cd5555">"It seems that app exited in a short time. Please check and restart again."</span>
 </code></pre></div><p>然后在机器人启动时</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#228b22">// 运行5分钟后删除demand lock，这表示系统可以进入稳定运行阶段。如果刚启动就退出脚本不会重启程序  
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4" tabindex="0"><code class="language-kotlin" data-lang="kotlin"><span style="color:#228b22">// 运行5分钟后删除demand lock，这表示系统可以进入稳定运行阶段。如果刚启动就退出脚本不会重启程序  
 </span><span style="color:#228b22"></span>handler.postDelayed({  
-    File(<span style="color:#cd5555">&#34;demand_lock.lock&#34;</span>).takeIf { <span style="color:#8b008b;font-weight:bold">it</span>.exists() }?.delete() 
+    File(<span style="color:#cd5555">"demand_lock.lock"</span>).takeIf { <span style="color:#8b008b;font-weight:bold">it</span>.exists() }?.delete() 
 }, <span style="color:#b452cd">5</span> * <span style="color:#b452cd">60</span> * <span style="color:#b452cd">1000</span>)
 </code></pre></div><h2 id="主线程崩溃长时间未响应检测">主线程崩溃/长时间未响应检测</h2>
 <p>与安卓上不同，java默认一个线程的崩溃并不会导致整个程序的退出。于去我们的需求讲这并不合适。</p>
@@ -1710,7 +907,7 @@ rm <span style="color:#00688b">$DEMAND_LOCK</span>
 <li>重复上面步骤。</li>
 </ol>
 <p>最终这部分代码如下：</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4" tabindex="0"><code class="language-kotlin" data-lang="kotlin">
 <span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#008b45;font-weight:bold">ApplicationContext</span>: Thread.UncaughtExceptionHandler, LoggerOwner <span style="color:#8b008b;font-weight:bold">by</span> slf4jLoggerOwner&lt;ApplicationContext&gt;() {  
     <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> handler <span style="color:#8b008b;font-weight:bold">by</span> lazy { Handler(Looper.mainLooper()) }  
   
@@ -1720,7 +917,7 @@ rm <span style="color:#00688b">$DEMAND_LOCK</span>
 </span><span style="color:#228b22">     * 将系统标记为稳定运行状态。demand_lock.lock文件是由启动脚本生成的。  
 </span><span style="color:#228b22">     */</span>  
     <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">markStable</span>() {  
-        File(<span style="color:#cd5555">&#34;demand_lock.lock&#34;</span>).takeIf { <span style="color:#8b008b;font-weight:bold">it</span>.exists() }?.delete()  
+        File(<span style="color:#cd5555">"demand_lock.lock"</span>).takeIf { <span style="color:#8b008b;font-weight:bold">it</span>.exists() }?.delete()  
     }  
   
     <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">init</span>() {  
@@ -1730,15 +927,15 @@ rm <span style="color:#00688b">$DEMAND_LOCK</span>
         <span style="color:#228b22">// 主线程长期无响应终止运行  
 </span><span style="color:#228b22"></span>        <span style="color:#8b008b;font-weight:bold">var</span> bomb: Boolean  
         thread {  
-            Thread.currentThread().name = <span style="color:#cd5555">&#34;main-watcher&#34;</span>  
+            Thread.currentThread().name = <span style="color:#cd5555">"main-watcher"</span>  
             <span style="color:#8b008b;font-weight:bold">while</span> (<span style="color:#8b008b;font-weight:bold">true</span>) {  
                 bomb = <span style="color:#8b008b;font-weight:bold">true</span>  
                 handler.post { bomb = <span style="color:#8b008b;font-weight:bold">false</span> }  
                 Thread.sleep(<span style="color:#b452cd">600</span>_000)  
                 <span style="color:#8b008b;font-weight:bold">if</span> (bomb) {  
-                    logger.error(<span style="color:#cd5555">&#34;主线程长时间未响应！&#34;</span>)  
+                    logger.error(<span style="color:#cd5555">"主线程长时间未响应！"</span>)  
                     Thread.getAllStackTraces().forEach {  
-                        logger.error(<span style="color:#cd5555">&#34;dump thread {}, {}&#34;</span>, <span style="color:#8b008b;font-weight:bold">it</span>.key, <span style="color:#8b008b;font-weight:bold">it</span>.value)  
+                        logger.error(<span style="color:#cd5555">"dump thread {}, {}"</span>, <span style="color:#8b008b;font-weight:bold">it</span>.key, <span style="color:#8b008b;font-weight:bold">it</span>.value)  
                     }  
                     exitProcess(<span style="color:#b452cd">1</span>)  
                 }  
@@ -1763,9 +960,9 @@ rm <span style="color:#00688b">$DEMAND_LOCK</span>
     }  
   
     <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">uncaughtException</span>(thread: Thread, tr: Throwable) {  
-        logger.error(<span style="color:#cd5555">&#34;exception in thread {}&#34;</span>, thread, tr)  
-        <span style="color:#8b008b;font-weight:bold">if</span> (thread.name == <span style="color:#cd5555">&#34;main&#34;</span>) {  
-            logger.error(<span style="color:#cd5555">&#34;Main thread crashed!&#34;</span>)  
+        logger.error(<span style="color:#cd5555">"exception in thread {}"</span>, thread, tr)  
+        <span style="color:#8b008b;font-weight:bold">if</span> (thread.name == <span style="color:#cd5555">"main"</span>) {  
+            logger.error(<span style="color:#cd5555">"Main thread crashed!"</span>)  
             exitProcess(<span style="color:#b452cd">1</span>)  
         }  
     }  
@@ -1774,7 +971,7 @@ rm <span style="color:#00688b">$DEMAND_LOCK</span>
 </code></pre></div><h1 id="其他">其他</h1>
 <h2 id="logger的封装">Logger的封装</h2>
 <p>直接上代码。目的就是少写一点模板代码，没什么复杂的。</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">interface</span> <span style="color:#008b45;font-weight:bold">LoggerOwner</span> {  
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4" tabindex="0"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">interface</span> <span style="color:#008b45;font-weight:bold">LoggerOwner</span> {  
     <span style="color:#8b008b;font-weight:bold">val</span> logger: Logger  
 }  
   
@@ -1791,7 +988,7 @@ rm <span style="color:#00688b">$DEMAND_LOCK</span>
 </span><span style="color:#228b22"> * 创建logger对象。  
 </span><span style="color:#228b22"> * 用于方法委托使用。  
 </span><span style="color:#228b22"> */</span>  
-<span style="color:#8b008b;font-weight:bold">inline</span> <span style="color:#8b008b;font-weight:bold">fun</span> &lt;<span style="color:#8b008b;font-weight:bold">reified</span> <span style="color:#008b45;font-weight:bold">T</span>&gt; <span style="color:#008b45">slf4jLoggerOwner</span>(): Slf4jLoggerOwner = Slf4jLoggerOwner(T::<span style="color:#8b008b;font-weight:bold">class</span>.java.canonicalName?:<span style="color:#cd5555">&#34;NO_NAME&#34;</span>)  
+<span style="color:#8b008b;font-weight:bold">inline</span> <span style="color:#8b008b;font-weight:bold">fun</span> &lt;<span style="color:#8b008b;font-weight:bold">reified</span> <span style="color:#008b45;font-weight:bold">T</span>&gt; <span style="color:#008b45">slf4jLoggerOwner</span>(): Slf4jLoggerOwner = Slf4jLoggerOwner(T::<span style="color:#8b008b;font-weight:bold">class</span>.java.canonicalName?:<span style="color:#cd5555">"NO_NAME"</span>)  
   
 <span style="color:#228b22">/**  
 </span><span style="color:#228b22"> * 创建logger对象  
@@ -1799,81 +996,50 @@ rm <span style="color:#00688b">$DEMAND_LOCK</span>
 </span><span style="color:#228b22"> */</span>  
 <span style="color:#8b008b;font-weight:bold">inline</span> <span style="color:#8b008b;font-weight:bold">fun</span> &lt;<span style="color:#8b008b;font-weight:bold">reified</span> <span style="color:#008b45;font-weight:bold">T</span>&gt; <span style="color:#008b45">slf4jLogger</span>(): Logger = slf4jLoggerOwner&lt;T&gt;().logger
 </code></pre></div><p>使用方法一（类文件中）：</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">Demo1</span>: LoggerOwner <span style="color:#8b008b;font-weight:bold">by</span> slf4jLoggerOwner&lt;Demo1&gt;() {
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4" tabindex="0"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">Demo1</span>: LoggerOwner <span style="color:#8b008b;font-weight:bold">by</span> slf4jLoggerOwner&lt;Demo1&gt;() {
 	<span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">demo1</span>() {
-		logger.info(<span style="color:#cd5555">&#34;demo 1&#34;</span>)
+		logger.info(<span style="color:#cd5555">"demo 1"</span>)
 	}
 }
 </code></pre></div><p>使用方法2（单个方法中）：</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4" tabindex="0"><code class="language-kotlin" data-lang="kotlin">
 <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">Demo2</span>
 
 <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">demo2</span>() {
 	<span style="color:#8b008b;font-weight:bold">val</span> logger = slf4jLogger&lt;Demo2&gt;()
-	logger.info(<span style="color:#cd5555">&#34;demo 2&#34;</span>)
+	logger.info(<span style="color:#cd5555">"demo 2"</span>)
 }
 </code></pre></div>
-                    
-                    <HR width="100%" id="EOF">
-		    <p style="color:#777;">最后修改于 2022-08-30</p>
-                    
-                </div>
-            </div>
-            
-            
-            <nav class="post-pagination">
-
-                
-                <a class="newer-posts" href="/posts/xfermode%E8%B8%A9%E5%9D%91%E5%B0%8F%E7%BB%93/">
-			下回<br>Xfermode踩坑小结
+<hr id="EOF" width="100%"/>
+<p style="color:#777;">最后修改于 2022-08-30</p>
+</div>
+</div>
+<nav class="post-pagination">
+<a class="newer-posts" href="/posts/xfermode%E8%B8%A9%E5%9D%91%E5%B0%8F%E7%BB%93/">
+			下回<br/>Xfermode踩坑小结
                 </a>
-                
-                
-                
-                <a class="older-posts" href="/posts/retrofit%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/">
-			上回<br>Retrofit源码阅读
+<a class="older-posts" href="/posts/retrofit%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/">
+			上回<br/>Retrofit源码阅读
                 </a>
-                
-            </nav>
-            <div class="post-comment-wrapper">
-                
-
-
-
-
-
-
-
-
-
-
-<script src="https://utteranc.es/client.js"
-        repo="zerofancy/zerofancy.github.io"
-        issue-term="title"
-        label=""
-        theme="github-light"
-        crossorigin="anonymous"
-        async>
+</nav>
+<div class="post-comment-wrapper">
+<script async="" crossorigin="anonymous" issue-term="title" label="" repo="zerofancy/zerofancy.github.io" src="https://utteranc.es/client.js" theme="github-light">
 </script>
-
-            </div>
-        </div>
-    </div>
-
-
-                    </div>
-            </div><div id="single-column-footer">
+</div>
+</div>
+</div>
+</div>
+</div><div id="single-column-footer">
 Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
-<br>
-移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
-<br>
+<br/>
+移植自 <a href="https://mak1t0.cc/" rel="noreferrer noopener" target="_blank">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" rel="noreferrer noopener" target="_blank">Journal.</a> <br/>
+<br/>
 
-&copy;
+©
 	
 	CC BY-SA 4.0
 	
 </div>
-            </div>
-    
-    <script src="/js/journal.js"></script></body>
+</div>
+<script src="/js/journal.js"></script></body>
 </html>

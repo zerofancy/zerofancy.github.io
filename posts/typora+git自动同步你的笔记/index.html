@@ -1,87 +1,28 @@
 <!DOCTYPE html>
 <html><head>
-<title>Typora&#43;git自动同步你的笔记</title>
-
-
-
-
-<meta charset="utf-8">
-<meta name="X-UA-Compatible" content="IE=edge">
-<meta name="google-site-verification" content="">
-<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
-<meta content="telephone=no" name="format-detection">
-<meta name="description" content="这两天看了群里某个大佬的笔记，突然觉得自己用VSCode记笔记的方案不香了。VSCode虽然对markdown的支持不错，但毕竟本职工作不是这个，直接拿来做笔记还是不够方便，太笨重了。于是我终于想起之前同学给我安利的markdown编辑器：Typora。">
-<meta name="renderer" content="webkit">
-<meta name="theme-color" content="#ffffff">
-
-
-
-<meta property="og:title" content="Typora&#43;git自动同步你的笔记" />
-<meta property="og:description" content="这两天看了群里某个大佬的笔记，突然觉得自己用VSCode记笔记的方案不香了。VSCode虽然对markdown的支持不错，但毕竟本职工作不是这个，直接拿来做笔记还是不够方便，太笨重了。于是我终于想起之前同学给我安利的markdown编辑器：Typora。" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://ntutn.top/posts/typora&#43;git%E8%87%AA%E5%8A%A8%E5%90%8C%E6%AD%A5%E4%BD%A0%E7%9A%84%E7%AC%94%E8%AE%B0/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2020-03-02T03:11:37+08:00" />
-<meta property="article:modified_time" content="2020-03-02T03:11:37+08:00" /><meta property="og:site_name" content="归零幻想" />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-<link rel="icon" href="//images.ntutn.top/favicon.ico">
-
-
-
-      <script src="/js/toc.js"></script>
-    
-    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
-<link rel="stylesheet" href="/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
-
-
-
-<link rel="stylesheet" href="/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
-
-
-<link rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Material+Icons">
-
-
-
-<script defer
-	src='https://static.cloudflareinsights.com/beacon.min.js'
-	data-cf-beacon='{"token": 5a03d307f5214109a1e7c8b2cf306a3d'>
+<title>Typora+git自动同步你的笔记</title>
+<meta charset="utf-8"/>
+<meta content="IE=edge" name="X-UA-Compatible"/>
+<meta content="" name="google-site-verification"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"/>
+<meta content="telephone=no" name="format-detection"/>
+<meta content="这两天看了群里某个大佬的笔记，突然觉得自己用VSCode记笔记的方案不香了。VSCode虽然对markdown的支持不错，但毕竟本职工作不是这个，直接拿来做笔记还是不够方便，太笨重了。于是我终于想起之前同学给我安利的markdown编辑器：Typora。" name="description"/>
+<meta content="webkit" name="renderer"/>
+<meta content="#ffffff" name="theme-color"/>
+<meta content="Typora+git自动同步你的笔记" property="og:title"/>
+<meta content="这两天看了群里某个大佬的笔记，突然觉得自己用VSCode记笔记的方案不香了。VSCode虽然对markdown的支持不错，但毕竟本职工作不是这个，直接拿来做笔记还是不够方便，太笨重了。于是我终于想起之前同学给我安利的markdown编辑器：Typora。" property="og:description"/>
+<meta content="article" property="og:type"/>
+<meta content="https://ntutn.top/posts/typora+git%E8%87%AA%E5%8A%A8%E5%90%8C%E6%AD%A5%E4%BD%A0%E7%9A%84%E7%AC%94%E8%AE%B0/" property="og:url"/><meta content="posts" property="article:section"/>
+<meta content="2020-03-02T03:11:37+08:00" property="article:published_time"/>
+<meta content="2020-03-02T03:11:37+08:00" property="article:modified_time"/><meta content="归零幻想" property="og:site_name"/>
+<link href="//images.ntutn.top/favicon.ico" rel="icon"/>
+<script src="/js/toc.js"></script>
+<link href="/vendor/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen" rel="stylesheet"/>
+<link href="/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css?family=Material+Icons" rel="stylesheet"/>
+<script data-cf-beacon='{"token": 5a03d307f5214109a1e7c8b2cf306a3d' defer="" src="https://static.cloudflareinsights.com/beacon.min.js">
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <style>
     pre code {
         color: black;
@@ -89,7 +30,7 @@
     }
 </style>
 <script src="https://unpkg.com/zoomtastic@2.2.1"></script>
-<script src="https://unpkg.com/kotlin-playground@1" data-selector="code.language-kotlin"></script>
+<script data-selector="code.language-kotlin" src="https://unpkg.com/kotlin-playground@1"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function(event) { 
         document.querySelectorAll("div.post-body-wrapper img").forEach(function(element){
@@ -119,661 +60,254 @@
 	})();
 
 </script>
-
 </head>
 <body>
-    	<div id="app"><div id="sideContainer" class="side-container">
-    
-    <a class="a-block nav-head false" href="https://ntutn.top/">
-    
-        <div class="nav-title">
+<div id="app"><div class="side-container" id="sideContainer">
+<a class="a-block nav-head false" href="https://ntutn.top/">
+<div class="nav-title">
             归零幻想
         </div>
-        
-        <div class="nav-subtitle">
+<div class="nav-subtitle">
             零点还不算熬夜
         </div>
-        
-    </a>
-
-    <div class="nav-link-list">
-        
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="/project">
+</a>
+<div class="nav-link-list">
+<a class="a-block nav-link-item false" href="/project">
                 项目
             </a>
-            
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="/tags">
+<a class="a-block nav-link-item false" href="/tags">
                 标签
             </a>
-            
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="/zwiki">
+<a class="a-block nav-link-item false" href="/zwiki">
                 WIKI
             </a>
-            
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="/friends">
+<a class="a-block nav-link-item false" href="/friends">
                 友链
             </a>
-            
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="/about">
+<a class="a-block nav-link-item false" href="/about">
                 关于
             </a>
-            
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="/index.xml">
+<a class="a-block nav-link-item false" href="/index.xml">
                 RSS
             </a>
-            
-        
-            
-            
-            
-                
-            
-            
-            
-            <a class="a-block nav-link-item active" href="/posts">
+<a class="a-block nav-link-item active" href="/posts">
                 归档
             </a>
-            
-        
-    </div>
-
-    
-
-    <div class="nav-footer">
+</div>
+<div class="nav-footer">
         
 Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
-<br>
-移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
-<br>
+<br/>
+移植自 <a href="https://mak1t0.cc/" rel="noreferrer noopener" target="_blank">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" rel="noreferrer noopener" target="_blank">Journal.</a> <br/>
+<br/>
 
-&copy;
+©
 	
 	CC BY-SA 4.0
 	
 
     </div>
-    
-</div><div id="extraContainer" class="extra-container">
-    
-    
-    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
-
-
-	<div class="toc-content">
-	
-		
-		
-		
-		<center>- 目录 -</center>
-		
-		
-		<ul>
-			
-				
-				
-					
-						
-						
-						
-						
-							
-								
-									<ul>
-								
-							
-						
-						
-							<li>
-								<a href="#dalao%e7%9a%84%e7%ac%94%e8%ae%b0" onclick="onNavClick(`#dalao的笔记-nav`)" id="dalao的笔记-nav">
+</div><div class="extra-container" id="extraContainer">
+<div :class="{ invisible: scrollY &lt;= 140 }" class="toc animated-visibility">
+<div class="toc-content">
+<center>- 目录 -</center>
+<ul>
+<ul>
+<li>
+<a href="#dalao%e7%9a%84%e7%ac%94%e8%ae%b0" id="dalao的笔记-nav" onclick="onNavClick(`#dalao的笔记-nav`)">
 									dalao的笔记
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#typora%e5%90%8c%e5%ad%a6%e5%ae%89%e5%88%a9%e7%9a%84markdown%e7%bc%96%e8%be%91%e5%b7%a5%e5%85%b7" onclick="onNavClick(`#typora同学安利的markdown编辑工具-nav`)" id="typora同学安利的markdown编辑工具-nav">
+</li>
+<li>
+<a href="#typora%e5%90%8c%e5%ad%a6%e5%ae%89%e5%88%a9%e7%9a%84markdown%e7%bc%96%e8%be%91%e5%b7%a5%e5%85%b7" id="typora同学安利的markdown编辑工具-nav" onclick="onNavClick(`#typora同学安利的markdown编辑工具-nav`)">
 									Typora，同学安利的markdown编辑工具
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-							
-								
-									<ul>
-								
-							
-						
-						
-							<li>
-								<a href="#%e5%ae%89%e8%a3%85" onclick="onNavClick(`#安装-nav`)" id="安装-nav">
+</li>
+<ul>
+<li>
+<a href="#%e5%ae%89%e8%a3%85" id="安装-nav" onclick="onNavClick(`#安装-nav`)">
 									安装
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#%e5%a4%8d%e5%88%b6%e5%9b%be%e7%89%87" onclick="onNavClick(`#复制图片-nav`)" id="复制图片-nav">
+</li>
+<li>
+<a href="#%e5%a4%8d%e5%88%b6%e5%9b%be%e7%89%87" id="复制图片-nav" onclick="onNavClick(`#复制图片-nav`)">
 									复制图片
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#%e9%87%8d%e8%a6%81%e7%9a%84%e5%bf%ab%e6%8d%b7%e9%94%ae" onclick="onNavClick(`#重要的快捷键-nav`)" id="重要的快捷键-nav">
+</li>
+<li>
+<a href="#%e9%87%8d%e8%a6%81%e7%9a%84%e5%bf%ab%e6%8d%b7%e9%94%ae" id="重要的快捷键-nav" onclick="onNavClick(`#重要的快捷键-nav`)">
 									重要的快捷键
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-							
-								</ul>
-							
-						
-						
-						
-							<li>
-								<a href="#%e7%94%a8git%e7%ae%a1%e7%90%86%e7%ac%94%e8%ae%b0" onclick="onNavClick(`#用git管理笔记-nav`)" id="用git管理笔记-nav">
+</li>
+</ul>
+<li>
+<a href="#%e7%94%a8git%e7%ae%a1%e7%90%86%e7%ac%94%e8%ae%b0" id="用git管理笔记-nav" onclick="onNavClick(`#用git管理笔记-nav`)">
 									用git管理笔记
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#%e8%87%aa%e5%8a%a8%e5%90%8c%e6%ad%a5%e7%ac%94%e8%ae%b0" onclick="onNavClick(`#自动同步笔记-nav`)" id="自动同步笔记-nav">
+</li>
+<li>
+<a href="#%e8%87%aa%e5%8a%a8%e5%90%8c%e6%ad%a5%e7%ac%94%e8%ae%b0" id="自动同步笔记-nav" onclick="onNavClick(`#自动同步笔记-nav`)">
 									自动同步笔记
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#windows%e4%b8%8b%e7%9a%84%e9%85%8d%e7%bd%ae" onclick="onNavClick(`#windows下的配置-nav`)" id="windows下的配置-nav">
+</li>
+<li>
+<a href="#windows%e4%b8%8b%e7%9a%84%e9%85%8d%e7%bd%ae" id="windows下的配置-nav" onclick="onNavClick(`#windows下的配置-nav`)">
 									Windows下的配置
 								</a>
-							</li>
-						
-						
-					
-				
-			
-		</ul>
-	</div>
-
+</li>
+</ul>
+</ul></div>
 </div>
-    
-    <div class="pagination">
-        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
-            <i class="material-icons pagination-action-icon">
+<div class="pagination">
+<a :class="{ invisible: scrollY == 0 }" class="pagination-action animated-visibility" href="#top" id="globalBackToTop">
+<i class="material-icons pagination-action-icon">
                 keyboard_arrow_up
             </i>
-        </a>
-        
-        <a type="button" class="pagination-action" id="darkModeToggleButton">
-            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+</a>
+<a class="pagination-action" id="darkModeToggleButton" type="button">
+<span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
                 dark_mode
             </span>
-        </a>
-        
-        
-    </div>
+</a>
 </div>
-<div class="single-column-drawer-container" id="drawer"
-     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
-    <div class="drawer-content">
-        <div class="drawer-menu">
-            
-            
-            
-                
-                
-                
-                
-                
-                <a class="a-block drawer-menu-item false" href="/project">
+</div>
+<div class="single-column-drawer-container" id="drawer" v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+<div class="drawer-content">
+<div class="drawer-menu">
+<a class="a-block drawer-menu-item false" href="/project">
                     项目
                 </a>
-                
-            
-                
-                
-                
-                
-                
-                <a class="a-block drawer-menu-item false" href="/tags">
+<a class="a-block drawer-menu-item false" href="/tags">
                     标签
                 </a>
-                
-            
-                
-                
-                
-                
-                
-                <a class="a-block drawer-menu-item false" href="/zwiki">
+<a class="a-block drawer-menu-item false" href="/zwiki">
                     WIKI
                 </a>
-                
-            
-                
-                
-                
-                
-                
-                <a class="a-block drawer-menu-item false" href="/friends">
+<a class="a-block drawer-menu-item false" href="/friends">
                     友链
                 </a>
-                
-            
-                
-                
-                
-                
-                
-                <a class="a-block drawer-menu-item false" href="/about">
+<a class="a-block drawer-menu-item false" href="/about">
                     关于
                 </a>
-                
-            
-                
-                
-                
-                
-                
-                <a class="a-block drawer-menu-item false" href="/index.xml">
+<a class="a-block drawer-menu-item false" href="/index.xml">
                     RSS
                 </a>
-                
-            
-                
-                
-                
-                    
-                
-                
-                
-                <a class="a-block drawer-menu-item active" href="/posts">
+<a class="a-block drawer-menu-item active" href="/posts">
                     归档
                 </a>
-                
-            
-            
-            <div class="toc">
-
-
-	<div class="toc-content">
-	
-		
-		
-		
-		<center>- 目录 -</center>
-		
-		
-		<ul>
-			
-				
-				
-					
-						
-						
-						
-						
-							
-								
-									<ul>
-								
-							
-						
-						
-							<li>
-								<a href="#dalao%e7%9a%84%e7%ac%94%e8%ae%b0" onclick="onNavClick(`#dalao的笔记-nav`)" id="dalao的笔记-nav">
+<div class="toc">
+<div class="toc-content">
+<center>- 目录 -</center>
+<ul>
+<ul>
+<li>
+<a href="#dalao%e7%9a%84%e7%ac%94%e8%ae%b0" id="dalao的笔记-nav" onclick="onNavClick(`#dalao的笔记-nav`)">
 									dalao的笔记
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#typora%e5%90%8c%e5%ad%a6%e5%ae%89%e5%88%a9%e7%9a%84markdown%e7%bc%96%e8%be%91%e5%b7%a5%e5%85%b7" onclick="onNavClick(`#typora同学安利的markdown编辑工具-nav`)" id="typora同学安利的markdown编辑工具-nav">
+</li>
+<li>
+<a href="#typora%e5%90%8c%e5%ad%a6%e5%ae%89%e5%88%a9%e7%9a%84markdown%e7%bc%96%e8%be%91%e5%b7%a5%e5%85%b7" id="typora同学安利的markdown编辑工具-nav" onclick="onNavClick(`#typora同学安利的markdown编辑工具-nav`)">
 									Typora，同学安利的markdown编辑工具
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-							
-								
-									<ul>
-								
-							
-						
-						
-							<li>
-								<a href="#%e5%ae%89%e8%a3%85" onclick="onNavClick(`#安装-nav`)" id="安装-nav">
+</li>
+<ul>
+<li>
+<a href="#%e5%ae%89%e8%a3%85" id="安装-nav" onclick="onNavClick(`#安装-nav`)">
 									安装
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#%e5%a4%8d%e5%88%b6%e5%9b%be%e7%89%87" onclick="onNavClick(`#复制图片-nav`)" id="复制图片-nav">
+</li>
+<li>
+<a href="#%e5%a4%8d%e5%88%b6%e5%9b%be%e7%89%87" id="复制图片-nav" onclick="onNavClick(`#复制图片-nav`)">
 									复制图片
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#%e9%87%8d%e8%a6%81%e7%9a%84%e5%bf%ab%e6%8d%b7%e9%94%ae" onclick="onNavClick(`#重要的快捷键-nav`)" id="重要的快捷键-nav">
+</li>
+<li>
+<a href="#%e9%87%8d%e8%a6%81%e7%9a%84%e5%bf%ab%e6%8d%b7%e9%94%ae" id="重要的快捷键-nav" onclick="onNavClick(`#重要的快捷键-nav`)">
 									重要的快捷键
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-							
-								</ul>
-							
-						
-						
-						
-							<li>
-								<a href="#%e7%94%a8git%e7%ae%a1%e7%90%86%e7%ac%94%e8%ae%b0" onclick="onNavClick(`#用git管理笔记-nav`)" id="用git管理笔记-nav">
+</li>
+</ul>
+<li>
+<a href="#%e7%94%a8git%e7%ae%a1%e7%90%86%e7%ac%94%e8%ae%b0" id="用git管理笔记-nav" onclick="onNavClick(`#用git管理笔记-nav`)">
 									用git管理笔记
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#%e8%87%aa%e5%8a%a8%e5%90%8c%e6%ad%a5%e7%ac%94%e8%ae%b0" onclick="onNavClick(`#自动同步笔记-nav`)" id="自动同步笔记-nav">
+</li>
+<li>
+<a href="#%e8%87%aa%e5%8a%a8%e5%90%8c%e6%ad%a5%e7%ac%94%e8%ae%b0" id="自动同步笔记-nav" onclick="onNavClick(`#自动同步笔记-nav`)">
 									自动同步笔记
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#windows%e4%b8%8b%e7%9a%84%e9%85%8d%e7%bd%ae" onclick="onNavClick(`#windows下的配置-nav`)" id="windows下的配置-nav">
+</li>
+<li>
+<a href="#windows%e4%b8%8b%e7%9a%84%e9%85%8d%e7%bd%ae" id="windows下的配置-nav" onclick="onNavClick(`#windows下的配置-nav`)">
 									Windows下的配置
 								</a>
-							</li>
-						
-						
-					
-				
-			
-		</ul>
-	</div>
-
+</li>
+</ul>
+</ul></div>
 </div>
-            
-        </div>
-    </div>
+</div>
+</div>
 </div>
 <transition name="fade">
-    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+<div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
 </transition>
-<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
-    <div id="navBackground" class="nav-background"></div>
-    <div class="container container-narrow nav-content">
-        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
-            <i class="material-icons">
+<nav class="navbar sticky-top navbar-light single-column-nav-container" id="navBar">
+<div class="nav-background" id="navBackground"></div>
+<div class="container container-narrow nav-content">
+<button class="nav-dropdown-toggle" id="nav_dropdown_btn" type="button" v-on:click="toggleDrawer">
+<i class="material-icons">
                 menu
             </i>
-        </button>
-        <a id="navTitle" class="navbar-brand" href="https://ntutn.top/">
+</button>
+<a class="navbar-brand" href="https://ntutn.top/" id="navTitle">
             归零幻想
         </a>
-        
-        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
-            <i class="material-icons" id="darkModeToggleIcon2">
+<button class="nav-darkmode-toggle" id="darkModeToggleButton2" type="button">
+<i class="material-icons" id="darkModeToggleIcon2">
                 dark_mode
             </i>
-        </button>
-        
-    </div>
-</nav>
-<div class="single-column-header-container" id="pageHead"
-     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
-    <a href="https://ntutn.top/">
-        <div class="single-column-header-title">归零幻想</div>
-        
-        <div class="single-column-header-subtitle">零点还不算熬夜</div>
-        
-
-    </a>
+</button>
 </div>
-
-            <div id="content">
-                <div id="streamContainer" class="stream-container">
-
-    <div class="post-list-container post-list-container-shadow">
-        <div class="post">
-            
-            
-            
-                
-            
-
-            <div class="post-head-wrapper"
-                
-                    
-                    
-                    style="background-image: url('https://i.loli.net/2020/08/20/1Lr3BfMvSw8haYy.png')"
-                    
-                
-            >
-                <div class="post-title">
-                    Typora&#43;git自动同步你的笔记
+</nav>
+<div class="single-column-header-container" id="pageHead" v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+<a href="https://ntutn.top/">
+<div class="single-column-header-title">归零幻想</div>
+<div class="single-column-header-subtitle">零点还不算熬夜</div>
+</a>
+</div>
+<div id="content">
+<div class="stream-container" id="streamContainer">
+<div class="post-list-container post-list-container-shadow">
+<div class="post">
+<div class="post-head-wrapper" style="background-image: url('https://i.loli.net/2020/08/20/1Lr3BfMvSw8haYy.png')">
+<div class="post-title">
+                    Typora+git自动同步你的笔记
                     
                     <div class="post-subtitle">
                         这两天看了群里某个大佬的笔记，突然觉得自己用VSCode记笔记的方案不香了。VSCode虽然对markdown的支持不错，但毕竟本职工作不是这个，直接拿来做笔记还是不够方便，太笨重了。于是我终于想起之前同学给我安利的markdown编辑器：Typora。
                     </div>
-                    
-                    <div class="post-meta">
-                        
-                        <time itemprop="datePublished">
+<div class="post-meta">
+<time itemprop="datePublished">
                             2020-03-02 03:11
                         </time>
-                        
-
-                        
-                            <i class="material-icons" style="">folder</i>
-                                <a href="/categories/%E5%B7%A5%E5%85%B7">工具</a>
-                                &nbsp;
+<i class="material-icons" style="">folder</i>
+<a href="/categories/%E5%B7%A5%E5%85%B7">工具</a>
+                                 
                         
 
                         
                             <i class="material-icons" style="">label</i>
-                            
-                                <a href="/tags/%E7%AC%94%E8%AE%B0">笔记</a>
-                                &nbsp;
+<a href="/tags/%E7%AC%94%E8%AE%B0">笔记</a>
+                                 
                             
                                 <a href="/tags/%E5%B7%A5%E5%85%B7">工具</a>
-                                &nbsp;
+                                 
                             
                                 <a href="/tags/git">git</a>
-                                &nbsp;
+                                 
                             
                                 <a href="/tags/markdown">markdown</a>
-                                &nbsp;
+                                 
                             
                         
                         
@@ -789,39 +323,36 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
                             36 s.
                         
                     </div>
-                </div>
-            </div>
-            
-            <div class="post-body-wrapper">
-                
-                <div class="post-body" v-pre>
-                
-                    <!-- raw HTML omitted -->
+</div>
+</div>
+<div class="post-body-wrapper">
+<div class="post-body" v-pre="">
+<!-- raw HTML omitted -->
 <p>这两天看了群里某个大佬的笔记，突然觉得自己用VSCode记笔记的方案不香了。VSCode虽然对<code>markdown</code>的支持不错，但毕竟本职工作不是这个，直接拿来做笔记还是不够方便，太笨重了。于是我终于想起之前同学给我安利的<code>markdown</code>编辑器：Typora。</p>
 <h2 id="dalao的笔记">dalao的笔记</h2>
 <p>首先看看大佬的笔记：</p>
-<p><img src="https://i.loli.net/2020/08/20/1Lr3BfMvSw8haYy.png" alt="1.png"></p>
+<p><img alt="1.png" src="https://i.loli.net/2020/08/20/1Lr3BfMvSw8haYy.png"/></p>
 <p>好想去偷他的笔记。不过话说他这笔记软件也不错啊，看起来简约清晰，我也有试一试的想法了。</p>
 <p>他用的笔记软件：<a href="https://github.com/tsujan/FeatherNotes">https://github.com/tsujan/FeatherNotes</a></p>
 <p>然后就被编译安装劝退了。一个是不太想这么折腾，另一个是这个软件没有提供编译好的包，感觉还是不够放心啊，毕竟如果以后开发者不维护了要再折腾一遍会非常麻烦。</p>
 <h2 id="typora同学安利的markdown编辑工具">Typora，同学安利的markdown编辑工具</h2>
 <p>与多数markdown编辑工具不同，Typora是所见即所得的markdown编辑工具。为什么程序员偏爱markdown？就是因为markdown可以让我们写作的时候只关注内容本身，而不用太在意排版的问题。而Typora又改变了传统的左右分栏或者点击切换预览的传统markdown编辑模式，用起来就更舒服了。</p>
-<p><img src="https://i.loli.net/2020/08/20/V7LzFNRXyT1hUbj.png" alt="2.png"></p>
+<p><img alt="2.png" src="https://i.loli.net/2020/08/20/V7LzFNRXyT1hUbj.png"/></p>
 <!-- raw HTML omitted -->
 <h3 id="安装">安装</h3>
 <p>在Ubuntu下安装还是非常方便的：</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#228b22"># or run:</span>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4" tabindex="0"><code class="language-bash" data-lang="bash"><span style="color:#228b22"># or run:</span>
 <span style="color:#228b22"># sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA300B7755AFCFAE</span>
 wget -qO - https://typora.io/linux/public-key.asc | sudo apt-key add -
-<span style="color:#228b22"># add Typora&#39;s repository</span>
-sudo add-apt-repository <span style="color:#cd5555">&#39;deb https://typora.io/linux ./&#39;</span>
+<span style="color:#228b22"># add Typora's repository</span>
+sudo add-apt-repository <span style="color:#cd5555">'deb https://typora.io/linux ./'</span>
 sudo apt-get update
 <span style="color:#228b22"># install typora</span>
 sudo apt-get install typora
 </code></pre></div><p>其他系统参考<a href="https://www.typora.net/#download">官网</a>。</p>
 <h3 id="复制图片">复制图片</h3>
 <p>不过有一点要注意：我们写文档常常要插入一些图片，为了后面和git好配合，我们需要将这些图片也放到当前文件夹里。按下<code>Ctrl+逗号</code>打开设置，将图片复制到当前文件夹下。如图。</p>
-<p><img src="https://i.loli.net/2020/08/20/VWcp6qEGOF9beZf.png" alt="3.png"></p>
+<p><img alt="3.png" src="https://i.loli.net/2020/08/20/VWcp6qEGOF9beZf.png"/></p>
 <h3 id="重要的快捷键">重要的快捷键</h3>
 <p>都是重点等于没有重点。我们只要记住能让我们离开鼠标提高效率的就行了。</p>
 <table>
@@ -872,16 +403,16 @@ sudo apt-get install typora
 <p>怎么注册账号，怎么建立仓库我就不说了。clone下来，这就是以后笔记安家的地方了。</p>
 <h2 id="自动同步笔记">自动同步笔记</h2>
 <p>然而，我们还是需要运行<code>git add</code>、<code>git commit</code>、<code>git push</code>，而且在别处修改了笔记还得手动pull一下。执行的命令这么固定，肯定是要写成脚本(.sync.sh)了。</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#658b00">cd</span> /home/zero/Documents/Notes
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4" tabindex="0"><code class="language-bash" data-lang="bash"><span style="color:#658b00">cd</span> /home/zero/Documents/Notes
 git pull &amp;
 typora . TODO.md
 git add .
-git commit -m <span style="color:#cd5555">&#34;Sync&#34;</span>
+git commit -m <span style="color:#cd5555">"Sync"</span>
 git push
 </code></pre></div><p>注意上面的路径改为你自己笔记文件夹的路径。第二行的<code>&amp;</code>不要省，我们没必要等pull完才打开Typora，这样可以加快一点启动速度。</p>
 <p>好了，现在我们执行脚本就能打开Typora，而且所有编辑还能自动同步。由于git默认不允许保留空提交，没有修改的时候也不会产生大量无用的记录，完美。</p>
 <p>最后写个桌面启动器就大功告成了：</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ini" data-lang="ini"><span style="color:#8b008b;font-weight:bold">[Desktop Entry]</span>
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4" tabindex="0"><code class="language-ini" data-lang="ini"><span style="color:#8b008b;font-weight:bold">[Desktop Entry]</span>
 <span style="color:#658b00">Type</span>=<span style="color:#cd5555">Application</span>
 <span style="color:#658b00">Icon</span>=<span style="color:#cd5555">typora</span>
 <span style="color:#658b00">Name</span>=<span style="color:#cd5555">笔记</span>
@@ -895,83 +426,51 @@ git push
 <p>Windows下的Typora并没有默认添加环境变量，请手动添加。添加后需要重启。
 首先对应上面的sh，写个cmd(.sync.cmd)：</p>
 </blockquote>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cmd" data-lang="cmd"><span style="color:#8b008b;font-weight:bold">start</span> /b git pull
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4" tabindex="0"><code class="language-cmd" data-lang="cmd"><span style="color:#8b008b;font-weight:bold">start</span> /b git pull
 typora . TODO.md
 git add .
-git commit -m <span style="color:#cd5555">&#34;Sync&#34;</span>
+git commit -m <span style="color:#cd5555">"Sync"</span>
 git push
 </code></pre></div><p>第一行不一样，这是因为cmd后台执行是用<code>start /b</code>的，与shell脚本的<code>&amp;</code>效果是一样的。</p>
 <p>此时双击这个cmd已经能看到效果了。</p>
 <p>但cmd执行时会有黑窗口，很影响美观，我们写个vbs脚本(.sync.vbs)来调用它，这样可以不显示黑窗口。</p>
-<pre tabindex="0"><code class="language-vbs" data-lang="vbs">WScript.CreateObject(&quot;WScript.Shell&quot;).Run &quot;.sync.cmd&quot;,0
+<pre tabindex="0"><code class="language-vbs" data-lang="vbs">WScript.CreateObject("WScript.Shell").Run ".sync.cmd",0
 </code></pre><p>最后创建个桌面快捷方式，指向<code>.sync.vbs</code>，就大功告成了。</p>
 <blockquote>
 <p>注意：快捷方式的起始目录要指向笔记的目录。</p>
 </blockquote>
-<hr>
+<hr/>
 <p>美中不足的是，在Android上我没找到比较合适的git客户端。虽然看到有个商用的评价不错，但为了这点笔记花那么多银子还是不值得。Android上的笔记软件倒是找到一个不错的：<a href="https://github.com/gsantner/markor">Markor</a>。虽然没有Typora的所见即所得那么厉害，但他的编辑界面做的很不错，配上蓝牙键盘，非常适合某些科目上课做笔记。</p>
-
-                    
-                    <HR width="100%" id="EOF">
-		    <p style="color:#777;">最后修改于 2020-03-02</p>
-                    
-                </div>
-            </div>
-            
-            
-            <nav class="post-pagination">
-
-                
-                <a class="newer-posts" href="/posts/%E6%8E%89%E5%9D%91%E7%9A%84%E6%97%A5%E5%B8%B8springboot%E7%9A%84json%E5%B1%9E%E6%80%A7%E5%90%8D%E5%A4%A7%E5%B0%8F%E5%86%99%E9%97%AE%E9%A2%98/">
-			下回<br>掉坑的日常：springboot的json属性名大小写问题
+<hr id="EOF" width="100%"/>
+<p style="color:#777;">最后修改于 2020-03-02</p>
+</div>
+</div>
+<nav class="post-pagination">
+<a class="newer-posts" href="/posts/%E6%8E%89%E5%9D%91%E7%9A%84%E6%97%A5%E5%B8%B8springboot%E7%9A%84json%E5%B1%9E%E6%80%A7%E5%90%8D%E5%A4%A7%E5%B0%8F%E5%86%99%E9%97%AE%E9%A2%98/">
+			下回<br/>掉坑的日常：springboot的json属性名大小写问题
                 </a>
-                
-                
-                
-                <a class="older-posts" href="/posts/java%E8%87%AA%E5%8A%A8%E8%A3%85%E7%AE%B1%E8%87%AA%E5%8A%A8%E6%8B%86%E7%AE%B1%E8%B8%A9%E5%9D%91/">
-			上回<br>Java自动装箱自动拆箱踩坑
+<a class="older-posts" href="/posts/java%E8%87%AA%E5%8A%A8%E8%A3%85%E7%AE%B1%E8%87%AA%E5%8A%A8%E6%8B%86%E7%AE%B1%E8%B8%A9%E5%9D%91/">
+			上回<br/>Java自动装箱自动拆箱踩坑
                 </a>
-                
-            </nav>
-            <div class="post-comment-wrapper">
-                
-
-
-
-
-
-
-
-
-
-
-<script src="https://utteranc.es/client.js"
-        repo="zerofancy/zerofancy.github.io"
-        issue-term="title"
-        label=""
-        theme="github-light"
-        crossorigin="anonymous"
-        async>
+</nav>
+<div class="post-comment-wrapper">
+<script async="" crossorigin="anonymous" issue-term="title" label="" repo="zerofancy/zerofancy.github.io" src="https://utteranc.es/client.js" theme="github-light">
 </script>
-
-            </div>
-        </div>
-    </div>
-
-
-                    </div>
-            </div><div id="single-column-footer">
+</div>
+</div>
+</div>
+</div>
+</div><div id="single-column-footer">
 Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
-<br>
-移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
-<br>
+<br/>
+移植自 <a href="https://mak1t0.cc/" rel="noreferrer noopener" target="_blank">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" rel="noreferrer noopener" target="_blank">Journal.</a> <br/>
+<br/>
 
-&copy;
+©
 	
 	CC BY-SA 4.0
 	
 </div>
-            </div>
-    
-    <script src="/js/journal.js"></script></body>
+</div>
+<script src="/js/journal.js"></script></body>
 </html>

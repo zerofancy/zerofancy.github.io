@@ -1,87 +1,28 @@
 <!DOCTYPE html>
 <html><head>
 <title>连续正整数</title>
-
-
-
-
-<meta charset="utf-8">
-<meta name="X-UA-Compatible" content="IE=edge">
-<meta name="google-site-verification" content="">
-<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
-<meta content="telephone=no" name="format-detection">
-<meta name="description" content="还是数据结构的网上作业，将一个整数分解为连续正整数之和，找对方向倒是也不算难……">
-<meta name="renderer" content="webkit">
-<meta name="theme-color" content="#ffffff">
-
-
-
-<meta property="og:title" content="连续正整数" />
-<meta property="og:description" content="还是数据结构的网上作业，将一个整数分解为连续正整数之和，找对方向倒是也不算难……" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://ntutn.top/posts/%E8%BF%9E%E7%BB%AD%E6%AD%A3%E6%95%B4%E6%95%B0/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2019-04-06T03:11:37+08:00" />
-<meta property="article:modified_time" content="2019-04-06T03:11:37+08:00" /><meta property="og:site_name" content="归零幻想" />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-<link rel="icon" href="//images.ntutn.top/favicon.ico">
-
-
-
-      <script src="/js/toc.js"></script>
-    
-    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
-<link rel="stylesheet" href="/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
-
-
-
-<link rel="stylesheet" href="/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
-
-
-<link rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Material+Icons">
-
-
-
-<script defer
-	src='https://static.cloudflareinsights.com/beacon.min.js'
-	data-cf-beacon='{"token": 5a03d307f5214109a1e7c8b2cf306a3d'>
+<meta charset="utf-8"/>
+<meta content="IE=edge" name="X-UA-Compatible"/>
+<meta content="" name="google-site-verification"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"/>
+<meta content="telephone=no" name="format-detection"/>
+<meta content="还是数据结构的网上作业，将一个整数分解为连续正整数之和，找对方向倒是也不算难……" name="description"/>
+<meta content="webkit" name="renderer"/>
+<meta content="#ffffff" name="theme-color"/>
+<meta content="连续正整数" property="og:title"/>
+<meta content="还是数据结构的网上作业，将一个整数分解为连续正整数之和，找对方向倒是也不算难……" property="og:description"/>
+<meta content="article" property="og:type"/>
+<meta content="https://ntutn.top/posts/%E8%BF%9E%E7%BB%AD%E6%AD%A3%E6%95%B4%E6%95%B0/" property="og:url"/><meta content="posts" property="article:section"/>
+<meta content="2019-04-06T03:11:37+08:00" property="article:published_time"/>
+<meta content="2019-04-06T03:11:37+08:00" property="article:modified_time"/><meta content="归零幻想" property="og:site_name"/>
+<link href="//images.ntutn.top/favicon.ico" rel="icon"/>
+<script src="/js/toc.js"></script>
+<link href="/vendor/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen" rel="stylesheet"/>
+<link href="/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css?family=Material+Icons" rel="stylesheet"/>
+<script data-cf-beacon='{"token": 5a03d307f5214109a1e7c8b2cf306a3d' defer="" src="https://static.cloudflareinsights.com/beacon.min.js">
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <style>
     pre code {
         color: black;
@@ -89,7 +30,7 @@
     }
 </style>
 <script src="https://unpkg.com/zoomtastic@2.2.1"></script>
-<script src="https://unpkg.com/kotlin-playground@1" data-selector="code.language-kotlin"></script>
+<script data-selector="code.language-kotlin" src="https://unpkg.com/kotlin-playground@1"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function(event) { 
         document.querySelectorAll("div.post-body-wrapper img").forEach(function(element){
@@ -119,454 +60,200 @@
 	})();
 
 </script>
-
 </head>
 <body>
-    	<div id="app"><div id="sideContainer" class="side-container">
-    
-    <a class="a-block nav-head false" href="https://ntutn.top/">
-    
-        <div class="nav-title">
+<div id="app"><div class="side-container" id="sideContainer">
+<a class="a-block nav-head false" href="https://ntutn.top/">
+<div class="nav-title">
             归零幻想
         </div>
-        
-        <div class="nav-subtitle">
+<div class="nav-subtitle">
             零点还不算熬夜
         </div>
-        
-    </a>
-
-    <div class="nav-link-list">
-        
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="/project">
+</a>
+<div class="nav-link-list">
+<a class="a-block nav-link-item false" href="/project">
                 项目
             </a>
-            
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="/tags">
+<a class="a-block nav-link-item false" href="/tags">
                 标签
             </a>
-            
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="/zwiki">
+<a class="a-block nav-link-item false" href="/zwiki">
                 WIKI
             </a>
-            
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="/friends">
+<a class="a-block nav-link-item false" href="/friends">
                 友链
             </a>
-            
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="/about">
+<a class="a-block nav-link-item false" href="/about">
                 关于
             </a>
-            
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="/index.xml">
+<a class="a-block nav-link-item false" href="/index.xml">
                 RSS
             </a>
-            
-        
-            
-            
-            
-                
-            
-            
-            
-            <a class="a-block nav-link-item active" href="/posts">
+<a class="a-block nav-link-item active" href="/posts">
                 归档
             </a>
-            
-        
-    </div>
-
-    
-
-    <div class="nav-footer">
+</div>
+<div class="nav-footer">
         
 Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
-<br>
-移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
-<br>
+<br/>
+移植自 <a href="https://mak1t0.cc/" rel="noreferrer noopener" target="_blank">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" rel="noreferrer noopener" target="_blank">Journal.</a> <br/>
+<br/>
 
-&copy;
+©
 	
 	CC BY-SA 4.0
 	
 
     </div>
-    
-</div><div id="extraContainer" class="extra-container">
-    
-    
-    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
-
-
-	<div class="toc-content">
-	
-		
-		
-		
-		<center>- 目录 -</center>
-		
-		
-		<ul>
-			
-				
-				
-					
-						
-						
-						
-						
-							
-								
-									<ul>
-								
-							
-						
-						
-							<li>
-								<a href="#input" onclick="onNavClick(`#input-nav`)" id="input-nav">
+</div><div class="extra-container" id="extraContainer">
+<div :class="{ invisible: scrollY &lt;= 140 }" class="toc animated-visibility">
+<div class="toc-content">
+<center>- 目录 -</center>
+<ul>
+<ul>
+<li>
+<a href="#input" id="input-nav" onclick="onNavClick(`#input-nav`)">
 									Input
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#output" onclick="onNavClick(`#output-nav`)" id="output-nav">
+</li>
+<li>
+<a href="#output" id="output-nav" onclick="onNavClick(`#output-nav`)">
 									Output
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#example" onclick="onNavClick(`#example-nav`)" id="example-nav">
+</li>
+<li>
+<a href="#example" id="example-nav" onclick="onNavClick(`#example-nav`)">
 									Example
 								</a>
-							</li>
-						
-						
-					
-				
-			
-		</ul>
-	</div>
-
+</li>
+</ul>
+</ul></div>
 </div>
-    
-    <div class="pagination">
-        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
-            <i class="material-icons pagination-action-icon">
+<div class="pagination">
+<a :class="{ invisible: scrollY == 0 }" class="pagination-action animated-visibility" href="#top" id="globalBackToTop">
+<i class="material-icons pagination-action-icon">
                 keyboard_arrow_up
             </i>
-        </a>
-        
-        <a type="button" class="pagination-action" id="darkModeToggleButton">
-            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+</a>
+<a class="pagination-action" id="darkModeToggleButton" type="button">
+<span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
                 dark_mode
             </span>
-        </a>
-        
-        
-    </div>
+</a>
 </div>
-<div class="single-column-drawer-container" id="drawer"
-     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
-    <div class="drawer-content">
-        <div class="drawer-menu">
-            
-            
-            
-                
-                
-                
-                
-                
-                <a class="a-block drawer-menu-item false" href="/project">
+</div>
+<div class="single-column-drawer-container" id="drawer" v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+<div class="drawer-content">
+<div class="drawer-menu">
+<a class="a-block drawer-menu-item false" href="/project">
                     项目
                 </a>
-                
-            
-                
-                
-                
-                
-                
-                <a class="a-block drawer-menu-item false" href="/tags">
+<a class="a-block drawer-menu-item false" href="/tags">
                     标签
                 </a>
-                
-            
-                
-                
-                
-                
-                
-                <a class="a-block drawer-menu-item false" href="/zwiki">
+<a class="a-block drawer-menu-item false" href="/zwiki">
                     WIKI
                 </a>
-                
-            
-                
-                
-                
-                
-                
-                <a class="a-block drawer-menu-item false" href="/friends">
+<a class="a-block drawer-menu-item false" href="/friends">
                     友链
                 </a>
-                
-            
-                
-                
-                
-                
-                
-                <a class="a-block drawer-menu-item false" href="/about">
+<a class="a-block drawer-menu-item false" href="/about">
                     关于
                 </a>
-                
-            
-                
-                
-                
-                
-                
-                <a class="a-block drawer-menu-item false" href="/index.xml">
+<a class="a-block drawer-menu-item false" href="/index.xml">
                     RSS
                 </a>
-                
-            
-                
-                
-                
-                    
-                
-                
-                
-                <a class="a-block drawer-menu-item active" href="/posts">
+<a class="a-block drawer-menu-item active" href="/posts">
                     归档
                 </a>
-                
-            
-            
-            <div class="toc">
-
-
-	<div class="toc-content">
-	
-		
-		
-		
-		<center>- 目录 -</center>
-		
-		
-		<ul>
-			
-				
-				
-					
-						
-						
-						
-						
-							
-								
-									<ul>
-								
-							
-						
-						
-							<li>
-								<a href="#input" onclick="onNavClick(`#input-nav`)" id="input-nav">
+<div class="toc">
+<div class="toc-content">
+<center>- 目录 -</center>
+<ul>
+<ul>
+<li>
+<a href="#input" id="input-nav" onclick="onNavClick(`#input-nav`)">
 									Input
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#output" onclick="onNavClick(`#output-nav`)" id="output-nav">
+</li>
+<li>
+<a href="#output" id="output-nav" onclick="onNavClick(`#output-nav`)">
 									Output
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#example" onclick="onNavClick(`#example-nav`)" id="example-nav">
+</li>
+<li>
+<a href="#example" id="example-nav" onclick="onNavClick(`#example-nav`)">
 									Example
 								</a>
-							</li>
-						
-						
-					
-				
-			
-		</ul>
-	</div>
-
+</li>
+</ul>
+</ul></div>
 </div>
-            
-        </div>
-    </div>
+</div>
+</div>
 </div>
 <transition name="fade">
-    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+<div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
 </transition>
-<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
-    <div id="navBackground" class="nav-background"></div>
-    <div class="container container-narrow nav-content">
-        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
-            <i class="material-icons">
+<nav class="navbar sticky-top navbar-light single-column-nav-container" id="navBar">
+<div class="nav-background" id="navBackground"></div>
+<div class="container container-narrow nav-content">
+<button class="nav-dropdown-toggle" id="nav_dropdown_btn" type="button" v-on:click="toggleDrawer">
+<i class="material-icons">
                 menu
             </i>
-        </button>
-        <a id="navTitle" class="navbar-brand" href="https://ntutn.top/">
+</button>
+<a class="navbar-brand" href="https://ntutn.top/" id="navTitle">
             归零幻想
         </a>
-        
-        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
-            <i class="material-icons" id="darkModeToggleIcon2">
+<button class="nav-darkmode-toggle" id="darkModeToggleButton2" type="button">
+<i class="material-icons" id="darkModeToggleIcon2">
                 dark_mode
             </i>
-        </button>
-        
-    </div>
-</nav>
-<div class="single-column-header-container" id="pageHead"
-     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
-    <a href="https://ntutn.top/">
-        <div class="single-column-header-title">归零幻想</div>
-        
-        <div class="single-column-header-subtitle">零点还不算熬夜</div>
-        
-
-    </a>
+</button>
 </div>
-
-            <div id="content">
-                <div id="streamContainer" class="stream-container">
-
-    <div class="post-list-container post-list-container-shadow">
-        <div class="post">
-            
-            
-            
-
-            <div class="post-head-wrapper-text-only"
-                
-            >
-                <div class="post-title">
+</nav>
+<div class="single-column-header-container" id="pageHead" v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+<a href="https://ntutn.top/">
+<div class="single-column-header-title">归零幻想</div>
+<div class="single-column-header-subtitle">零点还不算熬夜</div>
+</a>
+</div>
+<div id="content">
+<div class="stream-container" id="streamContainer">
+<div class="post-list-container post-list-container-shadow">
+<div class="post">
+<div class="post-head-wrapper-text-only">
+<div class="post-title">
                     连续正整数
                     
                     <div class="post-subtitle">
                         还是数据结构的网上作业，将一个整数分解为连续正整数之和，找对方向倒是也不算难……
                     </div>
-                    
-                    <div class="post-meta">
-                        
-                        <time itemprop="datePublished">
+<div class="post-meta">
+<time itemprop="datePublished">
                             2019-04-06 03:11
                         </time>
-                        
-
-                        
-                            <i class="material-icons" style="">folder</i>
-                                <a href="/categories/%E5%88%B7%E9%A2%98">刷题</a>
-                                &nbsp;
+<i class="material-icons" style="">folder</i>
+<a href="/categories/%E5%88%B7%E9%A2%98">刷题</a>
+                                 
                         
 
                         
                             <i class="material-icons" style="">label</i>
-                            
-                                <a href="/tags/c&#43;&#43;">C&#43;&#43;</a>
-                                &nbsp;
+<a href="/tags/c++">C++</a>
+                                 
                             
                                 <a href="/tags/%E7%BC%96%E7%A8%8B">编程</a>
-                                &nbsp;
+                                 
                             
                                 <a href="/tags/%E7%AE%97%E6%B3%95">算法</a>
-                                &nbsp;
+                                 
                             
                                 <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84">数据结构</a>
-                                &nbsp;
+                                 
                             
                         
                         
@@ -582,14 +269,11 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
                             45 s.
                         
                     </div>
-                </div>
-            </div>
-            
-            <div class="post-body-wrapper">
-                
-                <div class="post-body" v-pre>
-                
-                    <!-- raw HTML omitted -->
+</div>
+</div>
+<div class="post-body-wrapper">
+<div class="post-body" v-pre="">
+<!-- raw HTML omitted -->
 <blockquote>
 <p>还是数据结构的网上作业，将一个整数分解为连续正整数之和，找对方向倒是也不算难……</p>
 </blockquote>
@@ -634,7 +318,7 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 </table>
 <p><strong>单点时限: 2.0 sec</strong>
 <strong>内存限制: 256 MB</strong></p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;iostream&gt;</span><span style="color:#1e889b">
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4" tabindex="0"><code class="language-cpp" data-lang="cpp"><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;iostream&gt;</span><span style="color:#1e889b">
 </span><span style="color:#1e889b"></span><span style="color:#8b008b;font-weight:bold">using</span> <span style="color:#8b008b;font-weight:bold">namespace</span> std;
 <span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">main</span>()
 {
@@ -647,7 +331,7 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
         {
             counter++;
         }
-        <span style="color:#228b22">//cout&lt;&lt;&#34;test-&#34;&lt;&lt;i&lt;&lt;endl;
+        <span style="color:#228b22">//cout&lt;&lt;"test-"&lt;&lt;i&lt;&lt;endl;
 </span><span style="color:#228b22"></span>    }
     cout &lt;&lt; counter &lt;&lt; endl;
     <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>;
@@ -659,68 +343,36 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <li>所有数之和等于原数</li>
 </ul>
 <p>求和在这里就不必用循环了，用等差数列明显更高效。注意这里计算时为了防止整数除法运算截断的问题，将除法移动到了等式的右边。</p>
-
-                    
-                    <HR width="100%" id="EOF">
-		    <p style="color:#777;">最后修改于 2019-04-06</p>
-                    
-                </div>
-            </div>
-            
-            
-            <nav class="post-pagination">
-
-                
-                <a class="newer-posts" href="/posts/%E5%AD%A6%E7%94%9F%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/">
-			下回<br>学生管理系统
+<hr id="EOF" width="100%"/>
+<p style="color:#777;">最后修改于 2019-04-06</p>
+</div>
+</div>
+<nav class="post-pagination">
+<a class="newer-posts" href="/posts/%E5%AD%A6%E7%94%9F%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/">
+			下回<br/>学生管理系统
                 </a>
-                
-                
-                
-                <a class="older-posts" href="/posts/%E4%BD%BF%E7%94%A8%E6%98%A0%E5%83%8F%E5%8A%AB%E6%8C%81%E6%8A%80%E6%9C%AF%E5%B1%8F%E8%94%BD%E7%94%B5%E8%84%91%E4%B8%AD%E7%9A%84%E5%B9%BF%E5%91%8A%E8%BF%9B%E7%A8%8B/">
-			上回<br>使用映像劫持技术屏蔽电脑中的广告进程
+<a class="older-posts" href="/posts/%E4%BD%BF%E7%94%A8%E6%98%A0%E5%83%8F%E5%8A%AB%E6%8C%81%E6%8A%80%E6%9C%AF%E5%B1%8F%E8%94%BD%E7%94%B5%E8%84%91%E4%B8%AD%E7%9A%84%E5%B9%BF%E5%91%8A%E8%BF%9B%E7%A8%8B/">
+			上回<br/>使用映像劫持技术屏蔽电脑中的广告进程
                 </a>
-                
-            </nav>
-            <div class="post-comment-wrapper">
-                
-
-
-
-
-
-
-
-
-
-
-<script src="https://utteranc.es/client.js"
-        repo="zerofancy/zerofancy.github.io"
-        issue-term="title"
-        label=""
-        theme="github-light"
-        crossorigin="anonymous"
-        async>
+</nav>
+<div class="post-comment-wrapper">
+<script async="" crossorigin="anonymous" issue-term="title" label="" repo="zerofancy/zerofancy.github.io" src="https://utteranc.es/client.js" theme="github-light">
 </script>
-
-            </div>
-        </div>
-    </div>
-
-
-                    </div>
-            </div><div id="single-column-footer">
+</div>
+</div>
+</div>
+</div>
+</div><div id="single-column-footer">
 Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
-<br>
-移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
-<br>
+<br/>
+移植自 <a href="https://mak1t0.cc/" rel="noreferrer noopener" target="_blank">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" rel="noreferrer noopener" target="_blank">Journal.</a> <br/>
+<br/>
 
-&copy;
+©
 	
 	CC BY-SA 4.0
 	
 </div>
-            </div>
-    
-    <script src="/js/journal.js"></script></body>
+</div>
+<script src="/js/journal.js"></script></body>
 </html>

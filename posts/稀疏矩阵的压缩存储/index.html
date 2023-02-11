@@ -1,87 +1,28 @@
 <!DOCTYPE html>
 <html><head>
 <title>稀疏矩阵的压缩存储</title>
-
-
-
-
-<meta charset="utf-8">
-<meta name="X-UA-Compatible" content="IE=edge">
-<meta name="google-site-verification" content="">
-<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
-<meta content="telephone=no" name="format-detection">
-<meta name="description" content="特殊矩阵在采用二维数组存储时，尽管矩阵操作的算法都很简单，但是其空间的利用率很低。 系数矩阵就是一种应用很广泛的特殊的矩阵。现要求稀疏矩阵采用“压缩”存储，实现矩阵的常用操作，如输出、转置、求和等。">
-<meta name="renderer" content="webkit">
-<meta name="theme-color" content="#ffffff">
-
-
-
-<meta property="og:title" content="稀疏矩阵的压缩存储" />
-<meta property="og:description" content="特殊矩阵在采用二维数组存储时，尽管矩阵操作的算法都很简单，但是其空间的利用率很低。 系数矩阵就是一种应用很广泛的特殊的矩阵。现要求稀疏矩阵采用“压缩”存储，实现矩阵的常用操作，如输出、转置、求和等。" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://ntutn.top/posts/%E7%A8%80%E7%96%8F%E7%9F%A9%E9%98%B5%E7%9A%84%E5%8E%8B%E7%BC%A9%E5%AD%98%E5%82%A8/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2019-06-01T03:11:37+08:00" />
-<meta property="article:modified_time" content="2019-06-01T03:11:37+08:00" /><meta property="og:site_name" content="归零幻想" />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
-
-
-<link rel="icon" href="//images.ntutn.top/favicon.ico">
-
-
-
-      <script src="/js/toc.js"></script>
-    
-    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
-<link rel="stylesheet" href="/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
-
-
-
-<link rel="stylesheet" href="/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
-
-
-<link rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Material+Icons">
-
-
-
-<script defer
-	src='https://static.cloudflareinsights.com/beacon.min.js'
-	data-cf-beacon='{"token": 5a03d307f5214109a1e7c8b2cf306a3d'>
+<meta charset="utf-8"/>
+<meta content="IE=edge" name="X-UA-Compatible"/>
+<meta content="" name="google-site-verification"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"/>
+<meta content="telephone=no" name="format-detection"/>
+<meta content="特殊矩阵在采用二维数组存储时，尽管矩阵操作的算法都很简单，但是其空间的利用率很低。 系数矩阵就是一种应用很广泛的特殊的矩阵。现要求稀疏矩阵采用“压缩”存储，实现矩阵的常用操作，如输出、转置、求和等。" name="description"/>
+<meta content="webkit" name="renderer"/>
+<meta content="#ffffff" name="theme-color"/>
+<meta content="稀疏矩阵的压缩存储" property="og:title"/>
+<meta content="特殊矩阵在采用二维数组存储时，尽管矩阵操作的算法都很简单，但是其空间的利用率很低。 系数矩阵就是一种应用很广泛的特殊的矩阵。现要求稀疏矩阵采用“压缩”存储，实现矩阵的常用操作，如输出、转置、求和等。" property="og:description"/>
+<meta content="article" property="og:type"/>
+<meta content="https://ntutn.top/posts/%E7%A8%80%E7%96%8F%E7%9F%A9%E9%98%B5%E7%9A%84%E5%8E%8B%E7%BC%A9%E5%AD%98%E5%82%A8/" property="og:url"/><meta content="posts" property="article:section"/>
+<meta content="2019-06-01T03:11:37+08:00" property="article:published_time"/>
+<meta content="2019-06-01T03:11:37+08:00" property="article:modified_time"/><meta content="归零幻想" property="og:site_name"/>
+<link href="//images.ntutn.top/favicon.ico" rel="icon"/>
+<script src="/js/toc.js"></script>
+<link href="/vendor/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen" rel="stylesheet"/>
+<link href="/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css?family=Material+Icons" rel="stylesheet"/>
+<script data-cf-beacon='{"token": 5a03d307f5214109a1e7c8b2cf306a3d' defer="" src="https://static.cloudflareinsights.com/beacon.min.js">
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <style>
     pre code {
         color: black;
@@ -89,7 +30,7 @@
     }
 </style>
 <script src="https://unpkg.com/zoomtastic@2.2.1"></script>
-<script src="https://unpkg.com/kotlin-playground@1" data-selector="code.language-kotlin"></script>
+<script data-selector="code.language-kotlin" src="https://unpkg.com/kotlin-playground@1"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function(event) { 
         document.querySelectorAll("div.post-body-wrapper img").forEach(function(element){
@@ -119,582 +60,234 @@
 	})();
 
 </script>
-
 </head>
 <body>
-    	<div id="app"><div id="sideContainer" class="side-container">
-    
-    <a class="a-block nav-head false" href="https://ntutn.top/">
-    
-        <div class="nav-title">
+<div id="app"><div class="side-container" id="sideContainer">
+<a class="a-block nav-head false" href="https://ntutn.top/">
+<div class="nav-title">
             归零幻想
         </div>
-        
-        <div class="nav-subtitle">
+<div class="nav-subtitle">
             零点还不算熬夜
         </div>
-        
-    </a>
-
-    <div class="nav-link-list">
-        
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="/project">
+</a>
+<div class="nav-link-list">
+<a class="a-block nav-link-item false" href="/project">
                 项目
             </a>
-            
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="/tags">
+<a class="a-block nav-link-item false" href="/tags">
                 标签
             </a>
-            
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="/zwiki">
+<a class="a-block nav-link-item false" href="/zwiki">
                 WIKI
             </a>
-            
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="/friends">
+<a class="a-block nav-link-item false" href="/friends">
                 友链
             </a>
-            
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="/about">
+<a class="a-block nav-link-item false" href="/about">
                 关于
             </a>
-            
-        
-            
-            
-            
-            
-            
-            <a class="a-block nav-link-item false" href="/index.xml">
+<a class="a-block nav-link-item false" href="/index.xml">
                 RSS
             </a>
-            
-        
-            
-            
-            
-                
-            
-            
-            
-            <a class="a-block nav-link-item active" href="/posts">
+<a class="a-block nav-link-item active" href="/posts">
                 归档
             </a>
-            
-        
-    </div>
-
-    
-
-    <div class="nav-footer">
+</div>
+<div class="nav-footer">
         
 Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
-<br>
-移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
-<br>
+<br/>
+移植自 <a href="https://mak1t0.cc/" rel="noreferrer noopener" target="_blank">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" rel="noreferrer noopener" target="_blank">Journal.</a> <br/>
+<br/>
 
-&copy;
+©
 	
 	CC BY-SA 4.0
 	
 
     </div>
-    
-</div><div id="extraContainer" class="extra-container">
-    
-    
-    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
-
-
-	<div class="toc-content">
-	
-		
-		
-		
-		<center>- 目录 -</center>
-		
-		
-		<ul>
-			
-				
-				
-					
-						
-						
-						
-						
-							
-								
-									<ul>
-								
-							
-						
-						
-							<li>
-								<a href="#question" onclick="onNavClick(`#question-nav`)" id="question-nav">
+</div><div class="extra-container" id="extraContainer">
+<div :class="{ invisible: scrollY &lt;= 140 }" class="toc animated-visibility">
+<div class="toc-content">
+<center>- 目录 -</center>
+<ul>
+<ul>
+<li>
+<a href="#question" id="question-nav" onclick="onNavClick(`#question-nav`)">
 									Question
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#example" onclick="onNavClick(`#example-nav`)" id="example-nav">
+</li>
+<li>
+<a href="#example" id="example-nav" onclick="onNavClick(`#example-nav`)">
 									Example
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-							
-								
-									<ul>
-								
-							
-						
-						
-							<li>
-								<a href="#input" onclick="onNavClick(`#input-nav`)" id="input-nav">
+</li>
+<ul>
+<li>
+<a href="#input" id="input-nav" onclick="onNavClick(`#input-nav`)">
 									Input
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#output" onclick="onNavClick(`#output-nav`)" id="output-nav">
+</li>
+<li>
+<a href="#output" id="output-nav" onclick="onNavClick(`#output-nav`)">
 									Output
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-							
-								</ul>
-							
-						
-						
-						
-							<li>
-								<a href="#%e5%88%86%e6%9e%90" onclick="onNavClick(`#分析-nav`)" id="分析-nav">
+</li>
+</ul>
+<li>
+<a href="#%e5%88%86%e6%9e%90" id="分析-nav" onclick="onNavClick(`#分析-nav`)">
 									分析
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#anwser" onclick="onNavClick(`#anwser-nav`)" id="anwser-nav">
+</li>
+<li>
+<a href="#anwser" id="anwser-nav" onclick="onNavClick(`#anwser-nav`)">
 									Anwser
 								</a>
-							</li>
-						
-						
-					
-				
-			
-		</ul>
-	</div>
-
+</li>
+</ul>
+</ul></div>
 </div>
-    
-    <div class="pagination">
-        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
-            <i class="material-icons pagination-action-icon">
+<div class="pagination">
+<a :class="{ invisible: scrollY == 0 }" class="pagination-action animated-visibility" href="#top" id="globalBackToTop">
+<i class="material-icons pagination-action-icon">
                 keyboard_arrow_up
             </i>
-        </a>
-        
-        <a type="button" class="pagination-action" id="darkModeToggleButton">
-            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+</a>
+<a class="pagination-action" id="darkModeToggleButton" type="button">
+<span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
                 dark_mode
             </span>
-        </a>
-        
-        
-    </div>
+</a>
 </div>
-<div class="single-column-drawer-container" id="drawer"
-     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
-    <div class="drawer-content">
-        <div class="drawer-menu">
-            
-            
-            
-                
-                
-                
-                
-                
-                <a class="a-block drawer-menu-item false" href="/project">
+</div>
+<div class="single-column-drawer-container" id="drawer" v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+<div class="drawer-content">
+<div class="drawer-menu">
+<a class="a-block drawer-menu-item false" href="/project">
                     项目
                 </a>
-                
-            
-                
-                
-                
-                
-                
-                <a class="a-block drawer-menu-item false" href="/tags">
+<a class="a-block drawer-menu-item false" href="/tags">
                     标签
                 </a>
-                
-            
-                
-                
-                
-                
-                
-                <a class="a-block drawer-menu-item false" href="/zwiki">
+<a class="a-block drawer-menu-item false" href="/zwiki">
                     WIKI
                 </a>
-                
-            
-                
-                
-                
-                
-                
-                <a class="a-block drawer-menu-item false" href="/friends">
+<a class="a-block drawer-menu-item false" href="/friends">
                     友链
                 </a>
-                
-            
-                
-                
-                
-                
-                
-                <a class="a-block drawer-menu-item false" href="/about">
+<a class="a-block drawer-menu-item false" href="/about">
                     关于
                 </a>
-                
-            
-                
-                
-                
-                
-                
-                <a class="a-block drawer-menu-item false" href="/index.xml">
+<a class="a-block drawer-menu-item false" href="/index.xml">
                     RSS
                 </a>
-                
-            
-                
-                
-                
-                    
-                
-                
-                
-                <a class="a-block drawer-menu-item active" href="/posts">
+<a class="a-block drawer-menu-item active" href="/posts">
                     归档
                 </a>
-                
-            
-            
-            <div class="toc">
-
-
-	<div class="toc-content">
-	
-		
-		
-		
-		<center>- 目录 -</center>
-		
-		
-		<ul>
-			
-				
-				
-					
-						
-						
-						
-						
-							
-								
-									<ul>
-								
-							
-						
-						
-							<li>
-								<a href="#question" onclick="onNavClick(`#question-nav`)" id="question-nav">
+<div class="toc">
+<div class="toc-content">
+<center>- 目录 -</center>
+<ul>
+<ul>
+<li>
+<a href="#question" id="question-nav" onclick="onNavClick(`#question-nav`)">
 									Question
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#example" onclick="onNavClick(`#example-nav`)" id="example-nav">
+</li>
+<li>
+<a href="#example" id="example-nav" onclick="onNavClick(`#example-nav`)">
 									Example
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-							
-								
-									<ul>
-								
-							
-						
-						
-							<li>
-								<a href="#input" onclick="onNavClick(`#input-nav`)" id="input-nav">
+</li>
+<ul>
+<li>
+<a href="#input" id="input-nav" onclick="onNavClick(`#input-nav`)">
 									Input
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#output" onclick="onNavClick(`#output-nav`)" id="output-nav">
+</li>
+<li>
+<a href="#output" id="output-nav" onclick="onNavClick(`#output-nav`)">
 									Output
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-							
-								</ul>
-							
-						
-						
-						
-							<li>
-								<a href="#%e5%88%86%e6%9e%90" onclick="onNavClick(`#分析-nav`)" id="分析-nav">
+</li>
+</ul>
+<li>
+<a href="#%e5%88%86%e6%9e%90" id="分析-nav" onclick="onNavClick(`#分析-nav`)">
 									分析
 								</a>
-							</li>
-						
-						
-					
-				
-			
-				
-				
-					
-						
-						
-						
-						
-						
-							<li>
-								<a href="#anwser" onclick="onNavClick(`#anwser-nav`)" id="anwser-nav">
+</li>
+<li>
+<a href="#anwser" id="anwser-nav" onclick="onNavClick(`#anwser-nav`)">
 									Anwser
 								</a>
-							</li>
-						
-						
-					
-				
-			
-		</ul>
-	</div>
-
+</li>
+</ul>
+</ul></div>
 </div>
-            
-        </div>
-    </div>
+</div>
+</div>
 </div>
 <transition name="fade">
-    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+<div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
 </transition>
-<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
-    <div id="navBackground" class="nav-background"></div>
-    <div class="container container-narrow nav-content">
-        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
-            <i class="material-icons">
+<nav class="navbar sticky-top navbar-light single-column-nav-container" id="navBar">
+<div class="nav-background" id="navBackground"></div>
+<div class="container container-narrow nav-content">
+<button class="nav-dropdown-toggle" id="nav_dropdown_btn" type="button" v-on:click="toggleDrawer">
+<i class="material-icons">
                 menu
             </i>
-        </button>
-        <a id="navTitle" class="navbar-brand" href="https://ntutn.top/">
+</button>
+<a class="navbar-brand" href="https://ntutn.top/" id="navTitle">
             归零幻想
         </a>
-        
-        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
-            <i class="material-icons" id="darkModeToggleIcon2">
+<button class="nav-darkmode-toggle" id="darkModeToggleButton2" type="button">
+<i class="material-icons" id="darkModeToggleIcon2">
                 dark_mode
             </i>
-        </button>
-        
-    </div>
-</nav>
-<div class="single-column-header-container" id="pageHead"
-     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
-    <a href="https://ntutn.top/">
-        <div class="single-column-header-title">归零幻想</div>
-        
-        <div class="single-column-header-subtitle">零点还不算熬夜</div>
-        
-
-    </a>
+</button>
 </div>
-
-            <div id="content">
-                <div id="streamContainer" class="stream-container">
-
-    <div class="post-list-container post-list-container-shadow">
-        <div class="post">
-            
-            
-            
-
-            <div class="post-head-wrapper-text-only"
-                
-            >
-                <div class="post-title">
+</nav>
+<div class="single-column-header-container" id="pageHead" v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+<a href="https://ntutn.top/">
+<div class="single-column-header-title">归零幻想</div>
+<div class="single-column-header-subtitle">零点还不算熬夜</div>
+</a>
+</div>
+<div id="content">
+<div class="stream-container" id="streamContainer">
+<div class="post-list-container post-list-container-shadow">
+<div class="post">
+<div class="post-head-wrapper-text-only">
+<div class="post-title">
                     稀疏矩阵的压缩存储
                     
                     <div class="post-subtitle">
                         特殊矩阵在采用二维数组存储时，尽管矩阵操作的算法都很简单，但是其空间的利用率很低。 系数矩阵就是一种应用很广泛的特殊的矩阵。现要求稀疏矩阵采用“压缩”存储，实现矩阵的常用操作，如输出、转置、求和等。
                     </div>
-                    
-                    <div class="post-meta">
-                        
-                        <time itemprop="datePublished">
+<div class="post-meta">
+<time itemprop="datePublished">
                             2019-06-01 03:11
                         </time>
-                        
-
-                        
-                            <i class="material-icons" style="">folder</i>
-                                <a href="/categories/%E7%AE%97%E6%B3%95">算法</a>
-                                &nbsp;
+<i class="material-icons" style="">folder</i>
+<a href="/categories/%E7%AE%97%E6%B3%95">算法</a>
+                                 
                         
 
                         
                             <i class="material-icons" style="">label</i>
+<a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84">数据结构</a>
+                                 
                             
-                                <a href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84">数据结构</a>
-                                &nbsp;
-                            
-                                <a href="/tags/c&#43;&#43;">C&#43;&#43;</a>
-                                &nbsp;
+                                <a href="/tags/c++">C++</a>
+                                 
                             
                                 <a href="/tags/%E7%AE%97%E6%B3%95">算法</a>
-                                &nbsp;
+                                 
                             
                                 <a href="/tags/%E7%9F%A9%E9%98%B5">矩阵</a>
-                                &nbsp;
+                                 
                             
                         
                         
@@ -710,14 +303,11 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
                             52 s.
                         
                     </div>
-                </div>
-            </div>
-            
-            <div class="post-body-wrapper">
-                
-                <div class="post-body" v-pre>
-                
-                    <!-- raw HTML omitted -->
+</div>
+</div>
+<div class="post-body-wrapper">
+<div class="post-body" v-pre="">
+<!-- raw HTML omitted -->
 <p>特殊矩阵在采用二维数组存储时，尽管矩阵操作的算法都很简单，但是其空间的利用率很低。 系数矩阵就是一种应用很广泛的特殊的矩阵。现要求稀疏矩阵采用“压缩”存储，实现矩阵的常用操作，如输出、转置、求和等。</p>
 <h2 id="question">Question</h2>
 <p>矩阵采用“压缩”存储，实现矩阵的常用操作，如输出、转置、求和等。</p>
@@ -771,7 +361,7 @@ The added matrix is:
 </blockquote>
 <p>所谓矩阵的压缩存储，实际上是在矩阵中元素较少时，只存非零元素的方法。在矩阵比较特殊（如三角阵）或矩阵元素比较稀疏的情况下能大大节省存储空间。但同时，压缩存储也会导致访问效率下降。</p>
 <p>所以这里我们定义了结构体来存储矩阵中的某个元素：</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#8b008b;font-weight:bold">typedef</span> <span style="color:#8b008b;font-weight:bold">struct</span>{
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4" tabindex="0"><code class="language-cpp" data-lang="cpp"><span style="color:#8b008b;font-weight:bold">typedef</span> <span style="color:#8b008b;font-weight:bold">struct</span>{
     <span style="color:#00688b;font-weight:bold">int</span> row;
     <span style="color:#00688b;font-weight:bold">int</span> column;
     <span style="color:#00688b;font-weight:bold">int</span> data;
@@ -787,7 +377,7 @@ The added matrix is:
 qsort(res,pA,sizeof(point),cmp);
 </code></pre><p>至于第二问，两矩阵相加，类似归并的思想，每次找到小的拿过来，两者相等就相加。不过这里注意，两者相加有可能结果为0，要消去这组数据。</p>
 <h2 id="anwser">Anwser</h2>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;iostream&gt;</span><span style="color:#1e889b">
+<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4" tabindex="0"><code class="language-cpp" data-lang="cpp"><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;iostream&gt;</span><span style="color:#1e889b">
 </span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;cstdlib&gt;</span><span style="color:#1e889b">
 </span><span style="color:#1e889b"></span><span style="color:#8b008b;font-weight:bold">using</span> <span style="color:#8b008b;font-weight:bold">namespace</span> std;
 <span style="color:#8b008b;font-weight:bold">typedef</span> <span style="color:#8b008b;font-weight:bold">struct</span>{
@@ -803,7 +393,7 @@ qsort(res,pA,sizeof(point),cmp);
 }
 <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">printMatrix</span>(point*p,<span style="color:#00688b;font-weight:bold">int</span> n){
     <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>;i&lt;n;i++){
-        cout&lt;&lt;p[i].row&lt;&lt;<span style="color:#cd5555">&#39; &#39;</span>&lt;&lt;p[i].column&lt;&lt;<span style="color:#cd5555">&#39; &#39;</span>&lt;&lt;p[i].data&lt;&lt;endl;
+        cout&lt;&lt;p[i].row&lt;&lt;<span style="color:#cd5555">' '</span>&lt;&lt;p[i].column&lt;&lt;<span style="color:#cd5555">' '</span>&lt;&lt;p[i].data&lt;&lt;endl;
     }
 }
 <span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">cmpPos</span>(point*p1,point*p2){<span style="color:#228b22">//其实这个函数多余，直接用前面那个cmp函数也能达到比较的目的，不过我不习惯
@@ -837,7 +427,7 @@ qsort(res,pA,sizeof(point),cmp);
         cin&gt;&gt;dataB[i].row&gt;&gt;dataB[i].column&gt;&gt;dataB[i].data;
     }
     qsort(res,pA,<span style="color:#8b008b;font-weight:bold">sizeof</span>(point),cmp);
-    cout&lt;&lt;<span style="color:#cd5555">&#34;The transformed matrix  is:&#34;</span>&lt;&lt;endl;
+    cout&lt;&lt;<span style="color:#cd5555">"The transformed matrix  is:"</span>&lt;&lt;endl;
     printMatrix(res,pA);
     <span style="color:#8b008b;font-weight:bold">delete</span>[] res;
     res=<span style="color:#8b008b;font-weight:bold">new</span> point[pA+pB];<span style="color:#228b22">//结果元素数目总小于等于二者之和
@@ -872,7 +462,7 @@ qsort(res,pA,sizeof(point),cmp);
         p3++;
         p2++;
     }
-    cout&lt;&lt;<span style="color:#cd5555">&#34;The added matrix is:&#34;</span>&lt;&lt;endl;
+    cout&lt;&lt;<span style="color:#cd5555">"The added matrix is:"</span>&lt;&lt;endl;
     printMatrix(res,p3-res);
     <span style="color:#8b008b;font-weight:bold">delete</span>[] res;
     <span style="color:#8b008b;font-weight:bold">delete</span>[] dataA;
@@ -880,67 +470,36 @@ qsort(res,pA,sizeof(point),cmp);
     <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>;
 }
 </code></pre></div>
-                    
-                    <HR width="100%" id="EOF">
-		    <p style="color:#777;">最后修改于 2019-06-01</p>
-                    
-                </div>
-            </div>
-            
-            
-            <nav class="post-pagination">
-
-                
-                <a class="newer-posts" href="/posts/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AC%AC%E4%B8%89%E6%AC%A1%E6%B5%8B%E8%AF%95/">
-			下回<br>数据结构第三次测试
+<hr id="EOF" width="100%"/>
+<p style="color:#777;">最后修改于 2019-06-01</p>
+</div>
+</div>
+<nav class="post-pagination">
+<a class="newer-posts" href="/posts/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AC%AC%E4%B8%89%E6%AC%A1%E6%B5%8B%E8%AF%95/">
+			下回<br/>数据结构第三次测试
                 </a>
-                
-                
-                
-                <a class="older-posts" href="/posts/%E7%BB%9F%E8%AE%A1%E9%80%92%E5%BD%92%E5%AD%90%E9%97%AE%E9%A2%98%E4%B8%AA%E6%95%B0/">
-			上回<br>统计递归子问题个数
+<a class="older-posts" href="/posts/%E7%BB%9F%E8%AE%A1%E9%80%92%E5%BD%92%E5%AD%90%E9%97%AE%E9%A2%98%E4%B8%AA%E6%95%B0/">
+			上回<br/>统计递归子问题个数
                 </a>
-                
-            </nav>
-            <div class="post-comment-wrapper">
-                
-
-
-
-
-
-
-
-
-
-
-<script src="https://utteranc.es/client.js"
-        repo="zerofancy/zerofancy.github.io"
-        issue-term="title"
-        label=""
-        theme="github-light"
-        crossorigin="anonymous"
-        async>
+</nav>
+<div class="post-comment-wrapper">
+<script async="" crossorigin="anonymous" issue-term="title" label="" repo="zerofancy/zerofancy.github.io" src="https://utteranc.es/client.js" theme="github-light">
 </script>
-
-            </div>
-        </div>
-    </div>
-
-
-                    </div>
-            </div><div id="single-column-footer">
+</div>
+</div>
+</div>
+</div>
+</div><div id="single-column-footer">
 Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
-<br>
-移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
-<br>
+<br/>
+移植自 <a href="https://mak1t0.cc/" rel="noreferrer noopener" target="_blank">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" rel="noreferrer noopener" target="_blank">Journal.</a> <br/>
+<br/>
 
-&copy;
+©
 	
 	CC BY-SA 4.0
 	
 </div>
-            </div>
-    
-    <script src="/js/journal.js"></script></body>
+</div>
+<script src="/js/journal.js"></script></body>
 </html>
