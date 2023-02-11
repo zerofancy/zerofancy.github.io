@@ -7,9 +7,1753 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Fri, 16 Dec 2022 17:42:29 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 12 Feb 2023 04:50:03 +0800</lastBuildDate>
     
         <atom:link href="https://ntutn.top/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>图书管理系统</title>
+        <link>https://ntutn.top/posts/%E5%9B%BE%E4%B9%A6%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/</link>
+        <pubDate>Sat, 13 Apr 2019 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/%E5%9B%BE%E4%B9%A6%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/</guid>
+        <description>归零幻想 https://ntutn.top/posts/%E5%9B%BE%E4%B9%A6%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/ -&lt;p&gt;翻出了以前写的C++作业，图书管理系统，虽然挺简单的，但留下纪念下吧。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cpp&#34; data-lang=&#34;cpp&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;cstdlib&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;cstring&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;fstream&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;namespace&lt;/span&gt; std;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;CUser&lt;/span&gt;
+{
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt;:
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; code;      &lt;span style=&#34;color:#228b22&#34;&gt;//表示用户编号；
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; name[&lt;span style=&#34;color:#b452cd&#34;&gt;20&lt;/span&gt;];  &lt;span style=&#34;color:#228b22&#34;&gt;//表示用户姓名
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt;:
+    CUser()
+    {
+        ;
+    };   &lt;span style=&#34;color:#228b22&#34;&gt;// 默认构造函数
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    CUser(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; id, &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; na[])
+    {
+        code=id;
+        strcpy(name,na);
+    };   &lt;span style=&#34;color:#228b22&#34;&gt;//构造函数，初始化用户信息
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;setcode&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; n)
+    {
+        code=n;
+    };      &lt;span style=&#34;color:#228b22&#34;&gt;//用来设置用户编号
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;getcode&lt;/span&gt;()
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; code;
+    };          &lt;span style=&#34;color:#228b22&#34;&gt;//用来获取用户编号
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;setname&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; na[])
+    {
+        strcpy(name,na);
+    };  &lt;span style=&#34;color:#228b22&#34;&gt;//用来设置用户姓名
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt;* &lt;span style=&#34;color:#008b45&#34;&gt;getname&lt;/span&gt;()
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; name;
+    };        &lt;span style=&#34;color:#228b22&#34;&gt;//用来获取用户姓名
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;show&lt;/span&gt;()
+    {
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;用户编号：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;code&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;姓名：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;name&amp;lt;&amp;lt;endl;
+    };           &lt;span style=&#34;color:#228b22&#34;&gt;//用来显示用户的基本信息
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;};
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;CBook&lt;/span&gt;
+{
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt;:
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; code;              &lt;span style=&#34;color:#228b22&#34;&gt;//图书编号
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; name[&lt;span style=&#34;color:#b452cd&#34;&gt;20&lt;/span&gt;];      &lt;span style=&#34;color:#228b22&#34;&gt;//图书名称
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt; Is_Stock;          &lt;span style=&#34;color:#228b22&#34;&gt;//true为在架，false为借出
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt; Is_Existing;       &lt;span style=&#34;color:#228b22&#34;&gt;//true为存在, false为删除
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt;:
+    CBook()
+    {
+        ;
+    }; &lt;span style=&#34;color:#228b22&#34;&gt;//默认构造函数
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    CBook(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; no,&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; na[])
+    {
+        code=no;
+        strcpy(name,na);
+        Is_Stock=&lt;span style=&#34;color:#658b00&#34;&gt;true&lt;/span&gt;;
+        Is_Existing=&lt;span style=&#34;color:#658b00&#34;&gt;true&lt;/span&gt;;
+    };    &lt;span style=&#34;color:#228b22&#34;&gt;//构造函数，初始化图书信息
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;setcode&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; n)
+    {
+        code=n;
+    };   &lt;span style=&#34;color:#228b22&#34;&gt;//设置图书编号
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;getcode&lt;/span&gt;()
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; code;
+    };    &lt;span style=&#34;color:#228b22&#34;&gt;//获取图书编号
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;setname&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; na[])
+    {
+        strcpy(name,na);
+    };    &lt;span style=&#34;color:#228b22&#34;&gt;//设置图书名称
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt;* &lt;span style=&#34;color:#008b45&#34;&gt;getname&lt;/span&gt;()
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; name;
+    };  &lt;span style=&#34;color:#228b22&#34;&gt;//获取图书名称
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt;  &lt;span style=&#34;color:#008b45&#34;&gt;get_Stock&lt;/span&gt;()
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; Is_Stock;
+    };  &lt;span style=&#34;color:#228b22&#34;&gt;//获取图书是否在库信息
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;set_Stock&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt; isstock)
+    {
+        Is_Stock=isstock;
+    };&lt;span style=&#34;color:#228b22&#34;&gt;// 设置图书是否在库信息
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt;  &lt;span style=&#34;color:#008b45&#34;&gt;get_Existing&lt;/span&gt;()
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; Is_Existing;
+    };&lt;span style=&#34;color:#228b22&#34;&gt;//获取存在标志
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;set_Existing&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt; isex)
+    {
+        Is_Existing=isex;
+    };&lt;span style=&#34;color:#228b22&#34;&gt;//设置存在标志
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;};
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;CReader&lt;/span&gt;:&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; CUser
+{
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt;:
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt; Is_Existing;  &lt;span style=&#34;color:#228b22&#34;&gt;//true存在，false删除
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt; Is_Borrowing;  &lt;span style=&#34;color:#228b22&#34;&gt;//true借过书，false没有借书
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    CBook brbook;     &lt;span style=&#34;color:#228b22&#34;&gt;//表示读者所借的图书
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt;:
+    CReader()
+    {
+        CUser();
+    };   &lt;span style=&#34;color:#228b22&#34;&gt;//构造函数，初始化读者信息
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    CReader(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; id, &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; na[])
+    {
+        CUser(id,na);
+    };   &lt;span style=&#34;color:#228b22&#34;&gt;//构造函数，初始化读者信息
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;get_Existing&lt;/span&gt;()
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; Is_Existing;
+    };        &lt;span style=&#34;color:#228b22&#34;&gt;//用来获取删除标志
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;set_Existing&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt; isex)
+    {
+        Is_Existing=isex;
+    };     &lt;span style=&#34;color:#228b22&#34;&gt;//用来设置删除标志
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;get_Borrowing&lt;/span&gt;()
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; Is_Borrowing;
+    };      &lt;span style=&#34;color:#228b22&#34;&gt;//用来获取读者借阅情况
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;set_Borrowing&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt; isbo)
+    {
+        Is_Borrowing=isbo;
+    };   &lt;span style=&#34;color:#228b22&#34;&gt;//用来设置读者借阅情况
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;setbrbook&lt;/span&gt;(CBook bt)
+    {
+        brbook=bt;
+        Is_Borrowing=&lt;span style=&#34;color:#658b00&#34;&gt;true&lt;/span&gt;;
+    };  &lt;span style=&#34;color:#228b22&#34;&gt;//用来记录读者结束信息
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    CBook &lt;span style=&#34;color:#008b45&#34;&gt;getbrbook&lt;/span&gt;()
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; brbook;
+    };     &lt;span style=&#34;color:#228b22&#34;&gt;//用来获取读者结束信息
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;show&lt;/span&gt;()
+    {
+        CUser::show();
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(Is_Borrowing)
+        {
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;当前借书：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;brbook.getname()&amp;lt;&amp;lt;endl;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt;
+        {
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;当前用户没有借书！&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        }
+    };               &lt;span style=&#34;color:#228b22&#34;&gt;//重写基类成员，显示读者的基本信息情况和借书情况
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;};
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;CReaderManager&lt;/span&gt;
+{
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt;:
+    CReader rdarray[&lt;span style=&#34;color:#b452cd&#34;&gt;50&lt;/span&gt;];&lt;span style=&#34;color:#228b22&#34;&gt;// 存储读者信息的集合
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; top;      &lt;span style=&#34;color:#228b22&#34;&gt;//当前数组中存储的读者数量
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt;:
+    CReaderManager()
+    {
+        top=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+    };  &lt;span style=&#34;color:#228b22&#34;&gt;// 构造函数
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    ~CReaderManager()
+    {
+    };   &lt;span style=&#34;color:#228b22&#34;&gt;//析构函数
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;addreaders&lt;/span&gt;()
+    {
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; tmp[&lt;span style=&#34;color:#b452cd&#34;&gt;20&lt;/span&gt;];
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; tmp_no;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入读者的相关信息：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入读者的名称：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cin&amp;gt;&amp;gt;tmp;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入读者的编号：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cin&amp;gt;&amp;gt;tmp_no;
+        CReader tmp_reader(tmp_no,tmp);
+        rdarray[top]=tmp_reader;
+        top++;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;读者添加成功。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+    };          &lt;span style=&#34;color:#228b22&#34;&gt;//添加读者
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;findreaders&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; suffix)
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i&amp;lt;top; i++)
+        {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(rdarray[i].getcode()==suffix)
+            {
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; i;&lt;span style=&#34;color:#228b22&#34;&gt;//返回在库中的位置。
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;            }
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; -&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;;&lt;span style=&#34;color:#228b22&#34;&gt;//未找到
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    };     &lt;span style=&#34;color:#228b22&#34;&gt;//查找读者，这个函数用于借书还书操作。
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;findreaders&lt;/span&gt;()
+    {
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; tmp[&lt;span style=&#34;color:#b452cd&#34;&gt;20&lt;/span&gt;];
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入需要查找的用户的名称：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cin&amp;gt;&amp;gt;tmp;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i&amp;lt;top; i++)
+        {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(strcmp(rdarray[i].getname(),tmp)==&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;)
+            {
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; i;
+            }
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; -&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;;
+    };            &lt;span style=&#34;color:#228b22&#34;&gt;//查找读者，这个函数用于读者维护操作
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;editreaders&lt;/span&gt;()
+    {
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; tmp[&lt;span style=&#34;color:#b452cd&#34;&gt;20&lt;/span&gt;];
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; code;
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; num=findreaders();
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; tmp_ex;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(num==-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;)
+        {
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;您要的用户没有找到。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;;
+        }
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;用户姓名：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;rdarray[num].getname()&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;编号：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;rdarray[num].getcode()&amp;lt;&amp;lt;endl;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(rdarray[num].get_Borrowing())
+        {
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;用户借了&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;rdarray[num].getbrbook().getname()&amp;lt;&amp;lt;endl;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt;
+        {
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;用户没有借任何书。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(rdarray[num].get_Existing())
+        {
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;用户状态正常。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt;
+        {
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;用户已经被删除。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        }
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入修改后的姓名：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cin&amp;gt;&amp;gt;tmp;
+        rdarray[num].setname(tmp);
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入修改后的编号：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cin&amp;gt;&amp;gt;code;
+        rdarray[num].setcode(code);
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(!rdarray[num].get_Existing())
+        {
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;用户被标记为删除状态，是否恢复？(1恢复/0不恢复)&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+            cin&amp;gt;&amp;gt;tmp_ex;
+            rdarray[num].set_Existing(tmp_ex);
+        }
+    };          &lt;span style=&#34;color:#228b22&#34;&gt;//编辑读者信息
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;delreaders&lt;/span&gt;()
+    {
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; tmp_code;
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; num;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入要删除的用户的编号：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cin&amp;gt;&amp;gt;tmp_code;
+        num=findreaders(tmp_code);
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(num==-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;)
+        {
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;用户未找到，操作失败。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(!rdarray[num].get_Existing())
+        {
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;用户已经被删除，操作失败。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(!rdarray[num].get_Borrowing())
+        {
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;用户有书未还，操作失败。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;;
+        }
+        rdarray[num].set_Existing(&lt;span style=&#34;color:#658b00&#34;&gt;false&lt;/span&gt;);
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;用户删除完毕。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+    };          &lt;span style=&#34;color:#228b22&#34;&gt;//删除读者，读者如果借书要还书后才能删除
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;listreaders&lt;/span&gt;()
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i&amp;lt;top; i++)
+        {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(rdarray[i].get_Existing())
+            {
+                cout&amp;lt;&amp;lt;rdarray[i].getcode()&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;\t&amp;#39;&lt;/span&gt;&amp;lt;&amp;lt;rdarray[i].getname()&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;\t&amp;#39;&lt;/span&gt;;
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(rdarray[i].get_Borrowing())
+                {
+                    cout&amp;lt;&amp;lt;rdarray[i].getbrbook().getname();
+                }
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt;
+                {
+                    cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;未借书&amp;#34;&lt;/span&gt;;
+                }
+                cout&amp;lt;&amp;lt;endl;
+            }
+        }
+    };           &lt;span style=&#34;color:#228b22&#34;&gt;//显示所有读者
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    CReader&amp;amp; getreader(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; p)
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(p&amp;lt;&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;||p&amp;gt;=top)
+        {
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;下标越界。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+            p=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; rdarray[p];
+    }
+};
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;CBookManager&lt;/span&gt;
+{
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt;:
+    CBook btarray[&lt;span style=&#34;color:#b452cd&#34;&gt;50&lt;/span&gt;];                   &lt;span style=&#34;color:#228b22&#34;&gt;//图书集合
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; top;                         &lt;span style=&#34;color:#228b22&#34;&gt;//当前数组中存储的图书数量
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt;:
+    CBookManager()
+    {
+        top=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+    };
+    ~CBookManager()
+    {
+        ;
+    };
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;addbooks&lt;/span&gt;()
+    {
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; tmp[&lt;span style=&#34;color:#b452cd&#34;&gt;20&lt;/span&gt;];
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; tmp_no;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入图书的相关信息：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入图书的名称：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cin&amp;gt;&amp;gt;tmp;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入图书的编号：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cin&amp;gt;&amp;gt;tmp_no;
+        CBook tmp_book(tmp_no,tmp);
+        btarray[top]=tmp_book;
+        top++;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图书入库成功。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+    };    &lt;span style=&#34;color:#228b22&#34;&gt;//添加图书
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;findbooks&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; suffix)
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i&amp;lt;top; i++)
+        {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(btarray[i].getcode()==suffix)
+            {
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; i;&lt;span style=&#34;color:#228b22&#34;&gt;//返回图书在书库中的位置。
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;            }
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; -&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;;&lt;span style=&#34;color:#228b22&#34;&gt;//未找到图书
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    };  &lt;span style=&#34;color:#228b22&#34;&gt;//查找图书，这个函数用于借书还书操作
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;findbooks&lt;/span&gt;()
+    {
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; tmp[&lt;span style=&#34;color:#b452cd&#34;&gt;20&lt;/span&gt;];
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入需要查找的图书的名称：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cin&amp;gt;&amp;gt;tmp;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i&amp;lt;top; i++)
+        {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(strcmp(btarray[i].getname(),tmp)==&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;)
+            {
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; i;
+            }
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; -&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;;
+    };  &lt;span style=&#34;color:#228b22&#34;&gt;//查找图书，用于图书维护操作
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;editbooks&lt;/span&gt;()
+    {
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; tmp[&lt;span style=&#34;color:#b452cd&#34;&gt;20&lt;/span&gt;];
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; code;
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; num=findbooks();
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; tmp_ex;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(num==-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;)
+        {
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;您要的图书没有找到。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;;
+        }
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图书名称：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;btarray[num].getname()&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图书编号：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;btarray[num].getcode()&amp;lt;&amp;lt;endl;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(btarray[num].get_Stock())
+        {
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图书在架。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt;
+        {
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图书已经借出。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(btarray[num].get_Existing())
+        {
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图书状态正常。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt;
+        {
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图书已经被删除。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        }
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入修改后的名称：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cin&amp;gt;&amp;gt;tmp;
+        btarray[num].setname(tmp);
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入修改后的编号：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cin&amp;gt;&amp;gt;code;
+        btarray[num].setcode(code);
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(!btarray[num].get_Existing())
+        {
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图书被标记为删除状态，是否恢复？(1恢复/0不恢复)&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+            cin&amp;gt;&amp;gt;tmp_ex;
+            btarray[num].set_Existing(tmp_ex);
+        }
+    };     &lt;span style=&#34;color:#228b22&#34;&gt;//编辑图书
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;delbooks&lt;/span&gt;()
+    {
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; tmp_code;
+        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; num;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入要删除的图书的编号：&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cin&amp;gt;&amp;gt;tmp_code;
+        num=findbooks(tmp_code);
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(num==-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;)
+        {
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图书未找到，操作失败。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(!btarray[num].get_Existing())
+        {
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图书已经被删除，操作失败。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(!btarray[num].get_Stock())
+        {
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图书被借出，操作失败。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;;
+        }
+        btarray[num].set_Existing(&lt;span style=&#34;color:#658b00&#34;&gt;false&lt;/span&gt;);
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图书删除完毕。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+    };   &lt;span style=&#34;color:#228b22&#34;&gt;//  删除图书
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;listbooks&lt;/span&gt;()
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i&amp;lt;top; i++)
+        {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(btarray[i].get_Stock()&amp;amp;&amp;amp;btarray[i].get_Existing())
+            {
+                cout&amp;lt;&amp;lt;btarray[i].getcode()&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;\t&amp;#39;&lt;/span&gt;&amp;lt;&amp;lt;btarray[i].getname()&amp;lt;&amp;lt;endl;
+            }
+        }
+    } ;  &lt;span style=&#34;color:#228b22&#34;&gt;//显示全部图书
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    CBook&amp;amp; getbook(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; p)
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(p&amp;lt;&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;||p&amp;gt;=top)
+        {
+            cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;下标越界。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+            p=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; btarray[p];
+    }
+};
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;showmenu&lt;/span&gt;()
+{
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; re=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt;(re&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;1&amp;#39;&lt;/span&gt;||re&amp;gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;6&amp;#39;&lt;/span&gt;)
+    {
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;功能菜单&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.读者管理&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;2.借书管理&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;3.还书管理&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;4.图书管理&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;5.文件存储&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;6.退出&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入对应序号并回车&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cin&amp;gt;&amp;gt;re;
+        &lt;span style=&#34;color:#228b22&#34;&gt;//cout&amp;lt;&amp;lt;re;
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; re-&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;0&amp;#39;&lt;/span&gt;;
+}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;showmenu1&lt;/span&gt;()
+{
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; re=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt;(re&amp;lt;&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;||re&amp;gt;&lt;span style=&#34;color:#b452cd&#34;&gt;4&lt;/span&gt;)
+    {
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;功能菜单--读者管理&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.添加读者&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;2.删除读者&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;3.修改读者&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;4.查找读者&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入对应序号并回车&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cin&amp;gt;&amp;gt;re;
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; re;
+}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;showmenu4&lt;/span&gt;()
+{
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; re=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt;(re&amp;lt;&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;||re&amp;gt;&lt;span style=&#34;color:#b452cd&#34;&gt;4&lt;/span&gt;)
+    {
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;功能菜单--图书管理&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.添加图书&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;2.删除图书&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;3.修改图书&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;4.查找图书&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入对应序号并回车&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cin&amp;gt;&amp;gt;re;
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; re;
+}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;showmenu5&lt;/span&gt;()
+{
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; re=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt;(re&amp;lt;&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;||re&amp;gt;&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;)
+    {
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;功能菜单--文件存储&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1.读取&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;2.保存&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请输入对应序号并回车&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+        cin&amp;gt;&amp;gt;re;
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; re;
+}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;()
+{
+    CReaderManager cm1;
+    CBookManager cb1;
+    ofstream file;
+    ifstream file2;
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; cz=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; tmp_us;
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; tmp_bo;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt;(&lt;span style=&#34;color:#658b00&#34;&gt;true&lt;/span&gt;)
+    {
+        cz=showmenu();
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;switch&lt;/span&gt;(cz)
+        {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;:
+            cz=showmenu1();
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;switch&lt;/span&gt;(cz)
+            {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;:
+                cm1.addreaders();
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;:
+                cm1.delreaders();
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;3&lt;/span&gt;:
+                cm1.editreaders();
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;4&lt;/span&gt;:
+                cm1.findreaders();
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+            }
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;:
+            tmp_bo=cb1.findbooks();
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(tmp_bo==-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;)
+            {
+                cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;您要借的书没有找到。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+            }
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(!cb1.getbook(tmp_bo).get_Existing())
+            {
+                cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;您要借的书已经被删除，操作失败。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+            }
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(!cb1.getbook(tmp_bo).get_Stock())
+            {
+                cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;您要借的书已经被借出，操作失败。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+            }
+            tmp_us=cm1.findreaders();
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(tmp_bo==-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;)
+            {
+                cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;您使用的身份无效。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+            }
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(!cm1.getreader(tmp_us).get_Existing())
+            {
+                cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;您的账户已经被管理员删除。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+            }
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(cm1.getreader((tmp_us)).get_Borrowing())
+            {
+                cout&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;请把您借的书还了再借。&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;endl;
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+            }
+            cm1.getreader(tmp_us).set_Borrowing(&lt;span style=&#34;color:#658b00&#34;&gt;true&lt;/span&gt;);
+            cm1.getreader(tmp_us).setbrbook(cb1.getbook(tmp_bo));
+            cb1.getbook(tmp_bo).set_Stock(&lt;span style=&#34;color:#658b00&#34;&gt;false&lt;/span&gt;);
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;3&lt;/span&gt;:
+            cm1.editreaders();
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;4&lt;/span&gt;:
+            cz=showmenu4();
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;switch&lt;/span&gt;(cz)
+            {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;:
+                cb1.addbooks();
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;:
+                cb1.delbooks();
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;3&lt;/span&gt;:
+                cb1.editbooks();
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;4&lt;/span&gt;:
+                cb1.findbooks();
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+            }
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;5&lt;/span&gt;:
+            cz=showmenu5();
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;switch&lt;/span&gt;(cz)
+            {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;:
+                file2.open(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;cb1.dat&amp;#34;&lt;/span&gt;,ios::binary);
+                &lt;span style=&#34;color:#228b22&#34;&gt;//二进制打开，缺省为文本，ios::out,ios::in,文本输入输出用&amp;lt;&amp;lt;,&amp;gt;&amp;gt;
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                file2.read((&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; *)&amp;amp;cb1,&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;sizeof&lt;/span&gt;(cb1));
+                &lt;span style=&#34;color:#228b22&#34;&gt;///int num=file2.gcount(); //获取读到文件的大小
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                file2.close();
+                file2.open(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;cm1.dat&amp;#34;&lt;/span&gt;,ios::binary);
+                &lt;span style=&#34;color:#228b22&#34;&gt;//二进制打开，缺省为文本，ios::out,ios::in,文本输入输出用&amp;lt;&amp;lt;,&amp;gt;&amp;gt;
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                file2.read((&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; *)&amp;amp;cm1,&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;sizeof&lt;/span&gt;(cm1));
+                &lt;span style=&#34;color:#228b22&#34;&gt;///int num=file2.gcount(); //获取读到文件的大小
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                file2.close();
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;:
+                file.open(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;cb1.dat&amp;#34;&lt;/span&gt;,ios::binary);
+                &lt;span style=&#34;color:#228b22&#34;&gt;//缓存的类型是 unsigned char *，需要类型转换
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                file.write((&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; *)&amp;amp;cb1,&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;sizeof&lt;/span&gt;(cb1));  &lt;span style=&#34;color:#228b22&#34;&gt;//winServer为类对象
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                file.close();
+                file.open(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;cm1.dat&amp;#34;&lt;/span&gt;,ios::binary);
+                &lt;span style=&#34;color:#228b22&#34;&gt;//缓存的类型是 unsigned char *，需要类型转换
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                file.write((&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; *)&amp;amp;cm1,&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;sizeof&lt;/span&gt;(cm1));  &lt;span style=&#34;color:#228b22&#34;&gt;//winServer为类对象
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                file.close();
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+            }
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;6&lt;/span&gt;:
+            exit(&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;);
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+        }
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://ntutn.top/posts/%E5%9B%BE%E4%B9%A6%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/ - CC BY-SA 4.0</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>学生管理系统</title>
+        <link>https://ntutn.top/posts/%E5%AD%A6%E7%94%9F%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/</link>
+        <pubDate>Sat, 13 Apr 2019 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/%E5%AD%A6%E7%94%9F%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/</guid>
+        <description>归零幻想 https://ntutn.top/posts/%E5%AD%A6%E7%94%9F%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/ -&lt;!-- raw HTML omitted --&gt;
+&lt;blockquote&gt;
+&lt;p&gt;翻出了以前C语言C实验的大作业，当时搞了好多奇技淫巧，最终拿到99分。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;介绍&#34;&gt;介绍&lt;/h2&gt;
+&lt;p&gt;学生成绩管理系统v6.0是由软件工程1702刘海鑫设计的一款用于学生成绩管理的软件。&lt;/p&gt;
+&lt;h2 id=&#34;文件列表&#34;&gt;文件列表&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;Stuv6.0.exe	主体程序，用于实现整体功能。&lt;/li&gt;
+&lt;li&gt;main.dat	程序的数据文件，用于存储学生信息。&lt;/li&gt;
+&lt;li&gt;goodbye.bmp	程序退出时加载的图片。&lt;/li&gt;
+&lt;li&gt;desktop.ini	修改程序所在文件夹的图标。&lt;/li&gt;
+&lt;li&gt;consoletest.exe	编译的au3程序，用于辅助输入中文。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;代码：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-autoit&#34; data-lang=&#34;autoit&#34;&gt;$re=InputBox(&amp;quot;Input&amp;quot;,&amp;quot;You can input your massage now.(支持中文)&amp;quot;)
+ConsoleWrite($re)
+&lt;/code&gt;&lt;/pre&gt;&lt;ul&gt;
+&lt;li&gt;code.dat	密码存储文件。该文件存储的是xor算法加密的账号密码。&lt;/li&gt;
+&lt;li&gt;black.bmp	一张纯黑的图片，用于清除控制台加载图片的痕迹。2018年1月20日使用了image /d清除图片，本文件不再使用。&lt;/li&gt;
+&lt;li&gt;background.bmp	程序启动时加载的图片。&lt;/li&gt;
+&lt;li&gt;about.rtf	程序的说明文档。&lt;/li&gt;
+&lt;li&gt;scaned.txt	存储用户输入的临时文件，一般会自动清除。&lt;/li&gt;
+&lt;li&gt;subjects.dat	存储科目的名称，每行一个，最多允许50个，可用记事本直接打开编辑。&lt;/li&gt;
+&lt;li&gt;image.exe	外部程序，用于加载图片。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;h2 id=&#34;使用说明&#34;&gt;使用说明&lt;/h2&gt;
+&lt;p&gt;双击&lt;code&gt;stuv6.0.exe&lt;/code&gt;，程序启动。&lt;/p&gt;
+&lt;p&gt;待启动图片显示过后，出现密码输入框，回车确认输入。&lt;/p&gt;
+&lt;p&gt;默认账号：&lt;code&gt;admin&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;默认密码：&lt;code&gt;admin888&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;输入密码时如果输入~符号，将弹出一个信息框提示输入。这是为了便于输入中文和特殊符号。&lt;/p&gt;
+&lt;p&gt;本程序的密码存储是xor运算的结果，仅用于比对密码是否正确。&lt;/p&gt;
+&lt;p&gt;接下来进入主菜单。菜单使用黄色为底色，红色标定选中项。你可以按上下键选择，或直接按项目对应数字，回车确认。&lt;/p&gt;
+&lt;h2 id=&#34;开发日志&#34;&gt;开发日志&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;2018年3月10日，加入了控制台窗口大小控制的代码。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;修改了exe文件的图标。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;改用外部程序image.exe加载图片，并修改gotoxy函数的使用，成功使代码兼容了gun gcc系列编译器。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;测试WIN7运行效果，图片加载错位，无法全屏，其他功能不受影响。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;在科目分析功能加入分层成绩展示，至此，程序主体开发完毕。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;加入查找功能，查找方式为遍历，依据为id或姓名。
+同理，加入按id排序、按姓名的字典顺序排序。
+数据排序功能，选择后弹出二级菜单，进行升序排序或降序排序。
+排序的结果不会保存。
+排序后将自动展示排序结果。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;加入了科目分析，统计各科总分平均分。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;删除学生功能准备完成。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;将修改密码部分移出主函数，便于管理。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;学生信息展示准备完成。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;添加学生功能准备完成，界面比较简陋。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;发现有点控制台用BitBlt画的图不会自动清除，于是找了一张全黑的图片将其覆盖。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;发现在WIN7等系统控制台加载图片会出现错位，暂时不打算解决。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;开始准备程序主体功能。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;记事本太单调，决定将about改为写字板，内容为本文件。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;发现了atexit函数，于是顺理成章地加入了程序退出图。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;找到一个取巧的方法。控制台也是一个窗口，获取了他的句柄就可以在上面用BitBlt直接画图了吧。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;决定加入加载启动退出图片功能。可是Windows环境下C语言直接调用GDI常常导致系统蓝屏。虽然直接用其他语言就可以轻松写出，但总是有点不甘心。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;加入了about，system(&amp;ldquo;notepad.exe about.txt&amp;rdquo;)实现。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;加入了密码修改功能。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;发现并修正了“窗口”覆盖时的一个BUG。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;成功实现菜单功能！上下键控制菜单移动，回车选择目标。亦可直接按选项对应数字移动菜单项。函数原型：int showMenu(char txt[][50],int n,int selected,int X,int Y)
+txt是各菜单的文本。
+n是菜单项总数目。
+selected为当前选中项。
+X,Y为菜单加载的坐标。
+函数返回值为用户最终选定项。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;发现getch对中文兼容不好。为了方便输入中文密码，用AU3写了控制台程序：&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;在getch检测到用户输入~后即打开该程序输入数据。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;制作了密码登录界面，用户名用fgets扫描，password用getch检测。getch检测到后输出*。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;调用前面的函数实现了伪信息框（图左），虽然和系统的信息框（图右）没得比，但在控制台下做出这个水平我还是知足了。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;UE的控制台与程序兼容性实在不行，改用code blocks作为IDE，编译器使用gcc for windows。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;通过gotoxy和严格的坐标计算实现了绘制伪窗口功能。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;发现了函数gotoxy(x,y)，可以控制光标输出位置，但好像移植性不好，比如GUN系列编译器就是另一个函数。决定还是使用。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;最终暂时选定XOR算法，代码：&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;准备用户登录验证方案，由经验打算采用XOR算法或MD5算法。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;找到了合理的颜色控制方案，但似乎并不是所有控制台都能使用（UltraEdit DOS Command就不能用），不过暂时就这样了。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;决定将界面制作得精美一些。查找资料。找到DOS命令color可以改控制台颜色方案，但只能同时更改整个控制台的颜色，怎么看都不舒服，放弃。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;找到DOS指令title可以直接修改控制台标题。控制台标题改为“学生成绩管理系统V6.0”。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;选定课题为学生成绩管理系统，总体难度不大，毕竟书上范例改一改就是标准答案了。但我决定还是挑战一下。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://ntutn.top/res/img/stu1.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ntutn.top/res/img/stu2.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ntutn.top/res/img/stu3.png&#34; alt=&#34;&#34;&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;#34;stdio.h&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;#34;stdlib.h&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;#34;string.h&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;windows.h&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;//#include &amp;lt;conio.h&amp;gt;
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;#34;math.h&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;miniMessage&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt;*msg);
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;showExitPic&lt;/span&gt;();
+&lt;span style=&#34;color:#228b22&#34;&gt;/*
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;typedef HWND (WINAPI *PROCGETCONSOLEWINDOW)();//图片加载
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;PROCGETCONSOLEWINDOW GetConsoleWindow;
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;*/&lt;/span&gt;
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;PrintChar&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; *ch,UINT count,UINT x,UINT y)  &lt;span style=&#34;color:#228b22&#34;&gt;//在坐标(x,y)处输出字符串ch,ch里有count个字符
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;{
+    HANDLE h=GetStdHandle(STD_OUTPUT_HANDLE);
+    COORD pos;
+    ULONG unuse;
+    pos.X=x;
+    pos.Y=y;
+    CONSOLE_SCREEN_BUFFER_INFO bInfo; &lt;span style=&#34;color:#228b22&#34;&gt;// 窗口缓冲区信息
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    GetConsoleScreenBufferInfo(h, &amp;amp;bInfo );
+    WriteConsoleOutputCharacterA(h,ch,count,pos,&amp;amp;unuse);
+}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;color&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;short&lt;/span&gt; x) &lt;span style=&#34;color:#228b22&#34;&gt;//自定义函根据参数改变颜色
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;{
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(x&amp;gt;=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt; &amp;amp;&amp;amp; x&amp;lt;=&lt;span style=&#34;color:#b452cd&#34;&gt;15&lt;/span&gt;)&lt;span style=&#34;color:#228b22&#34;&gt;//参数在0-15的范围颜色
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), x);    &lt;span style=&#34;color:#228b22&#34;&gt;//只有一个参数，改变字体颜色
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;//默认的颜色白色
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), &lt;span style=&#34;color:#b452cd&#34;&gt;7&lt;/span&gt;);
+    &lt;span style=&#34;color:#228b22&#34;&gt;/*
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;    颜色函数SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),前景色 | 背景色 | 前景加强 | 背景加强);
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;        前景色：数字0-15 或 FOREGROUND_XXX 表示  （其中XXX可用BLUE、RED、GREEN表示）
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;        前景加强：数字8 或 FOREGROUND_INTENSITY 表示
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;        背景色：数字16 32 64 或 BACKGROUND_XXX 三种颜色表示
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;        背景加强： 数字128 或 BACKGROUND_INTENSITY 表示
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;    主要应用：改变指定区域字体与背景的颜色
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;    前景颜色对应值：
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;    　　0=黑色                8=灰色　　
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;      　1=蓝色                9=淡蓝色        十六进制        　　
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;    　　2=绿色                10=淡绿色       0xa        　　
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;    　　3=湖蓝色              11=淡浅绿色     0xb　
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;    　　4=红色                12=淡红色       0xc　　
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;    　　5=紫色                13=淡紫色       0xd        　　
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;    　　6=黄色                14=淡黄色       0xe        　　
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;    　　7=白色                15=亮白色       0xf
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;    　　也可以把这些值设置成常量。
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;    */&lt;/span&gt;
+}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;gotoxy&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;unsigned&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; x,&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;unsigned&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; y)
+{
+    &lt;span style=&#34;color:#228b22&#34;&gt;//COORD是Windows API中定义的一种结构，表示一个字符在控制台屏幕上的坐标
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    COORD cor;
+    &lt;span style=&#34;color:#228b22&#34;&gt;//句柄
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    HANDLE hout;
+    &lt;span style=&#34;color:#228b22&#34;&gt;//设定我们要定位到的坐标
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    cor.X = x;
+    cor.Y = y;
+    &lt;span style=&#34;color:#228b22&#34;&gt;//GetStdHandle函数获取一个指向特定标准设备的句柄，包括标准输入，标准输出和标准错误。
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#228b22&#34;&gt;//STD_OUTPUT_HANDLE正是代表标准输出（也就是显示屏）的宏
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    hout = GetStdHandle(STD_OUTPUT_HANDLE);
+    &lt;span style=&#34;color:#228b22&#34;&gt;//SetConsoleCursorPosition函数用于设置控制台光标的位置
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    SetConsoleCursorPosition(hout, cor);
+}
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;typedef&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;struct&lt;/span&gt;
+{
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; name[&lt;span style=&#34;color:#b452cd&#34;&gt;25&lt;/span&gt;];
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; sex;
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; age;
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; id;
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; subjects[&lt;span style=&#34;color:#b452cd&#34;&gt;50&lt;/span&gt;];
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; sum;
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; avg;
+} student;
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; sub_name[&lt;span style=&#34;color:#b452cd&#34;&gt;50&lt;/span&gt;][&lt;span style=&#34;color:#b452cd&#34;&gt;25&lt;/span&gt;];
+student stu_dat[&lt;span style=&#34;color:#b452cd&#34;&gt;10000&lt;/span&gt;];
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; dat_count;
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; sub_count;
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;Login&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt;*c1,&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt;*c2)
+{
+    FILE*fp;
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt;*p1;
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt;*p3;
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt;*p2;
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; tmp;
+    fp=fopen(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;code.dat&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;r&amp;#34;&lt;/span&gt;);
+    p1=c1;
+    p3=c2;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(strlen(c1)&amp;gt;strlen(c2))
+    {
+        p2=p1;
+        p1=p3;
+        p3=p2;
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; (; *p3!=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;\0&amp;#39;&lt;/span&gt;; )
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(*p1==&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;\0&amp;#39;&lt;/span&gt;)
+        {
+            p1=c1;
+        }
+        tmp=fgetc(fp);
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(((*p1)^(*p3))!=tmp)
+        {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+        }
+        p1++;
+        p3++;
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(strlen(c1)&amp;lt;&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;||strlen(c2)&amp;lt;&lt;span style=&#34;color:#b452cd&#34;&gt;6&lt;/span&gt;)
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;;
+    fclose(fp);
+}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;savePwd&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt;*c1,&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt;*c2)
+{
+    FILE*fp;
+    fp=fopen(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;code.dat&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;w&amp;#34;&lt;/span&gt;);
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt;*p1=c1;
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt;*p2=c2;
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt;*p3;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(strlen(c1)&amp;gt;strlen(c2))
+    {
+        p3=p1;
+        p1=p2;
+        p2=p3;
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; (; *p2!=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;\0&amp;#39;&lt;/span&gt;; )
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(*p1==&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;\0&amp;#39;&lt;/span&gt;)
+        {
+            p1=c1;
+        }
+        fputc((*p1)^(*p2),fp);
+        p1++;
+        p2++;
+    }
+    fclose(fp);
+}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;dat_add&lt;/span&gt;(student*s1)
+{
+    FILE*fp;
+    s1-&amp;gt;sum=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; (&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i&amp;lt;sub_count; i++)
+    {
+        s1-&amp;gt;sum+=s1-&amp;gt;subjects[i];
+    }
+    s1-&amp;gt;avg=s1-&amp;gt;sum/=sub_count;
+    fp=fopen(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;main.dat&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;ab&amp;#34;&lt;/span&gt;);
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(fp==&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;)
+    {
+        fp=fopen(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;main.dat&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;wb&amp;#34;&lt;/span&gt;);
+    }
+    fwrite(s1,&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;sizeof&lt;/span&gt;(student),&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;,fp);
+    fclose(fp);
+}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;sub_load&lt;/span&gt;()
+{
+    FILE*fp;
+    fp=fopen(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;subjects.dat&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;r&amp;#34;&lt;/span&gt;);
+    sub_count=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; (&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i&amp;lt;&lt;span style=&#34;color:#b452cd&#34;&gt;50&lt;/span&gt;; i++)
+    {
+        fgets(sub_name[i],&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;sizeof&lt;/span&gt;(sub_name),fp);
+        sub_name[i][strlen(sub_name[i])-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;]=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;\0&amp;#39;&lt;/span&gt;;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(strlen(sub_name[i])&amp;gt;&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;)
+        {
+            sub_count++;
+        }
+    }
+    fclose(fp);
+}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;sub_print&lt;/span&gt;()
+{
+    printf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;学号&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;姓名&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;性别&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;年龄&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;);
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; (&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i&amp;lt;&lt;span style=&#34;color:#b452cd&#34;&gt;50&lt;/span&gt;; i++)
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(strlen(sub_name[i])==&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;)
+        {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+        }
+        printf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;%s&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;,sub_name[i]);
+    }
+    printf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;总分&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;平均分&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;排名&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;);
+    putchar(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;\n&amp;#39;&lt;/span&gt;);
+}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;dat_load&lt;/span&gt;()
+{
+    FILE*fp;
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i;
+    fp=fopen(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;main.dat&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;rb&amp;#34;&lt;/span&gt;);
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(fp==&lt;span style=&#34;color:#658b00&#34;&gt;NULL&lt;/span&gt;)
+    {
+        puts(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;main.dat is lost!&amp;#34;&lt;/span&gt;);
+        exit(&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;);
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; (i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; !feof(fp) ; i++)
+    {
+        fread(&amp;amp;stu_dat[i],&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;sizeof&lt;/span&gt;(student),&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;,fp);
+    }
+    fclose(fp);
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; i-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;;
+}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;dat_show&lt;/span&gt; (student s)
+{
+    printf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;%d&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;%s&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;%c&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;%d&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;,s.id,s.name,s.sex,s.age);
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; (&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i&amp;lt;sub_count; i++)
+    {
+        printf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;%d&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;,s.subjects[i]);
+    }
+    printf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;%d&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;%d&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;,s.sum,s.avg);
+}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;showMiniWindow&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt;*title,&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; X,&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; Y,&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; height,&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; width)
+{
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i&amp;lt;width; i++)
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i2=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i2&amp;lt;height; i2++)
+        {
+            gotoxy(X+i,Y+i2);
+            putchar(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39; &amp;#39;&lt;/span&gt;);
+        }
+    }
+    color(&lt;span style=&#34;color:#b452cd&#34;&gt;3&lt;/span&gt;);
+    gotoxy(X,Y);
+    putchar(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;X&amp;#39;&lt;/span&gt;);
+    gotoxy(X+width-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;,Y);
+    putchar(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;X&amp;#39;&lt;/span&gt;);
+    gotoxy(X,Y+height-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;);
+    putchar(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;X&amp;#39;&lt;/span&gt;);
+    gotoxy(X+width-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;,Y+height-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;);
+    putchar(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;X&amp;#39;&lt;/span&gt;);
+    color(&lt;span style=&#34;color:#b452cd&#34;&gt;5&lt;/span&gt;);
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; (&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;; i&amp;lt;width; i++)
+    {
+        gotoxy(X+i-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;,Y);
+        putchar(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;-&amp;#39;&lt;/span&gt;);
+        gotoxy(X+i-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;,Y+height-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;);
+        putchar(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;-&amp;#39;&lt;/span&gt;);
+    }
+    color(&lt;span style=&#34;color:#b452cd&#34;&gt;9&lt;/span&gt;);
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; (&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;; i&amp;lt;height; i++)
+    {
+        gotoxy(X,Y+i-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;);
+        putchar(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;|&amp;#39;&lt;/span&gt;);
+        gotoxy(X+width-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;,Y+i-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;);
+        putchar(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;|&amp;#39;&lt;/span&gt;);
+        PrintChar(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;|&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;,X+width-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;,Y+i-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;);
+    }
+    color(&lt;span style=&#34;color:#b452cd&#34;&gt;12&lt;/span&gt;);
+    gotoxy(X+width/&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;-strlen(title)/&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;,Y);
+    printf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;%s&amp;#34;&lt;/span&gt;,title);
+    color(&lt;span style=&#34;color:#b452cd&#34;&gt;16&lt;/span&gt;);
+    gotoxy(X+&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;,Y+&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;);
+}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;miniLogin&lt;/span&gt; ()
+{
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; c1[&lt;span style=&#34;color:#b452cd&#34;&gt;25&lt;/span&gt;],c2[&lt;span style=&#34;color:#b452cd&#34;&gt;25&lt;/span&gt;];
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; ch_tmp;
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt;*p=c2;
+    FILE*fp;
+    showMiniWindow(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;login&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#b452cd&#34;&gt;6&lt;/span&gt;,&lt;span style=&#34;color:#b452cd&#34;&gt;5&lt;/span&gt;,&lt;span style=&#34;color:#b452cd&#34;&gt;4&lt;/span&gt;,&lt;span style=&#34;color:#b452cd&#34;&gt;32&lt;/span&gt;);
+    puts(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;User     ________________&amp;#34;&lt;/span&gt;);
+    gotoxy(&lt;span style=&#34;color:#b452cd&#34;&gt;7&lt;/span&gt;,&lt;span style=&#34;color:#b452cd&#34;&gt;7&lt;/span&gt;);
+    puts(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;password ________________&amp;#34;&lt;/span&gt;);
+    gotoxy(&lt;span style=&#34;color:#b452cd&#34;&gt;16&lt;/span&gt;,&lt;span style=&#34;color:#b452cd&#34;&gt;6&lt;/span&gt;);
+    fgets(c1,&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;sizeof&lt;/span&gt;(c1),stdin);
+    c1[strlen(c1)-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;]=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;\0&amp;#39;&lt;/span&gt;;
+    gotoxy(&lt;span style=&#34;color:#b452cd&#34;&gt;16&lt;/span&gt;,&lt;span style=&#34;color:#b452cd&#34;&gt;7&lt;/span&gt;);
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt;(&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;)
+    {
+        ch_tmp=getch();
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(ch_tmp==&lt;span style=&#34;color:#b452cd&#34;&gt;13&lt;/span&gt;)
+        {
+            *p=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;\0&amp;#39;&lt;/span&gt;;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(ch_tmp==&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;~&amp;#39;&lt;/span&gt;)
+        {
+            system(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;consoletest.exe&amp;gt;scaned.txt&amp;#34;&lt;/span&gt;);
+            fp=fopen(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;scaned.txt&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;r&amp;#34;&lt;/span&gt;);
+            fgets(c2,&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;sizeof&lt;/span&gt;(c2),fp);
+            fclose(fp);
+            system(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;del scaned.txt&amp;#34;&lt;/span&gt;);
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt;
+        {
+            *p=ch_tmp;
+            p++;
+            putchar(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;*&amp;#39;&lt;/span&gt;);
+        }
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(Login(c1,c2))
+    {
+        miniMessage(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;登录成功，欢迎您的使用！&amp;#34;&lt;/span&gt;);
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt;
+    {
+        miniMessage(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;用户名或密码错误！&amp;#34;&lt;/span&gt;);
+        Sleep(&lt;span style=&#34;color:#b452cd&#34;&gt;1000&lt;/span&gt;);
+        showExitPic();
+        exit(&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;);
+    }
+    Sleep(&lt;span style=&#34;color:#b452cd&#34;&gt;1000&lt;/span&gt;);
+}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;miniMessage&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt;*msg)
+{
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; n=strlen(msg);
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; width=(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;)sqrt(n)+&lt;span style=&#34;color:#b452cd&#34;&gt;10&lt;/span&gt;;
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; height=n/(width-&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;)+&lt;span style=&#34;color:#b452cd&#34;&gt;4&lt;/span&gt;;
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; X=&lt;span style=&#34;color:#b452cd&#34;&gt;5&lt;/span&gt;;
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; Y=&lt;span style=&#34;color:#b452cd&#34;&gt;7&lt;/span&gt;;
+    showMiniWindow(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Message&amp;#34;&lt;/span&gt;,X,Y,height,width);
+    X++;
+    Y++;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; (&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i&amp;lt;n; i++)
+    {
+        putchar(msg[i]);
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(i%(width-&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;)==&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;)
+        {
+            Y++;
+            gotoxy(X,Y);
+        }
+    }
+}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;showMenu&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; txt[][&lt;span style=&#34;color:#b452cd&#34;&gt;50&lt;/span&gt;],&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; n,&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; selected,&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; X,&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; Y)
+{
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; maxwidth=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; tmp_width;
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; tmp_press;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i&amp;lt;n; i++)
+    {
+        tmp_width=strlen(txt[i]);
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(tmp_width&amp;gt;maxwidth)
+        {
+            maxwidth=tmp_width;
+        }
+    }
+    showMiniWindow(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;MENU&amp;#34;&lt;/span&gt;,X,Y,n+&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;,maxwidth+&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;);
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i&amp;lt;n; i++)
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(i==selected)
+        {
+            color(&lt;span style=&#34;color:#b452cd&#34;&gt;4&lt;/span&gt;);
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt;
+        {
+            color(&lt;span style=&#34;color:#b452cd&#34;&gt;6&lt;/span&gt;);
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i2=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; txt[i][i2]!=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;\0&amp;#39;&lt;/span&gt;; i2++)
+        {
+            gotoxy(X+i2+&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;,Y+i+&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;);
+            putchar(txt[i][i2]);
+        }
+    }
+    color(&lt;span style=&#34;color:#b452cd&#34;&gt;16&lt;/span&gt;);
+    tmp_press=getch();
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(tmp_press==&lt;span style=&#34;color:#b452cd&#34;&gt;13&lt;/span&gt;)
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; selected;
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(tmp_press==&lt;span style=&#34;color:#b452cd&#34;&gt;72&lt;/span&gt;)
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(selected&amp;gt;&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;)
+        {
+            selected--;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt;
+        {
+            putchar(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;\a&amp;#39;&lt;/span&gt;);
+        }
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(tmp_press==&lt;span style=&#34;color:#b452cd&#34;&gt;80&lt;/span&gt;)
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(selected&amp;lt;n-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;)
+        {
+            selected++;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt;
+        {
+            putchar(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;\a&amp;#39;&lt;/span&gt;);
+        }
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(tmp_press-&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;0&amp;#39;&lt;/span&gt;&amp;gt;=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;&amp;amp;&amp;amp;tmp_press-&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;0&amp;#39;&lt;/span&gt;&amp;lt;n)
+    {
+        selected=tmp_press-&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;0&amp;#39;&lt;/span&gt;;
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; showMenu(txt,n,selected,X,Y);
+}
+&lt;span style=&#34;color:#228b22&#34;&gt;/*
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;void picLoad(char*path)
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;{
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;    HMODULE hKernel32 = GetModuleHandle(&amp;#34;kernel32&amp;#34;);
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;    GetConsoleWindow= (PROCGETCONSOLEWINDOW)GetProcAddress(hKernel32,&amp;#34;GetConsoleWindow&amp;#34;);
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;    HWND cmd=GetConsoleWindow();
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;    HDC dc = GetDC(cmd);
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;    HBITMAP hBitmap;
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;    hBitmap=(HBITMAP)LoadImage            (NULL,path,IMAGE_BITMAP,0,0,LR_LOADFROMFILE|LR_CREATEDIBSECTION);
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;    HDC cmdmem = CreateCompatibleDC(dc);
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;    SelectObject(cmdmem, hBitmap);
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;    BitBlt(dc, 0, 0, 1300, 700, cmdmem, 0, 0, SRCCOPY);
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;    Sleep(3000);
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;    return ;
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;}*/&lt;/span&gt;
+&lt;span style=&#34;color:#228b22&#34;&gt;/*
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;void loadBlack()
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;{
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;    HMODULE hKernel32 = GetModuleHandle(&amp;#34;kernel32&amp;#34;);
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;    GetConsoleWindow= (PROCGETCONSOLEWINDOW)GetProcAddress(hKernel32,&amp;#34;GetConsoleWindow&amp;#34;);
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;    HWND cmd=GetConsoleWindow();
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;    HDC dc = GetDC(cmd);
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;    HBITMAP hBitmap;
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;    hBitmap=(HBITMAP)LoadImage            (NULL,&amp;#34;black.bmp&amp;#34;,IMAGE_BITMAP,0,0,LR_LOADFROMFILE|LR_CREATEDIBSECTION);
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;    HDC cmdmem = CreateCompatibleDC(dc);
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;    SelectObject(cmdmem, hBitmap);
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;    BitBlt(dc, 0, 0, 1300, 700, cmdmem, 0, 0, SRCCOPY);
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;    return ;
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;}
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;*/&lt;/span&gt;
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;showExitPic&lt;/span&gt;()
+{
+    system(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;image goodbye.bmp 0 0&amp;#34;&lt;/span&gt;);
+    Sleep(&lt;span style=&#34;color:#b452cd&#34;&gt;3000&lt;/span&gt;);
+    &lt;span style=&#34;color:#228b22&#34;&gt;//picLoad(&amp;#34;goodbye.bmp&amp;#34;);
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;add_stu&lt;/span&gt;()
+{
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; tmp_sex[&lt;span style=&#34;color:#b452cd&#34;&gt;10&lt;/span&gt;];
+    student tmp;
+    system(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;cls&amp;#34;&lt;/span&gt;);
+    printf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Please input the id number of the new student.&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;);
+    scanf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;%d&amp;#34;&lt;/span&gt;,&amp;amp;tmp.id);
+    printf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Please input the name of the student.&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;);
+    scanf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;%s&amp;#34;&lt;/span&gt;,tmp.name);
+    printf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Please input the sex of the student.(F for Female,M for Male.)&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;);
+    scanf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;%s&amp;#34;&lt;/span&gt;,tmp_sex);
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(strcmp(tmp_sex,&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;F&amp;#34;&lt;/span&gt;)==&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;)
+    {
+        tmp.sex=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;F&amp;#39;&lt;/span&gt;;
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt;
+    {
+        tmp.sex=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;M&amp;#39;&lt;/span&gt;;
+    }
+    printf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Please input the age of the student.&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;);
+    scanf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;%d&amp;#34;&lt;/span&gt;,&amp;amp;tmp.age);
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i&amp;lt;sub_count; i++)
+    {
+        printf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Please input %s&amp;#39;s %s score.&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;,tmp.name,sub_name[i]);
+        scanf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;%d&amp;#34;&lt;/span&gt;,&amp;amp;tmp.subjects[i]);
+    }
+    dat_add(&amp;amp;tmp);
+    dat_count=dat_load();
+    printf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Data added successfully!&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;);
+    Sleep(&lt;span style=&#34;color:#b452cd&#34;&gt;3000&lt;/span&gt;);
+}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;showalldata&lt;/span&gt;()
+{
+    system(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;cls&amp;#34;&lt;/span&gt;);
+    sub_print();
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i&amp;lt;dat_count; i++)
+    {
+        printf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;%d&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;%s&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;%c&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;%d&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;,stu_dat[i].id,stu_dat[i].name,stu_dat[i].sex,stu_dat[i].age);
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i2=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i2&amp;lt;sub_count; i2++)
+        {
+            printf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;%d&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;,stu_dat[i].subjects[i2]);
+        }
+        printf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;%d&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;%d&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;%d&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t\n&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;,stu_dat[i].sum,stu_dat[i].avg,i+&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;);
+    }
+    system(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;pause&amp;#34;&lt;/span&gt;);
+}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;ed_password&lt;/span&gt;()
+{
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; us_name[&lt;span style=&#34;color:#b452cd&#34;&gt;50&lt;/span&gt;];
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; us_pwd[&lt;span style=&#34;color:#b452cd&#34;&gt;50&lt;/span&gt;];
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; us_pwd2[&lt;span style=&#34;color:#b452cd&#34;&gt;50&lt;/span&gt;];
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; us_pwd3[&lt;span style=&#34;color:#b452cd&#34;&gt;50&lt;/span&gt;];
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt;*p;
+    FILE*fp;
+    system(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;cls&amp;#34;&lt;/span&gt;);
+    showMiniWindow(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;修改密码&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#b452cd&#34;&gt;5&lt;/span&gt;,&lt;span style=&#34;color:#b452cd&#34;&gt;7&lt;/span&gt;,&lt;span style=&#34;color:#b452cd&#34;&gt;6&lt;/span&gt;,&lt;span style=&#34;color:#b452cd&#34;&gt;36&lt;/span&gt;);
+    puts(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;UserName&amp;#34;&lt;/span&gt;);
+    gotoxy(&lt;span style=&#34;color:#b452cd&#34;&gt;6&lt;/span&gt;,&lt;span style=&#34;color:#b452cd&#34;&gt;9&lt;/span&gt;);
+    puts(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;PassWord&amp;#34;&lt;/span&gt;);
+    gotoxy(&lt;span style=&#34;color:#b452cd&#34;&gt;6&lt;/span&gt;,&lt;span style=&#34;color:#b452cd&#34;&gt;10&lt;/span&gt;);
+    puts(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;NewPassWord&amp;#34;&lt;/span&gt;);
+    gotoxy(&lt;span style=&#34;color:#b452cd&#34;&gt;6&lt;/span&gt;,&lt;span style=&#34;color:#b452cd&#34;&gt;11&lt;/span&gt;);
+    puts(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Again&amp;#34;&lt;/span&gt;);
+    gotoxy(&lt;span style=&#34;color:#b452cd&#34;&gt;18&lt;/span&gt;,&lt;span style=&#34;color:#b452cd&#34;&gt;8&lt;/span&gt;);
+    scanf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;%s&amp;#34;&lt;/span&gt;,us_name);
+    gotoxy(&lt;span style=&#34;color:#b452cd&#34;&gt;18&lt;/span&gt;,&lt;span style=&#34;color:#b452cd&#34;&gt;9&lt;/span&gt;);
+    p=us_pwd;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt;(&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;)
+    {
+        *p=getch();
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(*p==&lt;span style=&#34;color:#b452cd&#34;&gt;13&lt;/span&gt;)
+        {
+            p--;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(*p==&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;~&amp;#39;&lt;/span&gt;)
+        {
+            system(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;consoletest.exe&amp;gt;scaned.txt&amp;#34;&lt;/span&gt;);
+            fp=fopen(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;scaned.txt&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;r&amp;#34;&lt;/span&gt;);
+            fgets(us_pwd,&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;sizeof&lt;/span&gt;(us_pwd),fp);
+            fclose(fp);
+            system(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;del scaned.txt&amp;#34;&lt;/span&gt;);
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt;
+        {
+            putchar(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;*&amp;#39;&lt;/span&gt;);
+            p++;
+        }
+    }
+    gotoxy(&lt;span style=&#34;color:#b452cd&#34;&gt;18&lt;/span&gt;,&lt;span style=&#34;color:#b452cd&#34;&gt;10&lt;/span&gt;);
+    p=us_pwd2;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt;(&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;)
+    {
+        *p=getch();
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(*p==&lt;span style=&#34;color:#b452cd&#34;&gt;13&lt;/span&gt;)
+        {
+            p--;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(*p==&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;~&amp;#39;&lt;/span&gt;)
+        {
+            system(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;consoletest.exe&amp;gt;scaned.txt&amp;#34;&lt;/span&gt;);
+            fp=fopen(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;scaned.txt&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;r&amp;#34;&lt;/span&gt;);
+            fgets(us_pwd2,&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;sizeof&lt;/span&gt;(us_pwd2),fp);
+            fclose(fp);
+            system(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;del scaned.txt&amp;#34;&lt;/span&gt;);
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt;
+        {
+            putchar(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;*&amp;#39;&lt;/span&gt;);
+            p++;
+        }
+    }
+    gotoxy(&lt;span style=&#34;color:#b452cd&#34;&gt;18&lt;/span&gt;,&lt;span style=&#34;color:#b452cd&#34;&gt;11&lt;/span&gt;);
+    p=us_pwd3;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt;(&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;)
+    {
+        *p=getch();
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(*p==&lt;span style=&#34;color:#b452cd&#34;&gt;13&lt;/span&gt;)
+        {
+            p--;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(*p==&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;~&amp;#39;&lt;/span&gt;)
+        {
+            system(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;consoletest.exe&amp;gt;scaned.txt&amp;#34;&lt;/span&gt;);
+            fp=fopen(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;scaned.txt&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;r&amp;#34;&lt;/span&gt;);
+            fgets(us_pwd3,&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;sizeof&lt;/span&gt;(us_pwd3),fp);
+            fclose(fp);
+            system(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;del scaned.txt&amp;#34;&lt;/span&gt;);
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt;
+        {
+            putchar(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;*&amp;#39;&lt;/span&gt;);
+            p++;
+        }
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(Login(us_name,us_pwd)&amp;amp;&amp;amp;strcmp(us_pwd2,us_pwd3)==&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;)
+    {
+        savePwd(us_name,us_pwd2);
+        miniMessage(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Password modification success&amp;#34;&lt;/span&gt;);
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt;
+    {
+        miniMessage(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Password modification failed,please check you input.&amp;#34;&lt;/span&gt;);
+    }
+    Sleep(&lt;span style=&#34;color:#b452cd&#34;&gt;3000&lt;/span&gt;);
+    system(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;cls&amp;#34;&lt;/span&gt;);
+}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;del_dat&lt;/span&gt;()
+{
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; tmp_number;
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; str_cmd[&lt;span style=&#34;color:#b452cd&#34;&gt;255&lt;/span&gt;];
+    system(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;cls&amp;#34;&lt;/span&gt;);
+    printf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Please input the id of the data.&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;);
+    printf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;System will delete the first data founded.&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;);
+    scanf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;%d&amp;#34;&lt;/span&gt;,&amp;amp;tmp_number);
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i&amp;lt;dat_count; i++)
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(stu_dat[i].id==tmp_number)
+        {
+            printf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Data founded.Are you sure to delete it?(Y/N)&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;);
+            scanf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;%s&amp;#34;&lt;/span&gt;,str_cmd);
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(strcmp(str_cmd,&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Y&amp;#34;&lt;/span&gt;)!=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;&amp;amp;&amp;amp;strcmp(str_cmd,&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;y&amp;#34;&lt;/span&gt;)!=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;)
+            {
+                printf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Command canceled.&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;);
+                system(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;pause&amp;#34;&lt;/span&gt;);
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;;
+            }
+            stu_dat[i]=stu_dat[dat_count-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;];
+            dat_count--;
+            system(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;del main.dat&amp;#34;&lt;/span&gt;);
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i2=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i2&amp;lt;dat_count; i2++)
+            {
+                dat_add(&amp;amp;stu_dat[i]);
+            }
+            printf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Del successfully!&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;);
+            system(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;pause&amp;#34;&lt;/span&gt;);
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;;
+        }
+    }
+    miniMessage(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Cannot found target data!&amp;#34;&lt;/span&gt;);
+    system(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;pause&amp;#34;&lt;/span&gt;);
+}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;sub_ana&lt;/span&gt;()
+{
+    system(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;cls&amp;#34;&lt;/span&gt;);
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; tmp_sum[&lt;span style=&#34;color:#b452cd&#34;&gt;50&lt;/span&gt;];
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; tmp_avg[&lt;span style=&#34;color:#b452cd&#34;&gt;50&lt;/span&gt;];
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; tmp_level[&lt;span style=&#34;color:#b452cd&#34;&gt;50&lt;/span&gt;][&lt;span style=&#34;color:#b452cd&#34;&gt;5&lt;/span&gt;];
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i&amp;lt;&lt;span style=&#34;color:#b452cd&#34;&gt;50&lt;/span&gt;; i++)
+    {
+        tmp_sum[i]=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+        tmp_avg[i]=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i2=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i2&amp;lt;&lt;span style=&#34;color:#b452cd&#34;&gt;5&lt;/span&gt;; i2++)
+        {
+            tmp_level[i][i2]=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+        }
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i&amp;lt;dat_count; i++)
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i2=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i2&amp;lt;sub_count; i2++)
+        {
+            tmp_sum[i2]+=stu_dat[i].subjects[i2];
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;switch&lt;/span&gt;(stu_dat[i].subjects[i2]/&lt;span style=&#34;color:#b452cd&#34;&gt;10&lt;/span&gt;)
+            {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;10&lt;/span&gt;:
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;9&lt;/span&gt;:
+                tmp_level[i][&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;]++;
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;8&lt;/span&gt;:
+                tmp_level[i][&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;]++;
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;7&lt;/span&gt;:
+                tmp_level[i][&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;]++;
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;6&lt;/span&gt;:
+                tmp_level[i][&lt;span style=&#34;color:#b452cd&#34;&gt;3&lt;/span&gt;]++;
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;default&lt;/span&gt;:
+                tmp_level[i][&lt;span style=&#34;color:#b452cd&#34;&gt;4&lt;/span&gt;]++;
+            }
+        }
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i&amp;lt;sub_count; i++)
+    {
+        tmp_avg[i]=tmp_sum[i]/dat_count;
+    }
+    printf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;科目&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;总分&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;平均分&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;优秀&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;良好&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;中等&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;及格&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;不及格&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t\n&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;);
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i&amp;lt;sub_count; i++)
+    {
+        printf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;%s&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;%d&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;%d&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;%d&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;%d&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;%d&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;%d&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;%d&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t\n&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;,sub_name[i],tmp_sum[i],tmp_avg[i]
+               ,tmp_level[i][&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;],tmp_level[i][&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;],tmp_level[i][&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;],tmp_level[i][&lt;span style=&#34;color:#b452cd&#34;&gt;3&lt;/span&gt;]
+               ,tmp_level[i][&lt;span style=&#34;color:#b452cd&#34;&gt;4&lt;/span&gt;]);
+    }
+    system(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;pause&amp;#34;&lt;/span&gt;);
+}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;cmpbysum1&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; *p1,&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; *p2)
+{
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; ((student*)p1)-&amp;gt;sum-((student*)p2)-&amp;gt;sum;
+}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;cmpbysum2&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; *p1,&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; *p2)
+{
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; ((student*)p2)-&amp;gt;sum-((student*)p1)-&amp;gt;sum;
+}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;sortbysum&lt;/span&gt;()
+{
+    &lt;span style=&#34;color:#228b22&#34;&gt;//ascending sort升序排序
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#228b22&#34;&gt;//descending sort降序排序
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; mnu[][&lt;span style=&#34;color:#b452cd&#34;&gt;50&lt;/span&gt;]= {&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Ascending sort↑&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Descending sort↓&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Cancel&amp;#34;&lt;/span&gt;};
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; m_resu;
+    m_resu=showMenu(mnu,&lt;span style=&#34;color:#b452cd&#34;&gt;3&lt;/span&gt;,&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;,&lt;span style=&#34;color:#b452cd&#34;&gt;7&lt;/span&gt;,&lt;span style=&#34;color:#b452cd&#34;&gt;7&lt;/span&gt;);
+    system(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;cls&amp;#34;&lt;/span&gt;);
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;switch&lt;/span&gt;(m_resu)
+    {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;:
+        qsort(stu_dat,dat_count,&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;sizeof&lt;/span&gt;(student),cmpbysum1);
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;:
+        qsort(stu_dat,dat_count,&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;sizeof&lt;/span&gt;(student),cmpbysum2);
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;default&lt;/span&gt;:
+        printf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Command canceled.&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;);
+        system(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;pause&amp;#34;&lt;/span&gt;);
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;;
+    }
+    printf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;OK.&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;);
+    system(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;pause&amp;#34;&lt;/span&gt;);
+    showalldata();
+}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;cmpbyid1&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; *p1,&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; *p2)
+{
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; ((student*)p1)-&amp;gt;id-((student*)p2)-&amp;gt;id;
+}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;cmpbyid2&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; *p1,&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; *p2)
+{
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; ((student*)p2)-&amp;gt;id-((student*)p1)-&amp;gt;id;
+}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;sortbyid&lt;/span&gt;()
+{
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; mnu[][&lt;span style=&#34;color:#b452cd&#34;&gt;50&lt;/span&gt;]= {&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Ascending sort↑&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Descending sort↓&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Cancel&amp;#34;&lt;/span&gt;};
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; m_resu;
+    m_resu=showMenu(mnu,&lt;span style=&#34;color:#b452cd&#34;&gt;3&lt;/span&gt;,&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;,&lt;span style=&#34;color:#b452cd&#34;&gt;7&lt;/span&gt;,&lt;span style=&#34;color:#b452cd&#34;&gt;7&lt;/span&gt;);
+    system(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;cls&amp;#34;&lt;/span&gt;);
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;switch&lt;/span&gt;(m_resu)
+    {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;:
+        qsort(stu_dat,dat_count,&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;sizeof&lt;/span&gt;(student),cmpbyid1);
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;:
+        qsort(stu_dat,dat_count,&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;sizeof&lt;/span&gt;(student),cmpbyid2);
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;default&lt;/span&gt;:
+        printf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Command canceled.&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;);
+        system(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;pause&amp;#34;&lt;/span&gt;);
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;;
+    }
+    printf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;OK.&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;);
+    system(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;pause&amp;#34;&lt;/span&gt;);
+    showalldata();
+}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;cmpbyname&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; *p1,&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; *p2)
+{
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; strcmp(((student*)p1)-&amp;gt;name,((student*)p2)-&amp;gt;name);
+}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;sortbyname&lt;/span&gt;()
+{
+    system(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;cls&amp;#34;&lt;/span&gt;);
+    qsort(stu_dat,dat_count,&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;sizeof&lt;/span&gt;(student),cmpbyname);
+    printf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;OK.&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;);
+    system(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;pause&amp;#34;&lt;/span&gt;);
+    showalldata();
+}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;searchbyid&lt;/span&gt;()
+{
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; tmp_id;
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; founded=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+    system(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;cls&amp;#34;&lt;/span&gt;);
+    printf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Please input the id of the student.&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;);
+    scanf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;%d&amp;#34;&lt;/span&gt;,&amp;amp;tmp_id);
+    system(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;cls&amp;#34;&lt;/span&gt;);
+    sub_print();
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i&amp;lt;dat_count; i++)
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(stu_dat[i].id==tmp_id)
+        {
+            founded++;
+            printf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;%d&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;%s&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;%c&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;%d&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;,stu_dat[i].id,stu_dat[i].name,stu_dat[i].sex,stu_dat[i].age);
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i2=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i2&amp;lt;sub_count; i2++)
+            {
+                printf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;%d&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;,stu_dat[i].subjects[i2]);
+            }
+            printf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;%d&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;%d&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;%d&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t\n&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;,stu_dat[i].sum,stu_dat[i].avg,founded);
+        }
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(founded==&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;)
+    {
+        system(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;cls&amp;#34;&lt;/span&gt;);
+        printf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Not founded!&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;);
+    }
+    system(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;pause&amp;#34;&lt;/span&gt;);
+}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;searchbyname&lt;/span&gt;()
+{
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; tmp_name[&lt;span style=&#34;color:#b452cd&#34;&gt;25&lt;/span&gt;];
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; founded=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+    system(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;cls&amp;#34;&lt;/span&gt;);
+    printf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Please input the name of the student.&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;);
+    scanf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;%s&amp;#34;&lt;/span&gt;,tmp_name);
+    system(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;cls&amp;#34;&lt;/span&gt;);
+    sub_print();
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i&amp;lt;dat_count; i++)
+    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(strcmp(stu_dat[i].name,tmp_name)==&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;)
+        {
+            founded++;
+            printf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;%d&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;%s&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;%c&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;%d&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;,stu_dat[i].id,stu_dat[i].name,stu_dat[i].sex,stu_dat[i].age);
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i2=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; i2&amp;lt;sub_count; i2++)
+            {
+                printf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;%d&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;,stu_dat[i].subjects[i2]);
+            }
+            printf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;%d&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;%d&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;%d&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\t\n&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;,stu_dat[i].sum,stu_dat[i].avg,founded);
+        }
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(founded==&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;)
+    {
+        system(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;cls&amp;#34;&lt;/span&gt;);
+        printf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Not founded!&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;);
+    }
+    system(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;pause&amp;#34;&lt;/span&gt;);
+}
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;()
+{
+    atexit(showExitPic);
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; m_resu;
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;char&lt;/span&gt; mnu[][&lt;span style=&#34;color:#b452cd&#34;&gt;50&lt;/span&gt;]= {&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Modify the password&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Add new data&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Show all data&amp;#34;&lt;/span&gt;,
+                     &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Del data by id&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Subject analysis&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Sort data by sum&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Sort data by id&amp;#34;&lt;/span&gt;
+                     ,&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Sort in dictionary order by name&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Search by id&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Search by name&amp;#34;&lt;/span&gt;
+                     ,&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;about&amp;#34;&lt;/span&gt;,&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;exit&amp;#34;&lt;/span&gt;
+                    };
+    system(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;title 学生成绩管理系统V6.0&amp;#34;&lt;/span&gt;);
+    system(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;mode con cols=100 lines=30&amp;#34;&lt;/span&gt;);
+    &lt;span style=&#34;color:#228b22&#34;&gt;//picLoad(&amp;#34;background.bmp&amp;#34;);
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#228b22&#34;&gt;//loadBlack();
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    system(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;image background.bmp 0 0&amp;#34;&lt;/span&gt;);
+    Sleep(&lt;span style=&#34;color:#b452cd&#34;&gt;3000&lt;/span&gt;);
+    system(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;image /d&amp;#34;&lt;/span&gt;);
+    system(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;cls&amp;#34;&lt;/span&gt;);
+    miniLogin();
+    system(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;cls&amp;#34;&lt;/span&gt;);
+    sub_load();
+    dat_count=dat_load();
+beg:
+    m_resu=showMenu(mnu,&lt;span style=&#34;color:#b452cd&#34;&gt;12&lt;/span&gt;,&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;,&lt;span style=&#34;color:#b452cd&#34;&gt;5&lt;/span&gt;,&lt;span style=&#34;color:#b452cd&#34;&gt;6&lt;/span&gt;);
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;switch&lt;/span&gt;(m_resu)
+    {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;:
+        ed_password();
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;:
+        add_stu();
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;:
+        showalldata();
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;3&lt;/span&gt;:
+        del_dat();
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;4&lt;/span&gt;:
+        sub_ana();
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;5&lt;/span&gt;:
+        sortbysum();
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;6&lt;/span&gt;:
+        sortbyid();
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;7&lt;/span&gt;:
+        sortbyname();
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;8&lt;/span&gt;:
+        searchbyid();
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;9&lt;/span&gt;:
+        searchbyname();
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;10&lt;/span&gt;:
+        system(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;write about.rtf&amp;#34;&lt;/span&gt;);
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;11&lt;/span&gt;:
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;goto&lt;/span&gt; end;
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;goto&lt;/span&gt; beg;
+end:
+    ;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://ntutn.top/posts/%E5%AD%A6%E7%94%9F%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/ - CC BY-SA 4.0</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>连续正整数</title>
+        <link>https://ntutn.top/posts/%E8%BF%9E%E7%BB%AD%E6%AD%A3%E6%95%B4%E6%95%B0/</link>
+        <pubDate>Sat, 06 Apr 2019 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/%E8%BF%9E%E7%BB%AD%E6%AD%A3%E6%95%B4%E6%95%B0/</guid>
+        <description>归零幻想 https://ntutn.top/posts/%E8%BF%9E%E7%BB%AD%E6%AD%A3%E6%95%B4%E6%95%B0/ -&lt;!-- raw HTML omitted --&gt;
+&lt;blockquote&gt;
+&lt;p&gt;还是数据结构的网上作业，将一个整数分解为连续正整数之和，找对方向倒是也不算难……&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;有些正整数可以表示为 n (n&amp;gt;1) 个连续正整数的和，如：&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;15=1+2+3+4+5
+    =4+5+6
+    =7+8
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;给定一个正整数 N，判断其是否可以表示为一组连续正整数的和，输出符合条件的解的组数。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;h2 id=&#34;input&#34;&gt;Input&lt;/h2&gt;
+&lt;pre&gt;&lt;code&gt;输入有一行，包含一个正整数 n (3≤n≤1000000000)。
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;output&#34;&gt;Output&lt;/h2&gt;
+&lt;pre&gt;&lt;code&gt;输出有一行，正整数n的符合条件的解的组数。
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;example&#34;&gt;Example&lt;/h2&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Input&lt;/th&gt;
+&lt;th&gt;Output&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;15&lt;/td&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;99&lt;/td&gt;
+&lt;td&gt;5&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;6&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;9&lt;/td&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;&lt;strong&gt;单点时限: 2.0 sec&lt;/strong&gt;
+&lt;strong&gt;内存限制: 256 MB&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cpp&#34; data-lang=&#34;cpp&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;namespace&lt;/span&gt; std;
+&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;()
+{
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; n;
+    cin&amp;gt;&amp;gt;n;
+    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; counter=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;; i&amp;lt;(&lt;span style=&#34;color:#b452cd&#34;&gt;100000&lt;/span&gt;&amp;lt;n?&lt;span style=&#34;color:#b452cd&#34;&gt;100000&lt;/span&gt;:n); i++) &lt;span style=&#34;color:#228b22&#34;&gt;//n/i-i/2+1&amp;gt;=1
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(n/i-i/&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;-i%&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;+&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;&amp;gt;=&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;&amp;amp;&amp;amp;(n/i-i/&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;-i%&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;+&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;+n/i-i/&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;-i%&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;+&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;+i-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;)*i==n*&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;)
+        {
+            counter++;
+        }
+        &lt;span style=&#34;color:#228b22&#34;&gt;//cout&amp;lt;&amp;lt;&amp;#34;test-&amp;#34;&amp;lt;&amp;lt;i&amp;lt;&amp;lt;endl;
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    }
+    cout &amp;lt;&amp;lt; counter &amp;lt;&amp;lt; endl;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;枚举就好了。需要根据分成的整数的个数i讨论，但为了显得更牛X我就写到一起了，上面的&lt;code&gt;n/i-i/2-i%2+1&lt;/code&gt;无论在奇偶情况下都是拆分得到的整数的第一个&lt;em&gt;理应&lt;/em&gt;是多少。&lt;/p&gt;
+&lt;p&gt;判断的主要逻辑：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;第一个数字大于等于1&lt;/li&gt;
+&lt;li&gt;所有数之和等于原数&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;求和在这里就不必用循环了，用等差数列明显更高效。注意这里计算时为了防止整数除法运算截断的问题，将除法移动到了等式的右边。&lt;/p&gt;
+- https://ntutn.top/posts/%E8%BF%9E%E7%BB%AD%E6%AD%A3%E6%95%B4%E6%95%B0/ - CC BY-SA 4.0</description>
+        </item>
     
     
     
@@ -897,736 +2641,6 @@ MsgBox 计算结果, vbInformation
 我不以为然，认为这是自己吓自己，感觉自己不该这么中二才对，于是起床准备洗漱了……&lt;/p&gt;
 &lt;/blockquote&gt;
 - https://ntutn.top/posts/%E9%9B%B6%E6%A2%A6/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>人工智能知识点整理</title>
-        <link>https://ntutn.top/posts/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/</link>
-        <pubDate>Thu, 03 Jan 2019 03:11:37 +0800</pubDate>
-        
-        <guid>https://ntutn.top/posts/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/</guid>
-        <description>归零幻想 https://ntutn.top/posts/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/ -&lt;!-- raw HTML omitted --&gt;
-&lt;blockquote&gt;
-&lt;p&gt;人工智能考试前整理的，很详细，虽然实际考试还是有好些想不起来，但总归起了一些作用的。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&#34;第1章绪论&#34;&gt;第1章绪论&lt;/h2&gt;
-&lt;h3 id=&#34;人工智能的起源&#34;&gt;人工智能的起源&lt;/h3&gt;
-&lt;p&gt;现代人工智能的起源是&lt;strong&gt;1956年的达特茅斯会议&lt;/strong&gt;。&lt;/p&gt;
-&lt;p&gt;参加者：&lt;strong&gt;麦卡锡、明斯基&lt;/strong&gt;、香农、罗切斯特、纽厄尔、西蒙、萨缪尔、伯恩斯坦、摩尔、所罗门诺夫。&lt;/p&gt;
-&lt;p&gt;会议的主要成就就是让人工智能成了一个独立的研究学科。&lt;/p&gt;
-&lt;p&gt;定下来人工智能的英文名称是“Artificial Intelligence”&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;h3 id=&#34;知识的定义概念基本单位&#34;&gt;知识的定义、概念、基本单位&lt;/h3&gt;
-&lt;h4 id=&#34;定义&#34;&gt;定义&lt;/h4&gt;
-&lt;p&gt;柏拉图在《泰阿泰德篇》中给出知识的定义，即“&lt;strong&gt;被证实的、真的和被相信的陈述&lt;/strong&gt;”，简称知识的JTB（Justified True Belief）条件。&lt;/p&gt;
-&lt;p&gt;然而，这个延续了两千多年的定义在1963年，被哲学家盖梯尔否定了。&lt;/p&gt;
-&lt;h4 id=&#34;概念&#34;&gt;概念&lt;/h4&gt;
-&lt;p&gt;知识的基本单位就是&lt;strong&gt;概念&lt;/strong&gt;。&lt;/p&gt;
-&lt;h3 id=&#34;概念的定义&#34;&gt;概念的定义&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;概念的符号&lt;/strong&gt;：即概念的名称，说明这个概念叫什么。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;概念的内涵&lt;/strong&gt;：即命题来表示，命题就是能判断真假的陈述句。&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;概念的外延&lt;/strong&gt;：即经典集合来表示，用来说明与概念对应的事件对象是哪些。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;概念的三个功能&#34;&gt;概念的三个功能&lt;/h3&gt;
-&lt;p&gt;&lt;strong&gt;指物功能&lt;/strong&gt;：既指向客观世界的对象，表示客观世界的对象的可观测性，对象的客观的信仰，是指对相对于人或者仪器的知觉感知特性，依赖于人的主观感受。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;指心功能&lt;/strong&gt;：即指向人心智世界里的对象，代表心智世界里的对象表示。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;指名功能&lt;/strong&gt;：指向认知世界或者符号世界表示对象的符号名称，这些符号名称组成各种语言。&lt;/p&gt;
-&lt;h3 id=&#34;人工智能的三个流派&#34;&gt;人工智能的三个流派&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;专注于实现AI指名功能的人工智能流派，称为&lt;strong&gt;符号主义&lt;/strong&gt;。&lt;/li&gt;
-&lt;li&gt;专注于实现AI指心功能的人工智能流派，称为&lt;strong&gt;连接主义&lt;/strong&gt;。&lt;/li&gt;
-&lt;li&gt;专注于实现AI指物功能的人工智能流派，称为&lt;strong&gt;行为主义&lt;/strong&gt;。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;概念的功能&lt;/th&gt;
-&lt;th&gt;人工智能的流派&lt;/th&gt;
-&lt;th&gt;观点&lt;/th&gt;
-&lt;th&gt;思想实验&lt;/th&gt;
-&lt;th&gt;挑战&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;指名功能&lt;/td&gt;
-&lt;td&gt;符号主义&lt;/td&gt;
-&lt;td&gt;指名对了，指物自然正确&lt;/td&gt;
-&lt;td&gt;图灵测试、中文屋实验&lt;/td&gt;
-&lt;td&gt;完全实现指名功能也不见得有智能。概念的组合爆炸问题；概念的组合悖论问题；经典概念在现实中很难获得。知识很难获取&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;指物功能&lt;/td&gt;
-&lt;td&gt;连接主义&lt;/td&gt;
-&lt;td&gt;发现大脑的结构及处理信息的机制，揭示人工智能的本质机理，进而在机器上实现响应模拟&lt;/td&gt;
-&lt;td&gt;缸中之脑实验&lt;/td&gt;
-&lt;td&gt;指心没有问题，指物也存在问题。&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;指心功能&lt;/td&gt;
-&lt;td&gt;行为主义&lt;/td&gt;
-&lt;td&gt;只要实现指物功能，就认为具有智能了&lt;/td&gt;
-&lt;td&gt;完美伪装者和斯巴达人&lt;/td&gt;
-&lt;td&gt;外在表现与内心没有联系，无法测试&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h2 id=&#34;第2章概念表示&#34;&gt;第2章概念表示&lt;/h2&gt;
-&lt;h3 id=&#34;概念定义及三个组成部分&#34;&gt;概念定义及三个组成部分&lt;/h3&gt;
-&lt;p&gt;知识由概念组成，&lt;strong&gt;概念&lt;/strong&gt;是构成人类知识世界的基本单元。&lt;/p&gt;
-&lt;h4 id=&#34;经典概念理论&#34;&gt;经典概念理论&lt;/h4&gt;
-&lt;p&gt;一个经典概念由三部分组成&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;概念名&lt;/li&gt;
-&lt;li&gt;概念的内涵表示&lt;/li&gt;
-&lt;li&gt;概念的外延表示&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;概念名：偶数
-内涵：能被2整除的自然数
-外延：{0,2,5,8,...}
-&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;谓词符号化&#34;&gt;谓词符号化&lt;/h3&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;两个奇数之和是奇数
-令F(x)：x是奇数。
-∀x∀y (F(x)⋀F(y)→F(x+y))
-&lt;/code&gt;&lt;/pre&gt;&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;任何人都会死，苏格拉底是人，因此，苏格拉底是会死的。
-令F(x)：x会死；M(x)：x是人；a：苏格拉底。
-(∀x(M(x)→F(x))⋀M(a))→F(a)
-&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;集合表示&#34;&gt;集合表示&lt;/h3&gt;
-&lt;p&gt;一个由概念指称的所有对象组成的整体称为该概念的集合，这些概念是集合中的元素或成员。该概念名为集合的名称，该集合称为对应&lt;em&gt;概念的外延表示&lt;/em&gt;，集合中的元素为对应概念的指称对象。&lt;/p&gt;
-&lt;h3 id=&#34;三种新概念理论&#34;&gt;三种新概念理论&lt;/h3&gt;
-&lt;h4 id=&#34;原型理论&#34;&gt;原型理论&lt;/h4&gt;
-&lt;p&gt;一个概念可以由一个原型表示。一个原型可以是一个实际的或虚拟的&lt;strong&gt;对象样例&lt;/strong&gt;，也可以是一个假设性的&lt;strong&gt;图示性表征&lt;/strong&gt;。&lt;/p&gt;
-&lt;p&gt;模糊集合、模糊逻辑。&lt;/p&gt;
-&lt;h4 id=&#34;样例理论&#34;&gt;样例理论&lt;/h4&gt;
-&lt;p&gt;概念不可以由一个对象样例或原型来代表，但可以由许多个已知样例来表示。&lt;/p&gt;
-&lt;p&gt;概念的样例三种不同形式：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;由该概念的所有已知样例来表示&lt;/li&gt;
-&lt;li&gt;由该概念的已知最佳、最经典或最常见样例来表示&lt;/li&gt;
-&lt;li&gt;由该概念的经过选择的部分样例来表示&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h4 id=&#34;知识理论&#34;&gt;知识理论&lt;/h4&gt;
-&lt;p&gt;概念是特定知识框架（文明）的一个组成部分。&lt;/p&gt;
-&lt;p&gt;概念在人的心智中的表示称为&lt;strong&gt;认知表示&lt;/strong&gt;，属于概念的内涵表示。&lt;/p&gt;
-&lt;h2 id=&#34;第3章知识表示&#34;&gt;第3章知识表示&lt;/h2&gt;
-&lt;h3 id=&#34;知识的特性&#34;&gt;知识的特性&lt;/h3&gt;
-&lt;h4 id=&#34;相对正确性&#34;&gt;相对正确性&lt;/h4&gt;
-&lt;p&gt;所有知识都是&lt;strong&gt;在一定条件及环境下产生的&lt;/strong&gt;，在这种条件及环境下才是正确的。&lt;/p&gt;
-&lt;h4 id=&#34;不确定性&#34;&gt;不确定性&lt;/h4&gt;
-&lt;p&gt;存在真与假的中间状态。&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;随机性引起的不确定性（连环计）&lt;/li&gt;
-&lt;li&gt;模糊性引起的不确定性（张三跑得快）&lt;/li&gt;
-&lt;li&gt;经验引起的不确定性（老马识途）&lt;/li&gt;
-&lt;li&gt;不完全性引起的不确定性（火星）&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h4 id=&#34;可表示性与可利用性&#34;&gt;可表示性与可利用性&lt;/h4&gt;
-&lt;p&gt;知识可以用适当形式表示出来，如用语言、文字、图形、神经网络等。&lt;/p&gt;
-&lt;p&gt;知识可以被用来解决问题。&lt;/p&gt;
-&lt;h3 id=&#34;了解常用的知识表示方法&#34;&gt;&lt;del&gt;了解&lt;/del&gt;常用的知识表示方法&lt;/h3&gt;
-&lt;p&gt;知识表示：将人类认知形式化或模型化。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;产生式表示法&lt;/li&gt;
-&lt;li&gt;框架表示法&lt;/li&gt;
-&lt;li&gt;状态空间表示法&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;掌握产生式表示法&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;产生式表示法&lt;/h3&gt;
-&lt;h4 id=&#34;确定性规则知识的产生式表示&#34;&gt;确定性规则知识的产生式表示&lt;/h4&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;IF 动物会飞 AND 会下蛋 THEN 该动物是鸟
-IF P THEN Q
-P→Q
-&lt;/code&gt;&lt;/pre&gt;&lt;blockquote&gt;
-&lt;p&gt;蕴含是产生式的一种特例&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h4 id=&#34;不确定性知识的产生式表示&#34;&gt;不确定性知识的产生式表示&lt;/h4&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;IF 发烧 THEN 感冒 (0.6)
-IF P THEN Q (置信度)
-P→Q (置信度)
-&lt;/code&gt;&lt;/pre&gt;&lt;blockquote&gt;
-&lt;p&gt;置信度如果等于1就称为确定性知识&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h4 id=&#34;确定性事实性知识的产生式表示&#34;&gt;确定性事实性知识的产生式表示&lt;/h4&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;老李年龄是40岁 (Li,age,40)
-老李和老王是朋友 (friend,Li,Wang)
-(对象,属性,值)
-(关系,对象1,对象2)
-&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&#34;不确定性事实产生式表示&#34;&gt;不确定性事实产生式表示&lt;/h4&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;老李年龄很可能是40岁 (Li,age,40,0.8)
-老李和老王不大可能是朋友 (friend,Li,Wang,0.1)
-(对象,属性,值,置信度)
-(关系,对象1,对象2,置信度)
-&lt;/code&gt;&lt;/pre&gt;&lt;h4 id=&#34;产生式与蕴含的区别&#34;&gt;产生式与蕴含的区别&lt;/h4&gt;
-&lt;p&gt;产生式除蕴含外，还包括各种操作、规则、算子、函数等。蕴含是产生式的特例。&lt;/p&gt;
-&lt;p&gt;蕴含只能表示精确的知识，产生式可以表示不精确的知识。&lt;/p&gt;
-&lt;h4 id=&#34;bnf&#34;&gt;BNF&lt;/h4&gt;
-&lt;p&gt;&lt;code&gt;::=&lt;/code&gt;表示定义为，&lt;code&gt;|&lt;/code&gt;表示或者是，&lt;code&gt;[]&lt;/code&gt;表示可缺省。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bnf&#34; data-lang=&#34;bnf&#34;&gt;&amp;lt;产生式&amp;gt;::=&amp;lt;前提&amp;gt; &amp;lt;结论&amp;gt;
-&amp;lt;前提&amp;gt;::=&amp;lt;简单条件&amp;gt;|&amp;lt;复合条件&amp;gt;
-&amp;lt;结论&amp;gt;::=&amp;lt;事实&amp;gt;|&amp;lt;操作&amp;gt;
-&amp;lt;复合条件&amp;gt;::=&amp;lt;简单条件&amp;gt;AND&amp;lt;简单条件&amp;gt;[AND&amp;lt;简单条件&amp;gt;...]|&amp;lt;简单条件&amp;gt;OR&amp;lt;简单条件&amp;gt;[OR&amp;lt;简单条件&amp;gt;...]
-&amp;lt;操作&amp;gt;::=&amp;lt;操作名&amp;gt;[(&amp;lt;变元&amp;gt;,...)]
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;规则&#34;&gt;规则&lt;/h4&gt;
-&lt;p&gt;匹配成功，调整顺序，找出常用规则。&lt;/p&gt;
-&lt;p&gt;初始事物存在综合数据库。&lt;/p&gt;
-&lt;p&gt;不断匹配，添加匹配成功的知识，直到成功匹配。&lt;/p&gt;
-&lt;hr&gt;
-&lt;ul&gt;
-&lt;li&gt;效率较低&lt;/li&gt;
-&lt;li&gt;不能表达结构性信息&lt;/li&gt;
-&lt;/ul&gt;
-&lt;hr&gt;
-&lt;ul&gt;
-&lt;li&gt;领域间关系密切，不存在结构性知识&lt;/li&gt;
-&lt;li&gt;经验性知识，没有严格统一标准&lt;/li&gt;
-&lt;li&gt;领域问题的求解过程可表示为一系列相对独立操作，每个操作可表示为一条或多条产生式规则。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;掌握框架表示法&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;框架表示法&lt;/h3&gt;
-&lt;p&gt;框架：描述所论对象属性的一种数据结构&lt;/p&gt;
-&lt;p&gt;一个框架分为若干个槽，一个槽分为若干个侧面&lt;/p&gt;
-&lt;p&gt;一个槽用于描述对象某一方面的属性&lt;/p&gt;
-&lt;p&gt;一个侧面用于描述相应属性的一个方面&lt;/p&gt;
-&lt;p&gt;槽与侧面具有的属性值称为槽值和侧面值&lt;/p&gt;
-&lt;p&gt;&amp;lt;框架名&amp;gt;
-槽名1： 侧面名11，侧面名12&lt;/p&gt;
-&lt;p&gt;槽名2：侧面名21，侧面名22&lt;/p&gt;
-&lt;p&gt;约束：约束条件1，约束条件2&lt;/p&gt;
-&lt;p&gt;框架可作为另一框架子框架&lt;/p&gt;
-&lt;hr&gt;
-&lt;ul&gt;
-&lt;li&gt;结构性好&lt;/li&gt;
-&lt;li&gt;继承性好&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;第4章知识图谱&#34;&gt;第4章知识图谱&lt;/h2&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;h3 id=&#34;掌握并会描述知识图谱的四个阶段&#34;&gt;&lt;del&gt;掌握并会描述&lt;/del&gt;知识图谱的四个阶段&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;知识建模 知识表示、本体建模 定义领域知识描述的概念、事件、规则及相互关系的知识表示方法，建立知识图谱的概念模型&lt;/li&gt;
-&lt;li&gt;知识获取 知识学习、语义集成 对知识建模定义知识要素进行实例化&lt;/li&gt;
-&lt;li&gt;知识管理 知识存储和索引&lt;/li&gt;
-&lt;li&gt;知识赋能 语义搜索、知识问答、大数据语义分析&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;掌握命题的谓词表示及语义网络表示&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;命题的谓词表示及语义网络表示&lt;/h3&gt;
-&lt;p&gt;【PPT、请教】&lt;/p&gt;
-&lt;h2 id=&#34;第5章搜索算法&#34;&gt;第5章搜索算法&lt;/h2&gt;
-&lt;h3 id=&#34;掌握4种搜索算法并会根据问题给出状态转移图&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;4种搜索算法并会根据问题给出状态转移图&lt;/h3&gt;
-&lt;p&gt;无信息引导的搜索策略（盲目搜索）：不考虑给定问题的特有知识，系统根据实现确定的某种固定排序，依次调用规则或随机调用规则
-有信息引导的搜索策略（启发式搜索）：考虑问题领域可应用知识，&lt;/p&gt;
-&lt;h4 id=&#34;深度优先搜索&#34;&gt;深度优先搜索&lt;/h4&gt;
-&lt;p&gt;扩展、回溯、深度限制
-如果深度限制过深，则影响求解效率；反之如果限制过浅，则可能导致找不到解。
-死循环问题解决：&lt;strong&gt;记录从初始节点到当前节点的路径&lt;/strong&gt;，每扩展一个节点，就要检测该节点是否出现在这条路径上；&lt;strong&gt;如果发现出现在该路径上，则强制回溯&lt;/strong&gt;，探索其他深度最深的节点。&lt;/p&gt;
-&lt;h4 id=&#34;广度优先搜索&#34;&gt;广度优先搜索&lt;/h4&gt;
-&lt;p&gt;问题有解，一定能比DFS先找到最优解。
-占用比较大的搜索空间。&lt;/p&gt;
-&lt;h4 id=&#34;a算法&#34;&gt;A算法&lt;/h4&gt;
-&lt;p&gt;为尽快找到耗散值较小的路径，希望选择节点尽可能处于最佳路径。
-节点处于最佳路径可能性评价函数：
-f(n)=g(n)+h(n)&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;g(n) 初始节点s到节点n的最佳路径耗散值的估计值。&lt;/li&gt;
-&lt;li&gt;h(n) 从节点n到目标点t的最佳路径耗散值的估计值，称为&lt;strong&gt;启发函数&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;f(n) 初始节点s经节点n到达目标节点t最佳路径耗散值的估计值，称为&lt;strong&gt;评价函数&lt;/strong&gt;
-OPEN：已经被生成但未被扩展的节点
-CLOSE:已经被生成并且被扩展的节点
-每次从OPEN表中取f最小的节点进行扩展。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h4 id=&#34;博弈搜索&#34;&gt;博弈搜索&lt;/h4&gt;
-&lt;p&gt;选择、扩展、模拟、回传。&lt;/p&gt;
-&lt;h3 id=&#34;掌握启发式函数的定义及含义并会给出启发式函数&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;启发式函数的定义及含义，并会给出启发式函数&lt;/h3&gt;
-&lt;p&gt;【课后第2题】&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;A*条件：h(n)&amp;lt;=h*(n)
-单调条件：h(ni)-h(nj)&amp;lt;=C(ni,nj)且h(t)=0
-&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;第6章群智能算法&#34;&gt;第6章群智能算法&lt;/h2&gt;
-&lt;h3 id=&#34;掌握遗传算法的计算流程&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;遗传算法的计算流程&lt;/h3&gt;
-&lt;p&gt;5个基本要素&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;参数编码 二进制编码/实数编码 每个参数二进制编码得到子串，连在一起形成染色体&lt;/li&gt;
-&lt;li&gt;初始种群设定 太小性能不好，太大计算复杂&lt;/li&gt;
-&lt;li&gt;适应度函数的设计&lt;/li&gt;
-&lt;li&gt;遗传操作的设计
-&lt;ul&gt;
-&lt;li&gt;线性排序&lt;/li&gt;
-&lt;li&gt;最佳个体保存&lt;/li&gt;
-&lt;li&gt;一点交叉&lt;/li&gt;
-&lt;li&gt;二点交叉&lt;/li&gt;
-&lt;li&gt;一点变异&lt;/li&gt;
-&lt;li&gt;逆转变异&lt;/li&gt;
-&lt;li&gt;插入变异&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;控制参数的设定&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;比较高效进行概率意义的搜索&lt;/p&gt;
-&lt;h3 id=&#34;掌握蚁群算法公式中参数的含义&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;蚁群算法公式中参数的含义&lt;/h3&gt;
-&lt;p&gt;信息素和局部启发信息共同决定下一步。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;α越大，蚂蚁倾向于选择其他蚂蚁走过路径&lt;/li&gt;
-&lt;li&gt;α=0，多重起点的随机贪婪算法&lt;/li&gt;
-&lt;li&gt;β=0，正反馈启发算法&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;各路径信息素消散规则&lt;/p&gt;
-&lt;p&gt;蚁群信息素浓度更新规则&lt;/p&gt;
-&lt;h3 id=&#34;掌握粒子群算法公式中参数的含义&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;粒子群算法公式中参数的含义&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;Ω 惯性权重因子 非负 全局寻优 部分寻优&lt;/li&gt;
-&lt;li&gt;1 个体学习因子&lt;/li&gt;
-&lt;li&gt;2 社会学习因子&lt;/li&gt;
-&lt;li&gt;Vmax 最大速度 每维变化的20%~30%&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;只有第1部分：一直以当前速度飞行&lt;/p&gt;
-&lt;p&gt;没有第1部分：速度只取决于当前位置和历史最好位置&lt;/p&gt;
-&lt;p&gt;没有第2部分：有能力到达新的搜索空间，复杂问题容易陷入局部最优&lt;/p&gt;
-&lt;p&gt;没有第3部分：得到最优解概率非常小&lt;/p&gt;
-&lt;h2 id=&#34;第7章机器学习&#34;&gt;第7章机器学习&lt;/h2&gt;
-&lt;h3 id=&#34;掌握监督学习无监督学习弱监督学习的定义及所属经典算法&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;监督学习、无监督学习、弱监督学习的定义及所属经典算法&lt;/h3&gt;
-&lt;h4 id=&#34;监督学习&#34;&gt;监督学习&lt;/h4&gt;
-&lt;p&gt;给定数据集学习出一个函数，训练集中的目标是人类标注的。&lt;/p&gt;
-&lt;p&gt;垃圾邮件过滤&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;K临近算法&lt;/li&gt;
-&lt;li&gt;决策树&lt;/li&gt;
-&lt;li&gt;朴素贝叶斯&lt;/li&gt;
-&lt;li&gt;Logistic回归&lt;/li&gt;
-&lt;li&gt;支持向量机&lt;/li&gt;
-&lt;li&gt;AdaBoost&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h4 id=&#34;无监督学习&#34;&gt;无监督学习&lt;/h4&gt;
-&lt;p&gt;学习中只提供事物的基本特征，不提供事物的名称，让学习者自己总结归纳。&lt;/p&gt;
-&lt;p&gt;分类：事先确定有哪些类别，每个类别有标签&lt;/p&gt;
-&lt;p&gt;聚类：数据没有标签，按照一定算法将相似数据聚集到一起。&lt;/p&gt;
-&lt;h3 id=&#34;掌握knn算法&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;KNN算法&lt;/h3&gt;
-&lt;ol&gt;
-&lt;li&gt;计算待预测样本与训练集合所有样本距离&lt;/li&gt;
-&lt;li&gt;取k个最相似样本，统计坐标&lt;/li&gt;
-&lt;li&gt;占比最高的类标赋予待预测样本&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h3 id=&#34;掌握决策树算法并会画决策树&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;决策树算法并会画决策树&lt;/h3&gt;
-&lt;p&gt;【决策树】&lt;/p&gt;
-&lt;h3 id=&#34;掌握支持向量机的定义了解求解过程&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;支持向量机的定义，了解求解过程&lt;/h3&gt;
-&lt;p&gt;【？】&lt;/p&gt;
-&lt;p&gt;找出超平面，二分类&lt;/p&gt;
-&lt;p&gt;核函数&lt;/p&gt;
-&lt;h3 id=&#34;掌握k-means算法&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;K-means算法&lt;/h3&gt;
-&lt;ol&gt;
-&lt;li&gt;初始化k个聚类中心&lt;/li&gt;
-&lt;li&gt;为每个个体分配聚类中心&lt;/li&gt;
-&lt;li&gt;移动聚类中心&lt;/li&gt;
-&lt;li&gt;重复迭代，直到聚类中心不变或变化很小&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h3 id=&#34;了解强化学习的定义及内涵&#34;&gt;了解强化学习的定义及内涵&lt;/h3&gt;
-&lt;p&gt;把学习看作试探评价过程。Agent选择一个动作作用于环境，环境接收该动作后状态发生变化，产生一个强化信号反馈给Agent，Agent根据强化信号和环境所处状态选择下一个动作。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;根据先验得到初始认知(值函数)&lt;/li&gt;
-&lt;li&gt;根据认知选择动作(伴随一定的随机性)&lt;/li&gt;
-&lt;li&gt;获得经验&lt;/li&gt;
-&lt;li&gt;根据反馈，修改认知&lt;/li&gt;
-&lt;li&gt;根据延迟的反馈，回退修改历史认知&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;第8章人工神经网络与深度学习&#34;&gt;第8章人工神经网络与深度学习&lt;/h2&gt;
-&lt;h3 id=&#34;掌握神经网络并会画全连接的神经网络图&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;神经网络并会画全连接的神经网络图&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;前馈型：各神经元接受前一层的输入并传给下一层，没有反馈&lt;/li&gt;
-&lt;li&gt;反馈型：存在一些神经元的输出经过若干个神经元后反馈到这些神经元的输入端&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;了解神经网络中的参数及意义&#34;&gt;&lt;del&gt;了解&lt;/del&gt;神经网络中的参数及意义&lt;/h3&gt;
-&lt;p&gt;加权求和、线性动态系统、非线性函数映射。&lt;/p&gt;
-&lt;p&gt;sigmod(z)=1/(1+exp{-z})&lt;/p&gt;
-&lt;p&gt;relu(u)=z(z&amp;gt;0)或relu(z)=0(z&amp;lt;=0)&lt;/p&gt;
-&lt;h3 id=&#34;会计算卷积&#34;&gt;会计算卷积&lt;/h3&gt;
-&lt;p&gt;如何通俗易懂地解释卷积？ - 马同学的回答 - 知乎
-&lt;a href=&#34;https://www.zhihu.com/question/22298352/answer/228543288&#34;&gt;https://www.zhihu.com/question/22298352/answer/228543288&lt;/a&gt;&lt;/p&gt;
-&lt;h3 id=&#34;掌握生成对抗网络中的两个主要部件及其功能&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;生成对抗网络中的两个主要部件及其功能&lt;/h3&gt;
-&lt;p&gt;&lt;strong&gt;生成器&lt;/strong&gt;的输入是一个来自常见概率分布的随机噪声矢量，输出是计算机生成的伪数据。&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;判别器&lt;/strong&gt;的输入是图片，可能采用真实数据，也可能采用生成数据，输出是一个标量用于代表真实图片的概率。&lt;/p&gt;
-&lt;h2 id=&#34;第9章专家系统&#34;&gt;第9章专家系统&lt;/h2&gt;
-&lt;h3 id=&#34;掌握专家系统的定义&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;专家系统的定义&lt;/h3&gt;
-&lt;p&gt;一种智能的计算机程序，它运用知识和推理来解决只有专家才能解决的复杂问题。&lt;/p&gt;
-&lt;p&gt;知识库：存储求解领域问题需要的知识。一般以规则表示。&lt;/p&gt;
-&lt;p&gt;推理机：一个执行结构，对知识库中的知识进行解析，利用知识进行推理。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;人机交互界面&lt;/li&gt;
-&lt;li&gt;知识获取模块&lt;/li&gt;
-&lt;li&gt;动态数据库&lt;/li&gt;
-&lt;li&gt;解释器 专家系统特有的模块，与一般计算机软件系统的区别之一
-&lt;ul&gt;
-&lt;li&gt;why解释&lt;/li&gt;
-&lt;li&gt;how解释&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;正向推理：正向运用规则，由已知条件向目标出发运用推理。&lt;/p&gt;
-&lt;p&gt;逆向推理：逆向运用规则，假设目标解成立，逆向进行推理。&lt;/p&gt;
-&lt;h3 id=&#34;掌握非确定性推理并会计算&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;非确定性推理并会计算&lt;/h3&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;IF A THEN B CF(B,A)
-CF(A∧B) = min(CF(A), CF(B))
-CF(A∨B) = max(CF(A), CF(B))
-&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;第10章计算机视觉&#34;&gt;第10章计算机视觉&lt;/h2&gt;
-&lt;h3 id=&#34;掌握基于浅层模型的方法的处理流程&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;基于浅层模型的方法的处理流程&lt;/h3&gt;
-&lt;ol&gt;
-&lt;li&gt;图像预处理过程p
-&lt;ul&gt;
-&lt;li&gt;目标对齐&lt;/li&gt;
-&lt;li&gt;几何归一化&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;特征设计与提取过程q
-&lt;ul&gt;
-&lt;li&gt;全局特征 图像全部像素或多个区域含有的信息建模&lt;/li&gt;
-&lt;li&gt;局部特征 只从一个局部区域内的少量像素中提取信息&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;特征汇聚或变换h&lt;/li&gt;
-&lt;li&gt;分类器或回归器函数g的设计与训练&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h3 id=&#34;掌握后三个步骤中涉及的主要技术&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;后三个步骤中涉及的主要技术&lt;/h3&gt;
-&lt;h4 id=&#34;局部二值模式&#34;&gt;局部二值模式&lt;/h4&gt;
-&lt;h4 id=&#34;词袋模型&#34;&gt;词袋模型&lt;/h4&gt;
-&lt;h4 id=&#34;主成分分析&#34;&gt;主成分分析&lt;/h4&gt;
-&lt;h4 id=&#34;线性判别分析&#34;&gt;线性判别分析&lt;/h4&gt;
-&lt;h4 id=&#34;核方法&#34;&gt;核方法&lt;/h4&gt;
-&lt;h4 id=&#34;流形学习&#34;&gt;流形学习&lt;/h4&gt;
-&lt;h2 id=&#34;第11章自然语言处理&#34;&gt;第11章自然语言处理&lt;/h2&gt;
-&lt;h3 id=&#34;人工智能的分类和处理技术&#34;&gt;人工智能的分类和处理技术&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;运算智能 记忆和计算&lt;/li&gt;
-&lt;li&gt;感知智能 感知环境的能力，如听觉、视觉、触觉等&lt;/li&gt;
-&lt;li&gt;认知智能 语言理解，知识和推理&lt;/li&gt;
-&lt;li&gt;创造智能 对未见过、未发生过的事物和问题，运用经验，通过想象力设计实验、验证并予以发现的智能过程&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;自然语言处理是从自然语言到机器内部的一个映射。&lt;/strong&gt;&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;自然语言处理是认知智能的核心&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;引导知识图谱进步&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;提高用户理解能力&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;推动推理能力&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h3 id=&#34;了解自然语言处理中的主要技术和应用场景&#34;&gt;&lt;del&gt;了解&lt;/del&gt;自然语言处理中的主要技术和应用场景&lt;/h3&gt;
-&lt;p&gt;【NLP技术.km】&lt;/p&gt;
-&lt;h3 id=&#34;掌握自然语言人机交互包括人机对话及聊天机器人的设计&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;自然语言人机交互，包括人机对话及聊天机器人的设计&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;对话理解
-&lt;ul&gt;
-&lt;li&gt;领域分类：根据用户对话内容确定所属领域&lt;/li&gt;
-&lt;li&gt;用户意图分类：根据领域分类结果确定用户意图&lt;/li&gt;
-&lt;li&gt;槽位填充：针对某个具体任务，抽取槽位信息&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;对话管理
-&lt;ul&gt;
-&lt;li&gt;对话状态跟踪&lt;/li&gt;
-&lt;li&gt;对话策略优化
-&lt;ul&gt;
-&lt;li&gt;基于有限状态机的方法&lt;/li&gt;
-&lt;li&gt;基于部分可观测马尔科夫链的方法&lt;/li&gt;
-&lt;li&gt;基于深度学习的方法&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;回复生成
-&lt;ul&gt;
-&lt;li&gt;基于模板的方法&lt;/li&gt;
-&lt;li&gt;基于统计的方法&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h4 id=&#34;基于规则的聊天机器人&#34;&gt;基于规则的聊天机器人&lt;/h4&gt;
-&lt;ol&gt;
-&lt;li&gt;规则系统对输入的自然语言进行解析&lt;/li&gt;
-&lt;li&gt;抽取预定义的关键词&lt;/li&gt;
-&lt;li&gt;通过预先定义的模板进行回复&lt;/li&gt;
-&lt;li&gt;如果不在规则体系内，则采用万能回复&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h4 id=&#34;基于检索的聊天机器人&#34;&gt;基于检索的聊天机器人&lt;/h4&gt;
-&lt;ul&gt;
-&lt;li&gt;搜索引擎技术+人类对话语料&lt;/li&gt;
-&lt;li&gt;组织成一问一答结构&lt;/li&gt;
-&lt;li&gt;匹配模型是关键&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;序列-编码器-&amp;gt;向量-编码器-&amp;gt;序列&lt;/p&gt;
-&lt;h2 id=&#34;第12章语音处理&#34;&gt;第12章语音处理&lt;/h2&gt;
-&lt;h3 id=&#34;掌握声音的四要素&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;声音的四要素&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;音高 声波频率&lt;/li&gt;
-&lt;li&gt;音强 振幅大小&lt;/li&gt;
-&lt;li&gt;音长 持续时间长短&lt;/li&gt;
-&lt;li&gt;音色 声音的特色和本质&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;掌握声音识别常用的几种声学特征&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;声音识别常用的几种声学特征&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;梅尔频率倒谱系数&lt;/li&gt;
-&lt;li&gt;梅尔标度滤波器组特征&lt;/li&gt;
-&lt;li&gt;感知线性预测倒谱系数&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;了解语音识别中常见的难题&#34;&gt;&lt;del&gt;了解&lt;/del&gt;语音识别中常见的难题&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;语音信号复杂多样&lt;/li&gt;
-&lt;li&gt;语音信号只有少量信息与语音识别相关&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;掌握语音识别系统的框架并掌握部分功能&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;语音识别系统的框架，并掌握部分功能&lt;/h3&gt;
-&lt;p&gt;特征提取、声学模型、语言模型、解码搜索
-【PPT第26页】&lt;/p&gt;
-&lt;h3 id=&#34;了解语音增强中的几种关键技术&#34;&gt;&lt;del&gt;了解&lt;/del&gt;语音增强中的几种关键技术&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;回声消除&lt;/li&gt;
-&lt;li&gt;混响抑制&lt;/li&gt;
-&lt;li&gt;语音降噪&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;了解情感语音的描述方式&#34;&gt;&lt;del&gt;了解&lt;/del&gt;情感语音的描述方式&lt;/h3&gt;
-&lt;p&gt;离散情感模型，将情感描述为离散的形容词、标签的形式，如高兴，愤怒等&lt;/p&gt;
-&lt;p&gt;维度情感模型将情感状态描述为多维情感空间中的连续数值，也称作连续情感描述。&lt;/p&gt;
-&lt;h2 id=&#34;第13章规划&#34;&gt;第13章规划&lt;/h2&gt;
-&lt;h3 id=&#34;掌握经典规划的假设条件以及经典规划的定义&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;经典规划的假设条件以及经典规划的定义&lt;/h3&gt;
-&lt;ol start=&#34;0&#34;&gt;
-&lt;li&gt;有限系统 问题只涉及有限的状态、行动、事件等&lt;/li&gt;
-&lt;li&gt;完全可观察 永远知道系统当前所在的状态&lt;/li&gt;
-&lt;li&gt;确定性 每个行动只会导致一种确定的影响&lt;/li&gt;
-&lt;li&gt;静态性 不存在外部行动，环境所有的改变都来自控制者的行动&lt;/li&gt;
-&lt;li&gt;状态目标 目标是一些需要达到的目标状态&lt;/li&gt;
-&lt;li&gt;序列规则 规则结果是一个线性行动序列&lt;/li&gt;
-&lt;li&gt;隐含时间 不考虑时间连续性&lt;/li&gt;
-&lt;li&gt;离线规划 规划求解器不考虑执行时状态&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;满足上述所有假设的称为经典规划。&lt;/p&gt;
-&lt;h3 id=&#34;掌握运用经典规划理论描述和解决实际问题的方法&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;运用经典规划理论描述和解决实际问题的方法&lt;/h3&gt;
-&lt;p&gt;这个问题可以定义3个行动：Load(装载), Unload(卸载)和Fly(飞行)。行动作用于两个谓词：In(c,p)表示货物c在飞机p内，At(x,a)表示物体x(飞机或货物)在机场a。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;注意当货物在飞机内（In）时，它不在（At）任何地方，所以At的实际意思是“可供在一个给定的地方使用”&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Action(Load(c,p,a))
-前提：At(c,a) ∧ At(p,a) ∧ Cargo(c) ∧ Plane(p) ∧ Airport(a)
-正效果：In(c,p)
-负效果： At(c,a)
-Action(Unload(c,p,a))
-前提：In(c,p) ∧ At(p,a) ∧ Cargo(c) ∧ Plane(p) ∧ Airport(a)
-正反馈：At(c,a)
-负反馈：In(c,p)
-Action(Fly(p,from,to))
-前提：At(p,from) ∧ Plane(p) ∧ Airport(from) ∧ Airport(to)
-正反馈：At(p,to)
-负反馈： At(p,from) 
-&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;第14章多智能体&#34;&gt;第14章多智能体&lt;/h2&gt;
-&lt;h3 id=&#34;掌握多智能体的定义&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;多智能体的定义&lt;/h3&gt;
-&lt;p&gt;智能体是一个软件实体，可以代表一个人类用户或其他程序。智能体具有一个行为集合，且具有某种程度的独立性或者自主性。智能体在采取行动时，通常采用知识来表示用户的目标或期望。&lt;/p&gt;
-&lt;h3 id=&#34;掌握多智能体的四种性质和强性质&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;多智能体的四种性质和强性质&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;自主性&lt;/li&gt;
-&lt;li&gt;主动性&lt;/li&gt;
-&lt;li&gt;反应能力&lt;/li&gt;
-&lt;li&gt;社会能力&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;强性质&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;移动性 具备在网络上移动的能力&lt;/li&gt;
-&lt;li&gt;诚实性 互相通信时不会传输错误的信息&lt;/li&gt;
-&lt;li&gt;无私性 不会有冲突的目标&lt;/li&gt;
-&lt;li&gt;理性 具备一定的理性，能分析目标是否能实现&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h3 id=&#34;掌握智能体的抽象结构&#34;&gt;&lt;del&gt;掌握&lt;/del&gt;智能体的抽象结构&lt;/h3&gt;
-&lt;ul&gt;
-&lt;li&gt;无内部状态&lt;/li&gt;
-&lt;li&gt;有内部状态
-【……】&lt;/li&gt;
-&lt;/ul&gt;
-- https://ntutn.top/posts/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>我发现了齐鲁软件大赛系统的漏洞</title>
-        <link>https://ntutn.top/posts/%E6%88%91%E5%8F%91%E7%8E%B0%E4%BA%86%E9%BD%90%E9%B2%81%E8%BD%AF%E4%BB%B6%E5%A4%A7%E8%B5%9B%E7%B3%BB%E7%BB%9F%E7%9A%84%E6%BC%8F%E6%B4%9E/</link>
-        <pubDate>Thu, 03 Jan 2019 03:11:37 +0800</pubDate>
-        
-        <guid>https://ntutn.top/posts/%E6%88%91%E5%8F%91%E7%8E%B0%E4%BA%86%E9%BD%90%E9%B2%81%E8%BD%AF%E4%BB%B6%E5%A4%A7%E8%B5%9B%E7%B3%BB%E7%BB%9F%E7%9A%84%E6%BC%8F%E6%B4%9E/</guid>
-        <description>归零幻想 https://ntutn.top/posts/%E6%88%91%E5%8F%91%E7%8E%B0%E4%BA%86%E9%BD%90%E9%B2%81%E8%BD%AF%E4%BB%B6%E5%A4%A7%E8%B5%9B%E7%B3%BB%E7%BB%9F%E7%9A%84%E6%BC%8F%E6%B4%9E/ -&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;事情起因是这样的：&lt;/p&gt;
-&lt;p&gt;本来我计划今天处理齐软提交作品的事情，然而知乎真是好看……&lt;/p&gt;
-&lt;p&gt;等我想起了这回事，提交信息后，先弹出修改成功提示，然后告诉我&lt;strong&gt;没有登录&lt;/strong&gt;。&lt;/p&gt;
-&lt;p&gt;what?没有登录但修改成功了？&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;吓得我感觉登进去，可不就是我刚刚填写的资料嘛。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2020/08/20/jZQeLTqHG9haiuI.png&#34; alt=&#34;1.png&#34;&gt;&lt;/p&gt;
-&lt;p&gt;为了排除在线编辑器本地保存重新加载的可能，我祭出&lt;code&gt;curl&lt;/code&gt;。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2020/08/20/hKGqjndUfYB7RTi.png&#34; alt=&#34;2.png&#34;&gt;&lt;/p&gt;
-&lt;p&gt;然后再次登进去&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2020/08/20/MbwDRyafdKBOQxq.png&#34; alt=&#34;4.png&#34;&gt;&lt;/p&gt;
-&lt;p&gt;嗯，没得洗了。直接修改数据的接口竟然不做登录验证。万一我写个循环这不就几乎删库了。&lt;/p&gt;
-&lt;p&gt;不过我是谁？我是正直的好青年，我当然选择把bug上交国家，不对，是告诉厂家，不对怎么说来着……算了，就是这个意思。&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;目前这个bug已经修复了，可惜也不能凭借发现这么严重漏洞直接拿个奖……&lt;/p&gt;
-- https://ntutn.top/posts/%E6%88%91%E5%8F%91%E7%8E%B0%E4%BA%86%E9%BD%90%E9%B2%81%E8%BD%AF%E4%BB%B6%E5%A4%A7%E8%B5%9B%E7%B3%BB%E7%BB%9F%E7%9A%84%E6%BC%8F%E6%B4%9E/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>日期相关的计算</title>
-        <link>https://ntutn.top/posts/%E6%97%A5%E6%9C%9F%E7%9B%B8%E5%85%B3%E7%9A%84%E8%AE%A1%E7%AE%97/</link>
-        <pubDate>Sun, 16 Sep 2018 03:11:37 +0800</pubDate>
-        
-        <guid>https://ntutn.top/posts/%E6%97%A5%E6%9C%9F%E7%9B%B8%E5%85%B3%E7%9A%84%E8%AE%A1%E7%AE%97/</guid>
-        <description>归零幻想 https://ntutn.top/posts/%E6%97%A5%E6%9C%9F%E7%9B%B8%E5%85%B3%E7%9A%84%E8%AE%A1%E7%AE%97/ -&lt;!-- raw HTML omitted --&gt;
-&lt;blockquote&gt;
-&lt;p&gt;今天（Sun, 16 Sep 2018 06:34:57 +0000）帮同学写一个日期相关的c++题，竟然耗费了很多时间，不得不感叹自己真是老了。
-首先定义类用年月日(yy,mm,dd)存储日期
-日期±天数，直接加减到“天”上，然后“多退少补”。
-两日期之间相差天数。我是先计算两日前距元年元月元日的天数，然后直接相减。但我这么算，老是差几天，调试了好久，甚至我都一度打算放弃，直接调用上面做的日期加天数一天一天往上累加（可以预料到这会用多长时间）。
-最后才检查出，竟然是判断闰年出错了，我把取余弄成了整除，闰年哭晕在厕所。
-老了，真的老了。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cpp&#34; data-lang=&#34;cpp&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
-&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;namespace&lt;/span&gt; std;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;TMyDate&lt;/span&gt;
-{
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt;:
-    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; yy,mm,dd;
-    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;bool&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;isrn&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; year)&lt;span style=&#34;color:#228b22&#34;&gt;//判断闰年
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;((year%&lt;span style=&#34;color:#b452cd&#34;&gt;4&lt;/span&gt;==&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;&amp;amp;&amp;amp;year%&lt;span style=&#34;color:#b452cd&#34;&gt;100&lt;/span&gt;!=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;)||(year%&lt;span style=&#34;color:#b452cd&#34;&gt;400&lt;/span&gt;==&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;))
-        {
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;true&lt;/span&gt;;
-        }
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;false&lt;/span&gt;;
-    }
-    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;getDaysofmonth&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; y,&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; m)&lt;span style=&#34;color:#228b22&#34;&gt;//某年某月有多少天
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;switch&lt;/span&gt;(m)
-        {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;:
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;3&lt;/span&gt;:
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;5&lt;/span&gt;:
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;7&lt;/span&gt;:
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;8&lt;/span&gt;:
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;10&lt;/span&gt;:
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;12&lt;/span&gt;:
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;31&lt;/span&gt;;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;:
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(isrn(y)){
-                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;29&lt;/span&gt;;
-            }
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;28&lt;/span&gt;;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;default&lt;/span&gt;:
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;30&lt;/span&gt;;
-        }
-    }
-    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;getTotaldays&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; y,&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; m,&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; d){&lt;span style=&#34;color:#228b22&#34;&gt;//某年月日距元年元月元日天数
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; sum=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
-        sum+=d;
-        m--;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt;(m--){
-            sum+=getDaysofmonth(y,m);
-        }
-        y--;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt;(y--){
-            sum+=isrn(y)?&lt;span style=&#34;color:#b452cd&#34;&gt;366&lt;/span&gt;:&lt;span style=&#34;color:#b452cd&#34;&gt;365&lt;/span&gt;;
-        }
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; sum;
-    }
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt;:
-    TMyDate()
-    {
-        yy=&lt;span style=&#34;color:#b452cd&#34;&gt;1900&lt;/span&gt;;
-        mm=&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;;
-        dd=&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;;
-    }
-    TMyDate(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; y,&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; m,&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; d)
-    {
-        yy=y;
-        mm=m;
-        dd=d;
-    }
-    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;getYear&lt;/span&gt;(){
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; yy;
-    }
-    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;getMonth&lt;/span&gt;(){
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; mm;
-    }
-    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;getDay&lt;/span&gt;(){
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; dd;
-    }
-    TMyDate &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;operator&lt;/span&gt;+(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; d){&lt;span style=&#34;color:#228b22&#34;&gt;//日期加天数
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; tmp_d=dd;
-        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; tmp_m=mm;
-        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; tmp_y=yy;
-        tmp_d+=d;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt;(&lt;span style=&#34;color:#658b00&#34;&gt;true&lt;/span&gt;){
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(tmp_d&amp;gt;getDaysofmonth(tmp_y,tmp_m)){
-                tmp_m++;
-                tmp_d-=getDaysofmonth(tmp_y,tmp_m);
-                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;continue&lt;/span&gt;;
-            }
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(tmp_m&amp;gt;&lt;span style=&#34;color:#b452cd&#34;&gt;12&lt;/span&gt;){
-                tmp_y++;
-                tmp_m-=&lt;span style=&#34;color:#b452cd&#34;&gt;12&lt;/span&gt;;
-                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;continue&lt;/span&gt;;
-            }
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
-        }
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;TMyDate&lt;/span&gt;(tmp_y,tmp_m,tmp_d);
-    }
-    TMyDate &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;operator&lt;/span&gt;-(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; d){&lt;span style=&#34;color:#228b22&#34;&gt;//日期减天数
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; tmp_d=dd;
-        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; tmp_m=mm;
-        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; tmp_y=yy;
-        tmp_d-=d;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt;(&lt;span style=&#34;color:#658b00&#34;&gt;true&lt;/span&gt;){
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(tmp_d&amp;lt;=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;){
-                tmp_m--;
-                tmp_d+=getDaysofmonth(tmp_y,tmp_m);
-                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;continue&lt;/span&gt;;
-            }
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(tmp_m&amp;lt;=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;){
-                tmp_y--;
-                tmp_m+=&lt;span style=&#34;color:#b452cd&#34;&gt;12&lt;/span&gt;;
-                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;continue&lt;/span&gt;;
-            }
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;;
-        }
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;TMyDate&lt;/span&gt;(tmp_y,tmp_m,tmp_d);
-    }
-    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;operator&lt;/span&gt;-(TMyDate&amp;amp;d){&lt;span style=&#34;color:#228b22&#34;&gt;//日期与日期相距天数
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;getTotaldays&lt;/span&gt;(yy,mm,dd)-getTotaldays(d.getYear(),d.getMonth(),d.getDay());
-    }
-    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;showInfo&lt;/span&gt;(){
-        cout&amp;lt;&amp;lt;yy&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;-&amp;#39;&lt;/span&gt;&amp;lt;&amp;lt;mm&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;-&amp;#39;&lt;/span&gt;&amp;lt;&amp;lt;dd&amp;lt;&amp;lt;endl;
-    }
-};
-&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;()
-{
-    TMyDate tmp1(&lt;span style=&#34;color:#b452cd&#34;&gt;2018&lt;/span&gt;,&lt;span style=&#34;color:#b452cd&#34;&gt;9&lt;/span&gt;,&lt;span style=&#34;color:#b452cd&#34;&gt;16&lt;/span&gt;);
-    TMyDate tmp2(&lt;span style=&#34;color:#b452cd&#34;&gt;1998&lt;/span&gt;,&lt;span style=&#34;color:#b452cd&#34;&gt;6&lt;/span&gt;,&lt;span style=&#34;color:#b452cd&#34;&gt;4&lt;/span&gt;);
-    TMyDate tmp3;
-    tmp1.showInfo();
-    tmp2.showInfo();
-    tmp3=tmp1-&lt;span style=&#34;color:#b452cd&#34;&gt;25&lt;/span&gt;;
-    tmp3.showInfo();
-    tmp3=tmp1+&lt;span style=&#34;color:#b452cd&#34;&gt;25&lt;/span&gt;;
-    tmp3.showInfo();
-    cout&amp;lt;&amp;lt;tmp1-tmp2&amp;lt;&amp;lt;endl;
-    tmp1.showInfo();
-    tmp2.showInfo();
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://ntutn.top/posts/%E6%97%A5%E6%9C%9F%E7%9B%B8%E5%85%B3%E7%9A%84%E8%AE%A1%E7%AE%97/ - CC BY-SA 4.0</description>
         </item>
     
     

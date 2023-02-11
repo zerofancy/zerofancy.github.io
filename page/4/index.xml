@@ -7,9 +7,240 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Fri, 16 Dec 2022 17:42:29 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 12 Feb 2023 04:50:03 +0800</lastBuildDate>
     
         <atom:link href="https://ntutn.top/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>android项目开发：Broadcast</title>
+        <link>https://ntutn.top/posts/broadcast/</link>
+        <pubDate>Thu, 24 Dec 2020 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/broadcast/</guid>
+        <description>归零幻想 https://ntutn.top/posts/broadcast/ -&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;仍然是《第一行代码》的学习笔记，安卓内置广播机制。&lt;/p&gt;
+&lt;p&gt;Android中每个应用程序都可以对自己感兴趣的广播进行注册，包括来自系统的，和其他应用程序的。&lt;/p&gt;
+&lt;p&gt;广播分为标准广播和有序广播。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;标准广播异步执行，所有BroadcastReceiver几乎同时收到广播的消息。&lt;/li&gt;
+&lt;li&gt;有序广播 同步执行，只有前一个Receiver逻辑执行完后才会传递给下一个，且可以将广播截断。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;h2 id=&#34;接收系统广播&#34;&gt;接收系统广播&lt;/h2&gt;
+&lt;p&gt;BroadcastReceiver的&lt;code&gt;onReceive()&lt;/code&gt;方法是在主线程调用的，不应执行耗时操作。但开一个新线程操作也是不可靠的&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;。&lt;/p&gt;
+&lt;h3 id=&#34;监听时间变化动态注册&#34;&gt;监听时间变化（动态注册）&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MainActivity&lt;/span&gt; : AppCompatActivity() {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; timeReceiver = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;: &lt;/span&gt;&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;BroadcastReceiver&lt;/span&gt;() {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onReceive&lt;/span&gt;(context: Context?, intent: Intent?) {
+            text.text = Date(System.currentTimeMillis()).toString()
+        }
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onCreate&lt;/span&gt;(savedInstanceState: Bundle?) {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; intentFilter = IntentFilter()
+        intentFilter.addAction(Intent.ACTION_TIME_TICK)
+        registerReceiver(timeReceiver, intentFilter)
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onDestroy&lt;/span&gt;() {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onDestroy()
+        unregisterReceiver(timeReceiver)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;开机启动静态注册&#34;&gt;开机启动（静态注册）&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;
+&lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;manifest&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;xmlns:android=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;http://schemas.android.com/apk/res/android&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#658b00&#34;&gt;package=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;top.ntutn.broadcasttest&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;gt;&lt;/span&gt;
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;uses-permission&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;android:name=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;android.permission.RECEIVE_BOOT_COMPLETED&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;application&lt;/span&gt;
+        &lt;span style=&#34;color:#658b00&#34;&gt;android:allowBackup=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;true&amp;#34;&lt;/span&gt;
+        &lt;span style=&#34;color:#658b00&#34;&gt;android:icon=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;@mipmap/ic_launcher&amp;#34;&lt;/span&gt;
+        &lt;span style=&#34;color:#658b00&#34;&gt;android:label=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;@string/app_name&amp;#34;&lt;/span&gt;
+        &lt;span style=&#34;color:#658b00&#34;&gt;android:roundIcon=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;@mipmap/ic_launcher_round&amp;#34;&lt;/span&gt;
+        &lt;span style=&#34;color:#658b00&#34;&gt;android:supportsRtl=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;true&amp;#34;&lt;/span&gt;
+        &lt;span style=&#34;color:#658b00&#34;&gt;android:theme=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;@style/Theme.BroadcastTest&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;receiver&lt;/span&gt;
+            &lt;span style=&#34;color:#658b00&#34;&gt;android:name=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;.BootCompleteReceiver&amp;#34;&lt;/span&gt;
+            &lt;span style=&#34;color:#658b00&#34;&gt;android:enabled=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;true&amp;#34;&lt;/span&gt;
+            &lt;span style=&#34;color:#658b00&#34;&gt;android:exported=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;true&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;gt;&lt;/span&gt;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;intent-filter&amp;gt;&lt;/span&gt;
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;action&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;android:name=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;android.intent.action.BOOT_COMPLETED&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/intent-filter&amp;gt;&lt;/span&gt;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/receiver&amp;gt;&lt;/span&gt;
+
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;activity&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;android:name=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;.MainActivity&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;gt;&lt;/span&gt;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;intent-filter&amp;gt;&lt;/span&gt;
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;action&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;android:name=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;android.intent.action.MAIN&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
+
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;category&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;android:name=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;android.intent.category.LAUNCHER&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/intent-filter&amp;gt;&lt;/span&gt;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/activity&amp;gt;&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/application&amp;gt;&lt;/span&gt;
+
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/manifest&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.broadcasttest&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.content.BroadcastReceiver&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.content.Context&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.content.Intent&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.widget.Toast&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;BootCompleteReceiver&lt;/span&gt; : BroadcastReceiver() {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onReceive&lt;/span&gt;(context: Context, intent: Intent) {
+        Toast.makeText(context, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Boot Complete&amp;#34;&lt;/span&gt;, Toast.LENGTH_LONG).show()
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;发送自定义广播&#34;&gt;发送自定义广播&lt;/h2&gt;
+&lt;h3 id=&#34;普通广播&#34;&gt;普通广播&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; intent = Intent(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;top.ntutn.broadcasttest.MY_BROADCAST&amp;#34;&lt;/span&gt;)
+intent.`package&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;`&lt;/span&gt; = packageName
+sendBroadcast(intent)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;intent中可以带上一些其他信息。&lt;/p&gt;
+&lt;p&gt;不指定package默认发送隐式广播，无法被静态注册的Receiver接收。指定package指定接收者。&lt;/p&gt;
+&lt;h3 id=&#34;有序广播&#34;&gt;有序广播&lt;/h3&gt;
+&lt;p&gt;通过设置intent-filter的&lt;code&gt;android:priority&lt;/code&gt;属性来调整各个接收者的优先级。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; intent = Intent(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;top.ntutn.broadcasttest.MY_BROADCAST&amp;#34;&lt;/span&gt;)
+intent.`package&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;`&lt;/span&gt; = packageName
+sendOrderedBroadcast(intent, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;第二个参数是个有关权限的。&lt;/p&gt;
+&lt;p&gt;先接收到的可以用&lt;code&gt;abortBroadcast()&lt;/code&gt;方法阻止广播继续传播。&lt;/p&gt;
+&lt;h2 id=&#34;broadcast和eventbus&#34;&gt;Broadcast和Eventbus&lt;/h2&gt;
+&lt;p&gt;今天学习了这章之后我第一个联想到的是之前学习的EventBus，它们在这里起到的作用相似。便好奇它们的区别，实际项目中的选择。&lt;/p&gt;
+&lt;p&gt;不过在网上搜到的回答千篇一律，各个都是CV能手，说EventBus更轻量级更灵活，但逻辑复杂时难以理出一个清楚的时间流程什么的。&lt;/p&gt;
+&lt;p&gt;先这么理解吧，以后工程经验丰富后再对比学习。&lt;/p&gt;
+&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;&lt;a href=&#34;https://blog.csdn.net/lyabc123456/article/details/83104832&#34;&gt;为什么不能在BroadcastReceiver中开启子线程&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/section&gt;
+- https://ntutn.top/posts/broadcast/ - CC BY-SA 4.0</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>禁用macOS的窗口标签</title>
+        <link>https://ntutn.top/posts/%E7%A6%81%E7%94%A8macos%E7%9A%84%E7%AA%97%E5%8F%A3%E6%A0%87%E7%AD%BE/</link>
+        <pubDate>Tue, 22 Dec 2020 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/%E7%A6%81%E7%94%A8macos%E7%9A%84%E7%AA%97%E5%8F%A3%E6%A0%87%E7%AD%BE/</guid>
+        <description>归零幻想 https://ntutn.top/posts/%E7%A6%81%E7%94%A8macos%E7%9A%84%E7%AA%97%E5%8F%A3%E6%A0%87%E7%AD%BE/ -&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;作为一个对更新相对激进的用户，我当然是第一时间升级了最新的macOS Big Sur。说实在的，这名字给我的第一印象并不好，因为被我看成了『Big Bug』。&lt;/p&gt;
+&lt;p&gt;圆角变大了，还有我一开始比较喜欢的功能，姑且称之为窗口标签。在BigSur中，当你打开两个全屏的Android Studio，它们将出现在同一个窗口，窗口上方出现不同的标签页，和浏览器一样。&lt;/p&gt;
+&lt;p&gt;好景不长，这个功能表现很不稳定，我不得不考虑干掉这个功能。如果只是没有成功触发也就算了，大不了当没升级用，但它常常会把一些弹出窗口也搞成和原窗口并列的标签。比如当你rename一个文件时，弹出的窗口有时就会并列到标签上，然后Android Studio就卡死了。&lt;/p&gt;
+&lt;p&gt;好吧，既然它开始影响我的工作效率了，我就找了找禁用的方法&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;defaults write com.google.android.studio AppleWindowTabbingMode manual
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;!-- raw HTML omitted --&gt;
+&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;来自&lt;a href=&#34;https://www.reddit.com/r/androiddev/comments/jtbl4m/has_anyone_updated_to_macos_big_sur_and_is/&#34;&gt;https://www.reddit.com/r/androiddev/comments/jtbl4m/has_anyone_updated_to_macos_big_sur_and_is/&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/section&gt;
+- https://ntutn.top/posts/%E7%A6%81%E7%94%A8macos%E7%9A%84%E7%AA%97%E5%8F%A3%E6%A0%87%E7%AD%BE/ - CC BY-SA 4.0</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>android项目开发：Fragment</title>
+        <link>https://ntutn.top/posts/fragment/</link>
+        <pubDate>Mon, 21 Dec 2020 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/fragment/</guid>
+        <description>归零幻想 https://ntutn.top/posts/fragment/ -&lt;!-- raw HTML omitted --&gt;
+&lt;h1 id=&#34;fragment&#34;&gt;Fragment&lt;/h1&gt;
+&lt;h2 id=&#34;fragment的使用方式&#34;&gt;Fragment的使用方式&lt;/h2&gt;
+&lt;h3 id=&#34;静态添加fragment&#34;&gt;静态添加Fragment&lt;/h3&gt;
+&lt;p&gt;Fragment的写法&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;LinearLayout&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;xmlns:android=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;http://schemas.android.com/apk/res/android&amp;#34;&lt;/span&gt;
+              &lt;span style=&#34;color:#658b00&#34;&gt;android:orientation=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;vertical&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_width=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;match_parent&amp;#34;&lt;/span&gt;
+              &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_height=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;match_parent&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;gt;&lt;/span&gt;
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;Button&lt;/span&gt;
+            &lt;span style=&#34;color:#658b00&#34;&gt;android:id=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;@+id/button&amp;#34;&lt;/span&gt;
+            &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_width=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;wrap_content&amp;#34;&lt;/span&gt;
+            &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_height=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;wrap_content&amp;#34;&lt;/span&gt;
+            &lt;span style=&#34;color:#658b00&#34;&gt;android:text=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;button&amp;#34;&lt;/span&gt;
+            &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_gravity=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;center_horizontal&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
+
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/LinearLayout&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.fragmenttest&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.os.Bundle&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.view.LayoutInflater&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.view.View&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.view.ViewGroup&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;androidx.fragment.app.Fragment&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;LeftFragment&lt;/span&gt; : Fragment() {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onCreateView&lt;/span&gt;(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; inflater.inflate(R.layout.left_fragment, container, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;静态添加Fragment&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;
+&lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt;&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;LinearLayout&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;xmlns:android=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;http://schemas.android.com/apk/res/android&amp;#34;&lt;/span&gt;
+              &lt;span style=&#34;color:#658b00&#34;&gt;xmlns:tools=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;http://schemas.android.com/tools&amp;#34;&lt;/span&gt;
+              &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_width=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;match_parent&amp;#34;&lt;/span&gt;
+              &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_height=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;match_parent&amp;#34;&lt;/span&gt;
+              &lt;span style=&#34;color:#658b00&#34;&gt;android:orientation=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;horizontal&amp;#34;&lt;/span&gt;
+              &lt;span style=&#34;color:#658b00&#34;&gt;tools:context=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;.MainActivity&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;gt;&lt;/span&gt;
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;fragment&lt;/span&gt;
+            &lt;span style=&#34;color:#658b00&#34;&gt;android:id=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;@+id/leftFragment&amp;#34;&lt;/span&gt;
+            &lt;span style=&#34;color:#658b00&#34;&gt;android:name=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;top.ntutn.fragmenttest.LeftFragment&amp;#34;&lt;/span&gt;
+            &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_width=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;0dp&amp;#34;&lt;/span&gt;
+            &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_height=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;match_parent&amp;#34;&lt;/span&gt;
+            &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_weight=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
+
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;fragment&lt;/span&gt;
+            &lt;span style=&#34;color:#658b00&#34;&gt;android:id=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;@+id/rightFragment&amp;#34;&lt;/span&gt;
+            &lt;span style=&#34;color:#658b00&#34;&gt;android:name=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;top.ntutn.fragmenttest.RightFragment&amp;#34;&lt;/span&gt;
+            &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_width=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;0dp&amp;#34;&lt;/span&gt;
+            &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_height=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;match_parent&amp;#34;&lt;/span&gt;
+            &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_weight=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
+
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/LinearLayout&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;!-- raw HTML omitted --&gt;
+&lt;h3 id=&#34;动态添加fragment&#34;&gt;动态添加Fragment&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; fragmentManager = supportFragmentManager
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; transaction = fragmentManager.beginTransaction()
+transaction.replace(R.id.rightLayout, fragment)
+transaction.commit()
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;在fragment中实现返回栈&#34;&gt;在Fragment中实现返回栈&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; fragmentManager = supportFragmentManager
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; transaction = fragmentManager.beginTransaction()
+transaction.replace(R.id.rightLayout, fragment)
+transaction.addToBackStack(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;)
+transaction.commit()
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;fragment与activity交互&#34;&gt;Fragment与Activity交互&lt;/h3&gt;
+&lt;p&gt;Activity中获取Fragment&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; fragment = supportFragmentManager.findFragmentById(R.id.leftFragment) &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;as&lt;/span&gt; LeftFragment
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;或使用&lt;code&gt;kotlin-android-extensions&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; fragment = leftFragment &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;as&lt;/span&gt; LeftFragment
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;fragment的生命周期&#34;&gt;Fragment的生命周期&lt;/h2&gt;
+&lt;p&gt;和Activity的生命周期类似，重点是几个方法：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;onAttach() 当Fragment和Activity建立关联的时候调用&lt;/li&gt;
+&lt;li&gt;onCreateView() 为Fragment创建视图时调用&lt;/li&gt;
+&lt;li&gt;onActivityCreated() 确保与Fragment相关联的Activity创建完毕时调用。&lt;/li&gt;
+&lt;li&gt;onDestroyView() 与Fragment关联的视图被移除时调用。&lt;/li&gt;
+&lt;li&gt;onDetach() 当Fragment与Activity解除关联时调用&lt;/li&gt;
+&lt;/ul&gt;
+- https://ntutn.top/posts/fragment/ - CC BY-SA 4.0</description>
+        </item>
     
     
     
@@ -875,332 +1106,6 @@ gift.vbe
     }
 }
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://ntutn.top/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>EventBus初探</title>
-        <link>https://ntutn.top/posts/eventbus%E5%88%9D%E6%8E%A2/</link>
-        <pubDate>Fri, 21 Aug 2020 03:11:37 +0800</pubDate>
-        
-        <guid>https://ntutn.top/posts/eventbus%E5%88%9D%E6%8E%A2/</guid>
-        <description>归零幻想 https://ntutn.top/posts/eventbus%E5%88%9D%E6%8E%A2/ -&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;公司项目中大量运用了EventBus&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;，这两天在做的需求相关的代码也用到了，于是还是要先去研究下这个EventBus是什么。&lt;/p&gt;
-&lt;p&gt;EventBus，顾名思义，事件总线，是一个安卓上的事件管理平台。用事件驱动的机制来简化事件传递的逻辑。在这层意义上也许可以类比&lt;code&gt;Qt&lt;/code&gt;的信号槽机制，或者安卓的广播。当你需要把一个事件传递给多个对象，EventBus就变得非常有用。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://github.com/greenrobot/EventBus/raw/master/EventBus-Publish-Subscribe.png&#34; alt=&#34;EventBus&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;em&gt;该图片来自EventBus的github仓库&lt;/em&gt;&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;h2 id=&#34;eventbus的使用&#34;&gt;EventBus的使用&lt;/h2&gt;
-&lt;p&gt;首先当然是添加依赖&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-groovy&#34; data-lang=&#34;groovy&#34;&gt;implementation &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;org.greenrobot:eventbus:3.2.0&amp;#39;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;写个demo展示下：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2020/09/08/CzpLZxPkrJiqaDm.jpg&#34; alt=&#34;photo_2020-09-08_15-58-48.jpg&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2020/09/08/SwM6ljRtPkgdGLT.jpg&#34; alt=&#34;photo_2020-09-08_15-59-12.jpg&#34;&gt;&lt;/p&gt;
-&lt;p&gt;点击按钮后，将两处文本的值修改为文本框中的值。注意：上面的那个红色的文本处于一个fragment中。&lt;/p&gt;
-&lt;p&gt;为此，我们先准备一个Event：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;data&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;ButtonEvent&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; text: String)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;点击按钮时，发送这个Event：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;        button.setOnClickListener {
-            EventBus.getDefault().post(ButtonEvent(editTextTextPersonName.text.toString()))
-        }
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然后在需要接收这个请求的地方，比如我们在&lt;code&gt;MainActivity&lt;/code&gt;的&lt;code&gt;onCreate()&lt;/code&gt;中注册EventBus：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;EventBus.getDefault().register(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;在&lt;code&gt;onDestory()&lt;/code&gt;中解除&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;EventBus.getDefault().unregister(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然后就可以接收那个Event了。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;    &lt;span style=&#34;color:#707a7c&#34;&gt;@Subscribe&lt;/span&gt;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onButtonEvent&lt;/span&gt;(buttonEvent: ButtonEvent){
-        textView.text=buttonEvent.text
-    }
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;同样对于Fragment，我们只需要做同样的事情，就可以监听这个Event了。很明显，这对于一个事件有多个处理的场景是很方便的。&lt;/p&gt;
-&lt;h2 id=&#34;订阅者的threadmode&#34;&gt;订阅者的threadMode&lt;/h2&gt;
-&lt;p&gt;安卓应用启动时，系统会创建一个主线程，负责向UI组件分发事件&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;，所有对UI的操作应该放到主线程中。EventBus是一种重要的跨线程更新UI的方式。&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;@Subscribe&lt;/code&gt;注解有一个参数&lt;code&gt;threadMode&lt;/code&gt;，有以下取值：&lt;/p&gt;
-&lt;h3 id=&#34;threadmodeposting&#34;&gt;ThreadMode.POSTING&lt;/h3&gt;
-&lt;p&gt;默认值，在同一线程中调用，开销最小。&lt;/p&gt;
-&lt;h3 id=&#34;threadmodemain&#34;&gt;ThreadMode.MAIN&lt;/h3&gt;
-&lt;p&gt;在主线程中调用。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;如果发送事件的是主线程，则直接调用。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h3 id=&#34;threadmodemain_ordered&#34;&gt;ThreadMode.MAIN_ORDERED&lt;/h3&gt;
-&lt;p&gt;在主线程中调用，同步调用（排队）。&lt;/p&gt;
-&lt;h3 id=&#34;threadmodebackground&#34;&gt;ThreadMode.BACKGROUND&lt;/h3&gt;
-&lt;p&gt;在后台线程中调用。&lt;/p&gt;
-&lt;h3 id=&#34;threadmodeasync&#34;&gt;ThreadMode.ASYNC&lt;/h3&gt;
-&lt;p&gt;在单独线程中调用，用于耗时操作。&lt;/p&gt;
-&lt;p&gt;对于EventBus更新UI，我同样写了demo：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;com.example.eventbustimerdemo&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.os.Bundle&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;androidx.appcompat.app.AppCompatActivity&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;kotlinx.android.synthetic.main.activity_main.*&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;org.greenrobot.eventbus.EventBus&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;org.greenrobot.eventbus.Subscribe&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;org.greenrobot.eventbus.ThreadMode&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MainActivity&lt;/span&gt; : AppCompatActivity() {
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onCreate&lt;/span&gt;(savedInstanceState: Bundle?) {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        btnStart.setOnClickListener {
-            Thread {
-                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt; (&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;) {
-                    Thread.sleep(&lt;span style=&#34;color:#b452cd&#34;&gt;1000&lt;/span&gt;)
-                    EventBus.getDefault().post(TickEvent())
-                }
-            }.start()
-            btnStart.isEnabled = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;
-        }
-        EventBus.getDefault().register(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;)
-    }
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onDestroy&lt;/span&gt;() {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onDestroy()
-        EventBus.getDefault().unregister(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;)
-    }
-    &lt;span style=&#34;color:#707a7c&#34;&gt;@Subscribe&lt;/span&gt;(threadMode = ThreadMode.MAIN)&lt;span style=&#34;color:#228b22&#34;&gt;//只有在UI线程中才能更新UI
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onTimeTick&lt;/span&gt;(event: TickEvent) {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; currentNum = tvTime.text.toString().toInt()
-        tvTime.text = (currentNum + &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;).toString()
-    }
-}
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;TickEvent&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;stickyevent&#34;&gt;StickyEvent&lt;/h2&gt;
-&lt;p&gt;『粘性事件』&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;，即在事件被广播后将长时间存在，新的订阅者仍然能收到。在一些场景下还是有用的，比如我们可能在一个详情页进行投票操作，在返回主页后才进行统计。这时粘性事件会带来帮助。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;        button.setOnClickListener {
-            EventBus.getDefault().postSticky(VoteEvent(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;))
-            finish()
-        }
-        button2.setOnClickListener {
-            EventBus.getDefault().postSticky(VoteEvent(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;))
-            finish()
-        }
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onResume&lt;/span&gt;() {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onResume()
-        EventBus.getDefault().register(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;)
-    }
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onPause&lt;/span&gt;() {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onPause()
-        EventBus.getDefault().unregister(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;)
-    }
-    &lt;span style=&#34;color:#707a7c&#34;&gt;@Subscribe&lt;/span&gt;(threadMode = ThreadMode.MAIN,sticky = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;)
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onVoteEvent&lt;/span&gt;(event: VoteEvent) {
-        textView.text = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (event.result) &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;你投票赞同&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;你投票反对&amp;#34;&lt;/span&gt;
-        EventBus.getDefault().removeStickyEvent(event)
-    }
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
-&lt;hr&gt;
-&lt;ol&gt;
-&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://github.com/greenrobot/EventBus&#34;&gt;EventBus&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.jianshu.com/p/0f5ed338feeb&#34;&gt;Android UI线程和非UI线程 &lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:3&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://blog.csdn.net/haoyuegongzi/article/details/78406342&#34;&gt;Android开发中更新UI的几种常用方式 &lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li id=&#34;fn:4&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://blog.csdn.net/IO_Field/article/details/52185717&#34;&gt;深入理解EventBus - ThreadMode、Sticky Event等&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/section&gt;
-- https://ntutn.top/posts/eventbus%E5%88%9D%E6%8E%A2/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>掉坑的日常：springboot的json属性名大小写问题</title>
-        <link>https://ntutn.top/posts/%E6%8E%89%E5%9D%91%E7%9A%84%E6%97%A5%E5%B8%B8springboot%E7%9A%84json%E5%B1%9E%E6%80%A7%E5%90%8D%E5%A4%A7%E5%B0%8F%E5%86%99%E9%97%AE%E9%A2%98/</link>
-        <pubDate>Tue, 24 Mar 2020 03:11:37 +0800</pubDate>
-        
-        <guid>https://ntutn.top/posts/%E6%8E%89%E5%9D%91%E7%9A%84%E6%97%A5%E5%B8%B8springboot%E7%9A%84json%E5%B1%9E%E6%80%A7%E5%90%8D%E5%A4%A7%E5%B0%8F%E5%86%99%E9%97%AE%E9%A2%98/</guid>
-        <description>归零幻想 https://ntutn.top/posts/%E6%8E%89%E5%9D%91%E7%9A%84%E6%97%A5%E5%B8%B8springboot%E7%9A%84json%E5%B1%9E%E6%80%A7%E5%90%8D%E5%A4%A7%E5%B0%8F%E5%86%99%E9%97%AE%E9%A2%98/ -&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;这两天想给自己小组的项目添加一个自动升级功能。这事听着复杂，但毕竟是个很常见的功能，github上的轮子很多。经过考虑，我决定选择&lt;a href=&#34;https://github.com/xuexiangjys/XUpdate&#34;&gt;这个组件&lt;/a&gt;，然后自己写后端。反正后端就返回一个json的事。然后就掉了坑。&lt;/p&gt;
-&lt;h2 id=&#34;起因&#34;&gt;起因&lt;/h2&gt;
-&lt;p&gt;案发现场没什么好说的，就是我发现自己设置的不能实现升级，在客户端调试半天发现用官方的json能升级。然后我就找我的json和官方的json有什么区别，看ContentType也没设置错，仔细比对发现属性大小写竟然不对。我当时还挺惊讶的，毕竟是直接复制的。&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;springboot可以使用&lt;code&gt;@ResponseBody&lt;/code&gt;返回对象自动转换json，而转换成的json属性名首字母会被转换成小写。&lt;/p&gt;
-&lt;h2 id=&#34;解决方案&#34;&gt;解决方案&lt;/h2&gt;
-&lt;h3 id=&#34;引入fastjson&#34;&gt;引入&lt;code&gt;fastjson&lt;/code&gt;&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;		&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
-			&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;com.alibaba&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
-			&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;fastjson&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
-			&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;1.2.66&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
-		&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;注入bean&#34;&gt;注入&lt;code&gt;bean&lt;/code&gt;&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;    &lt;span style=&#34;color:#707a7c&#34;&gt;@Bean&lt;/span&gt;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; HttpMessageConverters &lt;span style=&#34;color:#008b45&#34;&gt;httpMessageConverters&lt;/span&gt;() {
-        FastJsonHttpMessageConverter fastJsonHttpMessageConverter = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; FastJsonHttpMessageConverter(); &lt;span style=&#34;color:#228b22&#34;&gt;// 添加fastJson的配置信息
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        FastJsonConfig fastJsonConfig = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; FastJsonConfig();
-        fastJsonConfig.&lt;span style=&#34;color:#658b00&#34;&gt;setSerializerFeatures&lt;/span&gt;(SerializerFeature.&lt;span style=&#34;color:#658b00&#34;&gt;PrettyFormat&lt;/span&gt;); &lt;span style=&#34;color:#228b22&#34;&gt;// 处理中文乱码问题
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        List&amp;lt;MediaType&amp;gt; fastMediaTypes = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; ArrayList&amp;lt;&amp;gt;();
-        fastMediaTypes.&lt;span style=&#34;color:#658b00&#34;&gt;add&lt;/span&gt;(MediaType.&lt;span style=&#34;color:#658b00&#34;&gt;APPLICATION_JSON&lt;/span&gt;); &lt;span style=&#34;color:#228b22&#34;&gt;// 在convert中添加配置信息.
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        fastJsonHttpMessageConverter.&lt;span style=&#34;color:#658b00&#34;&gt;setSupportedMediaTypes&lt;/span&gt;(fastMediaTypes);
-        fastJsonHttpMessageConverter.&lt;span style=&#34;color:#658b00&#34;&gt;setFastJsonConfig&lt;/span&gt;(fastJsonConfig);
-        HttpMessageConverter&amp;lt;?&amp;gt; converter = fastJsonHttpMessageConverter;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; HttpMessageConverters(converter);
-    }
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;在属性上加注解&#34;&gt;在属性上加注解&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;edu.upc.mishuserver.vo&lt;/span&gt;;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;com.alibaba.fastjson.annotation.JSONField&lt;/span&gt;;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;lombok.AllArgsConstructor&lt;/span&gt;;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;lombok.Builder&lt;/span&gt;;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;lombok.Data&lt;/span&gt;;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;lombok.NoArgsConstructor&lt;/span&gt;;
-&lt;span style=&#34;color:#228b22&#34;&gt;/**
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * UpdateInfo
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; */&lt;/span&gt;
-&lt;span style=&#34;color:#707a7c&#34;&gt;@Data&lt;/span&gt;
-&lt;span style=&#34;color:#707a7c&#34;&gt;@AllArgsConstructor&lt;/span&gt;
-&lt;span style=&#34;color:#707a7c&#34;&gt;@NoArgsConstructor&lt;/span&gt;
-&lt;span style=&#34;color:#707a7c&#34;&gt;@Builder&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;UpdateInfo&lt;/span&gt; {
-    &lt;span style=&#34;color:#707a7c&#34;&gt;@JSONField&lt;/span&gt;(name=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Code&amp;#34;&lt;/span&gt;)
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; Long code;
-    &lt;span style=&#34;color:#707a7c&#34;&gt;@JSONField&lt;/span&gt;(name = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Msg&amp;#34;&lt;/span&gt;)
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; String msg;
-    &lt;span style=&#34;color:#707a7c&#34;&gt;@JSONField&lt;/span&gt;(name = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;UpdateStatus&amp;#34;&lt;/span&gt;)
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; Integer updateStatus;
-    &lt;span style=&#34;color:#707a7c&#34;&gt;@JSONField&lt;/span&gt;(name = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;VersionCode&amp;#34;&lt;/span&gt;)
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; Long versionCode;
-    &lt;span style=&#34;color:#707a7c&#34;&gt;@JSONField&lt;/span&gt;(name = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;VersionName&amp;#34;&lt;/span&gt;)
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; String versionName;
-    &lt;span style=&#34;color:#707a7c&#34;&gt;@JSONField&lt;/span&gt;(name = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;ModifyContent&amp;#34;&lt;/span&gt;)
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; String modifyContent;
-    &lt;span style=&#34;color:#707a7c&#34;&gt;@JSONField&lt;/span&gt;(name = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;DownloadUrl&amp;#34;&lt;/span&gt;)
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; String downloadUrl;
-    &lt;span style=&#34;color:#707a7c&#34;&gt;@JSONField&lt;/span&gt;(name = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;ApkSize&amp;#34;&lt;/span&gt;)
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; Long apkSize;
-    &lt;span style=&#34;color:#707a7c&#34;&gt;@JSONField&lt;/span&gt;(name = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;ApkMd5&amp;#34;&lt;/span&gt;)
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; String apkMd5;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://ntutn.top/posts/%E6%8E%89%E5%9D%91%E7%9A%84%E6%97%A5%E5%B8%B8springboot%E7%9A%84json%E5%B1%9E%E6%80%A7%E5%90%8D%E5%A4%A7%E5%B0%8F%E5%86%99%E9%97%AE%E9%A2%98/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>Typora&#43;git自动同步你的笔记</title>
-        <link>https://ntutn.top/posts/typora&#43;git%E8%87%AA%E5%8A%A8%E5%90%8C%E6%AD%A5%E4%BD%A0%E7%9A%84%E7%AC%94%E8%AE%B0/</link>
-        <pubDate>Mon, 02 Mar 2020 03:11:37 +0800</pubDate>
-        
-        <guid>https://ntutn.top/posts/typora&#43;git%E8%87%AA%E5%8A%A8%E5%90%8C%E6%AD%A5%E4%BD%A0%E7%9A%84%E7%AC%94%E8%AE%B0/</guid>
-        <description>归零幻想 https://ntutn.top/posts/typora&#43;git%E8%87%AA%E5%8A%A8%E5%90%8C%E6%AD%A5%E4%BD%A0%E7%9A%84%E7%AC%94%E8%AE%B0/ -&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;这两天看了群里某个大佬的笔记，突然觉得自己用VSCode记笔记的方案不香了。VSCode虽然对&lt;code&gt;markdown&lt;/code&gt;的支持不错，但毕竟本职工作不是这个，直接拿来做笔记还是不够方便，太笨重了。于是我终于想起之前同学给我安利的&lt;code&gt;markdown&lt;/code&gt;编辑器：Typora。&lt;/p&gt;
-&lt;h2 id=&#34;dalao的笔记&#34;&gt;dalao的笔记&lt;/h2&gt;
-&lt;p&gt;首先看看大佬的笔记：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2020/08/20/1Lr3BfMvSw8haYy.png&#34; alt=&#34;1.png&#34;&gt;&lt;/p&gt;
-&lt;p&gt;好想去偷他的笔记。不过话说他这笔记软件也不错啊，看起来简约清晰，我也有试一试的想法了。&lt;/p&gt;
-&lt;p&gt;他用的笔记软件：&lt;a href=&#34;https://github.com/tsujan/FeatherNotes&#34;&gt;https://github.com/tsujan/FeatherNotes&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;然后就被编译安装劝退了。一个是不太想这么折腾，另一个是这个软件没有提供编译好的包，感觉还是不够放心啊，毕竟如果以后开发者不维护了要再折腾一遍会非常麻烦。&lt;/p&gt;
-&lt;h2 id=&#34;typora同学安利的markdown编辑工具&#34;&gt;Typora，同学安利的markdown编辑工具&lt;/h2&gt;
-&lt;p&gt;与多数markdown编辑工具不同，Typora是所见即所得的markdown编辑工具。为什么程序员偏爱markdown？就是因为markdown可以让我们写作的时候只关注内容本身，而不用太在意排版的问题。而Typora又改变了传统的左右分栏或者点击切换预览的传统markdown编辑模式，用起来就更舒服了。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2020/08/20/V7LzFNRXyT1hUbj.png&#34; alt=&#34;2.png&#34;&gt;&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;h3 id=&#34;安装&#34;&gt;安装&lt;/h3&gt;
-&lt;p&gt;在Ubuntu下安装还是非常方便的：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;# or run:&lt;/span&gt;
-&lt;span style=&#34;color:#228b22&#34;&gt;# sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA300B7755AFCFAE&lt;/span&gt;
-wget -qO - https://typora.io/linux/public-key.asc | sudo apt-key add -
-&lt;span style=&#34;color:#228b22&#34;&gt;# add Typora&amp;#39;s repository&lt;/span&gt;
-sudo add-apt-repository &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;deb https://typora.io/linux ./&amp;#39;&lt;/span&gt;
-sudo apt-get update
-&lt;span style=&#34;color:#228b22&#34;&gt;# install typora&lt;/span&gt;
-sudo apt-get install typora
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;其他系统参考&lt;a href=&#34;https://www.typora.net/#download&#34;&gt;官网&lt;/a&gt;。&lt;/p&gt;
-&lt;h3 id=&#34;复制图片&#34;&gt;复制图片&lt;/h3&gt;
-&lt;p&gt;不过有一点要注意：我们写文档常常要插入一些图片，为了后面和git好配合，我们需要将这些图片也放到当前文件夹里。按下&lt;code&gt;Ctrl+逗号&lt;/code&gt;打开设置，将图片复制到当前文件夹下。如图。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2020/08/20/VWcp6qEGOF9beZf.png&#34; alt=&#34;3.png&#34;&gt;&lt;/p&gt;
-&lt;h3 id=&#34;重要的快捷键&#34;&gt;重要的快捷键&lt;/h3&gt;
-&lt;p&gt;都是重点等于没有重点。我们只要记住能让我们离开鼠标提高效率的就行了。&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;快捷键&lt;/th&gt;
-&lt;th&gt;功能&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;Ctrl+S&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;保存&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;Ctrl+Z&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;撤销&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;Ctrl+Y&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;重做&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;Ctrl+Shift+L&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;侧边栏&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;Ctrl+/&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;切换源代码模式&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;表格中，&lt;code&gt;Ctrl+Enter&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;添加一行&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h2 id=&#34;用git管理笔记&#34;&gt;用git管理笔记&lt;/h2&gt;
-&lt;p&gt;首先什么是git？有些少年区分不了git和github，这是姿势水平还不够啊。听说过GitLab没？听说过码云没？不是修福报的那个马云哦。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;git：当前最流行的分布式版本控制软件&lt;/li&gt;
-&lt;li&gt;github：通过Git进行版本控制的软件源代码托管服务平台&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;鉴于本文并不是为了介绍这二者，本人就简单粗暴放个链接了。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://zh.wikipedia.org/wiki/Git&#34;&gt;https://zh.wikipedia.org/wiki/Git&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://zh.wikipedia.org/wiki/GitHub&#34;&gt;https://zh.wikipedia.org/wiki/GitHub&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;git虽然大多用于管理程序源代码，但用来管理我们的笔记却也正好。虽然笔记对于版本控制的需求不是非常大，但聊胜于无嘛。最重要的是，你可以把笔记借助git同步到github上，什么时候换工作环境完全可以全pull下来，岂不美滋滋？&lt;/p&gt;
-&lt;p&gt;git版本库托管平台有很多，这里我并没有选择github，而是选择了&lt;a href=&#34;https://code.aliyun.com&#34;&gt;阿里云的Code平台&lt;/a&gt;。毕竟在国内速度比较快啊。阿里云单个仓库容量足有2G，足够我们放笔记和笔记涉及的图片了。&lt;/p&gt;
-&lt;p&gt;怎么注册账号，怎么建立仓库我就不说了。clone下来，这就是以后笔记安家的地方了。&lt;/p&gt;
-&lt;h2 id=&#34;自动同步笔记&#34;&gt;自动同步笔记&lt;/h2&gt;
-&lt;p&gt;然而，我们还是需要运行&lt;code&gt;git add&lt;/code&gt;、&lt;code&gt;git commit&lt;/code&gt;、&lt;code&gt;git push&lt;/code&gt;，而且在别处修改了笔记还得手动pull一下。执行的命令这么固定，肯定是要写成脚本(.sync.sh)了。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#658b00&#34;&gt;cd&lt;/span&gt; /home/zero/Documents/Notes
-git pull &amp;amp;
-typora . TODO.md
-git add .
-git commit -m &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Sync&amp;#34;&lt;/span&gt;
-git push
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;注意上面的路径改为你自己笔记文件夹的路径。第二行的&lt;code&gt;&amp;amp;&lt;/code&gt;不要省，我们没必要等pull完才打开Typora，这样可以加快一点启动速度。&lt;/p&gt;
-&lt;p&gt;好了，现在我们执行脚本就能打开Typora，而且所有编辑还能自动同步。由于git默认不允许保留空提交，没有修改的时候也不会产生大量无用的记录，完美。&lt;/p&gt;
-&lt;p&gt;最后写个桌面启动器就大功告成了：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ini&#34; data-lang=&#34;ini&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[Desktop Entry]&lt;/span&gt;
-&lt;span style=&#34;color:#658b00&#34;&gt;Type&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;Application&lt;/span&gt;
-&lt;span style=&#34;color:#658b00&#34;&gt;Icon&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;typora&lt;/span&gt;
-&lt;span style=&#34;color:#658b00&#34;&gt;Name&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;笔记&lt;/span&gt;
-&lt;span style=&#34;color:#658b00&#34;&gt;Exec&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;/home/zero/Documents/Notes/.sync.sh&lt;/span&gt;
-&lt;span style=&#34;color:#658b00&#34;&gt;Terminal&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;false&lt;/span&gt;
-&lt;span style=&#34;color:#658b00&#34;&gt;Hidden&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;false&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;Note.desktop&lt;/code&gt;文件名保存到桌面就成了。&lt;/p&gt;
-&lt;h2 id=&#34;windows下的配置&#34;&gt;Windows下的配置&lt;/h2&gt;
-&lt;p&gt;Git是跨平台的，Typora也是跨平台的，那么我们这个方案自然同样可以跨平台。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Windows下的Typora并没有默认添加环境变量，请手动添加。添加后需要重启。
-首先对应上面的sh，写个cmd(.sync.cmd)：&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cmd&#34; data-lang=&#34;cmd&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;start&lt;/span&gt; /b git pull
-typora . TODO.md
-git add .
-git commit -m &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Sync&amp;#34;&lt;/span&gt;
-git push
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;第一行不一样，这是因为cmd后台执行是用&lt;code&gt;start /b&lt;/code&gt;的，与shell脚本的&lt;code&gt;&amp;amp;&lt;/code&gt;效果是一样的。&lt;/p&gt;
-&lt;p&gt;此时双击这个cmd已经能看到效果了。&lt;/p&gt;
-&lt;p&gt;但cmd执行时会有黑窗口，很影响美观，我们写个vbs脚本(.sync.vbs)来调用它，这样可以不显示黑窗口。&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-vbs&#34; data-lang=&#34;vbs&#34;&gt;WScript.CreateObject(&amp;quot;WScript.Shell&amp;quot;).Run &amp;quot;.sync.cmd&amp;quot;,0
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;最后创建个桌面快捷方式，指向&lt;code&gt;.sync.vbs&lt;/code&gt;，就大功告成了。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;注意：快捷方式的起始目录要指向笔记的目录。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;p&gt;美中不足的是，在Android上我没找到比较合适的git客户端。虽然看到有个商用的评价不错，但为了这点笔记花那么多银子还是不值得。Android上的笔记软件倒是找到一个不错的：&lt;a href=&#34;https://github.com/gsantner/markor&#34;&gt;Markor&lt;/a&gt;。虽然没有Typora的所见即所得那么厉害，但他的编辑界面做的很不错，配上蓝牙键盘，非常适合某些科目上课做笔记。&lt;/p&gt;
-- https://ntutn.top/posts/typora&#43;git%E8%87%AA%E5%8A%A8%E5%90%8C%E6%AD%A5%E4%BD%A0%E7%9A%84%E7%AC%94%E8%AE%B0/ - CC BY-SA 4.0</description>
         </item>
     
     

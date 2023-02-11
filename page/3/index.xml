@@ -7,9 +7,768 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Fri, 16 Dec 2022 17:42:29 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 12 Feb 2023 04:50:03 +0800</lastBuildDate>
     
         <atom:link href="https://ntutn.top/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>装饰模式实现分享功能</title>
+        <link>https://ntutn.top/posts/%E8%A3%85%E9%A5%B0%E6%A8%A1%E5%BC%8F%E5%AE%9E%E7%8E%B0%E5%88%86%E4%BA%AB%E5%8A%9F%E8%83%BD/</link>
+        <pubDate>Mon, 19 Jul 2021 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/%E8%A3%85%E9%A5%B0%E6%A8%A1%E5%BC%8F%E5%AE%9E%E7%8E%B0%E5%88%86%E4%BA%AB%E5%8A%9F%E8%83%BD/</guid>
+        <description>归零幻想 https://ntutn.top/posts/%E8%A3%85%E9%A5%B0%E6%A8%A1%E5%BC%8F%E5%AE%9E%E7%8E%B0%E5%88%86%E4%BA%AB%E5%8A%9F%E8%83%BD/ -&lt;!-- raw HTML omitted --&gt;
+&lt;h2 id=&#34;代码&#34;&gt;代码&lt;/h2&gt;
+&lt;p&gt;业务代码不可能直接贴出来，我按照大致的设计写了如下demo。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;java.lang.IllegalArgumentException&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;() {
+    listOf(
+        ShareData(listOf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图1&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图2&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图3&amp;#34;&lt;/span&gt;), &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;),
+        ShareData(listOf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图1&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图2&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图3&amp;#34;&lt;/span&gt;), &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;),
+        ShareData(listOf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;视频1&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;视频2&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;视频3&amp;#34;&lt;/span&gt;), &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;),
+        ShareData(listOf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;视频1&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;视频2&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;视频3&amp;#34;&lt;/span&gt;), &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;),
+        ShareData(listOf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图1&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;视频2&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图3&amp;#34;&lt;/span&gt;), &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;),
+        ShareData(listOf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图1&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;视频2&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图3&amp;#34;&lt;/span&gt;), &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;)
+    ).forEach {
+        println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;测试&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$it&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;)
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt;.handler.requestPermission()) {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt;.handler.doShare(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt;)
+        } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; {
+            println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;申请权限失败&amp;#34;&lt;/span&gt;)
+        }
+        println()
+    }
+}
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;ShareData&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; urls: List&amp;lt;String&amp;gt;, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; isFromSDK: Boolean) {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;companion&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; IMAGE = &lt;span style=&#34;color:#b452cd&#34;&gt;0x1&lt;/span&gt;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; VIDEO = &lt;span style=&#34;color:#b452cd&#34;&gt;0x2&lt;/span&gt;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; MIX = IMAGE.or(VIDEO)
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; handler &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;by&lt;/span&gt; lazy {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; res: ShareHandler = ShareHandlerImpl()
+        res = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (isFromSDK) ShareFromSdkHandler(res) &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; ShareFromSystemHandler(res)
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; result = &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;
+        urls.forEach { result = result.or(getUrlType(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt;)) }
+        res = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;when&lt;/span&gt; (result) {
+            IMAGE -&amp;gt; ShareImageHandler(res)
+            VIDEO -&amp;gt; ShareVideoHandler(res)
+            MIX -&amp;gt; ShareMixHandler(res)
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; -&amp;gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;throw&lt;/span&gt; IllegalArgumentException(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;不能处理的参数类型&amp;#34;&lt;/span&gt;)
+        }
+        res
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;getUrlType&lt;/span&gt;(url: String): Int = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (url.contains(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;图&amp;#34;&lt;/span&gt;)) IMAGE &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; VIDEO
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;toString&lt;/span&gt;(): String {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;ShareData(urls=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$urls&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;, isFromSDK=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$isFromSDK&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;)&amp;#34;&lt;/span&gt;
+    }
+}
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;interface&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;ShareHandler&lt;/span&gt; {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;validate&lt;/span&gt;(shareData: ShareData): Boolean
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;requestPermission&lt;/span&gt;(): Boolean
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;doShare&lt;/span&gt;(shareData: ShareData)
+}
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;ShareHandlerImpl&lt;/span&gt; : ShareHandler {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;validate&lt;/span&gt;(shareData: ShareData): Boolean {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; shareData.urls.isNotEmpty()
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;requestPermission&lt;/span&gt;() = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;throw&lt;/span&gt; NotImplementedError(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;未实现&amp;#34;&lt;/span&gt;)
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;doShare&lt;/span&gt;(shareData: ShareData) = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;throw&lt;/span&gt; NotImplementedError(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;未实现&amp;#34;&lt;/span&gt;)
+}
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;ShareFromSdkHandler&lt;/span&gt;(shareHandler: ShareHandler) : ShareHandler &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;by&lt;/span&gt; shareHandler {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;requestPermission&lt;/span&gt;(): Boolean {
+        println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;申请SDK分享权限&amp;#34;&lt;/span&gt;)
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
+    }
+}
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;ShareFromSystemHandler&lt;/span&gt;(shareHandler: ShareHandler) : ShareHandler &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;by&lt;/span&gt; shareHandler {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;requestPermission&lt;/span&gt;(): Boolean {
+        println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;申请系统分享权限&amp;#34;&lt;/span&gt;)
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
+    }
+}
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;ShareImageHandler&lt;/span&gt;(shareHandler: ShareHandler) : ShareHandler &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;by&lt;/span&gt; shareHandler {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;doShare&lt;/span&gt;(shareData: ShareData) {
+        println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;分享图片内容&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$shareData&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;)
+    }
+}
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;ShareVideoHandler&lt;/span&gt;(shareHandler: ShareHandler) : ShareHandler &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;by&lt;/span&gt; shareHandler {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;doShare&lt;/span&gt;(shareData: ShareData) {
+        println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;分享视频&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${shareData}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;)
+    }
+}
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;ShareMixHandler&lt;/span&gt;(shareHandler: ShareHandler) : ShareHandler &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;by&lt;/span&gt; shareHandler {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;doShare&lt;/span&gt;(shareData: ShareData) {
+        println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;分享混合内容&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$shareData&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;还用上了位运算和Kotlin的&lt;a href=&#34;https://www.kotlincn.net/docs/reference/delegation.html&#34;&gt;类委托&lt;/a&gt;，太卷了。&lt;/p&gt;
+&lt;p&gt;尝试画一下类图，这都是啥跟啥？&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2021/07/19/aApWiNvOlfmdZTt.png&#34; alt=&#34;ShareHandler.svg.png.lin.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;我对照着菜鸟教程确认了半天，确定这确实是个装饰模式。插入两个省略掉的抽象类就清楚很多了。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2021/07/19/yiSRrDhZx4AT9GI.png&#34; alt=&#34;装饰模式.svg.png.lin.png&#34;&gt;&lt;/p&gt;
+&lt;p&gt;怎么说呢，代码简洁实现优雅，我要学习的还有很多！&lt;/p&gt;
+- https://ntutn.top/posts/%E8%A3%85%E9%A5%B0%E6%A8%A1%E5%BC%8F%E5%AE%9E%E7%8E%B0%E5%88%86%E4%BA%AB%E5%8A%9F%E8%83%BD/ - CC BY-SA 4.0</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>安卓连连看游戏设计</title>
+        <link>https://ntutn.top/posts/%E5%AE%89%E5%8D%93%E8%BF%9E%E8%BF%9E%E7%9C%8B%E6%B8%B8%E6%88%8F%E8%AE%BE%E8%AE%A1/</link>
+        <pubDate>Sun, 25 Apr 2021 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/%E5%AE%89%E5%8D%93%E8%BF%9E%E8%BF%9E%E7%9C%8B%E6%B8%B8%E6%88%8F%E8%AE%BE%E8%AE%A1/</guid>
+        <description>归零幻想 https://ntutn.top/posts/%E5%AE%89%E5%8D%93%E8%BF%9E%E8%BF%9E%E7%9C%8B%E6%B8%B8%E6%88%8F%E8%AE%BE%E8%AE%A1/ -&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;字节取消大小周了，于是周末时间多起来了。虽然想着到处去玩，但现在疫情形势又不好了，于是安心呆在家里当一个肥宅。除了补一补番剧，就是把之前就想过的连连看游戏做出来了。&lt;/p&gt;
+&lt;p&gt;连连看游戏规则简单，点击两个相同的元素，如果他们能在两次拐弯以内连接起来，那么就可以消除。消除后就会出现空位，可以连接的就更多了。在规定时间内连续操作，直到消除所有元素。&lt;/p&gt;
+&lt;p&gt;虽然规则比较简单，但真正动手实现一遍还是很费工夫的。游戏既然做好了，那么我水一篇博客不过分吧:&amp;gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://s3.jpg.cm/2021/08/08/IAjmPL.jpg&#34; alt=&#34;连连看游戏界面&#34;&gt; &lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
+&lt;p&gt;项目的代码我放到了github。写的贼丑，轻喷。 &lt;a href=&#34;https://github.com/zerofancy/match&#34;&gt;https://github.com/zerofancy/match&lt;/a&gt;&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;h2 id=&#34;资源准备&#34;&gt;资源准备&lt;/h2&gt;
+&lt;p&gt;连连看需要一些素材图，可以考虑用水果、动物甚至我同学的头像等，但我想把难度设计高一点，手机屏幕就这么大，图片很小也能有比较高的辨识度，思来想去还是麻将比较合适。&lt;/p&gt;
+&lt;p&gt;幸运的是，我找到了这么一套免费的图片素材，&lt;a href=&#34;http://martinpersson.org/&#34;&gt;Mahjong Icons&lt;/a&gt;，只要提供一个指向这个页面的超链接就可以免费用。&lt;/p&gt;
+&lt;p&gt;另外还需要一个应用图标，这个我是直接在&lt;a href=&#34;https://iconpark.oceanengine.com/home&#34;&gt;Icon Park&lt;/a&gt;上找了一个。&lt;/p&gt;
+&lt;p&gt;接下来将素材导入到项目，为了随处使用方便，我还定义到了一个类中：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.match&lt;/span&gt;
+&lt;span style=&#34;color:#228b22&#34;&gt;/**
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * 麻将牌
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; */&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Mahjong&lt;/span&gt; {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; bamboos = listOf(
+        R.drawable.bamboo1,
+        R.drawable.bamboo2,
+        R.drawable.bamboo3,
+        R.drawable.bamboo4,
+        R.drawable.bamboo5,
+        R.drawable.bamboo6,
+        R.drawable.bamboo7,
+        R.drawable.bamboo8,
+        R.drawable.bamboo9
+    )
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; dragons = listOf(
+        R.drawable.dragon_chun,
+        R.drawable.dragon_green,
+        R.drawable.dragon_haku
+    )
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; faceDown = R.drawable.face_down
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; mans = listOf(
+        R.drawable.man1,
+        R.drawable.man2,
+        R.drawable.man3,
+        R.drawable.man4,
+        R.drawable.man5,
+        R.drawable.man6,
+        R.drawable.man7,
+        R.drawable.man8,
+        R.drawable.man9
+    )
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; pins = listOf(
+        R.drawable.pin1,
+        R.drawable.pin2,
+        R.drawable.pin3,
+        R.drawable.pin4,
+        R.drawable.pin5,
+        R.drawable.pin6,
+        R.drawable.pin7,
+        R.drawable.pin8,
+        R.drawable.pin9
+    )
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; redDoras = listOf(
+        R.drawable.red_dora_bamboo5,
+        R.drawable.red_dora_man5,
+        R.drawable.red_dora_pin5
+    )
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; winds = listOf(
+        R.drawable.wind_east,
+        R.drawable.wind_north,
+        R.drawable.wind_south,
+        R.drawable.wind_west
+    )
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; front = bamboos + dragons + mans + pins + redDoras + winds
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; all = front + faceDown
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;界面设计&#34;&gt;界面设计&lt;/h2&gt;
+&lt;p&gt;参考上面截图，游戏区域其实是相当简单的，但麻将格子太多，如何显示到界面中呢？我采取的是使用多个ImageView，然后用代码动态添加的方式。这样我可以将ImageView也存成一个二维数组，正好跟游戏数据的二维数组对应起来，写起来更方便。&lt;/p&gt;
+&lt;p&gt;这样我的界面就比较简单了，只要准备上方计时器的TextView和主要区域的ImageView就可以了。在&lt;code&gt;onCreate()&lt;/code&gt;生命周期我创建并添加这些ImageView：&lt;/p&gt;
+&lt;p&gt;这里我计算了中间区域的尺寸，让游戏区域为位于中间区域的一个近似正方形：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;        &lt;span style=&#34;color:#228b22&#34;&gt;// post一下，不然取不到
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        imageContainer.post {
+            &lt;span style=&#34;color:#228b22&#34;&gt;// 中间正方形区域宽高
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;            areaWidth = min(imageContainer.width, imageContainer.height - horizontalGap * (N - &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;))
+            imageViewArray = Array(N) { i -&amp;gt;
+                Array(N) { j -&amp;gt;
+                    ImageView(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;).apply {
+                        imageContainer.addView(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;)
+                        layoutParams = FrameLayout.LayoutParams(areaWidth / N, areaWidth / N)
+                        y =
+                            (i * (areaWidth / N + horizontalGap)).toFloat() - areaWidth / &lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt; - horizontalGap * N / &lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt; + imageContainer.height / &lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;
+                        x = (j * areaWidth / N).toFloat() - areaWidth / &lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt; + imageContainer.width / &lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;
+                        scaleType = ImageView.ScaleType.CENTER_INSIDE
+                        setOnClickListener {
+                            viewModel.itemClick(i + &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;, j + &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;)
+                        }
+                    }
+                }
+            }
+            &lt;span style=&#34;color:#228b22&#34;&gt;// 配置改变不重建
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;            savedInstanceState ?: kotlin.run {
+                viewModel.&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;init&lt;/span&gt;(N, N, mahjongSize, maxGameTime, stepGameTime)
+                viewModel.start()
+            }
+        }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;数据结构定义&#34;&gt;数据结构定义&lt;/h2&gt;
+&lt;p&gt;对于每一个麻将牌，我们需要关心他们显示的内容和当前的状态（是否被选中，是否已经消除），因而定义这样的数据结构：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;/**
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * 麻将数据类型
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * @param id 本次游戏中的编号（不是资源id）
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * @param isSelected 麻将是否被选中
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * @param isDeleted 麻将是否已经被删除
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; */&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;data&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MahjongType&lt;/span&gt;(
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; id: Int,
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; isSelected: Boolean = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;,
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; isDeleted: Boolean = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;
+)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;在ViewModel中，我用一个二维数组来存储游戏数据&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; mahjongArea: Array&amp;lt;Array&amp;lt;MahjongType&amp;gt;&amp;gt; = arrayOf()
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;set&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;对于选中点，需要记录它的行数和列数&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; selectedIndex: Pair&amp;lt;Int, Int&amp;gt;? = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;游戏有三种事件：游戏状态改变（开始、结束、暂停等）、游戏区域刷新、倒计时改变。这些我定义为LiveData。这里的refreshArea是一个Unit类型的LiveData，因为不需要传递什么数据，只要通知这个事件到来就可以了。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;    &lt;span style=&#34;color:#228b22&#34;&gt;// 游戏区域刷新事件
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; _refreshArea = MutableLiveData&amp;lt;Unit&amp;gt;()
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; refreshArea: LiveData&amp;lt;Unit&amp;gt;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;get&lt;/span&gt;() = _refreshArea
+    &lt;span style=&#34;color:#228b22&#34;&gt;// 游戏状态改变
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; _gameState = MutableLiveData&amp;lt;GameState&amp;gt;()
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; gameState: LiveData&amp;lt;GameState&amp;gt;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;get&lt;/span&gt;() = _gameState
+    &lt;span style=&#34;color:#228b22&#34;&gt;// 游戏倒计时
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; _gameTime = MutableLiveData&amp;lt;Int&amp;gt;()
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; gameTime: LiveData&amp;lt;Int&amp;gt;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;get&lt;/span&gt;() = _gameTime
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;enum&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;GameState&lt;/span&gt; {
+        PENDING,
+        RUNNING,
+        PAUSE,
+        SUCCEEDED,
+        FAILED
+    }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;游戏数据初始化&#34;&gt;游戏数据初始化&lt;/h2&gt;
+&lt;p&gt;游戏数据初始化时，我们要将所有变量置为初始状态。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;游戏区域 为了计算方便，我们实际存储的游戏区域比显示出来的游戏区域实际上是多一圈的，多一圈空格子，这样边上的元素计算能否连通的时候就不需要特殊处理&lt;/li&gt;
+&lt;li&gt;游戏中，麻将元素应该是成对的，所以我首先选择一些元素，然后随机添加到一个list中，每个添加两份，最后再打乱顺序&lt;/li&gt;
+&lt;li&gt;游戏中，所有需要后面判断和比较差异的复制都应该是深拷贝，否则他们是同一个对象，怎么比都是一样&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;    &lt;span style=&#34;color:#228b22&#34;&gt;/**
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     * 初始化游戏
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     * @param rows 游戏区域行数
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     * @param cols 游戏区域列数
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     * @param itemCount 使用的麻将牌的数量
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     */&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;init&lt;/span&gt;(rows: Int, cols: Int, itemCount: Int, maxGameTime: Int, stepGameTime: Int) {
+        require(rows * cols % &lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt; == &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;) { &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;区域应该有偶数个元素&amp;#34;&lt;/span&gt; }
+        require(itemCount &amp;lt;= Mahjong.front.size) { &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;麻将牌资源不足&amp;#34;&lt;/span&gt; }
+        require(maxGameTime &amp;gt; &lt;span style=&#34;color:#b452cd&#34;&gt;5&lt;/span&gt;) { &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;游戏时间过短&amp;#34;&lt;/span&gt; }
+        require(stepGameTime &amp;gt;= &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;) { &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;stepGameTime参数错误&amp;#34;&lt;/span&gt; }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.rows = rows
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.cols = cols
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.maxGameTime = maxGameTime
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.stepGameTime = stepGameTime
+        &lt;span style=&#34;color:#228b22&#34;&gt;// +2是为了给周围放上一圈空格子，计算的时候方便
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        mahjongArea = Array(rows + &lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;) {
+            Array(cols + &lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;) {
+                MahjongType(id = Mahjong.faceDown, isDeleted = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;)
+            }
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; totalItemCollection = Mahjong.front.shuffled().subList(&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;, itemCount)
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; res = mutableListOf&amp;lt;MahjongType&amp;gt;()
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt; (res.size &amp;lt; rows * cols) {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; item = MahjongType(id = totalItemCollection.random())
+            res.add(item)
+            &lt;span style=&#34;color:#228b22&#34;&gt;// 深拷贝
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;            res.add(item.copy())
+        }
+        res.shuffle()
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; (i &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;in&lt;/span&gt; res.indices) {
+            mahjongArea[i / cols + &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;][i % cols + &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;] = res[i]
+        }
+        selectedIndex = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;
+        _refreshArea.value = Unit
+        _gameState.value = GameState.PENDING
+    }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;游戏界面显示&#34;&gt;游戏界面显示&lt;/h2&gt;
+&lt;p&gt;我将每个ImageView对应的数据存储到它的tag中，这样在收到区域刷新事件时就可以直接比较判断是否要刷新了。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;        viewModel.refreshArea.observe(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;) {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; (i &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt; until N) {
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; (j &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt; until N) {
+                    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; dataItem = viewModel.mahjongArea[i + &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;][j + &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;]
+                    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; viewItem = imageViewArray[i][j]
+                    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (viewItem.tag != dataItem) {
+                        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (dataItem.isDeleted) {
+                            viewItem.setImageDrawable(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;)
+                        } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; {
+                            viewItem.setImageResource(dataItem.id)
+                        }
+                        viewItem.scaleType = ImageView.ScaleType.CENTER_INSIDE
+                        viewItem.tag = dataItem.copy() &lt;span style=&#34;color:#228b22&#34;&gt;// 深拷贝，否则一直一样
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (dataItem.isSelected) {
+                            viewItem.colorFilter = grayColorMatrixColorFilter
+                        } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; {
+                            viewItem.clearColorFilter()
+                        }
+                    }
+                }
+            }
+        }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;消除&#34;&gt;消除&lt;/h3&gt;
+&lt;p&gt;对于被消除的元素，通过&lt;code&gt;viewItem.setImageDrawable(null)&lt;/code&gt;清除显示内容。&lt;/p&gt;
+&lt;h3 id=&#34;选中&#34;&gt;选中&lt;/h3&gt;
+&lt;p&gt;对于被选中的元素，我通过设置&lt;code&gt;colorFilter&lt;/code&gt;的方式调整图片饱和度来做到高亮显示的目的。这个&lt;code&gt;colorFilter&lt;/code&gt;定义如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; grayColorMatrixColorFilter &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;by&lt;/span&gt; lazy {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; colorMatrix = ColorMatrix().apply {
+            setSaturation(&lt;span style=&#34;color:#b452cd&#34;&gt;25f&lt;/span&gt;)
+        }
+        ColorMatrixColorFilter(colorMatrix)
+    }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;麻将牌点击事件&#34;&gt;麻将牌点击事件&lt;/h2&gt;
+&lt;h3 id=&#34;选中-1&#34;&gt;选中&lt;/h3&gt;
+&lt;p&gt;首先我们只需要处理没有被消除的元素&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (mahjongArea[row][col].isDeleted) {
+            &lt;span style=&#34;color:#228b22&#34;&gt;// 当前点击元素已经消除
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;
+        }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果之前没有选中元素，那么我们应该直接选中这个元素&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (selectedIndex == &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;) {
+            &lt;span style=&#34;color:#228b22&#34;&gt;// 没有已经选中的，选中点击项
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;            mahjongArea[row][col].isSelected = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
+            selectedIndex = row to col
+            _refreshArea.value = Unit
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;
+        }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;消除-1&#34;&gt;消除&lt;/h3&gt;
+&lt;p&gt;否则就判断一下两个元素能否配对消除，并判断是否已经全部消除&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; previousSelected = mahjongArea[selectedIndex!!.first][selectedIndex!!.second]
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; currentSelected = mahjongArea[row][col]
+        &lt;span style=&#34;color:#228b22&#34;&gt;// 判断是否可消除
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (checkIsCanDelete(row to col, selectedIndex!!)) {
+            previousSelected.isSelected = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;
+            previousSelected.isDeleted = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
+            currentSelected.isDeleted = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
+            selectedIndex = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; gameTime = (_gameTime.value ?: &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;) + stepGameTime
+            _gameTime.value = gameTime.takeIf { &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt; &amp;lt;= maxGameTime } ?: maxGameTime
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (mahjongArea.all { &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt;.all { &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt;.isDeleted } }) {
+                &lt;span style=&#34;color:#228b22&#34;&gt;// 所有麻将已经消除，游戏胜利
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                _gameState.value = GameState.SUCCEEDED
+            }
+        } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; {
+            previousSelected.isSelected = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;
+            selectedIndex = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;
+        }
+        _refreshArea.value = Unit
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;那么如何判断能否消除呢？&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;    &lt;span style=&#34;color:#228b22&#34;&gt;/**
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     * 判断两个元素是否能消除
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     */&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;checkIsCanDelete&lt;/span&gt;(itemIndex1: Pair&amp;lt;Int, Int&amp;gt;, itemIndex2: Pair&amp;lt;Int, Int&amp;gt;): Boolean {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (itemIndex1 == itemIndex2) {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (mahjongArea.getByPair(itemIndex1).id != mahjongArea.getByPair(itemIndex2).id) {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; VisitDirection.values().any {
+            checkIsCanMatch(itemIndex1, itemIndex2, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt;)
+        }
+    }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果是同一个元素，肯定不能消除；如果两个元素不同，那也不能消除。在排除了这两种情况后，要判断能否通过两次以内的拐弯就到达就需要BFS了。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;如果当前元素当前方向的下一个元素可以与目标元素拐n次弯相连，那么当前元素可以与目标元素拐n次弯相连&lt;/li&gt;
+&lt;li&gt;如果当前元素非当前方向的下一个元素可以与目标元素拐n次弯相连，那么当前元素可以与目标元素拐n+1次弯相连&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;这里我用递归实现了这个算法，但实现的……有点丑&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;    &lt;span style=&#34;color:#228b22&#34;&gt;/**
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     * 判断两个在不同位置的相同元素是否能消除
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     * BFS
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     */&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;checkIsCanMatch&lt;/span&gt;(
+        currentPoint: Pair&amp;lt;Int, Int&amp;gt;,
+        targetPoint: Pair&amp;lt;Int, Int&amp;gt;,
+        visitDirection: VisitDirection,
+        maxRounds: Int = &lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;
+    ): Boolean {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; nextPoints = currentPoint.getNextPoints(visitDirection, targetPoint).filter {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (maxRounds &amp;gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;) &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt;.third == &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (targetPoint &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;in&lt;/span&gt; nextPoints.map { &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt;.first }) {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; nextPoints.isNotEmpty() &amp;amp;&amp;amp; nextPoints.any {
+            checkIsCanMatch(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt;.first, targetPoint, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt;.second, maxRounds - &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt;.third)
+        }
+    }
+    &lt;span style=&#34;color:#228b22&#34;&gt;/**
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     * 当前结点是否在游戏区域内
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     */&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;Pair&lt;/span&gt;&amp;lt;Int, Int&amp;gt;.isPointValid() =
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.first &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0.&lt;/span&gt;.(rows + &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;) &amp;amp;&amp;amp; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.second &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0.&lt;/span&gt;.(cols + &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;)
+    &lt;span style=&#34;color:#228b22&#34;&gt;/**
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     * 当前访问方向
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     */&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;enum&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;VisitDirection&lt;/span&gt; {
+        TOP,
+        BOTTOM,
+        LEFT,
+        RIGHT
+    }
+    &lt;span style=&#34;color:#228b22&#34;&gt;/**
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     * 获取当前点的下一个点
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     * @param currentDirection 当前朝向的方向
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     * @return 一个集合，集合中有0～3个三元组，每个三元组有{点，朝向，需要拐弯次数}
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     */&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;Pair&lt;/span&gt;&amp;lt;Int, Int&amp;gt;.getNextPoints(
+        currentDirection: VisitDirection,
+        targetPoint: Pair&amp;lt;Int, Int&amp;gt;
+    ): Set&amp;lt;Triple&amp;lt;Pair&amp;lt;Int, Int&amp;gt;, VisitDirection, Int&amp;gt;&amp;gt; {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; res = mutableSetOf&amp;lt;Triple&amp;lt;Pair&amp;lt;Int, Int&amp;gt;, VisitDirection, Int&amp;gt;&amp;gt;()
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; nextPoint = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;when&lt;/span&gt; (currentDirection) {
+            VisitDirection.TOP -&amp;gt; first - &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt; to second
+            VisitDirection.BOTTOM -&amp;gt; first + &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt; to second
+            VisitDirection.LEFT -&amp;gt; first to second - &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;
+            VisitDirection.RIGHT -&amp;gt; first to second + &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; &lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;(&lt;/span&gt;leftPoint, leftDirection) = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;when&lt;/span&gt; (currentDirection) {
+            VisitDirection.TOP -&amp;gt; first to second - &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt; to VisitDirection.LEFT
+            VisitDirection.BOTTOM -&amp;gt; first to second + &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt; to VisitDirection.RIGHT
+            VisitDirection.LEFT -&amp;gt; first + &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt; to second to VisitDirection.BOTTOM
+            VisitDirection.RIGHT -&amp;gt; first - &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt; to second to VisitDirection.TOP
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; &lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;(&lt;/span&gt;rightPoint, rightDirection) = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;when&lt;/span&gt; (currentDirection) {
+            VisitDirection.TOP -&amp;gt; first to second + &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt; to VisitDirection.RIGHT
+            VisitDirection.BOTTOM -&amp;gt; first to second - &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt; to VisitDirection.LEFT
+            VisitDirection.LEFT -&amp;gt; first - &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt; to second to VisitDirection.TOP
+            VisitDirection.RIGHT -&amp;gt; first + &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt; to second to VisitDirection.BOTTOM
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (nextPoint.isPointCanUse(targetPoint)) {
+            res.add(Triple(nextPoint, currentDirection, &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;))
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (leftPoint.isPointCanUse(targetPoint)) {
+            res.add(Triple(leftPoint, leftDirection, &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;))
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (rightPoint.isPointCanUse(targetPoint)) {
+            res.add(Triple(rightPoint, rightDirection, &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;))
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; res
+    }
+    &lt;span style=&#34;color:#228b22&#34;&gt;/**
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     * 判断某个点在游戏区域内，而且是空白格子或目标格子
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     */&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;Pair&lt;/span&gt;&amp;lt;Int, Int&amp;gt;.isPointCanUse(targetPoint: Pair&amp;lt;Int, Int&amp;gt;) =
+        isPointValid() &amp;amp;&amp;amp; (mahjongArea.getByPair(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;).isDeleted || &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt; == targetPoint)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;计时系统的设计&#34;&gt;计时系统的设计&lt;/h2&gt;
+&lt;p&gt;在VM中我有一个方法，当游戏在进行状态，每调用一次时间就减一。而在每成功消除一次，时间就加3，这样难度就不会太高。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;    &lt;span style=&#34;color:#228b22&#34;&gt;/**
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     * 每秒钟被调用，计算游戏倒计时
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     */&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;timeTick&lt;/span&gt;() {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (_gameState.value != GameState.RUNNING) {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; gameTime = (_gameTime.value ?: &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;) - &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;
+        _gameTime.value = gameTime
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (gameTime &amp;lt;= &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;) {
+            _gameState.value = GameState.FAILED
+        }
+    }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;我利用了handler的机制来实现每秒调用一次&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;: &lt;/span&gt;&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Runnable&lt;/span&gt; {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;run&lt;/span&gt;() {
+                viewModel.timeTick()
+                handler.postDelayed(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;, &lt;span style=&#34;color:#b452cd&#34;&gt;1000L&lt;/span&gt;)
+            }
+        }.run()
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;因为判断了游戏状态，所以暂停和继续也很好做了：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;    &lt;span style=&#34;color:#228b22&#34;&gt;/**
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     * 游戏暂停
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     */&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;pause&lt;/span&gt;() {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (_gameState.value != GameState.RUNNING) {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;
+        }
+        _gameState.value = GameState.PAUSE
+    }
+    &lt;span style=&#34;color:#228b22&#34;&gt;/**
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     * 继续游戏
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     */&lt;/span&gt;
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;resume&lt;/span&gt;() {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (_gameState.value != GameState.PAUSE) {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;
+        }
+        _gameState.value = GameState.RUNNING
+    }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;还有啥&#34;&gt;还有啥&lt;/h2&gt;
+&lt;p&gt;拓展函数确实是一个很好用的东西，很多通用的转换操作可以定义成拓展函数，用起来贼舒服。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;/**
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * 将dp值转换为px
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; */&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; Number.toPxFloat: Float
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;get&lt;/span&gt;() {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; r: Resources = Resources.getSystem()
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; px =
+            TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.toFloat(), r.displayMetrics)
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; px
+    }
+&lt;span style=&#34;color:#228b22&#34;&gt;/**
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * 将dp值转换为px
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; */&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; Number.toPx: Int
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;get&lt;/span&gt;() = toPxFloat.roundToInt()
+&lt;span style=&#34;color:#228b22&#34;&gt;/**
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * 将px值转换为dp
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; */&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; Number.toDpFloat: Float
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;get&lt;/span&gt;() {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; scale: Float = Resources.getSystem().displayMetrics.density
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; (&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.toFloat() * scale + &lt;span style=&#34;color:#b452cd&#34;&gt;0.5f&lt;/span&gt;)
+    }
+&lt;span style=&#34;color:#228b22&#34;&gt;/**
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * 将px值转换为dp
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; */&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; Number.toDp: Int
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;get&lt;/span&gt;() = toDpFloat.roundToInt()
+&lt;span style=&#34;color:#228b22&#34;&gt;/**
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * 使用一个Int对来取二维数组中的元素
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; */&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &amp;lt;&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;T&lt;/span&gt;&amp;gt; &lt;span style=&#34;color:#008b45&#34;&gt;Array&lt;/span&gt;&amp;lt;Array&amp;lt;T&amp;gt;&amp;gt;.getByPair(pair: Pair&amp;lt;Int, Int&amp;gt;) = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;[pair.first][pair.second]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;a href=&#34;https://developer.android.com/jetpack/compose&#34;&gt;JetPack Compose&lt;/a&gt;发布了，也许有机会我会重构下这个小游戏的界面，你可以不抱期待等等看。&lt;/p&gt;
+&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;hr&gt;
+&lt;ol&gt;
+&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;p&gt;本图片由&lt;a href=&#34;https://imagelol.com/?utm_source=iplaysoft.com&amp;amp;hmsr=iplaysoft.com&#34;&gt;笑果图床&lt;/a&gt; 提供支持。&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/section&gt;
+- https://ntutn.top/posts/%E5%AE%89%E5%8D%93%E8%BF%9E%E8%BF%9E%E7%9C%8B%E6%B8%B8%E6%88%8F%E8%AE%BE%E8%AE%A1/ - CC BY-SA 4.0</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>ClassLoader双亲委托机制探究</title>
+        <link>https://ntutn.top/posts/classloader%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%89%98%E6%9C%BA%E5%88%B6%E6%8E%A2%E7%A9%B6/</link>
+        <pubDate>Sun, 11 Apr 2021 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/classloader%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%89%98%E6%9C%BA%E5%88%B6%E6%8E%A2%E7%A9%B6/</guid>
+        <description>归零幻想 https://ntutn.top/posts/classloader%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%89%98%E6%9C%BA%E5%88%B6%E6%8E%A2%E7%A9%B6/ -&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;最近在研究抖音进入热点内流的耗时问题，种种线索指向了类加载耗时上。为此，我研究了Java类加载的双亲委托机制，并尝试给出了优化建议。&lt;/p&gt;
+&lt;h2 id=&#34;双亲委托机制&#34;&gt;双亲委托机制&lt;/h2&gt;
+&lt;p&gt;双亲委托机制中最重要的是loadClass方法，让我们看看它是怎么实现的。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;protected&lt;/span&gt; Class&amp;lt;?&amp;gt; loadClass(String name, &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;boolean&lt;/span&gt; resolve)
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;throws&lt;/span&gt; ClassNotFoundException
+    {
+            &lt;span style=&#34;color:#228b22&#34;&gt;// First, check if the class has already been loaded
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;            Class&amp;lt;?&amp;gt; c = findLoadedClass(name); &lt;span style=&#34;color:#228b22&#34;&gt;// 已加载过直接返回
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (c == &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;) {
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;try&lt;/span&gt; {
+                    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (parent != &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;) {
+                        c = parent.&lt;span style=&#34;color:#658b00&#34;&gt;loadClass&lt;/span&gt;(name, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;); &lt;span style=&#34;color:#228b22&#34;&gt;//尝试让parent加载
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                    } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; {
+                        c = findBootstrapClassOrNull(name); &lt;span style=&#34;color:#228b22&#34;&gt;// bootstrap class loader是否加载过
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                    }
+                } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;catch&lt;/span&gt; (ClassNotFoundException e) {
+                    &lt;span style=&#34;color:#228b22&#34;&gt;// ClassNotFoundException thrown if class not found
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                    &lt;span style=&#34;color:#228b22&#34;&gt;// from the non-null parent class loader
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                }
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (c == &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;) {
+                    &lt;span style=&#34;color:#228b22&#34;&gt;// If still not found, then invoke findClass in order
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                    &lt;span style=&#34;color:#228b22&#34;&gt;// to find the class.
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                    c = findClass(name); &lt;span style=&#34;color:#228b22&#34;&gt;// 自己加载（找不到会抛出异常）
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                }
+            }
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; c;
+    }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;findClass就是根据类名去加载具体类的方法，则整个加载机制就很清楚了。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;首先部分类会被BootstrapClassLoader加载，这部分是native实现。&lt;/li&gt;
+&lt;li&gt;会先尝试让parent加载&lt;/li&gt;
+&lt;li&gt;parent找不到时才会自己加载&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;如果我们能创建一个ClassLoader，将它插入到PathClassLoader和BootstrapClassLoader之间，那么所有被PathClassLoader加载的类就都可以记录下来了。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;h2 id=&#34;pathclassloaderproxy实现&#34;&gt;PathClassLoaderProxy实现&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Talk is cheap, show me the code.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;ClassLoaderProxy&lt;/span&gt; : ClassLoader() {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;findClass&lt;/span&gt;(name: String?): Class&amp;lt;*&amp;gt; {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (name != &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt; &amp;amp;&amp;amp; recording) loadedClass.add(name)
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;throw&lt;/span&gt; ClassNotFoundException()
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;companion&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; loadedClass = mutableSetOf&amp;lt;String&amp;gt;()
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; recording = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; hooked = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;
+        &lt;span style=&#34;color:#707a7c&#34;&gt;@JvmStatic&lt;/span&gt;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;inject&lt;/span&gt;(context: Context): Boolean {
+            Log.w(ClassLoaderWrapper2::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;.java.simpleName, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Hook开始&amp;#34;&lt;/span&gt;)
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;try&lt;/span&gt; {
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; originClassLoader = context.classLoader
+                Log.d(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;ClassLoader类型&amp;#34;&lt;/span&gt;, originClassLoader.javaClass.simpleName)
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; delegateClassLoader = ClassLoaderWrapper2()
+                setParent(delegateClassLoader, originClassLoader.parent)
+                setParent(originClassLoader, delegateClassLoader)
+                Log.w(ClassLoaderWrapper2::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;.java.simpleName, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Hook成功&amp;#34;&lt;/span&gt;)
+                hooked = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
+            } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;catch&lt;/span&gt; (e: Throwable) {
+            }
+            Log.e(ClassLoaderWrapper2::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;.java.simpleName, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Hook没有成功&amp;#34;&lt;/span&gt;)
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;setParent&lt;/span&gt;(classLoader: ClassLoader, newParent: ClassLoader) {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; parentField = ClassLoader::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;.java.getDeclaredField(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;parent&amp;#34;&lt;/span&gt;)
+            parentField.isAccessible = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
+            parentField.&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;set&lt;/span&gt;(classLoader, newParent)
+        }
+        &lt;span style=&#34;color:#707a7c&#34;&gt;@Throws&lt;/span&gt;(IllegalStateException::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;)
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;checkHookState&lt;/span&gt;() {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (!hooked) {
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;throw&lt;/span&gt; IllegalStateException(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;hookPackageClassLoader没有执行成功！&amp;#34;&lt;/span&gt;)
+            }
+        }
+        &lt;span style=&#34;color:#707a7c&#34;&gt;@Throws&lt;/span&gt;(IllegalStateException::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;, RuntimeException::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;)
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;startRecord&lt;/span&gt;() {
+            checkHookState()
+            synchronized(recording) {
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (recording) {
+                    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;throw&lt;/span&gt; RuntimeException(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;已经存在正在监听的任务！&amp;#34;&lt;/span&gt;)
+                }
+                loadedClass.clear()
+                recording = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
+            }
+        }
+        &lt;span style=&#34;color:#707a7c&#34;&gt;@Throws&lt;/span&gt;(IllegalStateException::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;, RuntimeException::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;)
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;endRecord&lt;/span&gt;(block: (Set&amp;lt;String&amp;gt;) -&amp;gt; Unit) {
+            checkHookState()
+            synchronized(recording) {
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (!recording) {
+                    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;throw&lt;/span&gt; RuntimeException(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;当前没有在监听！&amp;#34;&lt;/span&gt;)
+                }
+                recording = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;
+                block.invoke(loadedClass)
+            }
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;因为我们并不需要做实际的加载，只要抛出异常，加载还是交给我们儿子PathClassLoader就可以了。&lt;/p&gt;
+&lt;h2 id=&#34;记录加载时间&#34;&gt;记录加载时间&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.hookpackageclassloader&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.content.Context&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.util.Log&lt;/span&gt;
+&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;ClassLoaderWrapper&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; realClassLoader: ClassLoader) : ClassLoader() {
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; findClassMethod &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;by&lt;/span&gt; lazy {
+        ClassLoader::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;.java.getDeclaredMethod(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;findClass&amp;#34;&lt;/span&gt;, String::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;.java).apply {
+            isAccessible = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
+        }
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;loadClass&lt;/span&gt;(name: String?, resolve: Boolean): Class&amp;lt;*&amp;gt; {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; startTime = System.currentTimeMillis()
+        &lt;span style=&#34;color:#228b22&#34;&gt;// First, check if the class has already been loaded
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; c: Class&amp;lt;*&amp;gt;? = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;try&lt;/span&gt; {
+            c = parent.loadClass(name)
+        } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;catch&lt;/span&gt; (e: ClassNotFoundException) {
+            &lt;span style=&#34;color:#228b22&#34;&gt;// ClassNotFoundException thrown if class not found
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;            &lt;span style=&#34;color:#228b22&#34;&gt;// from the non-null parent class loader
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (c == &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;) {
+            c = findClassMethod.invoke(realClassLoader, name) &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;as&lt;/span&gt; Class&amp;lt;*&amp;gt;?
+        }
+        Log.e(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;classloader&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;load class: &lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$name&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;)
+        loadedClasses.add(name.toString() to System.currentTimeMillis() - startTime)
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; c!!
+    }
+    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;companion&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; {
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; loadedClasses = mutableSetOf&amp;lt;Pair&amp;lt;String, Long&amp;gt;&amp;gt;()
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; recording = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; hooked = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; preloadClasses = setOf(
+            &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;kotlin.collections.CollectionsKt&amp;#34;&lt;/span&gt;,
+            &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;kotlin.Triple&amp;#34;&lt;/span&gt;,
+            &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;top.ntutn.hookpackageclassloader.ClassLoaderWrapper&amp;#34;&lt;/span&gt;,
+            &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;top.ntutn.hookpackageclassloader.ClassLoaderWrapper&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\$&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;Companion&amp;#34;&lt;/span&gt;
+        )
+        &lt;span style=&#34;color:#707a7c&#34;&gt;@JvmStatic&lt;/span&gt;
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;inject&lt;/span&gt;(context: Context): Boolean {
+            &lt;span style=&#34;color:#228b22&#34;&gt;// 提前加载避免死循环
+&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;            preloadClasses.forEach { Class.forName(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt;) }
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;try&lt;/span&gt; {
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; originClassLoader = context.classLoader
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; originParent = originClassLoader.parent
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; applicationInfo = context.applicationInfo
+                applicationInfo.sourceDir
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; delegateClassLoader = ClassLoaderWrapper3(originClassLoader)
+                setParent(delegateClassLoader, originParent)
+                setParent(originClassLoader, delegateClassLoader)
+                hooked = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
+            } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;catch&lt;/span&gt; (e: Exception) {
+                Log.e(ClassLoaderWrapper3::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;.simpleName, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;hook失败&amp;#34;&lt;/span&gt;)
+            }
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;
+        }
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;setParent&lt;/span&gt;(classLoader: ClassLoader, newParent: ClassLoader) {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; parentField = ClassLoader::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;.java.getDeclaredField(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;parent&amp;#34;&lt;/span&gt;)
+            parentField.isAccessible = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
+            parentField.&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;set&lt;/span&gt;(classLoader, newParent)
+        }
+        &lt;span style=&#34;color:#707a7c&#34;&gt;@Throws&lt;/span&gt;(IllegalStateException::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;)
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;checkHookState&lt;/span&gt;() {
+            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (!hooked) {
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;throw&lt;/span&gt; IllegalStateException(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;hook没有执行成功！&amp;#34;&lt;/span&gt;)
+            }
+        }
+        &lt;span style=&#34;color:#707a7c&#34;&gt;@Throws&lt;/span&gt;(IllegalStateException::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;, RuntimeException::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;)
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;startRecord&lt;/span&gt;() {
+            checkHookState()
+            synchronized(recording) {
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (recording) {
+                    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;throw&lt;/span&gt; RuntimeException(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;已经存在正在监听的任务！&amp;#34;&lt;/span&gt;)
+                }
+                loadedClasses.clear()
+                recording = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
+            }
+        }
+        &lt;span style=&#34;color:#707a7c&#34;&gt;@Throws&lt;/span&gt;(IllegalStateException::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;, RuntimeException::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;)
+        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;endRecord&lt;/span&gt;(block: (Set&amp;lt;Pair&amp;lt;String, Long&amp;gt;&amp;gt;) -&amp;gt; Unit) {
+            checkHookState()
+            synchronized(recording) {
+                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (!recording) {
+                    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;throw&lt;/span&gt; RuntimeException(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;当前没有在监听！&amp;#34;&lt;/span&gt;)
+                }
+                recording = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;
+                block.invoke(loadedClasses)
+            }
+        }
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;相比前面方案来说，注意点就是不要搞出死循环来，另外就是Kotlin自己的类似乎并不会被BootstrapClassLoader加载，需要在计时前加载一下。&lt;/p&gt;
+&lt;h2 id=&#34;反射进行类加载&#34;&gt;反射进行类加载&lt;/h2&gt;
+&lt;p&gt;非常简单，就是用&lt;code&gt;Class.forName()&lt;/code&gt;去加载了下这些类。&lt;/p&gt;
+&lt;p&gt;既然用了反射，混淆问题怎么解决？&lt;/p&gt;
+&lt;p&gt;幸运的是，对于一些简单的场景，ProGuard是可以帮我们处理的，其中就包括了直接使用&lt;code&gt;Class.forName(&amp;quot;some class&amp;quot;)&lt;/code&gt;的情况。参见&lt;a href=&#34;https://www.guardsquare.com/en/products/proguard/manual/introduction&#34;&gt;ProGuard manual | Introduction | Guardsquare&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;遗憾的是，当这个字符串穿上马夹（比如放到了某个变量里再传给这个函数）似乎ProGuard就不认识了。因而，我只好用笨方法生成一大堆Class.forName()了。&lt;/p&gt;
+&lt;p&gt;在demo中，这个方法正常work了，但在抖音的release包多半类会反射失败，此法不可行。按照我的思路之后如果还想继续看就只好看下怎样设计一个gradle插件，编译时从生成的mapping.txt解析出这些Class混淆后的名字再打到抖音的包里。成本很高而且我目前大概没有能力完成。&lt;/p&gt;
+&lt;p&gt;一次失败的尝试呢。但总归也算学到一些东西。&lt;/p&gt;
+- https://ntutn.top/posts/classloader%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%89%98%E6%9C%BA%E5%88%B6%E6%8E%A2%E7%A9%B6/ - CC BY-SA 4.0</description>
+        </item>
     
     
     
@@ -851,237 +1610,6 @@ defaultConfig {
 &lt;/ol&gt;
 &lt;/section&gt;
 - https://ntutn.top/posts/%E6%88%AA%E5%9B%BE%E4%B8%8D%E5%8F%AF%E4%BF%A1%E6%88%91%E4%BB%AC%E8%83%BD%E4%BF%A1%E4%BB%80%E4%B9%88/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>android项目开发：Broadcast</title>
-        <link>https://ntutn.top/posts/broadcast/</link>
-        <pubDate>Thu, 24 Dec 2020 03:11:37 +0800</pubDate>
-        
-        <guid>https://ntutn.top/posts/broadcast/</guid>
-        <description>归零幻想 https://ntutn.top/posts/broadcast/ -&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;仍然是《第一行代码》的学习笔记，安卓内置广播机制。&lt;/p&gt;
-&lt;p&gt;Android中每个应用程序都可以对自己感兴趣的广播进行注册，包括来自系统的，和其他应用程序的。&lt;/p&gt;
-&lt;p&gt;广播分为标准广播和有序广播。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;标准广播异步执行，所有BroadcastReceiver几乎同时收到广播的消息。&lt;/li&gt;
-&lt;li&gt;有序广播 同步执行，只有前一个Receiver逻辑执行完后才会传递给下一个，且可以将广播截断。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;h2 id=&#34;接收系统广播&#34;&gt;接收系统广播&lt;/h2&gt;
-&lt;p&gt;BroadcastReceiver的&lt;code&gt;onReceive()&lt;/code&gt;方法是在主线程调用的，不应执行耗时操作。但开一个新线程操作也是不可靠的&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;。&lt;/p&gt;
-&lt;h3 id=&#34;监听时间变化动态注册&#34;&gt;监听时间变化（动态注册）&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MainActivity&lt;/span&gt; : AppCompatActivity() {
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; timeReceiver = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;: &lt;/span&gt;&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;BroadcastReceiver&lt;/span&gt;() {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onReceive&lt;/span&gt;(context: Context?, intent: Intent?) {
-            text.text = Date(System.currentTimeMillis()).toString()
-        }
-    }
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onCreate&lt;/span&gt;(savedInstanceState: Bundle?) {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; intentFilter = IntentFilter()
-        intentFilter.addAction(Intent.ACTION_TIME_TICK)
-        registerReceiver(timeReceiver, intentFilter)
-    }
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onDestroy&lt;/span&gt;() {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onDestroy()
-        unregisterReceiver(timeReceiver)
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;开机启动静态注册&#34;&gt;开机启动（静态注册）&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;
-&lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt;&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;manifest&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;xmlns:android=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;http://schemas.android.com/apk/res/android&amp;#34;&lt;/span&gt;
-    &lt;span style=&#34;color:#658b00&#34;&gt;package=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;top.ntutn.broadcasttest&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;gt;&lt;/span&gt;
-
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;uses-permission&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;android:name=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;android.permission.RECEIVE_BOOT_COMPLETED&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;application&lt;/span&gt;
-        &lt;span style=&#34;color:#658b00&#34;&gt;android:allowBackup=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;true&amp;#34;&lt;/span&gt;
-        &lt;span style=&#34;color:#658b00&#34;&gt;android:icon=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;@mipmap/ic_launcher&amp;#34;&lt;/span&gt;
-        &lt;span style=&#34;color:#658b00&#34;&gt;android:label=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;@string/app_name&amp;#34;&lt;/span&gt;
-        &lt;span style=&#34;color:#658b00&#34;&gt;android:roundIcon=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;@mipmap/ic_launcher_round&amp;#34;&lt;/span&gt;
-        &lt;span style=&#34;color:#658b00&#34;&gt;android:supportsRtl=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;true&amp;#34;&lt;/span&gt;
-        &lt;span style=&#34;color:#658b00&#34;&gt;android:theme=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;@style/Theme.BroadcastTest&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;gt;&lt;/span&gt;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;receiver&lt;/span&gt;
-            &lt;span style=&#34;color:#658b00&#34;&gt;android:name=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;.BootCompleteReceiver&amp;#34;&lt;/span&gt;
-            &lt;span style=&#34;color:#658b00&#34;&gt;android:enabled=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;true&amp;#34;&lt;/span&gt;
-            &lt;span style=&#34;color:#658b00&#34;&gt;android:exported=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;true&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;gt;&lt;/span&gt;
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;intent-filter&amp;gt;&lt;/span&gt;
-                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;action&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;android:name=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;android.intent.action.BOOT_COMPLETED&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/intent-filter&amp;gt;&lt;/span&gt;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/receiver&amp;gt;&lt;/span&gt;
-
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;activity&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;android:name=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;.MainActivity&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;gt;&lt;/span&gt;
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;intent-filter&amp;gt;&lt;/span&gt;
-                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;action&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;android:name=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;android.intent.action.MAIN&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
-
-                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;category&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;android:name=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;android.intent.category.LAUNCHER&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/intent-filter&amp;gt;&lt;/span&gt;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/activity&amp;gt;&lt;/span&gt;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/application&amp;gt;&lt;/span&gt;
-
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/manifest&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.broadcasttest&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.content.BroadcastReceiver&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.content.Context&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.content.Intent&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.widget.Toast&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;BootCompleteReceiver&lt;/span&gt; : BroadcastReceiver() {
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onReceive&lt;/span&gt;(context: Context, intent: Intent) {
-        Toast.makeText(context, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Boot Complete&amp;#34;&lt;/span&gt;, Toast.LENGTH_LONG).show()
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;发送自定义广播&#34;&gt;发送自定义广播&lt;/h2&gt;
-&lt;h3 id=&#34;普通广播&#34;&gt;普通广播&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; intent = Intent(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;top.ntutn.broadcasttest.MY_BROADCAST&amp;#34;&lt;/span&gt;)
-intent.`package&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;`&lt;/span&gt; = packageName
-sendBroadcast(intent)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;intent中可以带上一些其他信息。&lt;/p&gt;
-&lt;p&gt;不指定package默认发送隐式广播，无法被静态注册的Receiver接收。指定package指定接收者。&lt;/p&gt;
-&lt;h3 id=&#34;有序广播&#34;&gt;有序广播&lt;/h3&gt;
-&lt;p&gt;通过设置intent-filter的&lt;code&gt;android:priority&lt;/code&gt;属性来调整各个接收者的优先级。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; intent = Intent(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;top.ntutn.broadcasttest.MY_BROADCAST&amp;#34;&lt;/span&gt;)
-intent.`package&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;`&lt;/span&gt; = packageName
-sendOrderedBroadcast(intent, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;第二个参数是个有关权限的。&lt;/p&gt;
-&lt;p&gt;先接收到的可以用&lt;code&gt;abortBroadcast()&lt;/code&gt;方法阻止广播继续传播。&lt;/p&gt;
-&lt;h2 id=&#34;broadcast和eventbus&#34;&gt;Broadcast和Eventbus&lt;/h2&gt;
-&lt;p&gt;今天学习了这章之后我第一个联想到的是之前学习的EventBus，它们在这里起到的作用相似。便好奇它们的区别，实际项目中的选择。&lt;/p&gt;
-&lt;p&gt;不过在网上搜到的回答千篇一律，各个都是CV能手，说EventBus更轻量级更灵活，但逻辑复杂时难以理出一个清楚的时间流程什么的。&lt;/p&gt;
-&lt;p&gt;先这么理解吧，以后工程经验丰富后再对比学习。&lt;/p&gt;
-&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
-&lt;hr&gt;
-&lt;ol&gt;
-&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;&lt;a href=&#34;https://blog.csdn.net/lyabc123456/article/details/83104832&#34;&gt;为什么不能在BroadcastReceiver中开启子线程&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/section&gt;
-- https://ntutn.top/posts/broadcast/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>禁用macOS的窗口标签</title>
-        <link>https://ntutn.top/posts/%E7%A6%81%E7%94%A8macos%E7%9A%84%E7%AA%97%E5%8F%A3%E6%A0%87%E7%AD%BE/</link>
-        <pubDate>Tue, 22 Dec 2020 03:11:37 +0800</pubDate>
-        
-        <guid>https://ntutn.top/posts/%E7%A6%81%E7%94%A8macos%E7%9A%84%E7%AA%97%E5%8F%A3%E6%A0%87%E7%AD%BE/</guid>
-        <description>归零幻想 https://ntutn.top/posts/%E7%A6%81%E7%94%A8macos%E7%9A%84%E7%AA%97%E5%8F%A3%E6%A0%87%E7%AD%BE/ -&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;作为一个对更新相对激进的用户，我当然是第一时间升级了最新的macOS Big Sur。说实在的，这名字给我的第一印象并不好，因为被我看成了『Big Bug』。&lt;/p&gt;
-&lt;p&gt;圆角变大了，还有我一开始比较喜欢的功能，姑且称之为窗口标签。在BigSur中，当你打开两个全屏的Android Studio，它们将出现在同一个窗口，窗口上方出现不同的标签页，和浏览器一样。&lt;/p&gt;
-&lt;p&gt;好景不长，这个功能表现很不稳定，我不得不考虑干掉这个功能。如果只是没有成功触发也就算了，大不了当没升级用，但它常常会把一些弹出窗口也搞成和原窗口并列的标签。比如当你rename一个文件时，弹出的窗口有时就会并列到标签上，然后Android Studio就卡死了。&lt;/p&gt;
-&lt;p&gt;好吧，既然它开始影响我的工作效率了，我就找了找禁用的方法&lt;sup id=&#34;fnref:1&#34;&gt;&lt;a href=&#34;#fn:1&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;defaults write com.google.android.studio AppleWindowTabbingMode manual
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;!-- raw HTML omitted --&gt;
-&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
-&lt;hr&gt;
-&lt;ol&gt;
-&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
-&lt;p&gt;来自&lt;a href=&#34;https://www.reddit.com/r/androiddev/comments/jtbl4m/has_anyone_updated_to_macos_big_sur_and_is/&#34;&gt;https://www.reddit.com/r/androiddev/comments/jtbl4m/has_anyone_updated_to_macos_big_sur_and_is/&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/section&gt;
-- https://ntutn.top/posts/%E7%A6%81%E7%94%A8macos%E7%9A%84%E7%AA%97%E5%8F%A3%E6%A0%87%E7%AD%BE/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>android项目开发：Fragment</title>
-        <link>https://ntutn.top/posts/fragment/</link>
-        <pubDate>Mon, 21 Dec 2020 03:11:37 +0800</pubDate>
-        
-        <guid>https://ntutn.top/posts/fragment/</guid>
-        <description>归零幻想 https://ntutn.top/posts/fragment/ -&lt;!-- raw HTML omitted --&gt;
-&lt;h1 id=&#34;fragment&#34;&gt;Fragment&lt;/h1&gt;
-&lt;h2 id=&#34;fragment的使用方式&#34;&gt;Fragment的使用方式&lt;/h2&gt;
-&lt;h3 id=&#34;静态添加fragment&#34;&gt;静态添加Fragment&lt;/h3&gt;
-&lt;p&gt;Fragment的写法&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt;&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;LinearLayout&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;xmlns:android=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;http://schemas.android.com/apk/res/android&amp;#34;&lt;/span&gt;
-              &lt;span style=&#34;color:#658b00&#34;&gt;android:orientation=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;vertical&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_width=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;match_parent&amp;#34;&lt;/span&gt;
-              &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_height=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;match_parent&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;gt;&lt;/span&gt;
-
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;Button&lt;/span&gt;
-            &lt;span style=&#34;color:#658b00&#34;&gt;android:id=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;@+id/button&amp;#34;&lt;/span&gt;
-            &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_width=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;wrap_content&amp;#34;&lt;/span&gt;
-            &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_height=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;wrap_content&amp;#34;&lt;/span&gt;
-            &lt;span style=&#34;color:#658b00&#34;&gt;android:text=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;button&amp;#34;&lt;/span&gt;
-            &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_gravity=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;center_horizontal&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
-
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/LinearLayout&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.fragmenttest&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.os.Bundle&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.view.LayoutInflater&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.view.View&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.view.ViewGroup&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;androidx.fragment.app.Fragment&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;LeftFragment&lt;/span&gt; : Fragment() {
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onCreateView&lt;/span&gt;(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; inflater.inflate(R.layout.left_fragment, container, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;)
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;静态添加Fragment&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;
-&lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt;&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;LinearLayout&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;xmlns:android=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;http://schemas.android.com/apk/res/android&amp;#34;&lt;/span&gt;
-              &lt;span style=&#34;color:#658b00&#34;&gt;xmlns:tools=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;http://schemas.android.com/tools&amp;#34;&lt;/span&gt;
-              &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_width=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;match_parent&amp;#34;&lt;/span&gt;
-              &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_height=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;match_parent&amp;#34;&lt;/span&gt;
-              &lt;span style=&#34;color:#658b00&#34;&gt;android:orientation=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;horizontal&amp;#34;&lt;/span&gt;
-              &lt;span style=&#34;color:#658b00&#34;&gt;tools:context=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;.MainActivity&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;gt;&lt;/span&gt;
-
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;fragment&lt;/span&gt;
-            &lt;span style=&#34;color:#658b00&#34;&gt;android:id=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;@+id/leftFragment&amp;#34;&lt;/span&gt;
-            &lt;span style=&#34;color:#658b00&#34;&gt;android:name=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;top.ntutn.fragmenttest.LeftFragment&amp;#34;&lt;/span&gt;
-            &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_width=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;0dp&amp;#34;&lt;/span&gt;
-            &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_height=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;match_parent&amp;#34;&lt;/span&gt;
-            &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_weight=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
-
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;fragment&lt;/span&gt;
-            &lt;span style=&#34;color:#658b00&#34;&gt;android:id=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;@+id/rightFragment&amp;#34;&lt;/span&gt;
-            &lt;span style=&#34;color:#658b00&#34;&gt;android:name=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;top.ntutn.fragmenttest.RightFragment&amp;#34;&lt;/span&gt;
-            &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_width=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;0dp&amp;#34;&lt;/span&gt;
-            &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_height=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;match_parent&amp;#34;&lt;/span&gt;
-            &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_weight=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
-
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/LinearLayout&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;!-- raw HTML omitted --&gt;
-&lt;h3 id=&#34;动态添加fragment&#34;&gt;动态添加Fragment&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; fragmentManager = supportFragmentManager
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; transaction = fragmentManager.beginTransaction()
-transaction.replace(R.id.rightLayout, fragment)
-transaction.commit()
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;在fragment中实现返回栈&#34;&gt;在Fragment中实现返回栈&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; fragmentManager = supportFragmentManager
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; transaction = fragmentManager.beginTransaction()
-transaction.replace(R.id.rightLayout, fragment)
-transaction.addToBackStack(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;)
-transaction.commit()
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;fragment与activity交互&#34;&gt;Fragment与Activity交互&lt;/h3&gt;
-&lt;p&gt;Activity中获取Fragment&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; fragment = supportFragmentManager.findFragmentById(R.id.leftFragment) &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;as&lt;/span&gt; LeftFragment
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;或使用&lt;code&gt;kotlin-android-extensions&lt;/code&gt;&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; fragment = leftFragment &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;as&lt;/span&gt; LeftFragment
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;fragment的生命周期&#34;&gt;Fragment的生命周期&lt;/h2&gt;
-&lt;p&gt;和Activity的生命周期类似，重点是几个方法：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;onAttach() 当Fragment和Activity建立关联的时候调用&lt;/li&gt;
-&lt;li&gt;onCreateView() 为Fragment创建视图时调用&lt;/li&gt;
-&lt;li&gt;onActivityCreated() 确保与Fragment相关联的Activity创建完毕时调用。&lt;/li&gt;
-&lt;li&gt;onDestroyView() 与Fragment关联的视图被移除时调用。&lt;/li&gt;
-&lt;li&gt;onDetach() 当Fragment与Activity解除关联时调用&lt;/li&gt;
-&lt;/ul&gt;
-- https://ntutn.top/posts/fragment/ - CC BY-SA 4.0</description>
         </item>
     
     
