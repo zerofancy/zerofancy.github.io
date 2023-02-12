@@ -1,28 +1,87 @@
 <!DOCTYPE html>
 <html><head>
 <title>给APP添加构建信息</title>
-<meta charset="utf-8"/>
-<meta content="IE=edge" name="X-UA-Compatible"/>
-<meta content="" name="google-site-verification"/>
-<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"/>
-<meta content="telephone=no" name="format-detection"/>
-<meta content="这两天在琢磨一个问题，一个APP是怎么知道自己是怎么来的呢？ 一个应用得知道自己是怎么来的，这样出了问题才知道该找谁。举个例子，当应用发生了一个线上crash，崩溃信息收集上来，然后我们打开堆栈一看懵了——这个发生崩溃的`v5.c`是哪个类呢？" name="description"/>
-<meta content="webkit" name="renderer"/>
-<meta content="#ffffff" name="theme-color"/>
-<meta content="给APP添加构建信息" property="og:title"/>
-<meta content="这两天在琢磨一个问题，一个APP是怎么知道自己是怎么来的呢？ 一个应用得知道自己是怎么来的，这样出了问题才知道该找谁。举个例子，当应用发生了一个线上crash，崩溃信息收集上来，然后我们打开堆栈一看懵了——这个发生崩溃的`v5.c`是哪个类呢？" property="og:description"/>
-<meta content="article" property="og:type"/>
-<meta content="https://ntutn.top/posts/%E7%BB%99app%E6%B7%BB%E5%8A%A0%E6%9E%84%E5%BB%BA%E4%BF%A1%E6%81%AF/" property="og:url"/><meta content="posts" property="article:section"/>
-<meta content="2022-01-16T23:24:16+08:00" property="article:published_time"/>
-<meta content="2022-01-16T23:24:16+08:00" property="article:modified_time"/><meta content="归零幻想" property="og:site_name"/>
-<link href="//images.ntutn.top/favicon.ico" rel="icon"/>
-<script src="/js/toc.js"></script>
-<link href="/vendor/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-<link href="/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen" rel="stylesheet"/>
-<link href="/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css?family=Material+Icons" rel="stylesheet"/>
-<script data-cf-beacon='{"token": 5a03d307f5214109a1e7c8b2cf306a3d' defer="" src="https://static.cloudflareinsights.com/beacon.min.js">
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="这两天在琢磨一个问题，一个APP是怎么知道自己是怎么来的呢？ 一个应用得知道自己是怎么来的，这样出了问题才知道该找谁。举个例子，当应用发生了一个线上crash，崩溃信息收集上来，然后我们打开堆栈一看懵了——这个发生崩溃的`v5.c`是哪个类呢？">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+<meta property="og:title" content="给APP添加构建信息" />
+<meta property="og:description" content="这两天在琢磨一个问题，一个APP是怎么知道自己是怎么来的呢？ 一个应用得知道自己是怎么来的，这样出了问题才知道该找谁。举个例子，当应用发生了一个线上crash，崩溃信息收集上来，然后我们打开堆栈一看懵了——这个发生崩溃的`v5.c`是哪个类呢？" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ntutn.top/posts/%E7%BB%99app%E6%B7%BB%E5%8A%A0%E6%9E%84%E5%BB%BA%E4%BF%A1%E6%81%AF/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-01-16T23:24:16+08:00" />
+<meta property="article:modified_time" content="2022-01-16T23:24:16+08:00" /><meta property="og:site_name" content="归零幻想" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+<link rel="icon" href="//images.ntutn.top/favicon.ico">
+
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+<link rel="stylesheet" href="/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
+
+
+
+<link rel="stylesheet" href="/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
+
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+<script defer
+	src='https://static.cloudflareinsights.com/beacon.min.js'
+	data-cf-beacon='{"token": 5a03d307f5214109a1e7c8b2cf306a3d'>
 </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <style>
     pre code {
         color: black;
@@ -30,7 +89,7 @@
     }
 </style>
 <script src="https://unpkg.com/zoomtastic@2.2.1"></script>
-<script data-selector="code.language-kotlin" src="https://unpkg.com/kotlin-playground@1"></script>
+<script src="https://unpkg.com/kotlin-playground@1" data-selector="code.language-kotlin"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function(event) { 
         document.querySelectorAll("div.post-body-wrapper img").forEach(function(element){
@@ -60,204 +119,477 @@
 	})();
 
 </script>
+
 </head>
 <body>
-<div id="app"><div class="side-container" id="sideContainer">
-<a class="a-block nav-head false" href="https://ntutn.top/">
-<div class="nav-title">
+    	<div id="app"><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://ntutn.top/">
+    
+        <div class="nav-title">
             归零幻想
         </div>
-<div class="nav-subtitle">
+        
+        <div class="nav-subtitle">
             零点还不算熬夜
         </div>
-</a>
-<div class="nav-link-list">
-<a class="a-block nav-link-item false" href="/project">
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/project">
                 项目
             </a>
-<a class="a-block nav-link-item false" href="/tags">
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
                 标签
             </a>
-<a class="a-block nav-link-item active" href="/posts">
+            
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
                 归档
             </a>
-<a class="a-block nav-link-item false" href="/friends">
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/friends">
                 友链
             </a>
-<a class="a-block nav-link-item false" href="/about">
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/about">
                 关于
             </a>
-<a class="a-block nav-link-item false" href="/index.xml">
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/index.xml">
                 RSS
             </a>
-</div>
-<div class="nav-footer">
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
         
 Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
-<br/>
-移植自 <a href="https://mak1t0.cc/" rel="noreferrer noopener" target="_blank">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" rel="noreferrer noopener" target="_blank">Journal.</a> <br/>
-<br/>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
 
-©
+&copy;
 	
 	CC BY-SA 4.0
 	
 
     </div>
-</div><div class="extra-container" id="extraContainer">
-<div :class="{ invisible: scrollY &lt;= 140 }" class="toc animated-visibility">
-<div class="toc-content">
-<center>- 目录 -</center>
-<ul>
-<li>
-<a href="#%e7%bb%99app%e6%b7%bb%e5%8a%a0%e6%9e%84%e5%bb%ba%e4%bf%a1%e6%81%af" id="给app添加构建信息-nav" onclick="onNavClick(`#给app添加构建信息-nav`)">
+    
+</div><div id="extraContainer" class="extra-container">
+    
+    
+    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%bb%99app%e6%b7%bb%e5%8a%a0%e6%9e%84%e5%bb%ba%e4%bf%a1%e6%81%af" onclick="onNavClick(`#给app添加构建信息-nav`)" id="给app添加构建信息-nav">
 									给APP添加构建信息
 								</a>
-</li>
-<ul>
-<li>
-<a href="#%e5%8c%ba%e5%88%86%e4%b8%8d%e5%90%8c%e6%9e%84%e5%bb%ba%e7%bb%93%e6%9e%9c" id="区分不同构建结果-nav" onclick="onNavClick(`#区分不同构建结果-nav`)">
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%8c%ba%e5%88%86%e4%b8%8d%e5%90%8c%e6%9e%84%e5%bb%ba%e7%bb%93%e6%9e%9c" onclick="onNavClick(`#区分不同构建结果-nav`)" id="区分不同构建结果-nav">
 									区分不同构建结果
 								</a>
-</li>
-<li>
-<a href="#%e5%b0%86%e4%bf%a1%e6%81%af%e4%bc%a0%e7%bb%99%e5%ba%94%e7%94%a8" id="将信息传给应用-nav" onclick="onNavClick(`#将信息传给应用-nav`)">
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%b0%86%e4%bf%a1%e6%81%af%e4%bc%a0%e7%bb%99%e5%ba%94%e7%94%a8" onclick="onNavClick(`#将信息传给应用-nav`)" id="将信息传给应用-nav">
 									将信息传给应用
 								</a>
-</li>
-<li>
-<a href="#%e4%bf%9d%e5%ad%98%e6%9e%84%e5%bb%ba%e4%bf%a1%e6%81%af" id="保存构建信息-nav" onclick="onNavClick(`#保存构建信息-nav`)">
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e4%bf%9d%e5%ad%98%e6%9e%84%e5%bb%ba%e4%bf%a1%e6%81%af" onclick="onNavClick(`#保存构建信息-nav`)" id="保存构建信息-nav">
 									保存构建信息
 								</a>
-</li>
-</ul>
-</ul></div>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
 </div>
-<div class="pagination">
-<a :class="{ invisible: scrollY == 0 }" class="pagination-action animated-visibility" href="#top" id="globalBackToTop">
-<i class="material-icons pagination-action-icon">
+    
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
                 keyboard_arrow_up
             </i>
-</a>
-<a class="pagination-action" id="darkModeToggleButton" type="button">
-<span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
                 dark_mode
             </span>
-</a>
+        </a>
+        
+        
+    </div>
 </div>
-</div>
-<div class="single-column-drawer-container" id="drawer" v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
-<div class="drawer-content">
-<div class="drawer-menu">
-<a class="a-block drawer-menu-item false" href="/project">
+<div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/project">
                     项目
                 </a>
-<a class="a-block drawer-menu-item false" href="/tags">
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
                     标签
                 </a>
-<a class="a-block drawer-menu-item active" href="/posts">
+                
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
                     归档
                 </a>
-<a class="a-block drawer-menu-item false" href="/friends">
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/friends">
                     友链
                 </a>
-<a class="a-block drawer-menu-item false" href="/about">
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/about">
                     关于
                 </a>
-<a class="a-block drawer-menu-item false" href="/index.xml">
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/index.xml">
                     RSS
                 </a>
-<div class="toc">
-<div class="toc-content">
-<center>- 目录 -</center>
-<ul>
-<li>
-<a href="#%e7%bb%99app%e6%b7%bb%e5%8a%a0%e6%9e%84%e5%bb%ba%e4%bf%a1%e6%81%af" id="给app添加构建信息-nav" onclick="onNavClick(`#给app添加构建信息-nav`)">
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e7%bb%99app%e6%b7%bb%e5%8a%a0%e6%9e%84%e5%bb%ba%e4%bf%a1%e6%81%af" onclick="onNavClick(`#给app添加构建信息-nav`)" id="给app添加构建信息-nav">
 									给APP添加构建信息
 								</a>
-</li>
-<ul>
-<li>
-<a href="#%e5%8c%ba%e5%88%86%e4%b8%8d%e5%90%8c%e6%9e%84%e5%bb%ba%e7%bb%93%e6%9e%9c" id="区分不同构建结果-nav" onclick="onNavClick(`#区分不同构建结果-nav`)">
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%8c%ba%e5%88%86%e4%b8%8d%e5%90%8c%e6%9e%84%e5%bb%ba%e7%bb%93%e6%9e%9c" onclick="onNavClick(`#区分不同构建结果-nav`)" id="区分不同构建结果-nav">
 									区分不同构建结果
 								</a>
-</li>
-<li>
-<a href="#%e5%b0%86%e4%bf%a1%e6%81%af%e4%bc%a0%e7%bb%99%e5%ba%94%e7%94%a8" id="将信息传给应用-nav" onclick="onNavClick(`#将信息传给应用-nav`)">
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%b0%86%e4%bf%a1%e6%81%af%e4%bc%a0%e7%bb%99%e5%ba%94%e7%94%a8" onclick="onNavClick(`#将信息传给应用-nav`)" id="将信息传给应用-nav">
 									将信息传给应用
 								</a>
-</li>
-<li>
-<a href="#%e4%bf%9d%e5%ad%98%e6%9e%84%e5%bb%ba%e4%bf%a1%e6%81%af" id="保存构建信息-nav" onclick="onNavClick(`#保存构建信息-nav`)">
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e4%bf%9d%e5%ad%98%e6%9e%84%e5%bb%ba%e4%bf%a1%e6%81%af" onclick="onNavClick(`#保存构建信息-nav`)" id="保存构建信息-nav">
 									保存构建信息
 								</a>
-</li>
-</ul>
-</ul></div>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
 </div>
-</div>
-</div>
+            
+        </div>
+    </div>
 </div>
 <transition name="fade">
-<div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
 </transition>
-<nav class="navbar sticky-top navbar-light single-column-nav-container" id="navBar">
-<div class="nav-background" id="navBackground"></div>
-<div class="container container-narrow nav-content">
-<button class="nav-dropdown-toggle" id="nav_dropdown_btn" type="button" v-on:click="toggleDrawer">
-<i class="material-icons">
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
                 menu
             </i>
-</button>
-<a class="navbar-brand" href="https://ntutn.top/" id="navTitle">
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://ntutn.top/">
             归零幻想
         </a>
-<button class="nav-darkmode-toggle" id="darkModeToggleButton2" type="button">
-<i class="material-icons" id="darkModeToggleIcon2">
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
                 dark_mode
             </i>
-</button>
-</div>
+        </button>
+        
+    </div>
 </nav>
-<div class="single-column-header-container" id="pageHead" v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
-<a href="https://ntutn.top/">
-<div class="single-column-header-title">归零幻想</div>
-<div class="single-column-header-subtitle">零点还不算熬夜</div>
-</a>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://ntutn.top/">
+        <div class="single-column-header-title">归零幻想</div>
+        
+        <div class="single-column-header-subtitle">零点还不算熬夜</div>
+        
+
+    </a>
 </div>
-<div id="content">
-<div class="stream-container" id="streamContainer">
-<div class="post-list-container post-list-container-shadow">
-<div class="post">
-<div class="post-head-wrapper" style="background-image: url('https://images.ntutn.top/2022/01/55dc59fdd208c87b155b6a3947fc77f4.png')">
-<div class="post-title">
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+                
+            
+
+            <div class="post-head-wrapper"
+                
+                    
+                    
+                    style="background-image: url('https://images.ntutn.top/2022/01/55dc59fdd208c87b155b6a3947fc77f4.png')"
+                    
+                
+            >
+                <div class="post-title">
                     给APP添加构建信息
                     
                     <div class="post-subtitle">
                         这两天在琢磨一个问题，一个APP是怎么知道自己是怎么来的呢？ 一个应用得知道自己是怎么来的，这样出了问题才知道该找谁。举个例子，当应用发生了一个线上crash，崩溃信息收集上来，然后我们打开堆栈一看懵了——这个发生崩溃的`v5.c`是哪个类呢？
                     </div>
-<div class="post-meta">
-<time itemprop="datePublished">
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
                             2022-01-16 23:24
                         </time>
-<i class="material-icons" style="">folder</i>
-<a href="/categories/%E6%8A%80%E5%B7%A7">技巧</a>
-                                 
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/%E6%8A%80%E5%B7%A7">技巧</a>
+                                &nbsp;
                         
 
                         
                             <i class="material-icons" style="">label</i>
-<a href="/tags/%E5%AE%89%E5%8D%93">安卓</a>
-                                 
+                            
+                                <a href="/tags/%E5%AE%89%E5%8D%93">安卓</a>
+                                &nbsp;
                             
                                 <a href="/tags/kotlin">Kotlin</a>
-                                 
+                                &nbsp;
                             
                                 <a href="/tags/gradle">gradle</a>
-                                 
+                                &nbsp;
                             
                                 <a href="/tags/buildconfig">BuildConfig</a>
-                                 
+                                &nbsp;
                             
                         
                         
@@ -273,19 +605,22 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
                             34 s.
                         
                     </div>
-</div>
-</div>
-<div class="post-body-wrapper">
-<div class="post-body" v-pre="">
-<!-- raw HTML omitted -->
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <!-- raw HTML omitted -->
 <h1 id="给app添加构建信息">给APP添加构建信息</h1>
 <blockquote>
 <p>这两天在琢磨一个问题，一个APP是怎么知道自己是怎么来的呢？
 一个应用得知道自己是怎么来的，这样出了问题才知道该找谁。举个例子，当应用发生了一个线上crash，崩溃信息收集上来，然后我们打开堆栈一看懵了——这个发生崩溃的<code>v5.c</code>是哪个类呢？</p>
 </blockquote>
-<p><img alt="crash" src="https://images.ntutn.top/2022/01/9616ad8a32ec122442705981e9e97847.png"/></p>
+<p><img src="https://images.ntutn.top/2022/01/9616ad8a32ec122442705981e9e97847.png" alt="crash"></p>
 <p>显然，代码被混淆过，我们要拿到编译时生成的<code>mapping.txt</code>来还原堆栈，如图</p>
-<p><img alt="retrace" src="https://images.ntutn.top/2022/01/aaa2591c565385ad28ce781047c567e5.png"/></p>
+<p><img src="https://images.ntutn.top/2022/01/aaa2591c565385ad28ce781047c567e5.png" alt="retrace"></p>
 <p>**然而，我们编译了很多次，客官您要的是哪次的mapping文件呢？**显然，我们不仅要保留每次构建的相关信息，还得能准确区分开每次构建的产物，能做到有问题立即查询到对应构建信息。</p>
 <p>应用需要知道自己是“<em>怎么来的</em>”。</p>
 <!-- raw HTML omitted -->
@@ -296,85 +631,117 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 </ol>
 <p>看上去前者更优雅，但一个commit id上并不一定只有一个成功的构建，比如你做一应用叫“快音”，测试通过后调整了一些编译选项打出线上包，此时只根据commit id就无法确定是对应测试包的构建还是线上包了。</p>
 <p>所以，最实在的方法还是后者。</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4" tabindex="0"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">runShellCommand</span>(command: String): String {
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">runShellCommand</span>(command: String): String {
     <span style="color:#8b008b;font-weight:bold">val</span> byteOut = ByteArrayOutputStream()
     project.exec {
-        commandLine = command.split(<span style="color:#cd5555">" "</span>)
+        commandLine = command.split(<span style="color:#cd5555">&#34; &#34;</span>)
         standardOutput = byteOut
     }
     <span style="color:#8b008b;font-weight:bold">return</span> String(byteOut.toByteArray())
 }
 <span style="color:#8b008b;font-weight:bold">val</span> buildNumber = UUID.randomUUID()
-<span style="color:#8b008b;font-weight:bold">val</span> gitBranch = runShellCommand(<span style="color:#cd5555">"git branch --show-current"</span>).trim()
-<span style="color:#8b008b;font-weight:bold">val</span> gitCommitId = runShellCommand(<span style="color:#cd5555">"git rev-parse HEAD"</span>).trim()
+<span style="color:#8b008b;font-weight:bold">val</span> gitBranch = runShellCommand(<span style="color:#cd5555">&#34;git branch --show-current&#34;</span>).trim()
+<span style="color:#8b008b;font-weight:bold">val</span> gitCommitId = runShellCommand(<span style="color:#cd5555">&#34;git rev-parse HEAD&#34;</span>).trim()
 <span style="color:#8b008b;font-weight:bold">val</span> buildTimeMILLIS = System.currentTimeMillis()
 </code></pre></div><h2 id="将信息传给应用">将信息传给应用</h2>
 <p>不知道大家有没有这种习惯，在开发时加一些测试代码时判断只在Debug版本生效，即</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4" tabindex="0"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">if</span> (BuildConfig.DEBUG) {
-    Toast.makeText(applicationContext, <span style="color:#cd5555">"test"</span>, Toast.LENGTH_SHORT).show()
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">if</span> (BuildConfig.DEBUG) {
+    Toast.makeText(applicationContext, <span style="color:#cd5555">&#34;test&#34;</span>, Toast.LENGTH_SHORT).show()
 }
-</code></pre></div><p>这样即使我真的忘记删除这段代码也不会影响到线上，让用户看到个“test”感到莫名其妙。这里用的<code>BuildConfig</code>就是在Gradle构建时生成的一个类，里面包含了一些有关当前构建的信息<sup id="fnref:1"><a class="footnote-ref" href="#fn:1" role="doc-noteref">1</a></sup>。</p>
+</code></pre></div><p>这样即使我真的忘记删除这段代码也不会影响到线上，让用户看到个“test”感到莫名其妙。这里用的<code>BuildConfig</code>就是在Gradle构建时生成的一个类，里面包含了一些有关当前构建的信息<sup id="fnref:1"><a href="#fn:1" class="footnote-ref" role="doc-noteref">1</a></sup>。</p>
 <p>而幸运的是，官方也提供了方法让我们可以往<code>BuildConfig</code>里面自己加东西，于是</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4" tabindex="0"><code class="language-kotlin" data-lang="kotlin">android {
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">android {
     defaultConfig {
-        buildConfigField(<span style="color:#cd5555">"String"</span>, <span style="color:#cd5555">"BUILD_NUMBER"</span>, <span style="color:#cd5555">"</span><span style="color:#cd5555">\"</span><span style="color:#cd5555">$buildNumber</span><span style="color:#cd5555">\"</span><span style="color:#cd5555">"</span>)
-        buildConfigField(<span style="color:#cd5555">"String"</span>, <span style="color:#cd5555">"GIT_BRANCH"</span>, <span style="color:#cd5555">"</span><span style="color:#cd5555">\"</span><span style="color:#cd5555">$gitBranch</span><span style="color:#cd5555">\"</span><span style="color:#cd5555">"</span>)
-        buildConfigField(<span style="color:#cd5555">"String"</span>, <span style="color:#cd5555">"GIT_COMMIT_ID"</span>, <span style="color:#cd5555">"</span><span style="color:#cd5555">\"</span><span style="color:#cd5555">$gitCommitId</span><span style="color:#cd5555">\"</span><span style="color:#cd5555">"</span>)
-        buildConfigField(<span style="color:#cd5555">"Long"</span>, <span style="color:#cd5555">"BUILD_TIME_MILLIS"</span>, <span style="color:#cd5555">"</span><span style="color:#cd5555">${buildTimeMILLIS}</span><span style="color:#cd5555">L"</span>)
+        buildConfigField(<span style="color:#cd5555">&#34;String&#34;</span>, <span style="color:#cd5555">&#34;BUILD_NUMBER&#34;</span>, <span style="color:#cd5555">&#34;</span><span style="color:#cd5555">\&#34;</span><span style="color:#cd5555">$buildNumber</span><span style="color:#cd5555">\&#34;</span><span style="color:#cd5555">&#34;</span>)
+        buildConfigField(<span style="color:#cd5555">&#34;String&#34;</span>, <span style="color:#cd5555">&#34;GIT_BRANCH&#34;</span>, <span style="color:#cd5555">&#34;</span><span style="color:#cd5555">\&#34;</span><span style="color:#cd5555">$gitBranch</span><span style="color:#cd5555">\&#34;</span><span style="color:#cd5555">&#34;</span>)
+        buildConfigField(<span style="color:#cd5555">&#34;String&#34;</span>, <span style="color:#cd5555">&#34;GIT_COMMIT_ID&#34;</span>, <span style="color:#cd5555">&#34;</span><span style="color:#cd5555">\&#34;</span><span style="color:#cd5555">$gitCommitId</span><span style="color:#cd5555">\&#34;</span><span style="color:#cd5555">&#34;</span>)
+        buildConfigField(<span style="color:#cd5555">&#34;Long&#34;</span>, <span style="color:#cd5555">&#34;BUILD_TIME_MILLIS&#34;</span>, <span style="color:#cd5555">&#34;</span><span style="color:#cd5555">${buildTimeMILLIS}</span><span style="color:#cd5555">L&#34;</span>)
     }
 }
 </code></pre></div><p>然后这些字段就会出现在<code>BuildConfig</code>中</p>
-<p><img alt="BuildConfig自定义字段" src="https://images.ntutn.top/2022/01/55dc59fdd208c87b155b6a3947fc77f4.png"/></p>
+<p><img src="https://images.ntutn.top/2022/01/55dc59fdd208c87b155b6a3947fc77f4.png" alt="BuildConfig自定义字段"></p>
 <p>我们在报告崩溃信息时就可以带上，这样排查时就知道从何开始找起了。</p>
 <h2 id="保存构建信息">保存构建信息</h2>
 <p>自定义一个task来进行发布，反正都是Kotlin代码，怎么保存这里不展开了。最终我们的服务端不但记录每一次构建时的最终产物，还记录了<code>mapping.txt</code>文件，记录了buildNumber，当后面排查问题时就能比较简单复现场景了。</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4" tabindex="0"><code class="language-kotlin" data-lang="kotlin">tasks.create(<span style="color:#cd5555">"apkReleaseAndUpload"</span>) {
-    dependsOn(tasks[<span style="color:#cd5555">"assemble"</span>])
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">tasks.create(<span style="color:#cd5555">&#34;apkReleaseAndUpload&#34;</span>) {
+    dependsOn(tasks[<span style="color:#cd5555">&#34;assemble&#34;</span>])
     doLast {
-        println(<span style="color:#cd5555">"发布任务开始（构建版本号</span><span style="color:#cd5555">$buildNumber</span><span style="color:#cd5555">）"</span>)
+        println(<span style="color:#cd5555">&#34;发布任务开始（构建版本号</span><span style="color:#cd5555">$buildNumber</span><span style="color:#cd5555">）&#34;</span>)
         <span style="color:#228b22">// 保存构建信息
 </span><span style="color:#228b22"></span>    }
 }
-</code></pre></div><hr/>
+</code></pre></div><hr>
 <p>进行到这里，我们就做到了之前说的目标，应用知道自己是怎么来的（保留了构建相关信息），我们排查问题也有个大概方向。</p>
 <section class="footnotes" role="doc-endnotes">
-<hr/>
+<hr>
 <ol>
 <li id="fn:1" role="doc-endnote">
-<p><a href="https://developer.android.com/studio/build/gradle-tips#share-custom-fields-and-resource-values-with-your-app-code">与应用代码共享自定义字段和资源值 </a> <a class="footnote-backref" href="#fnref:1" role="doc-backlink">↩︎</a></p>
+<p><a href="https://developer.android.com/studio/build/gradle-tips#share-custom-fields-and-resource-values-with-your-app-code">与应用代码共享自定义字段和资源值 </a>&#160;<a href="#fnref:1" class="footnote-backref" role="doc-backlink">&#x21a9;&#xfe0e;</a></p>
 </li>
 </ol>
 </section>
-<hr id="EOF" width="100%"/>
-<p style="color:#777;">最后修改于 2022-01-16</p>
-</div>
-</div>
-<nav class="post-pagination">
-<a class="newer-posts" href="/posts/auil%E5%AD%A6%E4%B9%A0/">
-			下回<br/>AUIL学习
-                </a>
-<a class="older-posts" href="/posts/%E6%8C%81%E4%B9%85%E5%8C%96/">
-			上回<br/>android项目开发：持久化
-                </a>
-</nav>
-<div class="post-comment-wrapper">
-<script async="" crossorigin="anonymous" issue-term="title" label="" repo="zerofancy/zerofancy.github.io" src="https://utteranc.es/client.js" theme="github-light">
-</script>
-</div>
-</div>
-</div>
-</div>
-</div><div id="single-column-footer">
-Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
-<br/>
-移植自 <a href="https://mak1t0.cc/" rel="noreferrer noopener" target="_blank">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" rel="noreferrer noopener" target="_blank">Journal.</a> <br/>
-<br/>
 
-©
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">最后修改于 2022-01-16</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts" href="/posts/auil%E5%AD%A6%E4%B9%A0/">
+			下回<br>AUIL学习
+                </a>
+                
+                
+                
+                <a class="older-posts" href="/posts/%E6%8C%81%E4%B9%85%E5%8C%96/">
+			上回<br>android项目开发：持久化
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+<script src="https://utteranc.es/client.js"
+        repo="zerofancy/zerofancy.github.io"
+        issue-term="title"
+        label=""
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
 	
 	CC BY-SA 4.0
 	
 </div>
-</div>
-<script src="/js/journal.js"></script></body>
+            </div>
+    
+    <script src="/js/journal.js"></script></body>
 </html>

@@ -13,7 +13,7 @@ const _do_decrypt = function (encrypted, password) {
 const _click_handler = function (element) {
     let parent = element.parentNode.parentNode;
     let encrypted = parent.querySelector(
-        ".hugo-encryptor-cipher-text").innerText;
+        ".hugo-encryptor-cipher-text").innerText.trim();
     let password = parent.querySelector(
         ".hugo-encryptor-input").value;
     password = CryptoJS.MD5(password).toString();

@@ -1,28 +1,87 @@
 <!DOCTYPE html>
 <html><head>
 <title>Xfermode踩坑小结</title>
-<meta charset="utf-8"/>
-<meta content="IE=edge" name="X-UA-Compatible"/>
-<meta content="" name="google-site-verification"/>
-<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"/>
-<meta content="telephone=no" name="format-detection"/>
-<meta content="Xfermode踩坑小结" name="description"/>
-<meta content="webkit" name="renderer"/>
-<meta content="#ffffff" name="theme-color"/>
-<meta content="Xfermode踩坑小结" property="og:title"/>
-<meta content="Xfermode踩坑小结" property="og:description"/>
-<meta content="article" property="og:type"/>
-<meta content="https://ntutn.top/posts/xfermode%E8%B8%A9%E5%9D%91%E5%B0%8F%E7%BB%93/" property="og:url"/><meta content="posts" property="article:section"/>
-<meta content="2022-09-05T02:18:57+08:00" property="article:published_time"/>
-<meta content="2022-09-05T02:18:57+08:00" property="article:modified_time"/><meta content="归零幻想" property="og:site_name"/>
-<link href="//images.ntutn.top/favicon.ico" rel="icon"/>
-<script src="/js/toc.js"></script>
-<link href="/vendor/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-<link href="/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen" rel="stylesheet"/>
-<link href="/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css?family=Material+Icons" rel="stylesheet"/>
-<script data-cf-beacon='{"token": 5a03d307f5214109a1e7c8b2cf306a3d' defer="" src="https://static.cloudflareinsights.com/beacon.min.js">
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="Xfermode踩坑小结">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+<meta property="og:title" content="Xfermode踩坑小结" />
+<meta property="og:description" content="Xfermode踩坑小结" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ntutn.top/posts/xfermode%E8%B8%A9%E5%9D%91%E5%B0%8F%E7%BB%93/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-09-05T02:18:57+08:00" />
+<meta property="article:modified_time" content="2022-09-05T02:18:57+08:00" /><meta property="og:site_name" content="归零幻想" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+<link rel="icon" href="//images.ntutn.top/favicon.ico">
+
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+<link rel="stylesheet" href="/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
+
+
+
+<link rel="stylesheet" href="/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
+
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+<script defer
+	src='https://static.cloudflareinsights.com/beacon.min.js'
+	data-cf-beacon='{"token": 5a03d307f5214109a1e7c8b2cf306a3d'>
 </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <style>
     pre code {
         color: black;
@@ -30,7 +89,7 @@
     }
 </style>
 <script src="https://unpkg.com/zoomtastic@2.2.1"></script>
-<script data-selector="code.language-kotlin" src="https://unpkg.com/kotlin-playground@1"></script>
+<script src="https://unpkg.com/kotlin-playground@1" data-selector="code.language-kotlin"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function(event) { 
         document.querySelectorAll("div.post-body-wrapper img").forEach(function(element){
@@ -60,221 +119,546 @@
 	})();
 
 </script>
+
 </head>
 <body>
-<div id="app"><div class="side-container" id="sideContainer">
-<a class="a-block nav-head false" href="https://ntutn.top/">
-<div class="nav-title">
+    	<div id="app"><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://ntutn.top/">
+    
+        <div class="nav-title">
             归零幻想
         </div>
-<div class="nav-subtitle">
+        
+        <div class="nav-subtitle">
             零点还不算熬夜
         </div>
-</a>
-<div class="nav-link-list">
-<a class="a-block nav-link-item false" href="/project">
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/project">
                 项目
             </a>
-<a class="a-block nav-link-item false" href="/tags">
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
                 标签
             </a>
-<a class="a-block nav-link-item active" href="/posts">
+            
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
                 归档
             </a>
-<a class="a-block nav-link-item false" href="/friends">
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/friends">
                 友链
             </a>
-<a class="a-block nav-link-item false" href="/about">
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/about">
                 关于
             </a>
-<a class="a-block nav-link-item false" href="/index.xml">
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/index.xml">
                 RSS
             </a>
-</div>
-<div class="nav-footer">
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
         
 Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
-<br/>
-移植自 <a href="https://mak1t0.cc/" rel="noreferrer noopener" target="_blank">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" rel="noreferrer noopener" target="_blank">Journal.</a> <br/>
-<br/>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
 
-©
+&copy;
 	
 	CC BY-SA 4.0
 	
 
     </div>
-</div><div class="extra-container" id="extraContainer">
-<div :class="{ invisible: scrollY &lt;= 140 }" class="toc animated-visibility">
-<div class="toc-content">
-<center>- 目录 -</center>
-<ul>
-<li>
-<a href="#xfermode%e8%b8%a9%e5%9d%91%e5%b0%8f%e7%bb%93" id="xfermode踩坑小结-nav" onclick="onNavClick(`#xfermode踩坑小结-nav`)">
+    
+</div><div id="extraContainer" class="extra-container">
+    
+    
+    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#xfermode%e8%b8%a9%e5%9d%91%e5%b0%8f%e7%bb%93" onclick="onNavClick(`#xfermode踩坑小结-nav`)" id="xfermode踩坑小结-nav">
 									Xfermode踩坑小结
 								</a>
-</li>
-<li>
-<a href="#%e5%ae%98%e6%96%b9%e6%96%87%e6%a1%a3%e9%94%99%e4%ba%86" id="官方文档错了-nav" onclick="onNavClick(`#官方文档错了-nav`)">
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%ae%98%e6%96%b9%e6%96%87%e6%a1%a3%e9%94%99%e4%ba%86" onclick="onNavClick(`#官方文档错了-nav`)" id="官方文档错了-nav">
 									官方文档错了？
 								</a>
-</li>
-<li>
-<a href="#xfermode%e7%9a%84%e5%87%a0%e4%b8%aa%e5%ba%94%e7%94%a8" id="xfermode的几个应用-nav" onclick="onNavClick(`#xfermode的几个应用-nav`)">
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#xfermode%e7%9a%84%e5%87%a0%e4%b8%aa%e5%ba%94%e7%94%a8" onclick="onNavClick(`#xfermode的几个应用-nav`)" id="xfermode的几个应用-nav">
 									Xfermode的几个应用
 								</a>
-</li>
-<li>
-<a href="#%e5%bc%b9%e5%b9%95%e9%9c%80%e6%b1%82xfermode%e7%9a%84%e5%ba%94%e7%94%a8" id="弹幕需求xfermode的应用-nav" onclick="onNavClick(`#弹幕需求xfermode的应用-nav`)">
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%bc%b9%e5%b9%95%e9%9c%80%e6%b1%82xfermode%e7%9a%84%e5%ba%94%e7%94%a8" onclick="onNavClick(`#弹幕需求xfermode的应用-nav`)" id="弹幕需求xfermode的应用-nav">
 									弹幕需求Xfermode的应用
 								</a>
-</li>
-<li>
-<a href="#%e5%85%b6%e4%bb%96" id="其他-nav" onclick="onNavClick(`#其他-nav`)">
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%85%b6%e4%bb%96" onclick="onNavClick(`#其他-nav`)" id="其他-nav">
 									其他
 								</a>
-</li>
-<ul>
-<li>
-<a href="#xfermode%e5%85%bc%e5%ae%b9%e6%80%a7" id="xfermode兼容性-nav" onclick="onNavClick(`#xfermode兼容性-nav`)">
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#xfermode%e5%85%bc%e5%ae%b9%e6%80%a7" onclick="onNavClick(`#xfermode兼容性-nav`)" id="xfermode兼容性-nav">
 									Xfermode兼容性
 								</a>
-</li>
-</ul>
-</ul></div>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
 </div>
-<div class="pagination">
-<a :class="{ invisible: scrollY == 0 }" class="pagination-action animated-visibility" href="#top" id="globalBackToTop">
-<i class="material-icons pagination-action-icon">
+    
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
                 keyboard_arrow_up
             </i>
-</a>
-<a class="pagination-action" id="darkModeToggleButton" type="button">
-<span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
                 dark_mode
             </span>
-</a>
+        </a>
+        
+        
+    </div>
 </div>
-</div>
-<div class="single-column-drawer-container" id="drawer" v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
-<div class="drawer-content">
-<div class="drawer-menu">
-<a class="a-block drawer-menu-item false" href="/project">
+<div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/project">
                     项目
                 </a>
-<a class="a-block drawer-menu-item false" href="/tags">
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
                     标签
                 </a>
-<a class="a-block drawer-menu-item active" href="/posts">
+                
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
                     归档
                 </a>
-<a class="a-block drawer-menu-item false" href="/friends">
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/friends">
                     友链
                 </a>
-<a class="a-block drawer-menu-item false" href="/about">
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/about">
                     关于
                 </a>
-<a class="a-block drawer-menu-item false" href="/index.xml">
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/index.xml">
                     RSS
                 </a>
-<div class="toc">
-<div class="toc-content">
-<center>- 目录 -</center>
-<ul>
-<li>
-<a href="#xfermode%e8%b8%a9%e5%9d%91%e5%b0%8f%e7%bb%93" id="xfermode踩坑小结-nav" onclick="onNavClick(`#xfermode踩坑小结-nav`)">
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#xfermode%e8%b8%a9%e5%9d%91%e5%b0%8f%e7%bb%93" onclick="onNavClick(`#xfermode踩坑小结-nav`)" id="xfermode踩坑小结-nav">
 									Xfermode踩坑小结
 								</a>
-</li>
-<li>
-<a href="#%e5%ae%98%e6%96%b9%e6%96%87%e6%a1%a3%e9%94%99%e4%ba%86" id="官方文档错了-nav" onclick="onNavClick(`#官方文档错了-nav`)">
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%ae%98%e6%96%b9%e6%96%87%e6%a1%a3%e9%94%99%e4%ba%86" onclick="onNavClick(`#官方文档错了-nav`)" id="官方文档错了-nav">
 									官方文档错了？
 								</a>
-</li>
-<li>
-<a href="#xfermode%e7%9a%84%e5%87%a0%e4%b8%aa%e5%ba%94%e7%94%a8" id="xfermode的几个应用-nav" onclick="onNavClick(`#xfermode的几个应用-nav`)">
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#xfermode%e7%9a%84%e5%87%a0%e4%b8%aa%e5%ba%94%e7%94%a8" onclick="onNavClick(`#xfermode的几个应用-nav`)" id="xfermode的几个应用-nav">
 									Xfermode的几个应用
 								</a>
-</li>
-<li>
-<a href="#%e5%bc%b9%e5%b9%95%e9%9c%80%e6%b1%82xfermode%e7%9a%84%e5%ba%94%e7%94%a8" id="弹幕需求xfermode的应用-nav" onclick="onNavClick(`#弹幕需求xfermode的应用-nav`)">
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%bc%b9%e5%b9%95%e9%9c%80%e6%b1%82xfermode%e7%9a%84%e5%ba%94%e7%94%a8" onclick="onNavClick(`#弹幕需求xfermode的应用-nav`)" id="弹幕需求xfermode的应用-nav">
 									弹幕需求Xfermode的应用
 								</a>
-</li>
-<li>
-<a href="#%e5%85%b6%e4%bb%96" id="其他-nav" onclick="onNavClick(`#其他-nav`)">
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%85%b6%e4%bb%96" onclick="onNavClick(`#其他-nav`)" id="其他-nav">
 									其他
 								</a>
-</li>
-<ul>
-<li>
-<a href="#xfermode%e5%85%bc%e5%ae%b9%e6%80%a7" id="xfermode兼容性-nav" onclick="onNavClick(`#xfermode兼容性-nav`)">
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#xfermode%e5%85%bc%e5%ae%b9%e6%80%a7" onclick="onNavClick(`#xfermode兼容性-nav`)" id="xfermode兼容性-nav">
 									Xfermode兼容性
 								</a>
-</li>
-</ul>
-</ul></div>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
 </div>
-</div>
-</div>
+            
+        </div>
+    </div>
 </div>
 <transition name="fade">
-<div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
 </transition>
-<nav class="navbar sticky-top navbar-light single-column-nav-container" id="navBar">
-<div class="nav-background" id="navBackground"></div>
-<div class="container container-narrow nav-content">
-<button class="nav-dropdown-toggle" id="nav_dropdown_btn" type="button" v-on:click="toggleDrawer">
-<i class="material-icons">
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
                 menu
             </i>
-</button>
-<a class="navbar-brand" href="https://ntutn.top/" id="navTitle">
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://ntutn.top/">
             归零幻想
         </a>
-<button class="nav-darkmode-toggle" id="darkModeToggleButton2" type="button">
-<i class="material-icons" id="darkModeToggleIcon2">
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
                 dark_mode
             </i>
-</button>
-</div>
+        </button>
+        
+    </div>
 </nav>
-<div class="single-column-header-container" id="pageHead" v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
-<a href="https://ntutn.top/">
-<div class="single-column-header-title">归零幻想</div>
-<div class="single-column-header-subtitle">零点还不算熬夜</div>
-</a>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://ntutn.top/">
+        <div class="single-column-header-title">归零幻想</div>
+        
+        <div class="single-column-header-subtitle">零点还不算熬夜</div>
+        
+
+    </a>
 </div>
-<div id="content">
-<div class="stream-container" id="streamContainer">
-<div class="post-list-container post-list-container-shadow">
-<div class="post">
-<div class="post-head-wrapper" style="background-image: url('https://images.ntutn.top/2022/09/b3ea74b2c64e8b008ba3295f0546df9c.png')">
-<div class="post-title">
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+                
+            
+
+            <div class="post-head-wrapper"
+                
+                    
+                    
+                    style="background-image: url('https://images.ntutn.top/2022/09/b3ea74b2c64e8b008ba3295f0546df9c.png')"
+                    
+                
+            >
+                <div class="post-title">
                     Xfermode踩坑小结
                     
                     <div class="post-subtitle">
                         Xfermode踩坑小结
                     </div>
-<div class="post-meta">
-<time itemprop="datePublished">
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
                             2022-09-05 02:18
                         </time>
-<i class="material-icons" style="">folder</i>
-<a href="/categories/%E5%AE%89%E5%8D%93">安卓</a>
-                                 
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/%E5%AE%89%E5%8D%93">安卓</a>
+                                &nbsp;
                         
 
                         
                             <i class="material-icons" style="">label</i>
-<a href="/tags/xfermode">Xfermode</a>
-                                 
+                            
+                                <a href="/tags/xfermode">Xfermode</a>
+                                &nbsp;
                             
                                 <a href="/tags/%E5%AE%89%E5%8D%93">安卓</a>
-                                 
+                                &nbsp;
                             
                                 <a href="/tags/view">View</a>
-                                 
+                                &nbsp;
                             
                         
                         
@@ -290,26 +674,29 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
                             30 s.
                         
                     </div>
-</div>
-</div>
-<div class="post-body-wrapper">
-<div class="post-body" v-pre="">
-<h1 id="xfermode踩坑小结">Xfermode踩坑小结</h1>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <h1 id="xfermode踩坑小结">Xfermode踩坑小结</h1>
 <blockquote>
-<p>Xfermode is the base class for objects that are called to implement custom “transfer-modes” in the drawing pipeline. The static function Create(Modes) can be called to return an instance of any of the predefined subclasses as specified in the Modes enum. When an Xfermode is assigned to an Paint, then objects drawn with that paint have the xfermode applied.</p>
+<p>Xfermode is the base class for objects that are called to implement custom &ldquo;transfer-modes&rdquo; in the drawing pipeline. The static function Create(Modes) can be called to return an instance of any of the predefined subclasses as specified in the Modes enum. When an Xfermode is assigned to an Paint, then objects drawn with that paint have the xfermode applied.</p>
 </blockquote>
 <p>Xfermode最初有三个子类，除了目前我们常用的 <code>PorterDuffXfermode</code> 其他两个都已经作古了。</p>
 <p>PorterDuffXfermode可以指定两张图形如何进行混合，借此我们可以实现一些特殊的绘图效果。官方有个很经典的示例图， <em>我经常是需要用时才找出来看一看。</em></p>
-<p><img alt="官方APIDemos" src="https://images.ntutn.top/2022/09/b3ea74b2c64e8b008ba3295f0546df9c.png"/></p>
+<p><img src="https://images.ntutn.top/2022/09/b3ea74b2c64e8b008ba3295f0546df9c.png" alt="官方APIDemos"></p>
 <h1 id="官方文档错了">官方文档错了？</h1>
 <p>然而在最近做需求时，我发现自己做出来的效果和官方图上不一致。网上检索，有人说官方的示意图错了，并给出了自己绘制的demo。有模有样有代码，让人信服。</p>
-<p><img alt="网友的ApiDemos" src="https://images.ntutn.top/2022/09/381a44d4722a2f53d05229bf8f1bc099.jpg"/></p>
+<p><img src="https://images.ntutn.top/2022/09/381a44d4722a2f53d05229bf8f1bc099.jpg" alt="网友的ApiDemos"></p>
 <p>但官方的文档真的错了吗？如果错了，为什么一直没有改呢？我直觉感觉这种事情概率比较低，所以还是得找到双方的代码才能断案。</p>
 <p>官方的示例在一个叫做API Demos的APP中，代码在一个叫做 <a href="https://android.googlesource.com/platform/development/+/master/samples/ApiDemos/src/com/example/android/apis/graphics/Xfermodes.java">Xfermodes.java</a> 的文件中，它没有很复杂的依赖关系，只要一并把它的父类 <a href="https://android.googlesource.com/platform/development/+/master/samples/ApiDemos/src/com/example/android/apis/graphics/GraphicsActivity.java">GraphicsActivity.java</a> 一并拷贝过来就能工作。建议可以拷贝到自己的demo工程中，方便需要时查阅。</p>
-<p><img alt="ApiDemos我们的运行结果" src="https://images.ntutn.top/2022/09/8a823f4937afc11010358e75b5bed9b5.jpg"/></p>
+<p><img src="https://images.ntutn.top/2022/09/8a823f4937afc11010358e75b5bed9b5.jpg" alt="ApiDemos我们的运行结果"></p>
 <p>看上去也没有错误。接下来看看双方的代码，看看问题出在哪里。</p>
 <p>官方代码（等效）</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4" tabindex="0"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">makeDst</span>(width: Int, height: Int): Bitmap {  
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">makeDst</span>(width: Int, height: Int): Bitmap {  
     <span style="color:#8b008b;font-weight:bold">val</span> paint = Paint().also {  
         <span style="color:#8b008b;font-weight:bold">it</span>.color = <span style="color:#b452cd">0xFFFFCC44</span>.toInt()  
     }  
@@ -342,7 +729,7 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
     }  
 }
 </code></pre></div><p>网友代码（等效）</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4" tabindex="0"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">makeDst</span>(width: Int, height: Int): Bitmap {  
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">makeDst</span>(width: Int, height: Int): Bitmap {  
     <span style="color:#8b008b;font-weight:bold">val</span> paint = Paint().also {  
         <span style="color:#8b008b;font-weight:bold">it</span>.color = <span style="color:#b452cd">0xFFFFCC44</span>.toInt()  
     }  
@@ -375,7 +762,7 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
     }  
 }
 </code></pre></div><p>仔细观察上述代码，你会发现 <strong>网友用法中两次绘制实际上并不完全重叠</strong>。官方生成的两个Bitmap，是同样大小的并在同一个位置绘制，而后者是只生成了部分需要绘制的位置图形，在特定位置绘制。</p>
-<p><img alt="单个图片绘制示意" src="https://images.ntutn.top/2022/09/03ee100cf274352bb89bd5326a2971ec.png"/></p>
+<p><img src="https://images.ntutn.top/2022/09/03ee100cf274352bb89bd5326a2971ec.png" alt="单个图片绘制示意"></p>
 <p>例如，对于一个400X400的目标区域，官方方法是创建了两个400X400的Bitmap，直接在(0, 0) 位置绘制。 另一种方法是创建了两个200X200的Bitmap，一个在(100, 100)处绘制，另一个在(200, 200)处绘制。</p>
 <p>后者绘制区域并不重叠，因而可以看到圆形变化的始终只有圆形的右下角四分之一圆。</p>
 <h1 id="xfermode的几个应用">Xfermode的几个应用</h1>
@@ -385,9 +772,9 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <li>抖音弹幕描边裁剪</li>
 </ol>
 <h1 id="弹幕需求xfermode的应用">弹幕需求Xfermode的应用</h1>
-<p><img alt="B站的带描边弹幕" src="https://images.ntutn.top/2022/09/e6c0cb56a69c8c9d8ba72ec75d47a1b7.png"/></p>
+<p><img src="https://images.ntutn.top/2022/09/e6c0cb56a69c8c9d8ba72ec75d47a1b7.png" alt="B站的带描边弹幕"></p>
 <p>弹幕有个优化需求，是给弹幕文字加上描边。描边一般是将paint的style设置为Stroke再进行一次绘制实现的。</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4" tabindex="0"><code class="language-kotlin" data-lang="kotlin"><span style="color:#228b22">// 绘制描边
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#228b22">// 绘制描边
 </span><span style="color:#228b22"></span>with(layout.paint) {
     color = Color.BLACK  
     style = Paint.Style.STROKE  
@@ -402,9 +789,9 @@ layout.draw(canvas)
 }
 layout.draw(canvas)
 </code></pre></div><p>然而我这样实现后，效果并不好，因为 <strong>弹幕文本和描边都是有透明度的，而描边笔画重叠的位置也会进行绘制</strong> 。</p>
-<p><img alt="描边与透明度的冲突" src="https://images.ntutn.top/2022/09/bcd2513ffa6e3242c590981ac8f0af06.png"/></p>
+<p><img src="https://images.ntutn.top/2022/09/bcd2513ffa6e3242c590981ac8f0af06.png" alt="描边与透明度的冲突"></p>
 <p>所以，我需要先将描边与填充重叠的地方裁掉，然后再绘制填充</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4" tabindex="0"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">draw</span>(canvas: Canvas) {  
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">draw</span>(canvas: Canvas) {  
     <span style="color:#228b22">// 外层saveLayer也需要保留，否则裁剪时会有非预期表现  
 </span><span style="color:#228b22"></span>    canvas.saveLayer(<span style="color:#8b008b;font-weight:bold">null</span>, <span style="color:#8b008b;font-weight:bold">null</span>)  
 
@@ -435,53 +822,85 @@ layout.draw(canvas)
 <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">drawSolid</span>(canvas: Canvas, drawColor: Int ? = <span style="color:#8b008b;font-weight:bold">null</span>) {  
     with(layout.paint) {  
         style = Paint.Style.FILL  
-        color = drawColor ?: <span style="color:#cd5555">"#99FF0000"</span>.color  
+        color = drawColor ?: <span style="color:#cd5555">&#34;#99FF0000&#34;</span>.color  
     }  
     layout.draw(canvas)   
 }
-</code></pre></div><p><img alt="弹幕xfermode绘制效果" src="https://images.ntutn.top/2022/09/141e77ad4e1480f333d54c012b7ed0ed.png"/></p>
+</code></pre></div><p><img src="https://images.ntutn.top/2022/09/141e77ad4e1480f333d54c012b7ed0ed.png" alt="弹幕xfermode绘制效果"></p>
 <p>不过这个方案实现出来 <strong>性能表现太差</strong> 被砍掉了 Orz</p>
 <p>总之就是，慎用saveLayer，优先考虑其他实现，尤其是在这种比较注重性能的场合。</p>
-<hr/>
+<hr>
 <h1 id="其他">其他</h1>
 <h2 id="xfermode兼容性">Xfermode兼容性</h2>
 <p>这个是需求测试中发现的。QA一台安卓手机上绘制效果不符合预期，然后借来跑了下demo，发现得到的结果和我自己测试机上还不一样。这里我找了个安卓8的手机，可以看到结果和我们之前得到的并不尽相同。</p>
-<p><img alt="xfermode兼容问题" src="https://images.ntutn.top/2022/09/0f4cc08dd4e2be9ca129462c842b7512.png"/></p>
+<p><img src="https://images.ntutn.top/2022/09/0f4cc08dd4e2be9ca129462c842b7512.png" alt="xfermode兼容问题"></p>
 <p>显然，图上 CLEAR、DARKEN、LIGHTEN 是和前面运行结果不一样的。</p>
 <p>我建议， <strong>以上提到3个表现不一致的（CLEAR、DARKEN、LIGHTEN）和ADD、OVERLAY这两个没有在文档提到的不要在工程中用。</strong></p>
 <p>此外， <strong>尽量只在canvas.saveLayer上和canvas.drawBitmap上设置xfermode</strong> 在普通的图形绘制上不要给画笔设置xfermode，不是官方示例中的用法，可能出问题（本人踩坑，在vivo的某个机型出现了奇怪的绘制结果）</p>
 <p><strong>canvas如果来源于View的onDraw方法，要使用xfermode要在最外层套上saveLayer</strong> ，因为View拿出来的Canvas并不是透明背景，当你直接用xfermode裁剪掉部分区域时会遇到奇怪的问题（被裁掉的区域出现大块黑色块）。</p>
 <p><strong>愿在天堂的需求不需要用到xfermode。</strong></p>
-<hr id="EOF" width="100%"/>
-<p style="color:#777;">最后修改于 2022-09-05</p>
-</div>
-</div>
-<nav class="post-pagination">
-<a class="newer-posts" href="/posts/%E6%89%93%E9%80%A0%E4%B8%80%E4%B8%AA%E6%8E%A5%E5%85%A5%E7%AE%80%E5%8D%95%E7%9A%84%E9%80%9A%E7%94%A8banner%E7%BB%84%E4%BB%B6/">
-			下回<br/>打造一个接入简单的通用banner组件
-                </a>
-<a class="older-posts" href="/posts/%E4%BB%8E%E5%A4%B4%E5%BC%80%E5%A7%8B%E5%88%B6%E4%BD%9C%E4%B8%80%E4%B8%AAtg%E6%9C%BA%E5%99%A8%E4%BA%BA/">
-			上回<br/>从头开始制作一个tg机器人
-                </a>
-</nav>
-<div class="post-comment-wrapper">
-<script async="" crossorigin="anonymous" issue-term="title" label="" repo="zerofancy/zerofancy.github.io" src="https://utteranc.es/client.js" theme="github-light">
-</script>
-</div>
-</div>
-</div>
-</div>
-</div><div id="single-column-footer">
-Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
-<br/>
-移植自 <a href="https://mak1t0.cc/" rel="noreferrer noopener" target="_blank">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" rel="noreferrer noopener" target="_blank">Journal.</a> <br/>
-<br/>
 
-©
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">最后修改于 2022-09-05</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts" href="/posts/%E6%89%93%E9%80%A0%E4%B8%80%E4%B8%AA%E6%8E%A5%E5%85%A5%E7%AE%80%E5%8D%95%E7%9A%84%E9%80%9A%E7%94%A8banner%E7%BB%84%E4%BB%B6/">
+			下回<br>打造一个接入简单的通用banner组件
+                </a>
+                
+                
+                
+                <a class="older-posts" href="/posts/%E4%BB%8E%E5%A4%B4%E5%BC%80%E5%A7%8B%E5%88%B6%E4%BD%9C%E4%B8%80%E4%B8%AAtg%E6%9C%BA%E5%99%A8%E4%BA%BA/">
+			上回<br>从头开始制作一个tg机器人
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+<script src="https://utteranc.es/client.js"
+        repo="zerofancy/zerofancy.github.io"
+        issue-term="title"
+        label=""
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
 	
 	CC BY-SA 4.0
 	
 </div>
-</div>
-<script src="/js/journal.js"></script></body>
+            </div>
+    
+    <script src="/js/journal.js"></script></body>
 </html>

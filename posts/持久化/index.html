@@ -1,28 +1,87 @@
 <!DOCTYPE html>
 <html><head>
 <title>android项目开发：持久化</title>
-<meta charset="utf-8"/>
-<meta content="IE=edge" name="X-UA-Compatible"/>
-<meta content="" name="google-site-verification"/>
-<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"/>
-<meta content="telephone=no" name="format-detection"/>
-<meta content="《第一行代码》阅读记录，有关数据持久化存储，略过了数据库的方式。" name="description"/>
-<meta content="webkit" name="renderer"/>
-<meta content="#ffffff" name="theme-color"/>
-<meta content="android项目开发：持久化" property="og:title"/>
-<meta content="《第一行代码》阅读记录，有关数据持久化存储，略过了数据库的方式。" property="og:description"/>
-<meta content="article" property="og:type"/>
-<meta content="https://ntutn.top/posts/%E6%8C%81%E4%B9%85%E5%8C%96/" property="og:url"/><meta content="posts" property="article:section"/>
-<meta content="2021-10-24T03:11:37+08:00" property="article:published_time"/>
-<meta content="2021-10-24T03:11:37+08:00" property="article:modified_time"/><meta content="归零幻想" property="og:site_name"/>
-<link href="//images.ntutn.top/favicon.ico" rel="icon"/>
-<script src="/js/toc.js"></script>
-<link href="/vendor/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
-<link href="/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen" rel="stylesheet"/>
-<link href="/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css?family=Material+Icons" rel="stylesheet"/>
-<script data-cf-beacon='{"token": 5a03d307f5214109a1e7c8b2cf306a3d' defer="" src="https://static.cloudflareinsights.com/beacon.min.js">
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="《第一行代码》阅读记录，有关数据持久化存储，略过了数据库的方式。">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+<meta property="og:title" content="android项目开发：持久化" />
+<meta property="og:description" content="《第一行代码》阅读记录，有关数据持久化存储，略过了数据库的方式。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ntutn.top/posts/%E6%8C%81%E4%B9%85%E5%8C%96/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-10-24T03:11:37+08:00" />
+<meta property="article:modified_time" content="2021-10-24T03:11:37+08:00" /><meta property="og:site_name" content="归零幻想" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+<link rel="icon" href="//images.ntutn.top/favicon.ico">
+
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+<link rel="stylesheet" href="/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
+
+
+
+<link rel="stylesheet" href="/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
+
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+<script defer
+	src='https://static.cloudflareinsights.com/beacon.min.js'
+	data-cf-beacon='{"token": 5a03d307f5214109a1e7c8b2cf306a3d'>
 </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <style>
     pre code {
         color: black;
@@ -30,7 +89,7 @@
     }
 </style>
 <script src="https://unpkg.com/zoomtastic@2.2.1"></script>
-<script data-selector="code.language-kotlin" src="https://unpkg.com/kotlin-playground@1"></script>
+<script src="https://unpkg.com/kotlin-playground@1" data-selector="code.language-kotlin"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function(event) { 
         document.querySelectorAll("div.post-body-wrapper img").forEach(function(element){
@@ -60,204 +119,470 @@
 	})();
 
 </script>
+
 </head>
 <body>
-<div id="app"><div class="side-container" id="sideContainer">
-<a class="a-block nav-head false" href="https://ntutn.top/">
-<div class="nav-title">
+    	<div id="app"><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://ntutn.top/">
+    
+        <div class="nav-title">
             归零幻想
         </div>
-<div class="nav-subtitle">
+        
+        <div class="nav-subtitle">
             零点还不算熬夜
         </div>
-</a>
-<div class="nav-link-list">
-<a class="a-block nav-link-item false" href="/project">
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/project">
                 项目
             </a>
-<a class="a-block nav-link-item false" href="/tags">
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
                 标签
             </a>
-<a class="a-block nav-link-item active" href="/posts">
+            
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
                 归档
             </a>
-<a class="a-block nav-link-item false" href="/friends">
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/friends">
                 友链
             </a>
-<a class="a-block nav-link-item false" href="/about">
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/about">
                 关于
             </a>
-<a class="a-block nav-link-item false" href="/index.xml">
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/index.xml">
                 RSS
             </a>
-</div>
-<div class="nav-footer">
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
         
 Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
-<br/>
-移植自 <a href="https://mak1t0.cc/" rel="noreferrer noopener" target="_blank">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" rel="noreferrer noopener" target="_blank">Journal.</a> <br/>
-<br/>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
 
-©
+&copy;
 	
 	CC BY-SA 4.0
 	
 
     </div>
-</div><div class="extra-container" id="extraContainer">
-<div :class="{ invisible: scrollY &lt;= 140 }" class="toc animated-visibility">
-<div class="toc-content">
-<center>- 目录 -</center>
-<ul>
-<li>
-<a href="#%e6%8c%81%e4%b9%85%e5%8c%96" id="持久化-nav" onclick="onNavClick(`#持久化-nav`)">
+    
+</div><div id="extraContainer" class="extra-container">
+    
+    
+    <div class="toc animated-visibility" :class="{ invisible: scrollY <= 140 }">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%8c%81%e4%b9%85%e5%8c%96" onclick="onNavClick(`#持久化-nav`)" id="持久化-nav">
 									持久化
 								</a>
-</li>
-<ul>
-<li>
-<a href="#%e6%96%87%e4%bb%b6%e5%ad%98%e5%82%a8" id="文件存储-nav" onclick="onNavClick(`#文件存储-nav`)">
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%96%87%e4%bb%b6%e5%ad%98%e5%82%a8" onclick="onNavClick(`#文件存储-nav`)" id="文件存储-nav">
 									文件存储
 								</a>
-</li>
-<li>
-<a href="#sharedpreference" id="sharedpreference-nav" onclick="onNavClick(`#sharedpreference-nav`)">
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#sharedpreference" onclick="onNavClick(`#sharedpreference-nav`)" id="sharedpreference-nav">
 									SharedPreference
 								</a>
-</li>
-<li>
-<a href="#%e6%95%b0%e6%8d%ae%e5%ba%93" id="数据库-nav" onclick="onNavClick(`#数据库-nav`)">
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%95%b0%e6%8d%ae%e5%ba%93" onclick="onNavClick(`#数据库-nav`)" id="数据库-nav">
 									数据库
 								</a>
-</li>
-</ul>
-</ul></div>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
 </div>
-<div class="pagination">
-<a :class="{ invisible: scrollY == 0 }" class="pagination-action animated-visibility" href="#top" id="globalBackToTop">
-<i class="material-icons pagination-action-icon">
+    
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top" :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
                 keyboard_arrow_up
             </i>
-</a>
-<a class="pagination-action" id="darkModeToggleButton" type="button">
-<span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
                 dark_mode
             </span>
-</a>
+        </a>
+        
+        
+    </div>
 </div>
-</div>
-<div class="single-column-drawer-container" id="drawer" v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
-<div class="drawer-content">
-<div class="drawer-menu">
-<a class="a-block drawer-menu-item false" href="/project">
+<div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/project">
                     项目
                 </a>
-<a class="a-block drawer-menu-item false" href="/tags">
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
                     标签
                 </a>
-<a class="a-block drawer-menu-item active" href="/posts">
+                
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
                     归档
                 </a>
-<a class="a-block drawer-menu-item false" href="/friends">
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/friends">
                     友链
                 </a>
-<a class="a-block drawer-menu-item false" href="/about">
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/about">
                     关于
                 </a>
-<a class="a-block drawer-menu-item false" href="/index.xml">
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/index.xml">
                     RSS
                 </a>
-<div class="toc">
-<div class="toc-content">
-<center>- 目录 -</center>
-<ul>
-<li>
-<a href="#%e6%8c%81%e4%b9%85%e5%8c%96" id="持久化-nav" onclick="onNavClick(`#持久化-nav`)">
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%8c%81%e4%b9%85%e5%8c%96" onclick="onNavClick(`#持久化-nav`)" id="持久化-nav">
 									持久化
 								</a>
-</li>
-<ul>
-<li>
-<a href="#%e6%96%87%e4%bb%b6%e5%ad%98%e5%82%a8" id="文件存储-nav" onclick="onNavClick(`#文件存储-nav`)">
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e6%96%87%e4%bb%b6%e5%ad%98%e5%82%a8" onclick="onNavClick(`#文件存储-nav`)" id="文件存储-nav">
 									文件存储
 								</a>
-</li>
-<li>
-<a href="#sharedpreference" id="sharedpreference-nav" onclick="onNavClick(`#sharedpreference-nav`)">
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#sharedpreference" onclick="onNavClick(`#sharedpreference-nav`)" id="sharedpreference-nav">
 									SharedPreference
 								</a>
-</li>
-<li>
-<a href="#%e6%95%b0%e6%8d%ae%e5%ba%93" id="数据库-nav" onclick="onNavClick(`#数据库-nav`)">
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%95%b0%e6%8d%ae%e5%ba%93" onclick="onNavClick(`#数据库-nav`)" id="数据库-nav">
 									数据库
 								</a>
-</li>
-</ul>
-</ul></div>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
 </div>
-</div>
-</div>
+            
+        </div>
+    </div>
 </div>
 <transition name="fade">
-<div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
 </transition>
-<nav class="navbar sticky-top navbar-light single-column-nav-container" id="navBar">
-<div class="nav-background" id="navBackground"></div>
-<div class="container container-narrow nav-content">
-<button class="nav-dropdown-toggle" id="nav_dropdown_btn" type="button" v-on:click="toggleDrawer">
-<i class="material-icons">
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
                 menu
             </i>
-</button>
-<a class="navbar-brand" href="https://ntutn.top/" id="navTitle">
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://ntutn.top/">
             归零幻想
         </a>
-<button class="nav-darkmode-toggle" id="darkModeToggleButton2" type="button">
-<i class="material-icons" id="darkModeToggleIcon2">
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
                 dark_mode
             </i>
-</button>
-</div>
+        </button>
+        
+    </div>
 </nav>
-<div class="single-column-header-container" id="pageHead" v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
-<a href="https://ntutn.top/">
-<div class="single-column-header-title">归零幻想</div>
-<div class="single-column-header-subtitle">零点还不算熬夜</div>
-</a>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://ntutn.top/">
+        <div class="single-column-header-title">归零幻想</div>
+        
+        <div class="single-column-header-subtitle">零点还不算熬夜</div>
+        
+
+    </a>
 </div>
-<div id="content">
-<div class="stream-container" id="streamContainer">
-<div class="post-list-container post-list-container-shadow">
-<div class="post">
-<div class="post-head-wrapper-text-only">
-<div class="post-title">
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
                     android项目开发：持久化
                     
                     <div class="post-subtitle">
                         《第一行代码》阅读记录，有关数据持久化存储，略过了数据库的方式。
                     </div>
-<div class="post-meta">
-<time itemprop="datePublished">
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
                             2021-10-24 03:11
                         </time>
-<i class="material-icons" style="">folder</i>
-<a href="/categories/%E5%AD%A6%E4%B9%A0">学习</a>
-                                 
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/%E5%AD%A6%E4%B9%A0">学习</a>
+                                &nbsp;
                         
 
                         
                             <i class="material-icons" style="">label</i>
-<a href="/tags/%E5%AE%89%E5%8D%93">安卓</a>
-                                 
+                            
+                                <a href="/tags/%E5%AE%89%E5%8D%93">安卓</a>
+                                &nbsp;
                             
                                 <a href="/tags/kotlin">Kotlin</a>
-                                 
+                                &nbsp;
                             
                                 <a href="/tags/%E7%AC%AC%E4%B8%80%E8%A1%8C%E4%BB%A3%E7%A0%81">第一行代码</a>
-                                 
+                                &nbsp;
                             
                                 <a href="/tags/%E7%AC%94%E8%AE%B0">笔记</a>
-                                 
+                                &nbsp;
                             
                         
                         
@@ -273,18 +598,21 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
                             25 s.
                         
                     </div>
-</div>
-</div>
-<div class="post-body-wrapper">
-<div class="post-body" v-pre="">
-<!-- raw HTML omitted -->
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <!-- raw HTML omitted -->
 <p>《第一行代码》阅读记录，有关数据持久化存储，略过了数据库的方式。</p>
 <h1 id="持久化">持久化</h1>
 <h2 id="文件存储">文件存储</h2>
 <p>先暂时只是写了个demo，有需要再深入看。</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4" tabindex="0"><code class="language-kotlin" data-lang="kotlin">    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">saveText</span>(inputText: String) {
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">saveText</span>(inputText: String) {
         <span style="color:#8b008b;font-weight:bold">try</span> {
-            <span style="color:#8b008b;font-weight:bold">val</span> output = openFileOutput(<span style="color:#cd5555">"data"</span>, Context.MODE_PRIVATE)
+            <span style="color:#8b008b;font-weight:bold">val</span> output = openFileOutput(<span style="color:#cd5555">&#34;data&#34;</span>, Context.MODE_PRIVATE)
             <span style="color:#8b008b;font-weight:bold">val</span> writer = BufferedWriter(OutputStreamWriter(output))
             writer.use {
                 <span style="color:#8b008b;font-weight:bold">it</span>.write(inputText)
@@ -296,7 +624,7 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
     <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">loadText</span>(): String {
         <span style="color:#8b008b;font-weight:bold">val</span> content = StringBuilder()
         <span style="color:#8b008b;font-weight:bold">try</span> {
-            <span style="color:#8b008b;font-weight:bold">val</span> input = openFileInput(<span style="color:#cd5555">"data"</span>)
+            <span style="color:#8b008b;font-weight:bold">val</span> input = openFileInput(<span style="color:#cd5555">&#34;data&#34;</span>)
             <span style="color:#8b008b;font-weight:bold">val</span> reader = BufferedReader(InputStreamReader(input))
             reader.use { r -&gt;
                 r.forEachLine {
@@ -309,28 +637,28 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
         <span style="color:#8b008b;font-weight:bold">return</span> content.toString()
     }
 </code></pre></div><h2 id="sharedpreference">SharedPreference</h2>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4" tabindex="0"><code class="language-kotlin" data-lang="kotlin">            saveButton.setOnClickListener {
-                getSharedPreferences(<span style="color:#cd5555">"data"</span>, Context.MODE_PRIVATE).edit {
-                    putString(<span style="color:#cd5555">"name"</span>, <span style="color:#cd5555">"Tom"</span>)
-                    putInt(<span style="color:#cd5555">"age"</span>, <span style="color:#b452cd">28</span>)
-                    putBoolean(<span style="color:#cd5555">"married"</span>, <span style="color:#8b008b;font-weight:bold">false</span>)
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">            saveButton.setOnClickListener {
+                getSharedPreferences(<span style="color:#cd5555">&#34;data&#34;</span>, Context.MODE_PRIVATE).edit {
+                    putString(<span style="color:#cd5555">&#34;name&#34;</span>, <span style="color:#cd5555">&#34;Tom&#34;</span>)
+                    putInt(<span style="color:#cd5555">&#34;age&#34;</span>, <span style="color:#b452cd">28</span>)
+                    putBoolean(<span style="color:#cd5555">&#34;married&#34;</span>, <span style="color:#8b008b;font-weight:bold">false</span>)
                 }
             }
             restoreButton.setOnClickListener {
-                getSharedPreferences(<span style="color:#cd5555">"data"</span>, Context.MODE_PRIVATE).apply {
-                    <span style="color:#8b008b;font-weight:bold">val</span> name = getString(<span style="color:#cd5555">"name"</span>, <span style="color:#cd5555">"苏珊"</span>)
-                    <span style="color:#8b008b;font-weight:bold">val</span> age = getInt(<span style="color:#cd5555">"age"</span>, <span style="color:#b452cd">15</span>)
-                    <span style="color:#8b008b;font-weight:bold">val</span> isMarried = getBoolean(<span style="color:#cd5555">"married"</span>, <span style="color:#8b008b;font-weight:bold">false</span>)
+                getSharedPreferences(<span style="color:#cd5555">&#34;data&#34;</span>, Context.MODE_PRIVATE).apply {
+                    <span style="color:#8b008b;font-weight:bold">val</span> name = getString(<span style="color:#cd5555">&#34;name&#34;</span>, <span style="color:#cd5555">&#34;苏珊&#34;</span>)
+                    <span style="color:#8b008b;font-weight:bold">val</span> age = getInt(<span style="color:#cd5555">&#34;age&#34;</span>, <span style="color:#b452cd">15</span>)
+                    <span style="color:#8b008b;font-weight:bold">val</span> isMarried = getBoolean(<span style="color:#cd5555">&#34;married&#34;</span>, <span style="color:#8b008b;font-weight:bold">false</span>)
                     Toast.makeText(
                         <span style="color:#8b008b;font-weight:bold">this</span><span style="color:#707a7c">@MainActivity</span>,
-                        <span style="color:#cd5555">"</span><span style="color:#cd5555">${name}</span><span style="color:#cd5555">年龄</span><span style="color:#cd5555">${age}</span><span style="color:#cd5555">岁</span><span style="color:#cd5555">${if (isMarried) "已婚" else "未婚"}</span><span style="color:#cd5555">"</span>,
+                        <span style="color:#cd5555">&#34;</span><span style="color:#cd5555">${name}</span><span style="color:#cd5555">年龄</span><span style="color:#cd5555">${age}</span><span style="color:#cd5555">岁</span><span style="color:#cd5555">${if (isMarried) &#34;已婚&#34; else &#34;未婚&#34;}</span><span style="color:#cd5555">&#34;</span>,
                         Toast.LENGTH_LONG
                     ).show()
                 }
             }
 </code></pre></div><h2 id="数据库">数据库</h2>
 <p>基本用法demo</p>
-<div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4" tabindex="0"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.databasetest</span>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.databasetest</span>
 <span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.content.ContentValues</span>
 <span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.content.Context</span>
 <span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.database.Cursor</span>
@@ -340,7 +668,7 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.widget.Toast</span>
 <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">MyDatabaseHelper</span>(<span style="color:#8b008b;font-weight:bold">val</span> context: Context, name: String, version: Int) :
     SQLiteOpenHelper(context, name, <span style="color:#8b008b;font-weight:bold">null</span>, version) {
-    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> createBook = <span style="color:#cd5555">"""
+    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> createBook = <span style="color:#cd5555">&#34;&#34;&#34;
 </span><span style="color:#cd5555">        create table Book (
 </span><span style="color:#cd5555">            id integer primary key autoincrement,
 </span><span style="color:#cd5555">            author text,
@@ -348,24 +676,24 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 </span><span style="color:#cd5555">            pages integer,
 </span><span style="color:#cd5555">            name text
 </span><span style="color:#cd5555">        )
-</span><span style="color:#cd5555">    """</span>.trimIndent()
-    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> createCategory = <span style="color:#cd5555">"""
+</span><span style="color:#cd5555">    &#34;&#34;&#34;</span>.trimIndent()
+    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> createCategory = <span style="color:#cd5555">&#34;&#34;&#34;
 </span><span style="color:#cd5555">        create table Category (
 </span><span style="color:#cd5555">            id integer primary key autoincrement,
 </span><span style="color:#cd5555">            category_name text,
 </span><span style="color:#cd5555">            category_code integer
 </span><span style="color:#cd5555">        )
-</span><span style="color:#cd5555">    """</span>.trimIndent()
+</span><span style="color:#cd5555">    &#34;&#34;&#34;</span>.trimIndent()
     <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onCreate</span>(db: SQLiteDatabase) {
         db.execSQL(createBook)
         db.execSQL(createCategory)
-        Toast.makeText(context, <span style="color:#cd5555">"建立数据库完成"</span>, Toast.LENGTH_LONG).show()
+        Toast.makeText(context, <span style="color:#cd5555">&#34;建立数据库完成&#34;</span>, Toast.LENGTH_LONG).show()
     }
     <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onUpgrade</span>(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         <span style="color:#8b008b;font-weight:bold">if</span> (oldVersion == newVersion) <span style="color:#8b008b;font-weight:bold">return</span>
-        Log.d(javaClass.simpleName, <span style="color:#cd5555">"旧版是</span><span style="color:#cd5555">${oldVersion}</span><span style="color:#cd5555">，新版是</span><span style="color:#cd5555">${newVersion}</span><span style="color:#cd5555">，数据库升级开始"</span>)
-        db.execSQL(<span style="color:#cd5555">"drop table if exists Book"</span>)
-        db.execSQL(<span style="color:#cd5555">"drop table if exists Category"</span>)
+        Log.d(javaClass.simpleName, <span style="color:#cd5555">&#34;旧版是</span><span style="color:#cd5555">${oldVersion}</span><span style="color:#cd5555">，新版是</span><span style="color:#cd5555">${newVersion}</span><span style="color:#cd5555">，数据库升级开始&#34;</span>)
+        db.execSQL(<span style="color:#cd5555">&#34;drop table if exists Book&#34;</span>)
+        db.execSQL(<span style="color:#cd5555">&#34;drop table if exists Category&#34;</span>)
         onCreate(db)
     }
 }
@@ -384,7 +712,7 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
             <span style="color:#8b008b;font-weight:bold">is</span> Byte -&gt; cv.put(key, value)
             <span style="color:#8b008b;font-weight:bold">is</span> ByteArray -&gt; cv.put(key, value)
             <span style="color:#8b008b;font-weight:bold">null</span> -&gt; cv.putNull(key)
-            <span style="color:#8b008b;font-weight:bold">else</span> -&gt; <span style="color:#8b008b;font-weight:bold">throw</span> IllegalArgumentException(<span style="color:#cd5555">"不支持的cv类型"</span>)
+            <span style="color:#8b008b;font-weight:bold">else</span> -&gt; <span style="color:#8b008b;font-weight:bold">throw</span> IllegalArgumentException(<span style="color:#cd5555">&#34;不支持的cv类型&#34;</span>)
         }
     }
     <span style="color:#8b008b;font-weight:bold">return</span> cv
@@ -392,7 +720,7 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">Cursor</span>.getString(name: String): String = getString(getColumnIndex(name))
 <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">Cursor</span>.getInt(name: String): Int = getInt(getColumnIndex(name))
 <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">Cursor</span>.getDouble(name: String): Double = getDouble(getColumnIndex(name))
-</code></pre></div><div class="highlight"><pre style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4" tabindex="0"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.databasetest</span>
+</code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.databasetest</span>
 <span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.os.Bundle</span>
 <span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.util.Log</span>
 <span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">androidx.appcompat.app.AppCompatActivity</span>
@@ -403,48 +731,48 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
         <span style="color:#8b008b;font-weight:bold">super</span>.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        <span style="color:#8b008b;font-weight:bold">val</span> dbHelper = MyDatabaseHelper(<span style="color:#8b008b;font-weight:bold">this</span>, <span style="color:#cd5555">"BookStore.db"</span>, <span style="color:#b452cd">6</span>)
+        <span style="color:#8b008b;font-weight:bold">val</span> dbHelper = MyDatabaseHelper(<span style="color:#8b008b;font-weight:bold">this</span>, <span style="color:#cd5555">&#34;BookStore.db&#34;</span>, <span style="color:#b452cd">6</span>)
         binding.createDatabaseButton.setOnClickListener {
             dbHelper.writableDatabase
         }
         binding.addDataButton.setOnClickListener {
             <span style="color:#8b008b;font-weight:bold">val</span> db = dbHelper.writableDatabase
             <span style="color:#8b008b;font-weight:bold">val</span> values1 = cvOf(
-                <span style="color:#cd5555">"name"</span> to <span style="color:#cd5555">"The Da Vinci Code"</span>,
-                <span style="color:#cd5555">"author"</span> to <span style="color:#cd5555">"Dan Brown"</span>,
-                <span style="color:#cd5555">"pages"</span> to <span style="color:#b452cd">454</span>,
-                <span style="color:#cd5555">"price"</span> to <span style="color:#b452cd">16.96</span>
+                <span style="color:#cd5555">&#34;name&#34;</span> to <span style="color:#cd5555">&#34;The Da Vinci Code&#34;</span>,
+                <span style="color:#cd5555">&#34;author&#34;</span> to <span style="color:#cd5555">&#34;Dan Brown&#34;</span>,
+                <span style="color:#cd5555">&#34;pages&#34;</span> to <span style="color:#b452cd">454</span>,
+                <span style="color:#cd5555">&#34;price&#34;</span> to <span style="color:#b452cd">16.96</span>
             )
-            db.insert(<span style="color:#cd5555">"Book"</span>, <span style="color:#8b008b;font-weight:bold">null</span>, values1)
+            db.insert(<span style="color:#cd5555">&#34;Book&#34;</span>, <span style="color:#8b008b;font-weight:bold">null</span>, values1)
             <span style="color:#8b008b;font-weight:bold">val</span> values2 = cvOf(
-                <span style="color:#cd5555">"name"</span> to <span style="color:#cd5555">"The Lost Symbol"</span>,
-                <span style="color:#cd5555">"author"</span> to <span style="color:#cd5555">"Dan Brown"</span>,
-                <span style="color:#cd5555">"pages"</span> to <span style="color:#b452cd">510</span>,
-                <span style="color:#cd5555">"price"</span> to <span style="color:#b452cd">19.95</span>
+                <span style="color:#cd5555">&#34;name&#34;</span> to <span style="color:#cd5555">&#34;The Lost Symbol&#34;</span>,
+                <span style="color:#cd5555">&#34;author&#34;</span> to <span style="color:#cd5555">&#34;Dan Brown&#34;</span>,
+                <span style="color:#cd5555">&#34;pages&#34;</span> to <span style="color:#b452cd">510</span>,
+                <span style="color:#cd5555">&#34;price&#34;</span> to <span style="color:#b452cd">19.95</span>
             )
-            db.insert(<span style="color:#cd5555">"Book"</span>, <span style="color:#8b008b;font-weight:bold">null</span>, values2)
+            db.insert(<span style="color:#cd5555">&#34;Book&#34;</span>, <span style="color:#8b008b;font-weight:bold">null</span>, values2)
         }
         binding.updateDataButton.setOnClickListener {
             <span style="color:#8b008b;font-weight:bold">val</span> db = dbHelper.writableDatabase
-            <span style="color:#8b008b;font-weight:bold">val</span> values = cvOf(<span style="color:#cd5555">"price"</span> to <span style="color:#b452cd">10.99</span>)
-            db.update(<span style="color:#cd5555">"Book"</span>, values, <span style="color:#cd5555">"name=?"</span>, arrayOf(<span style="color:#cd5555">"The Da Vinci Code"</span>))
+            <span style="color:#8b008b;font-weight:bold">val</span> values = cvOf(<span style="color:#cd5555">&#34;price&#34;</span> to <span style="color:#b452cd">10.99</span>)
+            db.update(<span style="color:#cd5555">&#34;Book&#34;</span>, values, <span style="color:#cd5555">&#34;name=?&#34;</span>, arrayOf(<span style="color:#cd5555">&#34;The Da Vinci Code&#34;</span>))
         }
         binding.deleteDataButton.setOnClickListener {
             <span style="color:#8b008b;font-weight:bold">val</span> db = dbHelper.writableDatabase
-            db.delete(<span style="color:#cd5555">"Book"</span>, <span style="color:#cd5555">"pages &gt; ?"</span>, arrayOf(<span style="color:#cd5555">"500"</span>))
+            db.delete(<span style="color:#cd5555">&#34;Book&#34;</span>, <span style="color:#cd5555">&#34;pages &gt; ?&#34;</span>, arrayOf(<span style="color:#cd5555">&#34;500&#34;</span>))
         }
         binding.queryDataButton.setOnClickListener {
             <span style="color:#8b008b;font-weight:bold">val</span> db = dbHelper.writableDatabase
-            <span style="color:#8b008b;font-weight:bold">val</span> cursor = db.query(<span style="color:#cd5555">"Book"</span>, <span style="color:#8b008b;font-weight:bold">null</span>, <span style="color:#8b008b;font-weight:bold">null</span>, <span style="color:#8b008b;font-weight:bold">null</span>, <span style="color:#8b008b;font-weight:bold">null</span>, <span style="color:#8b008b;font-weight:bold">null</span>, <span style="color:#8b008b;font-weight:bold">null</span>)
+            <span style="color:#8b008b;font-weight:bold">val</span> cursor = db.query(<span style="color:#cd5555">&#34;Book&#34;</span>, <span style="color:#8b008b;font-weight:bold">null</span>, <span style="color:#8b008b;font-weight:bold">null</span>, <span style="color:#8b008b;font-weight:bold">null</span>, <span style="color:#8b008b;font-weight:bold">null</span>, <span style="color:#8b008b;font-weight:bold">null</span>, <span style="color:#8b008b;font-weight:bold">null</span>)
             <span style="color:#8b008b;font-weight:bold">if</span> (cursor.moveToFirst()) {
                 <span style="color:#8b008b;font-weight:bold">do</span> {
-                    <span style="color:#8b008b;font-weight:bold">val</span> name = cursor.getString(<span style="color:#cd5555">"name"</span>)
-                    <span style="color:#8b008b;font-weight:bold">val</span> author = cursor.getString(<span style="color:#cd5555">"author"</span>)
-                    <span style="color:#8b008b;font-weight:bold">val</span> pages = cursor.getInt(<span style="color:#cd5555">"pages"</span>)
-                    <span style="color:#8b008b;font-weight:bold">val</span> price = cursor.getDouble(<span style="color:#cd5555">"price"</span>)
+                    <span style="color:#8b008b;font-weight:bold">val</span> name = cursor.getString(<span style="color:#cd5555">&#34;name&#34;</span>)
+                    <span style="color:#8b008b;font-weight:bold">val</span> author = cursor.getString(<span style="color:#cd5555">&#34;author&#34;</span>)
+                    <span style="color:#8b008b;font-weight:bold">val</span> pages = cursor.getInt(<span style="color:#cd5555">&#34;pages&#34;</span>)
+                    <span style="color:#8b008b;font-weight:bold">val</span> price = cursor.getDouble(<span style="color:#cd5555">&#34;price&#34;</span>)
                     Log.d(
                         javaClass.simpleName,
-                        <span style="color:#cd5555">"name: </span><span style="color:#cd5555">$name</span><span style="color:#cd5555">, author: </span><span style="color:#cd5555">$author</span><span style="color:#cd5555">, pages: </span><span style="color:#cd5555">$pages</span><span style="color:#cd5555">, price: </span><span style="color:#cd5555">$price</span><span style="color:#cd5555">"</span>
+                        <span style="color:#cd5555">&#34;name: </span><span style="color:#cd5555">$name</span><span style="color:#cd5555">, author: </span><span style="color:#cd5555">$author</span><span style="color:#cd5555">, pages: </span><span style="color:#cd5555">$pages</span><span style="color:#cd5555">, price: </span><span style="color:#cd5555">$price</span><span style="color:#cd5555">&#34;</span>
                     )
                 } <span style="color:#8b008b;font-weight:bold">while</span> (cursor.moveToNext())
             }
@@ -453,36 +781,68 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
     }
 }
 </code></pre></div><!-- raw HTML omitted -->
-<hr id="EOF" width="100%"/>
-<p style="color:#777;">最后修改于 2021-10-24</p>
-</div>
-</div>
-<nav class="post-pagination">
-<a class="newer-posts" href="/posts/%E7%BB%99app%E6%B7%BB%E5%8A%A0%E6%9E%84%E5%BB%BA%E4%BF%A1%E6%81%AF/">
-			下回<br/>给APP添加构建信息
-                </a>
-<a class="older-posts" href="/posts/kotlin/">
-			上回<br/>android项目开发：Kotlin
-                </a>
-</nav>
-<div class="post-comment-wrapper">
-<script async="" crossorigin="anonymous" issue-term="title" label="" repo="zerofancy/zerofancy.github.io" src="https://utteranc.es/client.js" theme="github-light">
-</script>
-</div>
-</div>
-</div>
-</div>
-</div><div id="single-column-footer">
-Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
-<br/>
-移植自 <a href="https://mak1t0.cc/" rel="noreferrer noopener" target="_blank">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" rel="noreferrer noopener" target="_blank">Journal.</a> <br/>
-<br/>
 
-©
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">最后修改于 2021-10-24</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts" href="/posts/%E7%BB%99app%E6%B7%BB%E5%8A%A0%E6%9E%84%E5%BB%BA%E4%BF%A1%E6%81%AF/">
+			下回<br>给APP添加构建信息
+                </a>
+                
+                
+                
+                <a class="older-posts" href="/posts/kotlin/">
+			上回<br>android项目开发：Kotlin
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+<script src="https://utteranc.es/client.js"
+        repo="zerofancy/zerofancy.github.io"
+        issue-term="title"
+        label=""
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
 	
 	CC BY-SA 4.0
 	
 </div>
-</div>
-<script src="/js/journal.js"></script></body>
+            </div>
+    
+    <script src="/js/journal.js"></script></body>
 </html>
