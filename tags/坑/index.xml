@@ -19,15 +19,15 @@
 于是大聪明我一拍脑门就写出来了，
 // 实际上是写了个安卓app, 这里只是示意 val list = listOf(&amp;#34;荟萃餐厅&amp;#34;, &amp;#34;玉兰餐厅&amp;#34;, &amp;#34;唐岛湾餐厅&amp;#34;) val floor = listOf(&amp;#34;1楼&amp;#34;, &amp;#34;2楼&amp;#34;, &amp;#34;3楼&amp;#34;) println(list.random() + floor.random()) 简洁优雅，不用算上下界，我们Kotlin真是太厉害辣！
 然后我们就在荟萃餐厅一楼连续吃了3天……小伙伴们都不相信我的编程水平了。
- 故事就到这里，那么问题在哪里呢？
+故事就到这里，那么问题在哪里呢？
 随机数不随机，那么肯定是初始化时没有引入不同seed。list.random()方法默认使用的Random对象定义在kotlin stdlib的Random.kt文件中
 接下来找到这个defaultPlatformRandom的实现
 这东西最终用的是PlatformThreadLocalRandom，而Android的ThreadLocalRandom中出了个bug——他在zygote进程中初始化，所以每个程序打开时都是相同的初始状态。
 我们可以在网上找到相关的讨论：
 https://www.reddit.com/r/androiddev/comments/x8z9r1/comment/innw882/?utm_source=share&amp;amp;utm_medium=web2x&amp;amp;context=3
 https://youtrack.jetbrains.com/issue/KT-52618/ThreadLocalRandom-is-not-a-good-source-of-randomness-on-Android-before-SDK-34-so-dont-use-it-for-Kotlin-Random
- 解决：
- 避免使用List.random、Random.nextXxx之类的方法，他们最终都是调用这个PlatformThreadLocalRandom，每次需要随机数时都创建一个Random对象，传入seed：val random = Random(System.currentTimeMills());random.nextInt() 升级Kotlin版本，根据官方的缺陷跟踪器，该问题兜底修复于1.7.20版本 使用字节码修改的方法，编译时替换掉相关的调用，比如可以用lancet来处理  </description>
+解决：
+避免使用List.random、Random.nextXxx之类的方法，他们最终都是调用这个PlatformThreadLocalRandom，每次需要随机数时都创建一个Random对象，传入seed：val random = Random(System.currentTimeMills());random.nextInt() 升级Kotlin版本，根据官方的缺陷跟踪器，该问题兜底修复于1.7.20版本 使用字节码修改的方法，编译时替换掉相关的调用，比如可以用lancet来处理 </description>
     </item>
     
   </channel>

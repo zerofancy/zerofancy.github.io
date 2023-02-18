@@ -35,7 +35,6 @@
 
 
 
-
   
 
 
@@ -48,11 +47,11 @@
       <script src="/js/toc.js"></script>
     
     <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
-<link rel="stylesheet" href="/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
+<link rel="stylesheet" href="/scss/journal.scss" integrity="" media="screen">
 
 
 
-<link rel="stylesheet" href="/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
+<link rel="stylesheet" href="/scss/dark-mode.scss" integrity="" media="screen">
 
 
 <link rel="stylesheet"
@@ -639,31 +638,31 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <h2 id="程序模拟">程序模拟</h2>
 <p>有点绕，咱学软件的，就干脆让电脑跑一跑。</p>
 <h3 id="代码">代码</h3>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">java.util.Random</span>;
-<span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">Test</span>{
-    <span style="color:#8b008b;font-weight:bold">public</span> <span style="color:#8b008b;font-weight:bold">static</span> <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">main</span>(String[] args) {
-        Random ran=<span style="color:#8b008b;font-weight:bold">new</span> Random();
-        <span style="color:#00688b;font-weight:bold">int</span> c1=0,c2=0;
-        <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=0;i&lt;1e6;i++){
-            <span style="color:#00688b;font-weight:bold">boolean</span> boxes[]={<span style="color:#8b008b;font-weight:bold">false</span>,<span style="color:#8b008b;font-weight:bold">false</span>,<span style="color:#8b008b;font-weight:bold">false</span>};
-            boxes[ran.<span style="color:#658b00">nextInt</span>(boxes.<span style="color:#658b00">length</span>)]=<span style="color:#8b008b;font-weight:bold">true</span>;<span style="color:#228b22">//某个门后有奖
-</span><span style="color:#228b22"></span>            <span style="color:#00688b;font-weight:bold">int</span> sel=ran.<span style="color:#658b00">nextInt</span>(boxes.<span style="color:#658b00">length</span>);<span style="color:#228b22">//随便选择一扇门
-</span><span style="color:#228b22"></span>            <span style="color:#00688b;font-weight:bold">int</span> p=0;
-            <span style="color:#8b008b;font-weight:bold">while</span>(p==sel||boxes[p]){<span style="color:#228b22">//主持人选择一扇没奖的门（且不与参与者选同一扇）
-</span><span style="color:#228b22"></span>                p=ran.<span style="color:#658b00">nextInt</span>(boxes.<span style="color:#658b00">length</span>);
-            }
-            <span style="color:#8b008b;font-weight:bold">if</span>(boxes[sel]){<span style="color:#228b22">//不更换中奖
-</span><span style="color:#228b22"></span>                c1++;
-            }
-            <span style="color:#8b008b;font-weight:bold">if</span>(boxes[0+1+2-sel-p]){<span style="color:#228b22">//更换中奖
-</span><span style="color:#228b22"></span>                c2++;
-            }
-        }
-        System.<span style="color:#658b00">out</span>.<span style="color:#658b00">println</span>(c1/1e6);
-        System.<span style="color:#658b00">out</span>.<span style="color:#658b00">println</span>(c2/1e6);
-    }
-}
-</code></pre></div><h3 id="运行结果">运行结果</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">java.util.Random</span>;
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">Test</span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">public</span> <span style="color:#8b008b;font-weight:bold">static</span> <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">main</span>(String[] args) {
+</span></span><span style="display:flex;"><span>        Random ran=<span style="color:#8b008b;font-weight:bold">new</span> Random();
+</span></span><span style="display:flex;"><span>        <span style="color:#00688b;font-weight:bold">int</span> c1=<span style="color:#b452cd">0</span>,c2=<span style="color:#b452cd">0</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>;i&lt;<span style="color:#b452cd">1e6</span>;i++){
+</span></span><span style="display:flex;"><span>            <span style="color:#00688b;font-weight:bold">boolean</span> boxes[]={<span style="color:#8b008b;font-weight:bold">false</span>,<span style="color:#8b008b;font-weight:bold">false</span>,<span style="color:#8b008b;font-weight:bold">false</span>};
+</span></span><span style="display:flex;"><span>            boxes[ran.<span style="color:#658b00">nextInt</span>(boxes.<span style="color:#658b00">length</span>)]=<span style="color:#8b008b;font-weight:bold">true</span>;<span style="color:#228b22">//某个门后有奖
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>            <span style="color:#00688b;font-weight:bold">int</span> sel=ran.<span style="color:#658b00">nextInt</span>(boxes.<span style="color:#658b00">length</span>);<span style="color:#228b22">//随便选择一扇门
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>            <span style="color:#00688b;font-weight:bold">int</span> p=<span style="color:#b452cd">0</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">while</span>(p==sel||boxes[p]){<span style="color:#228b22">//主持人选择一扇没奖的门（且不与参与者选同一扇）
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>                p=ran.<span style="color:#658b00">nextInt</span>(boxes.<span style="color:#658b00">length</span>);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">if</span>(boxes[sel]){<span style="color:#228b22">//不更换中奖
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>                c1++;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">if</span>(boxes[<span style="color:#b452cd">0</span>+<span style="color:#b452cd">1</span>+<span style="color:#b452cd">2</span>-sel-p]){<span style="color:#228b22">//更换中奖
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>                c2++;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        System.<span style="color:#658b00">out</span>.<span style="color:#658b00">println</span>(c1/<span style="color:#b452cd">1e6</span>);
+</span></span><span style="display:flex;"><span>        System.<span style="color:#658b00">out</span>.<span style="color:#658b00">println</span>(c2/<span style="color:#b452cd">1e6</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="运行结果">运行结果</h3>
 <pre tabindex="0"><code>0.332419
 0.667581
 </code></pre><p>看来是更换比较好了。</p>
@@ -679,14 +678,14 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
             <nav class="post-pagination">
 
                 
-                <a class="newer-posts" href="/project/qt%E8%B5%B0%E8%BF%B7%E5%AE%AB/">
-			下回<br>[已归档]Qt走迷宫
+                <a class="newer-posts" href="/posts/%E5%A4%A7%E5%9E%8B%E6%95%B0%E7%BB%84%E6%8C%89%E8%A1%8C%E9%81%8D%E5%8E%86%E4%B8%8E%E6%8C%89%E5%88%97%E9%81%8D%E5%8E%86%E7%9A%84%E5%8C%BA%E5%88%AB/">
+			下回<br>大型数组按行遍历与按列遍历的区别
                 </a>
                 
                 
                 
-                <a class="older-posts" href="/posts/%E5%A4%A7%E5%9E%8B%E6%95%B0%E7%BB%84%E6%8C%89%E8%A1%8C%E9%81%8D%E5%8E%86%E4%B8%8E%E6%8C%89%E5%88%97%E9%81%8D%E5%8E%86%E7%9A%84%E5%8C%BA%E5%88%AB/">
-			上回<br>大型数组按行遍历与按列遍历的区别
+                <a class="older-posts" href="/posts/%E9%97%B7%E5%A3%B0%E4%BD%9C%E5%A4%A7%E6%AD%BB%E5%88%A0%E9%99%A4%E7%94%B5%E8%84%91%E5%86%85%E7%9A%84%E7%A9%BA%E6%96%87%E4%BB%B6%E5%A4%B9/">
+			上回<br>闷声作大死：删除电脑内的空文件夹
                 </a>
                 
             </nav>

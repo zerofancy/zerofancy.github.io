@@ -35,7 +35,6 @@
 
 
 
-
   
 
 
@@ -48,11 +47,11 @@
       <script src="/js/toc.js"></script>
     
     <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
-<link rel="stylesheet" href="/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
+<link rel="stylesheet" href="/scss/journal.scss" integrity="" media="screen">
 
 
 
-<link rel="stylesheet" href="/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
+<link rel="stylesheet" href="/scss/dark-mode.scss" integrity="" media="screen">
 
 
 <link rel="stylesheet"
@@ -542,53 +541,53 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <p>在通知渠道创建时通知的重要等级也就确定了，之后不能再被APP修改。</p>
 <!-- raw HTML omitted -->
 <h2 id="通知dmeo">通知dmeo</h2>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.notificationtest</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.app.NotificationChannel</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.app.NotificationManager</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.app.PendingIntent</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.content.Context</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.content.Intent</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.graphics.BitmapFactory</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.os.Build</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">androidx.appcompat.app.AppCompatActivity</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.os.Bundle</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">androidx.core.app.NotificationCompat</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.notificationtest.databinding.ActivityMainBinding</span>
-<span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">MainActivity</span> : AppCompatActivity() {
-    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">lateinit</span> <span style="color:#8b008b;font-weight:bold">var</span> binding: ActivityMainBinding
-    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onCreate</span>(savedInstanceState: Bundle?) {
-        <span style="color:#8b008b;font-weight:bold">super</span>.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        initView()
-    }
-    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">initView</span>(){
-        <span style="color:#8b008b;font-weight:bold">val</span> manager = getSystemService(Context.NOTIFICATION_SERVICE) <span style="color:#8b008b;font-weight:bold">as</span> NotificationManager
-        <span style="color:#8b008b;font-weight:bold">if</span>(Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.O){
-            <span style="color:#228b22">// 通知渠道
-</span><span style="color:#228b22"></span>            <span style="color:#8b008b;font-weight:bold">val</span> channel = NotificationChannel(<span style="color:#cd5555">&#34;normal&#34;</span>,<span style="color:#cd5555">&#34;Normal&#34;</span>,NotificationManager.IMPORTANCE_DEFAULT)
-            manager.createNotificationChannel(channel)
-        }
-        binding.sendNotice.setOnClickListener {
-            <span style="color:#8b008b;font-weight:bold">val</span> intent = Intent(<span style="color:#8b008b;font-weight:bold">this</span>,NotificationActivity::<span style="color:#8b008b;font-weight:bold">class</span>.java)
-            <span style="color:#8b008b;font-weight:bold">val</span> pi = PendingIntent.getActivity(<span style="color:#8b008b;font-weight:bold">this</span>,REQUEST_NOTIFICATION_ACTIVITY,intent,<span style="color:#b452cd">0</span>)
-            <span style="color:#8b008b;font-weight:bold">val</span> notification = NotificationCompat.Builder(<span style="color:#8b008b;font-weight:bold">this</span>,<span style="color:#cd5555">&#34;normal&#34;</span>)
-                    .setContentTitle(<span style="color:#cd5555">&#34;This is content title&#34;</span>)
-                    .setContentText(<span style="color:#cd5555">&#34;This is content text. &#34;</span>)
-                    .setSmallIcon(R.drawable.ic_launcher_foreground)
-                    .setLargeIcon(BitmapFactory.decodeResource(resources,R.drawable.ic_launcher_foreground))
-                    .setContentIntent(pi)
-                    .setAutoCancel(<span style="color:#8b008b;font-weight:bold">true</span>)
-                    .build()
-            manager.notify(CHANNEL,notification)
-        }
-    }
-    <span style="color:#8b008b;font-weight:bold">companion</span> <span style="color:#8b008b;font-weight:bold">object</span> {
-        <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#8b008b;font-weight:bold">val</span> CHANNEL = <span style="color:#b452cd">1</span>
-        <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#8b008b;font-weight:bold">val</span> REQUEST_NOTIFICATION_ACTIVITY = <span style="color:#b452cd">1</span>
-    }
-}
-</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.notificationtest</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.app.NotificationChannel</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.app.NotificationManager</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.app.PendingIntent</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.content.Context</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.content.Intent</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.graphics.BitmapFactory</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.os.Build</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">androidx.appcompat.app.AppCompatActivity</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.os.Bundle</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">androidx.core.app.NotificationCompat</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.notificationtest.databinding.ActivityMainBinding</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">MainActivity</span> : AppCompatActivity() {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">lateinit</span> <span style="color:#8b008b;font-weight:bold">var</span> binding: ActivityMainBinding
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onCreate</span>(savedInstanceState: Bundle?) {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">super</span>.onCreate(savedInstanceState)
+</span></span><span style="display:flex;"><span>        binding = <span style="color:#008b45;font-weight:bold">ActivityMainBinding</span>.inflate(layoutInflater)
+</span></span><span style="display:flex;"><span>        setContentView(binding.root)
+</span></span><span style="display:flex;"><span>        initView()
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">initView</span>(){
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">val</span> manager = getSystemService(<span style="color:#008b45;font-weight:bold">Context</span>.NOTIFICATION_SERVICE) <span style="color:#8b008b;font-weight:bold">as</span> NotificationManager
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span>(<span style="color:#008b45;font-weight:bold">Build</span>.<span style="color:#008b45;font-weight:bold">VERSION</span>.SDK_INT &gt;= <span style="color:#008b45;font-weight:bold">Build</span>.<span style="color:#008b45;font-weight:bold">VERSION_CODES</span>.O){
+</span></span><span style="display:flex;"><span>            <span style="color:#228b22">// 通知渠道
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>            <span style="color:#8b008b;font-weight:bold">val</span> channel = NotificationChannel(<span style="color:#cd5555">&#34;normal&#34;</span>,<span style="color:#cd5555">&#34;Normal&#34;</span>,<span style="color:#008b45;font-weight:bold">NotificationManager</span>.IMPORTANCE_DEFAULT)
+</span></span><span style="display:flex;"><span>            manager.createNotificationChannel(channel)
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        binding.sendNotice.setOnClickListener {
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">val</span> intent = Intent(<span style="color:#8b008b;font-weight:bold">this</span>,NotificationActivity::<span style="color:#8b008b;font-weight:bold">class</span>.java)
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">val</span> pi = <span style="color:#008b45;font-weight:bold">PendingIntent</span>.getActivity(<span style="color:#8b008b;font-weight:bold">this</span>,REQUEST_NOTIFICATION_ACTIVITY,intent,<span style="color:#b452cd">0</span>)
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">val</span> notification = <span style="color:#008b45;font-weight:bold">NotificationCompat</span>.Builder(<span style="color:#8b008b;font-weight:bold">this</span>,<span style="color:#cd5555">&#34;normal&#34;</span>)
+</span></span><span style="display:flex;"><span>                    .setContentTitle(<span style="color:#cd5555">&#34;This is content title&#34;</span>)
+</span></span><span style="display:flex;"><span>                    .setContentText(<span style="color:#cd5555">&#34;This is content text. &#34;</span>)
+</span></span><span style="display:flex;"><span>                    .setSmallIcon(<span style="color:#008b45;font-weight:bold">R</span>.drawable.ic_launcher_foreground)
+</span></span><span style="display:flex;"><span>                    .setLargeIcon(<span style="color:#008b45;font-weight:bold">BitmapFactory</span>.decodeResource(resources,<span style="color:#008b45;font-weight:bold">R</span>.drawable.ic_launcher_foreground))
+</span></span><span style="display:flex;"><span>                    .setContentIntent(pi)
+</span></span><span style="display:flex;"><span>                    .setAutoCancel(<span style="color:#8b008b;font-weight:bold">true</span>)
+</span></span><span style="display:flex;"><span>                    .build()
+</span></span><span style="display:flex;"><span>            manager.notify(CHANNEL,notification)
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">companion</span> <span style="color:#8b008b;font-weight:bold">object</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#8b008b;font-weight:bold">val</span> CHANNEL = <span style="color:#b452cd">1</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#8b008b;font-weight:bold">val</span> REQUEST_NOTIFICATION_ACTIVITY = <span style="color:#b452cd">1</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div>
                     
                     <HR width="100%" id="EOF">
 		    <p style="color:#777;">最后修改于 2021-01-12</p>

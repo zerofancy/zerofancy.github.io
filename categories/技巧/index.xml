@@ -14,14 +14,16 @@
       <pubDate>Sun, 16 Jan 2022 23:24:16 +0800</pubDate>
       
       <guid>https://ntutn.top/posts/%E7%BB%99app%E6%B7%BB%E5%8A%A0%E6%9E%84%E5%BB%BA%E4%BF%A1%E6%81%AF/</guid>
-      <description>给APP添加构建信息  这两天在琢磨一个问题，一个APP是怎么知道自己是怎么来的呢？ 一个应用得知道自己是怎么来的，这样出了问题才知道该找谁。举个例子，当应用发生了一个线上crash，崩溃信息收集上来，然后我们打开堆栈一看懵了——这个发生崩溃的v5.c是哪个类呢？
- 显然，代码被混淆过，我们要拿到编译时生成的mapping.txt来还原堆栈，如图
+      <description>给APP添加构建信息 这两天在琢磨一个问题，一个APP是怎么知道自己是怎么来的呢？ 一个应用得知道自己是怎么来的，这样出了问题才知道该找谁。举个例子，当应用发生了一个线上crash，崩溃信息收集上来，然后我们打开堆栈一看懵了——这个发生崩溃的v5.c是哪个类呢？
+显然，代码被混淆过，我们要拿到编译时生成的mapping.txt来还原堆栈，如图
 **然而，我们编译了很多次，客官您要的是哪次的mapping文件呢？**显然，我们不仅要保留每次构建的相关信息，还得能准确区分开每次构建的产物，能做到有问题立即查询到对应构建信息。
 应用需要知道自己是“怎么来的”。
-区分不同构建结果  可以收集当前commit id，commit不同一定是不同构建。 可以生成一个较长的随机数每次构建不同。  看上去前者更优雅，但一个commit id上并不一定只有一个成功的构建，比如你做一应用叫“快音”，测试通过后调整了一些编译选项打出线上包，此时只根据commit id就无法确定是对应测试包的构建还是线上包了。
+区分不同构建结果 可以收集当前commit id，commit不同一定是不同构建。 可以生成一个较长的随机数每次构建不同。 看上去前者更优雅，但一个commit id上并不一定只有一个成功的构建，比如你做一应用叫“快音”，测试通过后调整了一些编译选项打出线上包，此时只根据commit id就无法确定是对应测试包的构建还是线上包了。
 所以，最实在的方法还是后者。
 fun runShellCommand(command: String): String { val byteOut = ByteArrayOutputStream() project.exec { commandLine = command.split(&amp;#34; &amp;#34;) standardOutput = byteOut } return String(byteOut.toByteArray()) } val buildNumber = UUID.randomUUID() val gitBranch = runShellCommand(&amp;#34;git branch --show-current&amp;#34;).trim() val gitCommitId = runShellCommand(&amp;#34;git rev-parse HEAD&amp;#34;).trim() val buildTimeMILLIS = System.currentTimeMillis() 将信息传给应用 不知道大家有没有这种习惯，在开发时加一些测试代码时判断只在Debug版本生效，即
-if (BuildConfig.DEBUG) { Toast.makeText(applicationContext, &amp;#34;test&amp;#34;, Toast.LENGTH_SHORT).show() } 这样即使我真的忘记删除这段代码也不会影响到线上，让用户看到个“test”感到莫名其妙。这里用的BuildConfig就是在Gradle构建时生成的一个类，里面包含了一些有关当前构建的信息1。</description>
+if (BuildConfig.DEBUG) { Toast.makeText(applicationContext, &amp;#34;test&amp;#34;, Toast.LENGTH_SHORT).show() } 这样即使我真的忘记删除这段代码也不会影响到线上，让用户看到个“test”感到莫名其妙。这里用的BuildConfig就是在Gradle构建时生成的一个类，里面包含了一些有关当前构建的信息1。
+而幸运的是，官方也提供了方法让我们可以往BuildConfig里面自己加东西，于是
+android { defaultConfig { buildConfigField(&amp;#34;String&amp;#34;, &amp;#34;BUILD_NUMBER&amp;#34;, &amp;#34;\&amp;#34;$buildNumber\&amp;#34;&amp;#34;) buildConfigField(&amp;#34;String&amp;#34;, &amp;#34;GIT_BRANCH&amp;#34;, &amp;#34;\&amp;#34;$gitBranch\&amp;#34;&amp;#34;) buildConfigField(&amp;#34;String&amp;#34;, &amp;#34;GIT_COMMIT_ID&amp;#34;, &amp;#34;\&amp;#34;$gitCommitId\&amp;#34;&amp;#34;) buildConfigField(&amp;#34;Long&amp;#34;, &amp;#34;BUILD_TIME_MILLIS&amp;#34;, &amp;#34;${buildTimeMILLIS}L&amp;#34;) } } 然后这些字段就会出现在BuildConfig中</description>
     </item>
     
     <item>
@@ -34,8 +36,7 @@ if (BuildConfig.DEBUG) { Toast.makeText(applicationContext, &amp;#34;test&amp;#3
 圆角变大了，还有我一开始比较喜欢的功能，姑且称之为窗口标签。在BigSur中，当你打开两个全屏的Android Studio，它们将出现在同一个窗口，窗口上方出现不同的标签页，和浏览器一样。
 好景不长，这个功能表现很不稳定，我不得不考虑干掉这个功能。如果只是没有成功触发也就算了，大不了当没升级用，但它常常会把一些弹出窗口也搞成和原窗口并列的标签。比如当你rename一个文件时，弹出的窗口有时就会并列到标签上，然后Android Studio就卡死了。
 好吧，既然它开始影响我的工作效率了，我就找了找禁用的方法1。
-defaults write com.google.android.studio AppleWindowTabbingMode manual   来自https://www.reddit.com/r/androiddev/comments/jtbl4m/has_anyone_updated_to_macos_big_sur_and_is/&amp;#160;&amp;#x21a9;&amp;#xfe0e;
-   </description>
+defaults write com.google.android.studio AppleWindowTabbingMode manual 来自https://www.reddit.com/r/androiddev/comments/jtbl4m/has_anyone_updated_to_macos_big_sur_and_is/&amp;#160;&amp;#x21a9;&amp;#xfe0e;</description>
     </item>
     
   </channel>

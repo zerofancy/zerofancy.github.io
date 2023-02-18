@@ -35,7 +35,6 @@
 
 
 
-
   
 
 
@@ -48,11 +47,11 @@
       <script src="/js/toc.js"></script>
     
     <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
-<link rel="stylesheet" href="/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
+<link rel="stylesheet" href="/scss/journal.scss" integrity="" media="screen">
 
 
 
-<link rel="stylesheet" href="/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
+<link rel="stylesheet" href="/scss/dark-mode.scss" integrity="" media="screen">
 
 
 <link rel="stylesheet"
@@ -598,7 +597,7 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
                             
                             3 min
                             
-                            26 s.
+                            27 s.
                         
                     </div>
                 </div>
@@ -622,116 +621,116 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 </code></pre><p>则输出：</p>
 <pre tabindex="0"><code>9 8 7 6 5 4 3 2 1
 </code></pre><p>预置代码如下： （其中/*   */ 部分是要补充的<code>insert</code>和<code>reverse</code>函数）</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#1e889b">#include</span><span style="color:#1e889b">&lt;iostream&gt;</span><span style="color:#1e889b">
-</span><span style="color:#1e889b">#include</span><span style="color:#1e889b">&lt;stdlib.h&gt;</span><span style="color:#1e889b">
-</span><span style="color:#1e889b"></span><span style="color:#8b008b;font-weight:bold">using</span> <span style="color:#8b008b;font-weight:bold">namespace</span> std;
-<span style="color:#8b008b;font-weight:bold">typedef</span> <span style="color:#00688b;font-weight:bold">int</span> ElemType;  <span style="color:#228b22">//数据元素类型
-</span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">List</span>; <span style="color:#228b22">//前视定义,否则友元无法定义
-</span><span style="color:#228b22">//结点类定义
-</span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">LinkNode</span>
-{  <span style="color:#8b008b;font-weight:bold">friend</span>  <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">List</span>; 
-   <span style="color:#8b008b;font-weight:bold">private</span>: 
-     LinkNode *link; 
-     ElemType data;  
-   <span style="color:#8b008b;font-weight:bold">public</span>: 
-     LinkNode (LinkNode *ptr = <span style="color:#658b00">NULL</span>)    {link=ptr;}
-     LinkNode(<span style="color:#8b008b;font-weight:bold">const</span> ElemType &amp; item, LinkNode *ptr = <span style="color:#658b00">NULL</span>){  data=item;link=ptr;} 
-     ~LinkNode(){}; 
-}; 
-<span style="color:#228b22">//单链表类定义 
-</span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">List</span>   
-{  <span style="color:#8b008b;font-weight:bold">private</span>:    
-     LinkNode *first; <span style="color:#228b22">//指向链表头结点的指针          
-</span><span style="color:#228b22"></span>   <span style="color:#8b008b;font-weight:bold">public</span>:
-     List (ElemType x) { first = <span style="color:#8b008b;font-weight:bold">new</span> LinkNode (x);}   <span style="color:#228b22">// 带头结点
-</span><span style="color:#228b22"></span>     ~List (){ MakeEmpty();}         <span style="color:#228b22">//析构函数
-</span><span style="color:#228b22"></span>     <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">MakeEmpty</span> ( );      <span style="color:#228b22">//线性表置空    
-</span><span style="color:#228b22"></span>     <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">insert</span>(ElemType val);   <span style="color:#228b22">//在有序线性表中插入元素val
-</span><span style="color:#228b22"></span>     <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">reverse</span>();   <span style="color:#228b22">//线性表的倒置
-</span><span style="color:#228b22"></span>     <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">output</span>();    <span style="color:#228b22">//线性表的输出               
-</span><span style="color:#228b22"></span>}; 
-<span style="color:#00688b;font-weight:bold">void</span> List:: MakeEmpty ( )
- { LinkNode *q;
-   <span style="color:#8b008b;font-weight:bold">while</span> (  first-&gt;link != <span style="color:#658b00">NULL</span> ) 
-	{ q = first-&gt;link;  <span style="color:#228b22">//指向别摘下结点 
-</span><span style="color:#228b22"></span>      first-&gt;link = q-&gt;link;<span style="color:#228b22">//从链中摘下结点
-</span><span style="color:#228b22"></span>      <span style="color:#8b008b;font-weight:bold">delete</span> q;        <span style="color:#228b22">//释放摘下的结点 
-</span><span style="color:#228b22"></span>    }
-};	
-<span style="color:#00688b;font-weight:bold">void</span> List ::output ( )
-{  LinkNode  *p=first-&gt;link; 
-   <span style="color:#8b008b;font-weight:bold">while</span>(p!=<span style="color:#658b00">NULL</span>)
-   { <span style="color:#8b008b;font-weight:bold">if</span>(p==first-&gt;link) cout&lt;&lt;p-&gt;data;
-     <span style="color:#8b008b;font-weight:bold">else</span>  cout&lt;&lt;<span style="color:#cd5555">&#34; &#34;</span>&lt;&lt;p-&gt;data;
-     p=p-&gt;link;
-   }
-   cout&lt;&lt;endl;
-}
-<span style="color:#228b22">/*
-</span><span style="color:#228b22">**************************************************
-</span><span style="color:#228b22">请写出 insert 成员函数
-</span><span style="color:#228b22">**************************************************
-</span><span style="color:#228b22">**************************************************
-</span><span style="color:#228b22">请写出 reverse 成员函数
-</span><span style="color:#228b22">**************************************************
-</span><span style="color:#228b22">*/</span>
-<span style="color:#00688b;font-weight:bold">int</span>  <span style="color:#008b45">main</span>()
-{   List list(<span style="color:#b452cd">0</span>);
-    ElemType endTag=<span style="color:#b452cd">0</span>;
-    ElemType val;
-    <span style="color:#228b22">//下面通过不断读入元素，插入到有序单链表中，建立从小到大的有序单链表
-</span><span style="color:#228b22"></span>    cin&gt;&gt;val;
-    <span style="color:#8b008b;font-weight:bold">while</span>(val!=endTag) 
-     {  list.insert(val);     <span style="color:#228b22">//在有序表中插入一个元素
-</span><span style="color:#228b22"></span>        cin&gt;&gt;val;  
-      }
-    list.reverse ();   <span style="color:#228b22">//线性表倒置
-</span><span style="color:#228b22"></span>    cout&lt;&lt;<span style="color:#cd5555">&#34;The result is:&#34;</span>&lt;&lt;endl;
-    list.output ();
-    <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>;
-}
-</code></pre></div><h2 id="分析">分析</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#1e889b">#include</span><span style="color:#1e889b">&lt;iostream&gt;</span><span style="color:#1e889b">
+</span></span></span><span style="display:flex;"><span><span style="color:#1e889b">#include</span><span style="color:#1e889b">&lt;stdlib.h&gt;</span><span style="color:#1e889b">
+</span></span></span><span style="display:flex;"><span><span style="color:#1e889b"></span><span style="color:#8b008b;font-weight:bold">using</span> <span style="color:#8b008b;font-weight:bold">namespace</span> std;
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">typedef</span> <span style="color:#00688b;font-weight:bold">int</span> ElemType;  <span style="color:#228b22">//数据元素类型
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">List</span>; <span style="color:#228b22">//前视定义,否则友元无法定义
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">//结点类定义
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">LinkNode</span>
+</span></span><span style="display:flex;"><span>{  <span style="color:#8b008b;font-weight:bold">friend</span>  <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">List</span>; 
+</span></span><span style="display:flex;"><span>   <span style="color:#8b008b;font-weight:bold">private</span>: 
+</span></span><span style="display:flex;"><span>     LinkNode *link; 
+</span></span><span style="display:flex;"><span>     ElemType data;  
+</span></span><span style="display:flex;"><span>   <span style="color:#8b008b;font-weight:bold">public</span>: 
+</span></span><span style="display:flex;"><span>     LinkNode (LinkNode *ptr = <span style="color:#658b00">NULL</span>)    {link=ptr;}
+</span></span><span style="display:flex;"><span>     LinkNode(<span style="color:#8b008b;font-weight:bold">const</span> ElemType &amp; item, LinkNode *ptr = <span style="color:#658b00">NULL</span>){  data=item;link=ptr;} 
+</span></span><span style="display:flex;"><span>     ~LinkNode(){}; 
+</span></span><span style="display:flex;"><span>}; 
+</span></span><span style="display:flex;"><span><span style="color:#228b22">//单链表类定义 
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">List</span>   
+</span></span><span style="display:flex;"><span>{  <span style="color:#8b008b;font-weight:bold">private</span>:    
+</span></span><span style="display:flex;"><span>     LinkNode *first; <span style="color:#228b22">//指向链表头结点的指针          
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>   <span style="color:#8b008b;font-weight:bold">public</span>:
+</span></span><span style="display:flex;"><span>     List (ElemType x) { first = <span style="color:#8b008b;font-weight:bold">new</span> LinkNode (x);}   <span style="color:#228b22">// 带头结点
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>     ~List (){ MakeEmpty();}         <span style="color:#228b22">//析构函数
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>     <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">MakeEmpty</span> ( );      <span style="color:#228b22">//线性表置空    
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>     <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">insert</span>(ElemType val);   <span style="color:#228b22">//在有序线性表中插入元素val
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>     <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">reverse</span>();   <span style="color:#228b22">//线性表的倒置
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>     <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">output</span>();    <span style="color:#228b22">//线性表的输出               
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>}; 
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">void</span> List:: MakeEmpty ( )
+</span></span><span style="display:flex;"><span> { LinkNode *q;
+</span></span><span style="display:flex;"><span>   <span style="color:#8b008b;font-weight:bold">while</span> (  first-&gt;link != <span style="color:#658b00">NULL</span> ) 
+</span></span><span style="display:flex;"><span>	{ q = first-&gt;link;  <span style="color:#228b22">//指向别摘下结点 
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>      first-&gt;link = q-&gt;link;<span style="color:#228b22">//从链中摘下结点
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>      <span style="color:#8b008b;font-weight:bold">delete</span> q;        <span style="color:#228b22">//释放摘下的结点 
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    }
+</span></span><span style="display:flex;"><span>};	
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">void</span> List ::output ( )
+</span></span><span style="display:flex;"><span>{  LinkNode  *p=first-&gt;link; 
+</span></span><span style="display:flex;"><span>   <span style="color:#8b008b;font-weight:bold">while</span>(p!=<span style="color:#658b00">NULL</span>)
+</span></span><span style="display:flex;"><span>   { <span style="color:#8b008b;font-weight:bold">if</span>(p==first-&gt;link) cout&lt;&lt;p-&gt;data;
+</span></span><span style="display:flex;"><span>     <span style="color:#8b008b;font-weight:bold">else</span>  cout&lt;&lt;<span style="color:#cd5555">&#34; &#34;</span>&lt;&lt;p-&gt;data;
+</span></span><span style="display:flex;"><span>     p=p-&gt;link;
+</span></span><span style="display:flex;"><span>   }
+</span></span><span style="display:flex;"><span>   cout&lt;&lt;endl;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#228b22">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">**************************************************
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">请写出 insert 成员函数
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">**************************************************
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">**************************************************
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">请写出 reverse 成员函数
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">**************************************************
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">*/</span>
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">int</span>  <span style="color:#008b45">main</span>()
+</span></span><span style="display:flex;"><span>{   List list(<span style="color:#b452cd">0</span>);
+</span></span><span style="display:flex;"><span>    ElemType endTag=<span style="color:#b452cd">0</span>;
+</span></span><span style="display:flex;"><span>    ElemType val;
+</span></span><span style="display:flex;"><span>    <span style="color:#228b22">//下面通过不断读入元素，插入到有序单链表中，建立从小到大的有序单链表
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    cin&gt;&gt;val;
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">while</span>(val!=endTag) 
+</span></span><span style="display:flex;"><span>     {  list.insert(val);     <span style="color:#228b22">//在有序表中插入一个元素
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>        cin&gt;&gt;val;  
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    list.reverse ();   <span style="color:#228b22">//线性表倒置
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    cout&lt;&lt;<span style="color:#cd5555">&#34;The result is:&#34;</span>&lt;&lt;endl;
+</span></span><span style="display:flex;"><span>    list.output ();
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="分析">分析</h2>
 <p>基础题，注意边界的判断和特例的处理。</p>
 <h2 id="answer">Answer</h2>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#228b22">/*
-</span><span style="color:#228b22">**************************************************
-</span><span style="color:#228b22">请写出 insert 成员函数
-</span><span style="color:#228b22">**************************************************
-</span><span style="color:#228b22">*/</span>
-<span style="color:#00688b;font-weight:bold">void</span> List::insert(ElemType val){
-    LinkNode*pNew=<span style="color:#8b008b;font-weight:bold">new</span> LinkNode(val);
-    LinkNode*pPointer=first;
-    <span style="color:#8b008b;font-weight:bold">while</span>(pPointer-&gt;link!=<span style="color:#658b00">NULL</span>){
-        <span style="color:#8b008b;font-weight:bold">if</span>(val&lt;pPointer-&gt;link-&gt;data){
-            pNew-&gt;link=pPointer-&gt;link;
-            pPointer-&gt;link=pNew;
-            <span style="color:#8b008b;font-weight:bold">return</span>;
-        }
-        pPointer=pPointer-&gt;link;
-    }
-    pPointer-&gt;link=pNew;
-}
-<span style="color:#228b22">/*
-</span><span style="color:#228b22">**************************************************
-</span><span style="color:#228b22">请写出 reverse 成员函数
-</span><span style="color:#228b22">**************************************************
-</span><span style="color:#228b22">*/</span>
-<span style="color:#00688b;font-weight:bold">void</span> List::reverse(){
-    <span style="color:#8b008b;font-weight:bold">if</span>(first-&gt;link==<span style="color:#658b00">NULL</span>||first-&gt;link-&gt;link==<span style="color:#658b00">NULL</span>){
-        <span style="color:#8b008b;font-weight:bold">return</span>;
-    }
-    LinkNode*pParent=first-&gt;link;
-    LinkNode*pChild=first-&gt;link-&gt;link;
-    first-&gt;link-&gt;link=<span style="color:#658b00">NULL</span>;
-    <span style="color:#8b008b;font-weight:bold">while</span>(pChild!=<span style="color:#658b00">NULL</span>){
-        LinkNode*pTemp=pChild-&gt;link;
-        pChild-&gt;link=pParent;
-        pParent=pChild;
-        pChild=pTemp;
-    }
-    first-&gt;link=pParent;
-}
-</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#228b22">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">**************************************************
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">请写出 insert 成员函数
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">**************************************************
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">*/</span>
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">void</span> List::insert(ElemType val){
+</span></span><span style="display:flex;"><span>    LinkNode*pNew=<span style="color:#8b008b;font-weight:bold">new</span> LinkNode(val);
+</span></span><span style="display:flex;"><span>    LinkNode*pPointer=first;
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">while</span>(pPointer-&gt;link!=<span style="color:#658b00">NULL</span>){
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span>(val&lt;pPointer-&gt;link-&gt;data){
+</span></span><span style="display:flex;"><span>            pNew-&gt;link=pPointer-&gt;link;
+</span></span><span style="display:flex;"><span>            pPointer-&gt;link=pNew;
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">return</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        pPointer=pPointer-&gt;link;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    pPointer-&gt;link=pNew;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#228b22">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">**************************************************
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">请写出 reverse 成员函数
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">**************************************************
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">*/</span>
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">void</span> List::reverse(){
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">if</span>(first-&gt;link==<span style="color:#658b00">NULL</span>||first-&gt;link-&gt;link==<span style="color:#658b00">NULL</span>){
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    LinkNode*pParent=first-&gt;link;
+</span></span><span style="display:flex;"><span>    LinkNode*pChild=first-&gt;link-&gt;link;
+</span></span><span style="display:flex;"><span>    first-&gt;link-&gt;link=<span style="color:#658b00">NULL</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">while</span>(pChild!=<span style="color:#658b00">NULL</span>){
+</span></span><span style="display:flex;"><span>        LinkNode*pTemp=pChild-&gt;link;
+</span></span><span style="display:flex;"><span>        pChild-&gt;link=pParent;
+</span></span><span style="display:flex;"><span>        pParent=pChild;
+</span></span><span style="display:flex;"><span>        pChild=pTemp;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    first-&gt;link=pParent;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div>
                     
                     <HR width="100%" id="EOF">
 		    <p style="color:#777;">最后修改于 2019-05-13</p>
@@ -743,14 +742,14 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
             <nav class="post-pagination">
 
                 
-                <a class="newer-posts" href="/posts/%E6%B4%BB%E5%8A%A8%E5%AE%89%E6%8E%92%E9%97%AE%E9%A2%98/">
-			下回<br>活动安排问题
+                <a class="newer-posts" href="/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86%E7%AC%94%E8%AE%B0/">
+			下回<br>计算机组成原理笔记
                 </a>
                 
                 
                 
-                <a class="older-posts" href="/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86%E7%AC%94%E8%AE%B0/">
-			上回<br>计算机组成原理笔记
+                <a class="older-posts" href="/posts/%E6%8B%AC%E5%8F%B7%E5%8C%B9%E9%85%8D/">
+			上回<br>数据结构 栈应用 1 括号匹配
                 </a>
                 
             </nav>

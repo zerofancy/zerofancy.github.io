@@ -35,7 +35,6 @@
 
 
 
-
   
 
 
@@ -48,11 +47,11 @@
       <script src="/js/toc.js"></script>
     
     <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
-<link rel="stylesheet" href="/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
+<link rel="stylesheet" href="/scss/journal.scss" integrity="" media="screen">
 
 
 
-<link rel="stylesheet" href="/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
+<link rel="stylesheet" href="/scss/dark-mode.scss" integrity="" media="screen">
 
 
 <link rel="stylesheet"
@@ -744,89 +743,89 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <!-- raw HTML omitted -->
 <h3 id="relativelayout">RelativeLayout</h3>
 <p>相对布局，复杂，但有迹可循。</p>
-<pre tabindex="0"><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-&lt;RelativeLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
-    xmlns:tools=&quot;http://schemas.android.com/tools&quot;
-    android:layout_width=&quot;match_parent&quot;
-    android:layout_height=&quot;match_parent&quot;
-    tools:context=&quot;.MainActivity&quot;&gt;
+<pre tabindex="0"><code>&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;
+&lt;RelativeLayout xmlns:android=&#34;http://schemas.android.com/apk/res/android&#34;
+    xmlns:tools=&#34;http://schemas.android.com/tools&#34;
+    android:layout_width=&#34;match_parent&#34;
+    android:layout_height=&#34;match_parent&#34;
+    tools:context=&#34;.MainActivity&#34;&gt;
     &lt;Button
-        android:id=&quot;@+id/button1&quot;
-        android:layout_width=&quot;wrap_content&quot;
-        android:layout_height=&quot;wrap_content&quot;
-        android:layout_alignParentLeft=&quot;true&quot;
-        android:layout_alignParentTop=&quot;true&quot;
-        android:text=&quot;Button1&quot; /&gt;
+        android:id=&#34;@+id/button1&#34;
+        android:layout_width=&#34;wrap_content&#34;
+        android:layout_height=&#34;wrap_content&#34;
+        android:layout_alignParentLeft=&#34;true&#34;
+        android:layout_alignParentTop=&#34;true&#34;
+        android:text=&#34;Button1&#34; /&gt;
     &lt;Button
-        android:id=&quot;@+id/button2&quot;
-        android:layout_width=&quot;wrap_content&quot;
-        android:layout_height=&quot;wrap_content&quot;
-        android:layout_alignParentTop=&quot;true&quot;
-        android:layout_alignParentRight=&quot;true&quot;
-        android:text=&quot;Button2&quot; /&gt;
+        android:id=&#34;@+id/button2&#34;
+        android:layout_width=&#34;wrap_content&#34;
+        android:layout_height=&#34;wrap_content&#34;
+        android:layout_alignParentTop=&#34;true&#34;
+        android:layout_alignParentRight=&#34;true&#34;
+        android:text=&#34;Button2&#34; /&gt;
     &lt;Button
-        android:id=&quot;@+id/button3&quot;
-        android:layout_width=&quot;wrap_content&quot;
-        android:layout_height=&quot;wrap_content&quot;
-        android:layout_centerInParent=&quot;true&quot;
-        android:text=&quot;Button3&quot; /&gt;
+        android:id=&#34;@+id/button3&#34;
+        android:layout_width=&#34;wrap_content&#34;
+        android:layout_height=&#34;wrap_content&#34;
+        android:layout_centerInParent=&#34;true&#34;
+        android:text=&#34;Button3&#34; /&gt;
     &lt;Button
-        android:id=&quot;@+id/button4&quot;
-        android:layout_width=&quot;wrap_content&quot;
-        android:layout_height=&quot;wrap_content&quot;
-        android:layout_alignParentLeft=&quot;true&quot;
-        android:layout_alignParentBottom=&quot;true&quot;
-        android:text=&quot;Button4&quot; /&gt;
+        android:id=&#34;@+id/button4&#34;
+        android:layout_width=&#34;wrap_content&#34;
+        android:layout_height=&#34;wrap_content&#34;
+        android:layout_alignParentLeft=&#34;true&#34;
+        android:layout_alignParentBottom=&#34;true&#34;
+        android:text=&#34;Button4&#34; /&gt;
     &lt;Button
-        android:id=&quot;@+id/button5&quot;
-        android:layout_width=&quot;wrap_content&quot;
-        android:layout_height=&quot;wrap_content&quot;
-        android:layout_alignParentRight=&quot;true&quot;
-        android:layout_alignParentBottom=&quot;true&quot;
-        android:text=&quot;Button5&quot; /&gt;
+        android:id=&#34;@+id/button5&#34;
+        android:layout_width=&#34;wrap_content&#34;
+        android:layout_height=&#34;wrap_content&#34;
+        android:layout_alignParentRight=&#34;true&#34;
+        android:layout_alignParentBottom=&#34;true&#34;
+        android:text=&#34;Button5&#34; /&gt;
 &lt;/RelativeLayout&gt;
 </code></pre><p>以上这段布局文件描述的就是一个相对布局，共有5个按钮，分别在父布局的左上、右上、中间、左下、右下位置。</p>
 <p>相对布局不仅可以相对于父布局，也可以相对于控件。以下描述了button3在中间，左上button1，右上button2，左下button4，右下button5的布局场景。</p>
-<pre tabindex="0"><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
-&lt;RelativeLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
-    xmlns:tools=&quot;http://schemas.android.com/tools&quot;
-    android:layout_width=&quot;match_parent&quot;
-    android:layout_height=&quot;match_parent&quot;
-    tools:context=&quot;.MainActivity&quot;&gt;
+<pre tabindex="0"><code>&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;
+&lt;RelativeLayout xmlns:android=&#34;http://schemas.android.com/apk/res/android&#34;
+    xmlns:tools=&#34;http://schemas.android.com/tools&#34;
+    android:layout_width=&#34;match_parent&#34;
+    android:layout_height=&#34;match_parent&#34;
+    tools:context=&#34;.MainActivity&#34;&gt;
     &lt;Button
-        android:id=&quot;@+id/button3&quot;
-        android:layout_width=&quot;wrap_content&quot;
-        android:layout_height=&quot;wrap_content&quot;
-        android:layout_centerInParent=&quot;true&quot;
-        android:text=&quot;Button3&quot; /&gt;
+        android:id=&#34;@+id/button3&#34;
+        android:layout_width=&#34;wrap_content&#34;
+        android:layout_height=&#34;wrap_content&#34;
+        android:layout_centerInParent=&#34;true&#34;
+        android:text=&#34;Button3&#34; /&gt;
     &lt;Button
-        android:id=&quot;@+id/button1&quot;
-        android:layout_width=&quot;wrap_content&quot;
-        android:layout_height=&quot;wrap_content&quot;
-        android:layout_above=&quot;@id/button3&quot;
-        android:layout_toLeftOf=&quot;@id/button3&quot;
-        android:text=&quot;Button1&quot; /&gt;
+        android:id=&#34;@+id/button1&#34;
+        android:layout_width=&#34;wrap_content&#34;
+        android:layout_height=&#34;wrap_content&#34;
+        android:layout_above=&#34;@id/button3&#34;
+        android:layout_toLeftOf=&#34;@id/button3&#34;
+        android:text=&#34;Button1&#34; /&gt;
     &lt;Button
-        android:id=&quot;@+id/button2&quot;
-        android:layout_width=&quot;wrap_content&quot;
-        android:layout_height=&quot;wrap_content&quot;
-        android:layout_above=&quot;@id/button3&quot;
-        android:layout_toRightOf=&quot;@id/button3&quot;
-        android:text=&quot;Button2&quot; /&gt;
+        android:id=&#34;@+id/button2&#34;
+        android:layout_width=&#34;wrap_content&#34;
+        android:layout_height=&#34;wrap_content&#34;
+        android:layout_above=&#34;@id/button3&#34;
+        android:layout_toRightOf=&#34;@id/button3&#34;
+        android:text=&#34;Button2&#34; /&gt;
     &lt;Button
-        android:id=&quot;@+id/button4&quot;
-        android:layout_width=&quot;wrap_content&quot;
-        android:layout_height=&quot;wrap_content&quot;
-        android:layout_below=&quot;@id/button3&quot;
-        android:layout_toLeftOf=&quot;@id/button3&quot;
-        android:text=&quot;Button4&quot; /&gt;
+        android:id=&#34;@+id/button4&#34;
+        android:layout_width=&#34;wrap_content&#34;
+        android:layout_height=&#34;wrap_content&#34;
+        android:layout_below=&#34;@id/button3&#34;
+        android:layout_toLeftOf=&#34;@id/button3&#34;
+        android:text=&#34;Button4&#34; /&gt;
     &lt;Button
-        android:id=&quot;@+id/button5&quot;
-        android:layout_width=&quot;wrap_content&quot;
-        android:layout_height=&quot;wrap_content&quot;
-        android:layout_below=&quot;@id/button3&quot;
-        android:layout_toRightOf=&quot;@id/button3&quot;
-        android:text=&quot;Button5&quot; /&gt;
+        android:id=&#34;@+id/button5&#34;
+        android:layout_width=&#34;wrap_content&#34;
+        android:layout_height=&#34;wrap_content&#34;
+        android:layout_below=&#34;@id/button3&#34;
+        android:layout_toRightOf=&#34;@id/button3&#34;
+        android:text=&#34;Button5&#34; /&gt;
 &lt;/RelativeLayout&gt;
 </code></pre><h3 id="framelayout">FrameLayout</h3>
 <p>帧布局，其内部组件将按顺序层叠到左上角。</p>

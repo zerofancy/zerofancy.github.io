@@ -35,7 +35,6 @@
 
 
 
-
   
 
 
@@ -48,11 +47,11 @@
       <script src="/js/toc.js"></script>
     
     <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
-<link rel="stylesheet" href="/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
+<link rel="stylesheet" href="/scss/journal.scss" integrity="" media="screen">
 
 
 
-<link rel="stylesheet" href="/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
+<link rel="stylesheet" href="/scss/dark-mode.scss" integrity="" media="screen">
 
 
 <link rel="stylesheet"
@@ -504,89 +503,89 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
                     <!-- raw HTML omitted -->
 <h2 id="代码">代码</h2>
 <p>业务代码不可能直接贴出来，我按照大致的设计写了如下demo。</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kt" data-lang="kt"><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">java.lang.IllegalArgumentException</span>
-<span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">main</span>() {
-    listOf(
-        ShareData(listOf(<span style="color:#cd5555">&#34;图1&#34;</span>, <span style="color:#cd5555">&#34;图2&#34;</span>, <span style="color:#cd5555">&#34;图3&#34;</span>), <span style="color:#8b008b;font-weight:bold">true</span>),
-        ShareData(listOf(<span style="color:#cd5555">&#34;图1&#34;</span>, <span style="color:#cd5555">&#34;图2&#34;</span>, <span style="color:#cd5555">&#34;图3&#34;</span>), <span style="color:#8b008b;font-weight:bold">false</span>),
-        ShareData(listOf(<span style="color:#cd5555">&#34;视频1&#34;</span>, <span style="color:#cd5555">&#34;视频2&#34;</span>, <span style="color:#cd5555">&#34;视频3&#34;</span>), <span style="color:#8b008b;font-weight:bold">true</span>),
-        ShareData(listOf(<span style="color:#cd5555">&#34;视频1&#34;</span>, <span style="color:#cd5555">&#34;视频2&#34;</span>, <span style="color:#cd5555">&#34;视频3&#34;</span>), <span style="color:#8b008b;font-weight:bold">false</span>),
-        ShareData(listOf(<span style="color:#cd5555">&#34;图1&#34;</span>, <span style="color:#cd5555">&#34;视频2&#34;</span>, <span style="color:#cd5555">&#34;图3&#34;</span>), <span style="color:#8b008b;font-weight:bold">true</span>),
-        ShareData(listOf(<span style="color:#cd5555">&#34;图1&#34;</span>, <span style="color:#cd5555">&#34;视频2&#34;</span>, <span style="color:#cd5555">&#34;图3&#34;</span>), <span style="color:#8b008b;font-weight:bold">false</span>)
-    ).forEach {
-        println(<span style="color:#cd5555">&#34;测试</span><span style="color:#cd5555">$it</span><span style="color:#cd5555">&#34;</span>)
-        <span style="color:#8b008b;font-weight:bold">if</span> (<span style="color:#8b008b;font-weight:bold">it</span>.handler.requestPermission()) {
-            <span style="color:#8b008b;font-weight:bold">it</span>.handler.doShare(<span style="color:#8b008b;font-weight:bold">it</span>)
-        } <span style="color:#8b008b;font-weight:bold">else</span> {
-            println(<span style="color:#cd5555">&#34;申请权限失败&#34;</span>)
-        }
-        println()
-    }
-}
-<span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">ShareData</span>(<span style="color:#8b008b;font-weight:bold">val</span> urls: List&lt;String&gt;, <span style="color:#8b008b;font-weight:bold">val</span> isFromSDK: Boolean) {
-    <span style="color:#8b008b;font-weight:bold">companion</span> <span style="color:#8b008b;font-weight:bold">object</span> {
-        <span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#8b008b;font-weight:bold">val</span> IMAGE = <span style="color:#b452cd">0x1</span>
-        <span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#8b008b;font-weight:bold">val</span> VIDEO = <span style="color:#b452cd">0x2</span>
-        <span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#8b008b;font-weight:bold">val</span> MIX = IMAGE.or(VIDEO)
-    }
-    <span style="color:#8b008b;font-weight:bold">val</span> handler <span style="color:#8b008b;font-weight:bold">by</span> lazy {
-        <span style="color:#8b008b;font-weight:bold">var</span> res: ShareHandler = ShareHandlerImpl()
-        res = <span style="color:#8b008b;font-weight:bold">if</span> (isFromSDK) ShareFromSdkHandler(res) <span style="color:#8b008b;font-weight:bold">else</span> ShareFromSystemHandler(res)
-        <span style="color:#8b008b;font-weight:bold">var</span> result = <span style="color:#b452cd">0</span>
-        urls.forEach { result = result.or(getUrlType(<span style="color:#8b008b;font-weight:bold">it</span>)) }
-        res = <span style="color:#8b008b;font-weight:bold">when</span> (result) {
-            IMAGE -&gt; ShareImageHandler(res)
-            VIDEO -&gt; ShareVideoHandler(res)
-            MIX -&gt; ShareMixHandler(res)
-            <span style="color:#8b008b;font-weight:bold">else</span> -&gt; <span style="color:#8b008b;font-weight:bold">throw</span> IllegalArgumentException(<span style="color:#cd5555">&#34;不能处理的参数类型&#34;</span>)
-        }
-        res
-    }
-    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">getUrlType</span>(url: String): Int = <span style="color:#8b008b;font-weight:bold">if</span> (url.contains(<span style="color:#cd5555">&#34;图&#34;</span>)) IMAGE <span style="color:#8b008b;font-weight:bold">else</span> VIDEO
-    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">toString</span>(): String {
-        <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#cd5555">&#34;ShareData(urls=</span><span style="color:#cd5555">$urls</span><span style="color:#cd5555">, isFromSDK=</span><span style="color:#cd5555">$isFromSDK</span><span style="color:#cd5555">)&#34;</span>
-    }
-}
-<span style="color:#8b008b;font-weight:bold">interface</span> <span style="color:#008b45;font-weight:bold">ShareHandler</span> {
-    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">validate</span>(shareData: ShareData): Boolean
-    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">requestPermission</span>(): Boolean
-    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">doShare</span>(shareData: ShareData)
-}
-<span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">ShareHandlerImpl</span> : ShareHandler {
-    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">validate</span>(shareData: ShareData): Boolean {
-        <span style="color:#8b008b;font-weight:bold">return</span> shareData.urls.isNotEmpty()
-    }
-    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">requestPermission</span>() = <span style="color:#8b008b;font-weight:bold">throw</span> NotImplementedError(<span style="color:#cd5555">&#34;未实现&#34;</span>)
-    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">doShare</span>(shareData: ShareData) = <span style="color:#8b008b;font-weight:bold">throw</span> NotImplementedError(<span style="color:#cd5555">&#34;未实现&#34;</span>)
-}
-<span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">ShareFromSdkHandler</span>(shareHandler: ShareHandler) : ShareHandler <span style="color:#8b008b;font-weight:bold">by</span> shareHandler {
-    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">requestPermission</span>(): Boolean {
-        println(<span style="color:#cd5555">&#34;申请SDK分享权限&#34;</span>)
-        <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">true</span>
-    }
-}
-<span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">ShareFromSystemHandler</span>(shareHandler: ShareHandler) : ShareHandler <span style="color:#8b008b;font-weight:bold">by</span> shareHandler {
-    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">requestPermission</span>(): Boolean {
-        println(<span style="color:#cd5555">&#34;申请系统分享权限&#34;</span>)
-        <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">true</span>
-    }
-}
-<span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">ShareImageHandler</span>(shareHandler: ShareHandler) : ShareHandler <span style="color:#8b008b;font-weight:bold">by</span> shareHandler {
-    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">doShare</span>(shareData: ShareData) {
-        println(<span style="color:#cd5555">&#34;分享图片内容</span><span style="color:#cd5555">$shareData</span><span style="color:#cd5555">&#34;</span>)
-    }
-}
-<span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">ShareVideoHandler</span>(shareHandler: ShareHandler) : ShareHandler <span style="color:#8b008b;font-weight:bold">by</span> shareHandler {
-    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">doShare</span>(shareData: ShareData) {
-        println(<span style="color:#cd5555">&#34;分享视频</span><span style="color:#cd5555">${shareData}</span><span style="color:#cd5555">&#34;</span>)
-    }
-}
-<span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">ShareMixHandler</span>(shareHandler: ShareHandler) : ShareHandler <span style="color:#8b008b;font-weight:bold">by</span> shareHandler {
-    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">doShare</span>(shareData: ShareData) {
-        println(<span style="color:#cd5555">&#34;分享混合内容</span><span style="color:#cd5555">$shareData</span><span style="color:#cd5555">&#34;</span>)
-    }
-}
-</code></pre></div><p>还用上了位运算和Kotlin的<a href="https://www.kotlincn.net/docs/reference/delegation.html">类委托</a>，太卷了。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kt" data-lang="kt"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">java.lang.IllegalArgumentException</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">main</span>() {
+</span></span><span style="display:flex;"><span>    listOf(
+</span></span><span style="display:flex;"><span>        ShareData(listOf(<span style="color:#cd5555">&#34;图1&#34;</span>, <span style="color:#cd5555">&#34;图2&#34;</span>, <span style="color:#cd5555">&#34;图3&#34;</span>), <span style="color:#8b008b;font-weight:bold">true</span>),
+</span></span><span style="display:flex;"><span>        ShareData(listOf(<span style="color:#cd5555">&#34;图1&#34;</span>, <span style="color:#cd5555">&#34;图2&#34;</span>, <span style="color:#cd5555">&#34;图3&#34;</span>), <span style="color:#8b008b;font-weight:bold">false</span>),
+</span></span><span style="display:flex;"><span>        ShareData(listOf(<span style="color:#cd5555">&#34;视频1&#34;</span>, <span style="color:#cd5555">&#34;视频2&#34;</span>, <span style="color:#cd5555">&#34;视频3&#34;</span>), <span style="color:#8b008b;font-weight:bold">true</span>),
+</span></span><span style="display:flex;"><span>        ShareData(listOf(<span style="color:#cd5555">&#34;视频1&#34;</span>, <span style="color:#cd5555">&#34;视频2&#34;</span>, <span style="color:#cd5555">&#34;视频3&#34;</span>), <span style="color:#8b008b;font-weight:bold">false</span>),
+</span></span><span style="display:flex;"><span>        ShareData(listOf(<span style="color:#cd5555">&#34;图1&#34;</span>, <span style="color:#cd5555">&#34;视频2&#34;</span>, <span style="color:#cd5555">&#34;图3&#34;</span>), <span style="color:#8b008b;font-weight:bold">true</span>),
+</span></span><span style="display:flex;"><span>        ShareData(listOf(<span style="color:#cd5555">&#34;图1&#34;</span>, <span style="color:#cd5555">&#34;视频2&#34;</span>, <span style="color:#cd5555">&#34;图3&#34;</span>), <span style="color:#8b008b;font-weight:bold">false</span>)
+</span></span><span style="display:flex;"><span>    ).forEach {
+</span></span><span style="display:flex;"><span>        println(<span style="color:#cd5555">&#34;测试</span><span style="color:#cd5555">$it</span><span style="color:#cd5555">&#34;</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span> (<span style="color:#8b008b;font-weight:bold">it</span>.handler.requestPermission()) {
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">it</span>.handler.doShare(<span style="color:#8b008b;font-weight:bold">it</span>)
+</span></span><span style="display:flex;"><span>        } <span style="color:#8b008b;font-weight:bold">else</span> {
+</span></span><span style="display:flex;"><span>            println(<span style="color:#cd5555">&#34;申请权限失败&#34;</span>)
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        println()
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">ShareData</span>(<span style="color:#8b008b;font-weight:bold">val</span> urls: List&lt;String&gt;, <span style="color:#8b008b;font-weight:bold">val</span> isFromSDK: Boolean) {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">companion</span> <span style="color:#8b008b;font-weight:bold">object</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#8b008b;font-weight:bold">val</span> IMAGE = <span style="color:#b452cd">0x1</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#8b008b;font-weight:bold">val</span> VIDEO = <span style="color:#b452cd">0x2</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#8b008b;font-weight:bold">val</span> MIX = <span style="color:#008b45;font-weight:bold">IMAGE</span>.or(VIDEO)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> handler <span style="color:#8b008b;font-weight:bold">by</span> lazy {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">var</span> res: ShareHandler = ShareHandlerImpl()
+</span></span><span style="display:flex;"><span>        res = <span style="color:#8b008b;font-weight:bold">if</span> (isFromSDK) ShareFromSdkHandler(res) <span style="color:#8b008b;font-weight:bold">else</span> ShareFromSystemHandler(res)
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">var</span> result = <span style="color:#b452cd">0</span>
+</span></span><span style="display:flex;"><span>        urls.forEach { result = result.or(getUrlType(<span style="color:#8b008b;font-weight:bold">it</span>)) }
+</span></span><span style="display:flex;"><span>        res = <span style="color:#8b008b;font-weight:bold">when</span> (result) {
+</span></span><span style="display:flex;"><span>            IMAGE -&gt; ShareImageHandler(res)
+</span></span><span style="display:flex;"><span>            VIDEO -&gt; ShareVideoHandler(res)
+</span></span><span style="display:flex;"><span>            MIX -&gt; ShareMixHandler(res)
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">else</span> -&gt; <span style="color:#8b008b;font-weight:bold">throw</span> IllegalArgumentException(<span style="color:#cd5555">&#34;不能处理的参数类型&#34;</span>)
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        res
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">getUrlType</span>(url: String): Int = <span style="color:#8b008b;font-weight:bold">if</span> (url.contains(<span style="color:#cd5555">&#34;图&#34;</span>)) IMAGE <span style="color:#8b008b;font-weight:bold">else</span> VIDEO
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">toString</span>(): String {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#cd5555">&#34;ShareData(urls=</span><span style="color:#cd5555">$urls</span><span style="color:#cd5555">, isFromSDK=</span><span style="color:#cd5555">$isFromSDK</span><span style="color:#cd5555">)&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">interface</span> <span style="color:#008b45;font-weight:bold">ShareHandler</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">validate</span>(shareData: ShareData): Boolean
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">requestPermission</span>(): Boolean
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">doShare</span>(shareData: ShareData)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">ShareHandlerImpl</span> : ShareHandler {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">validate</span>(shareData: ShareData): Boolean {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span> shareData.urls.isNotEmpty()
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">requestPermission</span>() = <span style="color:#8b008b;font-weight:bold">throw</span> NotImplementedError(<span style="color:#cd5555">&#34;未实现&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">doShare</span>(shareData: ShareData) = <span style="color:#8b008b;font-weight:bold">throw</span> NotImplementedError(<span style="color:#cd5555">&#34;未实现&#34;</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">ShareFromSdkHandler</span>(shareHandler: ShareHandler) : ShareHandler <span style="color:#8b008b;font-weight:bold">by</span> shareHandler {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">requestPermission</span>(): Boolean {
+</span></span><span style="display:flex;"><span>        println(<span style="color:#cd5555">&#34;申请SDK分享权限&#34;</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">true</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">ShareFromSystemHandler</span>(shareHandler: ShareHandler) : ShareHandler <span style="color:#8b008b;font-weight:bold">by</span> shareHandler {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">requestPermission</span>(): Boolean {
+</span></span><span style="display:flex;"><span>        println(<span style="color:#cd5555">&#34;申请系统分享权限&#34;</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">true</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">ShareImageHandler</span>(shareHandler: ShareHandler) : ShareHandler <span style="color:#8b008b;font-weight:bold">by</span> shareHandler {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">doShare</span>(shareData: ShareData) {
+</span></span><span style="display:flex;"><span>        println(<span style="color:#cd5555">&#34;分享图片内容</span><span style="color:#cd5555">$shareData</span><span style="color:#cd5555">&#34;</span>)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">ShareVideoHandler</span>(shareHandler: ShareHandler) : ShareHandler <span style="color:#8b008b;font-weight:bold">by</span> shareHandler {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">doShare</span>(shareData: ShareData) {
+</span></span><span style="display:flex;"><span>        println(<span style="color:#cd5555">&#34;分享视频</span><span style="color:#cd5555">${shareData}</span><span style="color:#cd5555">&#34;</span>)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">ShareMixHandler</span>(shareHandler: ShareHandler) : ShareHandler <span style="color:#8b008b;font-weight:bold">by</span> shareHandler {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">doShare</span>(shareData: ShareData) {
+</span></span><span style="display:flex;"><span>        println(<span style="color:#cd5555">&#34;分享混合内容</span><span style="color:#cd5555">$shareData</span><span style="color:#cd5555">&#34;</span>)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>还用上了位运算和Kotlin的<a href="https://www.kotlincn.net/docs/reference/delegation.html">类委托</a>，太卷了。</p>
 <p>尝试画一下类图，这都是啥跟啥？</p>
 <p><img src="https://i.loli.net/2021/07/19/aApWiNvOlfmdZTt.png" alt="ShareHandler.svg.png.lin.png"></p>
 <p>我对照着菜鸟教程确认了半天，确定这确实是个装饰模式。插入两个省略掉的抽象类就清楚很多了。</p>

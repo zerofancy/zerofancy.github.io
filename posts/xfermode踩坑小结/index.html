@@ -35,7 +35,6 @@
 
 
 
-
   
 
 
@@ -48,11 +47,11 @@
       <script src="/js/toc.js"></script>
     
     <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
-<link rel="stylesheet" href="/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
+<link rel="stylesheet" href="/scss/journal.scss" integrity="" media="screen">
 
 
 
-<link rel="stylesheet" href="/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
+<link rel="stylesheet" href="/scss/dark-mode.scss" integrity="" media="screen">
 
 
 <link rel="stylesheet"
@@ -696,72 +695,72 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <p><img src="https://images.ntutn.top/2022/09/8a823f4937afc11010358e75b5bed9b5.jpg" alt="ApiDemos我们的运行结果"></p>
 <p>看上去也没有错误。接下来看看双方的代码，看看问题出在哪里。</p>
 <p>官方代码（等效）</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">makeDst</span>(width: Int, height: Int): Bitmap {  
-    <span style="color:#8b008b;font-weight:bold">val</span> paint = Paint().also {  
-        <span style="color:#8b008b;font-weight:bold">it</span>.color = <span style="color:#b452cd">0xFFFFCC44</span>.toInt()  
-    }  
-    <span style="color:#8b008b;font-weight:bold">val</span> bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)  
-    <span style="color:#8b008b;font-weight:bold">val</span> canvas = Canvas(bitmap)  
-    canvas.drawCircle(width / <span style="color:#b452cd">2f</span>, height / <span style="color:#b452cd">2f</span>, min(width, height) / <span style="color:#b452cd">4f</span>, paint)  
-    <span style="color:#8b008b;font-weight:bold">return</span> bitmap  
-}  
-
-<span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">makeSrc</span>(width: Int, height: Int): Bitmap {  
-    <span style="color:#8b008b;font-weight:bold">val</span> paint = Paint().also {   
-        <span style="color:#8b008b;font-weight:bold">it</span>.color = <span style="color:#b452cd">0xFF66AAFF</span>.toInt()  
-    }  
-    <span style="color:#8b008b;font-weight:bold">val</span> bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)  
-    <span style="color:#8b008b;font-weight:bold">val</span> canvas = Canvas(bitmap)  
-    canvas.drawRect(width / <span style="color:#b452cd">2f</span>, height / <span style="color:#b452cd">2f</span>, width.toFloat(), height.toFloat(), paint)  
-    <span style="color:#8b008b;font-weight:bold">return</span> bitmap  
-}  
-
-<span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">draw</span>(canvas: Canvas) {  
-    mPaint.xfermode = <span style="color:#8b008b;font-weight:bold">null</span>  
-    <span style="color:#8b008b;font-weight:bold">val</span> width = bounds.width()  
-    <span style="color:#8b008b;font-weight:bold">val</span> height = bounds.height()  
-    makeDst(width, height).also {  
-        canvas.drawBitmap(<span style="color:#8b008b;font-weight:bold">it</span>, <span style="color:#b452cd">0f</span>, <span style="color:#b452cd">0f</span>, mPaint)  
-    }  
-    mPaint.xfermode = PorterDuffXfermode(PorterDuff.Mode.DST_OVER)  
-    makeSrc(width, height).also {  
-        canvas.drawBitmap(<span style="color:#8b008b;font-weight:bold">it</span>, <span style="color:#b452cd">0f</span>, <span style="color:#b452cd">0f</span>, mPaint)  
-    }  
-}
-</code></pre></div><p>网友代码（等效）</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">makeDst</span>(width: Int, height: Int): Bitmap {  
-    <span style="color:#8b008b;font-weight:bold">val</span> paint = Paint().also {  
-        <span style="color:#8b008b;font-weight:bold">it</span>.color = <span style="color:#b452cd">0xFFFFCC44</span>.toInt()  
-    }  
-    <span style="color:#8b008b;font-weight:bold">val</span> bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)  
-    <span style="color:#8b008b;font-weight:bold">val</span> canvas = Canvas(bitmap)  
-    canvas.drawCircle(width / <span style="color:#b452cd">2f</span>, height / <span style="color:#b452cd">2f</span>, min(width, height) / <span style="color:#b452cd">2f</span>, paint)  
-    <span style="color:#8b008b;font-weight:bold">return</span> bitmap  
-}  
-
-<span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">makeSrc</span>(width: Int, height: Int): Bitmap {  
-    <span style="color:#8b008b;font-weight:bold">val</span> paint = Paint().also {  
-        <span style="color:#8b008b;font-weight:bold">it</span>.color = <span style="color:#b452cd">0xFF66AAFF</span>.toInt()  
-    }  
-    <span style="color:#8b008b;font-weight:bold">val</span> bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)  
-    <span style="color:#8b008b;font-weight:bold">val</span> canvas = Canvas(bitmap)  
-    canvas.drawRect(<span style="color:#b452cd">0f</span>, <span style="color:#b452cd">0f</span>, width.toFloat(), height.toFloat(), paint)  
-    <span style="color:#8b008b;font-weight:bold">return</span> bitmap  
-}  
-
-<span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">draw</span>(canvas: Canvas) {  
-    mPaint.xfermode = <span style="color:#8b008b;font-weight:bold">null</span>  
-    <span style="color:#8b008b;font-weight:bold">val</span> width = bounds.width()  
-    <span style="color:#8b008b;font-weight:bold">val</span> height = bounds.height()  
-    makeDst(width / <span style="color:#b452cd">2</span>, height / <span style="color:#b452cd">2</span>).also {  
-        canvas.drawBitmap(<span style="color:#8b008b;font-weight:bold">it</span>, width / <span style="color:#b452cd">4f</span>, height / <span style="color:#b452cd">4f</span>, mPaint)  
-    }  
-    mPaint.xfermode = PorterDuffXfermode(PorterDuff.Mode.DST_OVER)  
-    makeSrc(width / <span style="color:#b452cd">2</span>, height / <span style="color:#b452cd">2</span>).also {  
-        canvas.drawBitmap(<span style="color:#8b008b;font-weight:bold">it</span>, width / <span style="color:#b452cd">2f</span>, height / <span style="color:#b452cd">2f</span>, mPaint)  
-    }  
-}
-</code></pre></div><p>仔细观察上述代码，你会发现 <strong>网友用法中两次绘制实际上并不完全重叠</strong>。官方生成的两个Bitmap，是同样大小的并在同一个位置绘制，而后者是只生成了部分需要绘制的位置图形，在特定位置绘制。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">makeDst</span>(width: Int, height: Int): Bitmap {  
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> paint = Paint().also {  
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">it</span>.color = <span style="color:#b452cd">0xFFFFCC44</span>.toInt()  
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> bitmap = <span style="color:#008b45;font-weight:bold">Bitmap</span>.createBitmap(width, height, <span style="color:#008b45;font-weight:bold">Bitmap</span>.<span style="color:#008b45;font-weight:bold">Config</span>.ARGB_8888)  
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> canvas = Canvas(bitmap)  
+</span></span><span style="display:flex;"><span>    canvas.drawCircle(width / <span style="color:#b452cd">2f</span>, height / <span style="color:#b452cd">2f</span>, min(width, height) / <span style="color:#b452cd">4f</span>, paint)  
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">return</span> bitmap  
+</span></span><span style="display:flex;"><span>}  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">makeSrc</span>(width: Int, height: Int): Bitmap {  
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> paint = Paint().also {   
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">it</span>.color = <span style="color:#b452cd">0xFF66AAFF</span>.toInt()  
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> bitmap = <span style="color:#008b45;font-weight:bold">Bitmap</span>.createBitmap(width, height, <span style="color:#008b45;font-weight:bold">Bitmap</span>.<span style="color:#008b45;font-weight:bold">Config</span>.ARGB_8888)  
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> canvas = Canvas(bitmap)  
+</span></span><span style="display:flex;"><span>    canvas.drawRect(width / <span style="color:#b452cd">2f</span>, height / <span style="color:#b452cd">2f</span>, width.toFloat(), height.toFloat(), paint)  
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">return</span> bitmap  
+</span></span><span style="display:flex;"><span>}  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">draw</span>(canvas: Canvas) {  
+</span></span><span style="display:flex;"><span>    mPaint.xfermode = <span style="color:#8b008b;font-weight:bold">null</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> width = bounds.width()  
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> height = bounds.height()  
+</span></span><span style="display:flex;"><span>    makeDst(width, height).also {  
+</span></span><span style="display:flex;"><span>        canvas.drawBitmap(<span style="color:#8b008b;font-weight:bold">it</span>, <span style="color:#b452cd">0f</span>, <span style="color:#b452cd">0f</span>, mPaint)  
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>    mPaint.xfermode = PorterDuffXfermode(<span style="color:#008b45;font-weight:bold">PorterDuff</span>.<span style="color:#008b45;font-weight:bold">Mode</span>.DST_OVER)  
+</span></span><span style="display:flex;"><span>    makeSrc(width, height).also {  
+</span></span><span style="display:flex;"><span>        canvas.drawBitmap(<span style="color:#8b008b;font-weight:bold">it</span>, <span style="color:#b452cd">0f</span>, <span style="color:#b452cd">0f</span>, mPaint)  
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>网友代码（等效）</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">makeDst</span>(width: Int, height: Int): Bitmap {  
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> paint = Paint().also {  
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">it</span>.color = <span style="color:#b452cd">0xFFFFCC44</span>.toInt()  
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> bitmap = <span style="color:#008b45;font-weight:bold">Bitmap</span>.createBitmap(width, height, <span style="color:#008b45;font-weight:bold">Bitmap</span>.<span style="color:#008b45;font-weight:bold">Config</span>.ARGB_8888)  
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> canvas = Canvas(bitmap)  
+</span></span><span style="display:flex;"><span>    canvas.drawCircle(width / <span style="color:#b452cd">2f</span>, height / <span style="color:#b452cd">2f</span>, min(width, height) / <span style="color:#b452cd">2f</span>, paint)  
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">return</span> bitmap  
+</span></span><span style="display:flex;"><span>}  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">makeSrc</span>(width: Int, height: Int): Bitmap {  
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> paint = Paint().also {  
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">it</span>.color = <span style="color:#b452cd">0xFF66AAFF</span>.toInt()  
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> bitmap = <span style="color:#008b45;font-weight:bold">Bitmap</span>.createBitmap(width, height, <span style="color:#008b45;font-weight:bold">Bitmap</span>.<span style="color:#008b45;font-weight:bold">Config</span>.ARGB_8888)  
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> canvas = Canvas(bitmap)  
+</span></span><span style="display:flex;"><span>    canvas.drawRect(<span style="color:#b452cd">0f</span>, <span style="color:#b452cd">0f</span>, width.toFloat(), height.toFloat(), paint)  
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">return</span> bitmap  
+</span></span><span style="display:flex;"><span>}  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">draw</span>(canvas: Canvas) {  
+</span></span><span style="display:flex;"><span>    mPaint.xfermode = <span style="color:#8b008b;font-weight:bold">null</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> width = bounds.width()  
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> height = bounds.height()  
+</span></span><span style="display:flex;"><span>    makeDst(width / <span style="color:#b452cd">2</span>, height / <span style="color:#b452cd">2</span>).also {  
+</span></span><span style="display:flex;"><span>        canvas.drawBitmap(<span style="color:#8b008b;font-weight:bold">it</span>, width / <span style="color:#b452cd">4f</span>, height / <span style="color:#b452cd">4f</span>, mPaint)  
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>    mPaint.xfermode = PorterDuffXfermode(<span style="color:#008b45;font-weight:bold">PorterDuff</span>.<span style="color:#008b45;font-weight:bold">Mode</span>.DST_OVER)  
+</span></span><span style="display:flex;"><span>    makeSrc(width / <span style="color:#b452cd">2</span>, height / <span style="color:#b452cd">2</span>).also {  
+</span></span><span style="display:flex;"><span>        canvas.drawBitmap(<span style="color:#8b008b;font-weight:bold">it</span>, width / <span style="color:#b452cd">2f</span>, height / <span style="color:#b452cd">2f</span>, mPaint)  
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>仔细观察上述代码，你会发现 <strong>网友用法中两次绘制实际上并不完全重叠</strong>。官方生成的两个Bitmap，是同样大小的并在同一个位置绘制，而后者是只生成了部分需要绘制的位置图形，在特定位置绘制。</p>
 <p><img src="https://images.ntutn.top/2022/09/03ee100cf274352bb89bd5326a2971ec.png" alt="单个图片绘制示意"></p>
 <p>例如，对于一个400X400的目标区域，官方方法是创建了两个400X400的Bitmap，直接在(0, 0) 位置绘制。 另一种方法是创建了两个200X200的Bitmap，一个在(100, 100)处绘制，另一个在(200, 200)处绘制。</p>
 <p>后者绘制区域并不重叠，因而可以看到圆形变化的始终只有圆形的右下角四分之一圆。</p>
@@ -774,59 +773,59 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <h1 id="弹幕需求xfermode的应用">弹幕需求Xfermode的应用</h1>
 <p><img src="https://images.ntutn.top/2022/09/e6c0cb56a69c8c9d8ba72ec75d47a1b7.png" alt="B站的带描边弹幕"></p>
 <p>弹幕有个优化需求，是给弹幕文字加上描边。描边一般是将paint的style设置为Stroke再进行一次绘制实现的。</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#228b22">// 绘制描边
-</span><span style="color:#228b22"></span>with(layout.paint) {
-    color = Color.BLACK  
-    style = Paint.Style.STROKE  
-    strokeWidth = <span style="color:#b452cd">5f</span>.dpFloat
-}
-layout.draw(canvas)
-
-<span style="color:#228b22">// 绘制填充
-</span><span style="color:#228b22"></span>with(layout.paint) {
-    style = Paint.Style.FILL  
-    color = drawColor
-}
-layout.draw(canvas)
-</code></pre></div><p>然而我这样实现后，效果并不好，因为 <strong>弹幕文本和描边都是有透明度的，而描边笔画重叠的位置也会进行绘制</strong> 。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#228b22">// 绘制描边
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>with(layout.paint) {
+</span></span><span style="display:flex;"><span>    color = <span style="color:#008b45;font-weight:bold">Color</span>.BLACK  
+</span></span><span style="display:flex;"><span>    style = <span style="color:#008b45;font-weight:bold">Paint</span>.<span style="color:#008b45;font-weight:bold">Style</span>.STROKE  
+</span></span><span style="display:flex;"><span>    strokeWidth = <span style="color:#b452cd">5f</span>.dpFloat
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>layout.draw(canvas)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#228b22">// 绘制填充
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>with(layout.paint) {
+</span></span><span style="display:flex;"><span>    style = <span style="color:#008b45;font-weight:bold">Paint</span>.<span style="color:#008b45;font-weight:bold">Style</span>.FILL  
+</span></span><span style="display:flex;"><span>    color = drawColor
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>layout.draw(canvas)
+</span></span></code></pre></div><p>然而我这样实现后，效果并不好，因为 <strong>弹幕文本和描边都是有透明度的，而描边笔画重叠的位置也会进行绘制</strong> 。</p>
 <p><img src="https://images.ntutn.top/2022/09/bcd2513ffa6e3242c590981ac8f0af06.png" alt="描边与透明度的冲突"></p>
 <p>所以，我需要先将描边与填充重叠的地方裁掉，然后再绘制填充</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">draw</span>(canvas: Canvas) {  
-    <span style="color:#228b22">// 外层saveLayer也需要保留，否则裁剪时会有非预期表现  
-</span><span style="color:#228b22"></span>    canvas.saveLayer(<span style="color:#8b008b;font-weight:bold">null</span>, <span style="color:#8b008b;font-weight:bold">null</span>)  
-
-    <span style="color:#228b22">// 绘制描边
-</span><span style="color:#228b22"></span>    drawStroke(canvas)  
-
-    clipPaint.xfermode = PorterDuffXfermode(PorterDuff.Mode.DST_OUT)  
-    canvas.saveLayer(<span style="color:#8b008b;font-weight:bold">null</span>, clipPaint)  
-    <span style="color:#228b22">// 绘制文本剪影，DST_OUT方式图像混合。因为混合时会受到透明度影响，所以指定为黑色。
-</span><span style="color:#228b22"></span>    drawSolid(canvas, Color.BLACK)  
-    canvas.restore()  
-
-    <span style="color:#228b22">// 绘制文本
-</span><span style="color:#228b22"></span>    drawSolid(canvas)  
-
-    canvas.restore()  
-}  
-
-<span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">drawStroke</span>(canvas: Canvas) {  
-    with(layout.paint) {  
-        color = Color.BLACK  
-        style = Paint.Style.STROKE  
-        strokeWidth = <span style="color:#b452cd">5f</span>.dpFloat  
-    }  
-    layout.draw(canvas)  
-}  
-
-<span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">drawSolid</span>(canvas: Canvas, drawColor: Int ? = <span style="color:#8b008b;font-weight:bold">null</span>) {  
-    with(layout.paint) {  
-        style = Paint.Style.FILL  
-        color = drawColor ?: <span style="color:#cd5555">&#34;#99FF0000&#34;</span>.color  
-    }  
-    layout.draw(canvas)   
-}
-</code></pre></div><p><img src="https://images.ntutn.top/2022/09/141e77ad4e1480f333d54c012b7ed0ed.png" alt="弹幕xfermode绘制效果"></p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">draw</span>(canvas: Canvas) {  
+</span></span><span style="display:flex;"><span>    <span style="color:#228b22">// 外层saveLayer也需要保留，否则裁剪时会有非预期表现  
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    canvas.saveLayer(<span style="color:#8b008b;font-weight:bold">null</span>, <span style="color:#8b008b;font-weight:bold">null</span>)  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#228b22">// 绘制描边
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    drawStroke(canvas)  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    clipPaint.xfermode = PorterDuffXfermode(<span style="color:#008b45;font-weight:bold">PorterDuff</span>.<span style="color:#008b45;font-weight:bold">Mode</span>.DST_OUT)  
+</span></span><span style="display:flex;"><span>    canvas.saveLayer(<span style="color:#8b008b;font-weight:bold">null</span>, clipPaint)  
+</span></span><span style="display:flex;"><span>    <span style="color:#228b22">// 绘制文本剪影，DST_OUT方式图像混合。因为混合时会受到透明度影响，所以指定为黑色。
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    drawSolid(canvas, <span style="color:#008b45;font-weight:bold">Color</span>.BLACK)  
+</span></span><span style="display:flex;"><span>    canvas.restore()  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#228b22">// 绘制文本
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    drawSolid(canvas)  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    canvas.restore()  
+</span></span><span style="display:flex;"><span>}  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">drawStroke</span>(canvas: Canvas) {  
+</span></span><span style="display:flex;"><span>    with(layout.paint) {  
+</span></span><span style="display:flex;"><span>        color = <span style="color:#008b45;font-weight:bold">Color</span>.BLACK  
+</span></span><span style="display:flex;"><span>        style = <span style="color:#008b45;font-weight:bold">Paint</span>.<span style="color:#008b45;font-weight:bold">Style</span>.STROKE  
+</span></span><span style="display:flex;"><span>        strokeWidth = <span style="color:#b452cd">5f</span>.dpFloat  
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>    layout.draw(canvas)  
+</span></span><span style="display:flex;"><span>}  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">drawSolid</span>(canvas: Canvas, drawColor: Int ? = <span style="color:#8b008b;font-weight:bold">null</span>) {  
+</span></span><span style="display:flex;"><span>    with(layout.paint) {  
+</span></span><span style="display:flex;"><span>        style = <span style="color:#008b45;font-weight:bold">Paint</span>.<span style="color:#008b45;font-weight:bold">Style</span>.FILL  
+</span></span><span style="display:flex;"><span>        color = drawColor ?: <span style="color:#cd5555">&#34;#99FF0000&#34;</span>.color  
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>    layout.draw(canvas)   
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><img src="https://images.ntutn.top/2022/09/141e77ad4e1480f333d54c012b7ed0ed.png" alt="弹幕xfermode绘制效果"></p>
 <p>不过这个方案实现出来 <strong>性能表现太差</strong> 被砍掉了 Orz</p>
 <p>总之就是，慎用saveLayer，优先考虑其他实现，尤其是在这种比较注重性能的场合。</p>
 <hr>

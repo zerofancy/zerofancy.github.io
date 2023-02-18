@@ -19,15 +19,15 @@
 于是大聪明我一拍脑门就写出来了，
 // 实际上是写了个安卓app, 这里只是示意 val list = listOf(&amp;#34;荟萃餐厅&amp;#34;, &amp;#34;玉兰餐厅&amp;#34;, &amp;#34;唐岛湾餐厅&amp;#34;) val floor = listOf(&amp;#34;1楼&amp;#34;, &amp;#34;2楼&amp;#34;, &amp;#34;3楼&amp;#34;) println(list.random() + floor.random()) 简洁优雅，不用算上下界，我们Kotlin真是太厉害辣！
 然后我们就在荟萃餐厅一楼连续吃了3天……小伙伴们都不相信我的编程水平了。
- 故事就到这里，那么问题在哪里呢？
+故事就到这里，那么问题在哪里呢？
 随机数不随机，那么肯定是初始化时没有引入不同seed。list.random()方法默认使用的Random对象定义在kotlin stdlib的Random.kt文件中
 接下来找到这个defaultPlatformRandom的实现
 这东西最终用的是PlatformThreadLocalRandom，而Android的ThreadLocalRandom中出了个bug——他在zygote进程中初始化，所以每个程序打开时都是相同的初始状态。
 我们可以在网上找到相关的讨论：
 https://www.reddit.com/r/androiddev/comments/x8z9r1/comment/innw882/?utm_source=share&amp;amp;utm_medium=web2x&amp;amp;context=3
 https://youtrack.jetbrains.com/issue/KT-52618/ThreadLocalRandom-is-not-a-good-source-of-randomness-on-Android-before-SDK-34-so-dont-use-it-for-Kotlin-Random
- 解决：
- 避免使用List.random、Random.nextXxx之类的方法，他们最终都是调用这个PlatformThreadLocalRandom，每次需要随机数时都创建一个Random对象，传入seed：val random = Random(System.currentTimeMills());random.nextInt() 升级Kotlin版本，根据官方的缺陷跟踪器，该问题兜底修复于1.7.20版本 使用字节码修改的方法，编译时替换掉相关的调用，比如可以用lancet来处理  </description>
+解决：
+避免使用List.random、Random.nextXxx之类的方法，他们最终都是调用这个PlatformThreadLocalRandom，每次需要随机数时都创建一个Random对象，传入seed：val random = Random(System.currentTimeMills());random.nextInt() 升级Kotlin版本，根据官方的缺陷跟踪器，该问题兜底修复于1.7.20版本 使用字节码修改的方法，编译时替换掉相关的调用，比如可以用lancet来处理 </description>
     </item>
     
     <item>
@@ -50,9 +50,9 @@ https://youtrack.jetbrains.com/issue/KT-52618/ThreadLocalRandom-is-not-a-good-so
       <guid>https://ntutn.top/posts/%E6%89%93%E9%80%A0%E4%B8%80%E4%B8%AA%E6%8E%A5%E5%85%A5%E7%AE%80%E5%8D%95%E7%9A%84%E9%80%9A%E7%94%A8banner%E7%BB%84%E4%BB%B6/</guid>
       <description>banner是一个常见的活动入口形式，给我们的印象一般是一些不断轮播的图片。但，有些事情，远没有看上去那么简单。
 banner使用 特点：
- 支持不同类型卡片混排 支持比较复杂的轮播逻辑 布局和展示逻辑完全交给业务方ViewHolder控制，可以灵活定制。  先看最终使用效果，也许你能提起一些兴趣。
+支持不同类型卡片混排 支持比较复杂的轮播逻辑 布局和展示逻辑完全交给业务方ViewHolder控制，可以灵活定制。 先看最终使用效果，也许你能提起一些兴趣。
 https://www.bilibili.com/video/BV1Ed4y137T7/
- 将banner添加到你的布局中，  &amp;lt;top.ntutn.zerohelper.view.banner.BannerView android:id=&amp;#34;@+id/banner_view&amp;#34; android:layout_width=&amp;#34;match_parent&amp;#34; android:layout_height=&amp;#34;300dp&amp;#34; android:layout_gravity=&amp;#34;center&amp;#34; android:layout_margin=&amp;#34;16dp&amp;#34; tools:background=&amp;#34;@tools:sample/backgrounds/scenic&amp;#34; app:cardCornerRadius=&amp;#34;8dp&amp;#34;/&amp;gt;  准备一个或多个ViewHolder，实现业务展示和播控逻辑。  class ImageBannerData(var url: String = &amp;#34;&amp;#34;): BannerData { override val holderKey: String get() = ImageBannerViewHolder.key } class ImageBannerViewHolder(val binding: ItemImageBannerBinding) : BannerViewHolder(binding.root) { companion object: IBannerViewHolderFactory { override val key: String get() = &amp;#34;_image&amp;#34; override fun newInstance(parent: ViewGroup): BannerViewHolder { val inflater = LayoutInflater.from(parent.context) return ImageBannerViewHolder( ItemImageBannerBinding.</description>
+将banner添加到你的布局中， &amp;lt;top.ntutn.zerohelper.view.banner.BannerView android:id=&amp;#34;@+id/banner_view&amp;#34; android:layout_width=&amp;#34;match_parent&amp;#34; android:layout_height=&amp;#34;300dp&amp;#34; android:layout_gravity=&amp;#34;center&amp;#34; android:layout_margin=&amp;#34;16dp&amp;#34; tools:background=&amp;#34;@tools:sample/backgrounds/scenic&amp;#34; app:cardCornerRadius=&amp;#34;8dp&amp;#34;/&amp;gt; 准备一个或多个ViewHolder，实现业务展示和播控逻辑。 class ImageBannerData(var url: String = &amp;#34;&amp;#34;): BannerData { override val holderKey: String get() = ImageBannerViewHolder.key } class ImageBannerViewHolder(val binding: ItemImageBannerBinding) : BannerViewHolder(binding.root) { companion object: IBannerViewHolderFactory { override val key: String get() = &amp;#34;_image&amp;#34; override fun newInstance(parent: ViewGroup): BannerViewHolder { val inflater = LayoutInflater.from(parent.context) return ImageBannerViewHolder( ItemImageBannerBinding.inflate(inflater, parent, false) ) } } override fun onBind(data: BannerData) { if (data !</description>
     </item>
     
     <item>
@@ -61,11 +61,12 @@ https://www.bilibili.com/video/BV1Ed4y137T7/
       <pubDate>Mon, 05 Sep 2022 02:18:57 +0800</pubDate>
       
       <guid>https://ntutn.top/posts/xfermode%E8%B8%A9%E5%9D%91%E5%B0%8F%E7%BB%93/</guid>
-      <description>Xfermode踩坑小结  Xfermode is the base class for objects that are called to implement custom &amp;ldquo;transfer-modes&amp;rdquo; in the drawing pipeline. The static function Create(Modes) can be called to return an instance of any of the predefined subclasses as specified in the Modes enum. When an Xfermode is assigned to an Paint, then objects drawn with that paint have the xfermode applied.
- Xfermode最初有三个子类，除了目前我们常用的 PorterDuffXfermode 其他两个都已经作古了。
+      <description>Xfermode踩坑小结 Xfermode is the base class for objects that are called to implement custom &amp;ldquo;transfer-modes&amp;rdquo; in the drawing pipeline. The static function Create(Modes) can be called to return an instance of any of the predefined subclasses as specified in the Modes enum. When an Xfermode is assigned to an Paint, then objects drawn with that paint have the xfermode applied.
+Xfermode最初有三个子类，除了目前我们常用的 PorterDuffXfermode 其他两个都已经作古了。
 PorterDuffXfermode可以指定两张图形如何进行混合，借此我们可以实现一些特殊的绘图效果。官方有个很经典的示例图， 我经常是需要用时才找出来看一看。
 官方文档错了？ 然而在最近做需求时，我发现自己做出来的效果和官方图上不一致。网上检索，有人说官方的示意图错了，并给出了自己绘制的demo。有模有样有代码，让人信服。
-但官方的文档真的错了吗？如果错了，为什么一直没有改呢？我直觉感觉这种事情概率比较低，所以还是得找到双方的代码才能断案。</description>
+但官方的文档真的错了吗？如果错了，为什么一直没有改呢？我直觉感觉这种事情概率比较低，所以还是得找到双方的代码才能断案。
+官方的示例在一个叫做API Demos的APP中，代码在一个叫做 Xfermodes.</description>
     </item>
     
     <item>
@@ -80,7 +81,7 @@ PorterDuffXfermode可以指定两张图形如何进行混合，借此我们可�
 类似安卓，我在后台线程进行网络请求，主线程进行结果的分发处理。
 Message Message 就是消息对象。我对消息对象的定义如下：
 data class Message( val what: Int, val arg: Int = -1, val payload: Any? = null, var time: Long = 0L, var target: Handler? = null, val callback: Runnable? = null ) 要理解整个消息机制，还是得先看这几个参数。
- what 表示这是一条什么样的消息。一个 Handler 中可能定义和处理多种不同的消息，通过这个参数进行区分。 arg、payload 表示消息携带的参数。 arg 是简单的， Int 类型的参数，而 payload 则用于传递复杂对象。按需使用 time 表示 Message 预期被处理的时间。只有到了这个时间之后消息才可以被取出处理。这对应我们经常用的 handler.postDelayed 方法 target 处理消息的 Handler callback 消息处理时执行特定回调。实际上和继承相关 Handler 并在相关方法中处理消息是等同的  MessageQueue 记得安卓中有个比较经典和基础的问题，主线程实际执行了 Looper.</description>
+what 表示这是一条什么样的消息。一个 Handler 中可能定义和处理多种不同的消息，通过这个参数进行区分。 arg、payload 表示消息携带的参数。 arg 是简单的， Int 类型的参数，而 payload 则用于传递复杂对象。按需使用 time 表示 Message 预期被处理的时间。只有到了这个时间之后消息才可以被取出处理。这对应我们经常用的 handler.postDelayed 方法 target 处理消息的 Handler callback 消息处理时执行特定回调。实际上和继承相关 Handler 并在相关方法中处理消息是等同的 MessageQueue 记得安卓中有个比较经典和基础的问题，主线程实际执行了 Looper.</description>
     </item>
     
     <item>
@@ -91,7 +92,7 @@ data class Message( val what: Int, val arg: Int = -1, val payload: Any? = null, 
       <guid>https://ntutn.top/posts/retrofit%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/</guid>
       <description>Retrofit是一个相当简洁的网络请求框架，其本质上只是对Okhttp的封装，实际上底层还是用Okhttp来执行网络请求。这两天终于比较闲一些，于是又想起了被我束之高阁的前辈的武功秘籍。
 Retrofit的使用 参考官方例子，定义接口并使用
-public interface GitHub { @GET(&amp;#34;/repos/{owner}/{repo}/contributors&amp;#34;) Call&amp;lt;List&amp;lt;Contributor&amp;gt;&amp;gt; contributors(@Path(&amp;#34;owner&amp;#34;) String owner, @Path(&amp;#34;repo&amp;#34;) String repo); } // Create a very simple REST adapter which points the GitHub API.  Retrofit retrofit = new Retrofit.Builder() .baseUrl(API_URL) .addConverterFactory(GsonConverterFactory.create()) .build(); // Create an instance of our GitHub API interface.  GitHub github = retrofit.create(GitHub.class); // Create a call instance for looking up Retrofit contributors.  Call&amp;lt;List&amp;lt;Contributor&amp;gt;&amp;gt; call = github.contributors(&amp;#34;square&amp;#34;, &amp;#34;retrofit&amp;#34;); // Fetch and print a list of the contributors to the library.</description>
+public interface GitHub { @GET(&amp;#34;/repos/{owner}/{repo}/contributors&amp;#34;) Call&amp;lt;List&amp;lt;Contributor&amp;gt;&amp;gt; contributors(@Path(&amp;#34;owner&amp;#34;) String owner, @Path(&amp;#34;repo&amp;#34;) String repo); } // Create a very simple REST adapter which points the GitHub API. Retrofit retrofit = new Retrofit.Builder() .baseUrl(API_URL) .addConverterFactory(GsonConverterFactory.create()) .build(); // Create an instance of our GitHub API interface. GitHub github = retrofit.create(GitHub.class); // Create a call instance for looking up Retrofit contributors. Call&amp;lt;List&amp;lt;Contributor&amp;gt;&amp;gt; call = github.contributors(&amp;#34;square&amp;#34;, &amp;#34;retrofit&amp;#34;); // Fetch and print a list of the contributors to the library.</description>
     </item>
     
     <item>
@@ -106,9 +107,9 @@ public interface GitHub { @GET(&amp;#34;/repos/{owner}/{repo}/contributors&amp;#
 这里用的是Unsplash提供的随机壁纸服务，壁纸还是很合我的胃口的。图中URL：https://source.unsplash.com/random/3584x2240。这里的“3584x2240”根据你的显示器分辨率填写。
 设置壁纸 虽然“自动操作”的资源库中有“设置壁纸”这个能力，但我实际测试发现它只能改当前屏幕的壁纸，对于我用双屏的来说就比较难受了。因而这里要用Apple Script来实现：
 图中的脚本为：
-on run {input, parameters} set theFile to first item of input set filename to the POSIX path of theFile tell application &amp;quot;System Events&amp;quot; tell every desktop set picture to filename end tell end tell return filename end run 清理垃圾 这个简单，删除所有不是今天创建的图片就行了。
+on run {input, parameters}set theFile to first item of inputset filename to the POSIX path of theFiletell application &amp;#34;System Events&amp;#34;tell every desktopset picture to filenameend tellend tellreturn filenameend run 清理垃圾 这个简单，删除所有不是今天创建的图片就行了。
 每天执行 保存后，打开日程应用，可以看到出现了一条刚刚添加的日程。使用Command+E快捷键修改日程，“重复”改为每天。最终结果：
- 最后效果
+最后效果
 摸鱼结束，我去搬砖了。</description>
     </item>
     
@@ -138,11 +139,11 @@ MemoryCache 顾名思义，这个是在内存中缓存Bitmap相关的代码。
 MemoryCache结合了策略模式和装饰器模式，初始化时可选择不同缓存策略。
 一个Cache类内部持有一定量的Bitmap元素，并根据某种策略自动移除未使用的Bitmap。看结构我们应该从BaseMemoryCache开始看起。
 BaseMemoryCache中持有了所有放入的元素的弱引用，而它的子类根据策略持有了部分缓存对象的强引用。
-整个框架分多少个模块，每个模块的作用是什么  ImageLoader 门面。 ImageAware 对最终处理和展示图片操作的封装。 MemoryCache bitmap在内存中的缓存。 BitmapProcessor 图片处理器，处理原始图片。分为预处理和后处理，预处理的结果会存入缓存，而后处理每次展示都会执行。 BitmapDisplayer 控制图片展示，可为其附加一定的展示效果。 DiskCache bitmap在磁盘中的缓存 ImageDecoder 将图片解码为Bitmap，并缩放到合适尺寸  如何仅通过interface就将框架的整个流程串联起来 如何进行内存管理的，LRU是种什么算法，有没有比LRU更好的？ AUIL的图片缓存有二级，一是所有缓存过的图片都会持有WeakReference，可能随时回收；二是部分图片会持有强引用，不会被回收。这里的部分图片的总共大小可以设置，达到阈值之后使用一定的算法淘汰一些图片。这里最常用的就是LRU。
+整个框架分多少个模块，每个模块的作用是什么 ImageLoader 门面。 ImageAware 对最终处理和展示图片操作的封装。 MemoryCache bitmap在内存中的缓存。 BitmapProcessor 图片处理器，处理原始图片。分为预处理和后处理，预处理的结果会存入缓存，而后处理每次展示都会执行。 BitmapDisplayer 控制图片展示，可为其附加一定的展示效果。 DiskCache bitmap在磁盘中的缓存 ImageDecoder 将图片解码为Bitmap，并缩放到合适尺寸 如何仅通过interface就将框架的整个流程串联起来 如何进行内存管理的，LRU是种什么算法，有没有比LRU更好的？ AUIL的图片缓存有二级，一是所有缓存过的图片都会持有WeakReference，可能随时回收；二是部分图片会持有强引用，不会被回收。这里的部分图片的总共大小可以设置，达到阈值之后使用一定的算法淘汰一些图片。这里最常用的就是LRU。
 LRU是淘汰缓存文件的算法，它每次淘汰最久未使用的文件。是一种最常用的页面置换算法。除了LRU之外，AUIL预置的算法还有FIFO（先入先出）、LargestLimitted（淘汰最大的文件）、LFU（淘汰使用频率最低的）。三者各有优劣。
 如，LRU因为图片展示频率在时间上的不均匀性，可能将一些高频展示的图片淘汰掉，导致缓存命中率下降；LFU对于新图片频率统计无法比较好把控。
 用到了多少个线程池，这些线程池之间的区别是什么，如果只用一个线程池可以么？ 使用了三个线程池：
- taskExecutor taskExecutorForCachedImages taskDistributor  taskExecutor和taskExecutorForCachedImages都是用来执行图片处理和展示任务的，他们处理顺序都是个LIFO（后进先出）的队列，而taskDistributor是个普通的线程池，用于框架内其他任务。
+taskExecutor taskExecutorForCachedImages taskDistributor taskExecutor和taskExecutorForCachedImages都是用来执行图片处理和展示任务的，他们处理顺序都是个LIFO（后进先出）的队列，而taskDistributor是个普通的线程池，用于框架内其他任务。
 taskExecutorForCachedImages是专门为缓存中读取的图片展示用的线程池，因为这类图片响应会很快，所以AUIL专门给他们准备了一个线程池。 综上，如果用一个线程池则最终效果会大打折扣。</description>
     </item>
     
@@ -152,14 +153,16 @@ taskExecutorForCachedImages是专门为缓存中读取的图片展示用的线�
       <pubDate>Sun, 16 Jan 2022 23:24:16 +0800</pubDate>
       
       <guid>https://ntutn.top/posts/%E7%BB%99app%E6%B7%BB%E5%8A%A0%E6%9E%84%E5%BB%BA%E4%BF%A1%E6%81%AF/</guid>
-      <description>给APP添加构建信息  这两天在琢磨一个问题，一个APP是怎么知道自己是怎么来的呢？ 一个应用得知道自己是怎么来的，这样出了问题才知道该找谁。举个例子，当应用发生了一个线上crash，崩溃信息收集上来，然后我们打开堆栈一看懵了——这个发生崩溃的v5.c是哪个类呢？
- 显然，代码被混淆过，我们要拿到编译时生成的mapping.txt来还原堆栈，如图
+      <description>给APP添加构建信息 这两天在琢磨一个问题，一个APP是怎么知道自己是怎么来的呢？ 一个应用得知道自己是怎么来的，这样出了问题才知道该找谁。举个例子，当应用发生了一个线上crash，崩溃信息收集上来，然后我们打开堆栈一看懵了——这个发生崩溃的v5.c是哪个类呢？
+显然，代码被混淆过，我们要拿到编译时生成的mapping.txt来还原堆栈，如图
 **然而，我们编译了很多次，客官您要的是哪次的mapping文件呢？**显然，我们不仅要保留每次构建的相关信息，还得能准确区分开每次构建的产物，能做到有问题立即查询到对应构建信息。
 应用需要知道自己是“怎么来的”。
-区分不同构建结果  可以收集当前commit id，commit不同一定是不同构建。 可以生成一个较长的随机数每次构建不同。  看上去前者更优雅，但一个commit id上并不一定只有一个成功的构建，比如你做一应用叫“快音”，测试通过后调整了一些编译选项打出线上包，此时只根据commit id就无法确定是对应测试包的构建还是线上包了。
+区分不同构建结果 可以收集当前commit id，commit不同一定是不同构建。 可以生成一个较长的随机数每次构建不同。 看上去前者更优雅，但一个commit id上并不一定只有一个成功的构建，比如你做一应用叫“快音”，测试通过后调整了一些编译选项打出线上包，此时只根据commit id就无法确定是对应测试包的构建还是线上包了。
 所以，最实在的方法还是后者。
 fun runShellCommand(command: String): String { val byteOut = ByteArrayOutputStream() project.exec { commandLine = command.split(&amp;#34; &amp;#34;) standardOutput = byteOut } return String(byteOut.toByteArray()) } val buildNumber = UUID.randomUUID() val gitBranch = runShellCommand(&amp;#34;git branch --show-current&amp;#34;).trim() val gitCommitId = runShellCommand(&amp;#34;git rev-parse HEAD&amp;#34;).trim() val buildTimeMILLIS = System.currentTimeMillis() 将信息传给应用 不知道大家有没有这种习惯，在开发时加一些测试代码时判断只在Debug版本生效，即
-if (BuildConfig.DEBUG) { Toast.makeText(applicationContext, &amp;#34;test&amp;#34;, Toast.LENGTH_SHORT).show() } 这样即使我真的忘记删除这段代码也不会影响到线上，让用户看到个“test”感到莫名其妙。这里用的BuildConfig就是在Gradle构建时生成的一个类，里面包含了一些有关当前构建的信息1。</description>
+if (BuildConfig.DEBUG) { Toast.makeText(applicationContext, &amp;#34;test&amp;#34;, Toast.LENGTH_SHORT).show() } 这样即使我真的忘记删除这段代码也不会影响到线上，让用户看到个“test”感到莫名其妙。这里用的BuildConfig就是在Gradle构建时生成的一个类，里面包含了一些有关当前构建的信息1。
+而幸运的是，官方也提供了方法让我们可以往BuildConfig里面自己加东西，于是
+android { defaultConfig { buildConfigField(&amp;#34;String&amp;#34;, &amp;#34;BUILD_NUMBER&amp;#34;, &amp;#34;\&amp;#34;$buildNumber\&amp;#34;&amp;#34;) buildConfigField(&amp;#34;String&amp;#34;, &amp;#34;GIT_BRANCH&amp;#34;, &amp;#34;\&amp;#34;$gitBranch\&amp;#34;&amp;#34;) buildConfigField(&amp;#34;String&amp;#34;, &amp;#34;GIT_COMMIT_ID&amp;#34;, &amp;#34;\&amp;#34;$gitCommitId\&amp;#34;&amp;#34;) buildConfigField(&amp;#34;Long&amp;#34;, &amp;#34;BUILD_TIME_MILLIS&amp;#34;, &amp;#34;${buildTimeMILLIS}L&amp;#34;) } } 然后这些字段就会出现在BuildConfig中</description>
     </item>
     
     <item>
@@ -182,8 +185,9 @@ private fun saveText(inputText: String) { try { val output = openFileOutput(&amp
       <description>Kotlin 变量和函数 变量 用var和val定义变量，并有类型自动推导的支持。
 val用来声明一个不可变的变量，var用来声明一个可变的变量。
 val a = 10 var b: Int = 12 Kotlin完全抛弃了java中的基本数据类型，完全使用对象数据类型。
-   java基本数据类型 Kotlin对象数据类型 数据类型说明     int Int 整型   long Long 长整型   short Short 短整型   float Float 单精度浮点型   double Double 双精度浮点型   boolean Boolean 布尔型   char Char 字符型   byte Byte 字节型    函数 语法：
-fun main(args: Array&amp;lt;String&amp;gt;) { println(&amp;#34;Hello World!</description>
+java基本数据类型 Kotlin对象数据类型 数据类型说明 int Int 整型 long Long 长整型 short Short 短整型 float Float 单精度浮点型 double Double 双精度浮点型 boolean Boolean 布尔型 char Char 字符型 byte Byte 字节型 函数 语法：
+fun main(args: Array&amp;lt;String&amp;gt;) { println(&amp;#34;Hello World!&amp;#34;) } Kotlin中的函数在无必要时可以省略很多东西：
+import kotlin.math.max fun largerNumber(a: Int, b: Int) = max(a, b) fun main(args: Array&amp;lt;String&amp;gt;) { val a = 3 val b = 5 println(&amp;#34;The larger number of a and b is ${largerNumber(a, b)}&amp;#34;) } 程序的逻辑控制 if 与java中的if语句相比，Kotlin中的if是可以有返回值的。</description>
     </item>
     
     <item>
@@ -195,8 +199,7 @@ fun main(args: Array&amp;lt;String&amp;gt;) { println(&amp;#34;Hello World!</des
       <description>问题描述 和工具线配合完成某个需求，我这边的改动很少，但一鼓作气搞完后却遇到了奇怪的报错。已知工具线的代码大多是java的，而我这边自然是力推Kotlin。我们的代码参考如下：
 代码参考 工具线定义了一个接口用于callback
 package a; interface IPublishCallback { void onFinish(); } 工具线在执行完发布逻辑后无论成功还是失败都会调用我们的callback
-package a; public class PublishUtil { public static void publishVideo(String videoName, IPublishCallback callback) { Runnable runnable = () -&amp;gt; { try { System.out.println(&amp;#34;[&amp;#34; + videoName + &amp;#34;]开始执行耗时发布操作……&amp;#34;); Thread.sleep(1000L); } catch (InterruptedException e) { e.printStackTrace(); } callback.onFinish(); }; Thread thread = new Thread(runnable); thread.start(); try { thread.join(); } catch (InterruptedException e) { e.printStackTrace(); } } } 我们这边的实现是Kotlin的，就是调用了下工具线的方法
-package b import a.</description>
+package a; public class PublishUtil { public static void publishVideo(String videoName, IPublishCallback callback) { Runnable runnable = () -&amp;gt; { try { System.out.println(&amp;#34;[&amp;#34; + videoName + &amp;#34;]开始执行耗时发布操作……&amp;#34;); Thread.sleep(1000L); } catch (InterruptedException e) { e.printStackTrace(); } callback.onFinish(); }; Thread thread = new Thread(runnable); thread.start(); try { thread.join(); } catch (InterruptedException e) { e.printStackTrace(); } } } 我们这边的实现是Kotlin的，就是调用了下工具线的方法</description>
     </item>
     
     <item>
@@ -210,9 +213,8 @@ package b import a.</description>
 那就看看，这回是谁，为啥火了。一个放牛小伙，正巧被摄影师拍了，眼睛澄澈，笑容阳光，剩下的全是营销。
 『为何贴吧男性普遍仇视辱骂丁真？』我玩贴吧，但对丁真没啥恶感，只是对这一堆热搜有恶感：**明明这两天有更值得关注的事情的。**好吧，咱也不知道，咱也不敢问，你们知道有几条热搜被盖过去了就行了。
 『作为一名男性，你愿意和丁真互换人生吗？』好么，没完没了了，还不惜故意挑起性别对立。我就引用某个网友1的回答
-碰到问题，不想跟爱因斯坦换脑子 兜里没钱，也没想过跟王思聪换爹 现在更不可能跟丁真换运气 一无所有，就是一无所有的人生 百病缠身，就是百病缠身的人生 腰缠万贯，就是腰缠万贯的人生 我的成功是我的，谁也夺不走 我的失败也是我的，不想跟谁换 说白了，我只想做好自己，好好过独属自己的独一无二的无法复刻的人生 不管这人生多么操蛋 也不想成为一个无穷欲望堆积成的肉块 我小时候也放牛来着，还不是一步步卷过来的。
-  @在下头不是很铁了，原回答在某回答的回复里，但无法直接通过链接打开，大概是被限流了。转载已获授权。&amp;#160;&amp;#x21a9;&amp;#xfe0e;
-   </description>
+碰到问题，不想跟爱因斯坦换脑子兜里没钱，也没想过跟王思聪换爹现在更不可能跟丁真换运气一无所有，就是一无所有的人生百病缠身，就是百病缠身的人生腰缠万贯，就是腰缠万贯的人生我的成功是我的，谁也夺不走我的失败也是我的，不想跟谁换说白了，我只想做好自己，好好过独属自己的独一无二的无法复刻的人生不管这人生多么操蛋也不想成为一个无穷欲望堆积成的肉块 我小时候也放牛来着，还不是一步步卷过来的。
+@在下头不是很铁了，原回答在某回答的回复里，但无法直接通过链接打开，大概是被限流了。转载已获授权。&amp;#160;&amp;#x21a9;&amp;#xfe0e;</description>
     </item>
     
     <item>
@@ -240,7 +242,7 @@ import java.lang.IllegalArgumentException fun main() { listOf( ShareData(listOf(
 幸运的是，我找到了这么一套免费的图片素材，Mahjong Icons，只要提供一个指向这个页面的超链接就可以免费用。
 另外还需要一个应用图标，这个我是直接在Icon Park上找了一个。
 接下来将素材导入到项目，为了随处使用方便，我还定义到了一个类中：
-package top.ntutn.match /** * 麻将牌 */ object Mahjong { val bamboos = listOf( R.drawable.bamboo1, R.drawable.bamboo2, R.drawable.bamboo3, R.drawable.bamboo4, R.drawable.bamboo5, R.drawable.bamboo6, R.drawable.bamboo7, R.drawable.bamboo8, R.drawable.bamboo9 ) val dragons = listOf( R.drawable.dragon_chun, R.drawable.dragon_green, R.drawable.dragon_haku ) val faceDown = R.drawable.face_down val mans = listOf( R.drawable.man1, R.drawable.man2, R.drawable.man3, R.drawable.man4, R.drawable.man5, R.drawable.man6, R.drawable.man7, R.drawable.man8, R.drawable.man9 ) val pins = listOf( R.drawable.pin1, R.drawable.pin2, R.drawable.pin3, R.drawable.pin4, R.</description>
+package top.ntutn.match /** * 麻将牌 */ object Mahjong { val bamboos = listOf( R.drawable.bamboo1, R.drawable.bamboo2, R.drawable.bamboo3, R.drawable.bamboo4, R.drawable.bamboo5, R.drawable.bamboo6, R.drawable.bamboo7, R.drawable.bamboo8, R.drawable.bamboo9 ) val dragons = listOf( R.drawable.dragon_chun, R.drawable.dragon_green, R.drawable.dragon_haku ) val faceDown = R.drawable.face_down val mans = listOf( R.drawable.man1, R.drawable.man2, R.drawable.man3, R.drawable.man4, R.drawable.man5, R.drawable.man6, R.drawable.man7, R.drawable.man8, R.drawable.man9 ) val pins = listOf( R.drawable.pin1, R.drawable.pin2, R.drawable.pin3, R.</description>
     </item>
     
     <item>
@@ -251,7 +253,7 @@ package top.ntutn.match /** * 麻将牌 */ object Mahjong { val bamboos = listOf
       <guid>https://ntutn.top/posts/classloader%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%89%98%E6%9C%BA%E5%88%B6%E6%8E%A2%E7%A9%B6/</guid>
       <description>最近在研究抖音进入热点内流的耗时问题，种种线索指向了类加载耗时上。为此，我研究了Java类加载的双亲委托机制，并尝试给出了优化建议。
 双亲委托机制 双亲委托机制中最重要的是loadClass方法，让我们看看它是怎么实现的。
-protected Class&amp;lt;?&amp;gt; loadClass(String name, boolean resolve) throws ClassNotFoundException { // First, check if the class has already been loaded  Class&amp;lt;?&amp;gt; c = findLoadedClass(name); // 已加载过直接返回  if (c == null) { try { if (parent != null) { c = parent.loadClass(name, false); //尝试让parent加载  } else { c = findBootstrapClassOrNull(name); // bootstrap class loader是否加载过  } } catch (ClassNotFoundException e) { // ClassNotFoundException thrown if class not found  // from the non-null parent class loader  } if (c == null) { // If still not found, then invoke findClass in order  // to find the class.</description>
+protected Class&amp;lt;?&amp;gt; loadClass(String name, boolean resolve) throws ClassNotFoundException { // First, check if the class has already been loaded Class&amp;lt;?&amp;gt; c = findLoadedClass(name); // 已加载过直接返回 if (c == null) { try { if (parent != null) { c = parent.loadClass(name, false); //尝试让parent加载 } else { c = findBootstrapClassOrNull(name); // bootstrap class loader是否加载过 } } catch (ClassNotFoundException e) { // ClassNotFoundException thrown if class not found // from the non-null parent class loader } if (c == null) { // If still not found, then invoke findClass in order // to find the class.</description>
     </item>
     
     <item>
@@ -267,9 +269,9 @@ DebugConfig 因为字节自己的ABManager用着挺顺手，感觉自己项目�
 使用 先看使用：
 @ZeroConfig(key = &amp;#34;retrofit_config&amp;#34;, title = &amp;#34;Retrofit配置&amp;#34;, owner = &amp;#34;liuhaixin.zero&amp;#34;) data class RetrofitConfig(val baseUrl: String = RetrofitUtil.BASE_URL) private val retrofitConfig by zeroConfig&amp;lt;RetrofitConfig&amp;gt;() private val retrofit by lazy { Retrofit.Builder() .baseUrl(retrofitConfig?.baseUrl ?: BASE_URL) .addConverterFactory(GsonConverterFactory.create()) .client(okHttpClient) .build() } 看上去还是有点让人心动的吧。
 属性委托、泛型实化 首先是一段来自菜鸟教程的描述：
- 属性委托指的是一个类的某个属性值不是在类中直接进行定义，而是将其托付给一个代理类，从而实现对该类属性的统一管理。
+属性委托指的是一个类的某个属性值不是在类中直接进行定义，而是将其托付给一个代理类，从而实现对该类属性的统一管理。
 val/var &amp;lt;属性名&amp;gt;: &amp;lt;类型&amp;gt; by &amp;lt;表达式&amp;gt; by 关键字之后的表达式就是委托, 属性的 get() 方法(以及set() 方法)将被委托给这个对象的 getValue() 和 setValue() 方法。属性委托不必实现任何接口, 但必须提供 getValue() 函数(对于 var属性,还需要 setValue() 函数)。
- 借助这个特征，我们可以定义这样一个委托类：</description>
+借助这个特征，我们可以定义这样一个委托类：</description>
     </item>
     
     <item>
@@ -285,7 +287,7 @@ ViewBinding 无数人痛恨findViewById，并且为了干掉它做了许多尝�
 使用 首先在build.gradle（或build.gradle.kts）中的android块添加
 buildFeatures { viewBinding = true } 在xml中正常定义你的布局
 &amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt; &amp;lt;LinearLayout xmlns:android=&amp;#34;http://schemas.android.com/apk/res/android&amp;#34; xmlns:tools=&amp;#34;http://schemas.android.com/tools&amp;#34; android:layout_width=&amp;#34;match_parent&amp;#34; android:layout_height=&amp;#34;match_parent&amp;#34; android:orientation=&amp;#34;vertical&amp;#34; tools:context=&amp;#34;.MainActivity&amp;#34;&amp;gt; &amp;lt;TextView android:id=&amp;#34;@+id/text_view&amp;#34; android:layout_width=&amp;#34;match_parent&amp;#34; android:layout_height=&amp;#34;wrap_content&amp;#34; android:text=&amp;#34;Hello World!&amp;#34; /&amp;gt; &amp;lt;Button android:id=&amp;#34;@+id/test_button&amp;#34; android:layout_width=&amp;#34;match_parent&amp;#34; android:layout_height=&amp;#34;wrap_content&amp;#34; android:text=&amp;#34;toast&amp;#34; /&amp;gt; &amp;lt;Button android:id=&amp;#34;@+id/change_button&amp;#34; android:layout_width=&amp;#34;match_parent&amp;#34; android:layout_height=&amp;#34;wrap_content&amp;#34; android:text=&amp;#34;change&amp;#34; /&amp;gt; &amp;lt;/LinearLayout&amp;gt; 接下来就可以愉快使用了
-package top.ntutn.viewmodeldemo import android.os.Bundle import android.widget.Toast import androidx.appcompat.app.AppCompatActivity import top.ntutn.viewmodeldemo.databinding.ActivityMainBinding class MainActivity : AppCompatActivity() { private lateinit var binding: ActivityMainBinding override fun onCreate(savedInstanceState: Bundle?) { super.</description>
+package top.ntutn.viewmodeldemo import android.os.Bundle import android.widget.Toast import androidx.appcompat.app.AppCompatActivity import top.ntutn.viewmodeldemo.databinding.ActivityMainBinding class MainActivity : AppCompatActivity() { private lateinit var binding: ActivityMainBinding override fun onCreate(savedInstanceState: Bundle?</description>
     </item>
     
     <item>
@@ -308,7 +310,7 @@ echo &amp;#34;127.0.0.1 ocsp.apple.com&amp;#34; | sudo tee -a /etc/hosts 反正�
       
       <guid>https://ntutn.top/posts/%E8%AF%91%E7%94%A8buildsrc%E5%92%8Ckotlin_dsl%E7%AE%A1%E7%90%86gradle%E4%BE%9D%E8%B5%96/</guid>
       <description>多模块工程中一个更好的引入依赖的方法 翻译自Gradle Dependency Management With BuildSrc and Kotlin DSL
- 第一次尝试翻译英文文章……
+第一次尝试翻译英文文章……
 要点 主要集中在如何用buildSrc目录和Kotlin DSL脚本构建一个Gradle依赖管理系统，你也会学到这样做相对使用传统Groovy代码的好处。
 如果你倾向于通过视频来看这篇博客，文末附有一个Youtube视频。
 问题 众所周知在一个快速发展的项目中维护依赖是一个乏味的工作，而传统的Groovy脚本没有code navigation、自动补全，再加上性能问题和运行时错误让这一切变得更糟糕。
@@ -316,10 +318,10 @@ echo &amp;#34;127.0.0.1 ocsp.apple.com&amp;#34; | sudo tee -a /etc/hosts 反正�
 感谢Gradle团队和社区的工作提供了一个顺畅安全的构建流程，他们提出的最棒的主意之一就是用Kotlin DSL脚本写buildSrc目录。
 解决 依赖库引入和自定义task不应该放到构建脚本中，它们应该被声明到一个独立文件中再被构建脚本使用。在这个实现的早期，开发者习惯于创建一个Gradle文件来声明所有库并在构建脚本中使用。
 这确实在一定程度上解决了问题，你可以在这篇文章读到这种方法。但这个简单方案不能解决类似自动补全和code navigation的问题，这使得在长远上看这个方案不够可靠。在这之外，buildSrc似乎有希望解决这个问题。
- 这个目录被当作一个included build看待。在发现这个目录之后，Gradle自动编译和测试它的代码，并将编译结果放到你的构建脚本的class path中。在一个多模块的工程中只能有一个这样的目录，并且要放到工程的顶级目录中。应该优先通过script plugins因为这样更便于管理、重构和测试代码。 ——Gradle团队
- 创建buildSrc目录 使用Kotlin DSL脚本不但能解决构建脚本中的这些问题，还能得到先进的IDE支持，包括code navigation、编译时错误提示等。最重要的，我们再也不用使用Groovy了。
+这个目录被当作一个included build看待。在发现这个目录之后，Gradle自动编译和测试它的代码，并将编译结果放到你的构建脚本的class path中。在一个多模块的工程中只能有一个这样的目录，并且要放到工程的顶级目录中。应该优先通过script plugins因为这样更便于管理、重构和测试代码。 ——Gradle团队
+创建buildSrc目录 使用Kotlin DSL脚本不但能解决构建脚本中的这些问题，还能得到先进的IDE支持，包括code navigation、编译时错误提示等。最重要的，我们再也不用使用Groovy了。
 我们要做的第一件事是创建一个buildSrc目录：
- 在工程上右键 点击New并选择Directory 把它命名为buildSrc  如果你仍然不懂怎么创建这个目录，请看这里：
+在工程上右键 点击New并选择Directory 把它命名为buildSrc 如果你仍然不懂怎么创建这个目录，请看这里：
 然后我们需要在这个目录里创建一个叫做build.gradle.kts的文件，在这个文件里导入插件和存储库。
 plugins{ `kotlin-dsl` } repositories { jcenter() } 完成后你还需要点击gradle的“sync now”按钮，因为gradle把它当作了一个新建目录中的普通文件。现在你可以实现Kotlin DSL脚本了。
 下一步是创建一个类似这样的目录结构src&amp;gt;main&amp;gt;java，完成后如上图所示。
@@ -327,7 +329,7 @@ plugins{ `kotlin-dsl` } repositories { jcenter() } 完成后你还需要点击gr
 现在我们的目标是实现一个依赖管理系统，所以我们创建一个叫做Dependencies.kt的文件（你可以用你喜欢的任何名字）。
 完成后我们就可以通过Kotlin代码来声明依赖库和版本了。这里我们用object来声明特定的类型，例如版本号、AndroidX依赖库等。
 首先我们创建一个用来用Kotlin风格定义所有依赖库版本号的object。
-object Versions{ val constraint_layout_version = &amp;#34;1.1.3&amp;#34; val lifecycle_version = &amp;#34;2.2.0&amp;#34; val coroutines_version = &amp;#34;1.</description>
+object Versions{ val constraint_layout_version = &amp;#34;1.1.3&amp;#34; val lifecycle_version = &amp;#34;2.2.0&amp;#34; val coroutines_version = &amp;#34;1.3.8&amp;#34; val kotlin_version = &amp;#34;1.</description>
     </item>
     
     <item>
@@ -338,8 +340,8 @@ object Versions{ val constraint_layout_version = &amp;#34;1.1.3&amp;#34; val lif
       <guid>https://ntutn.top/posts/%E6%88%91%E7%9A%84%E9%BB%91%E5%8E%86%E5%8F%B2%E8%A2%ABgithub%E5%9F%8B%E5%88%B0%E5%8C%97%E6%9E%81%E4%BA%86/</guid>
       <description>昨天整理自己的github仓库的时候发现自己的个人主页多了个徽章：Arctic Code Vault Contributor
 So what happened?
-GitHub Code Vault是什么  GitHub Code Vault（GitHub 代码保险库）是由 GitHub Archive Program（GitHub 代码永久保存计划）设立的代码档案库，旨在保存开源软件以供未来使用。1
- 天灾人祸，世界末日，地球回到原始时代重新发展，或者betacat污染了所有开源代码库啦，人类就可以找到这份代码库，重建网络世界。
+GitHub Code Vault是什么 GitHub Code Vault（GitHub 代码保险库）是由 GitHub Archive Program（GitHub 代码永久保存计划）设立的代码档案库，旨在保存开源软件以供未来使用。1
+天灾人祸，世界末日，地球回到原始时代重新发展，或者betacat污染了所有开源代码库啦，人类就可以找到这份代码库，重建网络世界。
 该项目给github上活跃的开源代码库建立快照，将他们存储在胶片上运往北极。据称这些代码将被保存至少1000年。
 每个细节都充满了科幻的味道，比如考虑一前年后的人类不一定读懂今天的代码，在《GitHub Code Vault 指南》中介绍了二进制、计算机、软件、编译等基本概念，以及如何解码胶片上的信息。 当然，这个指南本身并没有被压缩和编码，他们没有犯某些网站的RARSetup.rar的错误。
 考虑到地球文明重建，人类不一定造出了计算机，于是还放了一份科技树指南，包含理解软件所需的多层技术基础，如微处理器、网络、电子、半导体，甚至工业社会前的技术。有了这些技术，让人类可以重新造出现代计算机。
@@ -357,7 +359,7 @@ noveldownloader https://github.com/zerofancy/noveldownloader
 我的代码留点bug给后世解决不算什么，但996.icu也被选中了。这下真的被钉到历史的耻辱柱上了……
 面向Stackoverflow编程 不同时快照一份 stackoverflow ，后代也不会抄啊。2
 大家还贡献了什么 dotfile、Github Pages、个人演讲库和个人网站、给女朋友的信，听说鸿蒙的ppt也在里面……
-参考  除了bug，GitHub可能还把你的女装照冻到了北极，1000年后还能读那种 https://archiveprogram.github.com/ GitHub Archive Program: the journey of the world’s open source code to the Arctic    GitHub Code Vault 指南&amp;#160;&amp;#x21a9;&amp;#xfe0e;</description>
+参考 除了bug，GitHub可能还把你的女装照冻到了北极，1000年后还能读那种 https://archiveprogram.github.com/ GitHub Archive Program: the journey of the world’s open source code to the Arctic GitHub Code Vault 指南&amp;#160;&amp;#x21a9;&amp;#xfe0e;</description>
     </item>
     
     <item>
@@ -371,7 +373,7 @@ noveldownloader https://github.com/zerofancy/noveldownloader
 通知渠道在8.0（O）引入。要求APP将通知分类，通过不同渠道进行分发，用户可以选择性禁用某个渠道的通知，或者调整优先等级。
 通知可以有不同的重要等级，有四种：IMPORTANCE_HIGH、IMPORTANCE_DEFAULT、IMPORTANCE_LOW、IMPORTANCE_MIN。根据重要等级不同，通知可能有不同的展现策略，比如在前台提示甚至播放声音。
 在通知渠道创建时通知的重要等级也就确定了，之后不能再被APP修改。
-通知dmeo package top.ntutn.notificationtest import android.app.NotificationChannel import android.app.NotificationManager import android.app.PendingIntent import android.content.Context import android.content.Intent import android.graphics.BitmapFactory import android.os.Build import androidx.appcompat.app.AppCompatActivity import android.os.Bundle import androidx.core.app.NotificationCompat import top.ntutn.notificationtest.databinding.ActivityMainBinding class MainActivity : AppCompatActivity() { private lateinit var binding: ActivityMainBinding override fun onCreate(savedInstanceState: Bundle?) { super.onCreate(savedInstanceState) binding = ActivityMainBinding.inflate(layoutInflater) setContentView(binding.root) initView() } private fun initView(){ val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager if(Build.VERSION.SDK_INT &amp;gt;= Build.VERSION_CODES.O){ // 通知渠道  val channel = NotificationChannel(&amp;#34;normal&amp;#34;,&amp;#34;Normal&amp;#34;,NotificationManager.</description>
+通知dmeo package top.ntutn.notificationtest import android.app.NotificationChannel import android.app.NotificationManager import android.app.PendingIntent import android.content.Context import android.content.Intent import android.graphics.BitmapFactory import android.os.Build import androidx.appcompat.app.AppCompatActivity import android.os.Bundle import androidx.core.app.NotificationCompat import top.ntutn.notificationtest.databinding.ActivityMainBinding class MainActivity : AppCompatActivity() { private lateinit var binding: ActivityMainBinding override fun onCreate(savedInstanceState: Bundle?) { super.onCreate(savedInstanceState) binding = ActivityMainBinding.inflate(layoutInflater) setContentView(binding.root) initView() } private fun initView(){ val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager if(Build.VERSION.SDK_INT &amp;gt;= Build.VERSION_CODES.O){ // 通知渠道 val channel = NotificationChannel(&amp;#34;normal&amp;#34;,&amp;#34;Normal&amp;#34;,NotificationManager.</description>
     </item>
     
     <item>
@@ -389,17 +391,16 @@ noveldownloader https://github.com/zerofancy/noveldownloader
 好吧，拼多多栽了，那么我们有没有别的方法证明这件事情发生过？万一下次是腾讯出了什么问题，小管家扛得住压力吗？
 截图不可靠 截图真的是个很神奇的东西，一行字只要被截成图可信度好像就上升了不少，但截图伪造起来也太容易了。
 有三人成虎旧事，人们总结了『耳听为虚，眼见为实』的真理，但现在信息时代眼见也不一定为实了。
- 图片有可能被软件处理过 网页内容可能被修改过 发布内容的账号可能是个高仿 图片可能没截全，存在被断章取义的现象  在这方面，比如F12，永远的神。
-互联网档案馆  互联网档案馆（英语：Internet Archive）是美国的一个由Alexa创始人布鲁斯特·卡利创办于1996年的非营利性的、提供互联网多媒体资料文件阅览服务的数字图书馆，总部位于加利福尼亚州旧金山的列治文区，其使命是“普及所有知识”（英语：universal access to all knowledge.）。该“档案馆”提供的数字资料有如网站、网页、图形材料音乐、视频、音频、软件、动态图像和数百万书籍等的永久性免费储存及获取的副本。 迄至2012年10月，其信息储量达到10PB。除此之外，该档案馆也是网络开放与自由化的倡议者之一。1
- 比如上面提到的小管家的这个回答：拼多多疑似回应「员工猝死」后秒删，是真的吗？拼多多又称截图系谣言，你相信吗？ - 知乎小管家的回答 - 知乎
+图片有可能被软件处理过 网页内容可能被修改过 发布内容的账号可能是个高仿 图片可能没截全，存在被断章取义的现象 在这方面，比如F12，永远的神。
+互联网档案馆 互联网档案馆（英语：Internet Archive）是美国的一个由Alexa创始人布鲁斯特·卡利创办于1996年的非营利性的、提供互联网多媒体资料文件阅览服务的数字图书馆，总部位于加利福尼亚州旧金山的列治文区，其使命是“普及所有知识”（英语：universal access to all knowledge.）。该“档案馆”提供的数字资料有如网站、网页、图形材料音乐、视频、音频、软件、动态图像和数百万书籍等的永久性免费储存及获取的副本。 迄至2012年10月，其信息储量达到10PB。除此之外，该档案馆也是网络开放与自由化的倡议者之一。1
+比如上面提到的小管家的这个回答：拼多多疑似回应「员工猝死」后秒删，是真的吗？拼多多又称截图系谣言，你相信吗？ - 知乎小管家的回答 - 知乎
 我们日后需要证明小管家说过，那么先打开互联网档案馆：
 https://archive.org/
 添加小管家这条回答
 然后archive.org的爬虫会抓取这个链接并保存下来。
 如果有一天知乎倒闭了，我们仍然能用这个链接证明小管家说过这句话。
 https://web.archive.org/web/20210104115016/https://www.zhihu.com/question/437783708/answer/1660566169
-  互联网档案馆&amp;#160;&amp;#x21a9;&amp;#xfe0e;
-   </description>
+互联网档案馆&amp;#160;&amp;#x21a9;&amp;#xfe0e;</description>
     </item>
     
     <item>
@@ -411,7 +412,7 @@ https://web.archive.org/web/20210104115016/https://www.zhihu.com/question/437783
       <description>仍然是《第一行代码》的学习笔记，安卓内置广播机制。
 Android中每个应用程序都可以对自己感兴趣的广播进行注册，包括来自系统的，和其他应用程序的。
 广播分为标准广播和有序广播。
- 标准广播异步执行，所有BroadcastReceiver几乎同时收到广播的消息。 有序广播 同步执行，只有前一个Receiver逻辑执行完后才会传递给下一个，且可以将广播截断。  接收系统广播 BroadcastReceiver的onReceive()方法是在主线程调用的，不应执行耗时操作。但开一个新线程操作也是不可靠的1。
+标准广播异步执行，所有BroadcastReceiver几乎同时收到广播的消息。 有序广播 同步执行，只有前一个Receiver逻辑执行完后才会传递给下一个，且可以将广播截断。 接收系统广播 BroadcastReceiver的onReceive()方法是在主线程调用的，不应执行耗时操作。但开一个新线程操作也是不可靠的1。
 监听时间变化（动态注册） class MainActivity : AppCompatActivity() { private val timeReceiver = object : BroadcastReceiver() { override fun onReceive(context: Context?, intent: Intent?) { text.text = Date(System.currentTimeMillis()).toString() } } override fun onCreate(savedInstanceState: Bundle?) { super.onCreate(savedInstanceState) setContentView(R.layout.activity_main) val intentFilter = IntentFilter() intentFilter.addAction(Intent.ACTION_TIME_TICK) registerReceiver(timeReceiver, intentFilter) } override fun onDestroy() { super.onDestroy() unregisterReceiver(timeReceiver) } } 开机启动（静态注册） &amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt; &amp;lt;manifest xmlns:android=&amp;#34;http://schemas.android.com/apk/res/android&amp;#34; package=&amp;#34;top.ntutn.broadcasttest&amp;#34;&amp;gt; &amp;lt;uses-permission android:name=&amp;#34;android.permission.RECEIVE_BOOT_COMPLETED&amp;#34; /&amp;gt; &amp;lt;application android:allowBackup=&amp;#34;true&amp;#34; android:icon=&amp;#34;@mipmap/ic_launcher&amp;#34; android:label=&amp;#34;@string/app_name&amp;#34; android:roundIcon=&amp;#34;@mipmap/ic_launcher_round&amp;#34; android:supportsRtl=&amp;#34;true&amp;#34; android:theme=&amp;#34;@style/Theme.</description>
     </item>
     
@@ -425,8 +426,7 @@ Android中每个应用程序都可以对自己感兴趣的广播进行注册，�
 圆角变大了，还有我一开始比较喜欢的功能，姑且称之为窗口标签。在BigSur中，当你打开两个全屏的Android Studio，它们将出现在同一个窗口，窗口上方出现不同的标签页，和浏览器一样。
 好景不长，这个功能表现很不稳定，我不得不考虑干掉这个功能。如果只是没有成功触发也就算了，大不了当没升级用，但它常常会把一些弹出窗口也搞成和原窗口并列的标签。比如当你rename一个文件时，弹出的窗口有时就会并列到标签上，然后Android Studio就卡死了。
 好吧，既然它开始影响我的工作效率了，我就找了找禁用的方法1。
-defaults write com.google.android.studio AppleWindowTabbingMode manual   来自https://www.reddit.com/r/androiddev/comments/jtbl4m/has_anyone_updated_to_macos_big_sur_and_is/&amp;#160;&amp;#x21a9;&amp;#xfe0e;
-   </description>
+defaults write com.google.android.studio AppleWindowTabbingMode manual 来自https://www.reddit.com/r/androiddev/comments/jtbl4m/has_anyone_updated_to_macos_big_sur_and_is/&amp;#160;&amp;#x21a9;&amp;#xfe0e;</description>
     </item>
     
     <item>
@@ -454,9 +454,9 @@ android:gravity指定控件内的内容对齐方式，有top、bottom、start、
 基本布局 LinearLayout 线性布局，通过android:orientation指定方向。
 有一个重要属性：android:layout_weight，它将控件已经占用的空间减掉后按照比重分给各个控件。一般我们直接指定android:layout_width为0dp，而给它指定一个比重，这样控件的尺寸将占满剩余空间。
 RelativeLayout 相对布局，复杂，但有迹可循。
-&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;utf-8&amp;quot;?&amp;gt; &amp;lt;RelativeLayout xmlns:android=&amp;quot;http://schemas.android.com/apk/res/android&amp;quot; xmlns:tools=&amp;quot;http://schemas.android.com/tools&amp;quot; android:layout_width=&amp;quot;match_parent&amp;quot; android:layout_height=&amp;quot;match_parent&amp;quot; tools:context=&amp;quot;.MainActivity&amp;quot;&amp;gt; &amp;lt;Button android:id=&amp;quot;@+id/button1&amp;quot; android:layout_width=&amp;quot;wrap_content&amp;quot; android:layout_height=&amp;quot;wrap_content&amp;quot; android:layout_alignParentLeft=&amp;quot;true&amp;quot; android:layout_alignParentTop=&amp;quot;true&amp;quot; android:text=&amp;quot;Button1&amp;quot; /&amp;gt; &amp;lt;Button android:id=&amp;quot;@+id/button2&amp;quot; android:layout_width=&amp;quot;wrap_content&amp;quot; android:layout_height=&amp;quot;wrap_content&amp;quot; android:layout_alignParentTop=&amp;quot;true&amp;quot; android:layout_alignParentRight=&amp;quot;true&amp;quot; android:text=&amp;quot;Button2&amp;quot; /&amp;gt; &amp;lt;Button android:id=&amp;quot;@+id/button3&amp;quot; android:layout_width=&amp;quot;wrap_content&amp;quot; android:layout_height=&amp;quot;wrap_content&amp;quot; android:layout_centerInParent=&amp;quot;true&amp;quot; android:text=&amp;quot;Button3&amp;quot; /&amp;gt; &amp;lt;Button android:id=&amp;quot;@+id/button4&amp;quot; android:layout_width=&amp;quot;wrap_content&amp;quot; android:layout_height=&amp;quot;wrap_content&amp;quot; android:layout_alignParentLeft=&amp;quot;true&amp;quot; android:layout_alignParentBottom=&amp;quot;true&amp;quot; android:text=&amp;quot;Button4&amp;quot; /&amp;gt; &amp;lt;Button android:id=&amp;quot;@+id/button5&amp;quot; android:layout_width=&amp;quot;wrap_content&amp;quot; android:layout_height=&amp;quot;wrap_content&amp;quot; android:layout_alignParentRight=&amp;quot;true&amp;quot; android:layout_alignParentBottom=&amp;quot;true&amp;quot; android:text=&amp;quot;Button5&amp;quot; /&amp;gt; &amp;lt;/RelativeLayout&amp;gt; 以上这段布局文件描述的就是一个相对布局，共有5个按钮，分别在父布局的左上、右上、中间、左下、右下位置。
+&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt;&amp;lt;RelativeLayout xmlns:android=&amp;#34;http://schemas.android.com/apk/res/android&amp;#34;xmlns:tools=&amp;#34;http://schemas.android.com/tools&amp;#34;android:layout_width=&amp;#34;match_parent&amp;#34;android:layout_height=&amp;#34;match_parent&amp;#34;tools:context=&amp;#34;.MainActivity&amp;#34;&amp;gt;&amp;lt;Buttonandroid:id=&amp;#34;@+id/button1&amp;#34;android:layout_width=&amp;#34;wrap_content&amp;#34;android:layout_height=&amp;#34;wrap_content&amp;#34;android:layout_alignParentLeft=&amp;#34;true&amp;#34;android:layout_alignParentTop=&amp;#34;true&amp;#34;android:text=&amp;#34;Button1&amp;#34; /&amp;gt;&amp;lt;Buttonandroid:id=&amp;#34;@+id/button2&amp;#34;android:layout_width=&amp;#34;wrap_content&amp;#34;android:layout_height=&amp;#34;wrap_content&amp;#34;android:layout_alignParentTop=&amp;#34;true&amp;#34;android:layout_alignParentRight=&amp;#34;true&amp;#34;android:text=&amp;#34;Button2&amp;#34; /&amp;gt;&amp;lt;Buttonandroid:id=&amp;#34;@+id/button3&amp;#34;android:layout_width=&amp;#34;wrap_content&amp;#34;android:layout_height=&amp;#34;wrap_content&amp;#34;android:layout_centerInParent=&amp;#34;true&amp;#34;android:text=&amp;#34;Button3&amp;#34; /&amp;gt;&amp;lt;Buttonandroid:id=&amp;#34;@+id/button4&amp;#34;android:layout_width=&amp;#34;wrap_content&amp;#34;android:layout_height=&amp;#34;wrap_content&amp;#34;android:layout_alignParentLeft=&amp;#34;true&amp;#34;android:layout_alignParentBottom=&amp;#34;true&amp;#34;android:text=&amp;#34;Button4&amp;#34; /&amp;gt;&amp;lt;Buttonandroid:id=&amp;#34;@+id/button5&amp;#34;android:layout_width=&amp;#34;wrap_content&amp;#34;android:layout_height=&amp;#34;wrap_content&amp;#34;android:layout_alignParentRight=&amp;#34;true&amp;#34;android:layout_alignParentBottom=&amp;#34;true&amp;#34;android:text=&amp;#34;Button5&amp;#34; /&amp;gt;&amp;lt;/RelativeLayout&amp;gt; 以上这段布局文件描述的就是一个相对布局，共有5个按钮，分别在父布局的左上、右上、中间、左下、右下位置。
 相对布局不仅可以相对于父布局，也可以相对于控件。以下描述了button3在中间，左上button1，右上button2，左下button4，右下button5的布局场景。
-&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;utf-8&amp;quot;?&amp;gt; &amp;lt;RelativeLayout xmlns:android=&amp;quot;http://schemas.android.com/apk/res/android&amp;quot; xmlns:tools=&amp;quot;http://schemas.android.com/tools&amp;quot; android:layout_width=&amp;quot;match_parent&amp;quot; android:layout_height=&amp;quot;match_parent&amp;quot; tools:context=&amp;quot;.</description>
+&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt;&amp;lt;RelativeLayout xmlns:android=&amp;#34;http://schemas.android.com/apk/res/android&amp;#34;xmlns:tools=&amp;#34;http://schemas.android.com/tools&amp;#34;android:layout_width=&amp;#34;match_parent&amp;#34;android:layout_height=&amp;#34;match_parent&amp;#34;tools:context=&amp;#34;.</description>
     </item>
     
     <item>
@@ -466,8 +466,8 @@ RelativeLayout 相对布局，复杂，但有迹可循。
       
       <guid>https://ntutn.top/posts/activity/</guid>
       <description>title: android项目开发：Activity author: 归零幻想 publishDate: 2020-12-15 editDate: 2020-12-15 tags: [android, 第一行代码, Kotlin, Activity]
- 仍然是《第一行代码》的读书笔记，可能引用原书的定义和描述，或代码案例。
- Activity Activity基本用法 Android讲究设计逻辑与视图分离，一般Activity都会对应一个布局文件（XML文件）。
+仍然是《第一行代码》的读书笔记，可能引用原书的定义和描述，或代码案例。
+Activity Activity基本用法 Android讲究设计逻辑与视图分离，一般Activity都会对应一个布局文件（XML文件）。
 所有的Activity都要在AndroidManifest中注册才生效。
 Activity可以创建菜单。首先在res/menu下创建一个xml文件（Android Studio中也提供了可视化编辑的方法）：
 &amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt; &amp;lt;menu xmlns:app=&amp;#34;http://schemas.android.com/apk/res-auto&amp;#34; xmlns:android=&amp;#34;http://schemas.android.com/apk/res/android&amp;#34;&amp;gt; &amp;lt;item android:id=&amp;#34;@+id/add_item&amp;#34; android:title=&amp;#34;Add&amp;#34;/&amp;gt; &amp;lt;item android:id=&amp;#34;@+id/remove_item&amp;#34; android:title=&amp;#34;Remove&amp;#34;/&amp;gt; &amp;lt;/menu&amp;gt; 重写两个方法
@@ -489,8 +489,7 @@ override fun onCreateOptionsMenu(menu: Menu?): Boolean { menuInflater.inflate(R.
 回到我这个Issue，虽然从业务逻辑的角度看用户操作后这个变量是不会为null的，但仍然应该有判空，有兜底的逻辑，这样你的程序才会更加健壮。
 Kotlin的空安全 与Java不同，Kotlin的类型系统在设计时就考虑了变量是否可空1，其用一个?表示变量是否能为空。
 var a: String = &amp;#34;abc&amp;#34; // 默认情况下，常规初始化意味着非空 a = null // 编译错误 var b: String? = &amp;#34;abc&amp;#34; // 可以设置为空 b = null // ok print(b) 判空 Kotlin有一定的类型推断能力，判空后进行赋值操作前能识别出变量是非空的类型。
-val b: String? = &amp;#34;Kotlin&amp;#34; if (b != null &amp;amp;&amp;amp; b.length &amp;gt; 0) { print(&amp;#34;String of length ${b.length}&amp;#34;) } else { print(&amp;#34;Empty string&amp;#34;) } 安全调用 Kotlin中提供了?.来安全调用一个可能为空的变量。b?.test()相当于if (b != null) b.test()。
-值得注意的是，这个操作符是可以和赋值语句一起用的。如：</description>
+val b: String? = &amp;#34;Kotlin&amp;#34; if (b != null &amp;amp;&amp;amp; b.length &amp;gt; 0) { print(&amp;#34;String of length ${b.length}&amp;#34;) } else { print(&amp;#34;Empty string&amp;#34;) } 安全调用 Kotlin中提供了?.来安全调用一个可能为空的变量。b?.test()相当于if (b != null) b.test()。</description>
     </item>
     
     <item>
@@ -508,10 +507,10 @@ app 项目中的代码、资源等内容。
 build 编译时自动生成的文件，不需要关心。
 libs 存放项目中的第三方jar包，这个目录下的jar包会自动添加到项目的构建路径下。
 src androidTest Android Test测试用例，可以对项目进行一些自动化测试。
- 实际上在公司里发现基本不写测试用例，全靠QA瞎几把点。
- test 用来编写单元测试用例，对项目进行自动化测试。
- 这里的测试用例是不依赖安卓框架的。
- main java 存放所有java代码（和Kotlin代码）的地方。
+实际上在公司里发现基本不写测试用例，全靠QA瞎几把点。
+test 用来编写单元测试用例，对项目进行自动化测试。
+这里的测试用例是不依赖安卓框架的。
+main java 存放所有java代码（和Kotlin代码）的地方。
 res 项目的资源文件夹，项目中使用到的所有图片、布局、字符串等资源都存在这个目录下。
 图片存放在drawable目录下，布局存放在layout目录下，字符串存放在values目录下。
 mipmap存放图标，之所以有很多mipmap目录是为了适配各种设备。若只有一份图片，那么放在xxhdpi下就可以了。
@@ -523,15 +522,14 @@ proguard-rules.pro 指定项目代码的混淆方式。
 build 编译时自动生成的内容。
 gradle gradle wrapper的配置文件。Android Studio会根据本地的缓存i去=情况决定是否需要联网下载gradle。
 .gitignore 排除文件或文件夹的git版本控制。
- 对于所有项目都会用到的.gitignore条目，不妨加入~/.gitignore全局配置。
- build.gradle 项目全局的构建脚本。
+对于所有项目都会用到的.gitignore条目，不妨加入~/.gitignore全局配置。
+build.gradle 项目全局的构建脚本。
 repositories中，google()对应谷歌自家代码仓库依赖，jcenter()中则是很多第三方开源库。
 gradle.properties 全局gradle的配置文件。
 gradlew和gradlew.bat 这两个文件是用来在命令行界面执行gradle命令的，其中gradlew是在Linux或Mac系统中使用的，gradlew.bat是在Windows系统中使用的。
 local.properties 用于指定本机中的Android SDK路径。
 settings.gradle 用来指定项目中所有引入的模块。
-  《第一行代码》&amp;#160;&amp;#x21a9;&amp;#xfe0e;
-   </description>
+《第一行代码》&amp;#160;&amp;#x21a9;&amp;#xfe0e;</description>
     </item>
     
     <item>
@@ -557,9 +555,11 @@ mrp应用对我的影响不小，接触了很多优秀的作品，现在我还�
 离开mrp的话题，当我来到大学，我发现我学习的VB其实也是过时的，后来微软转向了.net，又开始学了一点VB.net。然后VB.net虽然不至于过时，但在国内.net开发基本都是C#的，VB找不到工作的。算了，老子不学了， 微软真是一个很擅长杀死自己产品的公司 ，咱跟不起。
 不过VB也没白学，至少VBA和VBS还用得到。比如可以写个软件启动器，或者写过恶作剧整蛊我的朋友们。啊，后来只要是我发的文件，就算是txt后缀他们都不敢打开……
 下面哪些文件是安全的？
-看片神器.exe baidu.com 屏保line.scr 百度阿里腾讯.bat command.cmd story.vbs gift.vbe 好吧，这些都不怎么安全，你知道为什么吗？
-  请问像这种程序可以用什么软件操作? - 知乎&amp;#160;&amp;#x21a9;&amp;#xfe0e;
- 纯文字版QQ农场，点超链接收菜等操作，记得当时腾讯还用这个推广过自己QQ浏览器，省流量，能“一键收菜”。&amp;#160;&amp;#x21a9;&amp;#xfe0e;</description>
+看片神器.exebaidu.com屏保line.scr百度阿里腾讯.batcommand.cmdstory.vbsgift.vbe 好吧，这些都不怎么安全，你知道为什么吗？
+请问像这种程序可以用什么软件操作? - 知乎&amp;#160;&amp;#x21a9;&amp;#xfe0e;
+纯文字版QQ农场，点超链接收菜等操作，记得当时腾讯还用这个推广过自己QQ浏览器，省流量，能“一键收菜”。&amp;#160;&amp;#x21a9;&amp;#xfe0e;
+事实上这货连多线程支持都没有，要实现都得用很magic的方法。&amp;#160;&amp;#x21a9;&amp;#xfe0e;
+直到现在我还记得那两个指令：*#220807#，*#777755999#。&amp;#160;&amp;#x21a9;&amp;#xfe0e;</description>
     </item>
     
     <item>
@@ -569,21 +569,20 @@ mrp应用对我的影响不小，接触了很多优秀的作品，现在我还�
       
       <guid>https://ntutn.top/posts/b%E7%AB%99%E7%9A%84%E6%90%AC%E8%BF%90%E6%9C%BA%E5%88%B6%E5%92%8C%E7%9B%97%E8%A7%86%E9%A2%91%E8%A1%8C%E4%B8%BA%E6%9C%89%E5%8C%BA%E5%88%AB%E5%90%97/</guid>
       <description>在知乎看到这样的问题1，写下我的观点，也同步写到这里。
- 『搬运』同『转载』，『盗视频』特指『无授权转载视频』并隐含指『借此获得收益』。
-  b站用户被指责双标， 最大的锅是b站而不是up主 。
+『搬运』同『转载』，『盗视频』特指『无授权转载视频』并隐含指『借此获得收益』。
+b站用户被指责双标， 最大的锅是b站而不是up主 。
 b站没有明显区分转载作品和原创作品，在我看来就是享受了转载内容带来的红利又想规避因此带来的舆论和法律问题。
- 如何判断视频是转载的还是原创的？你看这里它只能投一个币这是搬运的。
- 收益  『搬运』视频是不能获得收益的。 很大程度这与是否获得授权无关，甚至与界定是否『商业使用』无关。up主没有获得收益，但显而易见b站是有收益的。比如一篇文章，转载到我的个人博客大概可以算非商业使用，因为博客中 没有任何广告，没有打赏或捐赠选项，没有对任何产品的商业宣传。
- 当然这一点不是up主的锅，但至少 请收起『搬运是给你免费做宣传』的说辞。
+如何判断视频是转载的还是原创的？你看这里它只能投一个币这是搬运的。
+收益 『搬运』视频是不能获得收益的。 很大程度这与是否获得授权无关，甚至与界定是否『商业使用』无关。up主没有获得收益，但显而易见b站是有收益的。比如一篇文章，转载到我的个人博客大概可以算非商业使用，因为博客中 没有任何广告，没有打赏或捐赠选项，没有对任何产品的商业宣传。
+当然这一点不是up主的锅，但至少 请收起『搬运是给你免费做宣传』的说辞。
 授权问题 『转载』行为是应当获取授权的，退一步讲至少是应当标明出处的。b站自己产生的内容默认会标注『禁止转载』，但大多网站不会有明显标注，所以给转载者留下余地，有人认为未标注默认应该是允许转载。在我看来这一点是不成立的，至少 在github，如果一个项目没有任何LICENSE说明和文件，应该被理解为保留授权 ，即使大多数情况只是作者忘了。
 标注出处 转载应标注出处，如何才算『标注出处』呢？很多视频中一句『来自Youtube』就算标注了出处了，标题还是翻译后的，你根据这句话能找到来源？
 即使标注了出处，基本上也只能写在视频的简介中。很多人不习惯看视频简介，尤其是b站还会默认折叠比较长的简介。 还是b站的锅
 我认为，合适的转载应该明显标出作品来源，并 至少要提供出足以找到来源作品的信息 。书籍杂志没办法，但对于互联网的文章，提供来源链接才算诚意。当然有些平台带超链接会无法过审，那可以再做权衡。
-倡议   对于内容创作者，顺手标注是否允许转载，比如我在自己博客标注了『在未另行说明的情况下，本站内容遵守 署名-相同方式共享 4.0 国际 (CC BY-SA 4.0)』 ，这样非商业转载就无须另外询问我的意见了。
-  对于转载内容的人，建议在来源未写明是否授权转载的情况下，主动向原作者申请授权。知乎曾经流行过『来自网络，侵删』式的标注，虽然也表达了态度，但实际上并不能规避因此带来的侵权法律风险。能找到作者情况下，申请授权才是正理。
-  对于用户，自觉抵制不标注出处甚至不标注『转载』的转载内容。
-    B站的搬运机制和盗视频行为有区别吗？ - 知乎&amp;#160;&amp;#x21a9;&amp;#xfe0e;
-   </description>
+倡议 对于内容创作者，顺手标注是否允许转载，比如我在自己博客标注了『在未另行说明的情况下，本站内容遵守 署名-相同方式共享 4.0 国际 (CC BY-SA 4.0)』 ，这样非商业转载就无须另外询问我的意见了。
+对于转载内容的人，建议在来源未写明是否授权转载的情况下，主动向原作者申请授权。知乎曾经流行过『来自网络，侵删』式的标注，虽然也表达了态度，但实际上并不能规避因此带来的侵权法律风险。能找到作者情况下，申请授权才是正理。
+对于用户，自觉抵制不标注出处甚至不标注『转载』的转载内容。
+B站的搬运机制和盗视频行为有区别吗？ - 知乎&amp;#160;&amp;#x21a9;&amp;#xfe0e;</description>
     </item>
     
     <item>
@@ -593,8 +592,8 @@ b站没有明显区分转载作品和原创作品，在我看来就是享受了�
       
       <guid>https://ntutn.top/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B/</guid>
       <description>仍然是《第一行代码》的笔记，不过略过了deprated的内容，并探究了下Handler的工作机制。
- 上班了，果然没有那么多大块时间写博客了。
- Handler 主线程不能进行耗时处理，子线程不能访问UI，所以我们需要异步消息处理机制。
+上班了，果然没有那么多大块时间写博客了。
+Handler 主线程不能进行耗时处理，子线程不能访问UI，所以我们需要异步消息处理机制。
 使用 class MainActivity : AppCompatActivity() { private lateinit var binding: ActivityMainBinding private val handler = object : Handler(Looper.getMainLooper()) { override fun handleMessage(msg: Message) { when(msg.what){ MSG_UPDATE_TEXT -&amp;gt; binding.textView.text = &amp;#34;Nice to meet you. &amp;#34; } } } override fun onCreate(savedInstanceState: Bundle?) { super.onCreate(savedInstanceState) binding = ActivityMainBinding.inflate(layoutInflater) setContentView(binding.root) initView() } private fun initView() { binding.apply { changeTextButton.setOnClickListener { thread { val msg = Message() msg.what = MSG_UPDATE_TEXT handler.</description>
     </item>
     
@@ -620,8 +619,8 @@ EventBus.getDefault().unregister(this) 然后就可以接收那个Event了。
 @Subscribe注解有一个参数threadMode，有以下取值：
 ThreadMode.POSTING 默认值，在同一线程中调用，开销最小。
 ThreadMode.MAIN 在主线程中调用。
- 如果发送事件的是主线程，则直接调用。
- ThreadMode.MAIN_ORDERED 在主线程中调用，同步调用（排队）。
+如果发送事件的是主线程，则直接调用。
+ThreadMode.MAIN_ORDERED 在主线程中调用，同步调用（排队）。
 ThreadMode.BACKGROUND 在后台线程中调用。
 ThreadMode.ASYNC 在单独线程中调用，用于耗时操作。
 对于EventBus更新UI，我同样写了demo：
@@ -634,10 +633,10 @@ package com.example.eventbustimerdemo import android.os.Bundle import androidx.a
       <pubDate>Tue, 24 Mar 2020 03:11:37 +0800</pubDate>
       
       <guid>https://ntutn.top/posts/%E6%8E%89%E5%9D%91%E7%9A%84%E6%97%A5%E5%B8%B8springboot%E7%9A%84json%E5%B1%9E%E6%80%A7%E5%90%8D%E5%A4%A7%E5%B0%8F%E5%86%99%E9%97%AE%E9%A2%98/</guid>
-      <description>这两天想给自己小组的项目添加一个自动升级功能。这事听着复杂，但毕竟是个很常见的功能，github上的轮子很多。经过考虑，我决定选择这个组件，然后自己写后端。反正后端就返回一个json的事。然后就掉了坑。
+      <description> 这两天想给自己小组的项目添加一个自动升级功能。这事听着复杂，但毕竟是个很常见的功能，github上的轮子很多。经过考虑，我决定选择这个组件，然后自己写后端。反正后端就返回一个json的事。然后就掉了坑。
 起因 案发现场没什么好说的，就是我发现自己设置的不能实现升级，在客户端调试半天发现用官方的json能升级。然后我就找我的json和官方的json有什么区别，看ContentType也没设置错，仔细比对发现属性大小写竟然不对。我当时还挺惊讶的，毕竟是直接复制的。
 springboot可以使用@ResponseBody返回对象自动转换json，而转换成的json属性名首字母会被转换成小写。
-解决方案 引入fastjson &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;com.alibaba&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;fastjson&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;1.2.66&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; 注入bean @Bean public HttpMessageConverters httpMessageConverters() { FastJsonHttpMessageConverter fastJsonHttpMessageConverter = new FastJsonHttpMessageConverter(); // 添加fastJson的配置信息  FastJsonConfig fastJsonConfig = new FastJsonConfig(); fastJsonConfig.setSerializerFeatures(SerializerFeature.PrettyFormat); // 处理中文乱码问题  List&amp;lt;MediaType&amp;gt; fastMediaTypes = new ArrayList&amp;lt;&amp;gt;(); fastMediaTypes.add(MediaType.APPLICATION_JSON); // 在convert中添加配置信息.  fastJsonHttpMessageConverter.setSupportedMediaTypes(fastMediaTypes); fastJsonHttpMessageConverter.setFastJsonConfig(fastJsonConfig); HttpMessageConverter&amp;lt;?&amp;gt; converter = fastJsonHttpMessageConverter; return new HttpMessageConverters(converter); } 在属性上加注解 package edu.upc.mishuserver.vo; import com.alibaba.fastjson.annotation.JSONField; import lombok.AllArgsConstructor; import lombok.Builder; import lombok.Data; import lombok.NoArgsConstructor; /** * UpdateInfo */ @Data @AllArgsConstructor @NoArgsConstructor @Builder public class UpdateInfo { @JSONField(name=&amp;#34;Code&amp;#34;) private Long code; @JSONField(name = &amp;#34;Msg&amp;#34;) private String msg; @JSONField(name = &amp;#34;UpdateStatus&amp;#34;) private Integer updateStatus; @JSONField(name = &amp;#34;VersionCode&amp;#34;) private Long versionCode; @JSONField(name = &amp;#34;VersionName&amp;#34;) private String versionName; @JSONField(name = &amp;#34;ModifyContent&amp;#34;) private String modifyContent; @JSONField(name = &amp;#34;DownloadUrl&amp;#34;) private String downloadUrl; @JSONField(name = &amp;#34;ApkSize&amp;#34;) private Long apkSize; @JSONField(name = &amp;#34;ApkMd5&amp;#34;) private String apkMd5; } </description>
+解决方案 引入fastjson &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;com.alibaba&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;fastjson&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;1.2.66&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; 注入bean @Bean public HttpMessageConverters httpMessageConverters() { FastJsonHttpMessageConverter fastJsonHttpMessageConverter = new FastJsonHttpMessageConverter(); // 添加fastJson的配置信息 FastJsonConfig fastJsonConfig = new FastJsonConfig(); fastJsonConfig.setSerializerFeatures(SerializerFeature.PrettyFormat); // 处理中文乱码问题 List&amp;lt;MediaType&amp;gt; fastMediaTypes = new ArrayList&amp;lt;&amp;gt;(); fastMediaTypes.add(MediaType.APPLICATION_JSON); // 在convert中添加配置信息. fastJsonHttpMessageConverter.setSupportedMediaTypes(fastMediaTypes); fastJsonHttpMessageConverter.setFastJsonConfig(fastJsonConfig); HttpMessageConverter&amp;lt;?&amp;gt; converter = fastJsonHttpMessageConverter; return new HttpMessageConverters(converter); } 在属性上加注解 package edu.upc.mishuserver.vo; import com.alibaba.fastjson.annotation.JSONField; import lombok.AllArgsConstructor; import lombok.Builder; import lombok.Data; import lombok.NoArgsConstructor; /** * UpdateInfo */ @Data @AllArgsConstructor @NoArgsConstructor @Builder public class UpdateInfo { @JSONField(name=&amp;#34;Code&amp;#34;) private Long code; @JSONField(name = &amp;#34;Msg&amp;#34;) private String msg; @JSONField(name = &amp;#34;UpdateStatus&amp;#34;) private Integer updateStatus; @JSONField(name = &amp;#34;VersionCode&amp;#34;) private Long versionCode; @JSONField(name = &amp;#34;VersionName&amp;#34;) private String versionName; @JSONField(name = &amp;#34;ModifyContent&amp;#34;) private String modifyContent; @JSONField(name = &amp;#34;DownloadUrl&amp;#34;) private String downloadUrl; @JSONField(name = &amp;#34;ApkSize&amp;#34;) private Long apkSize; @JSONField(name = &amp;#34;ApkMd5&amp;#34;) private String apkMd5; } </description>
     </item>
     
     <item>
@@ -656,7 +655,7 @@ Typora，同学安利的markdown编辑工具 与多数markdown编辑工具不同
 # or run: # sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA300B7755AFCFAE wget -qO - https://typora.io/linux/public-key.asc | sudo apt-key add - # add Typora&amp;#39;s repository sudo add-apt-repository &amp;#39;deb https://typora.io/linux ./&amp;#39; sudo apt-get update # install typora sudo apt-get install typora 其他系统参考官网。
 复制图片 不过有一点要注意：我们写文档常常要插入一些图片，为了后面和git好配合，我们需要将这些图片也放到当前文件夹里。按下Ctrl+逗号打开设置，将图片复制到当前文件夹下。如图。
 重要的快捷键 都是重点等于没有重点。我们只要记住能让我们离开鼠标提高效率的就行了。
-   快捷键 功能     Ctrl+S 保存   Ctrl+Z 撤销   Ctrl+Y 重做   Ctrl+Shift+L 侧边栏   Ctrl+/ 切换源代码模式   表格中，Ctrl+Enter 添加一行    用git管理笔记 首先什么是git？有些少年区分不了git和github，这是姿势水平还不够啊。听说过GitLab没？听说过码云没？不是修福报的那个马云哦。</description>
+快捷键 功能 Ctrl+S 保存 Ctrl+Z 撤销 Ctrl+Y 重做 Ctrl+Shift+L 侧边栏 Ctrl+/ 切换源代码模式 表格中，Ctrl+Enter 添加一行 用git管理笔记 首先什么是git？有些少年区分不了git和github，这是姿势水平还不够啊。听说过GitLab没？听说过码云没？不是修福报的那个马云哦。</description>
     </item>
     
     <item>
@@ -669,7 +668,7 @@ Typora，同学安利的markdown编辑工具 与多数markdown编辑工具不同
 事情要首先从一道力扣题目说起：
 删除排序数组中的重复项 II 给定一个排序数组，你需要在原地删除重复出现的元素，使得每个元素最多出现两次，返回移除后数组的新长度。
 不要使用额外的数组空间，你必须在原地修改输入数组并在使用 O(1) 额外空间的条件下完成。
-示例 1: 给定 nums = [1,1,1,2,2,3], 函数应返回新长度 length = 5, 并且原数组的前五个元素被修改为 1, 1, 2, 2, 3 。 你不需要考虑数组中超出新长度后面的元素。 示例 2: 给定 nums = [0,0,1,1,1,1,2,3,3], 函数应返回新长度 length = 7, 并且原数组的前五个元素被修改为 0, 0, 1, 1, 2, 3, 3 。 你不需要考虑数组中超出新长度后面的元素。
+示例 1: 给定 nums = [1,1,1,2,2,3],函数应返回新长度 length = 5, 并且原数组的前五个元素被修改为 1, 1, 2, 2, 3 。你不需要考虑数组中超出新长度后面的元素。 示例 2: 给定 nums = [0,0,1,1,1,1,2,3,3],函数应返回新长度 length = 7, 并且原数组的前五个元素被修改为 0, 0, 1, 1, 2, 3, 3 。 你不需要考虑数组中超出新长度后面的元素。
 Answer 针对这个题目，我写出了这样的代码：
 /* * @lc app=leetcode.cn id=80 lang=java * * [80] 删除排序数组中的重复项 II */ // @lc code=start class Solution { public int removeDuplicates(int[] nums) { int l = 0, r = 0; int ans1 = Integer.</description>
     </item>
@@ -703,27 +702,18 @@ Answer 针对这个题目，我写出了这样的代码：
 操作系统的发展 微机操作系统 个人机操作系统。
 实时操作系统 支持实时计算的系统，实时计算即 系统的正确性不仅取决于计算的逻辑结果，而且还依赖于产生结果的时间。
 实时任务的类型
- 周期性实时任务 非周期性实时任务 硬实时任务 软实时任务   实时计算机可以不运行实时操作系统，直接运行应用软件
-  高可用性 截止时间  开始截止时间 实际截止时间    单道批处理系统  自动性 顺序性 单道性  优点
+周期性实时任务 非周期性实时任务 硬实时任务 软实时任务 实时计算机可以不运行实时操作系统，直接运行应用软件
+高可用性 截止时间 开始截止时间 实际截止时间 单道批处理系统 自动性 顺序性 单道性 优点
 减少人工等待时间
 缺点
- 作业独占CPU CPU等待IO使得CPU利用率低  多道批处理系统  多道性 无序性 调度性 复杂性  优点
- 提高CPU利用率 提高内存和IO利用率 增加系统吞吐量   吞吐量：单位时间里系统处理的作业量 缺点
-  平均等待周期长 缺乏交互能力  分时系统  多路性 独立性 及时性 交互性  优点</description>
-    </item>
-    
-    <item>
-      <title>三门问题</title>
-      <link>https://ntutn.top/posts/%E4%B8%89%E9%97%A8%E9%97%AE%E9%A2%98/</link>
-      <pubDate>Mon, 16 Sep 2019 03:11:37 +0800</pubDate>
-      
-      <guid>https://ntutn.top/posts/%E4%B8%89%E9%97%A8%E9%97%AE%E9%A2%98/</guid>
-      <description>参赛者面前有三扇关闭着的门，其中一扇的后面是一辆汽车，选中后面有车的那扇门就可以赢得该汽车， 而另外两扇门后面则各藏有一只山羊。当参赛者选定了一扇门，但未去开启它的时候，主持人会开启剩 下两扇门中的一扇，露出其中一只山羊。主持人其后会问参赛者要不要更换选择，选另一扇仍然关着的门。
- 那么，应不应该更换呢？   分析 假如你选择了A，那你中奖概率应为1/3.
-主持人在B、C中选了个没奖的，这与你的选择其实没影响，因为你没选的肯定有个没奖的。
-换与不换其实就相当于问你选A还是不选A。
-程序模拟 有点绕，咱学软件的，就干脆让电脑跑一跑。
-代码 import java.util.Random; class Test{ public static void main(String[] args) { Random ran=new Random(); int c1=0,c2=0; for(int i=0;i&amp;lt;1e6;i++){ boolean boxes[]={false,false,false}; boxes[ran.nextInt(boxes.length)]=true;//某个门后有奖  int sel=ran.nextInt(boxes.length);//随便选择一扇门  int p=0; while(p==sel||boxes[p]){//主持人选择一扇没奖的门（且不与参与者选同一扇）  p=ran.nextInt(boxes.length); } if(boxes[sel]){//不更换中奖  c1++; } if(boxes[0+1+2-sel-p]){//更换中奖  c2++; } } System.out.println(c1/1e6); System.out.println(c2/1e6); } } 运行结果 0.332419 0.667581 看来是更换比较好了。</description>
+作业独占CPU CPU等待IO使得CPU利用率低 多道批处理系统 多道性 无序性 调度性 复杂性 优点
+提高CPU利用率 提高内存和IO利用率 增加系统吞吐量 吞吐量：单位时间里系统处理的作业量 缺点
+平均等待周期长 缺乏交互能力 分时系统 多路性 独立性 及时性 交互性 优点
+提供人机交互 多终端共享主机 关键问题
+及时接收用户的命令和顺序 及时处理用户的命令。 使所有的用户作业都进入内存，在很短的的时间内使每个作业都运行一次 操作系统产品现状 嵌入式操作系统 嵌入式系统 是宿主于非计算机设备的操作系统。 嵌入式操作系统 是运行于嵌入式系统中的操作系统。
+掌上计算机操作系统 PDA
+实时操作系统 在资源调度、中断处理等方面的设计和实现要充分考虑系统对时间都限制。应用领域如 自动控制、军事指挥系统、民用航空管理等
+与嵌入式系统在分类上有一定重叠，有一定时限要求，在设计和实现上也有一些共同的特点， 专用性、规模小、实时性、高可靠性 。</description>
     </item>
     
     <item>
@@ -733,11 +723,25 @@ Answer 针对这个题目，我写出了这样的代码：
       
       <guid>https://ntutn.top/posts/%E5%A4%A7%E5%9E%8B%E6%95%B0%E7%BB%84%E6%8C%89%E8%A1%8C%E9%81%8D%E5%8E%86%E4%B8%8E%E6%8C%89%E5%88%97%E9%81%8D%E5%8E%86%E7%9A%84%E5%8C%BA%E5%88%AB/</guid>
       <description>今天这学期开学第一天，上了《计算机操作系统原理》，老师提出个问题
- 对于一个很大的数组（如70000×70000），按行遍历速度快还是按列遍历快，为什么？
- 乍一看，程序时间复杂度一样，理论上不是应该一样快吗？难道老师在钓鱼？
+对于一个很大的数组（如70000×70000），按行遍历速度快还是按列遍历快，为什么？
+乍一看，程序时间复杂度一样，理论上不是应该一样快吗？难道老师在钓鱼？
 实践出真知，我们就写个程序跑一跑。
-程序  70000×70000我电脑在默认情况下开不下，我这里用20000×20000测试
- 按行遍历 /** * M1 */ public class M1 { public static void main(String[] args) { final int N=20000; int[][] a = new int[N][N]; Long start=System.currentTimeMillis(); for(int i=0;i&amp;lt;N;i++){ for (int j = 0; j &amp;lt; N; j++) { a[i][j]=1; } } Long stop=System.currentTimeMillis(); System.out.println(stop-start); } } 按列遍历 /** * M2 */ public class M2 { public static void main(String[] args) { final int N=20000; int[][] a = new int[N][N]; Long start=System.</description>
+程序 70000×70000我电脑在默认情况下开不下，我这里用20000×20000测试
+按行遍历 /** * M1 */ public class M1 { public static void main(String[] args) { final int N=20000; int[][] a = new int[N][N]; Long start=System.currentTimeMillis(); for(int i=0;i&amp;lt;N;i++){ for (int j = 0; j &amp;lt; N; j++) { a[i][j]=1; } } Long stop=System.currentTimeMillis(); System.out.println(stop-start); } } 按列遍历 /** * M2 */ public class M2 { public static void main(String[] args) { final int N=20000; int[][] a = new int[N][N]; Long start=System.</description>
+    </item>
+    
+    <item>
+      <title>三门问题</title>
+      <link>https://ntutn.top/posts/%E4%B8%89%E9%97%A8%E9%97%AE%E9%A2%98/</link>
+      <pubDate>Mon, 16 Sep 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E4%B8%89%E9%97%A8%E9%97%AE%E9%A2%98/</guid>
+      <description>参赛者面前有三扇关闭着的门，其中一扇的后面是一辆汽车，选中后面有车的那扇门就可以赢得该汽车， 而另外两扇门后面则各藏有一只山羊。当参赛者选定了一扇门，但未去开启它的时候，主持人会开启剩 下两扇门中的一扇，露出其中一只山羊。主持人其后会问参赛者要不要更换选择，选另一扇仍然关着的门。
+那么，应不应该更换呢？ 分析 假如你选择了A，那你中奖概率应为1/3.
+主持人在B、C中选了个没奖的，这与你的选择其实没影响，因为你没选的肯定有个没奖的。
+换与不换其实就相当于问你选A还是不选A。
+程序模拟 有点绕，咱学软件的，就干脆让电脑跑一跑。
+代码 import java.util.Random; class Test{ public static void main(String[] args) { Random ran=new Random(); int c1=0,c2=0; for(int i=0;i&amp;lt;1e6;i++){ boolean boxes[]={false,false,false}; boxes[ran.nextInt(boxes.length)]=true;//某个门后有奖 int sel=ran.nextInt(boxes.length);//随便选择一扇门 int p=0; while(p==sel||boxes[p]){//主持人选择一扇没奖的门（且不与参与者选同一扇） p=ran.nextInt(boxes.length); } if(boxes[sel]){//不更换中奖 c1++; } if(boxes[0+1+2-sel-p]){//更换中奖 c2++; } } System.out.println(c1/1e6); System.out.println(c2/1e6); } } 运行结果 0.3324190.667581 看来是更换比较好了。</description>
     </item>
     
     <item>
@@ -757,36 +761,16 @@ title 删除空文件夹 color 03 echo 程序需要管理员权限…… set /a 
     </item>
     
     <item>
-      <title>在Windows10上安装血战上海滩</title>
-      <link>https://ntutn.top/posts/%E5%9C%A8windows10%E4%B8%8A%E5%AE%89%E8%A3%85%E8%A1%80%E6%88%98%E4%B8%8A%E6%B5%B7%E6%BB%A9/</link>
-      <pubDate>Sat, 01 Jun 2019 03:11:37 +0800</pubDate>
-      
-      <guid>https://ntutn.top/posts/%E5%9C%A8windows10%E4%B8%8A%E5%AE%89%E8%A3%85%E8%A1%80%E6%88%98%E4%B8%8A%E6%B5%B7%E6%BB%A9/</guid>
-      <description>《血战上海滩》是由北京欢乐亿派科技有限公司开发的单机FPS游戏，发行于2003年，是一个非常经典的老游戏了。 近来我打算把这个游戏找出来再玩一遍，可是在Windows10上安装还是有些问题……
-下载 下载不用多说，自己找资源吧，一共三百多兆的单机游戏。
- 现在很多单机游戏下载时网站都会给你带上一个“启动器”来显示广告，恶心的很。找到文件夹中，注意血战上海滩的游戏文件是一个帽子的图标，大小为1.87M，SHA1为FE5A102AA9DE633FB6E388EAAEEA38BC43E8E7E4
- 启动 直接双击exe，然后……它免费帮你调了一下分辨率，就没反应了。
-貌似兼容性是个比较大的问题……于是在网上找了好久，终于知道，可以用命令行控制游戏窗口运行：
-shanghai.exe -windows 修改屏幕分辨率实现全屏 倒是能运行了，只是……画面都在左上角，没法玩啊……
-所以再加上自动修改屏幕分辨率就可以全屏了。修改屏幕分辨率可以用setres
-下载链接下载并将exe文件放到血战上海滩的游戏文件夹。
-于是用下面的命令：
-setres h800 v600 shanghai.exe -windows setres h1920 v1080 1920*1080是我电脑的屏幕分辨率，注意换成自己的。
-隐藏显示任务栏 然而，这样还是有问题，就是这样“全屏”后任务栏并没有消失，虽然可以设置自动隐藏任务栏但总归还是不爽，于是写了个简单C#程序在启动游戏隐藏任务栏（虽然很简单，但没找到只用命令实现的方法）
-using System; using System.Collections.Generic; using System.Linq; using System.Text; using System.Threading.Tasks; using System.Runtime.InteropServices; namespace ShowTaskBar { class Program { private const int SW_HIDE = 0; //隐藏任务栏  private const int SW_RESTORE = 9;//显示任务栏 [DllImport(&amp;#34;user32.dll&amp;#34;)] public static extern int ShowWindow(int hwnd, int nCmdShow); [DllImport(&amp;#34;user32.dll&amp;#34;)] public static extern int FindWindow(string lpClassName, string lpWindowName); static void Main(string[] args) { ShowWindow(FindWindow(&amp;#34;Shell_TrayWnd&amp;#34;, null), SW_HIDE); } } } using System; using System.</description>
-    </item>
-    
-    <item>
       <title>数据结构第三次测试</title>
       <link>https://ntutn.top/posts/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AC%AC%E4%B8%89%E6%AC%A1%E6%B5%8B%E8%AF%95/</link>
       <pubDate>Sat, 01 Jun 2019 03:11:37 +0800</pubDate>
       
       <guid>https://ntutn.top/posts/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AC%AC%E4%B8%89%E6%AC%A1%E6%B5%8B%E8%AF%95/</guid>
       <description>数据结构测试，树部分，水题
- 一 假设二叉树的数据元素为字符，采用二叉链式存储结构。二叉树ADT实现的大部分代码已经给出，其中采用完全前序序列创建二叉树。请补充写出下列两个操作函数。
- 注意： 答案区只写出两个函数，其他代码不允许修改和重写、提交！
-  计算以某结点为根的二叉树的高度； 以前序顺序输出各个元素结点为根的子树的高度；  例如：有如右图的二叉树 输入 ABD@@E@@C@F@@ 输出 Height(A)=3 Height(B)=2 Height(D)=1 Height(E)=1 Height(C)=2 Height(F)=1 已给出的代码如下：
-#include &amp;lt;iostream&amp;gt;#include &amp;lt;stdlib.h&amp;gt;using namespace std; //数据元素类型 typedef char ElemType; //二叉树结点定义 typedef struct TreeNode {	ElemType data; struct TreeNode *lson, *rson; } TreeNode; //二叉树类 class BinaryTree { private: TreeNode *root; public: BinaryTree() { root = NULL; }; ~BinaryTree() { MakeEmpty(root); } void MakeEmpty(TreeNode *t); void create( ) { root = cp_create(root); }; //完全前序建立二叉树，空指针用@表示 	TreeNode *cp_create(TreeNode *t); //****** 要补充的函数height ******** 	int height(TreeNode *t) ; //求二叉树的高度 	void output() { Pro_height(root); }; //****** 要补充的函数 Pro_height ********** 	void Pro_height(TreeNode *t); // 前序顺序输出各个元素结点为根的子树的高度 }; //二叉树置空 void BinaryTree::MakeEmpty(TreeNode *t) {	if (t !</description>
+一 假设二叉树的数据元素为字符，采用二叉链式存储结构。二叉树ADT实现的大部分代码已经给出，其中采用完全前序序列创建二叉树。请补充写出下列两个操作函数。
+注意： 答案区只写出两个函数，其他代码不允许修改和重写、提交！
+计算以某结点为根的二叉树的高度； 以前序顺序输出各个元素结点为根的子树的高度； 例如：有如右图的二叉树 输入 ABD@@E@@C@F@@ 输出 Height(A)=3Height(B)=2Height(D)=1Height(E)=1Height(C)=2Height(F)=1 已给出的代码如下：
+#include &amp;lt;iostream&amp;gt; #include &amp;lt;stdlib.h&amp;gt; using namespace std; //数据元素类型 typedef char ElemType; //二叉树结点定义 typedef struct TreeNode {	ElemType data; struct TreeNode *lson, *rson; } TreeNode; //二叉树类 class BinaryTree { private: TreeNode *root; public: BinaryTree() { root = NULL; }; ~BinaryTree() { MakeEmpty(root); } void MakeEmpty(TreeNode *t); void create( ) { root = cp_create(root); }; //完全前序建立二叉树，空指针用@表示 TreeNode *cp_create(TreeNode *t); //****** 要补充的函数height ******** int height(TreeNode *t) ; //求二叉树的高度 void output() { Pro_height(root); }; //****** 要补充的函数 Pro_height ********** void Pro_height(TreeNode *t); // 前序顺序输出各个元素结点为根的子树的高度 }; //二叉树置空 void BinaryTree::MakeEmpty(TreeNode *t) {	if (t !</description>
     </item>
     
     <item>
@@ -800,7 +784,27 @@ Question 矩阵采用“压缩”存储，实现矩阵的常用操作，如输�
 矩阵的输入：有多行，第1行包括三个整数，分别是矩阵的大小m,n及非零元素的个数r。后面r行分别输入各个非零元素的 行、列、值
 矩阵的输出：按人们习惯的矩阵格式输出，即输出一个m*n的矩阵，是零元素的输出0，非零元素输出元素值。
 例如：输入如下：
-100 90 5 //矩阵的行数为100，列数为90，共5个非零元素。 1 10 100 //a(1,10)=100 50 60 200//a(50,60)=200 50 80 100//a(50,80)=100 60 60 200//a(60,60)=200 99 89 10//a(99,89)=10 100 90 4 //矩阵b的行数为100，列数为90，共4个非零元素。 1 1 10 //b(1,1)=10 50 60 -200//b(50,60)=-200 50 80 100 //b(50,80)=100 70 70 10 //b(70,70)=10 Example Input 100 90 5 1 10 100 50 60 200 50 80 100 60 60 200 99 89 10 100 90 4 1 1 10 50 60 -200 50 80 100 70 70 10 Output The transformed matrix is: 10 1 100 60 50 200 60 60 200 80 50 100 89 99 10 The added matrix is: 1 1 10 1 10 100 50 80 200 60 60 200 70 70 10 99 89 10 分析 首先题目描述有错。</description>
+100 90 5 //矩阵的行数为100，列数为90，共5个非零元素。1 10 100 //a(1,10)=10050 60 200//a(50,60)=20050 80 100//a(50,80)=10060 60 200//a(60,60)=20099 89 10//a(99,89)=10100 90 4 //矩阵b的行数为100，列数为90，共4个非零元素。1 1 10 //b(1,1)=1050 60 -200//b(50,60)=-20050 80 100 //b(50,80)=10070 70 10 //b(70,70)=10 Example Input 100 90 51 10 10050 60 20050 80 10060 60 20099 89 10100 90 41 1 1050 60 -20050 80 10070 70 10 Output The transformed matrix is:10 1 10060 50 20060 60 20080 50 10089 99 10The added matrix is:1 1 101 10 10050 80 20060 60 20070 70 1099 89 10 分析 首先题目描述有错。</description>
+    </item>
+    
+    <item>
+      <title>在Windows10上安装血战上海滩</title>
+      <link>https://ntutn.top/posts/%E5%9C%A8windows10%E4%B8%8A%E5%AE%89%E8%A3%85%E8%A1%80%E6%88%98%E4%B8%8A%E6%B5%B7%E6%BB%A9/</link>
+      <pubDate>Sat, 01 Jun 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E5%9C%A8windows10%E4%B8%8A%E5%AE%89%E8%A3%85%E8%A1%80%E6%88%98%E4%B8%8A%E6%B5%B7%E6%BB%A9/</guid>
+      <description>《血战上海滩》是由北京欢乐亿派科技有限公司开发的单机FPS游戏，发行于2003年，是一个非常经典的老游戏了。 近来我打算把这个游戏找出来再玩一遍，可是在Windows10上安装还是有些问题……
+下载 下载不用多说，自己找资源吧，一共三百多兆的单机游戏。
+现在很多单机游戏下载时网站都会给你带上一个“启动器”来显示广告，恶心的很。找到文件夹中，注意血战上海滩的游戏文件是一个帽子的图标，大小为1.87M，SHA1为FE5A102AA9DE633FB6E388EAAEEA38BC43E8E7E4
+启动 直接双击exe，然后……它免费帮你调了一下分辨率，就没反应了。
+貌似兼容性是个比较大的问题……于是在网上找了好久，终于知道，可以用命令行控制游戏窗口运行：
+shanghai.exe -windows 修改屏幕分辨率实现全屏 倒是能运行了，只是……画面都在左上角，没法玩啊……
+所以再加上自动修改屏幕分辨率就可以全屏了。修改屏幕分辨率可以用setres
+下载链接下载并将exe文件放到血战上海滩的游戏文件夹。
+于是用下面的命令：
+setres h800 v600 shanghai.exe -windows setres h1920 v1080 1920*1080是我电脑的屏幕分辨率，注意换成自己的。
+隐藏显示任务栏 然而，这样还是有问题，就是这样“全屏”后任务栏并没有消失，虽然可以设置自动隐藏任务栏但总归还是不爽，于是写了个简单C#程序在启动游戏隐藏任务栏（虽然很简单，但没找到只用命令实现的方法）
+using System; using System.Collections.Generic; using System.Linq; using System.Text; using System.Threading.Tasks; using System.Runtime.InteropServices; namespace ShowTaskBar { class Program { private const int SW_HIDE = 0; //隐藏任务栏 private const int SW_RESTORE = 9;//显示任务栏 [DllImport(&amp;#34;user32.dll&amp;#34;)] public static extern int ShowWindow(int hwnd, int nCmdShow); [DllImport(&amp;#34;user32.dll&amp;#34;)] public static extern int FindWindow(string lpClassName, string lpWindowName); static void Main(string[] args) { ShowWindow(FindWindow(&amp;#34;Shell_TrayWnd&amp;#34;, null), SW_HIDE); } } } using System; using System.</description>
     </item>
     
     <item>
@@ -809,17 +813,17 @@ Question 矩阵采用“压缩”存储，实现矩阵的常用操作，如输�
       <pubDate>Fri, 17 May 2019 03:11:37 +0800</pubDate>
       
       <guid>https://ntutn.top/posts/%E7%BB%9F%E8%AE%A1%E9%80%92%E5%BD%92%E5%AD%90%E9%97%AE%E9%A2%98%E4%B8%AA%E6%95%B0/</guid>
-      <description>分治策略是算法设计的重要策略之一，该策略的基本思想是把问题进行分解成一些子问题，通过子问题的求解完成对原问题的求解。其关键是分解和合并，好的分解或合并方法才会产生高效的分治算法。
+      <description> 分治策略是算法设计的重要策略之一，该策略的基本思想是把问题进行分解成一些子问题，通过子问题的求解完成对原问题的求解。其关键是分解和合并，好的分解或合并方法才会产生高效的分治算法。
 分治策略设计出的算法最常见的就是递归算法。但是如果在分解时，分解出的子问题有很多是重复的，那么这样的分治（递归）算法求解问题的效率就非常低。例如斐波那契数问题，如果采用递归求解，算法效率非常低：O(2^n)。而如果采用递推求解(动态规划自底向上求解)，算法效率非常高：O(n)。
 Question 现在请你编写程序，统计计算一个斐波那契数时分解出的各子问题的个数。
 斐波那契数的定义如下：
-Fib(0)=0 Fib(1)=1 Fib(n)=Fib(n-1)+Fib(n-2) 输入：一个整数n，即计算Fib(n)
+Fib(0)=0Fib(1)=1Fib(n)=Fib(n-1)+Fib(n-2) 输入：一个整数n，即计算Fib(n)
 输出：n+1行，即各个子问题的值及该子问题的个数。
-Example Input 5 Output Fib(0)=0,spn=3 Fib(1)=1,spn=5 Fib(2)=1,spn=3 Fib(3)=2,spn=2 Fib(4)=3,spn=1 Fib(5)=5,spn=1 分析 一大段分治思想的介绍，递归与递推的区别，我以为这题用递归会超时，要用递推求解，于是入坑……
+Example Input 5 Output Fib(0)=0,spn=3Fib(1)=1,spn=5Fib(2)=1,spn=3Fib(3)=2,spn=2Fib(4)=3,spn=1Fib(5)=5,spn=1 分析 一大段分治思想的介绍，递归与递推的区别，我以为这题用递归会超时，要用递推求解，于是入坑……
 这题要统计子问题个数，递推或者递归加备忘录根本没重复的计算怎么统计……
 不死心的我又仔细研究递推子问题个数的规律，发现子问题个数正好是一个反着的斐波那契数列（结尾元素特殊处理），所以可以正向递推求数列，反向递推求子问题个数。
 不过特殊情况研究的有点头疼，暂时就不搞了，下面给出的是老老实实递归求解的程序。
-Answer #include &amp;lt;iostream&amp;gt;#include &amp;lt;cstring&amp;gt;using namespace std; int*spn; int*data; int fib(int n){ spn[n]++; if(n==0){ data[0]=0; return 0; } if(n==1){ data[1]=1; return 1; } int res=fib(n-1)+fib(n-2); data[n]=res; return res; } int main() { int n; cin&amp;gt;&amp;gt;n; spn=new int[n+1]; data=new int[n+1]; memset(spn,0,(n+1)*sizeof(int)); memset(data,-1,(n+1)*sizeof(int)); data[0]=0; data[1]=1; fib(n); for(int i=0;i&amp;lt;=n;i++){ cout&amp;lt;&amp;lt;&amp;#34;Fib(&amp;#34;&amp;lt;&amp;lt;i&amp;lt;&amp;lt;&amp;#34;)=&amp;#34;&amp;lt;&amp;lt;data[i]&amp;lt;&amp;lt;&amp;#34;,spn=&amp;#34;&amp;lt;&amp;lt;spn[i]&amp;lt;&amp;lt;endl; } return 0; } </description>
+Answer #include &amp;lt;iostream&amp;gt; #include &amp;lt;cstring&amp;gt; using namespace std; int*spn; int*data; int fib(int n){ spn[n]++; if(n==0){ data[0]=0; return 0; } if(n==1){ data[1]=1; return 1; } int res=fib(n-1)+fib(n-2); data[n]=res; return res; } int main() { int n; cin&amp;gt;&amp;gt;n; spn=new int[n+1]; data=new int[n+1]; memset(spn,0,(n+1)*sizeof(int)); memset(data,-1,(n+1)*sizeof(int)); data[0]=0; data[1]=1; fib(n); for(int i=0;i&amp;lt;=n;i++){ cout&amp;lt;&amp;lt;&amp;#34;Fib(&amp;#34;&amp;lt;&amp;lt;i&amp;lt;&amp;lt;&amp;#34;)=&amp;#34;&amp;lt;&amp;lt;data[i]&amp;lt;&amp;lt;&amp;#34;,spn=&amp;#34;&amp;lt;&amp;lt;spn[i]&amp;lt;&amp;lt;endl; } return 0; } </description>
     </item>
     
     <item>
@@ -831,7 +835,7 @@ Answer #include &amp;lt;iostream&amp;gt;#include &amp;lt;cstring&amp;gt;using na
       <description>人工智能知识点整理Question
 假设二叉数的数据元素为字符，采用二叉链式存储结构。请编码实现二叉树ADT，其中包括创建二叉树、遍历二叉树（深度、广度）、求二叉树的深度（高度）、计算二叉树的元素个数、计算二叉树的叶子数、二叉树的格式输出等。
 根据输入的符号，执行相应的操作。如下：
- C：根据完全前序序列创建二叉树，#表示空结点（空子树）；输入：二叉树的完全前序序列，创建成功输出 Created success! H：求二叉树的高度； 输出： Height=高度 L：计算二叉树的叶子数；输出：Leaves=叶子个数 N：计算二叉树中元素总个数；输出：Nodes=结点个数 1：先序遍历二叉树；输出：Preorder is:序列 . 2：中序遍历二叉树；输出：Inorder is:序列 . 3：后序遍历二叉树；输出：Postorder is:序列 . 4：广度遍历二叉树；输出：BFSorder is:序列 . F：查找值为x的结点个数；输出：The count of x is 个数 . P：以目录缩格文本形式输出所有节点。输出：The tree is:（换行，下面各行是输出的二叉树） X：退出  Example Input C ABC##DE#G##F### H L N 1 2 3 4 F A P X Output Created success! Height=5 Leaves=3 Nodes=7 Preorder is:A B C D E G F . Inorder is:C B E G D F A .</description>
+C：根据完全前序序列创建二叉树，#表示空结点（空子树）；输入：二叉树的完全前序序列，创建成功输出 Created success! H：求二叉树的高度； 输出： Height=高度 L：计算二叉树的叶子数；输出：Leaves=叶子个数 N：计算二叉树中元素总个数；输出：Nodes=结点个数 1：先序遍历二叉树；输出：Preorder is:序列 . 2：中序遍历二叉树；输出：Inorder is:序列 . 3：后序遍历二叉树；输出：Postorder is:序列 . 4：广度遍历二叉树；输出：BFSorder is:序列 . F：查找值为x的结点个数；输出：The count of x is 个数 . P：以目录缩格文本形式输出所有节点。输出：The tree is:（换行，下面各行是输出的二叉树） X：退出 Example Input CABC##DE#G##F###HLN1234FAPX Output Created success!Height=5Leaves=3Nodes=7Preorder is:A B C D E G F .Inorder is:C B E G D F A .</description>
     </item>
     
     <item>
@@ -847,9 +851,33 @@ Question 假设有n个活动的集合E={a1,a2,...,an}，其每个活动都要求
 提示：贪心策略
 输入，有多行，第1行是活动的个数n，后面n行，每行3个整数，是每个活动的编号、占用资源的开始时间、结束时间。
 输出，选出的最大活动子集，即有多行，每行包括活动的编号、开始时间、结束时间。
-Example Input 11 1 3 8 2 2 13 3 1 4 4 5 7 5 6 10 6 8 11 7 12 14 8 5 9 9 3 5 10 0 6 11 8 12 Output 3：1-4 4：5-7 6：8-11 7：12-14 分析 经典的贪心问题，贪心策略为选择结束时间最早的活动，因为这样就可以给后面的活动留出更多的时间。
- 掉坑：在选择活动时只处理了前24小时的活动，而事实证明我画蛇添足了。
- Answer #include &amp;lt;iostream&amp;gt;#include &amp;lt;stdio.h&amp;gt;#include &amp;lt;stdlib.h&amp;gt;using namespace std; //定义允许的最大活动数 #define Maxn 100 //定义活动的类型 typedef struct act_Node { int Id; //活动ID  int s_Time; //活动开始时间  int f_Time; //活动结束时间 } ACND; //对活动按贪心准则排序 void Sort(int n,ACND arr[]) { for(int i=0;i&amp;lt;n;i++){ int tmp=i; for(int j=i+1;j&amp;lt;n;j++){ if(arr[j].</description>
+Example Input 111 3 82 2 133 1 44 5 75 6 106 8 117 12 148 5 99 3 510 0 611 8 12 Output 3：1-44：5-76：8-117：12-14 分析 经典的贪心问题，贪心策略为选择结束时间最早的活动，因为这样就可以给后面的活动留出更多的时间。
+掉坑：在选择活动时只处理了前24小时的活动，而事实证明我画蛇添足了。
+Answer #include &amp;lt;iostream&amp;gt; #include &amp;lt;stdio.h&amp;gt; #include &amp;lt;stdlib.h&amp;gt; using namespace std; //定义允许的最大活动数 #define Maxn 100 //定义活动的类型 typedef struct act_Node { int Id; //活动ID int s_Time; //活动开始时间 int f_Time; //活动结束时间 } ACND; //对活动按贪心准则排序 void Sort(int n,ACND arr[]) { for(int i=0;i&amp;lt;n;i++){ int tmp=i; for(int j=i+1;j&amp;lt;n;j++){ if(arr[j].</description>
+    </item>
+    
+    <item>
+      <title>计算机组成原理笔记</title>
+      <link>https://ntutn.top/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86%E7%AC%94%E8%AE%B0/</link>
+      <pubDate>Mon, 13 May 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86%E7%AC%94%E8%AE%B0/</guid>
+      <description>概述 计算机组成原理马上就要期中考试了，我也在积极准备复习，顺着课本也做了一波笔记，把每个部分的知识点都整理了一下。没理解的暂时还空着（比如海明校验码），有些整理起来不方便的也暂时空着，回头去查课本吧。
+结课了，顺着课本捋了一遍，做的一些笔记：
+计算机组成原理 概述 计算机硬件 采用存储程序工作方式。 由运算器、控制器、存储器、输入设备、输出设备部件组成。 存储器：存储数据/指令 控制器：控制指令的自动执行 运算器：加减乘除、逻辑运算 操作人员通过输入输出设备控制计算机。 计算机内部以二进制表示指令和数据 指令由操作码和地址码组成。 总线：传输信息的介质。 ALU：数据处理部件，执行算数和逻辑运算。
+计算机软件 计算机系统层次结构 应用（问题） 最终用户算法 程序员编程（语言）操作系统/虚拟机指令集体系结构（ISA）架构师微体系结构功能部件/RTL 电子工程师电路器件机器级语言 和运行程序的计算机底层结构密切相关。 可读性差，不易于记忆。
+汇编语言 机器语言 高级语言 和底层计算机结构关系不大。 可读性相当较好。 大多数程序员使用高级语言编写程序。
+程序设计语言处理系统 汇编程序：汇编器，汇编语言》机器语言 解释程序：解释器，将源程序中的语句按顺序逐条翻译并立即执行。 编译程序：编译器，高级语言》汇编语言/机器语言。 计算机系统的不同用户 最终用户 使应用程序完成特定任务的用户。
+简单的人机交互界面、安装在计算机中的相关应用程序。
+系统管理员 利用操作系统等软件提供的功能对系统进行配置管理维护的操作人员。
+部分硬件层面、系统管理层面、相关实用程序和人机交互界面。
+应用程序员 使用高级语言编制应用软件的程序员。
+硬件、操作系统提供的编程接口、人机交互界面、实用程序、相关的语言程序处理系统。
+系统程序员 设计和开发系统软件的程序员。
+计算机底层相关硬件和系统结构。
+一个人可以既是最终用户，又是系统管理员、…… ISA处于硬件和软件交界面，是计算机系统核心部分。
+程序开发与执行过程 对于
+#include&amp;lt;stdio.h&amp;gt; int main(){ printf(&amp;#34;Hello World!\n&amp;#34;); } 通过程序编辑软件得到hello.c 将hello.c预处理、编译、汇编、链接，生成可执行目标程序 gcc -o hello hello.</description>
     </item>
     
     <item>
@@ -866,28 +894,7 @@ reverse函数：实现线性表元素的倒置，即将线性表中数据元素�
 例如输入：
 3 8 7 2 4 9 1 6 5 0 则输出：
 9 8 7 6 5 4 3 2 1 预置代码如下： （其中/* */ 部分是要补充的insert和reverse函数）
-#include&amp;lt;iostream&amp;gt;#include&amp;lt;stdlib.h&amp;gt;using namespace std; typedef int ElemType; //数据元素类型 class List; //前视定义,否则友元无法定义 //结点类定义 class LinkNode { friend class List; private: LinkNode *link; ElemType data; public: LinkNode (LinkNode *ptr = NULL) {link=ptr;} LinkNode(const ElemType &amp;amp; item, LinkNode *ptr = NULL){ data=item;link=ptr;} ~LinkNode(){}; }; //单链表类定义 class List { private: LinkNode *first; //指向链表头结点的指针  public: List (ElemType x) { first = new LinkNode (x);} // 带头结点  ~List (){ MakeEmpty();} //析构函数  void MakeEmpty ( ); //线性表置空  void insert(ElemType val); //在有序线性表中插入元素val  void reverse(); //线性表的倒置  void output(); //线性表的输出 }; void List:: MakeEmpty ( ) { LinkNode *q; while ( first-&amp;gt;link !</description>
-    </item>
-    
-    <item>
-      <title>计算机组成原理笔记</title>
-      <link>https://ntutn.top/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86%E7%AC%94%E8%AE%B0/</link>
-      <pubDate>Mon, 13 May 2019 03:11:37 +0800</pubDate>
-      
-      <guid>https://ntutn.top/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86%E7%AC%94%E8%AE%B0/</guid>
-      <description>概述 计算机组成原理马上就要期中考试了，我也在积极准备复习，顺着课本也做了一波笔记，把每个部分的知识点都整理了一下。没理解的暂时还空着（比如海明校验码），有些整理起来不方便的也暂时空着，回头去查课本吧。
-结课了，顺着课本捋了一遍，做的一些笔记：
-计算机组成原理 概述 计算机硬件  采用存储程序工作方式。 由运算器、控制器、存储器、输入设备、输出设备部件组成。 存储器：存储数据/指令 控制器：控制指令的自动执行 运算器：加减乘除、逻辑运算 操作人员通过输入输出设备控制计算机。 计算机内部以二进制表示指令和数据 指令由操作码和地址码组成。 总线：传输信息的介质。  ALU：数据处理部件，执行算数和逻辑运算。
-计算机软件 计算机系统层次结构 应用（问题） 最终用户 算法 程序员 编程（语言） 操作系统/虚拟机 指令集体系结构（ISA）架构师 微体系结构 功能部件/RTL 电子工程师 电路 器件   机器级语言   和运行程序的计算机底层结构密切相关。 可读性差，不易于记忆。
-  汇编语言 机器语言  高级语言   和底层计算机结构关系不大。 可读性相当较好。 大多数程序员使用高级语言编写程序。
- 程序设计语言处理系统  汇编程序：汇编器，汇编语言》机器语言 解释程序：解释器，将源程序中的语句按顺序逐条翻译并立即执行。 编译程序：编译器，高级语言》汇编语言/机器语言。  计算机系统的不同用户 最终用户 使应用程序完成特定任务的用户。
-简单的人机交互界面、安装在计算机中的相关应用程序。
-系统管理员 利用操作系统等软件提供的功能对系统进行配置管理维护的操作人员。
-部分硬件层面、系统管理层面、相关实用程序和人机交互界面。
-应用程序员 使用高级语言编制应用软件的程序员。
-硬件、操作系统提供的编程接口、人机交互界面、实用程序、相关的语言程序处理系统。
-系统程序员 设计和开发系统软件的程序员。
-计算机底层相关硬件和系统结构。</description>
+#include&amp;lt;iostream&amp;gt; #include&amp;lt;stdlib.h&amp;gt; using namespace std; typedef int ElemType; //数据元素类型 class List; //前视定义,否则友元无法定义 //结点类定义 class LinkNode { friend class List; private: LinkNode *link; ElemType data; public: LinkNode (LinkNode *ptr = NULL) {link=ptr;} LinkNode(const ElemType &amp;amp; item, LinkNode *ptr = NULL){ data=item;link=ptr;} ~LinkNode(){}; }; //单链表类定义 class List { private: LinkNode *first; //指向链表头结点的指针 public: List (ElemType x) { first = new LinkNode (x);} // 带头结点 ~List (){ MakeEmpty();} //析构函数 void MakeEmpty ( ); //线性表置空 void insert(ElemType val); //在有序线性表中插入元素val void reverse(); //线性表的倒置 void output(); //线性表的输出 }; void List:: MakeEmpty ( ) { LinkNode *q; while ( first-&amp;gt;link !</description>
     </item>
     
     <item>
@@ -897,15 +904,15 @@ reverse函数：实现线性表元素的倒置，即将线性表中数据元素�
       
       <guid>https://ntutn.top/posts/%E6%8B%AC%E5%8F%B7%E5%8C%B9%E9%85%8D/</guid>
       <description>大概是一道栈的应用的水题吧。
- 输入一行符号,以#结束，判断其中的括号是否匹配。 遇到左括号入栈，遇到右括号出栈。如果字符串结束栈不空，输出栈内左括号对应右括号。
+输入一行符号,以#结束，判断其中的括号是否匹配。 遇到左括号入栈，遇到右括号出栈。如果字符串结束栈不空，输出栈内左括号对应右括号。
 Question 用栈实现：输入一行符号,以#结束，判断其中的括号是否匹配。括号包括：
 { } 、 [ ] 、 ( )、 &amp;lt; &amp;gt; 如果匹配，输出 right
 如果不匹配，给出错误提示。包括：
 第几个符号处理时出现错误；哪几个符号失配等
 Example 思路 遇到左括号入栈，遇到右括号出栈。如果字符串结束栈不空，输出栈内左括号对应右括号。
- 没有一遍过，因为题目中没说如果出错就不再继续处理。
- 相关  栈：顺序表，只允许在一端输入输出。 getline(cin,str);可输入整行，支持空格。 如果用数组实现栈，则其存储空间必须是一次性申请得到的。  Answer  指定初始maxsize=1是我某种程度上的强迫症，反正这题时间限制很宽松。
- #include &amp;lt;iostream&amp;gt;#include&amp;lt;cstring&amp;gt;#include&amp;lt;string&amp;gt;using namespace std; class mystack{ private: char *data; int maxsize; int top; public: mystack(){ maxsize=1; data=new char[maxsize]; top=-1; } bool isEmpty(){ return top==-1; } char getTop(){ if(top&amp;gt;-1){ return data[top]; } return &amp;#39;\0&amp;#39;; } void pop(){ if(top&amp;gt;=0){ top--; } } void expand(){ char*tmp=new char[maxsize*2]; strncpy(tmp,data,maxsize); maxsize*=2; delete[] data; data=tmp; } void push(char x){ if(top+1==maxsize){ expand(); } data[++top]=x; } ~mystack(){ delete[] data; } }; char getPar(char x){ switch(x){ case &amp;#39;{&amp;#39;: return &amp;#39;}&amp;#39;; case &amp;#39;[&amp;#39;: return &amp;#39;]&amp;#39;; case &amp;#39;(&amp;#39;: return &amp;#39;)&amp;#39;; case &amp;#39;&amp;lt;&amp;#39;: return &amp;#39;&amp;gt;&amp;#39;; } return &amp;#39;\0&amp;#39;; } int isKH(char x){ switch(x){ case &amp;#39;{&amp;#39;: case &amp;#39;[&amp;#39;: case &amp;#39;(&amp;#39;: case &amp;#39;&amp;lt;&amp;#39;: return 1; case &amp;#39;}&amp;#39;: case &amp;#39;]&amp;#39;: case &amp;#39;)&amp;#39;: case &amp;#39;&amp;gt;&amp;#39;: return 2; } return 0; } int main() { string tmp; getline(cin,tmp); mystack*stk=new mystack(); bool erred=false; for(int i=0;i&amp;lt;tmp.</description>
+没有一遍过，因为题目中没说如果出错就不再继续处理。
+相关 栈：顺序表，只允许在一端输入输出。 getline(cin,str);可输入整行，支持空格。 如果用数组实现栈，则其存储空间必须是一次性申请得到的。 Answer 指定初始maxsize=1是我某种程度上的强迫症，反正这题时间限制很宽松。
+#include &amp;lt;iostream&amp;gt; #include&amp;lt;cstring&amp;gt; #include&amp;lt;string&amp;gt; using namespace std; class mystack{ private: char *data; int maxsize; int top; public: mystack(){ maxsize=1; data=new char[maxsize]; top=-1; } bool isEmpty(){ return top==-1; } char getTop(){ if(top&amp;gt;-1){ return data[top]; } return &amp;#39;\0&amp;#39;; } void pop(){ if(top&amp;gt;=0){ top--; } } void expand(){ char*tmp=new char[maxsize*2]; strncpy(tmp,data,maxsize); maxsize*=2; delete[] data; data=tmp; } void push(char x){ if(top+1==maxsize){ expand(); } data[++top]=x; } ~mystack(){ delete[] data; } }; char getPar(char x){ switch(x){ case &amp;#39;{&amp;#39;: return &amp;#39;}&amp;#39;; case &amp;#39;[&amp;#39;: return &amp;#39;]&amp;#39;; case &amp;#39;(&amp;#39;: return &amp;#39;)&amp;#39;; case &amp;#39;&amp;lt;&amp;#39;: return &amp;#39;&amp;gt;&amp;#39;; } return &amp;#39;\0&amp;#39;; } int isKH(char x){ switch(x){ case &amp;#39;{&amp;#39;: case &amp;#39;[&amp;#39;: case &amp;#39;(&amp;#39;: case &amp;#39;&amp;lt;&amp;#39;: return 1; case &amp;#39;}&amp;#39;: case &amp;#39;]&amp;#39;: case &amp;#39;)&amp;#39;: case &amp;#39;&amp;gt;&amp;#39;: return 2; } return 0; } int main() { string tmp; getline(cin,tmp); mystack*stk=new mystack(); bool erred=false; for(int i=0;i&amp;lt;tmp.</description>
     </item>
     
     <item>
@@ -915,12 +922,13 @@ Example 思路 遇到左括号入栈，遇到右括号出栈。如果字符串�
       
       <guid>https://ntutn.top/posts/%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B1%82%E5%80%BC/</guid>
       <description>表达式求值是程序设计语言编译中的一个最基本问题，它的实现是栈应用的一个典型例子。
- Question 表达式求值是进行数据处理的最基本操作。请编写程序完成一个简单算术表达式的求值。要求如下：
- 运算符包括：+、-、*、-、^(乘方)、括号 运算量为数值常量，根据自己的能力可以对运算量做不同的约束，例如1位整数、多位整数、实数等（会有不同的测试用例）；   输入：一行，即表达式，以“=”结束。例如：  5*(8-3)+6/5=  输出：一行，即表达式的值。结果值为整数时输出为整数，如果有小数时保留5位小数。  26.20000 问题与分析 栈 栈是特殊的线性表，其一端固定，只允许在另一端插入或删除。其特性是“先进后出”。
-表达式的书写形式  前缀式 + × a b × - c / d e f 中缀式 a × b + (c - d / e) × f 后缀式 a b × c d e / - f × +  前缀式的运算规则 连续出现的两个操作数和在它们之前且紧靠它们的运算符构成一个最小表达式;
+Question 表达式求值是进行数据处理的最基本操作。请编写程序完成一个简单算术表达式的求值。要求如下：
+运算符包括：+、-、*、-、^(乘方)、括号 运算量为数值常量，根据自己的能力可以对运算量做不同的约束，例如1位整数、多位整数、实数等（会有不同的测试用例）； 输入：一行，即表达式，以“=”结束。例如： 5*(8-3)+6/5= 输出：一行，即表达式的值。结果值为整数时输出为整数，如果有小数时保留5位小数。 26.20000 问题与分析 栈 栈是特殊的线性表，其一端固定，只允许在另一端插入或删除。其特性是“先进后出”。
+表达式的书写形式 前缀式 + × a b × - c / d e f 中缀式 a × b + (c - d / e) × f 后缀式 a b × c d e / - f × + 前缀式的运算规则 连续出现的两个操作数和在它们之前且紧靠它们的运算符构成一个最小表达式;
 运算符出现的顺序与运算顺序相反
- 中缀式与后缀式略。其中中缀式是我们最常书写的形式。
- 后缀式的运算  是操作数，入栈 是符号，取出两个操作数运算后入栈 表达式处理完毕后栈内唯一元素即运算结果  中缀式转换为后缀式 直接对中缀式求值 类似中缀式转后缀式的过程，把运算量的输出改为“入OPND栈”，把运算符的“输出”改为“计算”：根据运算符，出栈需要的运算量，计算值，结果作为运算量再入栈。其他不需要变化。</description>
+中缀式与后缀式略。其中中缀式是我们最常书写的形式。
+后缀式的运算 是操作数，入栈 是符号，取出两个操作数运算后入栈 表达式处理完毕后栈内唯一元素即运算结果 中缀式转换为后缀式 直接对中缀式求值 类似中缀式转后缀式的过程，把运算量的输出改为“入OPND栈”，把运算符的“输出”改为“计算”：根据运算符，出栈需要的运算量，计算值，结果作为运算量再入栈。其他不需要变化。
+遇到的其他问题 用float交这道题会出错，精度不够，要用double。 判断有没有小数的方法：截断后与原值相减绝对值在误差允许范围内。不能用相等，因为浮点数的存储性质，直接比较相等很可能出错。 通过cin的setiosflags和setprecision格式化提交也会有问题，因为这样竟然是进行四舍五入的…… Answer #include &amp;lt;iostream&amp;gt; #include &amp;lt;string&amp;gt; #include &amp;lt;sstream&amp;gt; #include &amp;lt;cmath&amp;gt; #include &amp;lt;iomanip&amp;gt; #include &amp;lt;cstdio&amp;gt; using namespace std; template &amp;lt;class T&amp;gt; class mystack{ private: T *data; int maxsize; int top; public: mystack(){ maxsize=1; data=new T[maxsize]; top=-1; } bool isEmpty(){ return top==-1; } T getTop(){ if(top&amp;gt;-1){ return data[top]; } return NULL; } void pop(){ if(top&amp;gt;=0){ top--; } } void expand(){ T*tmp=new T[maxsize*2]; for(int i=0;i&amp;lt;maxsize;i++){ tmp[i]=data[i]; } maxsize*=2; delete[] data; data=tmp; } void push(T x){ if(top+1==maxsize){ expand(); } data[++top]=x; } ~mystack(){ delete[] data; } }; int getid(char x){ string str=&amp;#34;+-*/^()#&amp;#34;; for(int i=0;i&amp;lt;str.</description>
     </item>
     
     <item>
@@ -930,7 +938,7 @@ Example 思路 遇到左括号入栈，遇到右括号出栈。如果字符串�
       
       <guid>https://ntutn.top/posts/%E5%9B%BE%E4%B9%A6%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/</guid>
       <description>翻出了以前写的C++作业，图书管理系统，虽然挺简单的，但留下纪念下吧。
-#include &amp;lt;iostream&amp;gt;#include&amp;lt;cstdlib&amp;gt;#include&amp;lt;cstring&amp;gt;#include&amp;lt;fstream&amp;gt;using namespace std; class CUser { private: int code; //表示用户编号；  char name[20]; //表示用户姓名 public: CUser() { ; }; // 默认构造函数  CUser(int id, char na[]) { code=id; strcpy(name,na); }; //构造函数，初始化用户信息  void setcode(int n) { code=n; }; //用来设置用户编号  int getcode() { return code; }; //用来获取用户编号  void setname(char na[]) { strcpy(name,na); }; //用来设置用户姓名  char* getname() { return name; }; //用来获取用户姓名  void show() { cout&amp;lt;&amp;lt;&amp;#34;用户编号：&amp;#34;&amp;lt;&amp;lt;code&amp;lt;&amp;lt;endl; cout&amp;lt;&amp;lt;&amp;#34;姓名：&amp;#34;&amp;lt;&amp;lt;name&amp;lt;&amp;lt;endl; }; //用来显示用户的基本信息 }; class CBook { private: int code; //图书编号  char name[20]; //图书名称  bool Is_Stock; //true为在架，false为借出  bool Is_Existing; //true为存在, false为删除 public: CBook() { ; }; //默认构造函数  CBook(int no,char na[]) { code=no; strcpy(name,na); Is_Stock=true; Is_Existing=true; }; //构造函数，初始化图书信息  void setcode(int n) { code=n; }; //设置图书编号  int getcode() { return code; }; //获取图书编号  void setname(char na[]) { strcpy(name,na); }; //设置图书名称  char* getname() { return name; }; //获取图书名称  bool get_Stock() { return Is_Stock; }; //获取图书是否在库信息  void set_Stock(bool isstock) { Is_Stock=isstock; };// 设置图书是否在库信息  bool get_Existing() { return Is_Existing; };//获取存在标志  void set_Existing(bool isex) { Is_Existing=isex; };//设置存在标志 }; class CReader:public CUser { private: bool Is_Existing; //true存在，false删除  bool Is_Borrowing; //true借过书，false没有借书  CBook brbook; //表示读者所借的图书 public: CReader() { CUser(); }; //构造函数，初始化读者信息  CReader(int id, char na[]) { CUser(id,na); }; //构造函数，初始化读者信息  bool get_Existing() { return Is_Existing; }; //用来获取删除标志  void set_Existing(bool isex) { Is_Existing=isex; }; //用来设置删除标志  bool get_Borrowing() { return Is_Borrowing; }; //用来获取读者借阅情况  void set_Borrowing(bool isbo) { Is_Borrowing=isbo; }; //用来设置读者借阅情况  void setbrbook(CBook bt) { brbook=bt; Is_Borrowing=true; }; //用来记录读者结束信息  CBook getbrbook() { return brbook; }; //用来获取读者结束信息  void show() { CUser::show(); if(Is_Borrowing) { cout&amp;lt;&amp;lt;&amp;#34;当前借书：&amp;#34;&amp;lt;&amp;lt;brbook.</description>
+#include &amp;lt;iostream&amp;gt; #include&amp;lt;cstdlib&amp;gt; #include&amp;lt;cstring&amp;gt; #include&amp;lt;fstream&amp;gt; using namespace std; class CUser { private: int code; //表示用户编号； char name[20]; //表示用户姓名 public: CUser() { ; }; // 默认构造函数 CUser(int id, char na[]) { code=id; strcpy(name,na); }; //构造函数，初始化用户信息 void setcode(int n) { code=n; }; //用来设置用户编号 int getcode() { return code; }; //用来获取用户编号 void setname(char na[]) { strcpy(name,na); }; //用来设置用户姓名 char* getname() { return name; }; //用来获取用户姓名 void show() { cout&amp;lt;&amp;lt;&amp;#34;用户编号：&amp;#34;&amp;lt;&amp;lt;code&amp;lt;&amp;lt;endl; cout&amp;lt;&amp;lt;&amp;#34;姓名：&amp;#34;&amp;lt;&amp;lt;name&amp;lt;&amp;lt;endl; }; //用来显示用户的基本信息 }; class CBook { private: int code; //图书编号 char name[20]; //图书名称 bool Is_Stock; //true为在架，false为借出 bool Is_Existing; //true为存在, false为删除 public: CBook() { ; }; //默认构造函数 CBook(int no,char na[]) { code=no; strcpy(name,na); Is_Stock=true; Is_Existing=true; }; //构造函数，初始化图书信息 void setcode(int n) { code=n; }; //设置图书编号 int getcode() { return code; }; //获取图书编号 void setname(char na[]) { strcpy(name,na); }; //设置图书名称 char* getname() { return name; }; //获取图书名称 bool get_Stock() { return Is_Stock; }; //获取图书是否在库信息 void set_Stock(bool isstock) { Is_Stock=isstock; };// 设置图书是否在库信息 bool get_Existing() { return Is_Existing; };//获取存在标志 void set_Existing(bool isex) { Is_Existing=isex; };//设置存在标志 }; class CReader:public CUser { private: bool Is_Existing; //true存在，false删除 bool Is_Borrowing; //true借过书，false没有借书 CBook brbook; //表示读者所借的图书 public: CReader() { CUser(); }; //构造函数，初始化读者信息 CReader(int id, char na[]) { CUser(id,na); }; //构造函数，初始化读者信息 bool get_Existing() { return Is_Existing; }; //用来获取删除标志 void set_Existing(bool isex) { Is_Existing=isex; }; //用来设置删除标志 bool get_Borrowing() { return Is_Borrowing; }; //用来获取读者借阅情况 void set_Borrowing(bool isbo) { Is_Borrowing=isbo; }; //用来设置读者借阅情况 void setbrbook(CBook bt) { brbook=bt; Is_Borrowing=true; }; //用来记录读者结束信息 CBook getbrbook() { return brbook; }; //用来获取读者结束信息 void show() { CUser::show(); if(Is_Borrowing) { cout&amp;lt;&amp;lt;&amp;#34;当前借书：&amp;#34;&amp;lt;&amp;lt;brbook.</description>
     </item>
     
     <item>
@@ -940,21 +948,33 @@ Example 思路 遇到左括号入栈，遇到右括号出栈。如果字符串�
       
       <guid>https://ntutn.top/posts/%E5%AD%A6%E7%94%9F%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/</guid>
       <description>翻出了以前C语言C实验的大作业，当时搞了好多奇技淫巧，最终拿到99分。
- 介绍 学生成绩管理系统v6.0是由软件工程1702刘海鑫设计的一款用于学生成绩管理的软件。
-文件列表  Stuv6.0.exe	主体程序，用于实现整体功能。 main.dat	程序的数据文件，用于存储学生信息。 goodbye.bmp	程序退出时加载的图片。 desktop.ini	修改程序所在文件夹的图标。 consoletest.exe	编译的au3程序，用于辅助输入中文。  代码：
-$re=InputBox(&amp;quot;Input&amp;quot;,&amp;quot;You can input your massage now.(支持中文)&amp;quot;) ConsoleWrite($re)  code.dat	密码存储文件。该文件存储的是xor算法加密的账号密码。 black.bmp	一张纯黑的图片，用于清除控制台加载图片的痕迹。2018年1月20日使用了image /d清除图片，本文件不再使用。 background.bmp	程序启动时加载的图片。 about.rtf	程序的说明文档。 scaned.txt	存储用户输入的临时文件，一般会自动清除。 subjects.dat	存储科目的名称，每行一个，最多允许50个，可用记事本直接打开编辑。 image.exe	外部程序，用于加载图片。  使用说明 双击stuv6.0.exe，程序启动。
+介绍 学生成绩管理系统v6.0是由软件工程1702刘海鑫设计的一款用于学生成绩管理的软件。
+文件列表 Stuv6.0.exe	主体程序，用于实现整体功能。 main.dat	程序的数据文件，用于存储学生信息。 goodbye.bmp	程序退出时加载的图片。 desktop.ini	修改程序所在文件夹的图标。 consoletest.exe	编译的au3程序，用于辅助输入中文。 代码：
+$re=InputBox(&amp;#34;Input&amp;#34;,&amp;#34;You can input your massage now.(支持中文)&amp;#34;)ConsoleWrite($re) code.dat	密码存储文件。该文件存储的是xor算法加密的账号密码。 black.bmp	一张纯黑的图片，用于清除控制台加载图片的痕迹。2018年1月20日使用了image /d清除图片，本文件不再使用。 background.bmp	程序启动时加载的图片。 about.rtf	程序的说明文档。 scaned.txt	存储用户输入的临时文件，一般会自动清除。 subjects.dat	存储科目的名称，每行一个，最多允许50个，可用记事本直接打开编辑。 image.exe	外部程序，用于加载图片。 使用说明 双击stuv6.0.exe，程序启动。
 待启动图片显示过后，出现密码输入框，回车确认输入。
 默认账号：admin
 默认密码：admin888
 输入密码时如果输入~符号，将弹出一个信息框提示输入。这是为了便于输入中文和特殊符号。
 本程序的密码存储是xor运算的结果，仅用于比对密码是否正确。
 接下来进入主菜单。菜单使用黄色为底色，红色标定选中项。你可以按上下键选择，或直接按项目对应数字，回车确认。
-开发日志   2018年3月10日，加入了控制台窗口大小控制的代码。
-  修改了exe文件的图标。
-  改用外部程序image.exe加载图片，并修改gotoxy函数的使用，成功使代码兼容了gun gcc系列编译器。
-  测试WIN7运行效果，图片加载错位，无法全屏，其他功能不受影响。
-  在科目分析功能加入分层成绩展示，至此，程序主体开发完毕。
-  加入查找功能，查找方式为遍历，依据为id或姓名。 同理，加入按id排序、按姓名的字典顺序排序。 数据排序功能，选择后弹出二级菜单，进行升序排序或降序排序。 排序的结果不会保存。 排序后将自动展示排序结果。</description>
+开发日志 2018年3月10日，加入了控制台窗口大小控制的代码。
+修改了exe文件的图标。
+改用外部程序image.exe加载图片，并修改gotoxy函数的使用，成功使代码兼容了gun gcc系列编译器。
+测试WIN7运行效果，图片加载错位，无法全屏，其他功能不受影响。
+在科目分析功能加入分层成绩展示，至此，程序主体开发完毕。
+加入查找功能，查找方式为遍历，依据为id或姓名。 同理，加入按id排序、按姓名的字典顺序排序。 数据排序功能，选择后弹出二级菜单，进行升序排序或降序排序。 排序的结果不会保存。 排序后将自动展示排序结果。
+加入了科目分析，统计各科总分平均分。
+删除学生功能准备完成。
+将修改密码部分移出主函数，便于管理。
+学生信息展示准备完成。
+添加学生功能准备完成，界面比较简陋。
+发现有点控制台用BitBlt画的图不会自动清除，于是找了一张全黑的图片将其覆盖。
+发现在WIN7等系统控制台加载图片会出现错位，暂时不打算解决。
+开始准备程序主体功能。
+记事本太单调，决定将about改为写字板，内容为本文件。
+发现了atexit函数，于是顺理成章地加入了程序退出图。
+找到一个取巧的方法。控制台也是一个窗口，获取了他的句柄就可以在上面用BitBlt直接画图了吧。
+决定加入加载启动退出图片功能。可是Windows环境下C语言直接调用GDI常常导致系统蓝屏。虽然直接用其他语言就可以轻松写出，但总是有点不甘心。</description>
     </item>
     
     <item>
@@ -964,10 +984,12 @@ $re=InputBox(&amp;quot;Input&amp;quot;,&amp;quot;You can input your massage now.
       
       <guid>https://ntutn.top/posts/%E8%BF%9E%E7%BB%AD%E6%AD%A3%E6%95%B4%E6%95%B0/</guid>
       <description>还是数据结构的网上作业，将一个整数分解为连续正整数之和，找对方向倒是也不算难……
- 有些正整数可以表示为 n (n&amp;gt;1) 个连续正整数的和，如：
-15=1+2+3+4+5 =4+5+6 =7+8 给定一个正整数 N，判断其是否可以表示为一组连续正整数的和，输出符合条件的解的组数。
-Input 输入有一行，包含一个正整数 n (3≤n≤1000000000)。  Output 输出有一行，正整数n的符合条件的解的组数。  Example    Input Output     15 3   99 5   6 1   9 2    单点时限: 2.0 sec 内存限制: 256 MB
-#include &amp;lt;iostream&amp;gt;using namespace std; int main() { int n; cin&amp;gt;&amp;gt;n; int counter=0; for(int i=2; i&amp;lt;(100000&amp;lt;n?100000:n); i++) //n/i-i/2+1&amp;gt;=1  { if(n/i-i/2-i%2+1&amp;gt;=1&amp;amp;&amp;amp;(n/i-i/2-i%2+1+n/i-i/2-i%2+1+i-1)*i==n*2) { counter++; } //cout&amp;lt;&amp;lt;&amp;#34;test-&amp;#34;&amp;lt;&amp;lt;i&amp;lt;&amp;lt;endl;  } cout &amp;lt;&amp;lt; counter &amp;lt;&amp;lt; endl; return 0; } 枚举就好了。需要根据分成的整数的个数i讨论，但为了显得更牛X我就写到一起了，上面的n/i-i/2-i%2+1无论在奇偶情况下都是拆分得到的整数的第一个理应是多少。</description>
+有些正整数可以表示为 n (n&amp;gt;1) 个连续正整数的和，如：
+15=1+2+3+4+5=4+5+6=7+8 给定一个正整数 N，判断其是否可以表示为一组连续正整数的和，输出符合条件的解的组数。
+Input 输入有一行，包含一个正整数 n (3≤n≤1000000000)。Output 输出有一行，正整数n的符合条件的解的组数。Example Input Output 15 3 99 5 6 1 9 2 单点时限: 2.0 sec 内存限制: 256 MB
+#include &amp;lt;iostream&amp;gt; using namespace std; int main() { int n; cin&amp;gt;&amp;gt;n; int counter=0; for(int i=2; i&amp;lt;(100000&amp;lt;n?100000:n); i++) //n/i-i/2+1&amp;gt;=1 { if(n/i-i/2-i%2+1&amp;gt;=1&amp;amp;&amp;amp;(n/i-i/2-i%2+1+n/i-i/2-i%2+1+i-1)*i==n*2) { counter++; } //cout&amp;lt;&amp;lt;&amp;#34;test-&amp;#34;&amp;lt;&amp;lt;i&amp;lt;&amp;lt;endl; } cout &amp;lt;&amp;lt; counter &amp;lt;&amp;lt; endl; return 0; } 枚举就好了。需要根据分成的整数的个数i讨论，但为了显得更牛X我就写到一起了，上面的n/i-i/2-i%2+1无论在奇偶情况下都是拆分得到的整数的第一个理应是多少。
+判断的主要逻辑：
+第一个数字大于等于1 所有数之和等于原数 求和在这里就不必用循环了，用等差数列明显更高效。注意这里计算时为了防止整数除法运算截断的问题，将除法移动到了等式的右边。</description>
     </item>
     
     <item>
@@ -977,7 +999,7 @@ Input 输入有一行，包含一个正整数 n (3≤n≤1000000000)。  Output 
       
       <guid>https://ntutn.top/posts/%E4%BD%BF%E7%94%A8%E6%98%A0%E5%83%8F%E5%8A%AB%E6%8C%81%E6%8A%80%E6%9C%AF%E5%B1%8F%E8%94%BD%E7%94%B5%E8%84%91%E4%B8%AD%E7%9A%84%E5%B9%BF%E5%91%8A%E8%BF%9B%E7%A8%8B/</guid>
       <description>映像劫持（Image File Execution Options），简单的说法，就是当你打开的是程序A，而运行的确是程序B。映像劫持其实是Windows内设的用来调试程序的功能，但是现在却往往被病毒恶意利用。当用户双击对应的程序后，操作系统就会给外壳程序（例如“explorer.exe”）发布相应的指令，其中包含有执行程序的路径和文件名，然后由外壳程序来执行该程序。事实上在该过程中，Windows还会在注册表的上述路径中查询所有的映像劫持子键，如果存在和该程序名称完全相同的子键，就查询对应子健中包含的“dubugger”键值名，并用其指定的程序路径来代替原始的程序，之后执行的是遭到“劫持”的虚假程序。
- 国内很多软件都有重度广告，“资讯”、“新闻”、“弹窗”，不胜其烦。直接找到广告进程删除掉，结果一自动更新，又回来了。
+国内很多软件都有重度广告，“资讯”、“新闻”、“弹窗”，不胜其烦。直接找到广告进程删除掉，结果一自动更新，又回来了。
 于是，我想到了“映像劫持”：
 Windows Registry Editor Version 5.00 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SLBService.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\TsService.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\FoxitDesktopAd.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\FoxitProtect.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\LCServer.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\LRServer.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\2345MiniPage.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SohuNews.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\PinyinUp.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SGDownload.</description>
     </item>
@@ -989,7 +1011,7 @@ Windows Registry Editor Version 5.00 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Wind
       
       <guid>https://ntutn.top/posts/c&#43;&#43;%E7%BC%96%E7%A8%8B%E8%83%BD%E5%8A%9B%E8%AF%84%E4%BC%B0/</guid>
       <description>题目1 向类SeqList中插入数据，请根据main函数中的调用，完成Insert和output函数。
- Input   5 1 2 3 4 5 2 9  Output  1 2 3 4 5 1 2 9 3 4 5  Answer  #include&amp;lt;iostream&amp;gt;#include&amp;lt;stdlib.h&amp;gt;using namespace std; class SeqList { private: int * data; int last; // index of the last element public: SeqList ( int sz ); ~SeqList ( ) { delete [ ] data; } void input (); void output() ; void Insert ( const int &amp;amp;x, int i); } ; SeqList::SeqList ( int sz ) { if ( sz &amp;gt; 0 ) { data = new int[sz]; last = -1; } } void SeqList:: input() { cin &amp;gt;&amp;gt;last; for (int i=0; i&amp;lt;last; i++) cin&amp;gt;&amp;gt;data [i]; last--; } void SeqList::output() { bool fi=false; for(int i=0; i&amp;lt;=last; i++) { if(!</description>
+Input 51 2 3 4 52 9 Output 1 2 3 4 51 2 9 3 4 5 Answer #include&amp;lt;iostream&amp;gt; #include&amp;lt;stdlib.h&amp;gt; using namespace std; class SeqList { private: int * data; int last; // index of the last element public: SeqList ( int sz ); ~SeqList ( ) { delete [ ] data; } void input (); void output() ; void Insert ( const int &amp;amp;x, int i); } ; SeqList::SeqList ( int sz ) { if ( sz &amp;gt; 0 ) { data = new int[sz]; last = -1; } } void SeqList:: input() { cin &amp;gt;&amp;gt;last; for (int i=0; i&amp;lt;last; i++) cin&amp;gt;&amp;gt;data [i]; last--; } void SeqList::output() { bool fi=false; for(int i=0; i&amp;lt;=last; i++) { if(!</description>
     </item>
     
     <item>
@@ -998,8 +1020,8 @@ Windows Registry Editor Version 5.00 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Wind
       <pubDate>Wed, 27 Mar 2019 03:11:37 +0800</pubDate>
       
       <guid>https://ntutn.top/posts/%E7%9B%B4/</guid>
-      <description>直  发现了自己初中写的作文，我当年这么中二的吗……
- 树是直的，直得挺拔入云；山是直的，直得直插霄汉；竹是直的直得虚心髙洁。是啊，巍峨的直无处不在。
+      <description>直 发现了自己初中写的作文，我当年这么中二的吗……
+树是直的，直得挺拔入云；山是直的，直得直插霄汉；竹是直的直得虚心髙洁。是啊，巍峨的直无处不在。
 尺 人们仰慕大自然的直，于是制造了尺。尺，为直而生。再纷乱的外界环境，它总恪尽职守，一丝不苟。即使是它的制造者，它也将毫不留情地指出他的过失。
 人本如此。看到它，我想起了屈子，想起了岳将军，想起包拯，想起了正直的中国人。
 弓 尺是直的，但在不可抗力下它还是弯曲了。有时弯也是一种无奈，正直的树也抵不住弯曲的斧。那就弯吧。不！你没看到，弦是直的。弦如何直？那是弓在抗拒那股不可抗力！是啊，弓是弯的，但它的心是直的。它仍是一心向直的。
@@ -1017,15 +1039,15 @@ Windows Registry Editor Version 5.00 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Wind
       
       <guid>https://ntutn.top/posts/%E5%A0%86%E6%A0%88adt%E5%AE%9E%E7%8E%B0%E5%8F%8A%E5%BA%94%E7%94%A8/</guid>
       <description>假设栈ADT的数据元素为整数，栈ADT的实现采用顺序存储结构。现要用栈来辅助完成任意非负十进制整数到Base(Base不大于35)进制的转换。部分代码已经给出，请补充完善栈溢出处理函数和主函数。 注意：只提交需要补充的函数，其他代码不允许自己重写和修改。
- 栈溢出处理函数overflowProcess：当栈满时，将栈的空间在原来基础上扩大1倍。
+栈溢出处理函数overflowProcess：当栈满时，将栈的空间在原来基础上扩大1倍。
 主函数： 输入一个非负十进制整数n及要转换的进制Base，输出其转换后的进制形式，以及长度。输出格式如下：
 ($...$)10=(#...#)Base Length=转换进制后数的位数 其中$...$是输入的十进制数n，#...#是转换得到的Base进制数，如果转换后位码多于1位，则用大写字母A,B,&amp;hellip;等表示，10-A, 11-B,&amp;hellip;&amp;hellip;
 例如，输入：
 1024 2 输出：
-(1024)10=(10000000000)2 Length=11 再如，输入：
+(1024)10=(10000000000)2Length=11 再如，输入：
 25 30 输出：
-(25)10=(P)30 Length=1 预置代码如下：
-#include &amp;lt;iostream&amp;gt;using namespace std; #include &amp;lt;stdio.h&amp;gt;#include &amp;lt;stdlib.h&amp;gt;typedef int ElemType; class SeqStack { //顺序栈类定义  private: ElemType *elements; //数组存放栈元素  int top; //栈顶指示器  int maxSize; //栈最大容量  void overflowProcess(); //栈的溢出处理  public: SeqStack(int sz); //构造函数  ~SeqStack() { delete []elements; }; //析构函数  void Push(ElemType x); //进栈  int Pop(ElemType &amp;amp;x); //出栈  int IsEmpty() const { return top == -1; } int IsFull() const { return top == maxSize-1; } int GetSize() const {return top+1;} }; SeqStack::SeqStack(int sz) { elements=new ElemType[sz]; //申请连续空间  if(elements==NULL) {cout&amp;lt;&amp;lt;&amp;#34;空间申请错误！&amp;#34;&amp;lt;&amp;lt;endl;exit(1);} else { top=-1; //栈顶指示器指向栈底  maxSize=sz; //栈的最大空间  }; }; /* ********************************************************** 补充overflowProcess() 函数 ********************************************************** */ void SeqStack::Push(ElemType x) { //若栈满,则溢出处理，将元素x插入该栈栈顶  if (IsFull() == 1) overflowProcess(); //栈满  elements[++top] = x; //栈顶指针先加1, 再元素进栈 }; int SeqStack::Pop(ElemType &amp;amp; x) {//若栈不空，函数退出栈顶元素并将栈顶元素的值赋给x,  //返回true，否则返回false  if (IsEmpty() == 1) return 0; x = elements[top--]; //先取元素，栈顶指针退1  return 1; //退栈成功 }; /* ************************************************************** 补充mian()函数 ************************************************************** */ 分析和错误 OverflowProcess，用于栈溢出处理，一般申请原长度二倍的存储空间。</description>
+(25)10=(P)30Length=1 预置代码如下：
+#include &amp;lt;iostream&amp;gt; using namespace std; #include &amp;lt;stdio.h&amp;gt; #include &amp;lt;stdlib.h&amp;gt; typedef int ElemType; class SeqStack { //顺序栈类定义 private: ElemType *elements; //数组存放栈元素 int top; //栈顶指示器 int maxSize; //栈最大容量 void overflowProcess(); //栈的溢出处理 public: SeqStack(int sz); //构造函数 ~SeqStack() { delete []elements; }; //析构函数 void Push(ElemType x); //进栈 int Pop(ElemType &amp;amp;x); //出栈 int IsEmpty() const { return top == -1; } int IsFull() const { return top == maxSize-1; } int GetSize() const {return top+1;} }; SeqStack::SeqStack(int sz) { elements=new ElemType[sz]; //申请连续空间 if(elements==NULL) {cout&amp;lt;&amp;lt;&amp;#34;空间申请错误！&amp;#34;&amp;lt;&amp;lt;endl;exit(1);} else { top=-1; //栈顶指示器指向栈底 maxSize=sz; //栈的最大空间 }; }; /* ********************************************************** 补充overflowProcess() 函数 ********************************************************** */ void SeqStack::Push(ElemType x) { //若栈满,则溢出处理，将元素x插入该栈栈顶 if (IsFull() == 1) overflowProcess(); //栈满 elements[++top] = x; //栈顶指针先加1, 再元素进栈 }; int SeqStack::Pop(ElemType &amp;amp; x) {//若栈不空，函数退出栈顶元素并将栈顶元素的值赋给x, //返回true，否则返回false if (IsEmpty() == 1) return 0; x = elements[top--]; //先取元素，栈顶指针退1 return 1; //退栈成功 }; /* ************************************************************** 补充mian()函数 ************************************************************** */ 分析和错误 OverflowProcess，用于栈溢出处理，一般申请原长度二倍的存储空间。</description>
     </item>
     
     <item>
@@ -1037,46 +1059,46 @@ Windows Registry Editor Version 5.00 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Wind
       <description>拉多：梦的起点 主角，一个满脑子都是不切实际的想法的负气出走的小毛孩，开始了他伟大的征途。这里就按照后面作品的称号吧。
 首先回家，箱子里面有5G，聊胜于无吧。去买几个参丸，准备，走。
 找到战车 出镇，去东南方向的山洞，需要逃跑的怪物类型：
- 仿生蜗牛 生物炮 加农炮  基本是一路逃跑到了山洞最深处，喝个参丸，与挡路的狗对话。
+仿生蜗牛 生物炮 加农炮 基本是一路逃跑到了山洞最深处，喝个参丸，与挡路的狗对话。
 硬抗战狗一发攻击，然后狼会出现，并帮你打败战狗。
 山洞的战车太破，狼看不上，只拿走了副炮（徒手拆副炮啊）。于是这就是咱的第一辆战车了。
 将山洞里稍微搜刮一下，也许去找开始打不过的怪物报个仇。相当舒服。
 拉多有个规矩，就是战车不允许开进镇子，虽然没啥影响，但总是很不爽，毕竟好不容易找到战车总是想找人显摆一下啊。貌似这破规矩一直延续到第四部，香泽丽舍也有类似规矩。
- BUG：给战车吃个参丸，然后人的HP就变成一个极大的值……
- 水怪 作为赏金猎人，当然只有猎杀赏金首获得赏金才是最有趣的。可惜第一代这些元素不是很多，如果是第四代，任务系统是很重要的。
+BUG：给战车吃个参丸，然后人的HP就变成一个极大的值……
+水怪 作为赏金猎人，当然只有猎杀赏金首获得赏金才是最有趣的。可惜第一代这些元素不是很多，如果是第四代，任务系统是很重要的。
 水怪不是很强，基本拿到战车后就可以直接开BOSS了。
 首先去加满弹药和装甲，然后先向西走，再向北走，路上会看到一个山洞。进入，顺着箭头走，然后……就掉坑了。第一次玩的玩家基本都被坑过。在掉下来的这层到处走走，遇到水怪的概率很高。基本只用主炮输出就能打过。
 顺着坡爬上去，在另一个方向小心去拿那个箱子，是副炮。由于打水怪消耗不少装甲片，现在基本可以直接装备。副炮是无限弹药的，对于清小怪很有帮助。
 回镇补充一下，准备去下一个镇子。
 关卡，只要开着战车去，就会让你通过。
- 打赢后记得去情报处领赏金。
- 麦基 第一次玩我就没进入麦基镇，直接错过去了。在你向东走，路过一个小屋的标志，那就是麦基镇了。
+打赢后记得去情报处领赏金。
+麦基 第一次玩我就没进入麦基镇，直接错过去了。在你向东走，路过一个小屋的标志，那就是麦基镇了。
 宝石镜 进入麦基，首先看到一片白薯地，耕会儿地吧，不要每天都打打杀杀的【滑稽】。在耕地过程中会找到一枚戒指，拿到屋里可以换得宝石镜，虽然现在暂时没用，但是是最强人类装备的四个零件之一。
 传送装置（时空隧道） 坐传送装置到拉多镇，与门口一直堵门的人对话他就会让开，以后拉多也就可以使用传真了。我个人认为这个设计是为了避免BUG，毕竟这个游戏传真使用有一定概率穿送到生命科学研究所，而在拉多这样肯定是不合理的，于是大概程序员灵机一动……
- 在梦想起飞版本中的确有这个BUG，可以借此避免探测器球体和气息屏蔽仪被回收
- 生命科学研究所 既然前面提到了，就在这里说一说吧。在传真出错时会传送到生命科学研究所，里面一个人都没有，设备都是故障。到自动售货机面前调查一下，可以找到一个再生丸，可以让死人复活，而且使用后这里会再出现一个。实际用处不大，因为完全可以去直接找明奇博士复活。
+在梦想起飞版本中的确有这个BUG，可以借此避免探测器球体和气息屏蔽仪被回收
+生命科学研究所 既然前面提到了，就在这里说一说吧。在传真出错时会传送到生命科学研究所，里面一个人都没有，设备都是故障。到自动售货机面前调查一下，可以找到一个再生丸，可以让死人复活，而且使用后这里会再出现一个。实际用处不大，因为完全可以去直接找明奇博士复活。
 波布 从麦基继续向东，可以到达波布。
 给学校捐款与BUG 在波布给学校捐款一定数量后会在镇子中央给主角立个雕像，然而当你捐款数额超过了自己实际拥有的钱数，钱没扣，但雕像立起来了……
 伙伴以及复制战车BUG 在波布南边有一个房子，开着战车进去，然后走进屋里。这时屋里跑出来一个熊孩子，开上你的战车就到处乱逛。这熊孩子就是我们诱拐的目标，未来的机械师克里夫。走上前与他对话就可以让他加入了。
- 他开车开的挺快，可以去树那里堵他 克里夫上自己的战车，于是就有人想，如果自己先一步上车，会怎样？
- 于是就有人进行了实验。结果表明：
- 如果你先上车，克里夫会停在你面前，对话也得不到什么结果 如果克里夫先上车，参照前文 如果同时上车，结果……  两人都上车了，战车变成了两辆！当然这只是一个BUG，如果此时下车，复制的战车也会消失。这时，两辆车用的是同一套数据，这就造成一些判定也就可以被绕过。比如买一发特殊炮弹（铁弹）理应只能发射一枚炮弹的，但却发射两枚，于是就溢出，然后弹仓多了256枚特殊炮弹（没有名字的，价格还特别贵），然后卖掉，基本就不愁钱了。
+他开车开的挺快，可以去树那里堵他 克里夫上自己的战车，于是就有人想，如果自己先一步上车，会怎样？
+于是就有人进行了实验。结果表明：
+如果你先上车，克里夫会停在你面前，对话也得不到什么结果 如果克里夫先上车，参照前文 如果同时上车，结果…… 两人都上车了，战车变成了两辆！当然这只是一个BUG，如果此时下车，复制的战车也会消失。这时，两辆车用的是同一套数据，这就造成一些判定也就可以被绕过。比如买一发特殊炮弹（铁弹）理应只能发射一枚炮弹的，但却发射两枚，于是就溢出，然后弹仓多了256枚特殊炮弹（没有名字的，价格还特别贵），然后卖掉，基本就不愁钱了。
 水鬼 找到伙伴后，去波布进行一波修整，基本就可以开第二个BOSS了。需要进行的准备有：
- 对武器进行一次升级 买一个传真  说实话即使到现在我都感觉这游戏有些翻译很诡异，“传真”是一个传送装置（在第二部翻译叫“犬系统”），“金甲”被打烂会变成“金靴”……
- 去给伙伴租一辆战车 补充弹药和装甲片  第二个BOSS水鬼在波布东边的桥上出没，在上面多转转就能遇到。
+对武器进行一次升级 买一个传真 说实话即使到现在我都感觉这游戏有些翻译很诡异，“传真”是一个传送装置（在第二部翻译叫“犬系统”），“金甲”被打烂会变成“金靴”……
+去给伙伴租一辆战车 补充弹药和装甲片 第二个BOSS水鬼在波布东边的桥上出没，在上面多转转就能遇到。
 没什么要注意的，记得先打蛙人，后打水鬼。你可能在波布见到过有卖特种炮弹“榴弹”，估计本来按照设计应该是用来打蛙人的，但是实际发现好像根本用不到，直接主炮硬刚就行。
-打水鬼时，水鬼在HP比较低时有概率潜入水中恢复HP。这里要看运气了，一般是没问题，但要是你脸黑，也存在炮弹打完还没死的情况。</description>
-    </item>
-    
-    <item>
-      <title>我的理想——我的一篇日记</title>
-      <link>https://ntutn.top/posts/%E6%88%91%E7%9A%84%E7%90%86%E6%83%B3%E6%88%91%E7%9A%84%E4%B8%80%E7%AF%87%E6%97%A5%E8%AE%B0/</link>
-      <pubDate>Sun, 24 Mar 2019 03:11:37 +0800</pubDate>
-      
-      <guid>https://ntutn.top/posts/%E6%88%91%E7%9A%84%E7%90%86%E6%83%B3%E6%88%91%E7%9A%84%E4%B8%80%E7%AF%87%E6%97%A5%E8%AE%B0/</guid>
-      <description>我的理想——我的一篇日记 一不小心翻到了以前初中写的一篇日记，为了装X还是用英文写的，羞耻度爆表……
-Wednesday, December 26, 2012 Sunday
-Today we learned how to talk about future intentions. Iwant to be a programmer when I grow up. So how am I going to do it? I’m goingto study computer science and English when I have free time. It’s veryimportant. I learned Visual Basic. It was made by Microsoft. I can make someprogram now. On my last summer vacation, I made some programs, like notepad.</description>
+打水鬼时，水鬼在HP比较低时有概率潜入水中恢复HP。这里要看运气了，一般是没问题，但要是你脸黑，也存在炮弹打完还没死的情况。
+找到战车 虽然出租战车也挺舒服的，但是价格比较高，长期租很不合算（土豪随意）。出租战车收费是按照你租了多少战车，直接在你打怪得到的报酬中按照比例扣除。所以，在不用的时候，一定要按时归还，因为就算不用也是收钱的。
+准备：因为有人类战，买最好的人类装备，准备好恢复道具等。
+穿过水怪所在的大桥，就到了一家在偷偷排放污水的工厂。这可能与作品主题有点关系吧。有个大叔说不要踩花，虽然想吐槽他自己就站在花上，但这里想表现的大概是人们只注意自己身边的环境整洁，实质上并不注重环保。
+去找社长要战车，社长说要让花儿决定，然后，他拿出来花，“给，不给，给……”。虽然知道花儿都是三瓣的是因为画质问题，但果然还是好像吐槽。
+巨型炮 拉多的事情到这里基本就结束了，可以准备去下一个镇子了。
+要准备的有：
+弹药和装甲片的补充 购买8枚“铁弹” 巨型炮算是我们前期遇到的一个比较不好打的敌人了，攻防都很高，尤其你走到他面前基本就没弹药了。
+雷班纳每回合都用铁弹，机械师随意（就是打酱油的）。
+等铁弹用完，基本巨型炮的装备就全坏了，主炮解决掉就好了。
+不过经验倒是超级多，也算是挺合算的了。
+这时基本战车就坏的差不多了，回拉多修修车吧。</description>
     </item>
     
     <item>
@@ -1094,8 +1116,18 @@ D2 我被告知自己刚刚差不多是在做梦。想想也是，不符合逻�
 D3 我从迷蒙中清醒，脑子还是有点混乱，这里正在打仗，不对，按照规模来看，应该是两伙人在打群架，但狠辣的手法和波及到的人数占总人数的比例来看，这又是战争无疑，而且在我的观察中，我们好像并不是正义的一方。一个和尚追着我说我是他徒弟，我说自己是学生之类都会被他说是胡思乱想。不准我读书，只让我跟他学习功法。等我实在忍无可忍，就说你这两下子我也会，看他把木棍当做飞镖投向目标，我就拿起一根金针，精准地扔向他的一根白发并且成功命中。
 我就是有这样的能力，和尚就是应该有头发，这是理所当然的。
 D0 我睁开眼睛，拿起手机看了看时间，大概才六点。我不是一个初中生，我没有在配合神秘组织做实验，我不是奇怪的和尚的徒弟，我是一名大学生，最近在写一个个人博客的程序，最近买的蓝牙键盘刚刚到货。我昨晚睡得很晚，但现在一点都不困。我还在想前面这个嵌套的梦，我觉得正好可以用蓝牙键盘连接手机把这个梦写出来，发到博客里面。只是我又鬼使神差地说了一句：
- 溺死在零梦里吧。 我不以为然，认为这是自己吓自己，感觉自己不该这么中二才对，于是起床准备洗漱了……
- </description>
+溺死在零梦里吧。 我不以为然，认为这是自己吓自己，感觉自己不该这么中二才对，于是起床准备洗漱了……</description>
+    </item>
+    
+    <item>
+      <title>我的理想——我的一篇日记</title>
+      <link>https://ntutn.top/posts/%E6%88%91%E7%9A%84%E7%90%86%E6%83%B3%E6%88%91%E7%9A%84%E4%B8%80%E7%AF%87%E6%97%A5%E8%AE%B0/</link>
+      <pubDate>Sun, 24 Mar 2019 03:11:37 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E6%88%91%E7%9A%84%E7%90%86%E6%83%B3%E6%88%91%E7%9A%84%E4%B8%80%E7%AF%87%E6%97%A5%E8%AE%B0/</guid>
+      <description>我的理想——我的一篇日记 一不小心翻到了以前初中写的一篇日记，为了装X还是用英文写的，羞耻度爆表……
+Wednesday, December 26, 2012 Sunday
+Today we learned how to talk about future intentions. Iwant to be a programmer when I grow up. So how am I going to do it? I’m goingto study computer science and English when I have free time. It’s veryimportant. I learned Visual Basic. It was made by Microsoft. I can make someprogram now. On my last summer vacation, I made some programs, like notepad.</description>
     </item>
     
     <item>
@@ -1105,17 +1137,19 @@ D0 我睁开眼睛，拿起手机看了看时间，大概才六点。我不是�
       
       <guid>https://ntutn.top/posts/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/</guid>
       <description>人工智能考试前整理的，很详细，虽然实际考试还是有好些想不起来，但总归起了一些作用的。
- 第1章绪论 人工智能的起源 现代人工智能的起源是1956年的达特茅斯会议。
+第1章绪论 人工智能的起源 现代人工智能的起源是1956年的达特茅斯会议。
 参加者：麦卡锡、明斯基、香农、罗切斯特、纽厄尔、西蒙、萨缪尔、伯恩斯坦、摩尔、所罗门诺夫。
 会议的主要成就就是让人工智能成了一个独立的研究学科。
 定下来人工智能的英文名称是“Artificial Intelligence”
 知识的定义、概念、基本单位 定义 柏拉图在《泰阿泰德篇》中给出知识的定义，即“被证实的、真的和被相信的陈述”，简称知识的JTB（Justified True Belief）条件。
 然而，这个延续了两千多年的定义在1963年，被哲学家盖梯尔否定了。
 概念 知识的基本单位就是概念。
-概念的定义  概念的符号：即概念的名称，说明这个概念叫什么。 概念的内涵：即命题来表示，命题就是能判断真假的陈述句。 概念的外延：即经典集合来表示，用来说明与概念对应的事件对象是哪些。  概念的三个功能 指物功能：既指向客观世界的对象，表示客观世界的对象的可观测性，对象的客观的信仰，是指对相对于人或者仪器的知觉感知特性，依赖于人的主观感受。
+概念的定义 概念的符号：即概念的名称，说明这个概念叫什么。 概念的内涵：即命题来表示，命题就是能判断真假的陈述句。 概念的外延：即经典集合来表示，用来说明与概念对应的事件对象是哪些。 概念的三个功能 指物功能：既指向客观世界的对象，表示客观世界的对象的可观测性，对象的客观的信仰，是指对相对于人或者仪器的知觉感知特性，依赖于人的主观感受。
 指心功能：即指向人心智世界里的对象，代表心智世界里的对象表示。
 指名功能：指向认知世界或者符号世界表示对象的符号名称，这些符号名称组成各种语言。
-人工智能的三个流派  专注于实现AI指名功能的人工智能流派，称为符号主义。 专注于实现AI指心功能的人工智能流派，称为连接主义。 专注于实现AI指物功能的人工智能流派，称为行为主义。     概念的功能 人工智能的流派 观点 思想实验 挑战     指名功能 符号主义 指名对了，指物自然正确 图灵测试、中文屋实验 完全实现指名功能也不见得有智能。概念的组合爆炸问题；概念的组合悖论问题；经典概念在现实中很难获得。知识很难获取   指物功能 连接主义 发现大脑的结构及处理信息的机制，揭示人工智能的本质机理，进而在机器上实现响应模拟 缸中之脑实验 指心没有问题，指物也存在问题。   指心功能 行为主义 只要实现指物功能，就认为具有智能了 完美伪装者和斯巴达人 外在表现与内心没有联系，无法测试    第2章概念表示 概念定义及三个组成部分 知识由概念组成，概念是构成人类知识世界的基本单元。</description>
+人工智能的三个流派 专注于实现AI指名功能的人工智能流派，称为符号主义。 专注于实现AI指心功能的人工智能流派，称为连接主义。 专注于实现AI指物功能的人工智能流派，称为行为主义。 概念的功能 人工智能的流派 观点 思想实验 挑战 指名功能 符号主义 指名对了，指物自然正确 图灵测试、中文屋实验 完全实现指名功能也不见得有智能。概念的组合爆炸问题；概念的组合悖论问题；经典概念在现实中很难获得。知识很难获取 指物功能 连接主义 发现大脑的结构及处理信息的机制，揭示人工智能的本质机理，进而在机器上实现响应模拟 缸中之脑实验 指心没有问题，指物也存在问题。 指心功能 行为主义 只要实现指物功能，就认为具有智能了 完美伪装者和斯巴达人 外在表现与内心没有联系，无法测试 第2章概念表示 概念定义及三个组成部分 知识由概念组成，概念是构成人类知识世界的基本单元。
+经典概念理论 一个经典概念由三部分组成
+概念名 概念的内涵表示 概念的外延表示 概念名：偶数内涵：能被2整除的自然数外延：{0,2,5,8,...} 谓词符号化 两个奇数之和是奇数令F(x)：x是奇数。∀x∀y (F(x)⋀F(y)→F(x+y)) 任何人都会死，苏格拉底是人，因此，苏格拉底是会死的。令F(x)：x会死；M(x)：x是人；a：苏格拉底。(∀x(M(x)→F(x))⋀M(a))→F(a) 集合表示 一个由概念指称的所有对象组成的整体称为该概念的集合，这些概念是集合中的元素或成员。该概念名为集合的名称，该集合称为对应概念的外延表示，集合中的元素为对应概念的指称对象。</description>
     </item>
     
     <item>
@@ -1143,7 +1177,7 @@ what?没有登录但修改成功了？
       
       <guid>https://ntutn.top/posts/%E6%97%A5%E6%9C%9F%E7%9B%B8%E5%85%B3%E7%9A%84%E8%AE%A1%E7%AE%97/</guid>
       <description>今天（Sun, 16 Sep 2018 06:34:57 +0000）帮同学写一个日期相关的c++题，竟然耗费了很多时间，不得不感叹自己真是老了。 首先定义类用年月日(yy,mm,dd)存储日期 日期±天数，直接加减到“天”上，然后“多退少补”。 两日期之间相差天数。我是先计算两日前距元年元月元日的天数，然后直接相减。但我这么算，老是差几天，调试了好久，甚至我都一度打算放弃，直接调用上面做的日期加天数一天一天往上累加（可以预料到这会用多长时间）。 最后才检查出，竟然是判断闰年出错了，我把取余弄成了整除，闰年哭晕在厕所。 老了，真的老了。
- #include &amp;lt;iostream&amp;gt;using namespace std; class TMyDate { private: int yy,mm,dd; bool isrn(int year)//判断闰年  { if((year%4==0&amp;amp;&amp;amp;year%100!=0)||(year%400==0)) { return true; } return false; } int getDaysofmonth(int y,int m)//某年某月有多少天  { switch(m) { case 1: case 3: case 5: case 7: case 8: case 10: case 12: return 31; case 2: if(isrn(y)){ return 29; } return 28; default: return 30; } } int getTotaldays(int y,int m,int d){//某年月日距元年元月元日天数  int sum=0; sum+=d; m--; while(m--){ sum+=getDaysofmonth(y,m); } y--; while(y--){ sum+=isrn(y)?</description>
+#include &amp;lt;iostream&amp;gt; using namespace std; class TMyDate { private: int yy,mm,dd; bool isrn(int year)//判断闰年 { if((year%4==0&amp;amp;&amp;amp;year%100!=0)||(year%400==0)) { return true; } return false; } int getDaysofmonth(int y,int m)//某年某月有多少天 { switch(m) { case 1: case 3: case 5: case 7: case 8: case 10: case 12: return 31; case 2: if(isrn(y)){ return 29; } return 28; default: return 30; } } int getTotaldays(int y,int m,int d){//某年月日距元年元月元日天数 int sum=0; sum+=d; m--; while(m--){ sum+=getDaysofmonth(y,m); } y--; while(y--){ sum+=isrn(y)?</description>
     </item>
     
     <item>
@@ -1153,8 +1187,8 @@ what?没有登录但修改成功了？
       
       <guid>https://ntutn.top/posts/%E6%A2%A62018%E5%B9%B48%E6%9C%8819%E6%97%A5/</guid>
       <description>有点意思的梦。 据说人每天都做梦，很多人说自己不做梦是因为在醒后的一分钟内就忘记了梦的内容，也忘记了自己忘记过什么。这也解释了，人记住的梦大多是噩梦的现象，因为做好梦刺激不够，这一分钟不能形成足够清冽的印象。
- So，我是盗梦空间看多了吗？为啥做个梦就非得这么惊心动魄？
- 2018年8月19日
+So，我是盗梦空间看多了吗？为啥做个梦就非得这么惊心动魄？
+2018年8月19日
 做了个梦，梦里有个非常牛逼的人，他通过一些细节发现了世界逻辑上不能自洽的问题，于是他认为自己身陷梦境，决定破解这个梦境回到真实世界。
 他成功了。
 我失眠了……</description>

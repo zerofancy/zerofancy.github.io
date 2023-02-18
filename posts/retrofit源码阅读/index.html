@@ -35,7 +35,6 @@
 
 
 
-
   
 
 
@@ -48,11 +47,11 @@
       <script src="/js/toc.js"></script>
     
     <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
-<link rel="stylesheet" href="/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
+<link rel="stylesheet" href="/scss/journal.scss" integrity="" media="screen">
 
 
 
-<link rel="stylesheet" href="/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
+<link rel="stylesheet" href="/scss/dark-mode.scss" integrity="" media="screen">
 
 
 <link rel="stylesheet"
@@ -758,27 +757,27 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
                     <p>Retrofit是一个相当简洁的网络请求框架，其本质上只是对Okhttp的封装，实际上底层还是用Okhttp来执行网络请求。这两天终于比较闲一些，于是又想起了被我束之高阁的前辈的<a href="https://www.jianshu.com/p/5fa78ef8e096">武功秘籍</a>。</p>
 <h2 id="retrofit的使用">Retrofit的使用</h2>
 <p>参考官方例子，定义接口并使用</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">  <span style="color:#8b008b;font-weight:bold">public</span> <span style="color:#8b008b;font-weight:bold">interface</span> <span style="color:#008b45;font-weight:bold">GitHub</span> {
-    <span style="color:#707a7c">@GET</span>(<span style="color:#cd5555">&#34;/repos/{owner}/{repo}/contributors&#34;</span>)
-    Call&lt;List&lt;Contributor&gt;&gt; contributors(<span style="color:#707a7c">@Path</span>(<span style="color:#cd5555">&#34;owner&#34;</span>) String owner, <span style="color:#707a7c">@Path</span>(<span style="color:#cd5555">&#34;repo&#34;</span>) String repo);
-  }
-
-    <span style="color:#228b22">// Create a very simple REST adapter which points the GitHub API.
-</span><span style="color:#228b22"></span>    Retrofit retrofit =
-        new Retrofit.Builder()
-            .baseUrl(API_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build();
-
-    <span style="color:#228b22">// Create an instance of our GitHub API interface.
-</span><span style="color:#228b22"></span>    GitHub github = retrofit.create(GitHub.<span style="color:#8b008b;font-weight:bold">class</span>);
-
-    <span style="color:#228b22">// Create a call instance for looking up Retrofit contributors.
-</span><span style="color:#228b22"></span>    Call&lt;List&lt;Contributor&gt;&gt; call = github.contributors(<span style="color:#cd5555">&#34;square&#34;</span>, <span style="color:#cd5555">&#34;retrofit&#34;</span>);
-
-    <span style="color:#228b22">// Fetch and print a list of the contributors to the library.
-</span><span style="color:#228b22"></span>    List&lt;Contributor&gt; contributors = call.execute().body();
-</code></pre></div><h2 id="源码阅读">源码阅读</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span>  <span style="color:#8b008b;font-weight:bold">public</span> <span style="color:#8b008b;font-weight:bold">interface</span> <span style="color:#008b45;font-weight:bold">GitHub</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#707a7c">@GET</span>(<span style="color:#cd5555">&#34;/repos/{owner}/{repo}/contributors&#34;</span>)
+</span></span><span style="display:flex;"><span>    Call&lt;List&lt;Contributor&gt;&gt; contributors(<span style="color:#707a7c">@Path</span>(<span style="color:#cd5555">&#34;owner&#34;</span>) String owner, <span style="color:#707a7c">@Path</span>(<span style="color:#cd5555">&#34;repo&#34;</span>) String repo);
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#228b22">// Create a very simple REST adapter which points the GitHub API.
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    Retrofit retrofit =
+</span></span><span style="display:flex;"><span>        new <span style="color:#008b45;font-weight:bold">Retrofit</span>.Builder()
+</span></span><span style="display:flex;"><span>            .baseUrl(API_URL)
+</span></span><span style="display:flex;"><span>            .addConverterFactory(<span style="color:#008b45;font-weight:bold">GsonConverterFactory</span>.create())
+</span></span><span style="display:flex;"><span>            .build();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#228b22">// Create an instance of our GitHub API interface.
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    GitHub github = retrofit.create(<span style="color:#008b45;font-weight:bold">GitHub</span>.<span style="color:#8b008b;font-weight:bold">class</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#228b22">// Create a call instance for looking up Retrofit contributors.
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    Call&lt;List&lt;Contributor&gt;&gt; call = github.contributors(<span style="color:#cd5555">&#34;square&#34;</span>, <span style="color:#cd5555">&#34;retrofit&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#228b22">// Fetch and print a list of the contributors to the library.
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    List&lt;Contributor&gt; contributors = call.execute().body();
+</span></span></code></pre></div><h2 id="源码阅读">源码阅读</h2>
 <p>首先来到梦的开始<code>retrofit2.Retrofit#create</code>，可以看到这里是个动态代理，后续的处理交给<code>retrofit2.ServiceMethod#parseAnnotations</code>。</p>
 <p><img src="https://images.ntutn.top/2022/06/f5567d8937f9eb382f6f298e8221998f.png" alt="image-20220607204925036"></p>
 <p>而后ServiceMethod中解析注解中的信息</p>
@@ -804,24 +803,24 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <h3 id="adapterconverter的设计思路如果想要实现将okhttp也变成可替换的应该如何设计代码">adapter，converter的设计思路，如果想要实现将okhttp也变成可替换的应该如何设计代码？</h3>
 <p>Retrofit对象作为context，维护了各种所需参数和构造方法（factory）。在后续实际需要的位置创建出adapter。如可以定义NetlibAdapterFactory，RequestFactory中用到Okhttp的地方替换为由retrofit.netlibAdapterFactory创建。</p>
 <h3 id="invocationhandler与泛型的使用">InvocationHandler与泛型的使用？</h3>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#008b45;font-weight:bold">StubHelper</span> {
-    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#8b008b;font-weight:bold">val</span> TAG = <span style="color:#cd5555">&#34;StubHelper&#34;</span>
-
-    <span style="color:#8b008b;font-weight:bold">fun</span> &lt;<span style="color:#008b45;font-weight:bold">T</span>&gt; <span style="color:#008b45">create</span>(service: Class&lt;T&gt;): T {
-        <span style="color:#8b008b;font-weight:bold">return</span> Proxy.newProxyInstance(
-            service.classLoader, arrayOf&lt;Class&lt;*&gt;&gt;(service),
-            <span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#a61717;background-color:#e3d2d2">: </span><span style="color:#008b45;font-weight:bold">InvocationHandler</span> {
-                <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> emptyArgs = arrayOfNulls&lt;Any&gt;(<span style="color:#b452cd">0</span>)
-
-                <span style="color:#707a7c">@Throws</span>(Throwable::<span style="color:#8b008b;font-weight:bold">class</span>)
-                <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">invoke</span>(proxy: Any, method: Method, args: Array&lt;Any&gt;?): Any? {
-                    Log.d(TAG, method.toGenericString())
-                    <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">null</span>
-                }
-            }) <span style="color:#8b008b;font-weight:bold">as</span> T
-    }
-}
-</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#008b45;font-weight:bold">StubHelper</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#8b008b;font-weight:bold">val</span> TAG = <span style="color:#cd5555">&#34;StubHelper&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">fun</span> &lt;<span style="color:#008b45;font-weight:bold">T</span>&gt; <span style="color:#008b45">create</span>(service: Class&lt;T&gt;): T {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#008b45;font-weight:bold">Proxy</span>.newProxyInstance(
+</span></span><span style="display:flex;"><span>            service.classLoader, arrayOf&lt;Class&lt;*&gt;&gt;(service),
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#a61717;background-color:#e3d2d2">: </span><span style="color:#008b45;font-weight:bold">InvocationHandler</span> {
+</span></span><span style="display:flex;"><span>                <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> emptyArgs = arrayOfNulls&lt;Any&gt;(<span style="color:#b452cd">0</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                <span style="color:#707a7c">@Throws</span>(Throwable::<span style="color:#8b008b;font-weight:bold">class</span>)
+</span></span><span style="display:flex;"><span>                <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">invoke</span>(proxy: Any, method: Method, args: Array&lt;Any&gt;?): Any? {
+</span></span><span style="display:flex;"><span>                    <span style="color:#008b45;font-weight:bold">Log</span>.d(TAG, method.toGenericString())
+</span></span><span style="display:flex;"><span>                    <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">null</span>
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>            }) <span style="color:#8b008b;font-weight:bold">as</span> T
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div>
                     
                     <HR width="100%" id="EOF">
 		    <p style="color:#777;">最后修改于 2022-06-09</p>

@@ -35,7 +35,6 @@
 
 
 
-
   
 
 
@@ -48,11 +47,11 @@
       <script src="/js/toc.js"></script>
     
     <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
-<link rel="stylesheet" href="/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
+<link rel="stylesheet" href="/scss/journal.scss" integrity="" media="screen">
 
 
 
-<link rel="stylesheet" href="/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
+<link rel="stylesheet" href="/scss/dark-mode.scss" integrity="" media="screen">
 
 
 <link rel="stylesheet"
@@ -430,140 +429,140 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 老了，真的老了。</p>
 </blockquote>
 <!-- raw HTML omitted -->
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;iostream&gt;</span><span style="color:#1e889b">
-</span><span style="color:#1e889b"></span><span style="color:#8b008b;font-weight:bold">using</span> <span style="color:#8b008b;font-weight:bold">namespace</span> std;
-<span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">TMyDate</span>
-{
-<span style="color:#8b008b;font-weight:bold">private</span>:
-    <span style="color:#00688b;font-weight:bold">int</span> yy,mm,dd;
-    <span style="color:#00688b;font-weight:bold">bool</span> <span style="color:#008b45">isrn</span>(<span style="color:#00688b;font-weight:bold">int</span> year)<span style="color:#228b22">//判断闰年
-</span><span style="color:#228b22"></span>    {
-        <span style="color:#8b008b;font-weight:bold">if</span>((year%<span style="color:#b452cd">4</span>==<span style="color:#b452cd">0</span>&amp;&amp;year%<span style="color:#b452cd">100</span>!=<span style="color:#b452cd">0</span>)||(year%<span style="color:#b452cd">400</span>==<span style="color:#b452cd">0</span>))
-        {
-            <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#658b00">true</span>;
-        }
-        <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#658b00">false</span>;
-    }
-    <span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">getDaysofmonth</span>(<span style="color:#00688b;font-weight:bold">int</span> y,<span style="color:#00688b;font-weight:bold">int</span> m)<span style="color:#228b22">//某年某月有多少天
-</span><span style="color:#228b22"></span>    {
-        <span style="color:#8b008b;font-weight:bold">switch</span>(m)
-        {
-        <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">1</span>:
-        <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">3</span>:
-        <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">5</span>:
-        <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">7</span>:
-        <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">8</span>:
-        <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">10</span>:
-        <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">12</span>:
-            <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">31</span>;
-        <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">2</span>:
-            <span style="color:#8b008b;font-weight:bold">if</span>(isrn(y)){
-                <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">29</span>;
-            }
-            <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">28</span>;
-        <span style="color:#8b008b;font-weight:bold">default</span>:
-            <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">30</span>;
-        }
-    }
-    <span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">getTotaldays</span>(<span style="color:#00688b;font-weight:bold">int</span> y,<span style="color:#00688b;font-weight:bold">int</span> m,<span style="color:#00688b;font-weight:bold">int</span> d){<span style="color:#228b22">//某年月日距元年元月元日天数
-</span><span style="color:#228b22"></span>        <span style="color:#00688b;font-weight:bold">int</span> sum=<span style="color:#b452cd">0</span>;
-        sum+=d;
-        m--;
-        <span style="color:#8b008b;font-weight:bold">while</span>(m--){
-            sum+=getDaysofmonth(y,m);
-        }
-        y--;
-        <span style="color:#8b008b;font-weight:bold">while</span>(y--){
-            sum+=isrn(y)?<span style="color:#b452cd">366</span>:<span style="color:#b452cd">365</span>;
-        }
-        <span style="color:#8b008b;font-weight:bold">return</span> sum;
-    }
-<span style="color:#8b008b;font-weight:bold">public</span>:
-    TMyDate()
-    {
-        yy=<span style="color:#b452cd">1900</span>;
-        mm=<span style="color:#b452cd">1</span>;
-        dd=<span style="color:#b452cd">1</span>;
-    }
-    TMyDate(<span style="color:#00688b;font-weight:bold">int</span> y,<span style="color:#00688b;font-weight:bold">int</span> m,<span style="color:#00688b;font-weight:bold">int</span> d)
-    {
-        yy=y;
-        mm=m;
-        dd=d;
-    }
-    <span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">getYear</span>(){
-        <span style="color:#8b008b;font-weight:bold">return</span> yy;
-    }
-    <span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">getMonth</span>(){
-        <span style="color:#8b008b;font-weight:bold">return</span> mm;
-    }
-    <span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">getDay</span>(){
-        <span style="color:#8b008b;font-weight:bold">return</span> dd;
-    }
-    TMyDate <span style="color:#8b008b;font-weight:bold">operator</span>+(<span style="color:#00688b;font-weight:bold">int</span> d){<span style="color:#228b22">//日期加天数
-</span><span style="color:#228b22"></span>        <span style="color:#00688b;font-weight:bold">int</span> tmp_d=dd;
-        <span style="color:#00688b;font-weight:bold">int</span> tmp_m=mm;
-        <span style="color:#00688b;font-weight:bold">int</span> tmp_y=yy;
-        tmp_d+=d;
-        <span style="color:#8b008b;font-weight:bold">while</span>(<span style="color:#658b00">true</span>){
-            <span style="color:#8b008b;font-weight:bold">if</span>(tmp_d&gt;getDaysofmonth(tmp_y,tmp_m)){
-                tmp_m++;
-                tmp_d-=getDaysofmonth(tmp_y,tmp_m);
-                <span style="color:#8b008b;font-weight:bold">continue</span>;
-            }
-            <span style="color:#8b008b;font-weight:bold">if</span>(tmp_m&gt;<span style="color:#b452cd">12</span>){
-                tmp_y++;
-                tmp_m-=<span style="color:#b452cd">12</span>;
-                <span style="color:#8b008b;font-weight:bold">continue</span>;
-            }
-            <span style="color:#8b008b;font-weight:bold">break</span>;
-        }
-        <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#008b45">TMyDate</span>(tmp_y,tmp_m,tmp_d);
-    }
-    TMyDate <span style="color:#8b008b;font-weight:bold">operator</span>-(<span style="color:#00688b;font-weight:bold">int</span> d){<span style="color:#228b22">//日期减天数
-</span><span style="color:#228b22"></span>        <span style="color:#00688b;font-weight:bold">int</span> tmp_d=dd;
-        <span style="color:#00688b;font-weight:bold">int</span> tmp_m=mm;
-        <span style="color:#00688b;font-weight:bold">int</span> tmp_y=yy;
-        tmp_d-=d;
-        <span style="color:#8b008b;font-weight:bold">while</span>(<span style="color:#658b00">true</span>){
-            <span style="color:#8b008b;font-weight:bold">if</span>(tmp_d&lt;=<span style="color:#b452cd">0</span>){
-                tmp_m--;
-                tmp_d+=getDaysofmonth(tmp_y,tmp_m);
-                <span style="color:#8b008b;font-weight:bold">continue</span>;
-            }
-            <span style="color:#8b008b;font-weight:bold">if</span>(tmp_m&lt;=<span style="color:#b452cd">0</span>){
-                tmp_y--;
-                tmp_m+=<span style="color:#b452cd">12</span>;
-                <span style="color:#8b008b;font-weight:bold">continue</span>;
-            }
-            <span style="color:#8b008b;font-weight:bold">break</span>;
-        }
-        <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#008b45">TMyDate</span>(tmp_y,tmp_m,tmp_d);
-    }
-    <span style="color:#00688b;font-weight:bold">int</span> <span style="color:#8b008b;font-weight:bold">operator</span>-(TMyDate&amp;d){<span style="color:#228b22">//日期与日期相距天数
-</span><span style="color:#228b22"></span>        <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#008b45">getTotaldays</span>(yy,mm,dd)-getTotaldays(d.getYear(),d.getMonth(),d.getDay());
-    }
-    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">showInfo</span>(){
-        cout&lt;&lt;yy&lt;&lt;<span style="color:#cd5555">&#39;-&#39;</span>&lt;&lt;mm&lt;&lt;<span style="color:#cd5555">&#39;-&#39;</span>&lt;&lt;dd&lt;&lt;endl;
-    }
-};
-<span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">main</span>()
-{
-    TMyDate tmp1(<span style="color:#b452cd">2018</span>,<span style="color:#b452cd">9</span>,<span style="color:#b452cd">16</span>);
-    TMyDate tmp2(<span style="color:#b452cd">1998</span>,<span style="color:#b452cd">6</span>,<span style="color:#b452cd">4</span>);
-    TMyDate tmp3;
-    tmp1.showInfo();
-    tmp2.showInfo();
-    tmp3=tmp1-<span style="color:#b452cd">25</span>;
-    tmp3.showInfo();
-    tmp3=tmp1+<span style="color:#b452cd">25</span>;
-    tmp3.showInfo();
-    cout&lt;&lt;tmp1-tmp2&lt;&lt;endl;
-    tmp1.showInfo();
-    tmp2.showInfo();
-    <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>;
-}
-</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;iostream&gt;</span><span style="color:#1e889b">
+</span></span></span><span style="display:flex;"><span><span style="color:#1e889b"></span><span style="color:#8b008b;font-weight:bold">using</span> <span style="color:#8b008b;font-weight:bold">namespace</span> std;
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">TMyDate</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">private</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> yy,mm,dd;
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">bool</span> <span style="color:#008b45">isrn</span>(<span style="color:#00688b;font-weight:bold">int</span> year)<span style="color:#228b22">//判断闰年
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span>((year%<span style="color:#b452cd">4</span>==<span style="color:#b452cd">0</span>&amp;&amp;year%<span style="color:#b452cd">100</span>!=<span style="color:#b452cd">0</span>)||(year%<span style="color:#b452cd">400</span>==<span style="color:#b452cd">0</span>))
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#658b00">true</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#658b00">false</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">getDaysofmonth</span>(<span style="color:#00688b;font-weight:bold">int</span> y,<span style="color:#00688b;font-weight:bold">int</span> m)<span style="color:#228b22">//某年某月有多少天
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">switch</span>(m)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">1</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">3</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">5</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">7</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">8</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">10</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">12</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">31</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">2</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">if</span>(isrn(y)){
+</span></span><span style="display:flex;"><span>                <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">29</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">28</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">default</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">30</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">getTotaldays</span>(<span style="color:#00688b;font-weight:bold">int</span> y,<span style="color:#00688b;font-weight:bold">int</span> m,<span style="color:#00688b;font-weight:bold">int</span> d){<span style="color:#228b22">//某年月日距元年元月元日天数
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>        <span style="color:#00688b;font-weight:bold">int</span> sum=<span style="color:#b452cd">0</span>;
+</span></span><span style="display:flex;"><span>        sum+=d;
+</span></span><span style="display:flex;"><span>        m--;
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">while</span>(m--){
+</span></span><span style="display:flex;"><span>            sum+=getDaysofmonth(y,m);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        y--;
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">while</span>(y--){
+</span></span><span style="display:flex;"><span>            sum+=isrn(y)?<span style="color:#b452cd">366</span>:<span style="color:#b452cd">365</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span> sum;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">public</span>:
+</span></span><span style="display:flex;"><span>    TMyDate()
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        yy=<span style="color:#b452cd">1900</span>;
+</span></span><span style="display:flex;"><span>        mm=<span style="color:#b452cd">1</span>;
+</span></span><span style="display:flex;"><span>        dd=<span style="color:#b452cd">1</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    TMyDate(<span style="color:#00688b;font-weight:bold">int</span> y,<span style="color:#00688b;font-weight:bold">int</span> m,<span style="color:#00688b;font-weight:bold">int</span> d)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        yy=y;
+</span></span><span style="display:flex;"><span>        mm=m;
+</span></span><span style="display:flex;"><span>        dd=d;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">getYear</span>(){
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span> yy;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">getMonth</span>(){
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span> mm;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">getDay</span>(){
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span> dd;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    TMyDate <span style="color:#8b008b;font-weight:bold">operator</span>+(<span style="color:#00688b;font-weight:bold">int</span> d){<span style="color:#228b22">//日期加天数
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>        <span style="color:#00688b;font-weight:bold">int</span> tmp_d=dd;
+</span></span><span style="display:flex;"><span>        <span style="color:#00688b;font-weight:bold">int</span> tmp_m=mm;
+</span></span><span style="display:flex;"><span>        <span style="color:#00688b;font-weight:bold">int</span> tmp_y=yy;
+</span></span><span style="display:flex;"><span>        tmp_d+=d;
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">while</span>(<span style="color:#658b00">true</span>){
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">if</span>(tmp_d&gt;getDaysofmonth(tmp_y,tmp_m)){
+</span></span><span style="display:flex;"><span>                tmp_m++;
+</span></span><span style="display:flex;"><span>                tmp_d-=getDaysofmonth(tmp_y,tmp_m);
+</span></span><span style="display:flex;"><span>                <span style="color:#8b008b;font-weight:bold">continue</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">if</span>(tmp_m&gt;<span style="color:#b452cd">12</span>){
+</span></span><span style="display:flex;"><span>                tmp_y++;
+</span></span><span style="display:flex;"><span>                tmp_m-=<span style="color:#b452cd">12</span>;
+</span></span><span style="display:flex;"><span>                <span style="color:#8b008b;font-weight:bold">continue</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#008b45">TMyDate</span>(tmp_y,tmp_m,tmp_d);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    TMyDate <span style="color:#8b008b;font-weight:bold">operator</span>-(<span style="color:#00688b;font-weight:bold">int</span> d){<span style="color:#228b22">//日期减天数
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>        <span style="color:#00688b;font-weight:bold">int</span> tmp_d=dd;
+</span></span><span style="display:flex;"><span>        <span style="color:#00688b;font-weight:bold">int</span> tmp_m=mm;
+</span></span><span style="display:flex;"><span>        <span style="color:#00688b;font-weight:bold">int</span> tmp_y=yy;
+</span></span><span style="display:flex;"><span>        tmp_d-=d;
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">while</span>(<span style="color:#658b00">true</span>){
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">if</span>(tmp_d&lt;=<span style="color:#b452cd">0</span>){
+</span></span><span style="display:flex;"><span>                tmp_m--;
+</span></span><span style="display:flex;"><span>                tmp_d+=getDaysofmonth(tmp_y,tmp_m);
+</span></span><span style="display:flex;"><span>                <span style="color:#8b008b;font-weight:bold">continue</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">if</span>(tmp_m&lt;=<span style="color:#b452cd">0</span>){
+</span></span><span style="display:flex;"><span>                tmp_y--;
+</span></span><span style="display:flex;"><span>                tmp_m+=<span style="color:#b452cd">12</span>;
+</span></span><span style="display:flex;"><span>                <span style="color:#8b008b;font-weight:bold">continue</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#008b45">TMyDate</span>(tmp_y,tmp_m,tmp_d);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> <span style="color:#8b008b;font-weight:bold">operator</span>-(TMyDate&amp;d){<span style="color:#228b22">//日期与日期相距天数
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>        <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#008b45">getTotaldays</span>(yy,mm,dd)-getTotaldays(d.getYear(),d.getMonth(),d.getDay());
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">showInfo</span>(){
+</span></span><span style="display:flex;"><span>        cout&lt;&lt;yy&lt;&lt;<span style="color:#cd5555">&#39;-&#39;</span>&lt;&lt;mm&lt;&lt;<span style="color:#cd5555">&#39;-&#39;</span>&lt;&lt;dd&lt;&lt;endl;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">main</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    TMyDate tmp1(<span style="color:#b452cd">2018</span>,<span style="color:#b452cd">9</span>,<span style="color:#b452cd">16</span>);
+</span></span><span style="display:flex;"><span>    TMyDate tmp2(<span style="color:#b452cd">1998</span>,<span style="color:#b452cd">6</span>,<span style="color:#b452cd">4</span>);
+</span></span><span style="display:flex;"><span>    TMyDate tmp3;
+</span></span><span style="display:flex;"><span>    tmp1.showInfo();
+</span></span><span style="display:flex;"><span>    tmp2.showInfo();
+</span></span><span style="display:flex;"><span>    tmp3=tmp1-<span style="color:#b452cd">25</span>;
+</span></span><span style="display:flex;"><span>    tmp3.showInfo();
+</span></span><span style="display:flex;"><span>    tmp3=tmp1+<span style="color:#b452cd">25</span>;
+</span></span><span style="display:flex;"><span>    tmp3.showInfo();
+</span></span><span style="display:flex;"><span>    cout&lt;&lt;tmp1-tmp2&lt;&lt;endl;
+</span></span><span style="display:flex;"><span>    tmp1.showInfo();
+</span></span><span style="display:flex;"><span>    tmp2.showInfo();
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div>
                     
                     <HR width="100%" id="EOF">
 		    <p style="color:#777;">最后修改于 2018-09-16</p>
