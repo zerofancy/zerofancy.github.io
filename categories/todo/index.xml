@@ -14,10 +14,11 @@
       <pubDate>Sun, 06 Nov 2022 07:01:29 +0800</pubDate>
       
       <guid>https://ntutn.top/project/wanandroid%E5%AE%A2%E6%88%B7%E7%AB%AF/</guid>
-      <description>WanAndroid 是一个我很喜欢的安卓方面的技术分享站点，站长是个安卓方面的大佬，看介绍这大佬还是我们公司里的，虽然我这菜鸡是没有和他打交道的机会。
+      <description>
+WanAndroid 是一个我很喜欢的安卓方面的技术分享站点，站长是个安卓方面的大佬，看介绍这大佬还是我们公司里的，虽然我这菜鸡是没有和他打交道的机会。
 WanAndroid对外提供了站内各个模块的API，鼓励大家自己写个APP，作为一个宝贵的练手机会，我也难免手痒，尝试自己实现了下。
 地址： https://github.com/zerofancy/WandroidZ
-  banner Webview文章浏览 首页置顶文章 首页推荐文章 登陆  </description>
+banner Webview文章浏览 首页置顶文章 首页推荐文章 登陆 </description>
     </item>
     
     <item>
@@ -32,7 +33,7 @@ WanAndroid对外提供了站内各个模块的API，鼓励大家自己写个APP�
 类似安卓，我在后台线程进行网络请求，主线程进行结果的分发处理。
 Message Message 就是消息对象。我对消息对象的定义如下：
 data class Message( val what: Int, val arg: Int = -1, val payload: Any? = null, var time: Long = 0L, var target: Handler? = null, val callback: Runnable? = null ) 要理解整个消息机制，还是得先看这几个参数。
- what 表示这是一条什么样的消息。一个 Handler 中可能定义和处理多种不同的消息，通过这个参数进行区分。 arg、payload 表示消息携带的参数。 arg 是简单的， Int 类型的参数，而 payload 则用于传递复杂对象。按需使用 time 表示 Message 预期被处理的时间。只有到了这个时间之后消息才可以被取出处理。这对应我们经常用的 handler.postDelayed 方法 target 处理消息的 Handler callback 消息处理时执行特定回调。实际上和继承相关 Handler 并在相关方法中处理消息是等同的  MessageQueue 记得安卓中有个比较经典和基础的问题，主线程实际执行了 Looper.</description>
+what 表示这是一条什么样的消息。一个 Handler 中可能定义和处理多种不同的消息，通过这个参数进行区分。 arg、payload 表示消息携带的参数。 arg 是简单的， Int 类型的参数，而 payload 则用于传递复杂对象。按需使用 time 表示 Message 预期被处理的时间。只有到了这个时间之后消息才可以被取出处理。这对应我们经常用的 handler.postDelayed 方法 target 处理消息的 Handler callback 消息处理时执行特定回调。实际上和继承相关 Handler 并在相关方法中处理消息是等同的 MessageQueue 记得安卓中有个比较经典和基础的问题，主线程实际执行了 Looper.</description>
     </item>
     
     <item>
@@ -43,7 +44,7 @@ data class Message( val what: Int, val arg: Int = -1, val payload: Any? = null, 
       <guid>https://ntutn.top/posts/retrofit%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/</guid>
       <description>Retrofit是一个相当简洁的网络请求框架，其本质上只是对Okhttp的封装，实际上底层还是用Okhttp来执行网络请求。这两天终于比较闲一些，于是又想起了被我束之高阁的前辈的武功秘籍。
 Retrofit的使用 参考官方例子，定义接口并使用
-public interface GitHub { @GET(&amp;#34;/repos/{owner}/{repo}/contributors&amp;#34;) Call&amp;lt;List&amp;lt;Contributor&amp;gt;&amp;gt; contributors(@Path(&amp;#34;owner&amp;#34;) String owner, @Path(&amp;#34;repo&amp;#34;) String repo); } // Create a very simple REST adapter which points the GitHub API.  Retrofit retrofit = new Retrofit.Builder() .baseUrl(API_URL) .addConverterFactory(GsonConverterFactory.create()) .build(); // Create an instance of our GitHub API interface.  GitHub github = retrofit.create(GitHub.class); // Create a call instance for looking up Retrofit contributors.  Call&amp;lt;List&amp;lt;Contributor&amp;gt;&amp;gt; call = github.contributors(&amp;#34;square&amp;#34;, &amp;#34;retrofit&amp;#34;); // Fetch and print a list of the contributors to the library.</description>
+public interface GitHub { @GET(&amp;#34;/repos/{owner}/{repo}/contributors&amp;#34;) Call&amp;lt;List&amp;lt;Contributor&amp;gt;&amp;gt; contributors(@Path(&amp;#34;owner&amp;#34;) String owner, @Path(&amp;#34;repo&amp;#34;) String repo); } // Create a very simple REST adapter which points the GitHub API. Retrofit retrofit = new Retrofit.Builder() .baseUrl(API_URL) .addConverterFactory(GsonConverterFactory.create()) .build(); // Create an instance of our GitHub API interface. GitHub github = retrofit.create(GitHub.class); // Create a call instance for looking up Retrofit contributors. Call&amp;lt;List&amp;lt;Contributor&amp;gt;&amp;gt; call = github.contributors(&amp;#34;square&amp;#34;, &amp;#34;retrofit&amp;#34;); // Fetch and print a list of the contributors to the library.</description>
     </item>
     
     <item>
@@ -58,9 +59,9 @@ public interface GitHub { @GET(&amp;#34;/repos/{owner}/{repo}/contributors&amp;#
 这里用的是Unsplash提供的随机壁纸服务，壁纸还是很合我的胃口的。图中URL：https://source.unsplash.com/random/3584x2240。这里的“3584x2240”根据你的显示器分辨率填写。
 设置壁纸 虽然“自动操作”的资源库中有“设置壁纸”这个能力，但我实际测试发现它只能改当前屏幕的壁纸，对于我用双屏的来说就比较难受了。因而这里要用Apple Script来实现：
 图中的脚本为：
-on run {input, parameters} set theFile to first item of input set filename to the POSIX path of theFile tell application &amp;quot;System Events&amp;quot; tell every desktop set picture to filename end tell end tell return filename end run 清理垃圾 这个简单，删除所有不是今天创建的图片就行了。
+on run {input, parameters}set theFile to first item of inputset filename to the POSIX path of theFiletell application &amp;#34;System Events&amp;#34;tell every desktopset picture to filenameend tellend tellreturn filenameend run 清理垃圾 这个简单，删除所有不是今天创建的图片就行了。
 每天执行 保存后，打开日程应用，可以看到出现了一条刚刚添加的日程。使用Command+E快捷键修改日程，“重复”改为每天。最终结果：
- 最后效果
+最后效果
 摸鱼结束，我去搬砖了。</description>
     </item>
     
@@ -94,8 +95,7 @@ telnet 192.168.1.1 成功后执行sh。然后uname -a看下。这里我就不记
 回到我这个Issue，虽然从业务逻辑的角度看用户操作后这个变量是不会为null的，但仍然应该有判空，有兜底的逻辑，这样你的程序才会更加健壮。
 Kotlin的空安全 与Java不同，Kotlin的类型系统在设计时就考虑了变量是否可空1，其用一个?表示变量是否能为空。
 var a: String = &amp;#34;abc&amp;#34; // 默认情况下，常规初始化意味着非空 a = null // 编译错误 var b: String? = &amp;#34;abc&amp;#34; // 可以设置为空 b = null // ok print(b) 判空 Kotlin有一定的类型推断能力，判空后进行赋值操作前能识别出变量是非空的类型。
-val b: String? = &amp;#34;Kotlin&amp;#34; if (b != null &amp;amp;&amp;amp; b.length &amp;gt; 0) { print(&amp;#34;String of length ${b.length}&amp;#34;) } else { print(&amp;#34;Empty string&amp;#34;) } 安全调用 Kotlin中提供了?.来安全调用一个可能为空的变量。b?.test()相当于if (b != null) b.test()。
-值得注意的是，这个操作符是可以和赋值语句一起用的。如：</description>
+val b: String? = &amp;#34;Kotlin&amp;#34; if (b != null &amp;amp;&amp;amp; b.length &amp;gt; 0) { print(&amp;#34;String of length ${b.length}&amp;#34;) } else { print(&amp;#34;Empty string&amp;#34;) } 安全调用 Kotlin中提供了?.来安全调用一个可能为空的变量。b?.test()相当于if (b != null) b.test()。</description>
     </item>
     
     <item>
@@ -104,8 +104,8 @@ val b: String? = &amp;#34;Kotlin&amp;#34; if (b != null &amp;amp;&amp;amp; b.len
       <pubDate>Wed, 27 Mar 2019 03:11:37 +0800</pubDate>
       
       <guid>https://ntutn.top/posts/%E7%9B%B4/</guid>
-      <description>直  发现了自己初中写的作文，我当年这么中二的吗……
- 树是直的，直得挺拔入云；山是直的，直得直插霄汉；竹是直的直得虚心髙洁。是啊，巍峨的直无处不在。
+      <description>直 发现了自己初中写的作文，我当年这么中二的吗……
+树是直的，直得挺拔入云；山是直的，直得直插霄汉；竹是直的直得虚心髙洁。是啊，巍峨的直无处不在。
 尺 人们仰慕大自然的直，于是制造了尺。尺，为直而生。再纷乱的外界环境，它总恪尽职守，一丝不苟。即使是它的制造者，它也将毫不留情地指出他的过失。
 人本如此。看到它，我想起了屈子，想起了岳将军，想起包拯，想起了正直的中国人。
 弓 尺是直的，但在不可抗力下它还是弯曲了。有时弯也是一种无奈，正直的树也抵不住弯曲的斧。那就弯吧。不！你没看到，弦是直的。弦如何直？那是弓在抗拒那股不可抗力！是啊，弓是弯的，但它的心是直的。它仍是一心向直的。

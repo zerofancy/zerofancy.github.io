@@ -35,7 +35,6 @@
 
 
 
-
   
 
 
@@ -48,11 +47,11 @@
       <script src="/js/toc.js"></script>
     
     <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
-<link rel="stylesheet" href="/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
+<link rel="stylesheet" href="/scss/journal.scss" integrity="" media="screen">
 
 
 
-<link rel="stylesheet" href="/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
+<link rel="stylesheet" href="/scss/dark-mode.scss" integrity="" media="screen">
 
 
 <link rel="stylesheet"
@@ -654,7 +653,7 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
                             
                             5 min
                             
-                            15 s.
+                            16 s.
                         
                     </div>
                 </div>
@@ -725,277 +724,277 @@ A
 <p>我一开始写程序<code>Leaves=</code>写成了<code>Leaf=</code>，这鬼畜的错误半天没检查出来。顺便推荐个文本差异对比工具吧，这样找起来也容易：<a href="http://www.jq22.com/textDifference" title="在线文本差异对比">在线文本差异对比</a></p>
 <p>算上空行都300行了，真是够麻烦的。</p>
 <h2 id="answer">Answer</h2>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;iostream&gt;</span><span style="color:#1e889b">
-</span><span style="color:#1e889b"></span><span style="color:#8b008b;font-weight:bold">using</span> <span style="color:#8b008b;font-weight:bold">namespace</span> std;
-<span style="color:#8b008b;font-weight:bold">template</span>&lt;<span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">T</span>&gt;
-<span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">QueueNode</span>{
-<span style="color:#8b008b;font-weight:bold">public</span>:
-    T data;
-    QueueNode*link=<span style="color:#658b00">NULL</span>;
-    QueueNode(){
-        ;
-    }
-    QueueNode(T data){
-        <span style="color:#8b008b;font-weight:bold">this</span>-&gt;data=data;
-    }
-};
-<span style="color:#8b008b;font-weight:bold">template</span>&lt;<span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">T</span>&gt;
-<span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">Queue</span>{
-<span style="color:#8b008b;font-weight:bold">private</span>:
-    QueueNode&lt;T&gt;*tail=<span style="color:#658b00">NULL</span>;
-    QueueNode&lt;T&gt;*head=<span style="color:#658b00">NULL</span>;
-<span style="color:#8b008b;font-weight:bold">public</span>:
-    <span style="color:#00688b;font-weight:bold">bool</span> isEmpty(){
-        <span style="color:#8b008b;font-weight:bold">return</span> head==<span style="color:#658b00">NULL</span>;
-    }
-    ~Queue(){
-        <span style="color:#8b008b;font-weight:bold">while</span>(head!=<span style="color:#658b00">NULL</span>){
-            QueueNode&lt;T&gt;*p=head-&gt;link;
-            <span style="color:#8b008b;font-weight:bold">delete</span> head;
-            head=p;
-        }
-    }
-    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">enQueue</span>(T data){
-        <span style="color:#8b008b;font-weight:bold">if</span>(tail==<span style="color:#658b00">NULL</span>){
-            head=tail=<span style="color:#8b008b;font-weight:bold">new</span> QueueNode&lt;T&gt;(data);
-            <span style="color:#8b008b;font-weight:bold">return</span>;
-        }
-        tail-&gt;link=<span style="color:#8b008b;font-weight:bold">new</span> QueueNode&lt;T&gt;(data);
-        tail=tail-&gt;link;
-    }
-    T <span style="color:#008b45">deQueue</span>(){
-        <span style="color:#8b008b;font-weight:bold">if</span>(isEmpty()){
-            <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#658b00">NULL</span>;
-        }
-        T res=head-&gt;data;
-        QueueNode&lt;T&gt;*tmp=head;
-        head=head-&gt;link;
-        <span style="color:#8b008b;font-weight:bold">delete</span> tmp;
-        <span style="color:#8b008b;font-weight:bold">if</span>(head==<span style="color:#658b00">NULL</span>){
-            tail=<span style="color:#658b00">NULL</span>;
-        }
-        <span style="color:#8b008b;font-weight:bold">return</span> res;
-    }
-};
-<span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">Tree</span>;
-<span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">Node</span>{
-<span style="color:#8b008b;font-weight:bold">friend</span> <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">Tree</span>;
-<span style="color:#8b008b;font-weight:bold">private</span>:
-    <span style="color:#00688b;font-weight:bold">char</span> data=<span style="color:#cd5555">&#39;\0&#39;</span>;
-    Node*lChild=<span style="color:#658b00">NULL</span>;
-    Node*rChild=<span style="color:#658b00">NULL</span>;
-<span style="color:#8b008b;font-weight:bold">public</span>:
-    Node(){
-        ;
-    }
-    Node(<span style="color:#00688b;font-weight:bold">char</span> data){
-        <span style="color:#8b008b;font-weight:bold">this</span>-&gt;data=data;
-    }
-};
-<span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">Tree</span>{
-<span style="color:#8b008b;font-weight:bold">private</span>:
-    Node*root=<span style="color:#658b00">NULL</span>;
-    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">createTree</span>(Node*&amp;p,string&amp;str,<span style="color:#00688b;font-weight:bold">int</span>&amp;id){
-        <span style="color:#8b008b;font-weight:bold">if</span>(id&gt;=str.size()){
-            <span style="color:#8b008b;font-weight:bold">return</span>;
-        }
-        <span style="color:#8b008b;font-weight:bold">if</span>(str.at(id)==<span style="color:#cd5555">&#39;#&#39;</span>){
-            id++;
-            <span style="color:#8b008b;font-weight:bold">return</span>;
-        }
-        p=<span style="color:#8b008b;font-weight:bold">new</span> Node();
-        p-&gt;data=str.at(id);
-        id++;
-        createTree(p-&gt;lChild,str,id);
-        createTree(p-&gt;rChild,str,id);
-    }
-    size_t <span style="color:#008b45">getHeight</span>(Node*p){
-        size_t lHeight;
-        size_t rHeight;
-        <span style="color:#8b008b;font-weight:bold">if</span>(p-&gt;lChild==<span style="color:#658b00">NULL</span>){
-            lHeight=<span style="color:#b452cd">0</span>;
-        }<span style="color:#8b008b;font-weight:bold">else</span>{
-            lHeight=getHeight(p-&gt;lChild);
-        }
-        <span style="color:#8b008b;font-weight:bold">if</span>(p-&gt;rChild==<span style="color:#658b00">NULL</span>){
-            rHeight=<span style="color:#b452cd">0</span>;
-        }<span style="color:#8b008b;font-weight:bold">else</span>{
-            rHeight=getHeight(p-&gt;rChild);
-        }
-        <span style="color:#8b008b;font-weight:bold">return</span> max(lHeight,rHeight)+<span style="color:#b452cd">1</span>;
-    }
-    size_t <span style="color:#008b45">getLeaves</span>(Node*p){
-        <span style="color:#8b008b;font-weight:bold">if</span>(p==<span style="color:#658b00">NULL</span>){
-            <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>;
-        }
-        size_t res=<span style="color:#b452cd">0</span>;
-        <span style="color:#8b008b;font-weight:bold">if</span>(p-&gt;lChild==<span style="color:#658b00">NULL</span>&amp;&amp;p-&gt;rChild==<span style="color:#658b00">NULL</span>){
-            res++;
-        }
-        res+=getLeaves(p-&gt;lChild);
-        res+=getLeaves(p-&gt;rChild);
-        <span style="color:#8b008b;font-weight:bold">return</span> res;
-    }
-    size_t <span style="color:#008b45">getNodes</span>(Node*p){
-        <span style="color:#8b008b;font-weight:bold">if</span>(p==<span style="color:#658b00">NULL</span>){
-            <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>;
-        }
-        <span style="color:#8b008b;font-weight:bold">return</span> getNodes(p-&gt;lChild)+getNodes(p-&gt;rChild)+<span style="color:#b452cd">1</span>;
-    }
-    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">visit1</span>(Node*p){
-        <span style="color:#8b008b;font-weight:bold">if</span>(p==<span style="color:#658b00">NULL</span>){
-            <span style="color:#8b008b;font-weight:bold">return</span>;
-        }
-        cout&lt;&lt;p-&gt;data&lt;&lt;<span style="color:#cd5555">&#39; &#39;</span>;
-        visit1(p-&gt;lChild);
-        visit1(p-&gt;rChild);
-    }
-    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">visit2</span>(Node*p){
-        <span style="color:#8b008b;font-weight:bold">if</span>(p==<span style="color:#658b00">NULL</span>){
-            <span style="color:#8b008b;font-weight:bold">return</span>;
-        }
-        visit2(p-&gt;lChild);
-        cout&lt;&lt;p-&gt;data&lt;&lt;<span style="color:#cd5555">&#39; &#39;</span>;
-        visit2(p-&gt;rChild);
-    }
-    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">visit3</span>(Node*p){
-        <span style="color:#8b008b;font-weight:bold">if</span>(p==<span style="color:#658b00">NULL</span>){
-            <span style="color:#8b008b;font-weight:bold">return</span>;
-        }
-        visit3(p-&gt;lChild);
-        visit3(p-&gt;rChild);
-        cout&lt;&lt;p-&gt;data&lt;&lt;<span style="color:#cd5555">&#39; &#39;</span>;
-    }
-    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">delNode</span>(Node*p){
-        <span style="color:#8b008b;font-weight:bold">if</span>(p==<span style="color:#658b00">NULL</span>){
-            <span style="color:#8b008b;font-weight:bold">return</span>;
-        }
-        delNode(p-&gt;lChild);
-        delNode(p-&gt;rChild);
-        <span style="color:#8b008b;font-weight:bold">delete</span> p;
-    }
-    <span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">search</span>(<span style="color:#00688b;font-weight:bold">char</span> c,Node*p){
-        <span style="color:#8b008b;font-weight:bold">if</span>(p==<span style="color:#658b00">NULL</span>){
-            <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>;
-        }
-        <span style="color:#00688b;font-weight:bold">int</span> res=p-&gt;data==c?<span style="color:#b452cd">1</span>:<span style="color:#b452cd">0</span>;
-        <span style="color:#8b008b;font-weight:bold">return</span> search(c,p-&gt;lChild)+search(c,p-&gt;rChild)+res;
-    }
-    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">indexTree</span>(Node*p,<span style="color:#00688b;font-weight:bold">int</span> depth){
-        <span style="color:#8b008b;font-weight:bold">if</span>(p==<span style="color:#658b00">NULL</span>){
-            <span style="color:#8b008b;font-weight:bold">return</span>;
-        }
-        <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>;i&lt;depth;i++){
-            cout&lt;&lt;<span style="color:#cd5555">&#39; &#39;</span>&lt;&lt;<span style="color:#cd5555">&#39; &#39;</span>;
-        }
-        cout&lt;&lt;p-&gt;data&lt;&lt;endl;
-        indexTree(p-&gt;lChild,depth+<span style="color:#b452cd">1</span>);
-        indexTree(p-&gt;rChild,depth+<span style="color:#b452cd">1</span>);
-    }
-<span style="color:#8b008b;font-weight:bold">public</span>:
-    Tree(string str){
-        <span style="color:#00688b;font-weight:bold">int</span> id=<span style="color:#b452cd">0</span>;
-        createTree(root,str,id);
-    }
-    size_t <span style="color:#008b45">getHeight</span>(){
-        <span style="color:#8b008b;font-weight:bold">return</span> getHeight(root);
-    }
-    size_t <span style="color:#008b45">getLeaves</span>(){
-        <span style="color:#8b008b;font-weight:bold">return</span> getLeaves(root);
-    }
-    size_t <span style="color:#008b45">getNodes</span>(){
-        <span style="color:#8b008b;font-weight:bold">return</span> getNodes(root);
-    }
-    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">visit1</span>(){
-        cout&lt;&lt;<span style="color:#cd5555">&#34;Preorder is:&#34;</span>;
-        visit1(root);
-        cout&lt;&lt;<span style="color:#cd5555">&#39;.&#39;</span>&lt;&lt;endl;
-    }
-    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">visit2</span>(){
-        cout&lt;&lt;<span style="color:#cd5555">&#34;Inorder is:&#34;</span>;
-        visit2(root);
-        cout&lt;&lt;<span style="color:#cd5555">&#39;.&#39;</span>&lt;&lt;endl;
-    }
-    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">visit3</span>(){
-        cout&lt;&lt;<span style="color:#cd5555">&#34;Postorder is:&#34;</span>;
-        visit3(root);
-        cout&lt;&lt;<span style="color:#cd5555">&#39;.&#39;</span>&lt;&lt;endl;
-    }
-    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">visitBFS</span>(){
-        Queue&lt;Node*&gt;*q=<span style="color:#8b008b;font-weight:bold">new</span> Queue&lt;Node*&gt;();
-        q-&gt;enQueue(root);
-        <span style="color:#8b008b;font-weight:bold">while</span>(!q-&gt;isEmpty()){
-            Node*tmp=q-&gt;deQueue();
-            cout&lt;&lt;tmp-&gt;data&lt;&lt;<span style="color:#cd5555">&#39; &#39;</span>;
-            <span style="color:#8b008b;font-weight:bold">if</span>(tmp-&gt;lChild!=<span style="color:#658b00">NULL</span>){
-                q-&gt;enQueue(tmp-&gt;lChild);
-            }
-            <span style="color:#8b008b;font-weight:bold">if</span>(tmp-&gt;rChild!=<span style="color:#658b00">NULL</span>){
-                q-&gt;enQueue(tmp-&gt;rChild);
-            }
-        }
-        <span style="color:#8b008b;font-weight:bold">delete</span> q;
-    }
-    <span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">search</span>(<span style="color:#00688b;font-weight:bold">char</span> c){
-        <span style="color:#8b008b;font-weight:bold">return</span> search(c,root);
-    }
-    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">indexTree</span>(){
-        indexTree(root,<span style="color:#b452cd">0</span>);
-    }
-    ~Tree(){
-        delNode(root);
-    }
-};
-<span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">main</span>()
-{
-    <span style="color:#00688b;font-weight:bold">char</span> Op;
-    Tree*tree;
-    <span style="color:#8b008b;font-weight:bold">while</span>(cin&gt;&gt;Op){
-        string str;
-        <span style="color:#8b008b;font-weight:bold">switch</span>(Op){
-        <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#cd5555">&#39;C&#39;</span>:
-            cin&gt;&gt;str;
-            tree=<span style="color:#8b008b;font-weight:bold">new</span> Tree(str);
-            cout&lt;&lt;<span style="color:#cd5555">&#34;Created success!&#34;</span>&lt;&lt;endl;
-            <span style="color:#8b008b;font-weight:bold">break</span>;
-        <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#cd5555">&#39;H&#39;</span>:
-            cout&lt;&lt;<span style="color:#cd5555">&#34;Height=&#34;</span>&lt;&lt;tree-&gt;getHeight()&lt;&lt;endl;
-            <span style="color:#8b008b;font-weight:bold">break</span>;
-        <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#cd5555">&#39;L&#39;</span>:
-            cout&lt;&lt;<span style="color:#cd5555">&#34;Leaves=&#34;</span>&lt;&lt;tree-&gt;getLeaves()&lt;&lt;endl;
-            <span style="color:#8b008b;font-weight:bold">break</span>;
-        <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#cd5555">&#39;N&#39;</span>:
-            cout&lt;&lt;<span style="color:#cd5555">&#34;Nodes=&#34;</span>&lt;&lt;tree-&gt;getNodes()&lt;&lt;endl;
-            <span style="color:#8b008b;font-weight:bold">break</span>;
-        <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#cd5555">&#39;1&#39;</span>:
-            tree-&gt;visit1();
-            <span style="color:#8b008b;font-weight:bold">break</span>;
-        <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#cd5555">&#39;2&#39;</span>:
-            tree-&gt;visit2();
-            <span style="color:#8b008b;font-weight:bold">break</span>;
-        <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#cd5555">&#39;3&#39;</span>:
-            tree-&gt;visit3();
-            <span style="color:#8b008b;font-weight:bold">break</span>;
-        <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#cd5555">&#39;4&#39;</span>:
-            cout&lt;&lt;<span style="color:#cd5555">&#34;BFSorder is:&#34;</span>;
-            tree-&gt;visitBFS();
-            cout&lt;&lt;<span style="color:#cd5555">&#39;.&#39;</span>&lt;&lt;endl;
-            <span style="color:#8b008b;font-weight:bold">break</span>;
-        <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#cd5555">&#39;F&#39;</span>:
-            <span style="color:#00688b;font-weight:bold">char</span> x;
-            cin&gt;&gt;x;
-            cout&lt;&lt;<span style="color:#cd5555">&#34;The count of &#34;</span>&lt;&lt;x&lt;&lt;<span style="color:#cd5555">&#34; is &#34;</span>&lt;&lt;tree-&gt;search(x)&lt;&lt;endl;
-            <span style="color:#8b008b;font-weight:bold">break</span>;
-        <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#cd5555">&#39;P&#39;</span>:
-            cout&lt;&lt;<span style="color:#cd5555">&#34;The tree is:&#34;</span>&lt;&lt;endl;
-            tree-&gt;indexTree();
-            <span style="color:#8b008b;font-weight:bold">break</span>;
-        }
-    }
-    <span style="color:#8b008b;font-weight:bold">delete</span> tree;
-    <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>;
-}
-</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c++" data-lang="c++"><span style="display:flex;"><span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;iostream&gt;</span><span style="color:#1e889b">
+</span></span></span><span style="display:flex;"><span><span style="color:#1e889b"></span><span style="color:#8b008b;font-weight:bold">using</span> <span style="color:#8b008b;font-weight:bold">namespace</span> std;
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">template</span>&lt;<span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">T</span>&gt;
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">QueueNode</span>{
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">public</span>:
+</span></span><span style="display:flex;"><span>    T data;
+</span></span><span style="display:flex;"><span>    QueueNode*link=<span style="color:#658b00">NULL</span>;
+</span></span><span style="display:flex;"><span>    QueueNode(){
+</span></span><span style="display:flex;"><span>        ;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    QueueNode(T data){
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">this</span>-&gt;data=data;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">template</span>&lt;<span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">T</span>&gt;
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">Queue</span>{
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">private</span>:
+</span></span><span style="display:flex;"><span>    QueueNode&lt;T&gt;*tail=<span style="color:#658b00">NULL</span>;
+</span></span><span style="display:flex;"><span>    QueueNode&lt;T&gt;*head=<span style="color:#658b00">NULL</span>;
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">public</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">bool</span> isEmpty(){
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span> head==<span style="color:#658b00">NULL</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    ~Queue(){
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">while</span>(head!=<span style="color:#658b00">NULL</span>){
+</span></span><span style="display:flex;"><span>            QueueNode&lt;T&gt;*p=head-&gt;link;
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">delete</span> head;
+</span></span><span style="display:flex;"><span>            head=p;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">enQueue</span>(T data){
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span>(tail==<span style="color:#658b00">NULL</span>){
+</span></span><span style="display:flex;"><span>            head=tail=<span style="color:#8b008b;font-weight:bold">new</span> QueueNode&lt;T&gt;(data);
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">return</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        tail-&gt;link=<span style="color:#8b008b;font-weight:bold">new</span> QueueNode&lt;T&gt;(data);
+</span></span><span style="display:flex;"><span>        tail=tail-&gt;link;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    T <span style="color:#008b45">deQueue</span>(){
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span>(isEmpty()){
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#658b00">NULL</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        T res=head-&gt;data;
+</span></span><span style="display:flex;"><span>        QueueNode&lt;T&gt;*tmp=head;
+</span></span><span style="display:flex;"><span>        head=head-&gt;link;
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">delete</span> tmp;
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span>(head==<span style="color:#658b00">NULL</span>){
+</span></span><span style="display:flex;"><span>            tail=<span style="color:#658b00">NULL</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span> res;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">Tree</span>;
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">Node</span>{
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">friend</span> <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">Tree</span>;
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">private</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">char</span> data=<span style="color:#cd5555">&#39;\0&#39;</span>;
+</span></span><span style="display:flex;"><span>    Node*lChild=<span style="color:#658b00">NULL</span>;
+</span></span><span style="display:flex;"><span>    Node*rChild=<span style="color:#658b00">NULL</span>;
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">public</span>:
+</span></span><span style="display:flex;"><span>    Node(){
+</span></span><span style="display:flex;"><span>        ;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    Node(<span style="color:#00688b;font-weight:bold">char</span> data){
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">this</span>-&gt;data=data;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">Tree</span>{
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">private</span>:
+</span></span><span style="display:flex;"><span>    Node*root=<span style="color:#658b00">NULL</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">createTree</span>(Node*&amp;p,string&amp;str,<span style="color:#00688b;font-weight:bold">int</span>&amp;id){
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span>(id&gt;=str.size()){
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">return</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span>(str.at(id)==<span style="color:#cd5555">&#39;#&#39;</span>){
+</span></span><span style="display:flex;"><span>            id++;
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">return</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        p=<span style="color:#8b008b;font-weight:bold">new</span> Node();
+</span></span><span style="display:flex;"><span>        p-&gt;data=str.at(id);
+</span></span><span style="display:flex;"><span>        id++;
+</span></span><span style="display:flex;"><span>        createTree(p-&gt;lChild,str,id);
+</span></span><span style="display:flex;"><span>        createTree(p-&gt;rChild,str,id);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    size_t <span style="color:#008b45">getHeight</span>(Node*p){
+</span></span><span style="display:flex;"><span>        size_t lHeight;
+</span></span><span style="display:flex;"><span>        size_t rHeight;
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span>(p-&gt;lChild==<span style="color:#658b00">NULL</span>){
+</span></span><span style="display:flex;"><span>            lHeight=<span style="color:#b452cd">0</span>;
+</span></span><span style="display:flex;"><span>        }<span style="color:#8b008b;font-weight:bold">else</span>{
+</span></span><span style="display:flex;"><span>            lHeight=getHeight(p-&gt;lChild);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span>(p-&gt;rChild==<span style="color:#658b00">NULL</span>){
+</span></span><span style="display:flex;"><span>            rHeight=<span style="color:#b452cd">0</span>;
+</span></span><span style="display:flex;"><span>        }<span style="color:#8b008b;font-weight:bold">else</span>{
+</span></span><span style="display:flex;"><span>            rHeight=getHeight(p-&gt;rChild);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span> max(lHeight,rHeight)+<span style="color:#b452cd">1</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    size_t <span style="color:#008b45">getLeaves</span>(Node*p){
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span>(p==<span style="color:#658b00">NULL</span>){
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        size_t res=<span style="color:#b452cd">0</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span>(p-&gt;lChild==<span style="color:#658b00">NULL</span>&amp;&amp;p-&gt;rChild==<span style="color:#658b00">NULL</span>){
+</span></span><span style="display:flex;"><span>            res++;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        res+=getLeaves(p-&gt;lChild);
+</span></span><span style="display:flex;"><span>        res+=getLeaves(p-&gt;rChild);
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span> res;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    size_t <span style="color:#008b45">getNodes</span>(Node*p){
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span>(p==<span style="color:#658b00">NULL</span>){
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span> getNodes(p-&gt;lChild)+getNodes(p-&gt;rChild)+<span style="color:#b452cd">1</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">visit1</span>(Node*p){
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span>(p==<span style="color:#658b00">NULL</span>){
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">return</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        cout&lt;&lt;p-&gt;data&lt;&lt;<span style="color:#cd5555">&#39; &#39;</span>;
+</span></span><span style="display:flex;"><span>        visit1(p-&gt;lChild);
+</span></span><span style="display:flex;"><span>        visit1(p-&gt;rChild);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">visit2</span>(Node*p){
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span>(p==<span style="color:#658b00">NULL</span>){
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">return</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        visit2(p-&gt;lChild);
+</span></span><span style="display:flex;"><span>        cout&lt;&lt;p-&gt;data&lt;&lt;<span style="color:#cd5555">&#39; &#39;</span>;
+</span></span><span style="display:flex;"><span>        visit2(p-&gt;rChild);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">visit3</span>(Node*p){
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span>(p==<span style="color:#658b00">NULL</span>){
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">return</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        visit3(p-&gt;lChild);
+</span></span><span style="display:flex;"><span>        visit3(p-&gt;rChild);
+</span></span><span style="display:flex;"><span>        cout&lt;&lt;p-&gt;data&lt;&lt;<span style="color:#cd5555">&#39; &#39;</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">delNode</span>(Node*p){
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span>(p==<span style="color:#658b00">NULL</span>){
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">return</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        delNode(p-&gt;lChild);
+</span></span><span style="display:flex;"><span>        delNode(p-&gt;rChild);
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">delete</span> p;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">search</span>(<span style="color:#00688b;font-weight:bold">char</span> c,Node*p){
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span>(p==<span style="color:#658b00">NULL</span>){
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#00688b;font-weight:bold">int</span> res=p-&gt;data==c?<span style="color:#b452cd">1</span>:<span style="color:#b452cd">0</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span> search(c,p-&gt;lChild)+search(c,p-&gt;rChild)+res;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">indexTree</span>(Node*p,<span style="color:#00688b;font-weight:bold">int</span> depth){
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span>(p==<span style="color:#658b00">NULL</span>){
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">return</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>;i&lt;depth;i++){
+</span></span><span style="display:flex;"><span>            cout&lt;&lt;<span style="color:#cd5555">&#39; &#39;</span>&lt;&lt;<span style="color:#cd5555">&#39; &#39;</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        cout&lt;&lt;p-&gt;data&lt;&lt;endl;
+</span></span><span style="display:flex;"><span>        indexTree(p-&gt;lChild,depth+<span style="color:#b452cd">1</span>);
+</span></span><span style="display:flex;"><span>        indexTree(p-&gt;rChild,depth+<span style="color:#b452cd">1</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">public</span>:
+</span></span><span style="display:flex;"><span>    Tree(string str){
+</span></span><span style="display:flex;"><span>        <span style="color:#00688b;font-weight:bold">int</span> id=<span style="color:#b452cd">0</span>;
+</span></span><span style="display:flex;"><span>        createTree(root,str,id);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    size_t <span style="color:#008b45">getHeight</span>(){
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span> getHeight(root);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    size_t <span style="color:#008b45">getLeaves</span>(){
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span> getLeaves(root);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    size_t <span style="color:#008b45">getNodes</span>(){
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span> getNodes(root);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">visit1</span>(){
+</span></span><span style="display:flex;"><span>        cout&lt;&lt;<span style="color:#cd5555">&#34;Preorder is:&#34;</span>;
+</span></span><span style="display:flex;"><span>        visit1(root);
+</span></span><span style="display:flex;"><span>        cout&lt;&lt;<span style="color:#cd5555">&#39;.&#39;</span>&lt;&lt;endl;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">visit2</span>(){
+</span></span><span style="display:flex;"><span>        cout&lt;&lt;<span style="color:#cd5555">&#34;Inorder is:&#34;</span>;
+</span></span><span style="display:flex;"><span>        visit2(root);
+</span></span><span style="display:flex;"><span>        cout&lt;&lt;<span style="color:#cd5555">&#39;.&#39;</span>&lt;&lt;endl;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">visit3</span>(){
+</span></span><span style="display:flex;"><span>        cout&lt;&lt;<span style="color:#cd5555">&#34;Postorder is:&#34;</span>;
+</span></span><span style="display:flex;"><span>        visit3(root);
+</span></span><span style="display:flex;"><span>        cout&lt;&lt;<span style="color:#cd5555">&#39;.&#39;</span>&lt;&lt;endl;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">visitBFS</span>(){
+</span></span><span style="display:flex;"><span>        Queue&lt;Node*&gt;*q=<span style="color:#8b008b;font-weight:bold">new</span> Queue&lt;Node*&gt;();
+</span></span><span style="display:flex;"><span>        q-&gt;enQueue(root);
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">while</span>(!q-&gt;isEmpty()){
+</span></span><span style="display:flex;"><span>            Node*tmp=q-&gt;deQueue();
+</span></span><span style="display:flex;"><span>            cout&lt;&lt;tmp-&gt;data&lt;&lt;<span style="color:#cd5555">&#39; &#39;</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">if</span>(tmp-&gt;lChild!=<span style="color:#658b00">NULL</span>){
+</span></span><span style="display:flex;"><span>                q-&gt;enQueue(tmp-&gt;lChild);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">if</span>(tmp-&gt;rChild!=<span style="color:#658b00">NULL</span>){
+</span></span><span style="display:flex;"><span>                q-&gt;enQueue(tmp-&gt;rChild);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">delete</span> q;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">search</span>(<span style="color:#00688b;font-weight:bold">char</span> c){
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span> search(c,root);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">indexTree</span>(){
+</span></span><span style="display:flex;"><span>        indexTree(root,<span style="color:#b452cd">0</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    ~Tree(){
+</span></span><span style="display:flex;"><span>        delNode(root);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">main</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">char</span> Op;
+</span></span><span style="display:flex;"><span>    Tree*tree;
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">while</span>(cin&gt;&gt;Op){
+</span></span><span style="display:flex;"><span>        string str;
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">switch</span>(Op){
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#cd5555">&#39;C&#39;</span>:
+</span></span><span style="display:flex;"><span>            cin&gt;&gt;str;
+</span></span><span style="display:flex;"><span>            tree=<span style="color:#8b008b;font-weight:bold">new</span> Tree(str);
+</span></span><span style="display:flex;"><span>            cout&lt;&lt;<span style="color:#cd5555">&#34;Created success!&#34;</span>&lt;&lt;endl;
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#cd5555">&#39;H&#39;</span>:
+</span></span><span style="display:flex;"><span>            cout&lt;&lt;<span style="color:#cd5555">&#34;Height=&#34;</span>&lt;&lt;tree-&gt;getHeight()&lt;&lt;endl;
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#cd5555">&#39;L&#39;</span>:
+</span></span><span style="display:flex;"><span>            cout&lt;&lt;<span style="color:#cd5555">&#34;Leaves=&#34;</span>&lt;&lt;tree-&gt;getLeaves()&lt;&lt;endl;
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#cd5555">&#39;N&#39;</span>:
+</span></span><span style="display:flex;"><span>            cout&lt;&lt;<span style="color:#cd5555">&#34;Nodes=&#34;</span>&lt;&lt;tree-&gt;getNodes()&lt;&lt;endl;
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#cd5555">&#39;1&#39;</span>:
+</span></span><span style="display:flex;"><span>            tree-&gt;visit1();
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#cd5555">&#39;2&#39;</span>:
+</span></span><span style="display:flex;"><span>            tree-&gt;visit2();
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#cd5555">&#39;3&#39;</span>:
+</span></span><span style="display:flex;"><span>            tree-&gt;visit3();
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#cd5555">&#39;4&#39;</span>:
+</span></span><span style="display:flex;"><span>            cout&lt;&lt;<span style="color:#cd5555">&#34;BFSorder is:&#34;</span>;
+</span></span><span style="display:flex;"><span>            tree-&gt;visitBFS();
+</span></span><span style="display:flex;"><span>            cout&lt;&lt;<span style="color:#cd5555">&#39;.&#39;</span>&lt;&lt;endl;
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#cd5555">&#39;F&#39;</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#00688b;font-weight:bold">char</span> x;
+</span></span><span style="display:flex;"><span>            cin&gt;&gt;x;
+</span></span><span style="display:flex;"><span>            cout&lt;&lt;<span style="color:#cd5555">&#34;The count of &#34;</span>&lt;&lt;x&lt;&lt;<span style="color:#cd5555">&#34; is &#34;</span>&lt;&lt;tree-&gt;search(x)&lt;&lt;endl;
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#cd5555">&#39;P&#39;</span>:
+</span></span><span style="display:flex;"><span>            cout&lt;&lt;<span style="color:#cd5555">&#34;The tree is:&#34;</span>&lt;&lt;endl;
+</span></span><span style="display:flex;"><span>            tree-&gt;indexTree();
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">delete</span> tree;
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div>
                     
                     <HR width="100%" id="EOF">
 		    <p style="color:#777;">最后修改于 2019-05-14</p>

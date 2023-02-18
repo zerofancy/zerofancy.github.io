@@ -35,7 +35,6 @@
 
 
 
-
   
 
 
@@ -48,11 +47,11 @@
       <script src="/js/toc.js"></script>
     
     <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
-<link rel="stylesheet" href="/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
+<link rel="stylesheet" href="/scss/journal.scss" integrity="" media="screen">
 
 
 
-<link rel="stylesheet" href="/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
+<link rel="stylesheet" href="/scss/dark-mode.scss" integrity="" media="screen">
 
 
 <link rel="stylesheet"
@@ -636,37 +635,37 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <h2 id="handler">Handler</h2>
 <p>主线程不能进行耗时处理，子线程不能访问UI，所以我们需要异步消息处理机制。</p>
 <h3 id="使用">使用</h3>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">MainActivity</span> : AppCompatActivity() {
-    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">lateinit</span> <span style="color:#8b008b;font-weight:bold">var</span> binding: ActivityMainBinding
-    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> handler = <span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#a61717;background-color:#e3d2d2">: </span><span style="color:#008b45;font-weight:bold">Handler</span>(Looper.getMainLooper()) {
-        <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">handleMessage</span>(msg: Message) {
-            <span style="color:#8b008b;font-weight:bold">when</span>(msg.what){
-                MSG_UPDATE_TEXT -&gt; binding.textView.text = <span style="color:#cd5555">&#34;Nice to meet you. &#34;</span>
-            }
-        }
-    }
-    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onCreate</span>(savedInstanceState: Bundle?) {
-        <span style="color:#8b008b;font-weight:bold">super</span>.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        initView()
-    }
-    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">initView</span>() {
-        binding.apply {
-            changeTextButton.setOnClickListener {
-                thread {
-                    <span style="color:#8b008b;font-weight:bold">val</span> msg = Message()
-                    msg.what = MSG_UPDATE_TEXT
-                    handler.sendMessage(msg)
-                }
-            }
-        }
-    }
-    <span style="color:#8b008b;font-weight:bold">companion</span> <span style="color:#8b008b;font-weight:bold">object</span> {
-        <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#8b008b;font-weight:bold">val</span> MSG_UPDATE_TEXT = <span style="color:#b452cd">1</span>
-    }
-}
-</code></pre></div><h3 id="原理">原理</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">MainActivity</span> : AppCompatActivity() {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">lateinit</span> <span style="color:#8b008b;font-weight:bold">var</span> binding: ActivityMainBinding
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> handler = <span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#a61717;background-color:#e3d2d2">: </span><span style="color:#008b45;font-weight:bold">Handler</span>(<span style="color:#008b45;font-weight:bold">Looper</span>.getMainLooper()) {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">handleMessage</span>(msg: Message) {
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">when</span>(msg.what){
+</span></span><span style="display:flex;"><span>                MSG_UPDATE_TEXT -&gt; binding.textView.text = <span style="color:#cd5555">&#34;Nice to meet you. &#34;</span>
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onCreate</span>(savedInstanceState: Bundle?) {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">super</span>.onCreate(savedInstanceState)
+</span></span><span style="display:flex;"><span>        binding = <span style="color:#008b45;font-weight:bold">ActivityMainBinding</span>.inflate(layoutInflater)
+</span></span><span style="display:flex;"><span>        setContentView(binding.root)
+</span></span><span style="display:flex;"><span>        initView()
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">initView</span>() {
+</span></span><span style="display:flex;"><span>        binding.apply {
+</span></span><span style="display:flex;"><span>            changeTextButton.setOnClickListener {
+</span></span><span style="display:flex;"><span>                thread {
+</span></span><span style="display:flex;"><span>                    <span style="color:#8b008b;font-weight:bold">val</span> msg = Message()
+</span></span><span style="display:flex;"><span>                    msg.what = MSG_UPDATE_TEXT
+</span></span><span style="display:flex;"><span>                    handler.sendMessage(msg)
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">companion</span> <span style="color:#8b008b;font-weight:bold">object</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#8b008b;font-weight:bold">val</span> MSG_UPDATE_TEXT = <span style="color:#b452cd">1</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="原理">原理</h3>
 <p>图片有点多，懒得一张张转移了，去我整理的文档看吧：</p>
 <p><a href="https://bytedance.feishu.cn/docs/doccnRaxHFiTJDYLBuYMzpSSJAd">安卓Handler异步消息处理机制</a></p>
 <!-- raw HTML omitted -->
@@ -679,112 +678,112 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 </ol>
 <p>通过<code>startService(intent)</code>和<code>stopService(intent)</code>的方式启动和停止Service。</p>
 <p>Binder用于和View绑定通信。Binder和前台Service具体参见下面例子。</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.servicetest</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.app.NotificationChannel</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.app.NotificationManager</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.app.PendingIntent</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.app.Service</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.content.Context</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.content.Intent</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.graphics.BitmapFactory</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.os.Binder</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.os.Build</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.util.Log</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">androidx.core.app.NotificationCompat</span>
-<span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">MyService</span> : Service() {
-    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> mBinder = DownloadBinder()
-    <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">DownloadBinder</span> : Binder() {
-        <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">startDownload</span>() {
-            Log.d(javaClass.simpleName, <span style="color:#cd5555">&#34;startDownload() executed&#34;</span>)
-        }
-        <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">getProcess</span>(): Int {
-            Log.d(javaClass.simpleName, <span style="color:#cd5555">&#34;getProcess() executed&#34;</span>)
-            <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>
-        }
-    }
-    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onBind</span>(intent: Intent) = mBinder
-    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onCreate</span>() {
-        <span style="color:#8b008b;font-weight:bold">super</span>.onCreate()
-        Log.d(javaClass.simpleName, <span style="color:#cd5555">&#34;onCreate() executed&#34;</span>)
-        <span style="color:#8b008b;font-weight:bold">val</span> manager = getSystemService(Context.NOTIFICATION_SERVICE) <span style="color:#8b008b;font-weight:bold">as</span> NotificationManager
-        <span style="color:#8b008b;font-weight:bold">if</span> (Build.VERSION.SDK_INT &gt;= Build.VERSION_CODES.O) {
-            <span style="color:#8b008b;font-weight:bold">val</span> channel = NotificationChannel(
-                <span style="color:#cd5555">&#34;my_service&#34;</span>,
-                <span style="color:#cd5555">&#34;前台Service通知&#34;</span>,
-                NotificationManager.IMPORTANCE_DEFAULT
-            )
-            manager.createNotificationChannel(channel)
-        }
-        <span style="color:#8b008b;font-weight:bold">val</span> intent = Intent(<span style="color:#8b008b;font-weight:bold">this</span>, MainActivity::<span style="color:#8b008b;font-weight:bold">class</span>.java)
-        <span style="color:#8b008b;font-weight:bold">val</span> pi = PendingIntent.getActivity(<span style="color:#8b008b;font-weight:bold">this</span>, REQ_MY_SERVICE, intent, <span style="color:#b452cd">0</span>)
-        <span style="color:#8b008b;font-weight:bold">val</span> notification = NotificationCompat.Builder(<span style="color:#8b008b;font-weight:bold">this</span>, <span style="color:#cd5555">&#34;my_service&#34;</span>)
-            .setContentTitle(<span style="color:#cd5555">&#34;This is content title&#34;</span>)
-            .setContentText(<span style="color:#cd5555">&#34;This is content text. &#34;</span>)
-            .setContentIntent(pi)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
-            .setLargeIcon(BitmapFactory.decodeResource(resources,R.drawable.ic_launcher_foreground))
-            .build()
-        startForeground(<span style="color:#b452cd">1</span>, notification)
-    }
-    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onStartCommand</span>(intent: Intent?, flags: Int, startId: Int): Int {
-        Log.d(javaClass.simpleName, <span style="color:#cd5555">&#34;onStartCommand() executed&#34;</span>)
-        <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">super</span>.onStartCommand(intent, flags, startId)
-    }
-    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onDestroy</span>() {
-        <span style="color:#8b008b;font-weight:bold">super</span>.onDestroy()
-        Log.d(javaClass.simpleName, <span style="color:#cd5555">&#34;onDestroy() executed&#34;</span>)
-    }
-    <span style="color:#8b008b;font-weight:bold">companion</span> <span style="color:#8b008b;font-weight:bold">object</span> {
-        <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#8b008b;font-weight:bold">val</span> REQ_MY_SERVICE = <span style="color:#b452cd">0</span>
-    }
-}
-</code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.servicetest</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.content.ComponentName</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.content.Context</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.content.Intent</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.content.ServiceConnection</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.os.Bundle</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.os.IBinder</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">androidx.appcompat.app.AppCompatActivity</span>
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.servicetest.databinding.ActivityMainBinding</span>
-<span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">MainActivity</span> : AppCompatActivity() {
-    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">lateinit</span> <span style="color:#8b008b;font-weight:bold">var</span> binding: ActivityMainBinding
-    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">lateinit</span> <span style="color:#8b008b;font-weight:bold">var</span> downloadBinder: MyService.DownloadBinder
-    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> connection = <span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#a61717;background-color:#e3d2d2">: </span><span style="color:#008b45;font-weight:bold">ServiceConnection</span> {
-        <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onServiceConnected</span>(name: ComponentName, service: IBinder) {
-            downloadBinder = service <span style="color:#8b008b;font-weight:bold">as</span> MyService.DownloadBinder
-            downloadBinder.startDownload()
-            downloadBinder.getProcess()
-        }
-        <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onServiceDisconnected</span>(name: ComponentName?) = Unit
-    }
-    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onCreate</span>(savedInstanceState: Bundle?) {
-        <span style="color:#8b008b;font-weight:bold">super</span>.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        initView()
-    }
-    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">initView</span>() {
-        binding.apply {
-            startServiceButton.setOnClickListener {
-                <span style="color:#8b008b;font-weight:bold">val</span> intent = Intent(<span style="color:#8b008b;font-weight:bold">this</span><span style="color:#707a7c">@MainActivity</span>, MyService::<span style="color:#8b008b;font-weight:bold">class</span>.java)
-                startService(intent)
-            }
-            stopServiceButton.setOnClickListener {
-                <span style="color:#8b008b;font-weight:bold">val</span> intent = Intent(<span style="color:#8b008b;font-weight:bold">this</span><span style="color:#707a7c">@MainActivity</span>, MyService::<span style="color:#8b008b;font-weight:bold">class</span>.java)
-                stopService(intent)
-            }
-            bindServiceButton.setOnClickListener {
-                <span style="color:#8b008b;font-weight:bold">val</span> intent = Intent(<span style="color:#8b008b;font-weight:bold">this</span><span style="color:#707a7c">@MainActivity</span>, MyService::<span style="color:#8b008b;font-weight:bold">class</span>.java)
-                bindService(intent, connection, Context.BIND_AUTO_CREATE)
-            }
-            unbindServiceButton.setOnClickListener {
-                unbindService(connection)
-            }
-        }
-    }
-}
-</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.servicetest</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.app.NotificationChannel</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.app.NotificationManager</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.app.PendingIntent</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.app.Service</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.content.Context</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.content.Intent</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.graphics.BitmapFactory</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.os.Binder</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.os.Build</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.util.Log</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">androidx.core.app.NotificationCompat</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">MyService</span> : Service() {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> mBinder = DownloadBinder()
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">DownloadBinder</span> : Binder() {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">startDownload</span>() {
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45;font-weight:bold">Log</span>.d(javaClass.simpleName, <span style="color:#cd5555">&#34;startDownload() executed&#34;</span>)
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">getProcess</span>(): Int {
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45;font-weight:bold">Log</span>.d(javaClass.simpleName, <span style="color:#cd5555">&#34;getProcess() executed&#34;</span>)
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onBind</span>(intent: Intent) = mBinder
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onCreate</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">super</span>.onCreate()
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45;font-weight:bold">Log</span>.d(javaClass.simpleName, <span style="color:#cd5555">&#34;onCreate() executed&#34;</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">val</span> manager = getSystemService(<span style="color:#008b45;font-weight:bold">Context</span>.NOTIFICATION_SERVICE) <span style="color:#8b008b;font-weight:bold">as</span> NotificationManager
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span> (<span style="color:#008b45;font-weight:bold">Build</span>.<span style="color:#008b45;font-weight:bold">VERSION</span>.SDK_INT &gt;= <span style="color:#008b45;font-weight:bold">Build</span>.<span style="color:#008b45;font-weight:bold">VERSION_CODES</span>.O) {
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">val</span> channel = NotificationChannel(
+</span></span><span style="display:flex;"><span>                <span style="color:#cd5555">&#34;my_service&#34;</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#cd5555">&#34;前台Service通知&#34;</span>,
+</span></span><span style="display:flex;"><span>                <span style="color:#008b45;font-weight:bold">NotificationManager</span>.IMPORTANCE_DEFAULT
+</span></span><span style="display:flex;"><span>            )
+</span></span><span style="display:flex;"><span>            manager.createNotificationChannel(channel)
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">val</span> intent = Intent(<span style="color:#8b008b;font-weight:bold">this</span>, MainActivity::<span style="color:#8b008b;font-weight:bold">class</span>.java)
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">val</span> pi = <span style="color:#008b45;font-weight:bold">PendingIntent</span>.getActivity(<span style="color:#8b008b;font-weight:bold">this</span>, REQ_MY_SERVICE, intent, <span style="color:#b452cd">0</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">val</span> notification = <span style="color:#008b45;font-weight:bold">NotificationCompat</span>.Builder(<span style="color:#8b008b;font-weight:bold">this</span>, <span style="color:#cd5555">&#34;my_service&#34;</span>)
+</span></span><span style="display:flex;"><span>            .setContentTitle(<span style="color:#cd5555">&#34;This is content title&#34;</span>)
+</span></span><span style="display:flex;"><span>            .setContentText(<span style="color:#cd5555">&#34;This is content text. &#34;</span>)
+</span></span><span style="display:flex;"><span>            .setContentIntent(pi)
+</span></span><span style="display:flex;"><span>            .setSmallIcon(<span style="color:#008b45;font-weight:bold">R</span>.drawable.ic_launcher_foreground)
+</span></span><span style="display:flex;"><span>            .setLargeIcon(<span style="color:#008b45;font-weight:bold">BitmapFactory</span>.decodeResource(resources,<span style="color:#008b45;font-weight:bold">R</span>.drawable.ic_launcher_foreground))
+</span></span><span style="display:flex;"><span>            .build()
+</span></span><span style="display:flex;"><span>        startForeground(<span style="color:#b452cd">1</span>, notification)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onStartCommand</span>(intent: Intent?, flags: Int, startId: Int): Int {
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45;font-weight:bold">Log</span>.d(javaClass.simpleName, <span style="color:#cd5555">&#34;onStartCommand() executed&#34;</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">super</span>.onStartCommand(intent, flags, startId)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onDestroy</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">super</span>.onDestroy()
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45;font-weight:bold">Log</span>.d(javaClass.simpleName, <span style="color:#cd5555">&#34;onDestroy() executed&#34;</span>)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">companion</span> <span style="color:#8b008b;font-weight:bold">object</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#8b008b;font-weight:bold">val</span> REQ_MY_SERVICE = <span style="color:#b452cd">0</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.servicetest</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.content.ComponentName</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.content.Context</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.content.Intent</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.content.ServiceConnection</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.os.Bundle</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">android.os.IBinder</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">androidx.appcompat.app.AppCompatActivity</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">top.ntutn.servicetest.databinding.ActivityMainBinding</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">MainActivity</span> : AppCompatActivity() {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">lateinit</span> <span style="color:#8b008b;font-weight:bold">var</span> binding: ActivityMainBinding
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">lateinit</span> <span style="color:#8b008b;font-weight:bold">var</span> downloadBinder: <span style="color:#008b45;font-weight:bold">MyService</span>.DownloadBinder
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> connection = <span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#a61717;background-color:#e3d2d2">: </span><span style="color:#008b45;font-weight:bold">ServiceConnection</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onServiceConnected</span>(name: ComponentName, service: IBinder) {
+</span></span><span style="display:flex;"><span>            downloadBinder = service <span style="color:#8b008b;font-weight:bold">as</span> <span style="color:#008b45;font-weight:bold">MyService</span>.DownloadBinder
+</span></span><span style="display:flex;"><span>            downloadBinder.startDownload()
+</span></span><span style="display:flex;"><span>            downloadBinder.getProcess()
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onServiceDisconnected</span>(name: ComponentName?) = Unit
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onCreate</span>(savedInstanceState: Bundle?) {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">super</span>.onCreate(savedInstanceState)
+</span></span><span style="display:flex;"><span>        binding = <span style="color:#008b45;font-weight:bold">ActivityMainBinding</span>.inflate(layoutInflater)
+</span></span><span style="display:flex;"><span>        setContentView(binding.root)
+</span></span><span style="display:flex;"><span>        initView()
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">initView</span>() {
+</span></span><span style="display:flex;"><span>        binding.apply {
+</span></span><span style="display:flex;"><span>            startServiceButton.setOnClickListener {
+</span></span><span style="display:flex;"><span>                <span style="color:#8b008b;font-weight:bold">val</span> intent = Intent(<span style="color:#8b008b;font-weight:bold">this</span><span style="color:#707a7c">@MainActivity</span>, MyService::<span style="color:#8b008b;font-weight:bold">class</span>.java)
+</span></span><span style="display:flex;"><span>                startService(intent)
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            stopServiceButton.setOnClickListener {
+</span></span><span style="display:flex;"><span>                <span style="color:#8b008b;font-weight:bold">val</span> intent = Intent(<span style="color:#8b008b;font-weight:bold">this</span><span style="color:#707a7c">@MainActivity</span>, MyService::<span style="color:#8b008b;font-weight:bold">class</span>.java)
+</span></span><span style="display:flex;"><span>                stopService(intent)
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            bindServiceButton.setOnClickListener {
+</span></span><span style="display:flex;"><span>                <span style="color:#8b008b;font-weight:bold">val</span> intent = Intent(<span style="color:#8b008b;font-weight:bold">this</span><span style="color:#707a7c">@MainActivity</span>, MyService::<span style="color:#8b008b;font-weight:bold">class</span>.java)
+</span></span><span style="display:flex;"><span>                bindService(intent, connection, <span style="color:#008b45;font-weight:bold">Context</span>.BIND_AUTO_CREATE)
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            unbindServiceButton.setOnClickListener {
+</span></span><span style="display:flex;"><span>                unbindService(connection)
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div>
                     
                     <HR width="100%" id="EOF">
 		    <p style="color:#777;">最后修改于 2020-08-21</p>

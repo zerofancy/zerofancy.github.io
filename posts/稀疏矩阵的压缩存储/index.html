@@ -35,7 +35,6 @@
 
 
 
-
   
 
 
@@ -48,11 +47,11 @@
       <script src="/js/toc.js"></script>
     
     <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
-<link rel="stylesheet" href="/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
+<link rel="stylesheet" href="/scss/journal.scss" integrity="" media="screen">
 
 
 
-<link rel="stylesheet" href="/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
+<link rel="stylesheet" href="/scss/dark-mode.scss" integrity="" media="screen">
 
 
 <link rel="stylesheet"
@@ -687,7 +686,7 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
                             
                             4 min
                             
-                            52 s.
+                            53 s.
                         
                     </div>
                 </div>
@@ -751,12 +750,12 @@ The added matrix is:
 </blockquote>
 <p>所谓矩阵的压缩存储，实际上是在矩阵中元素较少时，只存非零元素的方法。在矩阵比较特殊（如三角阵）或矩阵元素比较稀疏的情况下能大大节省存储空间。但同时，压缩存储也会导致访问效率下降。</p>
 <p>所以这里我们定义了结构体来存储矩阵中的某个元素：</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#8b008b;font-weight:bold">typedef</span> <span style="color:#8b008b;font-weight:bold">struct</span>{
-    <span style="color:#00688b;font-weight:bold">int</span> row;
-    <span style="color:#00688b;font-weight:bold">int</span> column;
-    <span style="color:#00688b;font-weight:bold">int</span> data;
-}point;
-</code></pre></div><p>此题中第一部分，矩阵转置，通过观察即可知道，行变列列变行，只需交换元素<code>row</code>和<code>column</code>即可。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">typedef</span> <span style="color:#8b008b;font-weight:bold">struct</span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> row;
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> column;
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> data;
+</span></span><span style="display:flex;"><span>}point;
+</span></span></code></pre></div><p>此题中第一部分，矩阵转置，通过观察即可知道，行变列列变行，只需交换元素<code>row</code>和<code>column</code>即可。</p>
 <p>但交换后有个问题，即按照题目给出的标准输出，显然先输出行号小的元素，行号相等先输出列号小的元素。这就涉及了结构体数组的二级排序，也不难：</p>
 <pre tabindex="0"><code>int cmp(const void *p1,const void *p2){
     if(((point*)p1)-&gt;row==((point*)p2)-&gt;row){
@@ -767,99 +766,99 @@ The added matrix is:
 qsort(res,pA,sizeof(point),cmp);
 </code></pre><p>至于第二问，两矩阵相加，类似归并的思想，每次找到小的拿过来，两者相等就相加。不过这里注意，两者相加有可能结果为0，要消去这组数据。</p>
 <h2 id="anwser">Anwser</h2>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;iostream&gt;</span><span style="color:#1e889b">
-</span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;cstdlib&gt;</span><span style="color:#1e889b">
-</span><span style="color:#1e889b"></span><span style="color:#8b008b;font-weight:bold">using</span> <span style="color:#8b008b;font-weight:bold">namespace</span> std;
-<span style="color:#8b008b;font-weight:bold">typedef</span> <span style="color:#8b008b;font-weight:bold">struct</span>{
-    <span style="color:#00688b;font-weight:bold">int</span> row;
-    <span style="color:#00688b;font-weight:bold">int</span> column;
-    <span style="color:#00688b;font-weight:bold">int</span> data;
-}point;
-<span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">cmp</span>(<span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#00688b;font-weight:bold">void</span> *p1,<span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#00688b;font-weight:bold">void</span> *p2){
-    <span style="color:#8b008b;font-weight:bold">if</span>(((point*)p1)-&gt;row==((point*)p2)-&gt;row){
-        <span style="color:#8b008b;font-weight:bold">return</span> ((point*)p1)-&gt;column-((point*)p2)-&gt;column;
-    }
-    <span style="color:#8b008b;font-weight:bold">return</span> ((point*)p1)-&gt;row-((point*)p2)-&gt;row;
-}
-<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">printMatrix</span>(point*p,<span style="color:#00688b;font-weight:bold">int</span> n){
-    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>;i&lt;n;i++){
-        cout&lt;&lt;p[i].row&lt;&lt;<span style="color:#cd5555">&#39; &#39;</span>&lt;&lt;p[i].column&lt;&lt;<span style="color:#cd5555">&#39; &#39;</span>&lt;&lt;p[i].data&lt;&lt;endl;
-    }
-}
-<span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">cmpPos</span>(point*p1,point*p2){<span style="color:#228b22">//其实这个函数多余，直接用前面那个cmp函数也能达到比较的目的，不过我不习惯
-</span><span style="color:#228b22"></span>    <span style="color:#8b008b;font-weight:bold">if</span>(p1-&gt;row!=p2-&gt;row){
-        <span style="color:#8b008b;font-weight:bold">return</span> p1-&gt;row-p2-&gt;row;
-    }
-    <span style="color:#8b008b;font-weight:bold">if</span>(p1-&gt;column!=p2-&gt;column){
-        <span style="color:#8b008b;font-weight:bold">return</span> p1-&gt;column-p2-&gt;column;
-    }
-    <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>;
-}
-<span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">main</span>()
-{
-    <span style="color:#00688b;font-weight:bold">int</span> mA,nA,pA;<span style="color:#228b22">//第一个矩阵的行数、列数、非空元素数目
-</span><span style="color:#228b22"></span>    <span style="color:#00688b;font-weight:bold">int</span> mB,nB,pB;
-    point*dataA;
-    point*dataB;
-    point*res;<span style="color:#228b22">//存储结果
-</span><span style="color:#228b22"></span>    cin&gt;&gt;mA&gt;&gt;nA&gt;&gt;pA;
-    dataA=<span style="color:#8b008b;font-weight:bold">new</span> point[pA];
-    res=<span style="color:#8b008b;font-weight:bold">new</span> point[pA];
-    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>;i&lt;pA;i++){
-        cin&gt;&gt;dataA[i].row&gt;&gt;dataA[i].column&gt;&gt;dataA[i].data;
-        res[i].row=dataA[i].column;<span style="color:#228b22">//转置
-</span><span style="color:#228b22"></span>        res[i].column=dataA[i].row;
-        res[i].data=dataA[i].data;
-    }
-    cin&gt;&gt;mB&gt;&gt;nB&gt;&gt;pB;
-    dataB=<span style="color:#8b008b;font-weight:bold">new</span> point[pB];
-    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>;i&lt;pB;i++){
-        cin&gt;&gt;dataB[i].row&gt;&gt;dataB[i].column&gt;&gt;dataB[i].data;
-    }
-    qsort(res,pA,<span style="color:#8b008b;font-weight:bold">sizeof</span>(point),cmp);
-    cout&lt;&lt;<span style="color:#cd5555">&#34;The transformed matrix  is:&#34;</span>&lt;&lt;endl;
-    printMatrix(res,pA);
-    <span style="color:#8b008b;font-weight:bold">delete</span>[] res;
-    res=<span style="color:#8b008b;font-weight:bold">new</span> point[pA+pB];<span style="color:#228b22">//结果元素数目总小于等于二者之和
-</span><span style="color:#228b22"></span>    point*p1=dataA;
-    point*p2=dataB;
-    point*p3=res;
-    <span style="color:#8b008b;font-weight:bold">while</span>(p1&lt;dataA+pA&amp;&amp;p2&lt;dataB+pB){
-        <span style="color:#8b008b;font-weight:bold">if</span>(cmpPos(p1,p2)&lt;<span style="color:#b452cd">0</span>){
-            *p3=*p1;
-            p1++;
-        }<span style="color:#8b008b;font-weight:bold">else</span> <span style="color:#8b008b;font-weight:bold">if</span>(cmpPos(p1,p2)==<span style="color:#b452cd">0</span>){
-            *p3=*p1;
-            p3-&gt;data=p1-&gt;data+p2-&gt;data;
-            p1++;
-            p2++;
-            <span style="color:#8b008b;font-weight:bold">if</span>(p3-&gt;data==<span style="color:#b452cd">0</span>){
-                p3--;
-            }
-        }<span style="color:#8b008b;font-weight:bold">else</span>{
-            *p3=*p2;
-            p2++;
-        }
-        p3++;
-    }
-    <span style="color:#8b008b;font-weight:bold">while</span>(p1&lt;dataA+pA){
-        *p3=*p1;
-        p3++;
-        p1++;
-    }
-    <span style="color:#8b008b;font-weight:bold">while</span>(p2&lt;dataB+pB){
-        *p3=*p2;
-        p3++;
-        p2++;
-    }
-    cout&lt;&lt;<span style="color:#cd5555">&#34;The added matrix is:&#34;</span>&lt;&lt;endl;
-    printMatrix(res,p3-res);
-    <span style="color:#8b008b;font-weight:bold">delete</span>[] res;
-    <span style="color:#8b008b;font-weight:bold">delete</span>[] dataA;
-    <span style="color:#8b008b;font-weight:bold">delete</span>[] dataB;
-    <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>;
-}
-</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;iostream&gt;</span><span style="color:#1e889b">
+</span></span></span><span style="display:flex;"><span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;cstdlib&gt;</span><span style="color:#1e889b">
+</span></span></span><span style="display:flex;"><span><span style="color:#1e889b"></span><span style="color:#8b008b;font-weight:bold">using</span> <span style="color:#8b008b;font-weight:bold">namespace</span> std;
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">typedef</span> <span style="color:#8b008b;font-weight:bold">struct</span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> row;
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> column;
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> data;
+</span></span><span style="display:flex;"><span>}point;
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">cmp</span>(<span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#00688b;font-weight:bold">void</span> *p1,<span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#00688b;font-weight:bold">void</span> *p2){
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">if</span>(((point*)p1)-&gt;row==((point*)p2)-&gt;row){
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span> ((point*)p1)-&gt;column-((point*)p2)-&gt;column;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">return</span> ((point*)p1)-&gt;row-((point*)p2)-&gt;row;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">printMatrix</span>(point*p,<span style="color:#00688b;font-weight:bold">int</span> n){
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>;i&lt;n;i++){
+</span></span><span style="display:flex;"><span>        cout&lt;&lt;p[i].row&lt;&lt;<span style="color:#cd5555">&#39; &#39;</span>&lt;&lt;p[i].column&lt;&lt;<span style="color:#cd5555">&#39; &#39;</span>&lt;&lt;p[i].data&lt;&lt;endl;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">cmpPos</span>(point*p1,point*p2){<span style="color:#228b22">//其实这个函数多余，直接用前面那个cmp函数也能达到比较的目的，不过我不习惯
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    <span style="color:#8b008b;font-weight:bold">if</span>(p1-&gt;row!=p2-&gt;row){
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span> p1-&gt;row-p2-&gt;row;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">if</span>(p1-&gt;column!=p2-&gt;column){
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span> p1-&gt;column-p2-&gt;column;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">main</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> mA,nA,pA;<span style="color:#228b22">//第一个矩阵的行数、列数、非空元素数目
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    <span style="color:#00688b;font-weight:bold">int</span> mB,nB,pB;
+</span></span><span style="display:flex;"><span>    point*dataA;
+</span></span><span style="display:flex;"><span>    point*dataB;
+</span></span><span style="display:flex;"><span>    point*res;<span style="color:#228b22">//存储结果
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    cin&gt;&gt;mA&gt;&gt;nA&gt;&gt;pA;
+</span></span><span style="display:flex;"><span>    dataA=<span style="color:#8b008b;font-weight:bold">new</span> point[pA];
+</span></span><span style="display:flex;"><span>    res=<span style="color:#8b008b;font-weight:bold">new</span> point[pA];
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>;i&lt;pA;i++){
+</span></span><span style="display:flex;"><span>        cin&gt;&gt;dataA[i].row&gt;&gt;dataA[i].column&gt;&gt;dataA[i].data;
+</span></span><span style="display:flex;"><span>        res[i].row=dataA[i].column;<span style="color:#228b22">//转置
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>        res[i].column=dataA[i].row;
+</span></span><span style="display:flex;"><span>        res[i].data=dataA[i].data;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    cin&gt;&gt;mB&gt;&gt;nB&gt;&gt;pB;
+</span></span><span style="display:flex;"><span>    dataB=<span style="color:#8b008b;font-weight:bold">new</span> point[pB];
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>;i&lt;pB;i++){
+</span></span><span style="display:flex;"><span>        cin&gt;&gt;dataB[i].row&gt;&gt;dataB[i].column&gt;&gt;dataB[i].data;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    qsort(res,pA,<span style="color:#8b008b;font-weight:bold">sizeof</span>(point),cmp);
+</span></span><span style="display:flex;"><span>    cout&lt;&lt;<span style="color:#cd5555">&#34;The transformed matrix  is:&#34;</span>&lt;&lt;endl;
+</span></span><span style="display:flex;"><span>    printMatrix(res,pA);
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">delete</span>[] res;
+</span></span><span style="display:flex;"><span>    res=<span style="color:#8b008b;font-weight:bold">new</span> point[pA+pB];<span style="color:#228b22">//结果元素数目总小于等于二者之和
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    point*p1=dataA;
+</span></span><span style="display:flex;"><span>    point*p2=dataB;
+</span></span><span style="display:flex;"><span>    point*p3=res;
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">while</span>(p1&lt;dataA+pA&amp;&amp;p2&lt;dataB+pB){
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span>(cmpPos(p1,p2)&lt;<span style="color:#b452cd">0</span>){
+</span></span><span style="display:flex;"><span>            *p3=*p1;
+</span></span><span style="display:flex;"><span>            p1++;
+</span></span><span style="display:flex;"><span>        }<span style="color:#8b008b;font-weight:bold">else</span> <span style="color:#8b008b;font-weight:bold">if</span>(cmpPos(p1,p2)==<span style="color:#b452cd">0</span>){
+</span></span><span style="display:flex;"><span>            *p3=*p1;
+</span></span><span style="display:flex;"><span>            p3-&gt;data=p1-&gt;data+p2-&gt;data;
+</span></span><span style="display:flex;"><span>            p1++;
+</span></span><span style="display:flex;"><span>            p2++;
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">if</span>(p3-&gt;data==<span style="color:#b452cd">0</span>){
+</span></span><span style="display:flex;"><span>                p3--;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }<span style="color:#8b008b;font-weight:bold">else</span>{
+</span></span><span style="display:flex;"><span>            *p3=*p2;
+</span></span><span style="display:flex;"><span>            p2++;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        p3++;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">while</span>(p1&lt;dataA+pA){
+</span></span><span style="display:flex;"><span>        *p3=*p1;
+</span></span><span style="display:flex;"><span>        p3++;
+</span></span><span style="display:flex;"><span>        p1++;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">while</span>(p2&lt;dataB+pB){
+</span></span><span style="display:flex;"><span>        *p3=*p2;
+</span></span><span style="display:flex;"><span>        p3++;
+</span></span><span style="display:flex;"><span>        p2++;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    cout&lt;&lt;<span style="color:#cd5555">&#34;The added matrix is:&#34;</span>&lt;&lt;endl;
+</span></span><span style="display:flex;"><span>    printMatrix(res,p3-res);
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">delete</span>[] res;
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">delete</span>[] dataA;
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">delete</span>[] dataB;
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div>
                     
                     <HR width="100%" id="EOF">
 		    <p style="color:#777;">最后修改于 2019-06-01</p>
@@ -877,8 +876,8 @@ qsort(res,pA,sizeof(point),cmp);
                 
                 
                 
-                <a class="older-posts" href="/posts/%E7%BB%9F%E8%AE%A1%E9%80%92%E5%BD%92%E5%AD%90%E9%97%AE%E9%A2%98%E4%B8%AA%E6%95%B0/">
-			上回<br>统计递归子问题个数
+                <a class="older-posts" href="/posts/%E5%9C%A8windows10%E4%B8%8A%E5%AE%89%E8%A3%85%E8%A1%80%E6%88%98%E4%B8%8A%E6%B5%B7%E6%BB%A9/">
+			上回<br>在Windows10上安装血战上海滩
                 </a>
                 
             </nav>

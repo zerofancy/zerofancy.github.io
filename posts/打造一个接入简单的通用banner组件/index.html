@@ -35,7 +35,6 @@
 
 
 
-
   
 
 
@@ -48,11 +47,11 @@
       <script src="/js/toc.js"></script>
     
     <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
-<link rel="stylesheet" href="/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
+<link rel="stylesheet" href="/scss/journal.scss" integrity="" media="screen">
 
 
 
-<link rel="stylesheet" href="/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
+<link rel="stylesheet" href="/scss/dark-mode.scss" integrity="" media="screen">
 
 
 <link rel="stylesheet"
@@ -906,292 +905,292 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <ol>
 <li>将banner添加到你的布局中，</li>
 </ol>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml"><span style="color:#8b008b;font-weight:bold">&lt;top.ntutn.zerohelper.view.banner.BannerView</span>  
-    <span style="color:#658b00">android:id=</span><span style="color:#cd5555">&#34;@+id/banner_view&#34;</span>  
-    <span style="color:#658b00">android:layout_width=</span><span style="color:#cd5555">&#34;match_parent&#34;</span>  
-    <span style="color:#658b00">android:layout_height=</span><span style="color:#cd5555">&#34;300dp&#34;</span>  
-    <span style="color:#658b00">android:layout_gravity=</span><span style="color:#cd5555">&#34;center&#34;</span>  
-    <span style="color:#658b00">android:layout_margin=</span><span style="color:#cd5555">&#34;16dp&#34;</span>  
-    <span style="color:#658b00">tools:background=</span><span style="color:#cd5555">&#34;@tools:sample/backgrounds/scenic&#34;</span>  
-    <span style="color:#658b00">app:cardCornerRadius=</span><span style="color:#cd5555">&#34;8dp&#34;</span><span style="color:#8b008b;font-weight:bold">/&gt;</span>
-</code></pre></div><ol>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">&lt;top.ntutn.zerohelper.view.banner.BannerView</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#658b00">android:id=</span><span style="color:#cd5555">&#34;@+id/banner_view&#34;</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#658b00">android:layout_width=</span><span style="color:#cd5555">&#34;match_parent&#34;</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#658b00">android:layout_height=</span><span style="color:#cd5555">&#34;300dp&#34;</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#658b00">android:layout_gravity=</span><span style="color:#cd5555">&#34;center&#34;</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#658b00">android:layout_margin=</span><span style="color:#cd5555">&#34;16dp&#34;</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#658b00">tools:background=</span><span style="color:#cd5555">&#34;@tools:sample/backgrounds/scenic&#34;</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#658b00">app:cardCornerRadius=</span><span style="color:#cd5555">&#34;8dp&#34;</span><span style="color:#8b008b;font-weight:bold">/&gt;</span>
+</span></span></code></pre></div><ol>
 <li>准备一个或多个ViewHolder，实现业务展示和播控逻辑。</li>
 </ol>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">ImageBannerData</span>(<span style="color:#8b008b;font-weight:bold">var</span> url: String = <span style="color:#cd5555">&#34;&#34;</span>): BannerData {  
-    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">val</span> holderKey: String  
-        <span style="color:#8b008b;font-weight:bold">get</span>() = ImageBannerViewHolder.key  
-}  
-
-<span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">ImageBannerViewHolder</span>(<span style="color:#8b008b;font-weight:bold">val</span> binding: ItemImageBannerBinding) : BannerViewHolder(binding.root) {  
-    <span style="color:#8b008b;font-weight:bold">companion</span> <span style="color:#8b008b;font-weight:bold">object</span>: IBannerViewHolderFactory {  
-        <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">val</span> key: String  
-            <span style="color:#8b008b;font-weight:bold">get</span>() = <span style="color:#cd5555">&#34;_image&#34;</span>  
-
-        <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">newInstance</span>(parent: ViewGroup): BannerViewHolder {  
-            <span style="color:#8b008b;font-weight:bold">val</span> inflater = LayoutInflater.from(parent.context)  
-            <span style="color:#8b008b;font-weight:bold">return</span> ImageBannerViewHolder(  
-                ItemImageBannerBinding.inflate(inflater, parent, <span style="color:#8b008b;font-weight:bold">false</span>)  
-            )  
-        }  
-    }  
-
-    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onBind</span>(<span style="color:#8b008b;font-weight:bold">data</span>: BannerData) {  
-        <span style="color:#8b008b;font-weight:bold">if</span> (<span style="color:#8b008b;font-weight:bold">data</span> !is ImageBannerData) {  
-            <span style="color:#8b008b;font-weight:bold">return</span>  
-        }  
-        Glide.with(binding.bannerImageView)  
-            .load(<span style="color:#8b008b;font-weight:bold">data</span>.url)  
-            .placeholder(R.drawable.ic_baseline_photo_24)  
-            .into(binding.bannerImageView)  
-    }  
-
-    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onSelect</span>() {  
-        <span style="color:#8b008b;font-weight:bold">super</span>.onSelect()  
-        <span style="color:#228b22">// 3s后标记播放完成
-</span><span style="color:#228b22"></span>        selectScope.launch {  
-            delay(<span style="color:#b452cd">3000L</span>)  
-            playDone()  
-        }  
-    }  
-}
-</code></pre></div><ol>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">ImageBannerData</span>(<span style="color:#8b008b;font-weight:bold">var</span> url: String = <span style="color:#cd5555">&#34;&#34;</span>): BannerData {  
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">val</span> holderKey: String  
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">get</span>() = <span style="color:#008b45;font-weight:bold">ImageBannerViewHolder</span>.key  
+</span></span><span style="display:flex;"><span>}  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">ImageBannerViewHolder</span>(<span style="color:#8b008b;font-weight:bold">val</span> binding: ItemImageBannerBinding) : BannerViewHolder(binding.root) {  
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">companion</span> <span style="color:#8b008b;font-weight:bold">object</span>: IBannerViewHolderFactory {  
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">val</span> key: String  
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">get</span>() = <span style="color:#cd5555">&#34;_image&#34;</span>  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">newInstance</span>(parent: ViewGroup): BannerViewHolder {  
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">val</span> inflater = <span style="color:#008b45;font-weight:bold">LayoutInflater</span>.from(parent.context)  
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">return</span> ImageBannerViewHolder(  
+</span></span><span style="display:flex;"><span>                <span style="color:#008b45;font-weight:bold">ItemImageBannerBinding</span>.inflate(inflater, parent, <span style="color:#8b008b;font-weight:bold">false</span>)  
+</span></span><span style="display:flex;"><span>            )  
+</span></span><span style="display:flex;"><span>        }  
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onBind</span>(<span style="color:#8b008b;font-weight:bold">data</span>: BannerData) {  
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span> (<span style="color:#8b008b;font-weight:bold">data</span> !is ImageBannerData) {  
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">return</span>  
+</span></span><span style="display:flex;"><span>        }  
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45;font-weight:bold">Glide</span>.with(binding.bannerImageView)  
+</span></span><span style="display:flex;"><span>            .load(<span style="color:#8b008b;font-weight:bold">data</span>.url)  
+</span></span><span style="display:flex;"><span>            .placeholder(<span style="color:#008b45;font-weight:bold">R</span>.drawable.ic_baseline_photo_24)  
+</span></span><span style="display:flex;"><span>            .into(binding.bannerImageView)  
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onSelect</span>() {  
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">super</span>.onSelect()  
+</span></span><span style="display:flex;"><span>        <span style="color:#228b22">// 3s后标记播放完成
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>        selectScope.launch {  
+</span></span><span style="display:flex;"><span>            delay(<span style="color:#b452cd">3000L</span>)  
+</span></span><span style="display:flex;"><span>            playDone()  
+</span></span><span style="display:flex;"><span>        }  
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ol>
 <li>初始化Banner和绑定数据，记得最后要销毁哦</li>
 </ol>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">BannerViewActivity</span> : AppCompatActivity() {  
-    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">lateinit</span> <span style="color:#8b008b;font-weight:bold">var</span> binding: ActivityBannerViewBinding  
-
-    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onCreate</span>(savedInstanceState: Bundle?) {  
-        <span style="color:#8b008b;font-weight:bold">super</span>.onCreate(savedInstanceState)  
-        binding = ActivityBannerViewBinding.inflate(layoutInflater)  
-        setContentView(binding.root)  
-        bindView()  
-        bindData()  
-    }  
-
-    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">bindView</span>() {  
-        <span style="color:#228b22">// 初始化banner
-</span><span style="color:#228b22"></span>        binding.bannerView.initViewPager2()  
-        <span style="color:#228b22">// 注册VH
-</span><span style="color:#228b22"></span>        binding.bannerView.registerViewHolder(ImageBannerViewHolder.Companion)  
-        binding.bannerView.registerViewHolder(TextBannerViewHolder.Companion)  
-    }  
-
-    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">bindData</span>() { 
-        <span style="color:#228b22">// 绑定数据 
-</span><span style="color:#228b22"></span>        binding.bannerView.setData(  
-            buildList {  
-                repeat(<span style="color:#b452cd">20</span>) {  
-                    <span style="color:#8b008b;font-weight:bold">if</span> (listOf(<span style="color:#8b008b;font-weight:bold">true</span>, <span style="color:#8b008b;font-weight:bold">false</span>).random()) {  
-                        add(ImageBannerData(<span style="color:#cd5555">&#34;https://fakeimg.pl/400x300/</span><span style="color:#cd5555">${randomColor()}</span><span style="color:#cd5555">/?text=</span><span style="color:#cd5555">$it</span><span style="color:#cd5555">&#34;</span>))  
-                    } <span style="color:#8b008b;font-weight:bold">else</span> {  
-                        add(TextBannerData(<span style="color:#cd5555">&#34;This is #</span><span style="color:#cd5555">$it</span><span style="color:#cd5555"> ViewHolder.&#34;</span>))  
-                    }  
-                }  
-            }        )  
-    }  
-
-    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">randomColor</span>(): String {  
-        <span style="color:#8b008b;font-weight:bold">val</span> characters = <span style="color:#cd5555">&#34;0123456789ABCDEF&#34;</span>  
-        <span style="color:#8b008b;font-weight:bold">return</span> buildString { repeat(<span style="color:#b452cd">6</span>) { append(characters.random()) } }  
-    }  
-
-    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onStart</span>() {  
-        <span style="color:#8b008b;font-weight:bold">super</span>.onStart()  
-        <span style="color:#228b22">// 开启自动轮播
-</span><span style="color:#228b22"></span>        binding.bannerView.enableAutoSwitch()  
-    }  
-
-    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onStop</span>() {  
-        <span style="color:#8b008b;font-weight:bold">super</span>.onStop()  
-        <span style="color:#228b22">// 禁止自动轮播
-</span><span style="color:#228b22"></span>        binding.bannerView.disableAutoSwitch()  
-    }  
-
-    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onDestroy</span>() {  
-        <span style="color:#8b008b;font-weight:bold">super</span>.onDestroy()
-        <span style="color:#228b22">// 记得销毁控件  
-</span><span style="color:#228b22"></span>        binding.bannerView.release()  
-    }  
-}
-</code></pre></div><h1 id="banner设计">banner设计</h1>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">BannerViewActivity</span> : AppCompatActivity() {  
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">lateinit</span> <span style="color:#8b008b;font-weight:bold">var</span> binding: ActivityBannerViewBinding  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onCreate</span>(savedInstanceState: Bundle?) {  
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">super</span>.onCreate(savedInstanceState)  
+</span></span><span style="display:flex;"><span>        binding = <span style="color:#008b45;font-weight:bold">ActivityBannerViewBinding</span>.inflate(layoutInflater)  
+</span></span><span style="display:flex;"><span>        setContentView(binding.root)  
+</span></span><span style="display:flex;"><span>        bindView()  
+</span></span><span style="display:flex;"><span>        bindData()  
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">bindView</span>() {  
+</span></span><span style="display:flex;"><span>        <span style="color:#228b22">// 初始化banner
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>        binding.bannerView.initViewPager2()  
+</span></span><span style="display:flex;"><span>        <span style="color:#228b22">// 注册VH
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>        binding.bannerView.registerViewHolder(<span style="color:#008b45;font-weight:bold">ImageBannerViewHolder</span>.Companion)  
+</span></span><span style="display:flex;"><span>        binding.bannerView.registerViewHolder(<span style="color:#008b45;font-weight:bold">TextBannerViewHolder</span>.Companion)  
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">bindData</span>() { 
+</span></span><span style="display:flex;"><span>        <span style="color:#228b22">// 绑定数据 
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>        binding.bannerView.setData(  
+</span></span><span style="display:flex;"><span>            buildList {  
+</span></span><span style="display:flex;"><span>                repeat(<span style="color:#b452cd">20</span>) {  
+</span></span><span style="display:flex;"><span>                    <span style="color:#8b008b;font-weight:bold">if</span> (listOf(<span style="color:#8b008b;font-weight:bold">true</span>, <span style="color:#8b008b;font-weight:bold">false</span>).random()) {  
+</span></span><span style="display:flex;"><span>                        add(ImageBannerData(<span style="color:#cd5555">&#34;https://fakeimg.pl/400x300/</span><span style="color:#cd5555">${randomColor()}</span><span style="color:#cd5555">/?text=</span><span style="color:#cd5555">$it</span><span style="color:#cd5555">&#34;</span>))  
+</span></span><span style="display:flex;"><span>                    } <span style="color:#8b008b;font-weight:bold">else</span> {  
+</span></span><span style="display:flex;"><span>                        add(TextBannerData(<span style="color:#cd5555">&#34;This is #</span><span style="color:#cd5555">$it</span><span style="color:#cd5555"> ViewHolder.&#34;</span>))  
+</span></span><span style="display:flex;"><span>                    }  
+</span></span><span style="display:flex;"><span>                }  
+</span></span><span style="display:flex;"><span>            }        )  
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">randomColor</span>(): String {  
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">val</span> characters = <span style="color:#cd5555">&#34;0123456789ABCDEF&#34;</span>  
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span> buildString { repeat(<span style="color:#b452cd">6</span>) { append(characters.random()) } }  
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onStart</span>() {  
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">super</span>.onStart()  
+</span></span><span style="display:flex;"><span>        <span style="color:#228b22">// 开启自动轮播
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>        binding.bannerView.enableAutoSwitch()  
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onStop</span>() {  
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">super</span>.onStop()  
+</span></span><span style="display:flex;"><span>        <span style="color:#228b22">// 禁止自动轮播
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>        binding.bannerView.disableAutoSwitch()  
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onDestroy</span>() {  
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">super</span>.onDestroy()
+</span></span><span style="display:flex;"><span>        <span style="color:#228b22">// 记得销毁控件  
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>        binding.bannerView.release()  
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h1 id="banner设计">banner设计</h1>
 <p><img src="https://images.ntutn.top/2022/09/46cd2e16328c8030e8be7b2473eba6c7.png" alt="banner结构"></p>
 <p>banner整体上使用一个自定义ViewGroup嵌套一个ViewPager2实现。每张图片是一个ViewHolder，业务方可以实现自己需要的任何布局。</p>
 <h2 id="vh创建解耦">VH创建解耦</h2>
 <p>我们知道ViewPager2实际上就是用RecyclerView实现的，而ViewHolder要交给业务方实现，那么ViewHolder的创建逻辑就要从我们的BannerAdapter中分离出去了。</p>
 <p><img src="https://images.ntutn.top/2022/09/eaebc18f4dc6808a518176f4793259dc.png" alt="ViewHolder创建解耦"></p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">interface</span> <span style="color:#008b45;font-weight:bold">BannerData</span> {  
-    <span style="color:#228b22">// holderFactory.key  
-</span><span style="color:#228b22"></span>    <span style="color:#8b008b;font-weight:bold">val</span> holderKey: String  
-}
-
-<span style="color:#8b008b;font-weight:bold">interface</span> <span style="color:#008b45;font-weight:bold">IBannerViewHolderFactory</span> {  
-    <span style="color:#8b008b;font-weight:bold">val</span> key: String  
-    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">newInstance</span>(parent: ViewGroup): BannerViewHolder  
-}
-
-<span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">BannerAdapter</span>(<span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> bannerOperator: BannerOperator) :  
-    RecyclerView.Adapter&lt;BannerViewHolder&gt;() {  
-
-    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> viewHolderFactoryMap = mutableMapOf&lt;String, IBannerViewHolderFactory&gt;()  
-    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> viewHolderFactoryList = mutableListOf&lt;IBannerViewHolderFactory&gt;()  
-
-    <span style="color:#8b008b;font-weight:bold">var</span> dataSet: List&lt;BannerData&gt; = listOf()  
-        <span style="color:#8b008b;font-weight:bold">set</span>(value) {  
-            <span style="color:#8b008b;font-weight:bold">field</span> = value  
-            notifyDataSetChanged()  
-        }  
-
-    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">registerViewHolder</span>(factory: IBannerViewHolderFactory) {  
-        viewHolderFactoryMap[factory.key] = factory  
-        viewHolderFactoryList.add(factory)  
-    }  
-
-    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onCreateViewHolder</span>(parent: ViewGroup, viewType: Int): BannerViewHolder {  
-        <span style="color:#8b008b;font-weight:bold">val</span> viewHolder = viewHolderFactoryList[viewType].newInstance(parent)  
-        viewHolder.bannerOperator = bannerOperator  
-        <span style="color:#8b008b;font-weight:bold">return</span> viewHolder  
-    }  
-
-    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">getItemViewType</span>(position: Int): Int {  
-        <span style="color:#8b008b;font-weight:bold">val</span> key = <span style="color:#8b008b;font-weight:bold">if</span> (dataSet.isEmpty()) {  
-            StubViewHolder.key  
-        } <span style="color:#8b008b;font-weight:bold">else</span> {  
-            dataSet[position % dataSet.size].holderKey  
-        }  
-        <span style="color:#8b008b;font-weight:bold">val</span> factory = viewHolderFactoryMap[key]  
-        <span style="color:#8b008b;font-weight:bold">return</span> viewHolderFactoryList.indexOf(factory)  
-    }  
-
-    ...
-}
-</code></pre></div><h2 id="无限横滑">无限横滑</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">interface</span> <span style="color:#008b45;font-weight:bold">BannerData</span> {  
+</span></span><span style="display:flex;"><span>    <span style="color:#228b22">// holderFactory.key  
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    <span style="color:#8b008b;font-weight:bold">val</span> holderKey: String  
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">interface</span> <span style="color:#008b45;font-weight:bold">IBannerViewHolderFactory</span> {  
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> key: String  
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">newInstance</span>(parent: ViewGroup): BannerViewHolder  
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">BannerAdapter</span>(<span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> bannerOperator: BannerOperator) :  
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45;font-weight:bold">RecyclerView</span>.Adapter&lt;BannerViewHolder&gt;() {  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> viewHolderFactoryMap = mutableMapOf&lt;String, IBannerViewHolderFactory&gt;()  
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> viewHolderFactoryList = mutableListOf&lt;IBannerViewHolderFactory&gt;()  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">var</span> dataSet: List&lt;BannerData&gt; = listOf()  
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">set</span>(<span style="color:#8b008b;font-weight:bold">value</span>) {  
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">field</span> = <span style="color:#8b008b;font-weight:bold">value</span>  
+</span></span><span style="display:flex;"><span>            notifyDataSetChanged()  
+</span></span><span style="display:flex;"><span>        }  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">registerViewHolder</span>(factory: IBannerViewHolderFactory) {  
+</span></span><span style="display:flex;"><span>        viewHolderFactoryMap[factory.key] = factory  
+</span></span><span style="display:flex;"><span>        viewHolderFactoryList.add(factory)  
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onCreateViewHolder</span>(parent: ViewGroup, viewType: Int): BannerViewHolder {  
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">val</span> viewHolder = viewHolderFactoryList[viewType].newInstance(parent)  
+</span></span><span style="display:flex;"><span>        viewHolder.bannerOperator = bannerOperator  
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span> viewHolder  
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">getItemViewType</span>(position: Int): Int {  
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">val</span> key = <span style="color:#8b008b;font-weight:bold">if</span> (dataSet.isEmpty()) {  
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45;font-weight:bold">StubViewHolder</span>.key  
+</span></span><span style="display:flex;"><span>        } <span style="color:#8b008b;font-weight:bold">else</span> {  
+</span></span><span style="display:flex;"><span>            dataSet[position % dataSet.size].holderKey  
+</span></span><span style="display:flex;"><span>        }  
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">val</span> factory = viewHolderFactoryMap[key]  
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span> viewHolderFactoryList.indexOf(factory)  
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    ...
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="无限横滑">无限横滑</h2>
 <p>这个实现并不难，只要理解RecyclerView.Adapter的几个回调就可以。只要 <code>getItemCount()</code> 返回 <code>Int.MAX_VALUE</code> ，然后所有用到position的地方替换为 <code>position % dataSet.size</code> 即可。我不相信我会遇到头铁滑了2147483647次的头铁用户。</p>
 <h2 id="卡片选中事件传递">卡片选中事件传递</h2>
 <p>我预期一个ViewHolder要拿到自己被选中/取消选中状态的回调，用来处理播控状态。</p>
 <h3 id="选中事件产生">选中事件产生</h3>
 <p>选中事件是通过对ViewPager2页面事件监听来实现的。</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> pagerChangeCallback = <span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#a61717;background-color:#e3d2d2">: </span><span style="color:#008b45;font-weight:bold">ViewPager2</span>.OnPageChangeCallback() {  
-    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onPageSelected</span>(position: Int) {  
-        <span style="color:#8b008b;font-weight:bold">super</span>.onPageSelected(position)  
-        <span style="color:#228b22">// 选中页面发生变化
-</span><span style="color:#228b22"></span>    }  
-}  
-
-<span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">initViewPager2</span>() {  
-    ...
-    viewPager2.registerOnPageChangeCallback(pagerChangeCallback)  
-}  
-
-<span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">release</span>() {  
-    ...
-    viewPager2.unregisterOnPageChangeCallback(pagerChangeCallback)  
-}
-</code></pre></div><h3 id="使用livedata传递选中事件">使用LiveData传递选中事件</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> pagerChangeCallback = <span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#a61717;background-color:#e3d2d2">: </span><span style="color:#008b45;font-weight:bold">ViewPager2</span>.OnPageChangeCallback() {  
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onPageSelected</span>(position: Int) {  
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">super</span>.onPageSelected(position)  
+</span></span><span style="display:flex;"><span>        <span style="color:#228b22">// 选中页面发生变化
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    }  
+</span></span><span style="display:flex;"><span>}  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">initViewPager2</span>() {  
+</span></span><span style="display:flex;"><span>    ...
+</span></span><span style="display:flex;"><span>    viewPager2.registerOnPageChangeCallback(pagerChangeCallback)  
+</span></span><span style="display:flex;"><span>}  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">release</span>() {  
+</span></span><span style="display:flex;"><span>    ...
+</span></span><span style="display:flex;"><span>    viewPager2.unregisterOnPageChangeCallback(pagerChangeCallback)  
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="使用livedata传递选中事件">使用LiveData传递选中事件</h3>
 <p>为了将选中事件传递给VH，我决定让VH监听一个在BannerView中的LiveData来实现。但ViewHolder并不是LifecycleOwner，我们需要手动注册和取消监听。这里我们通常是写在attach和detach回调中来实现的。</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#228b22">// ViewHolder
-</span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">DemoViewHolder</span>(<span style="color:#8b008b;font-weight:bold">val</span> liveData) {
-    <span style="color:#8b008b;font-weight:bold">val</span> observer = ...
-
-    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onAttach</span>() {
-        liveData.observeForever(observer)
-    }
-
-    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onDetach</span>() {
-        liveData.removeObserver(observer)
-    }
-}
-
-<span style="color:#228b22">// Adapter
-</span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">DemoAdapter</span> {
-    ...
-
-    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onViewAttachedToWindow</span>(holder: BannerViewHolder) {  
-        <span style="color:#8b008b;font-weight:bold">super</span>.onViewAttachedToWindow(holder)  
-        holder.onAttach()  
-    }  
-
-    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onViewDetachedFromWindow</span>(holder: BannerViewHolder) {  
-        <span style="color:#8b008b;font-weight:bold">super</span>.onViewDetachedFromWindow(holder)  
-        holder.onDetach()  
-    }
-}
-</code></pre></div><p>但这样其实是有问题的， <strong>如果Activity直接退出，onViewDetachedFromWindow其实并不会执行，这样就会带来潜在问题。</strong> 参考 <a href="https://www.jianshu.com/p/4f66c2c71d8c"># RecyclerView#Adapter使用中的两个陷阱</a></p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#228b22">// ViewHolder
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">DemoViewHolder</span>(<span style="color:#8b008b;font-weight:bold">val</span> liveData) {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> observer = ...
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onAttach</span>() {
+</span></span><span style="display:flex;"><span>        liveData.observeForever(observer)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onDetach</span>() {
+</span></span><span style="display:flex;"><span>        liveData.removeObserver(observer)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#228b22">// Adapter
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">DemoAdapter</span> {
+</span></span><span style="display:flex;"><span>    ...
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onViewAttachedToWindow</span>(holder: BannerViewHolder) {  
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">super</span>.onViewAttachedToWindow(holder)  
+</span></span><span style="display:flex;"><span>        holder.onAttach()  
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onViewDetachedFromWindow</span>(holder: BannerViewHolder) {  
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">super</span>.onViewDetachedFromWindow(holder)  
+</span></span><span style="display:flex;"><span>        holder.onDetach()  
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>但这样其实是有问题的， <strong>如果Activity直接退出，onViewDetachedFromWindow其实并不会执行，这样就会带来潜在问题。</strong> 参考 <a href="https://www.jianshu.com/p/4f66c2c71d8c"># RecyclerView#Adapter使用中的两个陷阱</a></p>
 <p>我的办法是使用 <code>WeakHashMap</code>，不影响holder销毁的同时记录未detach的holder。</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">BannerAdapter</span>(<span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> bannerOperator: BannerOperator) :  
-    RecyclerView.Adapter&lt;BannerViewHolder&gt;() {
-
-    ...
-
-    <span style="color:#8b008b;font-weight:bold">var</span> detachHolderTasks = WeakHashMap&lt;RecyclerView.ViewHolder, Runnable&gt;()
-
-    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onViewAttachedToWindow</span>(holder: BannerViewHolder) {  
-        <span style="color:#8b008b;font-weight:bold">super</span>.onViewAttachedToWindow(holder)  
-        holder.onAttach()  
-        detachHolderTasks[holder] = Runnable { holder.onDetach() }  
-    }  
-
-    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onViewDetachedFromWindow</span>(holder: BannerViewHolder) {  
-        <span style="color:#8b008b;font-weight:bold">super</span>.onViewDetachedFromWindow(holder)  
-        holder.onDetach()  
-        detachHolderTasks.remove(holder)  
-    }  
-
-    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">release</span>() {  
-        detachHolderTasks.forEach {  
-            <span style="color:#8b008b;font-weight:bold">it</span>.value.run()  
-        }  
-    }
-}
-</code></pre></div><p>接下来就是实际监听LiveData并转换为事件了。</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">abstract</span> <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">BannerViewHolder</span>(view: View) : RecyclerView.ViewHolder(view) {  
-    <span style="color:#8b008b;font-weight:bold">protected</span> <span style="color:#8b008b;font-weight:bold">var</span> isSelected = <span style="color:#8b008b;font-weight:bold">false</span>  
-    <span style="color:#8b008b;font-weight:bold">var</span> bannerOperator: BannerOperator? = <span style="color:#8b008b;font-weight:bold">null</span> <span style="color:#228b22">// 实际上就是BannerView  
-</span><span style="color:#228b22"></span>    <span style="color:#8b008b;font-weight:bold">var</span> currentPosition = -<span style="color:#b452cd">1</span>  
-
-    ...
-
-    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> selectPositionObserver = Observer&lt;Int&gt; {  
-        checkSelectStatus()  
-    }  
-
-    <span style="color:#707a7c">@CallSuper</span>  
-    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onBind</span>(position: Int, <span style="color:#8b008b;font-weight:bold">data</span>: BannerData) {  
-        currentPosition = position  
-
-        onBind(<span style="color:#8b008b;font-weight:bold">data</span>)  
-
-        checkSelectStatus(force = <span style="color:#8b008b;font-weight:bold">true</span>)  
-    }  
-
-    <span style="color:#8b008b;font-weight:bold">abstract</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onBind</span>(<span style="color:#8b008b;font-weight:bold">data</span>: BannerData)  
-
-    <span style="color:#228b22">/**  
-</span><span style="color:#228b22">     * @param force 重新bind后，必定触发一次选择事件  
-</span><span style="color:#228b22">     */</span>  
-    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">checkSelectStatus</span>(force: Boolean = <span style="color:#8b008b;font-weight:bold">false</span>) {  
-        <span style="color:#8b008b;font-weight:bold">if</span> (bannerOperator?.selectedPosition?.value == currentPosition) {  
-            <span style="color:#8b008b;font-weight:bold">if</span> (force || !isSelected) {  
-                onSelect()  
-            }  
-        }  
-        <span style="color:#8b008b;font-weight:bold">if</span> (bannerOperator?.selectedPosition?.value != currentPosition) {  
-            <span style="color:#8b008b;font-weight:bold">if</span> (force || isSelected) {  
-                onUnSelect()  
-            }  
-        }  
-    }  
-
-    <span style="color:#707a7c">@CallSuper</span>  
-    <span style="color:#8b008b;font-weight:bold">open</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onSelect</span>() {  
-        isSelected = <span style="color:#8b008b;font-weight:bold">true</span>  
-    }  
-
-    <span style="color:#707a7c">@CallSuper</span>  
-    <span style="color:#8b008b;font-weight:bold">open</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onUnSelect</span>() {  
-        isSelected = <span style="color:#8b008b;font-weight:bold">false</span>  
-    }   
-}
-</code></pre></div><p>这里写这么啰嗦是为了处理两个特殊情况：</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">BannerAdapter</span>(<span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> bannerOperator: BannerOperator) :  
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45;font-weight:bold">RecyclerView</span>.Adapter&lt;BannerViewHolder&gt;() {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    ...
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">var</span> detachHolderTasks = WeakHashMap&lt;<span style="color:#008b45;font-weight:bold">RecyclerView</span>.ViewHolder, Runnable&gt;()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onViewAttachedToWindow</span>(holder: BannerViewHolder) {  
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">super</span>.onViewAttachedToWindow(holder)  
+</span></span><span style="display:flex;"><span>        holder.onAttach()  
+</span></span><span style="display:flex;"><span>        detachHolderTasks[holder] = Runnable { holder.onDetach() }  
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onViewDetachedFromWindow</span>(holder: BannerViewHolder) {  
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">super</span>.onViewDetachedFromWindow(holder)  
+</span></span><span style="display:flex;"><span>        holder.onDetach()  
+</span></span><span style="display:flex;"><span>        detachHolderTasks.remove(holder)  
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">release</span>() {  
+</span></span><span style="display:flex;"><span>        detachHolderTasks.forEach {  
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">it</span>.<span style="color:#8b008b;font-weight:bold">value</span>.run()  
+</span></span><span style="display:flex;"><span>        }  
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>接下来就是实际监听LiveData并转换为事件了。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">abstract</span> <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">BannerViewHolder</span>(view: View) : <span style="color:#008b45;font-weight:bold">RecyclerView</span>.ViewHolder(view) {  
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">protected</span> <span style="color:#8b008b;font-weight:bold">var</span> isSelected = <span style="color:#8b008b;font-weight:bold">false</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">var</span> bannerOperator: BannerOperator? = <span style="color:#8b008b;font-weight:bold">null</span> <span style="color:#228b22">// 实际上就是BannerView  
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    <span style="color:#8b008b;font-weight:bold">var</span> currentPosition = -<span style="color:#b452cd">1</span>  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    ...
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> selectPositionObserver = Observer&lt;Int&gt; {  
+</span></span><span style="display:flex;"><span>        checkSelectStatus()  
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#707a7c">@CallSuper</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onBind</span>(position: Int, <span style="color:#8b008b;font-weight:bold">data</span>: BannerData) {  
+</span></span><span style="display:flex;"><span>        currentPosition = position  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        onBind(<span style="color:#8b008b;font-weight:bold">data</span>)  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        checkSelectStatus(force = <span style="color:#8b008b;font-weight:bold">true</span>)  
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">abstract</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onBind</span>(<span style="color:#8b008b;font-weight:bold">data</span>: BannerData)  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#228b22">/**  
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">     * @param force 重新bind后，必定触发一次选择事件  
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">     */</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">checkSelectStatus</span>(force: Boolean = <span style="color:#8b008b;font-weight:bold">false</span>) {  
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span> (bannerOperator?.selectedPosition?.<span style="color:#8b008b;font-weight:bold">value</span> == currentPosition) {  
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">if</span> (force || !isSelected) {  
+</span></span><span style="display:flex;"><span>                onSelect()  
+</span></span><span style="display:flex;"><span>            }  
+</span></span><span style="display:flex;"><span>        }  
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span> (bannerOperator?.selectedPosition?.<span style="color:#8b008b;font-weight:bold">value</span> != currentPosition) {  
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">if</span> (force || isSelected) {  
+</span></span><span style="display:flex;"><span>                onUnSelect()  
+</span></span><span style="display:flex;"><span>            }  
+</span></span><span style="display:flex;"><span>        }  
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#707a7c">@CallSuper</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">open</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onSelect</span>() {  
+</span></span><span style="display:flex;"><span>        isSelected = <span style="color:#8b008b;font-weight:bold">true</span>  
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#707a7c">@CallSuper</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">open</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onUnSelect</span>() {  
+</span></span><span style="display:flex;"><span>        isSelected = <span style="color:#8b008b;font-weight:bold">false</span>  
+</span></span><span style="display:flex;"><span>    }   
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>这里写这么啰嗦是为了处理两个特殊情况：</p>
 <ol>
 <li>数据未走到onBind，但position先发生了变化。</li>
 <li>position未发生变化，但重新bind了不一样的数据。</li>
@@ -1202,177 +1201,177 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <p>这里也是我这个banner组件的最大特点， <strong>完播事件产生交给业务方灵活控制，消费则回到组件进行统一管理。</strong></p>
 <h3 id="完播事件产生">完播事件产生</h3>
 <p>卡片可以认为自己是在onSelect时开始播放，即每次onSelect触发一次playDone。具体何时完播就可以进行灵活的业务逻辑控制了，如5s后完播，视频播放完成后完播，甚至第一次曝光10s完播第二次5s完播等。</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">ImageBannerViewHolder</span>(<span style="color:#8b008b;font-weight:bold">val</span> binding: ItemImageBannerBinding) : BannerViewHolder(binding.root) {  
-    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onBind</span>(<span style="color:#8b008b;font-weight:bold">data</span>: BannerData) {  
-        <span style="color:#8b008b;font-weight:bold">if</span> (<span style="color:#8b008b;font-weight:bold">data</span> !is ImageBannerData) {  
-            <span style="color:#8b008b;font-weight:bold">return</span>  
-        }  
-        ...
-    }  
-
-    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onSelect</span>() {  
-        <span style="color:#8b008b;font-weight:bold">super</span>.onSelect()  
-        ThreadUtils.postDelayed({ playDone() }, <span style="color:#b452cd">5</span>_000L)  
-    }  
-}
-</code></pre></div><p>因为VH持有BannerView的引用，所以检查下当前是选中卡片就可以直接把完播事件传递给BannerView了。</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">abstract</span> <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">BannerViewHolder</span>(view: View) : RecyclerView.ViewHolder(view) {  
-    ...
-
-    <span style="color:#8b008b;font-weight:bold">protected</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">playDone</span>() {  
-        <span style="color:#8b008b;font-weight:bold">if</span> (isSelected) {  
-            bannerOperator?.currentItemPlayDone()  
-        }  
-    }  
-}
-</code></pre></div><h3 id="完播事件的消费">完播事件的消费</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">ImageBannerViewHolder</span>(<span style="color:#8b008b;font-weight:bold">val</span> binding: ItemImageBannerBinding) : BannerViewHolder(binding.root) {  
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onBind</span>(<span style="color:#8b008b;font-weight:bold">data</span>: BannerData) {  
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span> (<span style="color:#8b008b;font-weight:bold">data</span> !is ImageBannerData) {  
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">return</span>  
+</span></span><span style="display:flex;"><span>        }  
+</span></span><span style="display:flex;"><span>        ...
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onSelect</span>() {  
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">super</span>.onSelect()  
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45;font-weight:bold">ThreadUtils</span>.postDelayed({ playDone() }, <span style="color:#b452cd">5</span>_000L)  
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>因为VH持有BannerView的引用，所以检查下当前是选中卡片就可以直接把完播事件传递给BannerView了。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">abstract</span> <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">BannerViewHolder</span>(view: View) : <span style="color:#008b45;font-weight:bold">RecyclerView</span>.ViewHolder(view) {  
+</span></span><span style="display:flex;"><span>    ...
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">protected</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">playDone</span>() {  
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span> (isSelected) {  
+</span></span><span style="display:flex;"><span>            bannerOperator?.currentItemPlayDone()  
+</span></span><span style="display:flex;"><span>        }  
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="完播事件的消费">完播事件的消费</h3>
 <p>我用一个变量标识当前卡片已经完播，并有一个方法来检查并切换到下一张卡片。</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">BannerView</span> <span style="color:#707a7c">@JvmOverloads</span> <span style="color:#8b008b;font-weight:bold">constructor</span>(  
-    context: Context,  
-    attrs: AttributeSet? = <span style="color:#8b008b;font-weight:bold">null</span>,  
-    defStyleAttr: Int = <span style="color:#b452cd">0</span>  
-) : CardView(context, attrs, defStyleAttr), BannerOperator {  
-
-    ...
-    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">var</span> pageInvalid = <span style="color:#8b008b;font-weight:bold">false</span>  
-
-    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">switchNext</span>() {  
-        viewPager2.setCurrentItem(viewPager2.currentItem + <span style="color:#b452cd">1</span>, <span style="color:#8b008b;font-weight:bold">true</span>)  
-    }  
-
-    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">currentItemPlayDone</span>() {  
-        pageInvalid = <span style="color:#8b008b;font-weight:bold">true</span>  
-        checkAndSwitchPage()  
-    }  
-
-    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">checkAndSwitchPage</span>() {  
-        ...
-        <span style="color:#8b008b;font-weight:bold">if</span> (pageInvalid) {  
-            switchNext()  
-        }
-    }  
-}
-</code></pre></div><p>用户正在拖动，或者用户刚刚松手我们是不能切换的，否则会干扰用户操作。这里我们通过监听dispatchTouchEvent来实现。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">BannerView</span> <span style="color:#707a7c">@JvmOverloads</span> <span style="color:#8b008b;font-weight:bold">constructor</span>(  
+</span></span><span style="display:flex;"><span>    context: Context,  
+</span></span><span style="display:flex;"><span>    attrs: AttributeSet? = <span style="color:#8b008b;font-weight:bold">null</span>,  
+</span></span><span style="display:flex;"><span>    defStyleAttr: Int = <span style="color:#b452cd">0</span>  
+</span></span><span style="display:flex;"><span>) : CardView(context, attrs, defStyleAttr), BannerOperator {  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    ...
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">var</span> pageInvalid = <span style="color:#8b008b;font-weight:bold">false</span>  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">switchNext</span>() {  
+</span></span><span style="display:flex;"><span>        viewPager2.setCurrentItem(viewPager2.currentItem + <span style="color:#b452cd">1</span>, <span style="color:#8b008b;font-weight:bold">true</span>)  
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">currentItemPlayDone</span>() {  
+</span></span><span style="display:flex;"><span>        pageInvalid = <span style="color:#8b008b;font-weight:bold">true</span>  
+</span></span><span style="display:flex;"><span>        checkAndSwitchPage()  
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">checkAndSwitchPage</span>() {  
+</span></span><span style="display:flex;"><span>        ...
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span> (pageInvalid) {  
+</span></span><span style="display:flex;"><span>            switchNext()  
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>用户正在拖动，或者用户刚刚松手我们是不能切换的，否则会干扰用户操作。这里我们通过监听dispatchTouchEvent来实现。</p>
 <p>为什么不是 <code>onInterceptTouchEvent</code> 回调呢？因为ViewPager2父类RecyclerView在onTouch中开始滑动后会调用getParent().requestDisallowInterceptTouchEvent()阻止父布局继续拦截消息。放在dispatchTouchEvent中可以保证被调用到。</p>
 <p>实现上，用户未松手检查不通过，用户松手时补充一次检查即可。</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">BannerView</span> <span style="color:#707a7c">@JvmOverloads</span> <span style="color:#8b008b;font-weight:bold">constructor</span>(  
-    context: Context,  
-    attrs: AttributeSet? = <span style="color:#8b008b;font-weight:bold">null</span>,  
-    defStyleAttr: Int = <span style="color:#b452cd">0</span>  
-) : CardView(context, attrs, defStyleAttr), BannerOperator {  
-
-    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">var</span> lastUserTouchTime = -<span style="color:#b452cd">1L</span>  
-
-    <span style="color:#8b008b;font-weight:bold">var</span> delayAfterUserTouch = <span style="color:#b452cd">5000L</span>  
-
-    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">release</span>() {  
-        clearCheckTask()  
-        ...
-    }  
-
-    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">dispatchTouchEvent</span>(ev: MotionEvent?): Boolean {  
-        <span style="color:#8b008b;font-weight:bold">when</span> (ev?.action) {  
-            MotionEvent.ACTION_DOWN -&gt; {  
-                userDragging = <span style="color:#8b008b;font-weight:bold">true</span>  
-            }  
-            MotionEvent.ACTION_UP -&gt; {  
-                userDragging = <span style="color:#8b008b;font-weight:bold">false</span>  
-                lastUserTouchTime = SystemClock.uptimeMillis()  
-                checkAndSwitchPage()  
-            }  
-            MotionEvent.ACTION_CANCEL -&gt; {  
-                userDragging = <span style="color:#8b008b;font-weight:bold">false</span>  
-                lastUserTouchTime = SystemClock.uptimeMillis()  
-                checkAndSwitchPage()  
-            }  
-        }  
-        <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">super</span>.dispatchTouchEvent(ev)  
-    }  
-
-    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">checkAndSwitchPage</span>() {  
-        <span style="color:#8b008b;font-weight:bold">if</span> (userDragging) {  
-            <span style="color:#8b008b;font-weight:bold">return</span>  
-        }  
-        <span style="color:#8b008b;font-weight:bold">val</span> timeAfterLastTouch = SystemClock.uptimeMillis() - lastUserTouchTime  
-        <span style="color:#8b008b;font-weight:bold">if</span> (timeAfterLastTouch &lt; delayAfterUserTouch) {  
-            <span style="color:#228b22">// 用户拖动松手5000 ms内，不自动切换，并规划下一次检查  
-</span><span style="color:#228b22"></span>            handler.postDelayed(checkAutoPlayRunnable, delayAfterUserTouch - timeAfterLastTouch)  
-            <span style="color:#8b008b;font-weight:bold">return</span>  
-        }  
-        <span style="color:#8b008b;font-weight:bold">if</span> (pageInvalid) {  
-            switchNext()  
-        }  
-    }  
-
-    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">clearCheckTask</span>() {  
-        handler.removeCallbacks(checkAutoPlayRunnable)  
-    }  
-
-    ...
-}
-</code></pre></div><p>我们还可以把是否开启轮播交给外部控制，实现锁屏停止轮播，解锁后又恢复轮播的效果。</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">BannerView</span> <span style="color:#707a7c">@JvmOverloads</span> <span style="color:#8b008b;font-weight:bold">constructor</span>(  
-    context: Context,  
-    attrs: AttributeSet? = <span style="color:#8b008b;font-weight:bold">null</span>,  
-    defStyleAttr: Int = <span style="color:#b452cd">0</span>  
-) : CardView(context, attrs, defStyleAttr), BannerOperator { 
-
-    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">var</span> isAutoSwitchEnabled = <span style="color:#8b008b;font-weight:bold">false</span>
-
-    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">enableAutoSwitch</span>() {  
-        isAutoSwitchEnabled = <span style="color:#8b008b;font-weight:bold">true</span>  
-        checkAndSwitchPage()  
-    }  
-
-    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">disableAutoSwitch</span>() {  
-        clearCheckTask()  
-        isAutoSwitchEnabled = <span style="color:#8b008b;font-weight:bold">false</span>  
-    }  
-
-    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">checkAndSwitchPage</span>() {  
-        <span style="color:#8b008b;font-weight:bold">if</span> (userDragging) {  
-            <span style="color:#8b008b;font-weight:bold">return</span>  
-        }  
-        ...
-    }  
-
-    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">clearCheckTask</span>() {  
-        handler.removeCallbacks(checkAutoPlayRunnable)  
-    }  
-}
-</code></pre></div><h3 id="selectscope">selectScope</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">BannerView</span> <span style="color:#707a7c">@JvmOverloads</span> <span style="color:#8b008b;font-weight:bold">constructor</span>(  
+</span></span><span style="display:flex;"><span>    context: Context,  
+</span></span><span style="display:flex;"><span>    attrs: AttributeSet? = <span style="color:#8b008b;font-weight:bold">null</span>,  
+</span></span><span style="display:flex;"><span>    defStyleAttr: Int = <span style="color:#b452cd">0</span>  
+</span></span><span style="display:flex;"><span>) : CardView(context, attrs, defStyleAttr), BannerOperator {  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">var</span> lastUserTouchTime = -<span style="color:#b452cd">1L</span>  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">var</span> delayAfterUserTouch = <span style="color:#b452cd">5000L</span>  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">release</span>() {  
+</span></span><span style="display:flex;"><span>        clearCheckTask()  
+</span></span><span style="display:flex;"><span>        ...
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">dispatchTouchEvent</span>(ev: MotionEvent?): Boolean {  
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">when</span> (ev?.action) {  
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45;font-weight:bold">MotionEvent</span>.ACTION_DOWN -&gt; {  
+</span></span><span style="display:flex;"><span>                userDragging = <span style="color:#8b008b;font-weight:bold">true</span>  
+</span></span><span style="display:flex;"><span>            }  
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45;font-weight:bold">MotionEvent</span>.ACTION_UP -&gt; {  
+</span></span><span style="display:flex;"><span>                userDragging = <span style="color:#8b008b;font-weight:bold">false</span>  
+</span></span><span style="display:flex;"><span>                lastUserTouchTime = <span style="color:#008b45;font-weight:bold">SystemClock</span>.uptimeMillis()  
+</span></span><span style="display:flex;"><span>                checkAndSwitchPage()  
+</span></span><span style="display:flex;"><span>            }  
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45;font-weight:bold">MotionEvent</span>.ACTION_CANCEL -&gt; {  
+</span></span><span style="display:flex;"><span>                userDragging = <span style="color:#8b008b;font-weight:bold">false</span>  
+</span></span><span style="display:flex;"><span>                lastUserTouchTime = <span style="color:#008b45;font-weight:bold">SystemClock</span>.uptimeMillis()  
+</span></span><span style="display:flex;"><span>                checkAndSwitchPage()  
+</span></span><span style="display:flex;"><span>            }  
+</span></span><span style="display:flex;"><span>        }  
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">super</span>.dispatchTouchEvent(ev)  
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">checkAndSwitchPage</span>() {  
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span> (userDragging) {  
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">return</span>  
+</span></span><span style="display:flex;"><span>        }  
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">val</span> timeAfterLastTouch = <span style="color:#008b45;font-weight:bold">SystemClock</span>.uptimeMillis() - lastUserTouchTime  
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span> (timeAfterLastTouch &lt; delayAfterUserTouch) {  
+</span></span><span style="display:flex;"><span>            <span style="color:#228b22">// 用户拖动松手5000 ms内，不自动切换，并规划下一次检查  
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>            handler.postDelayed(checkAutoPlayRunnable, delayAfterUserTouch - timeAfterLastTouch)  
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">return</span>  
+</span></span><span style="display:flex;"><span>        }  
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span> (pageInvalid) {  
+</span></span><span style="display:flex;"><span>            switchNext()  
+</span></span><span style="display:flex;"><span>        }  
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">clearCheckTask</span>() {  
+</span></span><span style="display:flex;"><span>        handler.removeCallbacks(checkAutoPlayRunnable)  
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    ...
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>我们还可以把是否开启轮播交给外部控制，实现锁屏停止轮播，解锁后又恢复轮播的效果。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">BannerView</span> <span style="color:#707a7c">@JvmOverloads</span> <span style="color:#8b008b;font-weight:bold">constructor</span>(  
+</span></span><span style="display:flex;"><span>    context: Context,  
+</span></span><span style="display:flex;"><span>    attrs: AttributeSet? = <span style="color:#8b008b;font-weight:bold">null</span>,  
+</span></span><span style="display:flex;"><span>    defStyleAttr: Int = <span style="color:#b452cd">0</span>  
+</span></span><span style="display:flex;"><span>) : CardView(context, attrs, defStyleAttr), BannerOperator { 
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">var</span> isAutoSwitchEnabled = <span style="color:#8b008b;font-weight:bold">false</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">enableAutoSwitch</span>() {  
+</span></span><span style="display:flex;"><span>        isAutoSwitchEnabled = <span style="color:#8b008b;font-weight:bold">true</span>  
+</span></span><span style="display:flex;"><span>        checkAndSwitchPage()  
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">disableAutoSwitch</span>() {  
+</span></span><span style="display:flex;"><span>        clearCheckTask()  
+</span></span><span style="display:flex;"><span>        isAutoSwitchEnabled = <span style="color:#8b008b;font-weight:bold">false</span>  
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">checkAndSwitchPage</span>() {  
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span> (userDragging) {  
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">return</span>  
+</span></span><span style="display:flex;"><span>        }  
+</span></span><span style="display:flex;"><span>        ...
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">clearCheckTask</span>() {  
+</span></span><span style="display:flex;"><span>        handler.removeCallbacks(checkAutoPlayRunnable)  
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="selectscope">selectScope</h3>
 <p>上述完播事件产生中标记完播时使用了这样的代码 <code>ThreadUtils.postDelayed({ playDone() }, 5_000L)</code> ，其实还是在取消播放时取消下比较严谨。因此可以提供一个CoroutineScope，取消选中状态后自动取消。</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"> <span style="color:#8b008b;font-weight:bold">abstract</span> <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">BannerViewHolder</span>(view: View) : RecyclerView.ViewHolder(view) {  
-    <span style="color:#8b008b;font-weight:bold">protected</span> <span style="color:#8b008b;font-weight:bold">var</span> isSelected = <span style="color:#8b008b;font-weight:bold">false</span>  
-    <span style="color:#8b008b;font-weight:bold">protected</span> <span style="color:#8b008b;font-weight:bold">lateinit</span> <span style="color:#8b008b;font-weight:bold">var</span> selectScope: CoroutineScope  
-
-    <span style="color:#707a7c">@CallSuper</span>  
-    <span style="color:#8b008b;font-weight:bold">open</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onSelect</span>() {  
-        selectScope = CoroutineScope(Dispatchers.Main + SupervisorJob())  
-        isSelected = <span style="color:#8b008b;font-weight:bold">true</span>  
-    }  
-
-    <span style="color:#707a7c">@CallSuper</span>  
-    <span style="color:#8b008b;font-weight:bold">open</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onUnSelect</span>() {  
-        <span style="color:#8b008b;font-weight:bold">if</span> (::selectScope.isInitialized) {  
-            selectScope.cancel()  
-        }  
-        isSelected = <span style="color:#8b008b;font-weight:bold">false</span>  
-    }  
-    ...
-}
-</code></pre></div><p>这样使用方就比较方便了</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">ImageBannerViewHolder</span>(<span style="color:#8b008b;font-weight:bold">val</span> binding: ItemImageBannerBinding) : BannerViewHolder(binding.root) {  
-    ...
-    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onSelect</span>() {  
-        <span style="color:#8b008b;font-weight:bold">super</span>.onSelect()  
-        selectScope.launch {  
-            delay(<span style="color:#b452cd">3000L</span>)  
-            playDone()  
-        }  
-    }  
-}
-</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span> <span style="color:#8b008b;font-weight:bold">abstract</span> <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">BannerViewHolder</span>(view: View) : <span style="color:#008b45;font-weight:bold">RecyclerView</span>.ViewHolder(view) {  
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">protected</span> <span style="color:#8b008b;font-weight:bold">var</span> isSelected = <span style="color:#8b008b;font-weight:bold">false</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">protected</span> <span style="color:#8b008b;font-weight:bold">lateinit</span> <span style="color:#8b008b;font-weight:bold">var</span> selectScope: CoroutineScope  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#707a7c">@CallSuper</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">open</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onSelect</span>() {  
+</span></span><span style="display:flex;"><span>        selectScope = CoroutineScope(<span style="color:#008b45;font-weight:bold">Dispatchers</span>.Main + SupervisorJob())  
+</span></span><span style="display:flex;"><span>        isSelected = <span style="color:#8b008b;font-weight:bold">true</span>  
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#707a7c">@CallSuper</span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">open</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onUnSelect</span>() {  
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span> (::selectScope.isInitialized) {  
+</span></span><span style="display:flex;"><span>            selectScope.cancel()  
+</span></span><span style="display:flex;"><span>        }  
+</span></span><span style="display:flex;"><span>        isSelected = <span style="color:#8b008b;font-weight:bold">false</span>  
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>    ...
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>这样使用方就比较方便了</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">ImageBannerViewHolder</span>(<span style="color:#8b008b;font-weight:bold">val</span> binding: ItemImageBannerBinding) : BannerViewHolder(binding.root) {  
+</span></span><span style="display:flex;"><span>    ...
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onSelect</span>() {  
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">super</span>.onSelect()  
+</span></span><span style="display:flex;"><span>        selectScope.launch {  
+</span></span><span style="display:flex;"><span>            delay(<span style="color:#b452cd">3000L</span>)  
+</span></span><span style="display:flex;"><span>            playDone()  
+</span></span><span style="display:flex;"><span>        }  
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div>
                     
                     <HR width="100%" id="EOF">
 		    <p style="color:#777;">最后修改于 2022-09-14</p>

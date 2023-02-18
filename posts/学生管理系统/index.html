@@ -35,7 +35,6 @@
 
 
 
-
   
 
 
@@ -48,11 +47,11 @@
       <script src="/js/toc.js"></script>
     
     <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
-<link rel="stylesheet" href="/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
+<link rel="stylesheet" href="/scss/journal.scss" integrity="" media="screen">
 
 
 
-<link rel="stylesheet" href="/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
+<link rel="stylesheet" href="/scss/dark-mode.scss" integrity="" media="screen">
 
 
 <link rel="stylesheet"
@@ -592,7 +591,7 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
                             
                             19 min
                             
-                            8 s.
+                            9 s.
                         
                     </div>
                 </div>
@@ -617,7 +616,7 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <li>consoletest.exe	编译的au3程序，用于辅助输入中文。</li>
 </ul>
 <p>代码：</p>
-<pre tabindex="0"><code class="language-autoit" data-lang="autoit">$re=InputBox(&quot;Input&quot;,&quot;You can input your massage now.(支持中文)&quot;)
+<pre tabindex="0"><code class="language-autoit" data-lang="autoit">$re=InputBox(&#34;Input&#34;,&#34;You can input your massage now.(支持中文)&#34;)
 ConsoleWrite($re)
 </code></pre><ul>
 <li>code.dat	密码存储文件。该文件存储的是xor算法加密的账号密码。</li>
@@ -757,871 +756,871 @@ X,Y为菜单加载的坐标。
 <p><img src="/res/img/stu1.png" alt=""></p>
 <p><img src="/res/img/stu2.png" alt=""></p>
 <p><img src="/res/img/stu3.png" alt=""></p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&#34;stdio.h&#34;</span><span style="color:#1e889b">
-</span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&#34;stdlib.h&#34;</span><span style="color:#1e889b">
-</span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&#34;string.h&#34;</span><span style="color:#1e889b">
-</span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;windows.h&gt;</span><span style="color:#1e889b">
-</span><span style="color:#1e889b"></span><span style="color:#228b22">//#include &lt;conio.h&gt;
-</span><span style="color:#228b22"></span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&#34;math.h&#34;</span><span style="color:#1e889b">
-</span><span style="color:#1e889b"></span><span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">miniMessage</span>(<span style="color:#00688b;font-weight:bold">char</span>*msg);
-<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">showExitPic</span>();
-<span style="color:#228b22">/*
-</span><span style="color:#228b22">typedef HWND (WINAPI *PROCGETCONSOLEWINDOW)();//图片加载
-</span><span style="color:#228b22">PROCGETCONSOLEWINDOW GetConsoleWindow;
-</span><span style="color:#228b22">*/</span>
-<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">PrintChar</span>(<span style="color:#00688b;font-weight:bold">char</span> *ch,UINT count,UINT x,UINT y)  <span style="color:#228b22">//在坐标(x,y)处输出字符串ch,ch里有count个字符
-</span><span style="color:#228b22"></span>{
-    HANDLE h=GetStdHandle(STD_OUTPUT_HANDLE);
-    COORD pos;
-    ULONG unuse;
-    pos.X=x;
-    pos.Y=y;
-    CONSOLE_SCREEN_BUFFER_INFO bInfo; <span style="color:#228b22">// 窗口缓冲区信息
-</span><span style="color:#228b22"></span>    GetConsoleScreenBufferInfo(h, &amp;bInfo );
-    WriteConsoleOutputCharacterA(h,ch,count,pos,&amp;unuse);
-}
-<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">color</span>(<span style="color:#00688b;font-weight:bold">short</span> x) <span style="color:#228b22">//自定义函根据参数改变颜色
-</span><span style="color:#228b22"></span>{
-    <span style="color:#8b008b;font-weight:bold">if</span>(x&gt;=<span style="color:#b452cd">0</span> &amp;&amp; x&lt;=<span style="color:#b452cd">15</span>)<span style="color:#228b22">//参数在0-15的范围颜色
-</span><span style="color:#228b22"></span>        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), x);    <span style="color:#228b22">//只有一个参数，改变字体颜色
-</span><span style="color:#228b22"></span>    <span style="color:#8b008b;font-weight:bold">else</span><span style="color:#228b22">//默认的颜色白色
-</span><span style="color:#228b22"></span>        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), <span style="color:#b452cd">7</span>);
-    <span style="color:#228b22">/*
-</span><span style="color:#228b22">    颜色函数SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),前景色 | 背景色 | 前景加强 | 背景加强);
-</span><span style="color:#228b22">        前景色：数字0-15 或 FOREGROUND_XXX 表示  （其中XXX可用BLUE、RED、GREEN表示）
-</span><span style="color:#228b22">        前景加强：数字8 或 FOREGROUND_INTENSITY 表示
-</span><span style="color:#228b22">        背景色：数字16 32 64 或 BACKGROUND_XXX 三种颜色表示
-</span><span style="color:#228b22">        背景加强： 数字128 或 BACKGROUND_INTENSITY 表示
-</span><span style="color:#228b22">    主要应用：改变指定区域字体与背景的颜色
-</span><span style="color:#228b22">    前景颜色对应值：
-</span><span style="color:#228b22">    　　0=黑色                8=灰色　　
-</span><span style="color:#228b22">      　1=蓝色                9=淡蓝色        十六进制        　　
-</span><span style="color:#228b22">    　　2=绿色                10=淡绿色       0xa        　　
-</span><span style="color:#228b22">    　　3=湖蓝色              11=淡浅绿色     0xb　
-</span><span style="color:#228b22">    　　4=红色                12=淡红色       0xc　　
-</span><span style="color:#228b22">    　　5=紫色                13=淡紫色       0xd        　　
-</span><span style="color:#228b22">    　　6=黄色                14=淡黄色       0xe        　　
-</span><span style="color:#228b22">    　　7=白色                15=亮白色       0xf
-</span><span style="color:#228b22">    　　也可以把这些值设置成常量。
-</span><span style="color:#228b22">    */</span>
-}
-<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">gotoxy</span>(<span style="color:#00688b;font-weight:bold">unsigned</span> <span style="color:#00688b;font-weight:bold">char</span> x,<span style="color:#00688b;font-weight:bold">unsigned</span> <span style="color:#00688b;font-weight:bold">char</span> y)
-{
-    <span style="color:#228b22">//COORD是Windows API中定义的一种结构，表示一个字符在控制台屏幕上的坐标
-</span><span style="color:#228b22"></span>    COORD cor;
-    <span style="color:#228b22">//句柄
-</span><span style="color:#228b22"></span>    HANDLE hout;
-    <span style="color:#228b22">//设定我们要定位到的坐标
-</span><span style="color:#228b22"></span>    cor.X = x;
-    cor.Y = y;
-    <span style="color:#228b22">//GetStdHandle函数获取一个指向特定标准设备的句柄，包括标准输入，标准输出和标准错误。
-</span><span style="color:#228b22"></span>    <span style="color:#228b22">//STD_OUTPUT_HANDLE正是代表标准输出（也就是显示屏）的宏
-</span><span style="color:#228b22"></span>    hout = GetStdHandle(STD_OUTPUT_HANDLE);
-    <span style="color:#228b22">//SetConsoleCursorPosition函数用于设置控制台光标的位置
-</span><span style="color:#228b22"></span>    SetConsoleCursorPosition(hout, cor);
-}
-<span style="color:#8b008b;font-weight:bold">typedef</span> <span style="color:#8b008b;font-weight:bold">struct</span>
-{
-    <span style="color:#00688b;font-weight:bold">char</span> name[<span style="color:#b452cd">25</span>];
-    <span style="color:#00688b;font-weight:bold">char</span> sex;
-    <span style="color:#00688b;font-weight:bold">int</span> age;
-    <span style="color:#00688b;font-weight:bold">int</span> id;
-    <span style="color:#00688b;font-weight:bold">int</span> subjects[<span style="color:#b452cd">50</span>];
-    <span style="color:#00688b;font-weight:bold">int</span> sum;
-    <span style="color:#00688b;font-weight:bold">int</span> avg;
-} student;
-<span style="color:#00688b;font-weight:bold">char</span> sub_name[<span style="color:#b452cd">50</span>][<span style="color:#b452cd">25</span>];
-student stu_dat[<span style="color:#b452cd">10000</span>];
-<span style="color:#00688b;font-weight:bold">int</span> dat_count;
-<span style="color:#00688b;font-weight:bold">int</span> sub_count;
-<span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">Login</span>(<span style="color:#00688b;font-weight:bold">char</span>*c1,<span style="color:#00688b;font-weight:bold">char</span>*c2)
-{
-    FILE*fp;
-    <span style="color:#00688b;font-weight:bold">char</span>*p1;
-    <span style="color:#00688b;font-weight:bold">char</span>*p3;
-    <span style="color:#00688b;font-weight:bold">char</span>*p2;
-    <span style="color:#00688b;font-weight:bold">int</span> tmp;
-    fp=fopen(<span style="color:#cd5555">&#34;code.dat&#34;</span>,<span style="color:#cd5555">&#34;r&#34;</span>);
-    p1=c1;
-    p3=c2;
-    <span style="color:#8b008b;font-weight:bold">if</span>(strlen(c1)&gt;strlen(c2))
-    {
-        p2=p1;
-        p1=p3;
-        p3=p2;
-    }
-    <span style="color:#8b008b;font-weight:bold">for</span> (; *p3!=<span style="color:#cd5555">&#39;\0&#39;</span>; )
-    {
-        <span style="color:#8b008b;font-weight:bold">if</span>(*p1==<span style="color:#cd5555">&#39;\0&#39;</span>)
-        {
-            p1=c1;
-        }
-        tmp=fgetc(fp);
-        <span style="color:#8b008b;font-weight:bold">if</span>(((*p1)^(*p3))!=tmp)
-        {
-            <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>;
-        }
-        p1++;
-        p3++;
-    }
-    <span style="color:#8b008b;font-weight:bold">if</span>(strlen(c1)&lt;<span style="color:#b452cd">2</span>||strlen(c2)&lt;<span style="color:#b452cd">6</span>)
-    {
-        <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>;
-    }
-    <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">1</span>;
-    fclose(fp);
-}
-<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">savePwd</span>(<span style="color:#00688b;font-weight:bold">char</span>*c1,<span style="color:#00688b;font-weight:bold">char</span>*c2)
-{
-    FILE*fp;
-    fp=fopen(<span style="color:#cd5555">&#34;code.dat&#34;</span>,<span style="color:#cd5555">&#34;w&#34;</span>);
-    <span style="color:#00688b;font-weight:bold">char</span>*p1=c1;
-    <span style="color:#00688b;font-weight:bold">char</span>*p2=c2;
-    <span style="color:#00688b;font-weight:bold">char</span>*p3;
-    <span style="color:#8b008b;font-weight:bold">if</span>(strlen(c1)&gt;strlen(c2))
-    {
-        p3=p1;
-        p1=p2;
-        p2=p3;
-    }
-    <span style="color:#8b008b;font-weight:bold">for</span> (; *p2!=<span style="color:#cd5555">&#39;\0&#39;</span>; )
-    {
-        <span style="color:#8b008b;font-weight:bold">if</span>(*p1==<span style="color:#cd5555">&#39;\0&#39;</span>)
-        {
-            p1=c1;
-        }
-        fputc((*p1)^(*p2),fp);
-        p1++;
-        p2++;
-    }
-    fclose(fp);
-}
-<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">dat_add</span>(student*s1)
-{
-    FILE*fp;
-    s1-&gt;sum=<span style="color:#b452cd">0</span>;
-    <span style="color:#8b008b;font-weight:bold">for</span> (<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;sub_count; i++)
-    {
-        s1-&gt;sum+=s1-&gt;subjects[i];
-    }
-    s1-&gt;avg=s1-&gt;sum/=sub_count;
-    fp=fopen(<span style="color:#cd5555">&#34;main.dat&#34;</span>,<span style="color:#cd5555">&#34;ab&#34;</span>);
-    <span style="color:#8b008b;font-weight:bold">if</span>(fp==<span style="color:#658b00">NULL</span>)
-    {
-        fp=fopen(<span style="color:#cd5555">&#34;main.dat&#34;</span>,<span style="color:#cd5555">&#34;wb&#34;</span>);
-    }
-    fwrite(s1,<span style="color:#8b008b;font-weight:bold">sizeof</span>(student),<span style="color:#b452cd">1</span>,fp);
-    fclose(fp);
-}
-<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">sub_load</span>()
-{
-    FILE*fp;
-    fp=fopen(<span style="color:#cd5555">&#34;subjects.dat&#34;</span>,<span style="color:#cd5555">&#34;r&#34;</span>);
-    sub_count=<span style="color:#b452cd">0</span>;
-    <span style="color:#8b008b;font-weight:bold">for</span> (<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;<span style="color:#b452cd">50</span>; i++)
-    {
-        fgets(sub_name[i],<span style="color:#8b008b;font-weight:bold">sizeof</span>(sub_name),fp);
-        sub_name[i][strlen(sub_name[i])-<span style="color:#b452cd">1</span>]=<span style="color:#cd5555">&#39;\0&#39;</span>;
-        <span style="color:#8b008b;font-weight:bold">if</span>(strlen(sub_name[i])&gt;<span style="color:#b452cd">0</span>)
-        {
-            sub_count++;
-        }
-    }
-    fclose(fp);
-}
-<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">sub_print</span>()
-{
-    printf(<span style="color:#cd5555">&#34;学号</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">姓名</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">性别</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">年龄</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">&#34;</span>);
-    <span style="color:#8b008b;font-weight:bold">for</span> (<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;<span style="color:#b452cd">50</span>; i++)
-    {
-        <span style="color:#8b008b;font-weight:bold">if</span>(strlen(sub_name[i])==<span style="color:#b452cd">0</span>)
-        {
-            <span style="color:#8b008b;font-weight:bold">break</span>;
-        }
-        printf(<span style="color:#cd5555">&#34;%s</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">&#34;</span>,sub_name[i]);
-    }
-    printf(<span style="color:#cd5555">&#34;总分</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">平均分</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">排名</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">&#34;</span>);
-    putchar(<span style="color:#cd5555">&#39;\n&#39;</span>);
-}
-<span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">dat_load</span>()
-{
-    FILE*fp;
-    <span style="color:#00688b;font-weight:bold">int</span> i;
-    fp=fopen(<span style="color:#cd5555">&#34;main.dat&#34;</span>,<span style="color:#cd5555">&#34;rb&#34;</span>);
-    <span style="color:#8b008b;font-weight:bold">if</span>(fp==<span style="color:#658b00">NULL</span>)
-    {
-        puts(<span style="color:#cd5555">&#34;main.dat is lost!&#34;</span>);
-        exit(<span style="color:#b452cd">1</span>);
-    }
-    <span style="color:#8b008b;font-weight:bold">for</span> (i=<span style="color:#b452cd">0</span>; !feof(fp) ; i++)
-    {
-        fread(&amp;stu_dat[i],<span style="color:#8b008b;font-weight:bold">sizeof</span>(student),<span style="color:#b452cd">1</span>,fp);
-    }
-    fclose(fp);
-    <span style="color:#8b008b;font-weight:bold">return</span> i-<span style="color:#b452cd">1</span>;
-}
-<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">dat_show</span> (student s)
-{
-    printf(<span style="color:#cd5555">&#34;%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%s</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%c</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">&#34;</span>,s.id,s.name,s.sex,s.age);
-    <span style="color:#8b008b;font-weight:bold">for</span> (<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;sub_count; i++)
-    {
-        printf(<span style="color:#cd5555">&#34;%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">&#34;</span>,s.subjects[i]);
-    }
-    printf(<span style="color:#cd5555">&#34;%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">&#34;</span>,s.sum,s.avg);
-}
-<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">showMiniWindow</span>(<span style="color:#00688b;font-weight:bold">char</span>*title,<span style="color:#00688b;font-weight:bold">int</span> X,<span style="color:#00688b;font-weight:bold">int</span> Y,<span style="color:#00688b;font-weight:bold">int</span> height,<span style="color:#00688b;font-weight:bold">int</span> width)
-{
-    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;width; i++)
-    {
-        <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i2=<span style="color:#b452cd">0</span>; i2&lt;height; i2++)
-        {
-            gotoxy(X+i,Y+i2);
-            putchar(<span style="color:#cd5555">&#39; &#39;</span>);
-        }
-    }
-    color(<span style="color:#b452cd">3</span>);
-    gotoxy(X,Y);
-    putchar(<span style="color:#cd5555">&#39;X&#39;</span>);
-    gotoxy(X+width-<span style="color:#b452cd">1</span>,Y);
-    putchar(<span style="color:#cd5555">&#39;X&#39;</span>);
-    gotoxy(X,Y+height-<span style="color:#b452cd">1</span>);
-    putchar(<span style="color:#cd5555">&#39;X&#39;</span>);
-    gotoxy(X+width-<span style="color:#b452cd">1</span>,Y+height-<span style="color:#b452cd">1</span>);
-    putchar(<span style="color:#cd5555">&#39;X&#39;</span>);
-    color(<span style="color:#b452cd">5</span>);
-    <span style="color:#8b008b;font-weight:bold">for</span> (<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">2</span>; i&lt;width; i++)
-    {
-        gotoxy(X+i-<span style="color:#b452cd">1</span>,Y);
-        putchar(<span style="color:#cd5555">&#39;-&#39;</span>);
-        gotoxy(X+i-<span style="color:#b452cd">1</span>,Y+height-<span style="color:#b452cd">1</span>);
-        putchar(<span style="color:#cd5555">&#39;-&#39;</span>);
-    }
-    color(<span style="color:#b452cd">9</span>);
-    <span style="color:#8b008b;font-weight:bold">for</span> (<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">2</span>; i&lt;height; i++)
-    {
-        gotoxy(X,Y+i-<span style="color:#b452cd">1</span>);
-        putchar(<span style="color:#cd5555">&#39;|&#39;</span>);
-        gotoxy(X+width-<span style="color:#b452cd">1</span>,Y+i-<span style="color:#b452cd">1</span>);
-        putchar(<span style="color:#cd5555">&#39;|&#39;</span>);
-        PrintChar(<span style="color:#cd5555">&#34;|&#34;</span>,<span style="color:#b452cd">1</span>,X+width-<span style="color:#b452cd">1</span>,Y+i-<span style="color:#b452cd">1</span>);
-    }
-    color(<span style="color:#b452cd">12</span>);
-    gotoxy(X+width/<span style="color:#b452cd">2</span>-strlen(title)/<span style="color:#b452cd">2</span>,Y);
-    printf(<span style="color:#cd5555">&#34;%s&#34;</span>,title);
-    color(<span style="color:#b452cd">16</span>);
-    gotoxy(X+<span style="color:#b452cd">1</span>,Y+<span style="color:#b452cd">1</span>);
-}
-<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">miniLogin</span> ()
-{
-    <span style="color:#00688b;font-weight:bold">char</span> c1[<span style="color:#b452cd">25</span>],c2[<span style="color:#b452cd">25</span>];
-    <span style="color:#00688b;font-weight:bold">char</span> ch_tmp;
-    <span style="color:#00688b;font-weight:bold">char</span>*p=c2;
-    FILE*fp;
-    showMiniWindow(<span style="color:#cd5555">&#34;login&#34;</span>,<span style="color:#b452cd">6</span>,<span style="color:#b452cd">5</span>,<span style="color:#b452cd">4</span>,<span style="color:#b452cd">32</span>);
-    puts(<span style="color:#cd5555">&#34;User     ________________&#34;</span>);
-    gotoxy(<span style="color:#b452cd">7</span>,<span style="color:#b452cd">7</span>);
-    puts(<span style="color:#cd5555">&#34;password ________________&#34;</span>);
-    gotoxy(<span style="color:#b452cd">16</span>,<span style="color:#b452cd">6</span>);
-    fgets(c1,<span style="color:#8b008b;font-weight:bold">sizeof</span>(c1),stdin);
-    c1[strlen(c1)-<span style="color:#b452cd">1</span>]=<span style="color:#cd5555">&#39;\0&#39;</span>;
-    gotoxy(<span style="color:#b452cd">16</span>,<span style="color:#b452cd">7</span>);
-    <span style="color:#8b008b;font-weight:bold">while</span>(<span style="color:#b452cd">1</span>)
-    {
-        ch_tmp=getch();
-        <span style="color:#8b008b;font-weight:bold">if</span>(ch_tmp==<span style="color:#b452cd">13</span>)
-        {
-            *p=<span style="color:#cd5555">&#39;\0&#39;</span>;
-            <span style="color:#8b008b;font-weight:bold">break</span>;
-        }
-        <span style="color:#8b008b;font-weight:bold">else</span> <span style="color:#8b008b;font-weight:bold">if</span>(ch_tmp==<span style="color:#cd5555">&#39;~&#39;</span>)
-        {
-            system(<span style="color:#cd5555">&#34;consoletest.exe&gt;scaned.txt&#34;</span>);
-            fp=fopen(<span style="color:#cd5555">&#34;scaned.txt&#34;</span>,<span style="color:#cd5555">&#34;r&#34;</span>);
-            fgets(c2,<span style="color:#8b008b;font-weight:bold">sizeof</span>(c2),fp);
-            fclose(fp);
-            system(<span style="color:#cd5555">&#34;del scaned.txt&#34;</span>);
-            <span style="color:#8b008b;font-weight:bold">break</span>;
-        }
-        <span style="color:#8b008b;font-weight:bold">else</span>
-        {
-            *p=ch_tmp;
-            p++;
-            putchar(<span style="color:#cd5555">&#39;*&#39;</span>);
-        }
-    }
-    <span style="color:#8b008b;font-weight:bold">if</span>(Login(c1,c2))
-    {
-        miniMessage(<span style="color:#cd5555">&#34;登录成功，欢迎您的使用！&#34;</span>);
-    }
-    <span style="color:#8b008b;font-weight:bold">else</span>
-    {
-        miniMessage(<span style="color:#cd5555">&#34;用户名或密码错误！&#34;</span>);
-        Sleep(<span style="color:#b452cd">1000</span>);
-        showExitPic();
-        exit(<span style="color:#b452cd">1</span>);
-    }
-    Sleep(<span style="color:#b452cd">1000</span>);
-}
-<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">miniMessage</span>(<span style="color:#00688b;font-weight:bold">char</span>*msg)
-{
-    <span style="color:#00688b;font-weight:bold">int</span> n=strlen(msg);
-    <span style="color:#00688b;font-weight:bold">int</span> width=(<span style="color:#00688b;font-weight:bold">int</span>)sqrt(n)+<span style="color:#b452cd">10</span>;
-    <span style="color:#00688b;font-weight:bold">int</span> height=n/(width-<span style="color:#b452cd">2</span>)+<span style="color:#b452cd">4</span>;
-    <span style="color:#00688b;font-weight:bold">int</span> X=<span style="color:#b452cd">5</span>;
-    <span style="color:#00688b;font-weight:bold">int</span> Y=<span style="color:#b452cd">7</span>;
-    showMiniWindow(<span style="color:#cd5555">&#34;Message&#34;</span>,X,Y,height,width);
-    X++;
-    Y++;
-    <span style="color:#8b008b;font-weight:bold">for</span> (<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;n; i++)
-    {
-        putchar(msg[i]);
-        <span style="color:#8b008b;font-weight:bold">if</span>(i%(width-<span style="color:#b452cd">2</span>)==<span style="color:#b452cd">0</span>)
-        {
-            Y++;
-            gotoxy(X,Y);
-        }
-    }
-}
-<span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">showMenu</span>(<span style="color:#00688b;font-weight:bold">char</span> txt[][<span style="color:#b452cd">50</span>],<span style="color:#00688b;font-weight:bold">int</span> n,<span style="color:#00688b;font-weight:bold">int</span> selected,<span style="color:#00688b;font-weight:bold">int</span> X,<span style="color:#00688b;font-weight:bold">int</span> Y)
-{
-    <span style="color:#00688b;font-weight:bold">int</span> maxwidth=<span style="color:#b452cd">0</span>;
-    <span style="color:#00688b;font-weight:bold">int</span> tmp_width;
-    <span style="color:#00688b;font-weight:bold">char</span> tmp_press;
-    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;n; i++)
-    {
-        tmp_width=strlen(txt[i]);
-        <span style="color:#8b008b;font-weight:bold">if</span>(tmp_width&gt;maxwidth)
-        {
-            maxwidth=tmp_width;
-        }
-    }
-    showMiniWindow(<span style="color:#cd5555">&#34;MENU&#34;</span>,X,Y,n+<span style="color:#b452cd">2</span>,maxwidth+<span style="color:#b452cd">2</span>);
-    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;n; i++)
-    {
-        <span style="color:#8b008b;font-weight:bold">if</span>(i==selected)
-        {
-            color(<span style="color:#b452cd">4</span>);
-        }
-        <span style="color:#8b008b;font-weight:bold">else</span>
-        {
-            color(<span style="color:#b452cd">6</span>);
-        }
-        <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i2=<span style="color:#b452cd">0</span>; txt[i][i2]!=<span style="color:#cd5555">&#39;\0&#39;</span>; i2++)
-        {
-            gotoxy(X+i2+<span style="color:#b452cd">1</span>,Y+i+<span style="color:#b452cd">1</span>);
-            putchar(txt[i][i2]);
-        }
-    }
-    color(<span style="color:#b452cd">16</span>);
-    tmp_press=getch();
-    <span style="color:#8b008b;font-weight:bold">if</span>(tmp_press==<span style="color:#b452cd">13</span>)
-    {
-        <span style="color:#8b008b;font-weight:bold">return</span> selected;
-    }
-    <span style="color:#8b008b;font-weight:bold">else</span> <span style="color:#8b008b;font-weight:bold">if</span>(tmp_press==<span style="color:#b452cd">72</span>)
-    {
-        <span style="color:#8b008b;font-weight:bold">if</span>(selected&gt;<span style="color:#b452cd">0</span>)
-        {
-            selected--;
-        }
-        <span style="color:#8b008b;font-weight:bold">else</span>
-        {
-            putchar(<span style="color:#cd5555">&#39;\a&#39;</span>);
-        }
-    }
-    <span style="color:#8b008b;font-weight:bold">else</span> <span style="color:#8b008b;font-weight:bold">if</span>(tmp_press==<span style="color:#b452cd">80</span>)
-    {
-        <span style="color:#8b008b;font-weight:bold">if</span>(selected&lt;n-<span style="color:#b452cd">1</span>)
-        {
-            selected++;
-        }
-        <span style="color:#8b008b;font-weight:bold">else</span>
-        {
-            putchar(<span style="color:#cd5555">&#39;\a&#39;</span>);
-        }
-    }
-    <span style="color:#8b008b;font-weight:bold">else</span> <span style="color:#8b008b;font-weight:bold">if</span>(tmp_press-<span style="color:#cd5555">&#39;0&#39;</span>&gt;=<span style="color:#b452cd">0</span>&amp;&amp;tmp_press-<span style="color:#cd5555">&#39;0&#39;</span>&lt;n)
-    {
-        selected=tmp_press-<span style="color:#cd5555">&#39;0&#39;</span>;
-    }
-    <span style="color:#8b008b;font-weight:bold">return</span> showMenu(txt,n,selected,X,Y);
-}
-<span style="color:#228b22">/*
-</span><span style="color:#228b22">void picLoad(char*path)
-</span><span style="color:#228b22">{
-</span><span style="color:#228b22">    HMODULE hKernel32 = GetModuleHandle(&#34;kernel32&#34;);
-</span><span style="color:#228b22">    GetConsoleWindow= (PROCGETCONSOLEWINDOW)GetProcAddress(hKernel32,&#34;GetConsoleWindow&#34;);
-</span><span style="color:#228b22">    HWND cmd=GetConsoleWindow();
-</span><span style="color:#228b22">    HDC dc = GetDC(cmd);
-</span><span style="color:#228b22">    HBITMAP hBitmap;
-</span><span style="color:#228b22">    hBitmap=(HBITMAP)LoadImage            (NULL,path,IMAGE_BITMAP,0,0,LR_LOADFROMFILE|LR_CREATEDIBSECTION);
-</span><span style="color:#228b22">    HDC cmdmem = CreateCompatibleDC(dc);
-</span><span style="color:#228b22">    SelectObject(cmdmem, hBitmap);
-</span><span style="color:#228b22">    BitBlt(dc, 0, 0, 1300, 700, cmdmem, 0, 0, SRCCOPY);
-</span><span style="color:#228b22">    Sleep(3000);
-</span><span style="color:#228b22">    return ;
-</span><span style="color:#228b22">}*/</span>
-<span style="color:#228b22">/*
-</span><span style="color:#228b22">void loadBlack()
-</span><span style="color:#228b22">{
-</span><span style="color:#228b22">    HMODULE hKernel32 = GetModuleHandle(&#34;kernel32&#34;);
-</span><span style="color:#228b22">    GetConsoleWindow= (PROCGETCONSOLEWINDOW)GetProcAddress(hKernel32,&#34;GetConsoleWindow&#34;);
-</span><span style="color:#228b22">    HWND cmd=GetConsoleWindow();
-</span><span style="color:#228b22">    HDC dc = GetDC(cmd);
-</span><span style="color:#228b22">    HBITMAP hBitmap;
-</span><span style="color:#228b22">    hBitmap=(HBITMAP)LoadImage            (NULL,&#34;black.bmp&#34;,IMAGE_BITMAP,0,0,LR_LOADFROMFILE|LR_CREATEDIBSECTION);
-</span><span style="color:#228b22">    HDC cmdmem = CreateCompatibleDC(dc);
-</span><span style="color:#228b22">    SelectObject(cmdmem, hBitmap);
-</span><span style="color:#228b22">    BitBlt(dc, 0, 0, 1300, 700, cmdmem, 0, 0, SRCCOPY);
-</span><span style="color:#228b22">    return ;
-</span><span style="color:#228b22">}
-</span><span style="color:#228b22">*/</span>
-<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">showExitPic</span>()
-{
-    system(<span style="color:#cd5555">&#34;image goodbye.bmp 0 0&#34;</span>);
-    Sleep(<span style="color:#b452cd">3000</span>);
-    <span style="color:#228b22">//picLoad(&#34;goodbye.bmp&#34;);
-</span><span style="color:#228b22"></span>}
-<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">add_stu</span>()
-{
-    <span style="color:#00688b;font-weight:bold">char</span> tmp_sex[<span style="color:#b452cd">10</span>];
-    student tmp;
-    system(<span style="color:#cd5555">&#34;cls&#34;</span>);
-    printf(<span style="color:#cd5555">&#34;Please input the id number of the new student.</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
-    scanf(<span style="color:#cd5555">&#34;%d&#34;</span>,&amp;tmp.id);
-    printf(<span style="color:#cd5555">&#34;Please input the name of the student.</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
-    scanf(<span style="color:#cd5555">&#34;%s&#34;</span>,tmp.name);
-    printf(<span style="color:#cd5555">&#34;Please input the sex of the student.(F for Female,M for Male.)</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
-    scanf(<span style="color:#cd5555">&#34;%s&#34;</span>,tmp_sex);
-    <span style="color:#8b008b;font-weight:bold">if</span>(strcmp(tmp_sex,<span style="color:#cd5555">&#34;F&#34;</span>)==<span style="color:#b452cd">0</span>)
-    {
-        tmp.sex=<span style="color:#cd5555">&#39;F&#39;</span>;
-    }
-    <span style="color:#8b008b;font-weight:bold">else</span>
-    {
-        tmp.sex=<span style="color:#cd5555">&#39;M&#39;</span>;
-    }
-    printf(<span style="color:#cd5555">&#34;Please input the age of the student.</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
-    scanf(<span style="color:#cd5555">&#34;%d&#34;</span>,&amp;tmp.age);
-    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;sub_count; i++)
-    {
-        printf(<span style="color:#cd5555">&#34;Please input %s&#39;s %s score.</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>,tmp.name,sub_name[i]);
-        scanf(<span style="color:#cd5555">&#34;%d&#34;</span>,&amp;tmp.subjects[i]);
-    }
-    dat_add(&amp;tmp);
-    dat_count=dat_load();
-    printf(<span style="color:#cd5555">&#34;Data added successfully!</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
-    Sleep(<span style="color:#b452cd">3000</span>);
-}
-<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">showalldata</span>()
-{
-    system(<span style="color:#cd5555">&#34;cls&#34;</span>);
-    sub_print();
-    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;dat_count; i++)
-    {
-        printf(<span style="color:#cd5555">&#34;%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%s</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%c</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">&#34;</span>,stu_dat[i].id,stu_dat[i].name,stu_dat[i].sex,stu_dat[i].age);
-        <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i2=<span style="color:#b452cd">0</span>; i2&lt;sub_count; i2++)
-        {
-            printf(<span style="color:#cd5555">&#34;%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">&#34;</span>,stu_dat[i].subjects[i2]);
-        }
-        printf(<span style="color:#cd5555">&#34;%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t\n</span><span style="color:#cd5555">&#34;</span>,stu_dat[i].sum,stu_dat[i].avg,i+<span style="color:#b452cd">1</span>);
-    }
-    system(<span style="color:#cd5555">&#34;pause&#34;</span>);
-}
-<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">ed_password</span>()
-{
-    <span style="color:#00688b;font-weight:bold">char</span> us_name[<span style="color:#b452cd">50</span>];
-    <span style="color:#00688b;font-weight:bold">char</span> us_pwd[<span style="color:#b452cd">50</span>];
-    <span style="color:#00688b;font-weight:bold">char</span> us_pwd2[<span style="color:#b452cd">50</span>];
-    <span style="color:#00688b;font-weight:bold">char</span> us_pwd3[<span style="color:#b452cd">50</span>];
-    <span style="color:#00688b;font-weight:bold">char</span>*p;
-    FILE*fp;
-    system(<span style="color:#cd5555">&#34;cls&#34;</span>);
-    showMiniWindow(<span style="color:#cd5555">&#34;修改密码&#34;</span>,<span style="color:#b452cd">5</span>,<span style="color:#b452cd">7</span>,<span style="color:#b452cd">6</span>,<span style="color:#b452cd">36</span>);
-    puts(<span style="color:#cd5555">&#34;UserName&#34;</span>);
-    gotoxy(<span style="color:#b452cd">6</span>,<span style="color:#b452cd">9</span>);
-    puts(<span style="color:#cd5555">&#34;PassWord&#34;</span>);
-    gotoxy(<span style="color:#b452cd">6</span>,<span style="color:#b452cd">10</span>);
-    puts(<span style="color:#cd5555">&#34;NewPassWord&#34;</span>);
-    gotoxy(<span style="color:#b452cd">6</span>,<span style="color:#b452cd">11</span>);
-    puts(<span style="color:#cd5555">&#34;Again&#34;</span>);
-    gotoxy(<span style="color:#b452cd">18</span>,<span style="color:#b452cd">8</span>);
-    scanf(<span style="color:#cd5555">&#34;%s&#34;</span>,us_name);
-    gotoxy(<span style="color:#b452cd">18</span>,<span style="color:#b452cd">9</span>);
-    p=us_pwd;
-    <span style="color:#8b008b;font-weight:bold">while</span>(<span style="color:#b452cd">1</span>)
-    {
-        *p=getch();
-        <span style="color:#8b008b;font-weight:bold">if</span>(*p==<span style="color:#b452cd">13</span>)
-        {
-            p--;
-            <span style="color:#8b008b;font-weight:bold">break</span>;
-        }
-        <span style="color:#8b008b;font-weight:bold">else</span> <span style="color:#8b008b;font-weight:bold">if</span>(*p==<span style="color:#cd5555">&#39;~&#39;</span>)
-        {
-            system(<span style="color:#cd5555">&#34;consoletest.exe&gt;scaned.txt&#34;</span>);
-            fp=fopen(<span style="color:#cd5555">&#34;scaned.txt&#34;</span>,<span style="color:#cd5555">&#34;r&#34;</span>);
-            fgets(us_pwd,<span style="color:#8b008b;font-weight:bold">sizeof</span>(us_pwd),fp);
-            fclose(fp);
-            system(<span style="color:#cd5555">&#34;del scaned.txt&#34;</span>);
-            <span style="color:#8b008b;font-weight:bold">break</span>;
-        }
-        <span style="color:#8b008b;font-weight:bold">else</span>
-        {
-            putchar(<span style="color:#cd5555">&#39;*&#39;</span>);
-            p++;
-        }
-    }
-    gotoxy(<span style="color:#b452cd">18</span>,<span style="color:#b452cd">10</span>);
-    p=us_pwd2;
-    <span style="color:#8b008b;font-weight:bold">while</span>(<span style="color:#b452cd">1</span>)
-    {
-        *p=getch();
-        <span style="color:#8b008b;font-weight:bold">if</span>(*p==<span style="color:#b452cd">13</span>)
-        {
-            p--;
-            <span style="color:#8b008b;font-weight:bold">break</span>;
-        }
-        <span style="color:#8b008b;font-weight:bold">else</span> <span style="color:#8b008b;font-weight:bold">if</span>(*p==<span style="color:#cd5555">&#39;~&#39;</span>)
-        {
-            system(<span style="color:#cd5555">&#34;consoletest.exe&gt;scaned.txt&#34;</span>);
-            fp=fopen(<span style="color:#cd5555">&#34;scaned.txt&#34;</span>,<span style="color:#cd5555">&#34;r&#34;</span>);
-            fgets(us_pwd2,<span style="color:#8b008b;font-weight:bold">sizeof</span>(us_pwd2),fp);
-            fclose(fp);
-            system(<span style="color:#cd5555">&#34;del scaned.txt&#34;</span>);
-            <span style="color:#8b008b;font-weight:bold">break</span>;
-        }
-        <span style="color:#8b008b;font-weight:bold">else</span>
-        {
-            putchar(<span style="color:#cd5555">&#39;*&#39;</span>);
-            p++;
-        }
-    }
-    gotoxy(<span style="color:#b452cd">18</span>,<span style="color:#b452cd">11</span>);
-    p=us_pwd3;
-    <span style="color:#8b008b;font-weight:bold">while</span>(<span style="color:#b452cd">1</span>)
-    {
-        *p=getch();
-        <span style="color:#8b008b;font-weight:bold">if</span>(*p==<span style="color:#b452cd">13</span>)
-        {
-            p--;
-            <span style="color:#8b008b;font-weight:bold">break</span>;
-        }
-        <span style="color:#8b008b;font-weight:bold">else</span> <span style="color:#8b008b;font-weight:bold">if</span>(*p==<span style="color:#cd5555">&#39;~&#39;</span>)
-        {
-            system(<span style="color:#cd5555">&#34;consoletest.exe&gt;scaned.txt&#34;</span>);
-            fp=fopen(<span style="color:#cd5555">&#34;scaned.txt&#34;</span>,<span style="color:#cd5555">&#34;r&#34;</span>);
-            fgets(us_pwd3,<span style="color:#8b008b;font-weight:bold">sizeof</span>(us_pwd3),fp);
-            fclose(fp);
-            system(<span style="color:#cd5555">&#34;del scaned.txt&#34;</span>);
-            <span style="color:#8b008b;font-weight:bold">break</span>;
-        }
-        <span style="color:#8b008b;font-weight:bold">else</span>
-        {
-            putchar(<span style="color:#cd5555">&#39;*&#39;</span>);
-            p++;
-        }
-    }
-    <span style="color:#8b008b;font-weight:bold">if</span>(Login(us_name,us_pwd)&amp;&amp;strcmp(us_pwd2,us_pwd3)==<span style="color:#b452cd">0</span>)
-    {
-        savePwd(us_name,us_pwd2);
-        miniMessage(<span style="color:#cd5555">&#34;Password modification success&#34;</span>);
-    }
-    <span style="color:#8b008b;font-weight:bold">else</span>
-    {
-        miniMessage(<span style="color:#cd5555">&#34;Password modification failed,please check you input.&#34;</span>);
-    }
-    Sleep(<span style="color:#b452cd">3000</span>);
-    system(<span style="color:#cd5555">&#34;cls&#34;</span>);
-}
-<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">del_dat</span>()
-{
-    <span style="color:#00688b;font-weight:bold">int</span> tmp_number;
-    <span style="color:#00688b;font-weight:bold">char</span> str_cmd[<span style="color:#b452cd">255</span>];
-    system(<span style="color:#cd5555">&#34;cls&#34;</span>);
-    printf(<span style="color:#cd5555">&#34;Please input the id of the data.</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
-    printf(<span style="color:#cd5555">&#34;System will delete the first data founded.</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
-    scanf(<span style="color:#cd5555">&#34;%d&#34;</span>,&amp;tmp_number);
-    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;dat_count; i++)
-    {
-        <span style="color:#8b008b;font-weight:bold">if</span>(stu_dat[i].id==tmp_number)
-        {
-            printf(<span style="color:#cd5555">&#34;Data founded.Are you sure to delete it?(Y/N)</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
-            scanf(<span style="color:#cd5555">&#34;%s&#34;</span>,str_cmd);
-            <span style="color:#8b008b;font-weight:bold">if</span>(strcmp(str_cmd,<span style="color:#cd5555">&#34;Y&#34;</span>)!=<span style="color:#b452cd">0</span>&amp;&amp;strcmp(str_cmd,<span style="color:#cd5555">&#34;y&#34;</span>)!=<span style="color:#b452cd">0</span>)
-            {
-                printf(<span style="color:#cd5555">&#34;Command canceled.</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
-                system(<span style="color:#cd5555">&#34;pause&#34;</span>);
-                <span style="color:#8b008b;font-weight:bold">return</span>;
-            }
-            stu_dat[i]=stu_dat[dat_count-<span style="color:#b452cd">1</span>];
-            dat_count--;
-            system(<span style="color:#cd5555">&#34;del main.dat&#34;</span>);
-            <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i2=<span style="color:#b452cd">0</span>; i2&lt;dat_count; i2++)
-            {
-                dat_add(&amp;stu_dat[i]);
-            }
-            printf(<span style="color:#cd5555">&#34;Del successfully!</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
-            system(<span style="color:#cd5555">&#34;pause&#34;</span>);
-            <span style="color:#8b008b;font-weight:bold">return</span>;
-        }
-    }
-    miniMessage(<span style="color:#cd5555">&#34;Cannot found target data!&#34;</span>);
-    system(<span style="color:#cd5555">&#34;pause&#34;</span>);
-}
-<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">sub_ana</span>()
-{
-    system(<span style="color:#cd5555">&#34;cls&#34;</span>);
-    <span style="color:#00688b;font-weight:bold">int</span> tmp_sum[<span style="color:#b452cd">50</span>];
-    <span style="color:#00688b;font-weight:bold">int</span> tmp_avg[<span style="color:#b452cd">50</span>];
-    <span style="color:#00688b;font-weight:bold">int</span> tmp_level[<span style="color:#b452cd">50</span>][<span style="color:#b452cd">5</span>];
-    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;<span style="color:#b452cd">50</span>; i++)
-    {
-        tmp_sum[i]=<span style="color:#b452cd">0</span>;
-        tmp_avg[i]=<span style="color:#b452cd">0</span>;
-        <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i2=<span style="color:#b452cd">0</span>; i2&lt;<span style="color:#b452cd">5</span>; i2++)
-        {
-            tmp_level[i][i2]=<span style="color:#b452cd">0</span>;
-        }
-    }
-    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;dat_count; i++)
-    {
-        <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i2=<span style="color:#b452cd">0</span>; i2&lt;sub_count; i2++)
-        {
-            tmp_sum[i2]+=stu_dat[i].subjects[i2];
-            <span style="color:#8b008b;font-weight:bold">switch</span>(stu_dat[i].subjects[i2]/<span style="color:#b452cd">10</span>)
-            {
-            <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">10</span>:
-            <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">9</span>:
-                tmp_level[i][<span style="color:#b452cd">0</span>]++;
-                <span style="color:#8b008b;font-weight:bold">break</span>;
-            <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">8</span>:
-                tmp_level[i][<span style="color:#b452cd">1</span>]++;
-                <span style="color:#8b008b;font-weight:bold">break</span>;
-            <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">7</span>:
-                tmp_level[i][<span style="color:#b452cd">2</span>]++;
-                <span style="color:#8b008b;font-weight:bold">break</span>;
-            <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">6</span>:
-                tmp_level[i][<span style="color:#b452cd">3</span>]++;
-                <span style="color:#8b008b;font-weight:bold">break</span>;
-            <span style="color:#8b008b;font-weight:bold">default</span>:
-                tmp_level[i][<span style="color:#b452cd">4</span>]++;
-            }
-        }
-    }
-    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;sub_count; i++)
-    {
-        tmp_avg[i]=tmp_sum[i]/dat_count;
-    }
-    printf(<span style="color:#cd5555">&#34;科目</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">总分</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">平均分</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">优秀</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">良好</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">中等</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">及格</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">不及格</span><span style="color:#cd5555">\t\n</span><span style="color:#cd5555">&#34;</span>);
-    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;sub_count; i++)
-    {
-        printf(<span style="color:#cd5555">&#34;%s</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t\n</span><span style="color:#cd5555">&#34;</span>,sub_name[i],tmp_sum[i],tmp_avg[i]
-               ,tmp_level[i][<span style="color:#b452cd">0</span>],tmp_level[i][<span style="color:#b452cd">1</span>],tmp_level[i][<span style="color:#b452cd">2</span>],tmp_level[i][<span style="color:#b452cd">3</span>]
-               ,tmp_level[i][<span style="color:#b452cd">4</span>]);
-    }
-    system(<span style="color:#cd5555">&#34;pause&#34;</span>);
-}
-<span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">cmpbysum1</span>(<span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#00688b;font-weight:bold">void</span> *p1,<span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#00688b;font-weight:bold">void</span> *p2)
-{
-    <span style="color:#8b008b;font-weight:bold">return</span> ((student*)p1)-&gt;sum-((student*)p2)-&gt;sum;
-}
-<span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">cmpbysum2</span>(<span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#00688b;font-weight:bold">void</span> *p1,<span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#00688b;font-weight:bold">void</span> *p2)
-{
-    <span style="color:#8b008b;font-weight:bold">return</span> ((student*)p2)-&gt;sum-((student*)p1)-&gt;sum;
-}
-<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">sortbysum</span>()
-{
-    <span style="color:#228b22">//ascending sort升序排序
-</span><span style="color:#228b22"></span>    <span style="color:#228b22">//descending sort降序排序
-</span><span style="color:#228b22"></span>    <span style="color:#00688b;font-weight:bold">char</span> mnu[][<span style="color:#b452cd">50</span>]= {<span style="color:#cd5555">&#34;Ascending sort↑&#34;</span>,<span style="color:#cd5555">&#34;Descending sort↓&#34;</span>,<span style="color:#cd5555">&#34;Cancel&#34;</span>};
-    <span style="color:#00688b;font-weight:bold">int</span> m_resu;
-    m_resu=showMenu(mnu,<span style="color:#b452cd">3</span>,<span style="color:#b452cd">0</span>,<span style="color:#b452cd">7</span>,<span style="color:#b452cd">7</span>);
-    system(<span style="color:#cd5555">&#34;cls&#34;</span>);
-    <span style="color:#8b008b;font-weight:bold">switch</span>(m_resu)
-    {
-    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">0</span>:
-        qsort(stu_dat,dat_count,<span style="color:#8b008b;font-weight:bold">sizeof</span>(student),cmpbysum1);
-        <span style="color:#8b008b;font-weight:bold">break</span>;
-    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">1</span>:
-        qsort(stu_dat,dat_count,<span style="color:#8b008b;font-weight:bold">sizeof</span>(student),cmpbysum2);
-        <span style="color:#8b008b;font-weight:bold">break</span>;
-    <span style="color:#8b008b;font-weight:bold">default</span>:
-        printf(<span style="color:#cd5555">&#34;Command canceled.</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
-        system(<span style="color:#cd5555">&#34;pause&#34;</span>);
-        <span style="color:#8b008b;font-weight:bold">return</span>;
-    }
-    printf(<span style="color:#cd5555">&#34;OK.</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
-    system(<span style="color:#cd5555">&#34;pause&#34;</span>);
-    showalldata();
-}
-<span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">cmpbyid1</span>(<span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#00688b;font-weight:bold">void</span> *p1,<span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#00688b;font-weight:bold">void</span> *p2)
-{
-    <span style="color:#8b008b;font-weight:bold">return</span> ((student*)p1)-&gt;id-((student*)p2)-&gt;id;
-}
-<span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">cmpbyid2</span>(<span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#00688b;font-weight:bold">void</span> *p1,<span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#00688b;font-weight:bold">void</span> *p2)
-{
-    <span style="color:#8b008b;font-weight:bold">return</span> ((student*)p2)-&gt;id-((student*)p1)-&gt;id;
-}
-<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">sortbyid</span>()
-{
-    <span style="color:#00688b;font-weight:bold">char</span> mnu[][<span style="color:#b452cd">50</span>]= {<span style="color:#cd5555">&#34;Ascending sort↑&#34;</span>,<span style="color:#cd5555">&#34;Descending sort↓&#34;</span>,<span style="color:#cd5555">&#34;Cancel&#34;</span>};
-    <span style="color:#00688b;font-weight:bold">int</span> m_resu;
-    m_resu=showMenu(mnu,<span style="color:#b452cd">3</span>,<span style="color:#b452cd">0</span>,<span style="color:#b452cd">7</span>,<span style="color:#b452cd">7</span>);
-    system(<span style="color:#cd5555">&#34;cls&#34;</span>);
-    <span style="color:#8b008b;font-weight:bold">switch</span>(m_resu)
-    {
-    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">0</span>:
-        qsort(stu_dat,dat_count,<span style="color:#8b008b;font-weight:bold">sizeof</span>(student),cmpbyid1);
-        <span style="color:#8b008b;font-weight:bold">break</span>;
-    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">1</span>:
-        qsort(stu_dat,dat_count,<span style="color:#8b008b;font-weight:bold">sizeof</span>(student),cmpbyid2);
-        <span style="color:#8b008b;font-weight:bold">break</span>;
-    <span style="color:#8b008b;font-weight:bold">default</span>:
-        printf(<span style="color:#cd5555">&#34;Command canceled.</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
-        system(<span style="color:#cd5555">&#34;pause&#34;</span>);
-        <span style="color:#8b008b;font-weight:bold">return</span>;
-    }
-    printf(<span style="color:#cd5555">&#34;OK.</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
-    system(<span style="color:#cd5555">&#34;pause&#34;</span>);
-    showalldata();
-}
-<span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">cmpbyname</span>(<span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#00688b;font-weight:bold">void</span> *p1,<span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#00688b;font-weight:bold">void</span> *p2)
-{
-    <span style="color:#8b008b;font-weight:bold">return</span> strcmp(((student*)p1)-&gt;name,((student*)p2)-&gt;name);
-}
-<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">sortbyname</span>()
-{
-    system(<span style="color:#cd5555">&#34;cls&#34;</span>);
-    qsort(stu_dat,dat_count,<span style="color:#8b008b;font-weight:bold">sizeof</span>(student),cmpbyname);
-    printf(<span style="color:#cd5555">&#34;OK.</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
-    system(<span style="color:#cd5555">&#34;pause&#34;</span>);
-    showalldata();
-}
-<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">searchbyid</span>()
-{
-    <span style="color:#00688b;font-weight:bold">int</span> tmp_id;
-    <span style="color:#00688b;font-weight:bold">int</span> founded=<span style="color:#b452cd">0</span>;
-    system(<span style="color:#cd5555">&#34;cls&#34;</span>);
-    printf(<span style="color:#cd5555">&#34;Please input the id of the student.</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
-    scanf(<span style="color:#cd5555">&#34;%d&#34;</span>,&amp;tmp_id);
-    system(<span style="color:#cd5555">&#34;cls&#34;</span>);
-    sub_print();
-    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;dat_count; i++)
-    {
-        <span style="color:#8b008b;font-weight:bold">if</span>(stu_dat[i].id==tmp_id)
-        {
-            founded++;
-            printf(<span style="color:#cd5555">&#34;%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%s</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%c</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">&#34;</span>,stu_dat[i].id,stu_dat[i].name,stu_dat[i].sex,stu_dat[i].age);
-            <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i2=<span style="color:#b452cd">0</span>; i2&lt;sub_count; i2++)
-            {
-                printf(<span style="color:#cd5555">&#34;%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">&#34;</span>,stu_dat[i].subjects[i2]);
-            }
-            printf(<span style="color:#cd5555">&#34;%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t\n</span><span style="color:#cd5555">&#34;</span>,stu_dat[i].sum,stu_dat[i].avg,founded);
-        }
-    }
-    <span style="color:#8b008b;font-weight:bold">if</span>(founded==<span style="color:#b452cd">0</span>)
-    {
-        system(<span style="color:#cd5555">&#34;cls&#34;</span>);
-        printf(<span style="color:#cd5555">&#34;Not founded!</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
-    }
-    system(<span style="color:#cd5555">&#34;pause&#34;</span>);
-}
-<span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">searchbyname</span>()
-{
-    <span style="color:#00688b;font-weight:bold">char</span> tmp_name[<span style="color:#b452cd">25</span>];
-    <span style="color:#00688b;font-weight:bold">int</span> founded=<span style="color:#b452cd">0</span>;
-    system(<span style="color:#cd5555">&#34;cls&#34;</span>);
-    printf(<span style="color:#cd5555">&#34;Please input the name of the student.</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
-    scanf(<span style="color:#cd5555">&#34;%s&#34;</span>,tmp_name);
-    system(<span style="color:#cd5555">&#34;cls&#34;</span>);
-    sub_print();
-    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;dat_count; i++)
-    {
-        <span style="color:#8b008b;font-weight:bold">if</span>(strcmp(stu_dat[i].name,tmp_name)==<span style="color:#b452cd">0</span>)
-        {
-            founded++;
-            printf(<span style="color:#cd5555">&#34;%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%s</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%c</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">&#34;</span>,stu_dat[i].id,stu_dat[i].name,stu_dat[i].sex,stu_dat[i].age);
-            <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i2=<span style="color:#b452cd">0</span>; i2&lt;sub_count; i2++)
-            {
-                printf(<span style="color:#cd5555">&#34;%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">&#34;</span>,stu_dat[i].subjects[i2]);
-            }
-            printf(<span style="color:#cd5555">&#34;%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t\n</span><span style="color:#cd5555">&#34;</span>,stu_dat[i].sum,stu_dat[i].avg,founded);
-        }
-    }
-    <span style="color:#8b008b;font-weight:bold">if</span>(founded==<span style="color:#b452cd">0</span>)
-    {
-        system(<span style="color:#cd5555">&#34;cls&#34;</span>);
-        printf(<span style="color:#cd5555">&#34;Not founded!</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
-    }
-    system(<span style="color:#cd5555">&#34;pause&#34;</span>);
-}
-<span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">main</span>()
-{
-    atexit(showExitPic);
-    <span style="color:#00688b;font-weight:bold">int</span> m_resu;
-    <span style="color:#00688b;font-weight:bold">char</span> mnu[][<span style="color:#b452cd">50</span>]= {<span style="color:#cd5555">&#34;Modify the password&#34;</span>,<span style="color:#cd5555">&#34;Add new data&#34;</span>,<span style="color:#cd5555">&#34;Show all data&#34;</span>,
-                     <span style="color:#cd5555">&#34;Del data by id&#34;</span>,<span style="color:#cd5555">&#34;Subject analysis&#34;</span>,<span style="color:#cd5555">&#34;Sort data by sum&#34;</span>,<span style="color:#cd5555">&#34;Sort data by id&#34;</span>
-                     ,<span style="color:#cd5555">&#34;Sort in dictionary order by name&#34;</span>,<span style="color:#cd5555">&#34;Search by id&#34;</span>,<span style="color:#cd5555">&#34;Search by name&#34;</span>
-                     ,<span style="color:#cd5555">&#34;about&#34;</span>,<span style="color:#cd5555">&#34;exit&#34;</span>
-                    };
-    system(<span style="color:#cd5555">&#34;title 学生成绩管理系统V6.0&#34;</span>);
-    system(<span style="color:#cd5555">&#34;mode con cols=100 lines=30&#34;</span>);
-    <span style="color:#228b22">//picLoad(&#34;background.bmp&#34;);
-</span><span style="color:#228b22"></span>    <span style="color:#228b22">//loadBlack();
-</span><span style="color:#228b22"></span>    system(<span style="color:#cd5555">&#34;image background.bmp 0 0&#34;</span>);
-    Sleep(<span style="color:#b452cd">3000</span>);
-    system(<span style="color:#cd5555">&#34;image /d&#34;</span>);
-    system(<span style="color:#cd5555">&#34;cls&#34;</span>);
-    miniLogin();
-    system(<span style="color:#cd5555">&#34;cls&#34;</span>);
-    sub_load();
-    dat_count=dat_load();
-beg:
-    m_resu=showMenu(mnu,<span style="color:#b452cd">12</span>,<span style="color:#b452cd">0</span>,<span style="color:#b452cd">5</span>,<span style="color:#b452cd">6</span>);
-    <span style="color:#8b008b;font-weight:bold">switch</span>(m_resu)
-    {
-    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">0</span>:
-        ed_password();
-        <span style="color:#8b008b;font-weight:bold">break</span>;
-    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">1</span>:
-        add_stu();
-        <span style="color:#8b008b;font-weight:bold">break</span>;
-    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">2</span>:
-        showalldata();
-        <span style="color:#8b008b;font-weight:bold">break</span>;
-    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">3</span>:
-        del_dat();
-        <span style="color:#8b008b;font-weight:bold">break</span>;
-    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">4</span>:
-        sub_ana();
-        <span style="color:#8b008b;font-weight:bold">break</span>;
-    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">5</span>:
-        sortbysum();
-        <span style="color:#8b008b;font-weight:bold">break</span>;
-    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">6</span>:
-        sortbyid();
-        <span style="color:#8b008b;font-weight:bold">break</span>;
-    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">7</span>:
-        sortbyname();
-        <span style="color:#8b008b;font-weight:bold">break</span>;
-    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">8</span>:
-        searchbyid();
-        <span style="color:#8b008b;font-weight:bold">break</span>;
-    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">9</span>:
-        searchbyname();
-        <span style="color:#8b008b;font-weight:bold">break</span>;
-    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">10</span>:
-        system(<span style="color:#cd5555">&#34;write about.rtf&#34;</span>);
-        <span style="color:#8b008b;font-weight:bold">break</span>;
-    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">11</span>:
-        <span style="color:#8b008b;font-weight:bold">goto</span> end;
-    }
-    <span style="color:#8b008b;font-weight:bold">goto</span> beg;
-end:
-    ;
-}
-</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&#34;stdio.h&#34;</span><span style="color:#1e889b">
+</span></span></span><span style="display:flex;"><span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&#34;stdlib.h&#34;</span><span style="color:#1e889b">
+</span></span></span><span style="display:flex;"><span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&#34;string.h&#34;</span><span style="color:#1e889b">
+</span></span></span><span style="display:flex;"><span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;windows.h&gt;</span><span style="color:#1e889b">
+</span></span></span><span style="display:flex;"><span><span style="color:#1e889b"></span><span style="color:#228b22">//#include &lt;conio.h&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&#34;math.h&#34;</span><span style="color:#1e889b">
+</span></span></span><span style="display:flex;"><span><span style="color:#1e889b"></span><span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">miniMessage</span>(<span style="color:#00688b;font-weight:bold">char</span>*msg);
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">showExitPic</span>();
+</span></span><span style="display:flex;"><span><span style="color:#228b22">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">typedef HWND (WINAPI *PROCGETCONSOLEWINDOW)();//图片加载
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">PROCGETCONSOLEWINDOW GetConsoleWindow;
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">*/</span>
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">PrintChar</span>(<span style="color:#00688b;font-weight:bold">char</span> *ch,UINT count,UINT x,UINT y)  <span style="color:#228b22">//在坐标(x,y)处输出字符串ch,ch里有count个字符
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>{
+</span></span><span style="display:flex;"><span>    HANDLE h=<span style="color:#008b45">GetStdHandle</span>(STD_OUTPUT_HANDLE);
+</span></span><span style="display:flex;"><span>    COORD pos;
+</span></span><span style="display:flex;"><span>    ULONG unuse;
+</span></span><span style="display:flex;"><span>    pos.X=x;
+</span></span><span style="display:flex;"><span>    pos.Y=y;
+</span></span><span style="display:flex;"><span>    CONSOLE_SCREEN_BUFFER_INFO bInfo; <span style="color:#228b22">// 窗口缓冲区信息
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    <span style="color:#008b45">GetConsoleScreenBufferInfo</span>(h, &amp;bInfo );
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">WriteConsoleOutputCharacterA</span>(h,ch,count,pos,&amp;unuse);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">color</span>(<span style="color:#00688b;font-weight:bold">short</span> x) <span style="color:#228b22">//自定义函根据参数改变颜色
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">if</span>(x&gt;=<span style="color:#b452cd">0</span> &amp;&amp; x&lt;=<span style="color:#b452cd">15</span>)<span style="color:#228b22">//参数在0-15的范围颜色
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>        <span style="color:#008b45">SetConsoleTextAttribute</span>(<span style="color:#008b45">GetStdHandle</span>(STD_OUTPUT_HANDLE), x);    <span style="color:#228b22">//只有一个参数，改变字体颜色
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    <span style="color:#8b008b;font-weight:bold">else</span><span style="color:#228b22">//默认的颜色白色
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>        <span style="color:#008b45">SetConsoleTextAttribute</span>(<span style="color:#008b45">GetStdHandle</span>(STD_OUTPUT_HANDLE), <span style="color:#b452cd">7</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#228b22">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">    颜色函数SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),前景色 | 背景色 | 前景加强 | 背景加强);
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">        前景色：数字0-15 或 FOREGROUND_XXX 表示  （其中XXX可用BLUE、RED、GREEN表示）
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">        前景加强：数字8 或 FOREGROUND_INTENSITY 表示
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">        背景色：数字16 32 64 或 BACKGROUND_XXX 三种颜色表示
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">        背景加强： 数字128 或 BACKGROUND_INTENSITY 表示
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">    主要应用：改变指定区域字体与背景的颜色
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">    前景颜色对应值：
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">    　　0=黑色                8=灰色　　
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">      　1=蓝色                9=淡蓝色        十六进制        　　
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">    　　2=绿色                10=淡绿色       0xa        　　
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">    　　3=湖蓝色              11=淡浅绿色     0xb　
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">    　　4=红色                12=淡红色       0xc　　
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">    　　5=紫色                13=淡紫色       0xd        　　
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">    　　6=黄色                14=淡黄色       0xe        　　
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">    　　7=白色                15=亮白色       0xf
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">    　　也可以把这些值设置成常量。
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">    */</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">gotoxy</span>(<span style="color:#00688b;font-weight:bold">unsigned</span> <span style="color:#00688b;font-weight:bold">char</span> x,<span style="color:#00688b;font-weight:bold">unsigned</span> <span style="color:#00688b;font-weight:bold">char</span> y)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#228b22">//COORD是Windows API中定义的一种结构，表示一个字符在控制台屏幕上的坐标
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    COORD cor;
+</span></span><span style="display:flex;"><span>    <span style="color:#228b22">//句柄
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    HANDLE hout;
+</span></span><span style="display:flex;"><span>    <span style="color:#228b22">//设定我们要定位到的坐标
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    cor.X = x;
+</span></span><span style="display:flex;"><span>    cor.Y = y;
+</span></span><span style="display:flex;"><span>    <span style="color:#228b22">//GetStdHandle函数获取一个指向特定标准设备的句柄，包括标准输入，标准输出和标准错误。
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    <span style="color:#228b22">//STD_OUTPUT_HANDLE正是代表标准输出（也就是显示屏）的宏
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    hout = <span style="color:#008b45">GetStdHandle</span>(STD_OUTPUT_HANDLE);
+</span></span><span style="display:flex;"><span>    <span style="color:#228b22">//SetConsoleCursorPosition函数用于设置控制台光标的位置
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    <span style="color:#008b45">SetConsoleCursorPosition</span>(hout, cor);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">typedef</span> <span style="color:#8b008b;font-weight:bold">struct</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">char</span> name[<span style="color:#b452cd">25</span>];
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">char</span> sex;
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> age;
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> id;
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> subjects[<span style="color:#b452cd">50</span>];
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> sum;
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> avg;
+</span></span><span style="display:flex;"><span>} student;
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">char</span> sub_name[<span style="color:#b452cd">50</span>][<span style="color:#b452cd">25</span>];
+</span></span><span style="display:flex;"><span>student stu_dat[<span style="color:#b452cd">10000</span>];
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">int</span> dat_count;
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">int</span> sub_count;
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">Login</span>(<span style="color:#00688b;font-weight:bold">char</span>*c1,<span style="color:#00688b;font-weight:bold">char</span>*c2)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    FILE*fp;
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">char</span>*p1;
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">char</span>*p3;
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">char</span>*p2;
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> tmp;
+</span></span><span style="display:flex;"><span>    fp=<span style="color:#008b45">fopen</span>(<span style="color:#cd5555">&#34;code.dat&#34;</span>,<span style="color:#cd5555">&#34;r&#34;</span>);
+</span></span><span style="display:flex;"><span>    p1=c1;
+</span></span><span style="display:flex;"><span>    p3=c2;
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">if</span>(<span style="color:#008b45">strlen</span>(c1)&gt;<span style="color:#008b45">strlen</span>(c2))
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        p2=p1;
+</span></span><span style="display:flex;"><span>        p1=p3;
+</span></span><span style="display:flex;"><span>        p3=p2;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">for</span> (; *p3!=<span style="color:#cd5555">&#39;\0&#39;</span>; )
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span>(*p1==<span style="color:#cd5555">&#39;\0&#39;</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            p1=c1;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        tmp=<span style="color:#008b45">fgetc</span>(fp);
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span>(((*p1)^(*p3))!=tmp)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        p1++;
+</span></span><span style="display:flex;"><span>        p3++;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">if</span>(<span style="color:#008b45">strlen</span>(c1)&lt;<span style="color:#b452cd">2</span>||<span style="color:#008b45">strlen</span>(c2)&lt;<span style="color:#b452cd">6</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">0</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#b452cd">1</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">fclose</span>(fp);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">savePwd</span>(<span style="color:#00688b;font-weight:bold">char</span>*c1,<span style="color:#00688b;font-weight:bold">char</span>*c2)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    FILE*fp;
+</span></span><span style="display:flex;"><span>    fp=<span style="color:#008b45">fopen</span>(<span style="color:#cd5555">&#34;code.dat&#34;</span>,<span style="color:#cd5555">&#34;w&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">char</span>*p1=c1;
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">char</span>*p2=c2;
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">char</span>*p3;
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">if</span>(<span style="color:#008b45">strlen</span>(c1)&gt;<span style="color:#008b45">strlen</span>(c2))
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        p3=p1;
+</span></span><span style="display:flex;"><span>        p1=p2;
+</span></span><span style="display:flex;"><span>        p2=p3;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">for</span> (; *p2!=<span style="color:#cd5555">&#39;\0&#39;</span>; )
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span>(*p1==<span style="color:#cd5555">&#39;\0&#39;</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            p1=c1;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">fputc</span>((*p1)^(*p2),fp);
+</span></span><span style="display:flex;"><span>        p1++;
+</span></span><span style="display:flex;"><span>        p2++;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">fclose</span>(fp);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">dat_add</span>(student*s1)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    FILE*fp;
+</span></span><span style="display:flex;"><span>    s1-&gt;sum=<span style="color:#b452cd">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">for</span> (<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;sub_count; i++)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        s1-&gt;sum+=s1-&gt;subjects[i];
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    s1-&gt;avg=s1-&gt;sum/=sub_count;
+</span></span><span style="display:flex;"><span>    fp=<span style="color:#008b45">fopen</span>(<span style="color:#cd5555">&#34;main.dat&#34;</span>,<span style="color:#cd5555">&#34;ab&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">if</span>(fp==<span style="color:#658b00">NULL</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        fp=<span style="color:#008b45">fopen</span>(<span style="color:#cd5555">&#34;main.dat&#34;</span>,<span style="color:#cd5555">&#34;wb&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">fwrite</span>(s1,<span style="color:#8b008b;font-weight:bold">sizeof</span>(student),<span style="color:#b452cd">1</span>,fp);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">fclose</span>(fp);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">sub_load</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    FILE*fp;
+</span></span><span style="display:flex;"><span>    fp=<span style="color:#008b45">fopen</span>(<span style="color:#cd5555">&#34;subjects.dat&#34;</span>,<span style="color:#cd5555">&#34;r&#34;</span>);
+</span></span><span style="display:flex;"><span>    sub_count=<span style="color:#b452cd">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">for</span> (<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;<span style="color:#b452cd">50</span>; i++)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">fgets</span>(sub_name[i],<span style="color:#8b008b;font-weight:bold">sizeof</span>(sub_name),fp);
+</span></span><span style="display:flex;"><span>        sub_name[i][<span style="color:#008b45">strlen</span>(sub_name[i])-<span style="color:#b452cd">1</span>]=<span style="color:#cd5555">&#39;\0&#39;</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span>(<span style="color:#008b45">strlen</span>(sub_name[i])&gt;<span style="color:#b452cd">0</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            sub_count++;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">fclose</span>(fp);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">sub_print</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">printf</span>(<span style="color:#cd5555">&#34;学号</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">姓名</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">性别</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">年龄</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">for</span> (<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;<span style="color:#b452cd">50</span>; i++)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span>(<span style="color:#008b45">strlen</span>(sub_name[i])==<span style="color:#b452cd">0</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">printf</span>(<span style="color:#cd5555">&#34;%s</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">&#34;</span>,sub_name[i]);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">printf</span>(<span style="color:#cd5555">&#34;总分</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">平均分</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">排名</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">putchar</span>(<span style="color:#cd5555">&#39;\n&#39;</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">dat_load</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    FILE*fp;
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> i;
+</span></span><span style="display:flex;"><span>    fp=<span style="color:#008b45">fopen</span>(<span style="color:#cd5555">&#34;main.dat&#34;</span>,<span style="color:#cd5555">&#34;rb&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">if</span>(fp==<span style="color:#658b00">NULL</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">puts</span>(<span style="color:#cd5555">&#34;main.dat is lost!&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">exit</span>(<span style="color:#b452cd">1</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">for</span> (i=<span style="color:#b452cd">0</span>; !<span style="color:#008b45">feof</span>(fp) ; i++)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">fread</span>(&amp;stu_dat[i],<span style="color:#8b008b;font-weight:bold">sizeof</span>(student),<span style="color:#b452cd">1</span>,fp);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">fclose</span>(fp);
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">return</span> i-<span style="color:#b452cd">1</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">dat_show</span> (student s)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">printf</span>(<span style="color:#cd5555">&#34;%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%s</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%c</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">&#34;</span>,s.id,s.name,s.sex,s.age);
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">for</span> (<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;sub_count; i++)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">printf</span>(<span style="color:#cd5555">&#34;%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">&#34;</span>,s.subjects[i]);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">printf</span>(<span style="color:#cd5555">&#34;%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">&#34;</span>,s.sum,s.avg);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">showMiniWindow</span>(<span style="color:#00688b;font-weight:bold">char</span>*title,<span style="color:#00688b;font-weight:bold">int</span> X,<span style="color:#00688b;font-weight:bold">int</span> Y,<span style="color:#00688b;font-weight:bold">int</span> height,<span style="color:#00688b;font-weight:bold">int</span> width)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;width; i++)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i2=<span style="color:#b452cd">0</span>; i2&lt;height; i2++)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45">gotoxy</span>(X+i,Y+i2);
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45">putchar</span>(<span style="color:#cd5555">&#39; &#39;</span>);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">color</span>(<span style="color:#b452cd">3</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">gotoxy</span>(X,Y);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">putchar</span>(<span style="color:#cd5555">&#39;X&#39;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">gotoxy</span>(X+width-<span style="color:#b452cd">1</span>,Y);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">putchar</span>(<span style="color:#cd5555">&#39;X&#39;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">gotoxy</span>(X,Y+height-<span style="color:#b452cd">1</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">putchar</span>(<span style="color:#cd5555">&#39;X&#39;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">gotoxy</span>(X+width-<span style="color:#b452cd">1</span>,Y+height-<span style="color:#b452cd">1</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">putchar</span>(<span style="color:#cd5555">&#39;X&#39;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">color</span>(<span style="color:#b452cd">5</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">for</span> (<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">2</span>; i&lt;width; i++)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">gotoxy</span>(X+i-<span style="color:#b452cd">1</span>,Y);
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">putchar</span>(<span style="color:#cd5555">&#39;-&#39;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">gotoxy</span>(X+i-<span style="color:#b452cd">1</span>,Y+height-<span style="color:#b452cd">1</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">putchar</span>(<span style="color:#cd5555">&#39;-&#39;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">color</span>(<span style="color:#b452cd">9</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">for</span> (<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">2</span>; i&lt;height; i++)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">gotoxy</span>(X,Y+i-<span style="color:#b452cd">1</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">putchar</span>(<span style="color:#cd5555">&#39;|&#39;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">gotoxy</span>(X+width-<span style="color:#b452cd">1</span>,Y+i-<span style="color:#b452cd">1</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">putchar</span>(<span style="color:#cd5555">&#39;|&#39;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">PrintChar</span>(<span style="color:#cd5555">&#34;|&#34;</span>,<span style="color:#b452cd">1</span>,X+width-<span style="color:#b452cd">1</span>,Y+i-<span style="color:#b452cd">1</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">color</span>(<span style="color:#b452cd">12</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">gotoxy</span>(X+width/<span style="color:#b452cd">2</span>-<span style="color:#008b45">strlen</span>(title)/<span style="color:#b452cd">2</span>,Y);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">printf</span>(<span style="color:#cd5555">&#34;%s&#34;</span>,title);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">color</span>(<span style="color:#b452cd">16</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">gotoxy</span>(X+<span style="color:#b452cd">1</span>,Y+<span style="color:#b452cd">1</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">miniLogin</span> ()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">char</span> c1[<span style="color:#b452cd">25</span>],c2[<span style="color:#b452cd">25</span>];
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">char</span> ch_tmp;
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">char</span>*p=c2;
+</span></span><span style="display:flex;"><span>    FILE*fp;
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">showMiniWindow</span>(<span style="color:#cd5555">&#34;login&#34;</span>,<span style="color:#b452cd">6</span>,<span style="color:#b452cd">5</span>,<span style="color:#b452cd">4</span>,<span style="color:#b452cd">32</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">puts</span>(<span style="color:#cd5555">&#34;User     ________________&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">gotoxy</span>(<span style="color:#b452cd">7</span>,<span style="color:#b452cd">7</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">puts</span>(<span style="color:#cd5555">&#34;password ________________&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">gotoxy</span>(<span style="color:#b452cd">16</span>,<span style="color:#b452cd">6</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">fgets</span>(c1,<span style="color:#8b008b;font-weight:bold">sizeof</span>(c1),stdin);
+</span></span><span style="display:flex;"><span>    c1[<span style="color:#008b45">strlen</span>(c1)-<span style="color:#b452cd">1</span>]=<span style="color:#cd5555">&#39;\0&#39;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">gotoxy</span>(<span style="color:#b452cd">16</span>,<span style="color:#b452cd">7</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">while</span>(<span style="color:#b452cd">1</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        ch_tmp=<span style="color:#008b45">getch</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span>(ch_tmp==<span style="color:#b452cd">13</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            *p=<span style="color:#cd5555">&#39;\0&#39;</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">else</span> <span style="color:#8b008b;font-weight:bold">if</span>(ch_tmp==<span style="color:#cd5555">&#39;~&#39;</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45">system</span>(<span style="color:#cd5555">&#34;consoletest.exe&gt;scaned.txt&#34;</span>);
+</span></span><span style="display:flex;"><span>            fp=<span style="color:#008b45">fopen</span>(<span style="color:#cd5555">&#34;scaned.txt&#34;</span>,<span style="color:#cd5555">&#34;r&#34;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45">fgets</span>(c2,<span style="color:#8b008b;font-weight:bold">sizeof</span>(c2),fp);
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45">fclose</span>(fp);
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45">system</span>(<span style="color:#cd5555">&#34;del scaned.txt&#34;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">else</span>
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            *p=ch_tmp;
+</span></span><span style="display:flex;"><span>            p++;
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45">putchar</span>(<span style="color:#cd5555">&#39;*&#39;</span>);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">if</span>(<span style="color:#008b45">Login</span>(c1,c2))
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">miniMessage</span>(<span style="color:#cd5555">&#34;登录成功，欢迎您的使用！&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">else</span>
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">miniMessage</span>(<span style="color:#cd5555">&#34;用户名或密码错误！&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">Sleep</span>(<span style="color:#b452cd">1000</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">showExitPic</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">exit</span>(<span style="color:#b452cd">1</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">Sleep</span>(<span style="color:#b452cd">1000</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">miniMessage</span>(<span style="color:#00688b;font-weight:bold">char</span>*msg)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> n=<span style="color:#008b45">strlen</span>(msg);
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> width=(<span style="color:#00688b;font-weight:bold">int</span>)<span style="color:#008b45">sqrt</span>(n)+<span style="color:#b452cd">10</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> height=n/(width-<span style="color:#b452cd">2</span>)+<span style="color:#b452cd">4</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> X=<span style="color:#b452cd">5</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> Y=<span style="color:#b452cd">7</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">showMiniWindow</span>(<span style="color:#cd5555">&#34;Message&#34;</span>,X,Y,height,width);
+</span></span><span style="display:flex;"><span>    X++;
+</span></span><span style="display:flex;"><span>    Y++;
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">for</span> (<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;n; i++)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">putchar</span>(msg[i]);
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span>(i%(width-<span style="color:#b452cd">2</span>)==<span style="color:#b452cd">0</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            Y++;
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45">gotoxy</span>(X,Y);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">showMenu</span>(<span style="color:#00688b;font-weight:bold">char</span> txt[][<span style="color:#b452cd">50</span>],<span style="color:#00688b;font-weight:bold">int</span> n,<span style="color:#00688b;font-weight:bold">int</span> selected,<span style="color:#00688b;font-weight:bold">int</span> X,<span style="color:#00688b;font-weight:bold">int</span> Y)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> maxwidth=<span style="color:#b452cd">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> tmp_width;
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">char</span> tmp_press;
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;n; i++)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        tmp_width=<span style="color:#008b45">strlen</span>(txt[i]);
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span>(tmp_width&gt;maxwidth)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            maxwidth=tmp_width;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">showMiniWindow</span>(<span style="color:#cd5555">&#34;MENU&#34;</span>,X,Y,n+<span style="color:#b452cd">2</span>,maxwidth+<span style="color:#b452cd">2</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;n; i++)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span>(i==selected)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45">color</span>(<span style="color:#b452cd">4</span>);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">else</span>
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45">color</span>(<span style="color:#b452cd">6</span>);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i2=<span style="color:#b452cd">0</span>; txt[i][i2]!=<span style="color:#cd5555">&#39;\0&#39;</span>; i2++)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45">gotoxy</span>(X+i2+<span style="color:#b452cd">1</span>,Y+i+<span style="color:#b452cd">1</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45">putchar</span>(txt[i][i2]);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">color</span>(<span style="color:#b452cd">16</span>);
+</span></span><span style="display:flex;"><span>    tmp_press=<span style="color:#008b45">getch</span>();
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">if</span>(tmp_press==<span style="color:#b452cd">13</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span> selected;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">else</span> <span style="color:#8b008b;font-weight:bold">if</span>(tmp_press==<span style="color:#b452cd">72</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span>(selected&gt;<span style="color:#b452cd">0</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            selected--;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">else</span>
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45">putchar</span>(<span style="color:#cd5555">&#39;\a&#39;</span>);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">else</span> <span style="color:#8b008b;font-weight:bold">if</span>(tmp_press==<span style="color:#b452cd">80</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span>(selected&lt;n-<span style="color:#b452cd">1</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            selected++;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">else</span>
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45">putchar</span>(<span style="color:#cd5555">&#39;\a&#39;</span>);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">else</span> <span style="color:#8b008b;font-weight:bold">if</span>(tmp_press-<span style="color:#cd5555">&#39;0&#39;</span>&gt;=<span style="color:#b452cd">0</span>&amp;&amp;tmp_press-<span style="color:#cd5555">&#39;0&#39;</span>&lt;n)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        selected=tmp_press-<span style="color:#cd5555">&#39;0&#39;</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#008b45">showMenu</span>(txt,n,selected,X,Y);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#228b22">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">void picLoad(char*path)
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">{
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">    HMODULE hKernel32 = GetModuleHandle(&#34;kernel32&#34;);
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">    GetConsoleWindow= (PROCGETCONSOLEWINDOW)GetProcAddress(hKernel32,&#34;GetConsoleWindow&#34;);
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">    HWND cmd=GetConsoleWindow();
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">    HDC dc = GetDC(cmd);
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">    HBITMAP hBitmap;
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">    hBitmap=(HBITMAP)LoadImage            (NULL,path,IMAGE_BITMAP,0,0,LR_LOADFROMFILE|LR_CREATEDIBSECTION);
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">    HDC cmdmem = CreateCompatibleDC(dc);
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">    SelectObject(cmdmem, hBitmap);
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">    BitBlt(dc, 0, 0, 1300, 700, cmdmem, 0, 0, SRCCOPY);
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">    Sleep(3000);
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">    return ;
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">}*/</span>
+</span></span><span style="display:flex;"><span><span style="color:#228b22">/*
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">void loadBlack()
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">{
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">    HMODULE hKernel32 = GetModuleHandle(&#34;kernel32&#34;);
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">    GetConsoleWindow= (PROCGETCONSOLEWINDOW)GetProcAddress(hKernel32,&#34;GetConsoleWindow&#34;);
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">    HWND cmd=GetConsoleWindow();
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">    HDC dc = GetDC(cmd);
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">    HBITMAP hBitmap;
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">    hBitmap=(HBITMAP)LoadImage            (NULL,&#34;black.bmp&#34;,IMAGE_BITMAP,0,0,LR_LOADFROMFILE|LR_CREATEDIBSECTION);
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">    HDC cmdmem = CreateCompatibleDC(dc);
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">    SelectObject(cmdmem, hBitmap);
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">    BitBlt(dc, 0, 0, 1300, 700, cmdmem, 0, 0, SRCCOPY);
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">    return ;
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">}
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22">*/</span>
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">showExitPic</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">system</span>(<span style="color:#cd5555">&#34;image goodbye.bmp 0 0&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">Sleep</span>(<span style="color:#b452cd">3000</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#228b22">//picLoad(&#34;goodbye.bmp&#34;);
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>}
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">add_stu</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">char</span> tmp_sex[<span style="color:#b452cd">10</span>];
+</span></span><span style="display:flex;"><span>    student tmp;
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">system</span>(<span style="color:#cd5555">&#34;cls&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">printf</span>(<span style="color:#cd5555">&#34;Please input the id number of the new student.</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">scanf</span>(<span style="color:#cd5555">&#34;%d&#34;</span>,&amp;tmp.id);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">printf</span>(<span style="color:#cd5555">&#34;Please input the name of the student.</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">scanf</span>(<span style="color:#cd5555">&#34;%s&#34;</span>,tmp.name);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">printf</span>(<span style="color:#cd5555">&#34;Please input the sex of the student.(F for Female,M for Male.)</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">scanf</span>(<span style="color:#cd5555">&#34;%s&#34;</span>,tmp_sex);
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">if</span>(<span style="color:#008b45">strcmp</span>(tmp_sex,<span style="color:#cd5555">&#34;F&#34;</span>)==<span style="color:#b452cd">0</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        tmp.sex=<span style="color:#cd5555">&#39;F&#39;</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">else</span>
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        tmp.sex=<span style="color:#cd5555">&#39;M&#39;</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">printf</span>(<span style="color:#cd5555">&#34;Please input the age of the student.</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">scanf</span>(<span style="color:#cd5555">&#34;%d&#34;</span>,&amp;tmp.age);
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;sub_count; i++)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">printf</span>(<span style="color:#cd5555">&#34;Please input %s&#39;s %s score.</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>,tmp.name,sub_name[i]);
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">scanf</span>(<span style="color:#cd5555">&#34;%d&#34;</span>,&amp;tmp.subjects[i]);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">dat_add</span>(&amp;tmp);
+</span></span><span style="display:flex;"><span>    dat_count=<span style="color:#008b45">dat_load</span>();
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">printf</span>(<span style="color:#cd5555">&#34;Data added successfully!</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">Sleep</span>(<span style="color:#b452cd">3000</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">showalldata</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">system</span>(<span style="color:#cd5555">&#34;cls&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">sub_print</span>();
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;dat_count; i++)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">printf</span>(<span style="color:#cd5555">&#34;%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%s</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%c</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">&#34;</span>,stu_dat[i].id,stu_dat[i].name,stu_dat[i].sex,stu_dat[i].age);
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i2=<span style="color:#b452cd">0</span>; i2&lt;sub_count; i2++)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45">printf</span>(<span style="color:#cd5555">&#34;%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">&#34;</span>,stu_dat[i].subjects[i2]);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">printf</span>(<span style="color:#cd5555">&#34;%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t\n</span><span style="color:#cd5555">&#34;</span>,stu_dat[i].sum,stu_dat[i].avg,i+<span style="color:#b452cd">1</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">system</span>(<span style="color:#cd5555">&#34;pause&#34;</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">ed_password</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">char</span> us_name[<span style="color:#b452cd">50</span>];
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">char</span> us_pwd[<span style="color:#b452cd">50</span>];
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">char</span> us_pwd2[<span style="color:#b452cd">50</span>];
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">char</span> us_pwd3[<span style="color:#b452cd">50</span>];
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">char</span>*p;
+</span></span><span style="display:flex;"><span>    FILE*fp;
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">system</span>(<span style="color:#cd5555">&#34;cls&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">showMiniWindow</span>(<span style="color:#cd5555">&#34;修改密码&#34;</span>,<span style="color:#b452cd">5</span>,<span style="color:#b452cd">7</span>,<span style="color:#b452cd">6</span>,<span style="color:#b452cd">36</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">puts</span>(<span style="color:#cd5555">&#34;UserName&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">gotoxy</span>(<span style="color:#b452cd">6</span>,<span style="color:#b452cd">9</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">puts</span>(<span style="color:#cd5555">&#34;PassWord&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">gotoxy</span>(<span style="color:#b452cd">6</span>,<span style="color:#b452cd">10</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">puts</span>(<span style="color:#cd5555">&#34;NewPassWord&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">gotoxy</span>(<span style="color:#b452cd">6</span>,<span style="color:#b452cd">11</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">puts</span>(<span style="color:#cd5555">&#34;Again&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">gotoxy</span>(<span style="color:#b452cd">18</span>,<span style="color:#b452cd">8</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">scanf</span>(<span style="color:#cd5555">&#34;%s&#34;</span>,us_name);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">gotoxy</span>(<span style="color:#b452cd">18</span>,<span style="color:#b452cd">9</span>);
+</span></span><span style="display:flex;"><span>    p=us_pwd;
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">while</span>(<span style="color:#b452cd">1</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        *p=<span style="color:#008b45">getch</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span>(*p==<span style="color:#b452cd">13</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            p--;
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">else</span> <span style="color:#8b008b;font-weight:bold">if</span>(*p==<span style="color:#cd5555">&#39;~&#39;</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45">system</span>(<span style="color:#cd5555">&#34;consoletest.exe&gt;scaned.txt&#34;</span>);
+</span></span><span style="display:flex;"><span>            fp=<span style="color:#008b45">fopen</span>(<span style="color:#cd5555">&#34;scaned.txt&#34;</span>,<span style="color:#cd5555">&#34;r&#34;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45">fgets</span>(us_pwd,<span style="color:#8b008b;font-weight:bold">sizeof</span>(us_pwd),fp);
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45">fclose</span>(fp);
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45">system</span>(<span style="color:#cd5555">&#34;del scaned.txt&#34;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">else</span>
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45">putchar</span>(<span style="color:#cd5555">&#39;*&#39;</span>);
+</span></span><span style="display:flex;"><span>            p++;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">gotoxy</span>(<span style="color:#b452cd">18</span>,<span style="color:#b452cd">10</span>);
+</span></span><span style="display:flex;"><span>    p=us_pwd2;
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">while</span>(<span style="color:#b452cd">1</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        *p=<span style="color:#008b45">getch</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span>(*p==<span style="color:#b452cd">13</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            p--;
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">else</span> <span style="color:#8b008b;font-weight:bold">if</span>(*p==<span style="color:#cd5555">&#39;~&#39;</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45">system</span>(<span style="color:#cd5555">&#34;consoletest.exe&gt;scaned.txt&#34;</span>);
+</span></span><span style="display:flex;"><span>            fp=<span style="color:#008b45">fopen</span>(<span style="color:#cd5555">&#34;scaned.txt&#34;</span>,<span style="color:#cd5555">&#34;r&#34;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45">fgets</span>(us_pwd2,<span style="color:#8b008b;font-weight:bold">sizeof</span>(us_pwd2),fp);
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45">fclose</span>(fp);
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45">system</span>(<span style="color:#cd5555">&#34;del scaned.txt&#34;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">else</span>
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45">putchar</span>(<span style="color:#cd5555">&#39;*&#39;</span>);
+</span></span><span style="display:flex;"><span>            p++;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">gotoxy</span>(<span style="color:#b452cd">18</span>,<span style="color:#b452cd">11</span>);
+</span></span><span style="display:flex;"><span>    p=us_pwd3;
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">while</span>(<span style="color:#b452cd">1</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        *p=<span style="color:#008b45">getch</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span>(*p==<span style="color:#b452cd">13</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            p--;
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">else</span> <span style="color:#8b008b;font-weight:bold">if</span>(*p==<span style="color:#cd5555">&#39;~&#39;</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45">system</span>(<span style="color:#cd5555">&#34;consoletest.exe&gt;scaned.txt&#34;</span>);
+</span></span><span style="display:flex;"><span>            fp=<span style="color:#008b45">fopen</span>(<span style="color:#cd5555">&#34;scaned.txt&#34;</span>,<span style="color:#cd5555">&#34;r&#34;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45">fgets</span>(us_pwd3,<span style="color:#8b008b;font-weight:bold">sizeof</span>(us_pwd3),fp);
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45">fclose</span>(fp);
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45">system</span>(<span style="color:#cd5555">&#34;del scaned.txt&#34;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">else</span>
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45">putchar</span>(<span style="color:#cd5555">&#39;*&#39;</span>);
+</span></span><span style="display:flex;"><span>            p++;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">if</span>(<span style="color:#008b45">Login</span>(us_name,us_pwd)&amp;&amp;<span style="color:#008b45">strcmp</span>(us_pwd2,us_pwd3)==<span style="color:#b452cd">0</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">savePwd</span>(us_name,us_pwd2);
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">miniMessage</span>(<span style="color:#cd5555">&#34;Password modification success&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">else</span>
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">miniMessage</span>(<span style="color:#cd5555">&#34;Password modification failed,please check you input.&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">Sleep</span>(<span style="color:#b452cd">3000</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">system</span>(<span style="color:#cd5555">&#34;cls&#34;</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">del_dat</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> tmp_number;
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">char</span> str_cmd[<span style="color:#b452cd">255</span>];
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">system</span>(<span style="color:#cd5555">&#34;cls&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">printf</span>(<span style="color:#cd5555">&#34;Please input the id of the data.</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">printf</span>(<span style="color:#cd5555">&#34;System will delete the first data founded.</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">scanf</span>(<span style="color:#cd5555">&#34;%d&#34;</span>,&amp;tmp_number);
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;dat_count; i++)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span>(stu_dat[i].id==tmp_number)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45">printf</span>(<span style="color:#cd5555">&#34;Data founded.Are you sure to delete it?(Y/N)</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45">scanf</span>(<span style="color:#cd5555">&#34;%s&#34;</span>,str_cmd);
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">if</span>(<span style="color:#008b45">strcmp</span>(str_cmd,<span style="color:#cd5555">&#34;Y&#34;</span>)!=<span style="color:#b452cd">0</span>&amp;&amp;<span style="color:#008b45">strcmp</span>(str_cmd,<span style="color:#cd5555">&#34;y&#34;</span>)!=<span style="color:#b452cd">0</span>)
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                <span style="color:#008b45">printf</span>(<span style="color:#cd5555">&#34;Command canceled.</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
+</span></span><span style="display:flex;"><span>                <span style="color:#008b45">system</span>(<span style="color:#cd5555">&#34;pause&#34;</span>);
+</span></span><span style="display:flex;"><span>                <span style="color:#8b008b;font-weight:bold">return</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            stu_dat[i]=stu_dat[dat_count-<span style="color:#b452cd">1</span>];
+</span></span><span style="display:flex;"><span>            dat_count--;
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45">system</span>(<span style="color:#cd5555">&#34;del main.dat&#34;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i2=<span style="color:#b452cd">0</span>; i2&lt;dat_count; i2++)
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                <span style="color:#008b45">dat_add</span>(&amp;stu_dat[i]);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45">printf</span>(<span style="color:#cd5555">&#34;Del successfully!</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45">system</span>(<span style="color:#cd5555">&#34;pause&#34;</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">return</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">miniMessage</span>(<span style="color:#cd5555">&#34;Cannot found target data!&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">system</span>(<span style="color:#cd5555">&#34;pause&#34;</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">sub_ana</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">system</span>(<span style="color:#cd5555">&#34;cls&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> tmp_sum[<span style="color:#b452cd">50</span>];
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> tmp_avg[<span style="color:#b452cd">50</span>];
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> tmp_level[<span style="color:#b452cd">50</span>][<span style="color:#b452cd">5</span>];
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;<span style="color:#b452cd">50</span>; i++)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        tmp_sum[i]=<span style="color:#b452cd">0</span>;
+</span></span><span style="display:flex;"><span>        tmp_avg[i]=<span style="color:#b452cd">0</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i2=<span style="color:#b452cd">0</span>; i2&lt;<span style="color:#b452cd">5</span>; i2++)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            tmp_level[i][i2]=<span style="color:#b452cd">0</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;dat_count; i++)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i2=<span style="color:#b452cd">0</span>; i2&lt;sub_count; i2++)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            tmp_sum[i2]+=stu_dat[i].subjects[i2];
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">switch</span>(stu_dat[i].subjects[i2]/<span style="color:#b452cd">10</span>)
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">10</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">9</span>:
+</span></span><span style="display:flex;"><span>                tmp_level[i][<span style="color:#b452cd">0</span>]++;
+</span></span><span style="display:flex;"><span>                <span style="color:#8b008b;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">8</span>:
+</span></span><span style="display:flex;"><span>                tmp_level[i][<span style="color:#b452cd">1</span>]++;
+</span></span><span style="display:flex;"><span>                <span style="color:#8b008b;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">7</span>:
+</span></span><span style="display:flex;"><span>                tmp_level[i][<span style="color:#b452cd">2</span>]++;
+</span></span><span style="display:flex;"><span>                <span style="color:#8b008b;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">6</span>:
+</span></span><span style="display:flex;"><span>                tmp_level[i][<span style="color:#b452cd">3</span>]++;
+</span></span><span style="display:flex;"><span>                <span style="color:#8b008b;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">default</span>:
+</span></span><span style="display:flex;"><span>                tmp_level[i][<span style="color:#b452cd">4</span>]++;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;sub_count; i++)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        tmp_avg[i]=tmp_sum[i]/dat_count;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">printf</span>(<span style="color:#cd5555">&#34;科目</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">总分</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">平均分</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">优秀</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">良好</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">中等</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">及格</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">不及格</span><span style="color:#cd5555">\t\n</span><span style="color:#cd5555">&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;sub_count; i++)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">printf</span>(<span style="color:#cd5555">&#34;%s</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t\n</span><span style="color:#cd5555">&#34;</span>,sub_name[i],tmp_sum[i],tmp_avg[i]
+</span></span><span style="display:flex;"><span>               ,tmp_level[i][<span style="color:#b452cd">0</span>],tmp_level[i][<span style="color:#b452cd">1</span>],tmp_level[i][<span style="color:#b452cd">2</span>],tmp_level[i][<span style="color:#b452cd">3</span>]
+</span></span><span style="display:flex;"><span>               ,tmp_level[i][<span style="color:#b452cd">4</span>]);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">system</span>(<span style="color:#cd5555">&#34;pause&#34;</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">cmpbysum1</span>(<span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#00688b;font-weight:bold">void</span> *p1,<span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#00688b;font-weight:bold">void</span> *p2)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">return</span> ((student*)p1)-&gt;sum-((student*)p2)-&gt;sum;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">cmpbysum2</span>(<span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#00688b;font-weight:bold">void</span> *p1,<span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#00688b;font-weight:bold">void</span> *p2)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">return</span> ((student*)p2)-&gt;sum-((student*)p1)-&gt;sum;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">sortbysum</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#228b22">//ascending sort升序排序
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    <span style="color:#228b22">//descending sort降序排序
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    <span style="color:#00688b;font-weight:bold">char</span> mnu[][<span style="color:#b452cd">50</span>]= {<span style="color:#cd5555">&#34;Ascending sort↑&#34;</span>,<span style="color:#cd5555">&#34;Descending sort↓&#34;</span>,<span style="color:#cd5555">&#34;Cancel&#34;</span>};
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> m_resu;
+</span></span><span style="display:flex;"><span>    m_resu=<span style="color:#008b45">showMenu</span>(mnu,<span style="color:#b452cd">3</span>,<span style="color:#b452cd">0</span>,<span style="color:#b452cd">7</span>,<span style="color:#b452cd">7</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">system</span>(<span style="color:#cd5555">&#34;cls&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">switch</span>(m_resu)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">0</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">qsort</span>(stu_dat,dat_count,<span style="color:#8b008b;font-weight:bold">sizeof</span>(student),cmpbysum1);
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">1</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">qsort</span>(stu_dat,dat_count,<span style="color:#8b008b;font-weight:bold">sizeof</span>(student),cmpbysum2);
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">default</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">printf</span>(<span style="color:#cd5555">&#34;Command canceled.</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">system</span>(<span style="color:#cd5555">&#34;pause&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">printf</span>(<span style="color:#cd5555">&#34;OK.</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">system</span>(<span style="color:#cd5555">&#34;pause&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">showalldata</span>();
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">cmpbyid1</span>(<span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#00688b;font-weight:bold">void</span> *p1,<span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#00688b;font-weight:bold">void</span> *p2)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">return</span> ((student*)p1)-&gt;id-((student*)p2)-&gt;id;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">cmpbyid2</span>(<span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#00688b;font-weight:bold">void</span> *p1,<span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#00688b;font-weight:bold">void</span> *p2)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">return</span> ((student*)p2)-&gt;id-((student*)p1)-&gt;id;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">sortbyid</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">char</span> mnu[][<span style="color:#b452cd">50</span>]= {<span style="color:#cd5555">&#34;Ascending sort↑&#34;</span>,<span style="color:#cd5555">&#34;Descending sort↓&#34;</span>,<span style="color:#cd5555">&#34;Cancel&#34;</span>};
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> m_resu;
+</span></span><span style="display:flex;"><span>    m_resu=<span style="color:#008b45">showMenu</span>(mnu,<span style="color:#b452cd">3</span>,<span style="color:#b452cd">0</span>,<span style="color:#b452cd">7</span>,<span style="color:#b452cd">7</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">system</span>(<span style="color:#cd5555">&#34;cls&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">switch</span>(m_resu)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">0</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">qsort</span>(stu_dat,dat_count,<span style="color:#8b008b;font-weight:bold">sizeof</span>(student),cmpbyid1);
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">1</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">qsort</span>(stu_dat,dat_count,<span style="color:#8b008b;font-weight:bold">sizeof</span>(student),cmpbyid2);
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">default</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">printf</span>(<span style="color:#cd5555">&#34;Command canceled.</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">system</span>(<span style="color:#cd5555">&#34;pause&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">printf</span>(<span style="color:#cd5555">&#34;OK.</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">system</span>(<span style="color:#cd5555">&#34;pause&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">showalldata</span>();
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">cmpbyname</span>(<span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#00688b;font-weight:bold">void</span> *p1,<span style="color:#8b008b;font-weight:bold">const</span> <span style="color:#00688b;font-weight:bold">void</span> *p2)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#008b45">strcmp</span>(((student*)p1)-&gt;name,((student*)p2)-&gt;name);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">sortbyname</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">system</span>(<span style="color:#cd5555">&#34;cls&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">qsort</span>(stu_dat,dat_count,<span style="color:#8b008b;font-weight:bold">sizeof</span>(student),cmpbyname);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">printf</span>(<span style="color:#cd5555">&#34;OK.</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">system</span>(<span style="color:#cd5555">&#34;pause&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">showalldata</span>();
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">searchbyid</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> tmp_id;
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> founded=<span style="color:#b452cd">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">system</span>(<span style="color:#cd5555">&#34;cls&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">printf</span>(<span style="color:#cd5555">&#34;Please input the id of the student.</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">scanf</span>(<span style="color:#cd5555">&#34;%d&#34;</span>,&amp;tmp_id);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">system</span>(<span style="color:#cd5555">&#34;cls&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">sub_print</span>();
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;dat_count; i++)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span>(stu_dat[i].id==tmp_id)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            founded++;
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45">printf</span>(<span style="color:#cd5555">&#34;%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%s</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%c</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">&#34;</span>,stu_dat[i].id,stu_dat[i].name,stu_dat[i].sex,stu_dat[i].age);
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i2=<span style="color:#b452cd">0</span>; i2&lt;sub_count; i2++)
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                <span style="color:#008b45">printf</span>(<span style="color:#cd5555">&#34;%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">&#34;</span>,stu_dat[i].subjects[i2]);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45">printf</span>(<span style="color:#cd5555">&#34;%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t\n</span><span style="color:#cd5555">&#34;</span>,stu_dat[i].sum,stu_dat[i].avg,founded);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">if</span>(founded==<span style="color:#b452cd">0</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">system</span>(<span style="color:#cd5555">&#34;cls&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">printf</span>(<span style="color:#cd5555">&#34;Not founded!</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">system</span>(<span style="color:#cd5555">&#34;pause&#34;</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">searchbyname</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">char</span> tmp_name[<span style="color:#b452cd">25</span>];
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> founded=<span style="color:#b452cd">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">system</span>(<span style="color:#cd5555">&#34;cls&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">printf</span>(<span style="color:#cd5555">&#34;Please input the name of the student.</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">scanf</span>(<span style="color:#cd5555">&#34;%s&#34;</span>,tmp_name);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">system</span>(<span style="color:#cd5555">&#34;cls&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">sub_print</span>();
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>; i&lt;dat_count; i++)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span>(<span style="color:#008b45">strcmp</span>(stu_dat[i].name,tmp_name)==<span style="color:#b452cd">0</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            founded++;
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45">printf</span>(<span style="color:#cd5555">&#34;%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%s</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%c</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">&#34;</span>,stu_dat[i].id,stu_dat[i].name,stu_dat[i].sex,stu_dat[i].age);
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i2=<span style="color:#b452cd">0</span>; i2&lt;sub_count; i2++)
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                <span style="color:#008b45">printf</span>(<span style="color:#cd5555">&#34;%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">&#34;</span>,stu_dat[i].subjects[i2]);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45">printf</span>(<span style="color:#cd5555">&#34;%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t</span><span style="color:#cd5555">%d</span><span style="color:#cd5555">\t\n</span><span style="color:#cd5555">&#34;</span>,stu_dat[i].sum,stu_dat[i].avg,founded);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">if</span>(founded==<span style="color:#b452cd">0</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">system</span>(<span style="color:#cd5555">&#34;cls&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">printf</span>(<span style="color:#cd5555">&#34;Not founded!</span><span style="color:#cd5555">\n</span><span style="color:#cd5555">&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">system</span>(<span style="color:#cd5555">&#34;pause&#34;</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#00688b;font-weight:bold">int</span> <span style="color:#008b45">main</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">atexit</span>(showExitPic);
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> m_resu;
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">char</span> mnu[][<span style="color:#b452cd">50</span>]= {<span style="color:#cd5555">&#34;Modify the password&#34;</span>,<span style="color:#cd5555">&#34;Add new data&#34;</span>,<span style="color:#cd5555">&#34;Show all data&#34;</span>,
+</span></span><span style="display:flex;"><span>                     <span style="color:#cd5555">&#34;Del data by id&#34;</span>,<span style="color:#cd5555">&#34;Subject analysis&#34;</span>,<span style="color:#cd5555">&#34;Sort data by sum&#34;</span>,<span style="color:#cd5555">&#34;Sort data by id&#34;</span>
+</span></span><span style="display:flex;"><span>                     ,<span style="color:#cd5555">&#34;Sort in dictionary order by name&#34;</span>,<span style="color:#cd5555">&#34;Search by id&#34;</span>,<span style="color:#cd5555">&#34;Search by name&#34;</span>
+</span></span><span style="display:flex;"><span>                     ,<span style="color:#cd5555">&#34;about&#34;</span>,<span style="color:#cd5555">&#34;exit&#34;</span>
+</span></span><span style="display:flex;"><span>                    };
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">system</span>(<span style="color:#cd5555">&#34;title 学生成绩管理系统V6.0&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">system</span>(<span style="color:#cd5555">&#34;mode con cols=100 lines=30&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#228b22">//picLoad(&#34;background.bmp&#34;);
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    <span style="color:#228b22">//loadBlack();
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    <span style="color:#008b45">system</span>(<span style="color:#cd5555">&#34;image background.bmp 0 0&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">Sleep</span>(<span style="color:#b452cd">3000</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">system</span>(<span style="color:#cd5555">&#34;image /d&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">system</span>(<span style="color:#cd5555">&#34;cls&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">miniLogin</span>();
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">system</span>(<span style="color:#cd5555">&#34;cls&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">sub_load</span>();
+</span></span><span style="display:flex;"><span>    dat_count=<span style="color:#008b45">dat_load</span>();
+</span></span><span style="display:flex;"><span>beg:
+</span></span><span style="display:flex;"><span>    m_resu=<span style="color:#008b45">showMenu</span>(mnu,<span style="color:#b452cd">12</span>,<span style="color:#b452cd">0</span>,<span style="color:#b452cd">5</span>,<span style="color:#b452cd">6</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">switch</span>(m_resu)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">0</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">ed_password</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">1</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">add_stu</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">2</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">showalldata</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">3</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">del_dat</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">4</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">sub_ana</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">5</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">sortbysum</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">6</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">sortbyid</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">7</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">sortbyname</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">8</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">searchbyid</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">9</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">searchbyname</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">10</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#008b45">system</span>(<span style="color:#cd5555">&#34;write about.rtf&#34;</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">break</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">11</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">goto</span> end;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">goto</span> beg;
+</span></span><span style="display:flex;"><span>end:
+</span></span><span style="display:flex;"><span>    ;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div>
                     
                     <HR width="100%" id="EOF">
 		    <p style="color:#777;">最后修改于 2019-04-13</p>

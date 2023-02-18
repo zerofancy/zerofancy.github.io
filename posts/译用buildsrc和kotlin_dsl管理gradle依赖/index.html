@@ -35,7 +35,6 @@
 
 
 
-
   
 
 
@@ -48,11 +47,11 @@
       <script src="/js/toc.js"></script>
     
     <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
-<link rel="stylesheet" href="/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
+<link rel="stylesheet" href="/scss/journal.scss" integrity="" media="screen">
 
 
 
-<link rel="stylesheet" href="/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
+<link rel="stylesheet" href="/scss/dark-mode.scss" integrity="" media="screen">
 
 
 <link rel="stylesheet"
@@ -699,139 +698,139 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <p>如果你仍然不懂怎么创建这个目录，请看这里：</p>
 <p><img src="https://miro.medium.com/max/1400/1*rDhflrwxcwwr4mcefTrQEg.gif" alt=""></p>
 <p>然后我们需要在这个目录里创建一个叫做<code>build.gradle.kts</code>的文件，在这个文件里导入插件和存储库。</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">plugins{
-    `kotlin-dsl<span style="color:#a61717;background-color:#e3d2d2">`</span>
-}
-repositories {
-    jcenter()
-}
-</code></pre></div><p>完成后你还需要点击gradle的“sync now”按钮，因为gradle把它当作了一个新建目录中的普通文件。现在你可以实现Kotlin DSL脚本了。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span>plugins{
+</span></span><span style="display:flex;"><span>    <span style="color:#a61717;background-color:#e3d2d2">`</span>kotlin-dsl<span style="color:#a61717;background-color:#e3d2d2">`</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>repositories {
+</span></span><span style="display:flex;"><span>    jcenter()
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>完成后你还需要点击gradle的“sync now”按钮，因为gradle把它当作了一个新建目录中的普通文件。现在你可以实现Kotlin DSL脚本了。</p>
 <p><img src="https://miro.medium.com/max/870/1*L1zYKShhvKrrgTyn07S3aw.png" alt=""></p>
 <p>下一步是创建一个类似这样的目录结构<code>src&gt;main&gt;java</code>，完成后如上图所示。</p>
 <p>现在我们可以创建Kotlin文件来声明依赖库，管理版本或者实现自定义task。</p>
 <p>现在我们的目标是实现一个依赖管理系统，所以我们创建一个叫做<code>Dependencies.kt</code>的文件（你可以用你喜欢的任何名字）。</p>
 <p>完成后我们就可以通过Kotlin代码来声明依赖库和版本了。这里我们用object来声明特定的类型，例如版本号、AndroidX依赖库等。</p>
 <p>首先我们创建一个用来用Kotlin风格定义所有依赖库版本号的object。</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#008b45;font-weight:bold">Versions</span>{
-    <span style="color:#8b008b;font-weight:bold">val</span> constraint_layout_version = <span style="color:#cd5555">&#34;1.1.3&#34;</span>
-    <span style="color:#8b008b;font-weight:bold">val</span> lifecycle_version = <span style="color:#cd5555">&#34;2.2.0&#34;</span>
-    <span style="color:#8b008b;font-weight:bold">val</span> coroutines_version = <span style="color:#cd5555">&#34;1.3.8&#34;</span>
-    <span style="color:#8b008b;font-weight:bold">val</span> kotlin_version = <span style="color:#cd5555">&#34;1.3.41&#34;</span>
-  
-    <span style="color:#8b008b;font-weight:bold">val</span> appcompat = <span style="color:#cd5555">&#34;1.1.0&#34;</span>
-    <span style="color:#8b008b;font-weight:bold">val</span> recycelerview_version = <span style="color:#cd5555">&#34;1.0.0&#34;</span>
-    <span style="color:#8b008b;font-weight:bold">val</span> material_design_version = <span style="color:#cd5555">&#34;1.2.0&#34;</span>
-    <span style="color:#8b008b;font-weight:bold">val</span> cardview_version = <span style="color:#cd5555">&#34;1.0.0&#34;</span>
-    <span style="color:#8b008b;font-weight:bold">val</span> viewpager2_version = <span style="color:#cd5555">&#34;1.0.0&#34;</span>
-  
-    <span style="color:#8b008b;font-weight:bold">val</span> play_core_version = <span style="color:#cd5555">&#34;1.8.0&#34;</span>
-}
-</code></pre></div><p>下一步我们创建各种依赖库类型的专属object文件，例如Kotlinlibraries、AndroidXLibraries和UiLibraries等。</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#008b45;font-weight:bold">kotlinDependencies</span> {
-    <span style="color:#8b008b;font-weight:bold">val</span> kotlin = <span style="color:#cd5555">&#34;org.jetbrains.kotlin:kotlin-stdlib-jdk7:</span><span style="color:#cd5555">${Versions.kotlin_version}</span><span style="color:#cd5555">&#34;</span>
-    <span style="color:#8b008b;font-weight:bold">val</span> coroutines = <span style="color:#cd5555">&#34;org.jetbrains.kotlinx:kotlinx-coroutines-android:</span><span style="color:#cd5555">${Versions.coroutines_version}</span><span style="color:#cd5555">&#34;</span>
-}
-<span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#008b45;font-weight:bold">androidxsupportDependencies</span>{
-    <span style="color:#8b008b;font-weight:bold">val</span> appcompat = <span style="color:#cd5555">&#34;androidx.appcompat:appcompat:</span><span style="color:#cd5555">${Versions.appcompat}</span><span style="color:#cd5555">&#34;</span>
-    <span style="color:#8b008b;font-weight:bold">val</span> cardview = <span style="color:#cd5555">&#34;androidx.cardview:cardview:</span><span style="color:#cd5555">${Versions.cardview_version}</span><span style="color:#cd5555">&#34;</span>
-    <span style="color:#8b008b;font-weight:bold">val</span> contraintLayout = <span style="color:#cd5555">&#34;androidx.constraintlayout:constraintlayout:</span><span style="color:#cd5555">${Versions.constraint_layout_version}</span><span style="color:#cd5555">&#34;</span>
-    <span style="color:#8b008b;font-weight:bold">val</span> recyclerview = <span style="color:#cd5555">&#34;androidx.recyclerview:recyclerview:</span><span style="color:#cd5555">${Versions.recycelerview_version}</span><span style="color:#cd5555">&#34;</span>
-    <span style="color:#8b008b;font-weight:bold">val</span> viewpager2 = <span style="color:#cd5555">&#34;androidx.viewpager2:viewpager2:</span><span style="color:#cd5555">${Versions.viewpager2_version}</span><span style="color:#cd5555">&#34;</span>
-}
-<span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#008b45;font-weight:bold">materialDesignDependencies</span>{
-    <span style="color:#8b008b;font-weight:bold">val</span> materialDesign = <span style="color:#cd5555">&#34;com.google.android.material:material:</span><span style="color:#cd5555">${Versions.material_design_version}</span><span style="color:#cd5555">&#34;</span>
-}
-<span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#008b45;font-weight:bold">playcoreDependencies</span>{
-    <span style="color:#8b008b;font-weight:bold">val</span> play_core =  <span style="color:#cd5555">&#34;com.google.android.play:core:</span><span style="color:#cd5555">${Versions.play_core_version}</span><span style="color:#cd5555">&#34;</span>
-}
-</code></pre></div><p>最后把完整代码片段放到这里</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#008b45;font-weight:bold">Versions</span>{
-    <span style="color:#8b008b;font-weight:bold">val</span> constraint_layout_version = <span style="color:#cd5555">&#34;1.1.3&#34;</span>
-    <span style="color:#8b008b;font-weight:bold">val</span> lifecycle_version = <span style="color:#cd5555">&#34;2.2.0&#34;</span>
-    <span style="color:#8b008b;font-weight:bold">val</span> coroutines_version = <span style="color:#cd5555">&#34;1.3.8&#34;</span>
-    <span style="color:#8b008b;font-weight:bold">val</span> kotlin_version = <span style="color:#cd5555">&#34;1.3.41&#34;</span>
-  
-    <span style="color:#8b008b;font-weight:bold">val</span> appcompat = <span style="color:#cd5555">&#34;1.1.0&#34;</span>
-    <span style="color:#8b008b;font-weight:bold">val</span> recycelerview_version = <span style="color:#cd5555">&#34;1.0.0&#34;</span>
-    <span style="color:#8b008b;font-weight:bold">val</span> material_design_version = <span style="color:#cd5555">&#34;1.2.0&#34;</span>
-    <span style="color:#8b008b;font-weight:bold">val</span> cardview_version = <span style="color:#cd5555">&#34;1.0.0&#34;</span>
-    <span style="color:#8b008b;font-weight:bold">val</span> viewpager2_version = <span style="color:#cd5555">&#34;1.0.0&#34;</span>
-  
-    <span style="color:#8b008b;font-weight:bold">val</span> play_core_version = <span style="color:#cd5555">&#34;1.8.0&#34;</span>
-}
-<span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#008b45;font-weight:bold">kotlinDependencies</span> {
-    <span style="color:#8b008b;font-weight:bold">val</span> kotlin = <span style="color:#cd5555">&#34;org.jetbrains.kotlin:kotlin-stdlib-jdk7:</span><span style="color:#cd5555">${Versions.kotlin_version}</span><span style="color:#cd5555">&#34;</span>
-    <span style="color:#8b008b;font-weight:bold">val</span> coroutines = <span style="color:#cd5555">&#34;org.jetbrains.kotlinx:kotlinx-coroutines-android:</span><span style="color:#cd5555">${Versions.coroutines_version}</span><span style="color:#cd5555">&#34;</span>
-}
-<span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#008b45;font-weight:bold">androidxsupportDependencies</span>{
-    <span style="color:#8b008b;font-weight:bold">val</span> appcompat = <span style="color:#cd5555">&#34;androidx.appcompat:appcompat:</span><span style="color:#cd5555">${Versions.appcompat}</span><span style="color:#cd5555">&#34;</span>
-    <span style="color:#8b008b;font-weight:bold">val</span> cardview = <span style="color:#cd5555">&#34;androidx.cardview:cardview:</span><span style="color:#cd5555">${Versions.cardview_version}</span><span style="color:#cd5555">&#34;</span>
-    <span style="color:#8b008b;font-weight:bold">val</span> contraintLayout = <span style="color:#cd5555">&#34;androidx.constraintlayout:constraintlayout:</span><span style="color:#cd5555">${Versions.constraint_layout_version}</span><span style="color:#cd5555">&#34;</span>
-    <span style="color:#8b008b;font-weight:bold">val</span> recyclerview = <span style="color:#cd5555">&#34;androidx.recyclerview:recyclerview:</span><span style="color:#cd5555">${Versions.recycelerview_version}</span><span style="color:#cd5555">&#34;</span>
-    <span style="color:#8b008b;font-weight:bold">val</span> viewpager2 = <span style="color:#cd5555">&#34;androidx.viewpager2:viewpager2:</span><span style="color:#cd5555">${Versions.viewpager2_version}</span><span style="color:#cd5555">&#34;</span>
-}
-<span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#008b45;font-weight:bold">materialDesignDependencies</span>{
-    <span style="color:#8b008b;font-weight:bold">val</span> materialDesign = <span style="color:#cd5555">&#34;com.google.android.material:material:</span><span style="color:#cd5555">${Versions.material_design_version}</span><span style="color:#cd5555">&#34;</span>
-}
-<span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#008b45;font-weight:bold">playcoreDependencies</span>{
-    <span style="color:#8b008b;font-weight:bold">val</span> play_core =  <span style="color:#cd5555">&#34;com.google.android.play:core:</span><span style="color:#cd5555">${Versions.play_core_version}</span><span style="color:#cd5555">&#34;</span>
-}
-</code></pre></div><p>最后一步就是在project、app和模块级的build.gradle文件中使用这些object了。这相当简单，只要object的name和成员变量的name就行了。</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">dependencies {
-    <span style="color:#228b22">/** Kotlin */</span>
-    implementation( kotlinDependencies.kotlin)
-    <span style="color:#228b22">/** Coroutines */</span>
-    implementation( coroutineDependencies.coroutines)
-    
-    <span style="color:#228b22">/** support androidx ibraries */</span>
-    implementation( androidxsupportDependencies.appcompat)
-    implementation( androidxsupportDependencies.contraintLayout)
-    implementation( androidxsupportDependencies.recyclerview)
-    implementation( androidxsupportDependencies.cardview)
-    implementation( androidxsupportDependencies.viewpager2)
-    <span style="color:#228b22">/*** Material design */</span>
-    implementation( materialDesignDependencies.materialDesign)
-    
-    <span style="color:#228b22">/** Playcore */</span>
-    implementation( playcoreDependencies.play_core)
-}
-</code></pre></div><p>这种方法看上去简单，但拥有很多优点，比如code navigation、自动补全、运行时错误提示等。看下面的gif。（gif见原文）</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#008b45;font-weight:bold">Versions</span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> constraint_layout_version = <span style="color:#cd5555">&#34;1.1.3&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> lifecycle_version = <span style="color:#cd5555">&#34;2.2.0&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> coroutines_version = <span style="color:#cd5555">&#34;1.3.8&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> kotlin_version = <span style="color:#cd5555">&#34;1.3.41&#34;</span>
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> appcompat = <span style="color:#cd5555">&#34;1.1.0&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> recycelerview_version = <span style="color:#cd5555">&#34;1.0.0&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> material_design_version = <span style="color:#cd5555">&#34;1.2.0&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> cardview_version = <span style="color:#cd5555">&#34;1.0.0&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> viewpager2_version = <span style="color:#cd5555">&#34;1.0.0&#34;</span>
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> play_core_version = <span style="color:#cd5555">&#34;1.8.0&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>下一步我们创建各种依赖库类型的专属object文件，例如Kotlinlibraries、AndroidXLibraries和UiLibraries等。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#008b45;font-weight:bold">kotlinDependencies</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> kotlin = <span style="color:#cd5555">&#34;org.jetbrains.kotlin:kotlin-stdlib-jdk7:</span><span style="color:#cd5555">${Versions.kotlin_version}</span><span style="color:#cd5555">&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> coroutines = <span style="color:#cd5555">&#34;org.jetbrains.kotlinx:kotlinx-coroutines-android:</span><span style="color:#cd5555">${Versions.coroutines_version}</span><span style="color:#cd5555">&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#008b45;font-weight:bold">androidxsupportDependencies</span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> appcompat = <span style="color:#cd5555">&#34;androidx.appcompat:appcompat:</span><span style="color:#cd5555">${Versions.appcompat}</span><span style="color:#cd5555">&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> cardview = <span style="color:#cd5555">&#34;androidx.cardview:cardview:</span><span style="color:#cd5555">${Versions.cardview_version}</span><span style="color:#cd5555">&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> contraintLayout = <span style="color:#cd5555">&#34;androidx.constraintlayout:constraintlayout:</span><span style="color:#cd5555">${Versions.constraint_layout_version}</span><span style="color:#cd5555">&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> recyclerview = <span style="color:#cd5555">&#34;androidx.recyclerview:recyclerview:</span><span style="color:#cd5555">${Versions.recycelerview_version}</span><span style="color:#cd5555">&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> viewpager2 = <span style="color:#cd5555">&#34;androidx.viewpager2:viewpager2:</span><span style="color:#cd5555">${Versions.viewpager2_version}</span><span style="color:#cd5555">&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#008b45;font-weight:bold">materialDesignDependencies</span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> materialDesign = <span style="color:#cd5555">&#34;com.google.android.material:material:</span><span style="color:#cd5555">${Versions.material_design_version}</span><span style="color:#cd5555">&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#008b45;font-weight:bold">playcoreDependencies</span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> play_core =  <span style="color:#cd5555">&#34;com.google.android.play:core:</span><span style="color:#cd5555">${Versions.play_core_version}</span><span style="color:#cd5555">&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>最后把完整代码片段放到这里</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#008b45;font-weight:bold">Versions</span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> constraint_layout_version = <span style="color:#cd5555">&#34;1.1.3&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> lifecycle_version = <span style="color:#cd5555">&#34;2.2.0&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> coroutines_version = <span style="color:#cd5555">&#34;1.3.8&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> kotlin_version = <span style="color:#cd5555">&#34;1.3.41&#34;</span>
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> appcompat = <span style="color:#cd5555">&#34;1.1.0&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> recycelerview_version = <span style="color:#cd5555">&#34;1.0.0&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> material_design_version = <span style="color:#cd5555">&#34;1.2.0&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> cardview_version = <span style="color:#cd5555">&#34;1.0.0&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> viewpager2_version = <span style="color:#cd5555">&#34;1.0.0&#34;</span>
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> play_core_version = <span style="color:#cd5555">&#34;1.8.0&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#008b45;font-weight:bold">kotlinDependencies</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> kotlin = <span style="color:#cd5555">&#34;org.jetbrains.kotlin:kotlin-stdlib-jdk7:</span><span style="color:#cd5555">${Versions.kotlin_version}</span><span style="color:#cd5555">&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> coroutines = <span style="color:#cd5555">&#34;org.jetbrains.kotlinx:kotlinx-coroutines-android:</span><span style="color:#cd5555">${Versions.coroutines_version}</span><span style="color:#cd5555">&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#008b45;font-weight:bold">androidxsupportDependencies</span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> appcompat = <span style="color:#cd5555">&#34;androidx.appcompat:appcompat:</span><span style="color:#cd5555">${Versions.appcompat}</span><span style="color:#cd5555">&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> cardview = <span style="color:#cd5555">&#34;androidx.cardview:cardview:</span><span style="color:#cd5555">${Versions.cardview_version}</span><span style="color:#cd5555">&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> contraintLayout = <span style="color:#cd5555">&#34;androidx.constraintlayout:constraintlayout:</span><span style="color:#cd5555">${Versions.constraint_layout_version}</span><span style="color:#cd5555">&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> recyclerview = <span style="color:#cd5555">&#34;androidx.recyclerview:recyclerview:</span><span style="color:#cd5555">${Versions.recycelerview_version}</span><span style="color:#cd5555">&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> viewpager2 = <span style="color:#cd5555">&#34;androidx.viewpager2:viewpager2:</span><span style="color:#cd5555">${Versions.viewpager2_version}</span><span style="color:#cd5555">&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#008b45;font-weight:bold">materialDesignDependencies</span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> materialDesign = <span style="color:#cd5555">&#34;com.google.android.material:material:</span><span style="color:#cd5555">${Versions.material_design_version}</span><span style="color:#cd5555">&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#008b45;font-weight:bold">playcoreDependencies</span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> play_core =  <span style="color:#cd5555">&#34;com.google.android.play:core:</span><span style="color:#cd5555">${Versions.play_core_version}</span><span style="color:#cd5555">&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>最后一步就是在project、app和模块级的build.gradle文件中使用这些object了。这相当简单，只要object的name和成员变量的name就行了。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span>dependencies {
+</span></span><span style="display:flex;"><span>    <span style="color:#228b22">/** Kotlin */</span>
+</span></span><span style="display:flex;"><span>    implementation( kotlinDependencies.kotlin)
+</span></span><span style="display:flex;"><span>    <span style="color:#228b22">/** Coroutines */</span>
+</span></span><span style="display:flex;"><span>    implementation( coroutineDependencies.coroutines)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#228b22">/** support androidx ibraries */</span>
+</span></span><span style="display:flex;"><span>    implementation( androidxsupportDependencies.appcompat)
+</span></span><span style="display:flex;"><span>    implementation( androidxsupportDependencies.contraintLayout)
+</span></span><span style="display:flex;"><span>    implementation( androidxsupportDependencies.recyclerview)
+</span></span><span style="display:flex;"><span>    implementation( androidxsupportDependencies.cardview)
+</span></span><span style="display:flex;"><span>    implementation( androidxsupportDependencies.viewpager2)
+</span></span><span style="display:flex;"><span>    <span style="color:#228b22">/*** Material design */</span>
+</span></span><span style="display:flex;"><span>    implementation( materialDesignDependencies.materialDesign)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#228b22">/** Playcore */</span>
+</span></span><span style="display:flex;"><span>    implementation( playcoreDependencies.play_core)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>这种方法看上去简单，但拥有很多优点，比如code navigation、自动补全、运行时错误提示等。看下面的gif。（gif见原文）</p>
 <p>此外，我们可以在整个项目的所有模块中使用这些定义的依赖。</p>
 <h2 id="更多">更多</h2>
 <p>目前为止，我们实现了与依赖有关的所有东西，但我们确实可以在编译脚本中做更多事情，比如替换掉defaultConfig块，它看上去这样</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">compileSdkVersion(<span style="color:#b452cd">29</span>)
-defaultConfig {
-    applicationId = <span style="color:#cd5555">&#34;com.example.app&#34;</span>
-    minSdkVersion(<span style="color:#b452cd">16</span>)
-    targetSdkVersion (<span style="color:#b452cd">29</span>)
-    multiDexEnabled = <span style="color:#8b008b;font-weight:bold">true</span>
-    versionCode = <span style="color:#b452cd">1</span>
-    versionName = <span style="color:#cd5555">&#34;1.0&#34;</span>
-    testInstrumentationRunner = <span style="color:#cd5555">&#34;androidx.test.runner.AndroidJUnitRunner&#34;</span>
-    vectorDrawables.useSupportLibrary = <span style="color:#8b008b;font-weight:bold">true</span>
-}
-</code></pre></div><p>如我所说，把常量移到编译脚本外更安全。所以我们可以在下面另外创建一个Kotlin文件，或者在Dependencies.kt文件中创建一个新的object。然后声明所有常量，比如min、编译SDK版本等。</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#008b45;font-weight:bold">buildConfigVersions</span> {
-    <span style="color:#8b008b;font-weight:bold">val</span> compileSdkVersion = <span style="color:#b452cd">29</span>
-    <span style="color:#8b008b;font-weight:bold">val</span> buildToolsVersion = <span style="color:#cd5555">&#34;29.0.3&#34;</span>
-    <span style="color:#8b008b;font-weight:bold">val</span> minSdkVersion = <span style="color:#b452cd">16</span>
-    <span style="color:#8b008b;font-weight:bold">val</span> targetSdkVersion = <span style="color:#b452cd">29</span>
-    <span style="color:#8b008b;font-weight:bold">val</span> versionCode = <span style="color:#b452cd">6</span>
-    <span style="color:#8b008b;font-weight:bold">val</span> versionName = <span style="color:#cd5555">&#34;2.0&#34;</span>
-}
-</code></pre></div><p>现在我们可以在block中使用这个object了</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">compileSdkVersion(buildConfigVersions.compileSdkVersion)
-defaultConfig {
-    applicationId = <span style="color:#cd5555">&#34;com.example.app&#34;</span>
-    minSdkVersion(buildConfigVersions.minSdkVersion)
-    targetSdkVersion (buildConfigVersions.targetSdkVersion)
-    multiDexEnabled = <span style="color:#8b008b;font-weight:bold">true</span>
-    versionCode = buildConfigVersions.versionCode
-    versionName = buildConfigVersions.versionName
-    testInstrumentationRunner = <span style="color:#cd5555">&#34;androidx.test.runner.AndroidJUnitRunner&#34;</span>
-    vectorDrawables.useSupportLibrary = <span style="color:#8b008b;font-weight:bold">true</span>
-}
-</code></pre></div><p>如果你的工程中有任何顶级字符串或常量需要维护，你可以创建一个单独的文件，而不是在编译脚本中写的一团糟。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span>compileSdkVersion(<span style="color:#b452cd">29</span>)
+</span></span><span style="display:flex;"><span>defaultConfig {
+</span></span><span style="display:flex;"><span>    applicationId = <span style="color:#cd5555">&#34;com.example.app&#34;</span>
+</span></span><span style="display:flex;"><span>    minSdkVersion(<span style="color:#b452cd">16</span>)
+</span></span><span style="display:flex;"><span>    targetSdkVersion (<span style="color:#b452cd">29</span>)
+</span></span><span style="display:flex;"><span>    multiDexEnabled = <span style="color:#8b008b;font-weight:bold">true</span>
+</span></span><span style="display:flex;"><span>    versionCode = <span style="color:#b452cd">1</span>
+</span></span><span style="display:flex;"><span>    versionName = <span style="color:#cd5555">&#34;1.0&#34;</span>
+</span></span><span style="display:flex;"><span>    testInstrumentationRunner = <span style="color:#cd5555">&#34;androidx.test.runner.AndroidJUnitRunner&#34;</span>
+</span></span><span style="display:flex;"><span>    vectorDrawables.useSupportLibrary = <span style="color:#8b008b;font-weight:bold">true</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>如我所说，把常量移到编译脚本外更安全。所以我们可以在下面另外创建一个Kotlin文件，或者在Dependencies.kt文件中创建一个新的object。然后声明所有常量，比如min、编译SDK版本等。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#008b45;font-weight:bold">buildConfigVersions</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> compileSdkVersion = <span style="color:#b452cd">29</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> buildToolsVersion = <span style="color:#cd5555">&#34;29.0.3&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> minSdkVersion = <span style="color:#b452cd">16</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> targetSdkVersion = <span style="color:#b452cd">29</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> versionCode = <span style="color:#b452cd">6</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> versionName = <span style="color:#cd5555">&#34;2.0&#34;</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>现在我们可以在block中使用这个object了</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span>compileSdkVersion(buildConfigVersions.compileSdkVersion)
+</span></span><span style="display:flex;"><span>defaultConfig {
+</span></span><span style="display:flex;"><span>    applicationId = <span style="color:#cd5555">&#34;com.example.app&#34;</span>
+</span></span><span style="display:flex;"><span>    minSdkVersion(buildConfigVersions.minSdkVersion)
+</span></span><span style="display:flex;"><span>    targetSdkVersion (buildConfigVersions.targetSdkVersion)
+</span></span><span style="display:flex;"><span>    multiDexEnabled = <span style="color:#8b008b;font-weight:bold">true</span>
+</span></span><span style="display:flex;"><span>    versionCode = buildConfigVersions.versionCode
+</span></span><span style="display:flex;"><span>    versionName = buildConfigVersions.versionName
+</span></span><span style="display:flex;"><span>    testInstrumentationRunner = <span style="color:#cd5555">&#34;androidx.test.runner.AndroidJUnitRunner&#34;</span>
+</span></span><span style="display:flex;"><span>    vectorDrawables.useSupportLibrary = <span style="color:#8b008b;font-weight:bold">true</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>如果你的工程中有任何顶级字符串或常量需要维护，你可以创建一个单独的文件，而不是在编译脚本中写的一团糟。</p>
 <p>（Youtube视频见<a href="https://youtu.be/w5qCmvS9JGE">https://youtu.be/w5qCmvS9JGE</a> ）</p>
 
                     

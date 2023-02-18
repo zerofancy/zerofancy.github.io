@@ -7,7 +7,22 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Fri, 16 Dec 2022 17:42:29 +0800</lastBuildDate><atom:link href="https://ntutn.top/tags/kotlin/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 19 Feb 2023 00:39:01 +0800</lastBuildDate><atom:link href="https://ntutn.top/tags/kotlin/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Hugo博客文章加密</title>
+      <link>https://ntutn.top/project/hugo%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0%E5%8A%A0%E5%AF%86/</link>
+      <pubDate>Sun, 19 Feb 2023 00:39:01 +0800</pubDate>
+      
+      <guid>https://ntutn.top/project/hugo%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0%E5%8A%A0%E5%AF%86/</guid>
+      <description>最近发现一个看上去不错的项目叫做Hugo Encryptor，可以给hugo博客加密，输入密码后又可以正常访问，相当nice。
+然而这个工具折腾起来并没有那么容易用，因为它Python写的，依赖问题就是一个坑，这坑过了之后还发现它有其他的缺陷，比如重复运行会报错等。首先我这样说不是因为我讨厌Python哈，虽然我确实不喜欢，但作者去年也说计划拿Go重新实现的，但目前没啥动静。
+看它其实也就一个Python文件，遍历查找xml节点加密替换内容，属于是我这种教程都没看完的人也能看懂的程度，于是我决定自己写一个Kotlin版本。本来是想试试GraalVM整上各个平台的native版本，但折腾好久也没运行起来，于是退而求其次整了个类似安卓项目中gradlew文件的脚本叫hugow，替代hugo命令，一键完成下载安装工具、生成静态网站和对特定内容加密的功能。
+示例：下面这段内容的密码是ntutn。
+文章的部分内容被密码保护：
+--- DON&#39;T MODIFY THIS LINE ---在线演示：https://ntutn.top/hugo_encryptor_kt/posts/this-is-hugo-encryptor/
+仓库地址：https://github.com/zerofancy/hugo_encryptor_kt</description>
+    </item>
+    
     <item>
       <title>Kotlin的随机数不随机</title>
       <link>https://ntutn.top/posts/kotlin%E7%9A%84%E9%9A%8F%E6%9C%BA%E6%95%B0%E4%B8%8D%E9%9A%8F%E6%9C%BA/</link>
@@ -19,15 +34,15 @@
 于是大聪明我一拍脑门就写出来了，
 // 实际上是写了个安卓app, 这里只是示意 val list = listOf(&amp;#34;荟萃餐厅&amp;#34;, &amp;#34;玉兰餐厅&amp;#34;, &amp;#34;唐岛湾餐厅&amp;#34;) val floor = listOf(&amp;#34;1楼&amp;#34;, &amp;#34;2楼&amp;#34;, &amp;#34;3楼&amp;#34;) println(list.random() + floor.random()) 简洁优雅，不用算上下界，我们Kotlin真是太厉害辣！
 然后我们就在荟萃餐厅一楼连续吃了3天……小伙伴们都不相信我的编程水平了。
- 故事就到这里，那么问题在哪里呢？
+故事就到这里，那么问题在哪里呢？
 随机数不随机，那么肯定是初始化时没有引入不同seed。list.random()方法默认使用的Random对象定义在kotlin stdlib的Random.kt文件中
 接下来找到这个defaultPlatformRandom的实现
 这东西最终用的是PlatformThreadLocalRandom，而Android的ThreadLocalRandom中出了个bug——他在zygote进程中初始化，所以每个程序打开时都是相同的初始状态。
 我们可以在网上找到相关的讨论：
 https://www.reddit.com/r/androiddev/comments/x8z9r1/comment/innw882/?utm_source=share&amp;amp;utm_medium=web2x&amp;amp;context=3
 https://youtrack.jetbrains.com/issue/KT-52618/ThreadLocalRandom-is-not-a-good-source-of-randomness-on-Android-before-SDK-34-so-dont-use-it-for-Kotlin-Random
- 解决：
- 避免使用List.random、Random.nextXxx之类的方法，他们最终都是调用这个PlatformThreadLocalRandom，每次需要随机数时都创建一个Random对象，传入seed：val random = Random(System.currentTimeMills());random.nextInt() 升级Kotlin版本，根据官方的缺陷跟踪器，该问题兜底修复于1.7.20版本 使用字节码修改的方法，编译时替换掉相关的调用，比如可以用lancet来处理  </description>
+解决：
+避免使用List.random、Random.nextXxx之类的方法，他们最终都是调用这个PlatformThreadLocalRandom，每次需要随机数时都创建一个Random对象，传入seed：val random = Random(System.currentTimeMills());random.nextInt() 升级Kotlin版本，根据官方的缺陷跟踪器，该问题兜底修复于1.7.20版本 使用字节码修改的方法，编译时替换掉相关的调用，比如可以用lancet来处理 </description>
     </item>
     
     <item>
@@ -36,14 +51,16 @@ https://youtrack.jetbrains.com/issue/KT-52618/ThreadLocalRandom-is-not-a-good-so
       <pubDate>Sun, 16 Jan 2022 23:24:16 +0800</pubDate>
       
       <guid>https://ntutn.top/posts/%E7%BB%99app%E6%B7%BB%E5%8A%A0%E6%9E%84%E5%BB%BA%E4%BF%A1%E6%81%AF/</guid>
-      <description>给APP添加构建信息  这两天在琢磨一个问题，一个APP是怎么知道自己是怎么来的呢？ 一个应用得知道自己是怎么来的，这样出了问题才知道该找谁。举个例子，当应用发生了一个线上crash，崩溃信息收集上来，然后我们打开堆栈一看懵了——这个发生崩溃的v5.c是哪个类呢？
- 显然，代码被混淆过，我们要拿到编译时生成的mapping.txt来还原堆栈，如图
+      <description>给APP添加构建信息 这两天在琢磨一个问题，一个APP是怎么知道自己是怎么来的呢？ 一个应用得知道自己是怎么来的，这样出了问题才知道该找谁。举个例子，当应用发生了一个线上crash，崩溃信息收集上来，然后我们打开堆栈一看懵了——这个发生崩溃的v5.c是哪个类呢？
+显然，代码被混淆过，我们要拿到编译时生成的mapping.txt来还原堆栈，如图
 **然而，我们编译了很多次，客官您要的是哪次的mapping文件呢？**显然，我们不仅要保留每次构建的相关信息，还得能准确区分开每次构建的产物，能做到有问题立即查询到对应构建信息。
 应用需要知道自己是“怎么来的”。
-区分不同构建结果  可以收集当前commit id，commit不同一定是不同构建。 可以生成一个较长的随机数每次构建不同。  看上去前者更优雅，但一个commit id上并不一定只有一个成功的构建，比如你做一应用叫“快音”，测试通过后调整了一些编译选项打出线上包，此时只根据commit id就无法确定是对应测试包的构建还是线上包了。
+区分不同构建结果 可以收集当前commit id，commit不同一定是不同构建。 可以生成一个较长的随机数每次构建不同。 看上去前者更优雅，但一个commit id上并不一定只有一个成功的构建，比如你做一应用叫“快音”，测试通过后调整了一些编译选项打出线上包，此时只根据commit id就无法确定是对应测试包的构建还是线上包了。
 所以，最实在的方法还是后者。
 fun runShellCommand(command: String): String { val byteOut = ByteArrayOutputStream() project.exec { commandLine = command.split(&amp;#34; &amp;#34;) standardOutput = byteOut } return String(byteOut.toByteArray()) } val buildNumber = UUID.randomUUID() val gitBranch = runShellCommand(&amp;#34;git branch --show-current&amp;#34;).trim() val gitCommitId = runShellCommand(&amp;#34;git rev-parse HEAD&amp;#34;).trim() val buildTimeMILLIS = System.currentTimeMillis() 将信息传给应用 不知道大家有没有这种习惯，在开发时加一些测试代码时判断只在Debug版本生效，即
-if (BuildConfig.DEBUG) { Toast.makeText(applicationContext, &amp;#34;test&amp;#34;, Toast.LENGTH_SHORT).show() } 这样即使我真的忘记删除这段代码也不会影响到线上，让用户看到个“test”感到莫名其妙。这里用的BuildConfig就是在Gradle构建时生成的一个类，里面包含了一些有关当前构建的信息1。</description>
+if (BuildConfig.DEBUG) { Toast.makeText(applicationContext, &amp;#34;test&amp;#34;, Toast.LENGTH_SHORT).show() } 这样即使我真的忘记删除这段代码也不会影响到线上，让用户看到个“test”感到莫名其妙。这里用的BuildConfig就是在Gradle构建时生成的一个类，里面包含了一些有关当前构建的信息1。
+而幸运的是，官方也提供了方法让我们可以往BuildConfig里面自己加东西，于是
+android { defaultConfig { buildConfigField(&amp;#34;String&amp;#34;, &amp;#34;BUILD_NUMBER&amp;#34;, &amp;#34;\&amp;#34;$buildNumber\&amp;#34;&amp;#34;) buildConfigField(&amp;#34;String&amp;#34;, &amp;#34;GIT_BRANCH&amp;#34;, &amp;#34;\&amp;#34;$gitBranch\&amp;#34;&amp;#34;) buildConfigField(&amp;#34;String&amp;#34;, &amp;#34;GIT_COMMIT_ID&amp;#34;, &amp;#34;\&amp;#34;$gitCommitId\&amp;#34;&amp;#34;) buildConfigField(&amp;#34;Long&amp;#34;, &amp;#34;BUILD_TIME_MILLIS&amp;#34;, &amp;#34;${buildTimeMILLIS}L&amp;#34;) } } 然后这些字段就会出现在BuildConfig中</description>
     </item>
     
     <item>
@@ -66,8 +83,9 @@ private fun saveText(inputText: String) { try { val output = openFileOutput(&amp
       <description>Kotlin 变量和函数 变量 用var和val定义变量，并有类型自动推导的支持。
 val用来声明一个不可变的变量，var用来声明一个可变的变量。
 val a = 10 var b: Int = 12 Kotlin完全抛弃了java中的基本数据类型，完全使用对象数据类型。
-   java基本数据类型 Kotlin对象数据类型 数据类型说明     int Int 整型   long Long 长整型   short Short 短整型   float Float 单精度浮点型   double Double 双精度浮点型   boolean Boolean 布尔型   char Char 字符型   byte Byte 字节型    函数 语法：
-fun main(args: Array&amp;lt;String&amp;gt;) { println(&amp;#34;Hello World!</description>
+java基本数据类型 Kotlin对象数据类型 数据类型说明 int Int 整型 long Long 长整型 short Short 短整型 float Float 单精度浮点型 double Double 双精度浮点型 boolean Boolean 布尔型 char Char 字符型 byte Byte 字节型 函数 语法：
+fun main(args: Array&amp;lt;String&amp;gt;) { println(&amp;#34;Hello World!&amp;#34;) } Kotlin中的函数在无必要时可以省略很多东西：
+import kotlin.math.max fun largerNumber(a: Int, b: Int) = max(a, b) fun main(args: Array&amp;lt;String&amp;gt;) { val a = 3 val b = 5 println(&amp;#34;The larger number of a and b is ${largerNumber(a, b)}&amp;#34;) } 程序的逻辑控制 if 与java中的if语句相比，Kotlin中的if是可以有返回值的。</description>
     </item>
     
     <item>
@@ -79,8 +97,7 @@ fun main(args: Array&amp;lt;String&amp;gt;) { println(&amp;#34;Hello World!</des
       <description>问题描述 和工具线配合完成某个需求，我这边的改动很少，但一鼓作气搞完后却遇到了奇怪的报错。已知工具线的代码大多是java的，而我这边自然是力推Kotlin。我们的代码参考如下：
 代码参考 工具线定义了一个接口用于callback
 package a; interface IPublishCallback { void onFinish(); } 工具线在执行完发布逻辑后无论成功还是失败都会调用我们的callback
-package a; public class PublishUtil { public static void publishVideo(String videoName, IPublishCallback callback) { Runnable runnable = () -&amp;gt; { try { System.out.println(&amp;#34;[&amp;#34; + videoName + &amp;#34;]开始执行耗时发布操作……&amp;#34;); Thread.sleep(1000L); } catch (InterruptedException e) { e.printStackTrace(); } callback.onFinish(); }; Thread thread = new Thread(runnable); thread.start(); try { thread.join(); } catch (InterruptedException e) { e.printStackTrace(); } } } 我们这边的实现是Kotlin的，就是调用了下工具线的方法
-package b import a.</description>
+package a; public class PublishUtil { public static void publishVideo(String videoName, IPublishCallback callback) { Runnable runnable = () -&amp;gt; { try { System.out.println(&amp;#34;[&amp;#34; + videoName + &amp;#34;]开始执行耗时发布操作……&amp;#34;); Thread.sleep(1000L); } catch (InterruptedException e) { e.printStackTrace(); } callback.onFinish(); }; Thread thread = new Thread(runnable); thread.start(); try { thread.join(); } catch (InterruptedException e) { e.printStackTrace(); } } } 我们这边的实现是Kotlin的，就是调用了下工具线的方法</description>
     </item>
     
     <item>
@@ -108,7 +125,7 @@ import java.lang.IllegalArgumentException fun main() { listOf( ShareData(listOf(
 幸运的是，我找到了这么一套免费的图片素材，Mahjong Icons，只要提供一个指向这个页面的超链接就可以免费用。
 另外还需要一个应用图标，这个我是直接在Icon Park上找了一个。
 接下来将素材导入到项目，为了随处使用方便，我还定义到了一个类中：
-package top.ntutn.match /** * 麻将牌 */ object Mahjong { val bamboos = listOf( R.drawable.bamboo1, R.drawable.bamboo2, R.drawable.bamboo3, R.drawable.bamboo4, R.drawable.bamboo5, R.drawable.bamboo6, R.drawable.bamboo7, R.drawable.bamboo8, R.drawable.bamboo9 ) val dragons = listOf( R.drawable.dragon_chun, R.drawable.dragon_green, R.drawable.dragon_haku ) val faceDown = R.drawable.face_down val mans = listOf( R.drawable.man1, R.drawable.man2, R.drawable.man3, R.drawable.man4, R.drawable.man5, R.drawable.man6, R.drawable.man7, R.drawable.man8, R.drawable.man9 ) val pins = listOf( R.drawable.pin1, R.drawable.pin2, R.drawable.pin3, R.drawable.pin4, R.</description>
+package top.ntutn.match /** * 麻将牌 */ object Mahjong { val bamboos = listOf( R.drawable.bamboo1, R.drawable.bamboo2, R.drawable.bamboo3, R.drawable.bamboo4, R.drawable.bamboo5, R.drawable.bamboo6, R.drawable.bamboo7, R.drawable.bamboo8, R.drawable.bamboo9 ) val dragons = listOf( R.drawable.dragon_chun, R.drawable.dragon_green, R.drawable.dragon_haku ) val faceDown = R.drawable.face_down val mans = listOf( R.drawable.man1, R.drawable.man2, R.drawable.man3, R.drawable.man4, R.drawable.man5, R.drawable.man6, R.drawable.man7, R.drawable.man8, R.drawable.man9 ) val pins = listOf( R.drawable.pin1, R.drawable.pin2, R.drawable.pin3, R.</description>
     </item>
     
     <item>
@@ -118,7 +135,7 @@ package top.ntutn.match /** * 麻将牌 */ object Mahjong { val bamboos = listOf
       
       <guid>https://ntutn.top/posts/%E8%AF%91%E7%94%A8buildsrc%E5%92%8Ckotlin_dsl%E7%AE%A1%E7%90%86gradle%E4%BE%9D%E8%B5%96/</guid>
       <description>多模块工程中一个更好的引入依赖的方法 翻译自Gradle Dependency Management With BuildSrc and Kotlin DSL
- 第一次尝试翻译英文文章……
+第一次尝试翻译英文文章……
 要点 主要集中在如何用buildSrc目录和Kotlin DSL脚本构建一个Gradle依赖管理系统，你也会学到这样做相对使用传统Groovy代码的好处。
 如果你倾向于通过视频来看这篇博客，文末附有一个Youtube视频。
 问题 众所周知在一个快速发展的项目中维护依赖是一个乏味的工作，而传统的Groovy脚本没有code navigation、自动补全，再加上性能问题和运行时错误让这一切变得更糟糕。
@@ -126,10 +143,10 @@ package top.ntutn.match /** * 麻将牌 */ object Mahjong { val bamboos = listOf
 感谢Gradle团队和社区的工作提供了一个顺畅安全的构建流程，他们提出的最棒的主意之一就是用Kotlin DSL脚本写buildSrc目录。
 解决 依赖库引入和自定义task不应该放到构建脚本中，它们应该被声明到一个独立文件中再被构建脚本使用。在这个实现的早期，开发者习惯于创建一个Gradle文件来声明所有库并在构建脚本中使用。
 这确实在一定程度上解决了问题，你可以在这篇文章读到这种方法。但这个简单方案不能解决类似自动补全和code navigation的问题，这使得在长远上看这个方案不够可靠。在这之外，buildSrc似乎有希望解决这个问题。
- 这个目录被当作一个included build看待。在发现这个目录之后，Gradle自动编译和测试它的代码，并将编译结果放到你的构建脚本的class path中。在一个多模块的工程中只能有一个这样的目录，并且要放到工程的顶级目录中。应该优先通过script plugins因为这样更便于管理、重构和测试代码。 ——Gradle团队
- 创建buildSrc目录 使用Kotlin DSL脚本不但能解决构建脚本中的这些问题，还能得到先进的IDE支持，包括code navigation、编译时错误提示等。最重要的，我们再也不用使用Groovy了。
+这个目录被当作一个included build看待。在发现这个目录之后，Gradle自动编译和测试它的代码，并将编译结果放到你的构建脚本的class path中。在一个多模块的工程中只能有一个这样的目录，并且要放到工程的顶级目录中。应该优先通过script plugins因为这样更便于管理、重构和测试代码。 ——Gradle团队
+创建buildSrc目录 使用Kotlin DSL脚本不但能解决构建脚本中的这些问题，还能得到先进的IDE支持，包括code navigation、编译时错误提示等。最重要的，我们再也不用使用Groovy了。
 我们要做的第一件事是创建一个buildSrc目录：
- 在工程上右键 点击New并选择Directory 把它命名为buildSrc  如果你仍然不懂怎么创建这个目录，请看这里：
+在工程上右键 点击New并选择Directory 把它命名为buildSrc 如果你仍然不懂怎么创建这个目录，请看这里：
 然后我们需要在这个目录里创建一个叫做build.gradle.kts的文件，在这个文件里导入插件和存储库。
 plugins{ `kotlin-dsl` } repositories { jcenter() } 完成后你还需要点击gradle的“sync now”按钮，因为gradle把它当作了一个新建目录中的普通文件。现在你可以实现Kotlin DSL脚本了。
 下一步是创建一个类似这样的目录结构src&amp;gt;main&amp;gt;java，完成后如上图所示。
@@ -137,7 +154,7 @@ plugins{ `kotlin-dsl` } repositories { jcenter() } 完成后你还需要点击gr
 现在我们的目标是实现一个依赖管理系统，所以我们创建一个叫做Dependencies.kt的文件（你可以用你喜欢的任何名字）。
 完成后我们就可以通过Kotlin代码来声明依赖库和版本了。这里我们用object来声明特定的类型，例如版本号、AndroidX依赖库等。
 首先我们创建一个用来用Kotlin风格定义所有依赖库版本号的object。
-object Versions{ val constraint_layout_version = &amp;#34;1.1.3&amp;#34; val lifecycle_version = &amp;#34;2.2.0&amp;#34; val coroutines_version = &amp;#34;1.</description>
+object Versions{ val constraint_layout_version = &amp;#34;1.1.3&amp;#34; val lifecycle_version = &amp;#34;2.2.0&amp;#34; val coroutines_version = &amp;#34;1.3.8&amp;#34; val kotlin_version = &amp;#34;1.</description>
     </item>
     
     <item>
@@ -151,7 +168,7 @@ object Versions{ val constraint_layout_version = &amp;#34;1.1.3&amp;#34; val lif
 通知渠道在8.0（O）引入。要求APP将通知分类，通过不同渠道进行分发，用户可以选择性禁用某个渠道的通知，或者调整优先等级。
 通知可以有不同的重要等级，有四种：IMPORTANCE_HIGH、IMPORTANCE_DEFAULT、IMPORTANCE_LOW、IMPORTANCE_MIN。根据重要等级不同，通知可能有不同的展现策略，比如在前台提示甚至播放声音。
 在通知渠道创建时通知的重要等级也就确定了，之后不能再被APP修改。
-通知dmeo package top.ntutn.notificationtest import android.app.NotificationChannel import android.app.NotificationManager import android.app.PendingIntent import android.content.Context import android.content.Intent import android.graphics.BitmapFactory import android.os.Build import androidx.appcompat.app.AppCompatActivity import android.os.Bundle import androidx.core.app.NotificationCompat import top.ntutn.notificationtest.databinding.ActivityMainBinding class MainActivity : AppCompatActivity() { private lateinit var binding: ActivityMainBinding override fun onCreate(savedInstanceState: Bundle?) { super.onCreate(savedInstanceState) binding = ActivityMainBinding.inflate(layoutInflater) setContentView(binding.root) initView() } private fun initView(){ val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager if(Build.VERSION.SDK_INT &amp;gt;= Build.VERSION_CODES.O){ // 通知渠道  val channel = NotificationChannel(&amp;#34;normal&amp;#34;,&amp;#34;Normal&amp;#34;,NotificationManager.</description>
+通知dmeo package top.ntutn.notificationtest import android.app.NotificationChannel import android.app.NotificationManager import android.app.PendingIntent import android.content.Context import android.content.Intent import android.graphics.BitmapFactory import android.os.Build import androidx.appcompat.app.AppCompatActivity import android.os.Bundle import androidx.core.app.NotificationCompat import top.ntutn.notificationtest.databinding.ActivityMainBinding class MainActivity : AppCompatActivity() { private lateinit var binding: ActivityMainBinding override fun onCreate(savedInstanceState: Bundle?) { super.onCreate(savedInstanceState) binding = ActivityMainBinding.inflate(layoutInflater) setContentView(binding.root) initView() } private fun initView(){ val manager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager if(Build.VERSION.SDK_INT &amp;gt;= Build.VERSION_CODES.O){ // 通知渠道 val channel = NotificationChannel(&amp;#34;normal&amp;#34;,&amp;#34;Normal&amp;#34;,NotificationManager.</description>
     </item>
     
     <item>
@@ -163,7 +180,7 @@ object Versions{ val constraint_layout_version = &amp;#34;1.1.3&amp;#34; val lif
       <description>仍然是《第一行代码》的学习笔记，安卓内置广播机制。
 Android中每个应用程序都可以对自己感兴趣的广播进行注册，包括来自系统的，和其他应用程序的。
 广播分为标准广播和有序广播。
- 标准广播异步执行，所有BroadcastReceiver几乎同时收到广播的消息。 有序广播 同步执行，只有前一个Receiver逻辑执行完后才会传递给下一个，且可以将广播截断。  接收系统广播 BroadcastReceiver的onReceive()方法是在主线程调用的，不应执行耗时操作。但开一个新线程操作也是不可靠的1。
+标准广播异步执行，所有BroadcastReceiver几乎同时收到广播的消息。 有序广播 同步执行，只有前一个Receiver逻辑执行完后才会传递给下一个，且可以将广播截断。 接收系统广播 BroadcastReceiver的onReceive()方法是在主线程调用的，不应执行耗时操作。但开一个新线程操作也是不可靠的1。
 监听时间变化（动态注册） class MainActivity : AppCompatActivity() { private val timeReceiver = object : BroadcastReceiver() { override fun onReceive(context: Context?, intent: Intent?) { text.text = Date(System.currentTimeMillis()).toString() } } override fun onCreate(savedInstanceState: Bundle?) { super.onCreate(savedInstanceState) setContentView(R.layout.activity_main) val intentFilter = IntentFilter() intentFilter.addAction(Intent.ACTION_TIME_TICK) registerReceiver(timeReceiver, intentFilter) } override fun onDestroy() { super.onDestroy() unregisterReceiver(timeReceiver) } } 开机启动（静态注册） &amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt; &amp;lt;manifest xmlns:android=&amp;#34;http://schemas.android.com/apk/res/android&amp;#34; package=&amp;#34;top.ntutn.broadcasttest&amp;#34;&amp;gt; &amp;lt;uses-permission android:name=&amp;#34;android.permission.RECEIVE_BOOT_COMPLETED&amp;#34; /&amp;gt; &amp;lt;application android:allowBackup=&amp;#34;true&amp;#34; android:icon=&amp;#34;@mipmap/ic_launcher&amp;#34; android:label=&amp;#34;@string/app_name&amp;#34; android:roundIcon=&amp;#34;@mipmap/ic_launcher_round&amp;#34; android:supportsRtl=&amp;#34;true&amp;#34; android:theme=&amp;#34;@style/Theme.</description>
     </item>
     
@@ -192,9 +209,9 @@ android:gravity指定控件内的内容对齐方式，有top、bottom、start、
 基本布局 LinearLayout 线性布局，通过android:orientation指定方向。
 有一个重要属性：android:layout_weight，它将控件已经占用的空间减掉后按照比重分给各个控件。一般我们直接指定android:layout_width为0dp，而给它指定一个比重，这样控件的尺寸将占满剩余空间。
 RelativeLayout 相对布局，复杂，但有迹可循。
-&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;utf-8&amp;quot;?&amp;gt; &amp;lt;RelativeLayout xmlns:android=&amp;quot;http://schemas.android.com/apk/res/android&amp;quot; xmlns:tools=&amp;quot;http://schemas.android.com/tools&amp;quot; android:layout_width=&amp;quot;match_parent&amp;quot; android:layout_height=&amp;quot;match_parent&amp;quot; tools:context=&amp;quot;.MainActivity&amp;quot;&amp;gt; &amp;lt;Button android:id=&amp;quot;@+id/button1&amp;quot; android:layout_width=&amp;quot;wrap_content&amp;quot; android:layout_height=&amp;quot;wrap_content&amp;quot; android:layout_alignParentLeft=&amp;quot;true&amp;quot; android:layout_alignParentTop=&amp;quot;true&amp;quot; android:text=&amp;quot;Button1&amp;quot; /&amp;gt; &amp;lt;Button android:id=&amp;quot;@+id/button2&amp;quot; android:layout_width=&amp;quot;wrap_content&amp;quot; android:layout_height=&amp;quot;wrap_content&amp;quot; android:layout_alignParentTop=&amp;quot;true&amp;quot; android:layout_alignParentRight=&amp;quot;true&amp;quot; android:text=&amp;quot;Button2&amp;quot; /&amp;gt; &amp;lt;Button android:id=&amp;quot;@+id/button3&amp;quot; android:layout_width=&amp;quot;wrap_content&amp;quot; android:layout_height=&amp;quot;wrap_content&amp;quot; android:layout_centerInParent=&amp;quot;true&amp;quot; android:text=&amp;quot;Button3&amp;quot; /&amp;gt; &amp;lt;Button android:id=&amp;quot;@+id/button4&amp;quot; android:layout_width=&amp;quot;wrap_content&amp;quot; android:layout_height=&amp;quot;wrap_content&amp;quot; android:layout_alignParentLeft=&amp;quot;true&amp;quot; android:layout_alignParentBottom=&amp;quot;true&amp;quot; android:text=&amp;quot;Button4&amp;quot; /&amp;gt; &amp;lt;Button android:id=&amp;quot;@+id/button5&amp;quot; android:layout_width=&amp;quot;wrap_content&amp;quot; android:layout_height=&amp;quot;wrap_content&amp;quot; android:layout_alignParentRight=&amp;quot;true&amp;quot; android:layout_alignParentBottom=&amp;quot;true&amp;quot; android:text=&amp;quot;Button5&amp;quot; /&amp;gt; &amp;lt;/RelativeLayout&amp;gt; 以上这段布局文件描述的就是一个相对布局，共有5个按钮，分别在父布局的左上、右上、中间、左下、右下位置。
+&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt;&amp;lt;RelativeLayout xmlns:android=&amp;#34;http://schemas.android.com/apk/res/android&amp;#34;xmlns:tools=&amp;#34;http://schemas.android.com/tools&amp;#34;android:layout_width=&amp;#34;match_parent&amp;#34;android:layout_height=&amp;#34;match_parent&amp;#34;tools:context=&amp;#34;.MainActivity&amp;#34;&amp;gt;&amp;lt;Buttonandroid:id=&amp;#34;@+id/button1&amp;#34;android:layout_width=&amp;#34;wrap_content&amp;#34;android:layout_height=&amp;#34;wrap_content&amp;#34;android:layout_alignParentLeft=&amp;#34;true&amp;#34;android:layout_alignParentTop=&amp;#34;true&amp;#34;android:text=&amp;#34;Button1&amp;#34; /&amp;gt;&amp;lt;Buttonandroid:id=&amp;#34;@+id/button2&amp;#34;android:layout_width=&amp;#34;wrap_content&amp;#34;android:layout_height=&amp;#34;wrap_content&amp;#34;android:layout_alignParentTop=&amp;#34;true&amp;#34;android:layout_alignParentRight=&amp;#34;true&amp;#34;android:text=&amp;#34;Button2&amp;#34; /&amp;gt;&amp;lt;Buttonandroid:id=&amp;#34;@+id/button3&amp;#34;android:layout_width=&amp;#34;wrap_content&amp;#34;android:layout_height=&amp;#34;wrap_content&amp;#34;android:layout_centerInParent=&amp;#34;true&amp;#34;android:text=&amp;#34;Button3&amp;#34; /&amp;gt;&amp;lt;Buttonandroid:id=&amp;#34;@+id/button4&amp;#34;android:layout_width=&amp;#34;wrap_content&amp;#34;android:layout_height=&amp;#34;wrap_content&amp;#34;android:layout_alignParentLeft=&amp;#34;true&amp;#34;android:layout_alignParentBottom=&amp;#34;true&amp;#34;android:text=&amp;#34;Button4&amp;#34; /&amp;gt;&amp;lt;Buttonandroid:id=&amp;#34;@+id/button5&amp;#34;android:layout_width=&amp;#34;wrap_content&amp;#34;android:layout_height=&amp;#34;wrap_content&amp;#34;android:layout_alignParentRight=&amp;#34;true&amp;#34;android:layout_alignParentBottom=&amp;#34;true&amp;#34;android:text=&amp;#34;Button5&amp;#34; /&amp;gt;&amp;lt;/RelativeLayout&amp;gt; 以上这段布局文件描述的就是一个相对布局，共有5个按钮，分别在父布局的左上、右上、中间、左下、右下位置。
 相对布局不仅可以相对于父布局，也可以相对于控件。以下描述了button3在中间，左上button1，右上button2，左下button4，右下button5的布局场景。
-&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;utf-8&amp;quot;?&amp;gt; &amp;lt;RelativeLayout xmlns:android=&amp;quot;http://schemas.android.com/apk/res/android&amp;quot; xmlns:tools=&amp;quot;http://schemas.android.com/tools&amp;quot; android:layout_width=&amp;quot;match_parent&amp;quot; android:layout_height=&amp;quot;match_parent&amp;quot; tools:context=&amp;quot;.</description>
+&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt;&amp;lt;RelativeLayout xmlns:android=&amp;#34;http://schemas.android.com/apk/res/android&amp;#34;xmlns:tools=&amp;#34;http://schemas.android.com/tools&amp;#34;android:layout_width=&amp;#34;match_parent&amp;#34;android:layout_height=&amp;#34;match_parent&amp;#34;tools:context=&amp;#34;.</description>
     </item>
     
     <item>
@@ -204,8 +221,8 @@ RelativeLayout 相对布局，复杂，但有迹可循。
       
       <guid>https://ntutn.top/posts/activity/</guid>
       <description>title: android项目开发：Activity author: 归零幻想 publishDate: 2020-12-15 editDate: 2020-12-15 tags: [android, 第一行代码, Kotlin, Activity]
- 仍然是《第一行代码》的读书笔记，可能引用原书的定义和描述，或代码案例。
- Activity Activity基本用法 Android讲究设计逻辑与视图分离，一般Activity都会对应一个布局文件（XML文件）。
+仍然是《第一行代码》的读书笔记，可能引用原书的定义和描述，或代码案例。
+Activity Activity基本用法 Android讲究设计逻辑与视图分离，一般Activity都会对应一个布局文件（XML文件）。
 所有的Activity都要在AndroidManifest中注册才生效。
 Activity可以创建菜单。首先在res/menu下创建一个xml文件（Android Studio中也提供了可视化编辑的方法）：
 &amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt; &amp;lt;menu xmlns:app=&amp;#34;http://schemas.android.com/apk/res-auto&amp;#34; xmlns:android=&amp;#34;http://schemas.android.com/apk/res/android&amp;#34;&amp;gt; &amp;lt;item android:id=&amp;#34;@+id/add_item&amp;#34; android:title=&amp;#34;Add&amp;#34;/&amp;gt; &amp;lt;item android:id=&amp;#34;@+id/remove_item&amp;#34; android:title=&amp;#34;Remove&amp;#34;/&amp;gt; &amp;lt;/menu&amp;gt; 重写两个方法
@@ -227,8 +244,7 @@ override fun onCreateOptionsMenu(menu: Menu?): Boolean { menuInflater.inflate(R.
 回到我这个Issue，虽然从业务逻辑的角度看用户操作后这个变量是不会为null的，但仍然应该有判空，有兜底的逻辑，这样你的程序才会更加健壮。
 Kotlin的空安全 与Java不同，Kotlin的类型系统在设计时就考虑了变量是否可空1，其用一个?表示变量是否能为空。
 var a: String = &amp;#34;abc&amp;#34; // 默认情况下，常规初始化意味着非空 a = null // 编译错误 var b: String? = &amp;#34;abc&amp;#34; // 可以设置为空 b = null // ok print(b) 判空 Kotlin有一定的类型推断能力，判空后进行赋值操作前能识别出变量是非空的类型。
-val b: String? = &amp;#34;Kotlin&amp;#34; if (b != null &amp;amp;&amp;amp; b.length &amp;gt; 0) { print(&amp;#34;String of length ${b.length}&amp;#34;) } else { print(&amp;#34;Empty string&amp;#34;) } 安全调用 Kotlin中提供了?.来安全调用一个可能为空的变量。b?.test()相当于if (b != null) b.test()。
-值得注意的是，这个操作符是可以和赋值语句一起用的。如：</description>
+val b: String? = &amp;#34;Kotlin&amp;#34; if (b != null &amp;amp;&amp;amp; b.length &amp;gt; 0) { print(&amp;#34;String of length ${b.length}&amp;#34;) } else { print(&amp;#34;Empty string&amp;#34;) } 安全调用 Kotlin中提供了?.来安全调用一个可能为空的变量。b?.test()相当于if (b != null) b.test()。</description>
     </item>
     
     <item>
@@ -246,10 +262,10 @@ app 项目中的代码、资源等内容。
 build 编译时自动生成的文件，不需要关心。
 libs 存放项目中的第三方jar包，这个目录下的jar包会自动添加到项目的构建路径下。
 src androidTest Android Test测试用例，可以对项目进行一些自动化测试。
- 实际上在公司里发现基本不写测试用例，全靠QA瞎几把点。
- test 用来编写单元测试用例，对项目进行自动化测试。
- 这里的测试用例是不依赖安卓框架的。
- main java 存放所有java代码（和Kotlin代码）的地方。
+实际上在公司里发现基本不写测试用例，全靠QA瞎几把点。
+test 用来编写单元测试用例，对项目进行自动化测试。
+这里的测试用例是不依赖安卓框架的。
+main java 存放所有java代码（和Kotlin代码）的地方。
 res 项目的资源文件夹，项目中使用到的所有图片、布局、字符串等资源都存在这个目录下。
 图片存放在drawable目录下，布局存放在layout目录下，字符串存放在values目录下。
 mipmap存放图标，之所以有很多mipmap目录是为了适配各种设备。若只有一份图片，那么放在xxhdpi下就可以了。
@@ -261,15 +277,14 @@ proguard-rules.pro 指定项目代码的混淆方式。
 build 编译时自动生成的内容。
 gradle gradle wrapper的配置文件。Android Studio会根据本地的缓存i去=情况决定是否需要联网下载gradle。
 .gitignore 排除文件或文件夹的git版本控制。
- 对于所有项目都会用到的.gitignore条目，不妨加入~/.gitignore全局配置。
- build.gradle 项目全局的构建脚本。
+对于所有项目都会用到的.gitignore条目，不妨加入~/.gitignore全局配置。
+build.gradle 项目全局的构建脚本。
 repositories中，google()对应谷歌自家代码仓库依赖，jcenter()中则是很多第三方开源库。
 gradle.properties 全局gradle的配置文件。
 gradlew和gradlew.bat 这两个文件是用来在命令行界面执行gradle命令的，其中gradlew是在Linux或Mac系统中使用的，gradlew.bat是在Windows系统中使用的。
 local.properties 用于指定本机中的Android SDK路径。
 settings.gradle 用来指定项目中所有引入的模块。
-  《第一行代码》&amp;#160;&amp;#x21a9;&amp;#xfe0e;
-   </description>
+《第一行代码》&amp;#160;&amp;#x21a9;&amp;#xfe0e;</description>
     </item>
     
     <item>
@@ -279,8 +294,8 @@ settings.gradle 用来指定项目中所有引入的模块。
       
       <guid>https://ntutn.top/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B/</guid>
       <description>仍然是《第一行代码》的笔记，不过略过了deprated的内容，并探究了下Handler的工作机制。
- 上班了，果然没有那么多大块时间写博客了。
- Handler 主线程不能进行耗时处理，子线程不能访问UI，所以我们需要异步消息处理机制。
+上班了，果然没有那么多大块时间写博客了。
+Handler 主线程不能进行耗时处理，子线程不能访问UI，所以我们需要异步消息处理机制。
 使用 class MainActivity : AppCompatActivity() { private lateinit var binding: ActivityMainBinding private val handler = object : Handler(Looper.getMainLooper()) { override fun handleMessage(msg: Message) { when(msg.what){ MSG_UPDATE_TEXT -&amp;gt; binding.textView.text = &amp;#34;Nice to meet you. &amp;#34; } } } override fun onCreate(savedInstanceState: Bundle?) { super.onCreate(savedInstanceState) binding = ActivityMainBinding.inflate(layoutInflater) setContentView(binding.root) initView() } private fun initView() { binding.apply { changeTextButton.setOnClickListener { thread { val msg = Message() msg.what = MSG_UPDATE_TEXT handler.</description>
     </item>
     
@@ -306,8 +321,8 @@ EventBus.getDefault().unregister(this) 然后就可以接收那个Event了。
 @Subscribe注解有一个参数threadMode，有以下取值：
 ThreadMode.POSTING 默认值，在同一线程中调用，开销最小。
 ThreadMode.MAIN 在主线程中调用。
- 如果发送事件的是主线程，则直接调用。
- ThreadMode.MAIN_ORDERED 在主线程中调用，同步调用（排队）。
+如果发送事件的是主线程，则直接调用。
+ThreadMode.MAIN_ORDERED 在主线程中调用，同步调用（排队）。
 ThreadMode.BACKGROUND 在后台线程中调用。
 ThreadMode.ASYNC 在单独线程中调用，用于耗时操作。
 对于EventBus更新UI，我同样写了demo：

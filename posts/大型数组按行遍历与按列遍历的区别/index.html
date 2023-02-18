@@ -35,7 +35,6 @@
 
 
 
-
   
 
 
@@ -48,11 +47,11 @@
       <script src="/js/toc.js"></script>
     
     <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
-<link rel="stylesheet" href="/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
+<link rel="stylesheet" href="/scss/journal.scss" integrity="" media="screen">
 
 
 
-<link rel="stylesheet" href="/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
+<link rel="stylesheet" href="/scss/dark-mode.scss" integrity="" media="screen">
 
 
 <link rel="stylesheet"
@@ -681,42 +680,42 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <p>70000×70000我电脑在默认情况下开不下，我这里用20000×20000测试</p>
 </blockquote>
 <h3 id="按行遍历">按行遍历</h3>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#228b22">/**
-</span><span style="color:#228b22"> * M1
-</span><span style="color:#228b22"> */</span>
-<span style="color:#8b008b;font-weight:bold">public</span> <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">M1</span> {
-    <span style="color:#8b008b;font-weight:bold">public</span> <span style="color:#8b008b;font-weight:bold">static</span> <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">main</span>(String[] args) {
-        <span style="color:#8b008b;font-weight:bold">final</span> <span style="color:#00688b;font-weight:bold">int</span> N=20000;
-        <span style="color:#00688b;font-weight:bold">int</span>[][] a = <span style="color:#8b008b;font-weight:bold">new</span> <span style="color:#00688b;font-weight:bold">int</span>[N][N];
-        Long start=System.<span style="color:#658b00">currentTimeMillis</span>();
-        <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=0;i&lt;N;i++){
-            <span style="color:#8b008b;font-weight:bold">for</span> (<span style="color:#00688b;font-weight:bold">int</span> j = 0; j &lt; N; j++) {
-                a[i][j]=1;
-            }
-        }
-        Long stop=System.<span style="color:#658b00">currentTimeMillis</span>();
-        System.<span style="color:#658b00">out</span>.<span style="color:#658b00">println</span>(stop-start);
-    }
-}
-</code></pre></div><h3 id="按列遍历">按列遍历</h3>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#228b22">/**
-</span><span style="color:#228b22"> * M2
-</span><span style="color:#228b22"> */</span>
-<span style="color:#8b008b;font-weight:bold">public</span> <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">M2</span> {
-    <span style="color:#8b008b;font-weight:bold">public</span> <span style="color:#8b008b;font-weight:bold">static</span> <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">main</span>(String[] args) {
-        <span style="color:#8b008b;font-weight:bold">final</span> <span style="color:#00688b;font-weight:bold">int</span> N=20000;
-        <span style="color:#00688b;font-weight:bold">int</span>[][] a = <span style="color:#8b008b;font-weight:bold">new</span> <span style="color:#00688b;font-weight:bold">int</span>[N][N];
-        Long start=System.<span style="color:#658b00">currentTimeMillis</span>();
-        <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=0;i&lt;N;i++){
-            <span style="color:#8b008b;font-weight:bold">for</span> (<span style="color:#00688b;font-weight:bold">int</span> j = 0; j &lt; N; j++) {
-                a[j][i]=1;
-            }
-        }
-        Long stop=System.<span style="color:#658b00">currentTimeMillis</span>();
-        System.<span style="color:#658b00">out</span>.<span style="color:#658b00">println</span>(stop-start);
-    }
-}
-</code></pre></div><h2 id="运行结果">运行结果</h2>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#228b22">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"> * M1
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">public</span> <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">M1</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">public</span> <span style="color:#8b008b;font-weight:bold">static</span> <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">main</span>(String[] args) {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">final</span> <span style="color:#00688b;font-weight:bold">int</span> N=<span style="color:#b452cd">20000</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#00688b;font-weight:bold">int</span>[][] a = <span style="color:#8b008b;font-weight:bold">new</span> <span style="color:#00688b;font-weight:bold">int</span>[N][N];
+</span></span><span style="display:flex;"><span>        Long start=System.<span style="color:#658b00">currentTimeMillis</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>;i&lt;N;i++){
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">for</span> (<span style="color:#00688b;font-weight:bold">int</span> j = <span style="color:#b452cd">0</span>; j &lt; N; j++) {
+</span></span><span style="display:flex;"><span>                a[i][j]=<span style="color:#b452cd">1</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        Long stop=System.<span style="color:#658b00">currentTimeMillis</span>();
+</span></span><span style="display:flex;"><span>        System.<span style="color:#658b00">out</span>.<span style="color:#658b00">println</span>(stop-start);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="按列遍历">按列遍历</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#228b22">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"> * M2
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">public</span> <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">M2</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">public</span> <span style="color:#8b008b;font-weight:bold">static</span> <span style="color:#00688b;font-weight:bold">void</span> <span style="color:#008b45">main</span>(String[] args) {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">final</span> <span style="color:#00688b;font-weight:bold">int</span> N=<span style="color:#b452cd">20000</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#00688b;font-weight:bold">int</span>[][] a = <span style="color:#8b008b;font-weight:bold">new</span> <span style="color:#00688b;font-weight:bold">int</span>[N][N];
+</span></span><span style="display:flex;"><span>        Long start=System.<span style="color:#658b00">currentTimeMillis</span>();
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">for</span>(<span style="color:#00688b;font-weight:bold">int</span> i=<span style="color:#b452cd">0</span>;i&lt;N;i++){
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">for</span> (<span style="color:#00688b;font-weight:bold">int</span> j = <span style="color:#b452cd">0</span>; j &lt; N; j++) {
+</span></span><span style="display:flex;"><span>                a[j][i]=<span style="color:#b452cd">1</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        Long stop=System.<span style="color:#658b00">currentTimeMillis</span>();
+</span></span><span style="display:flex;"><span>        System.<span style="color:#658b00">out</span>.<span style="color:#658b00">println</span>(stop-start);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="运行结果">运行结果</h2>
 <p><img src="https://i.loli.net/2020/08/20/h7FJbzeVcMOpi3Z.png" alt="1.png"></p>
 <h2 id="分析">分析</h2>
 <p>好吧，看上去的确是不一样。看这结果是不是感觉有点玄学，为啥差这么多？</p>
@@ -789,14 +788,14 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
             <nav class="post-pagination">
 
                 
-                <a class="newer-posts" href="/posts/%E4%B8%89%E9%97%A8%E9%97%AE%E9%A2%98/">
-			下回<br>三门问题
+                <a class="newer-posts" href="/project/qt%E8%B5%B0%E8%BF%B7%E5%AE%AB/">
+			下回<br>[已归档]Qt走迷宫
                 </a>
                 
                 
                 
-                <a class="older-posts" href="/posts/%E9%97%B7%E5%A3%B0%E4%BD%9C%E5%A4%A7%E6%AD%BB%E5%88%A0%E9%99%A4%E7%94%B5%E8%84%91%E5%86%85%E7%9A%84%E7%A9%BA%E6%96%87%E4%BB%B6%E5%A4%B9/">
-			上回<br>闷声作大死：删除电脑内的空文件夹
+                <a class="older-posts" href="/posts/%E4%B8%89%E9%97%A8%E9%97%AE%E9%A2%98/">
+			上回<br>三门问题
                 </a>
                 
             </nav>

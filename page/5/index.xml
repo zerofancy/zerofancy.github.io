@@ -7,9 +7,176 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Sun, 12 Feb 2023 04:50:03 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 19 Feb 2023 00:39:01 +0800</lastBuildDate>
     
         <atom:link href="https://ntutn.top/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>android项目开发：多线程编程</title>
+        <link>https://ntutn.top/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B/</link>
+        <pubDate>Fri, 21 Aug 2020 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B/</guid>
+        <description>归零幻想 https://ntutn.top/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B/ -&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;仍然是《第一行代码》的笔记，不过略过了deprated的内容，并探究了下Handler的工作机制。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;上班了，果然没有那么多大块时间写博客了。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;handler&#34;&gt;Handler&lt;/h2&gt;
+&lt;p&gt;主线程不能进行耗时处理，子线程不能访问UI，所以我们需要异步消息处理机制。&lt;/p&gt;
+&lt;h3 id=&#34;使用&#34;&gt;使用&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MainActivity&lt;/span&gt; : AppCompatActivity() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;lateinit&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; binding: ActivityMainBinding
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; handler = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;: &lt;/span&gt;&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Handler&lt;/span&gt;(&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Looper&lt;/span&gt;.getMainLooper()) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;handleMessage&lt;/span&gt;(msg: Message) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;when&lt;/span&gt;(msg.what){
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                MSG_UPDATE_TEXT -&amp;gt; binding.textView.text = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Nice to meet you. &amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onCreate&lt;/span&gt;(savedInstanceState: Bundle?) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onCreate(savedInstanceState)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        binding = &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;ActivityMainBinding&lt;/span&gt;.inflate(layoutInflater)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        setContentView(binding.root)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        initView()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;initView&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        binding.apply {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            changeTextButton.setOnClickListener {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                thread {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; msg = Message()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    msg.what = MSG_UPDATE_TEXT
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    handler.sendMessage(msg)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;companion&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; MSG_UPDATE_TEXT = &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;原理&#34;&gt;原理&lt;/h3&gt;
+&lt;p&gt;图片有点多，懒得一张张转移了，去我整理的文档看吧：&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://bytedance.feishu.cn/docs/doccnRaxHFiTJDYLBuYMzpSSJAd&#34;&gt;安卓Handler异步消息处理机制&lt;/a&gt;&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;h2 id=&#34;service&#34;&gt;Service&lt;/h2&gt;
+&lt;p&gt;三个回调：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;onCreate()&lt;/code&gt; 在Service创建时调用&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;onStartCommand()&lt;/code&gt;在Service每次启动时被调用&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;onDestory()&lt;/code&gt;在Service销毁时调用&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;通过&lt;code&gt;startService(intent)&lt;/code&gt;和&lt;code&gt;stopService(intent)&lt;/code&gt;的方式启动和停止Service。&lt;/p&gt;
+&lt;p&gt;Binder用于和View绑定通信。Binder和前台Service具体参见下面例子。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.servicetest&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.app.NotificationChannel&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.app.NotificationManager&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.app.PendingIntent&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.app.Service&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.content.Context&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.content.Intent&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.graphics.BitmapFactory&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.os.Binder&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.os.Build&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.util.Log&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;androidx.core.app.NotificationCompat&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MyService&lt;/span&gt; : Service() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; mBinder = DownloadBinder()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;DownloadBinder&lt;/span&gt; : Binder() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;startDownload&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Log&lt;/span&gt;.d(javaClass.simpleName, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;startDownload() executed&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;getProcess&lt;/span&gt;(): Int {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Log&lt;/span&gt;.d(javaClass.simpleName, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;getProcess() executed&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onBind&lt;/span&gt;(intent: Intent) = mBinder
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onCreate&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onCreate()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Log&lt;/span&gt;.d(javaClass.simpleName, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;onCreate() executed&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; manager = getSystemService(&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Context&lt;/span&gt;.NOTIFICATION_SERVICE) &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;as&lt;/span&gt; NotificationManager
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Build&lt;/span&gt;.&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;VERSION&lt;/span&gt;.SDK_INT &amp;gt;= &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Build&lt;/span&gt;.&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;VERSION_CODES&lt;/span&gt;.O) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; channel = NotificationChannel(
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;my_service&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;前台Service通知&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;NotificationManager&lt;/span&gt;.IMPORTANCE_DEFAULT
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            )
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            manager.createNotificationChannel(channel)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; intent = Intent(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;, MainActivity::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;.java)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; pi = &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;PendingIntent&lt;/span&gt;.getActivity(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;, REQ_MY_SERVICE, intent, &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; notification = &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;NotificationCompat&lt;/span&gt;.Builder(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;my_service&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            .setContentTitle(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;This is content title&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            .setContentText(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;This is content text. &amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            .setContentIntent(pi)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            .setSmallIcon(&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;R&lt;/span&gt;.drawable.ic_launcher_foreground)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            .setLargeIcon(&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;BitmapFactory&lt;/span&gt;.decodeResource(resources,&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;R&lt;/span&gt;.drawable.ic_launcher_foreground))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            .build()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        startForeground(&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;, notification)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onStartCommand&lt;/span&gt;(intent: Intent?, flags: Int, startId: Int): Int {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Log&lt;/span&gt;.d(javaClass.simpleName, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;onStartCommand() executed&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onStartCommand(intent, flags, startId)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onDestroy&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onDestroy()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Log&lt;/span&gt;.d(javaClass.simpleName, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;onDestroy() executed&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;companion&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; REQ_MY_SERVICE = &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.servicetest&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.content.ComponentName&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.content.Context&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.content.Intent&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.content.ServiceConnection&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.os.Bundle&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.os.IBinder&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;androidx.appcompat.app.AppCompatActivity&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.servicetest.databinding.ActivityMainBinding&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MainActivity&lt;/span&gt; : AppCompatActivity() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;lateinit&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; binding: ActivityMainBinding
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;lateinit&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; downloadBinder: &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MyService&lt;/span&gt;.DownloadBinder
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; connection = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;: &lt;/span&gt;&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;ServiceConnection&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onServiceConnected&lt;/span&gt;(name: ComponentName, service: IBinder) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            downloadBinder = service &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;as&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MyService&lt;/span&gt;.DownloadBinder
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            downloadBinder.startDownload()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            downloadBinder.getProcess()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onServiceDisconnected&lt;/span&gt;(name: ComponentName?) = Unit
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onCreate&lt;/span&gt;(savedInstanceState: Bundle?) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onCreate(savedInstanceState)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        binding = &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;ActivityMainBinding&lt;/span&gt;.inflate(layoutInflater)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        setContentView(binding.root)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        initView()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;initView&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        binding.apply {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            startServiceButton.setOnClickListener {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; intent = Intent(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;&lt;span style=&#34;color:#707a7c&#34;&gt;@MainActivity&lt;/span&gt;, MyService::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;.java)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                startService(intent)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            stopServiceButton.setOnClickListener {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; intent = Intent(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;&lt;span style=&#34;color:#707a7c&#34;&gt;@MainActivity&lt;/span&gt;, MyService::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;.java)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                stopService(intent)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            bindServiceButton.setOnClickListener {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; intent = Intent(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;&lt;span style=&#34;color:#707a7c&#34;&gt;@MainActivity&lt;/span&gt;, MyService::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;.java)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                bindService(intent, connection, &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Context&lt;/span&gt;.BIND_AUTO_CREATE)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            unbindServiceButton.setOnClickListener {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                unbindService(connection)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://ntutn.top/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B/ - CC BY-SA 4.0</description>
+        </item>
     
     
     
@@ -27,27 +194,27 @@
 &lt;!-- raw HTML omitted --&gt;
 &lt;h2 id=&#34;eventbus的使用&#34;&gt;EventBus的使用&lt;/h2&gt;
 &lt;p&gt;首先当然是添加依赖&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-groovy&#34; data-lang=&#34;groovy&#34;&gt;implementation &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;org.greenrobot:eventbus:3.2.0&amp;#39;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;写个demo展示下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-groovy&#34; data-lang=&#34;groovy&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;implementation &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;org.greenrobot:eventbus:3.2.0&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;写个demo展示下：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://i.loli.net/2020/09/08/CzpLZxPkrJiqaDm.jpg&#34; alt=&#34;photo_2020-09-08_15-58-48.jpg&#34;&gt;&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://i.loli.net/2020/09/08/SwM6ljRtPkgdGLT.jpg&#34; alt=&#34;photo_2020-09-08_15-59-12.jpg&#34;&gt;&lt;/p&gt;
 &lt;p&gt;点击按钮后，将两处文本的值修改为文本框中的值。注意：上面的那个红色的文本处于一个fragment中。&lt;/p&gt;
 &lt;p&gt;为此，我们先准备一个Event：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;data&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;ButtonEvent&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; text: String)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;点击按钮时，发送这个Event：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;        button.setOnClickListener {
-            EventBus.getDefault().post(ButtonEvent(editTextTextPersonName.text.toString()))
-        }
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然后在需要接收这个请求的地方，比如我们在&lt;code&gt;MainActivity&lt;/code&gt;的&lt;code&gt;onCreate()&lt;/code&gt;中注册EventBus：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;EventBus.getDefault().register(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;在&lt;code&gt;onDestory()&lt;/code&gt;中解除&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;EventBus.getDefault().unregister(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;)
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然后就可以接收那个Event了。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;    &lt;span style=&#34;color:#707a7c&#34;&gt;@Subscribe&lt;/span&gt;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onButtonEvent&lt;/span&gt;(buttonEvent: ButtonEvent){
-        textView.text=buttonEvent.text
-    }
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;同样对于Fragment，我们只需要做同样的事情，就可以监听这个Event了。很明显，这对于一个事件有多个处理的场景是很方便的。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;data&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;ButtonEvent&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; text: String)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;点击按钮时，发送这个Event：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        button.setOnClickListener {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;EventBus&lt;/span&gt;.getDefault().post(ButtonEvent(editTextTextPersonName.text.toString()))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然后在需要接收这个请求的地方，比如我们在&lt;code&gt;MainActivity&lt;/code&gt;的&lt;code&gt;onCreate()&lt;/code&gt;中注册EventBus：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;EventBus&lt;/span&gt;.getDefault().register(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;在&lt;code&gt;onDestory()&lt;/code&gt;中解除&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;EventBus&lt;/span&gt;.getDefault().unregister(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然后就可以接收那个Event了。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#707a7c&#34;&gt;@Subscribe&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onButtonEvent&lt;/span&gt;(buttonEvent: ButtonEvent){
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        textView.text=buttonEvent.text
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;同样对于Fragment，我们只需要做同样的事情，就可以监听这个Event了。很明显，这对于一个事件有多个处理的场景是很方便的。&lt;/p&gt;
 &lt;h2 id=&#34;订阅者的threadmode&#34;&gt;订阅者的threadMode&lt;/h2&gt;
 &lt;p&gt;安卓应用启动时，系统会创建一个主线程，负责向UI组件分发事件&lt;sup id=&#34;fnref:2&#34;&gt;&lt;a href=&#34;#fn:2&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;，所有对UI的操作应该放到主线程中。EventBus是一种重要的跨线程更新UI的方式。&lt;sup id=&#34;fnref:3&#34;&gt;&lt;a href=&#34;#fn:3&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;&lt;/p&gt;
 &lt;p&gt;&lt;code&gt;@Subscribe&lt;/code&gt;注解有一个参数&lt;code&gt;threadMode&lt;/code&gt;，有以下取值：&lt;/p&gt;
@@ -65,79 +232,79 @@
 &lt;h3 id=&#34;threadmodeasync&#34;&gt;ThreadMode.ASYNC&lt;/h3&gt;
 &lt;p&gt;在单独线程中调用，用于耗时操作。&lt;/p&gt;
 &lt;p&gt;对于EventBus更新UI，我同样写了demo：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;com.example.eventbustimerdemo&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.os.Bundle&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;androidx.appcompat.app.AppCompatActivity&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;kotlinx.android.synthetic.main.activity_main.*&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;org.greenrobot.eventbus.EventBus&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;org.greenrobot.eventbus.Subscribe&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;org.greenrobot.eventbus.ThreadMode&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MainActivity&lt;/span&gt; : AppCompatActivity() {
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onCreate&lt;/span&gt;(savedInstanceState: Bundle?) {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        btnStart.setOnClickListener {
-            Thread {
-                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt; (&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;) {
-                    Thread.sleep(&lt;span style=&#34;color:#b452cd&#34;&gt;1000&lt;/span&gt;)
-                    EventBus.getDefault().post(TickEvent())
-                }
-            }.start()
-            btnStart.isEnabled = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;
-        }
-        EventBus.getDefault().register(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;)
-    }
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onDestroy&lt;/span&gt;() {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onDestroy()
-        EventBus.getDefault().unregister(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;)
-    }
-    &lt;span style=&#34;color:#707a7c&#34;&gt;@Subscribe&lt;/span&gt;(threadMode = ThreadMode.MAIN)&lt;span style=&#34;color:#228b22&#34;&gt;//只有在UI线程中才能更新UI
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onTimeTick&lt;/span&gt;(event: TickEvent) {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; currentNum = tvTime.text.toString().toInt()
-        tvTime.text = (currentNum + &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;).toString()
-    }
-}
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;TickEvent&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;stickyevent&#34;&gt;StickyEvent&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;com.example.eventbustimerdemo&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.os.Bundle&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;androidx.appcompat.app.AppCompatActivity&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;kotlinx.android.synthetic.main.activity_main.*&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;org.greenrobot.eventbus.EventBus&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;org.greenrobot.eventbus.Subscribe&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;org.greenrobot.eventbus.ThreadMode&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MainActivity&lt;/span&gt; : AppCompatActivity() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onCreate&lt;/span&gt;(savedInstanceState: Bundle?) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onCreate(savedInstanceState)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        setContentView(&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;R&lt;/span&gt;.layout.activity_main)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        btnStart.setOnClickListener {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            Thread {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt; (&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Thread&lt;/span&gt;.sleep(&lt;span style=&#34;color:#b452cd&#34;&gt;1000&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;EventBus&lt;/span&gt;.getDefault().post(TickEvent())
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            }.start()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            btnStart.isEnabled = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;EventBus&lt;/span&gt;.getDefault().register(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onDestroy&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onDestroy()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;EventBus&lt;/span&gt;.getDefault().unregister(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#707a7c&#34;&gt;@Subscribe&lt;/span&gt;(threadMode = &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;ThreadMode&lt;/span&gt;.MAIN)&lt;span style=&#34;color:#228b22&#34;&gt;//只有在UI线程中才能更新UI
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onTimeTick&lt;/span&gt;(event: TickEvent) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; currentNum = tvTime.text.toString().toInt()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        tvTime.text = (currentNum + &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;).toString()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;TickEvent&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;stickyevent&#34;&gt;StickyEvent&lt;/h2&gt;
 &lt;p&gt;『粘性事件』&lt;sup id=&#34;fnref:4&#34;&gt;&lt;a href=&#34;#fn:4&#34; class=&#34;footnote-ref&#34; role=&#34;doc-noteref&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;，即在事件被广播后将长时间存在，新的订阅者仍然能收到。在一些场景下还是有用的，比如我们可能在一个详情页进行投票操作，在返回主页后才进行统计。这时粘性事件会带来帮助。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;        button.setOnClickListener {
-            EventBus.getDefault().postSticky(VoteEvent(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;))
-            finish()
-        }
-        button2.setOnClickListener {
-            EventBus.getDefault().postSticky(VoteEvent(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;))
-            finish()
-        }
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onResume&lt;/span&gt;() {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onResume()
-        EventBus.getDefault().register(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;)
-    }
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onPause&lt;/span&gt;() {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onPause()
-        EventBus.getDefault().unregister(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;)
-    }
-    &lt;span style=&#34;color:#707a7c&#34;&gt;@Subscribe&lt;/span&gt;(threadMode = ThreadMode.MAIN,sticky = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;)
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onVoteEvent&lt;/span&gt;(event: VoteEvent) {
-        textView.text = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (event.result) &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;你投票赞同&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;你投票反对&amp;#34;&lt;/span&gt;
-        EventBus.getDefault().removeStickyEvent(event)
-    }
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;section class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        button.setOnClickListener {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;EventBus&lt;/span&gt;.getDefault().postSticky(VoteEvent(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            finish()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        button2.setOnClickListener {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;EventBus&lt;/span&gt;.getDefault().postSticky(VoteEvent(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            finish()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onResume&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onResume()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;EventBus&lt;/span&gt;.getDefault().register(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onPause&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onPause()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;EventBus&lt;/span&gt;.getDefault().unregister(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#707a7c&#34;&gt;@Subscribe&lt;/span&gt;(threadMode = &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;ThreadMode&lt;/span&gt;.MAIN,sticky = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onVoteEvent&lt;/span&gt;(event: VoteEvent) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        textView.text = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (event.result) &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;你投票赞同&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;你投票反对&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;EventBus&lt;/span&gt;.getDefault().removeStickyEvent(event)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;footnotes&#34; role=&#34;doc-endnotes&#34;&gt;
 &lt;hr&gt;
 &lt;ol&gt;
-&lt;li id=&#34;fn:1&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;li id=&#34;fn:1&#34;&gt;
 &lt;p&gt;&lt;a href=&#34;https://github.com/greenrobot/EventBus&#34;&gt;EventBus&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:1&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
-&lt;li id=&#34;fn:2&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;li id=&#34;fn:2&#34;&gt;
 &lt;p&gt;&lt;a href=&#34;https://www.jianshu.com/p/0f5ed338feeb&#34;&gt;Android UI线程和非UI线程 &lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:2&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
-&lt;li id=&#34;fn:3&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;li id=&#34;fn:3&#34;&gt;
 &lt;p&gt;&lt;a href=&#34;https://blog.csdn.net/haoyuegongzi/article/details/78406342&#34;&gt;Android开发中更新UI的几种常用方式 &lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:3&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
-&lt;li id=&#34;fn:4&#34; role=&#34;doc-endnote&#34;&gt;
+&lt;li id=&#34;fn:4&#34;&gt;
 &lt;p&gt;&lt;a href=&#34;https://blog.csdn.net/IO_Field/article/details/52185717&#34;&gt;深入理解EventBus - ThreadMode、Sticky Event等&lt;/a&gt;&amp;#160;&lt;a href=&#34;#fnref:4&#34; class=&#34;footnote-backref&#34; role=&#34;doc-backlink&#34;&gt;&amp;#x21a9;&amp;#xfe0e;&lt;/a&gt;&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
-&lt;/section&gt;
+&lt;/div&gt;
 - https://ntutn.top/posts/eventbus%E5%88%9D%E6%8E%A2/ - CC BY-SA 4.0</description>
         </item>
     
@@ -157,59 +324,59 @@
 &lt;p&gt;springboot可以使用&lt;code&gt;@ResponseBody&lt;/code&gt;返回对象自动转换json，而转换成的json属性名首字母会被转换成小写。&lt;/p&gt;
 &lt;h2 id=&#34;解决方案&#34;&gt;解决方案&lt;/h2&gt;
 &lt;h3 id=&#34;引入fastjson&#34;&gt;引入&lt;code&gt;fastjson&lt;/code&gt;&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;		&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
-			&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;com.alibaba&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
-			&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;fastjson&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
-			&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;1.2.66&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
-		&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;注入bean&#34;&gt;注入&lt;code&gt;bean&lt;/code&gt;&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;    &lt;span style=&#34;color:#707a7c&#34;&gt;@Bean&lt;/span&gt;
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; HttpMessageConverters &lt;span style=&#34;color:#008b45&#34;&gt;httpMessageConverters&lt;/span&gt;() {
-        FastJsonHttpMessageConverter fastJsonHttpMessageConverter = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; FastJsonHttpMessageConverter(); &lt;span style=&#34;color:#228b22&#34;&gt;// 添加fastJson的配置信息
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        FastJsonConfig fastJsonConfig = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; FastJsonConfig();
-        fastJsonConfig.&lt;span style=&#34;color:#658b00&#34;&gt;setSerializerFeatures&lt;/span&gt;(SerializerFeature.&lt;span style=&#34;color:#658b00&#34;&gt;PrettyFormat&lt;/span&gt;); &lt;span style=&#34;color:#228b22&#34;&gt;// 处理中文乱码问题
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        List&amp;lt;MediaType&amp;gt; fastMediaTypes = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; ArrayList&amp;lt;&amp;gt;();
-        fastMediaTypes.&lt;span style=&#34;color:#658b00&#34;&gt;add&lt;/span&gt;(MediaType.&lt;span style=&#34;color:#658b00&#34;&gt;APPLICATION_JSON&lt;/span&gt;); &lt;span style=&#34;color:#228b22&#34;&gt;// 在convert中添加配置信息.
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        fastJsonHttpMessageConverter.&lt;span style=&#34;color:#658b00&#34;&gt;setSupportedMediaTypes&lt;/span&gt;(fastMediaTypes);
-        fastJsonHttpMessageConverter.&lt;span style=&#34;color:#658b00&#34;&gt;setFastJsonConfig&lt;/span&gt;(fastJsonConfig);
-        HttpMessageConverter&amp;lt;?&amp;gt; converter = fastJsonHttpMessageConverter;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; HttpMessageConverters(converter);
-    }
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;在属性上加注解&#34;&gt;在属性上加注解&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;edu.upc.mishuserver.vo&lt;/span&gt;;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;com.alibaba.fastjson.annotation.JSONField&lt;/span&gt;;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;lombok.AllArgsConstructor&lt;/span&gt;;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;lombok.Builder&lt;/span&gt;;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;lombok.Data&lt;/span&gt;;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;lombok.NoArgsConstructor&lt;/span&gt;;
-&lt;span style=&#34;color:#228b22&#34;&gt;/**
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * UpdateInfo
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; */&lt;/span&gt;
-&lt;span style=&#34;color:#707a7c&#34;&gt;@Data&lt;/span&gt;
-&lt;span style=&#34;color:#707a7c&#34;&gt;@AllArgsConstructor&lt;/span&gt;
-&lt;span style=&#34;color:#707a7c&#34;&gt;@NoArgsConstructor&lt;/span&gt;
-&lt;span style=&#34;color:#707a7c&#34;&gt;@Builder&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;UpdateInfo&lt;/span&gt; {
-    &lt;span style=&#34;color:#707a7c&#34;&gt;@JSONField&lt;/span&gt;(name=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Code&amp;#34;&lt;/span&gt;)
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; Long code;
-    &lt;span style=&#34;color:#707a7c&#34;&gt;@JSONField&lt;/span&gt;(name = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Msg&amp;#34;&lt;/span&gt;)
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; String msg;
-    &lt;span style=&#34;color:#707a7c&#34;&gt;@JSONField&lt;/span&gt;(name = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;UpdateStatus&amp;#34;&lt;/span&gt;)
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; Integer updateStatus;
-    &lt;span style=&#34;color:#707a7c&#34;&gt;@JSONField&lt;/span&gt;(name = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;VersionCode&amp;#34;&lt;/span&gt;)
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; Long versionCode;
-    &lt;span style=&#34;color:#707a7c&#34;&gt;@JSONField&lt;/span&gt;(name = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;VersionName&amp;#34;&lt;/span&gt;)
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; String versionName;
-    &lt;span style=&#34;color:#707a7c&#34;&gt;@JSONField&lt;/span&gt;(name = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;ModifyContent&amp;#34;&lt;/span&gt;)
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; String modifyContent;
-    &lt;span style=&#34;color:#707a7c&#34;&gt;@JSONField&lt;/span&gt;(name = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;DownloadUrl&amp;#34;&lt;/span&gt;)
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; String downloadUrl;
-    &lt;span style=&#34;color:#707a7c&#34;&gt;@JSONField&lt;/span&gt;(name = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;ApkSize&amp;#34;&lt;/span&gt;)
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; Long apkSize;
-    &lt;span style=&#34;color:#707a7c&#34;&gt;@JSONField&lt;/span&gt;(name = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;ApkMd5&amp;#34;&lt;/span&gt;)
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; String apkMd5;
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://ntutn.top/posts/%E6%8E%89%E5%9D%91%E7%9A%84%E6%97%A5%E5%B8%B8springboot%E7%9A%84json%E5%B1%9E%E6%80%A7%E5%90%8D%E5%A4%A7%E5%B0%8F%E5%86%99%E9%97%AE%E9%A2%98/ - CC BY-SA 4.0</description>
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;dependency&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;groupId&amp;gt;&lt;/span&gt;com.alibaba&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/groupId&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;artifactId&amp;gt;&lt;/span&gt;fastjson&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/artifactId&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;			&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;version&amp;gt;&lt;/span&gt;1.2.66&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/version&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/dependency&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;注入bean&#34;&gt;注入&lt;code&gt;bean&lt;/code&gt;&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#707a7c&#34;&gt;@Bean&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; HttpMessageConverters &lt;span style=&#34;color:#008b45&#34;&gt;httpMessageConverters&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        FastJsonHttpMessageConverter fastJsonHttpMessageConverter = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; FastJsonHttpMessageConverter(); &lt;span style=&#34;color:#228b22&#34;&gt;// 添加fastJson的配置信息
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        FastJsonConfig fastJsonConfig = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; FastJsonConfig();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        fastJsonConfig.&lt;span style=&#34;color:#658b00&#34;&gt;setSerializerFeatures&lt;/span&gt;(SerializerFeature.&lt;span style=&#34;color:#658b00&#34;&gt;PrettyFormat&lt;/span&gt;); &lt;span style=&#34;color:#228b22&#34;&gt;// 处理中文乱码问题
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        List&amp;lt;MediaType&amp;gt; fastMediaTypes = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; ArrayList&amp;lt;&amp;gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        fastMediaTypes.&lt;span style=&#34;color:#658b00&#34;&gt;add&lt;/span&gt;(MediaType.&lt;span style=&#34;color:#658b00&#34;&gt;APPLICATION_JSON&lt;/span&gt;); &lt;span style=&#34;color:#228b22&#34;&gt;// 在convert中添加配置信息.
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        fastJsonHttpMessageConverter.&lt;span style=&#34;color:#658b00&#34;&gt;setSupportedMediaTypes&lt;/span&gt;(fastMediaTypes);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        fastJsonHttpMessageConverter.&lt;span style=&#34;color:#658b00&#34;&gt;setFastJsonConfig&lt;/span&gt;(fastJsonConfig);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        HttpMessageConverter&amp;lt;?&amp;gt; converter = fastJsonHttpMessageConverter;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; HttpMessageConverters(converter);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;在属性上加注解&#34;&gt;在属性上加注解&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;edu.upc.mishuserver.vo&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;com.alibaba.fastjson.annotation.JSONField&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;lombok.AllArgsConstructor&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;lombok.Builder&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;lombok.Data&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;lombok.NoArgsConstructor&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;/**
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * UpdateInfo
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#707a7c&#34;&gt;@Data&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#707a7c&#34;&gt;@AllArgsConstructor&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#707a7c&#34;&gt;@NoArgsConstructor&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#707a7c&#34;&gt;@Builder&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;UpdateInfo&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#707a7c&#34;&gt;@JSONField&lt;/span&gt;(name=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Code&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; Long code;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#707a7c&#34;&gt;@JSONField&lt;/span&gt;(name = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Msg&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; String msg;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#707a7c&#34;&gt;@JSONField&lt;/span&gt;(name = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;UpdateStatus&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; Integer updateStatus;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#707a7c&#34;&gt;@JSONField&lt;/span&gt;(name = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;VersionCode&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; Long versionCode;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#707a7c&#34;&gt;@JSONField&lt;/span&gt;(name = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;VersionName&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; String versionName;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#707a7c&#34;&gt;@JSONField&lt;/span&gt;(name = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;ModifyContent&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; String modifyContent;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#707a7c&#34;&gt;@JSONField&lt;/span&gt;(name = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;DownloadUrl&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; String downloadUrl;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#707a7c&#34;&gt;@JSONField&lt;/span&gt;(name = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;ApkSize&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; Long apkSize;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#707a7c&#34;&gt;@JSONField&lt;/span&gt;(name = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;ApkMd5&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; String apkMd5;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://ntutn.top/posts/%E6%8E%89%E5%9D%91%E7%9A%84%E6%97%A5%E5%B8%B8springboot%E7%9A%84json%E5%B1%9E%E6%80%A7%E5%90%8D%E5%A4%A7%E5%B0%8F%E5%86%99%E9%97%AE%E9%A2%98/ - CC BY-SA 4.0</description>
         </item>
     
     
@@ -234,15 +401,15 @@
 &lt;!-- raw HTML omitted --&gt;
 &lt;h3 id=&#34;安装&#34;&gt;安装&lt;/h3&gt;
 &lt;p&gt;在Ubuntu下安装还是非常方便的：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;# or run:&lt;/span&gt;
-&lt;span style=&#34;color:#228b22&#34;&gt;# sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA300B7755AFCFAE&lt;/span&gt;
-wget -qO - https://typora.io/linux/public-key.asc | sudo apt-key add -
-&lt;span style=&#34;color:#228b22&#34;&gt;# add Typora&amp;#39;s repository&lt;/span&gt;
-sudo add-apt-repository &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;deb https://typora.io/linux ./&amp;#39;&lt;/span&gt;
-sudo apt-get update
-&lt;span style=&#34;color:#228b22&#34;&gt;# install typora&lt;/span&gt;
-sudo apt-get install typora
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;其他系统参考&lt;a href=&#34;https://www.typora.net/#download&#34;&gt;官网&lt;/a&gt;。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;# or run:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;# sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA300B7755AFCFAE&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;wget -qO - https://typora.io/linux/public-key.asc | sudo apt-key add -
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;# add Typora&amp;#39;s repository&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo add-apt-repository &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;deb https://typora.io/linux ./&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo apt-get update
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;# install typora&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo apt-get install typora
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;其他系统参考&lt;a href=&#34;https://www.typora.net/#download&#34;&gt;官网&lt;/a&gt;。&lt;/p&gt;
 &lt;h3 id=&#34;复制图片&#34;&gt;复制图片&lt;/h3&gt;
 &lt;p&gt;不过有一点要注意：我们写文档常常要插入一些图片，为了后面和git好配合，我们需要将这些图片也放到当前文件夹里。按下&lt;code&gt;Ctrl+逗号&lt;/code&gt;打开设置，将图片复制到当前文件夹下。如图。&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://i.loli.net/2020/08/20/VWcp6qEGOF9beZf.png&#34; alt=&#34;3.png&#34;&gt;&lt;/p&gt;
@@ -296,38 +463,38 @@ sudo apt-get install typora
 &lt;p&gt;怎么注册账号，怎么建立仓库我就不说了。clone下来，这就是以后笔记安家的地方了。&lt;/p&gt;
 &lt;h2 id=&#34;自动同步笔记&#34;&gt;自动同步笔记&lt;/h2&gt;
 &lt;p&gt;然而，我们还是需要运行&lt;code&gt;git add&lt;/code&gt;、&lt;code&gt;git commit&lt;/code&gt;、&lt;code&gt;git push&lt;/code&gt;，而且在别处修改了笔记还得手动pull一下。执行的命令这么固定，肯定是要写成脚本(.sync.sh)了。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;color:#658b00&#34;&gt;cd&lt;/span&gt; /home/zero/Documents/Notes
-git pull &amp;amp;
-typora . TODO.md
-git add .
-git commit -m &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Sync&amp;#34;&lt;/span&gt;
-git push
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;注意上面的路径改为你自己笔记文件夹的路径。第二行的&lt;code&gt;&amp;amp;&lt;/code&gt;不要省，我们没必要等pull完才打开Typora，这样可以加快一点启动速度。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#658b00&#34;&gt;cd&lt;/span&gt; /home/zero/Documents/Notes
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git pull &amp;amp;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;typora . TODO.md
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git add .
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git commit -m &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Sync&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git push
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;注意上面的路径改为你自己笔记文件夹的路径。第二行的&lt;code&gt;&amp;amp;&lt;/code&gt;不要省，我们没必要等pull完才打开Typora，这样可以加快一点启动速度。&lt;/p&gt;
 &lt;p&gt;好了，现在我们执行脚本就能打开Typora，而且所有编辑还能自动同步。由于git默认不允许保留空提交，没有修改的时候也不会产生大量无用的记录，完美。&lt;/p&gt;
 &lt;p&gt;最后写个桌面启动器就大功告成了：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-ini&#34; data-lang=&#34;ini&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[Desktop Entry]&lt;/span&gt;
-&lt;span style=&#34;color:#658b00&#34;&gt;Type&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;Application&lt;/span&gt;
-&lt;span style=&#34;color:#658b00&#34;&gt;Icon&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;typora&lt;/span&gt;
-&lt;span style=&#34;color:#658b00&#34;&gt;Name&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;笔记&lt;/span&gt;
-&lt;span style=&#34;color:#658b00&#34;&gt;Exec&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;/home/zero/Documents/Notes/.sync.sh&lt;/span&gt;
-&lt;span style=&#34;color:#658b00&#34;&gt;Terminal&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;false&lt;/span&gt;
-&lt;span style=&#34;color:#658b00&#34;&gt;Hidden&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;false&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;Note.desktop&lt;/code&gt;文件名保存到桌面就成了。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-ini&#34; data-lang=&#34;ini&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[Desktop Entry]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#658b00&#34;&gt;Type&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;Application&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#658b00&#34;&gt;Icon&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;typora&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#658b00&#34;&gt;Name&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;笔记&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#658b00&#34;&gt;Exec&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;/home/zero/Documents/Notes/.sync.sh&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#658b00&#34;&gt;Terminal&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;false&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#658b00&#34;&gt;Hidden&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;false&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;Note.desktop&lt;/code&gt;文件名保存到桌面就成了。&lt;/p&gt;
 &lt;h2 id=&#34;windows下的配置&#34;&gt;Windows下的配置&lt;/h2&gt;
 &lt;p&gt;Git是跨平台的，Typora也是跨平台的，那么我们这个方案自然同样可以跨平台。&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;Windows下的Typora并没有默认添加环境变量，请手动添加。添加后需要重启。
 首先对应上面的sh，写个cmd(.sync.cmd)：&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cmd&#34; data-lang=&#34;cmd&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;start&lt;/span&gt; /b git pull
-typora . TODO.md
-git add .
-git commit -m &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Sync&amp;#34;&lt;/span&gt;
-git push
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;第一行不一样，这是因为cmd后台执行是用&lt;code&gt;start /b&lt;/code&gt;的，与shell脚本的&lt;code&gt;&amp;amp;&lt;/code&gt;效果是一样的。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-cmd&#34; data-lang=&#34;cmd&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;start&lt;/span&gt; /b git pull
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;typora . TODO.md
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git add .
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git commit -m &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Sync&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git push
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;第一行不一样，这是因为cmd后台执行是用&lt;code&gt;start /b&lt;/code&gt;的，与shell脚本的&lt;code&gt;&amp;amp;&lt;/code&gt;效果是一样的。&lt;/p&gt;
 &lt;p&gt;此时双击这个cmd已经能看到效果了。&lt;/p&gt;
 &lt;p&gt;但cmd执行时会有黑窗口，很影响美观，我们写个vbs脚本(.sync.vbs)来调用它，这样可以不显示黑窗口。&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-vbs&#34; data-lang=&#34;vbs&#34;&gt;WScript.CreateObject(&amp;quot;WScript.Shell&amp;quot;).Run &amp;quot;.sync.cmd&amp;quot;,0
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-vbs&#34; data-lang=&#34;vbs&#34;&gt;WScript.CreateObject(&amp;#34;WScript.Shell&amp;#34;).Run &amp;#34;.sync.cmd&amp;#34;,0
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;最后创建个桌面快捷方式，指向&lt;code&gt;.sync.vbs&lt;/code&gt;，就大功告成了。&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;注意：快捷方式的起始目录要指向笔记的目录。&lt;/p&gt;
@@ -362,40 +529,40 @@ git push
 &lt;/code&gt;&lt;/pre&gt;&lt;p&gt;你不需要考虑数组中超出新长度后面的元素。&lt;/p&gt;
 &lt;h3 id=&#34;answer&#34;&gt;Answer&lt;/h3&gt;
 &lt;p&gt;针对这个题目，我写出了这样的代码：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;/*
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * @lc app=leetcode.cn id=80 lang=java
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; *
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * [80] 删除排序数组中的重复项 II
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; */&lt;/span&gt;
-&lt;span style=&#34;color:#228b22&#34;&gt;// @lc code=start
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Solution&lt;/span&gt; {
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;removeDuplicates&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;[] nums) {
-        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; l = 0, r = 0;
-        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; ans1 = Integer.&lt;span style=&#34;color:#658b00&#34;&gt;MIN_VALUE&lt;/span&gt;, ans2 = Integer.&lt;span style=&#34;color:#658b00&#34;&gt;MIN_VALUE&lt;/span&gt;;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt; (r &amp;lt; nums.&lt;span style=&#34;color:#658b00&#34;&gt;length&lt;/span&gt;) {
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (ans1==ans2&amp;amp;&amp;amp; ans2 == nums[r]) {
-                ;
-            } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; {
-                nums[l] = nums[r];
-                ans1 = ans2;
-                ans2 = nums[r];
-                l++;
-            }
-            r++;
-        }
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; l;
-    }
-}
-&lt;span style=&#34;color:#228b22&#34;&gt;// @lc code=end
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;掉坑&#34;&gt;掉坑&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;/*
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * @lc app=leetcode.cn id=80 lang=java
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; *
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * [80] 删除排序数组中的重复项 II
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;// @lc code=start
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Solution&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;removeDuplicates&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;[] nums) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; l = &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;, r = &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; ans1 = Integer.&lt;span style=&#34;color:#658b00&#34;&gt;MIN_VALUE&lt;/span&gt;, ans2 = Integer.&lt;span style=&#34;color:#658b00&#34;&gt;MIN_VALUE&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt; (r &amp;lt; nums.&lt;span style=&#34;color:#658b00&#34;&gt;length&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (ans1==ans2&amp;amp;&amp;amp; ans2 == nums[r]) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                ;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                nums[l] = nums[r];
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                ans1 = ans2;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                ans2 = nums[r];
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                l++;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            r++;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; l;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;// @lc code=end
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;掉坑&#34;&gt;掉坑&lt;/h3&gt;
 &lt;p&gt;这代码在一般情况是没有问题的，但题目有个测试样例是&lt;code&gt;[-2147483648,-2147483648,-2147483648,1,1,1,2]&lt;/code&gt;，WA。&lt;/p&gt;
 &lt;p&gt;懒得处理开头特殊情况，但貌似运气不好，出题人是想让我处理一下的。&lt;/p&gt;
 &lt;p&gt;但作为懒癌患者我立马想到了新的偷懒方案，即用Integer代替int，这样用&lt;code&gt;null&lt;/code&gt;表示没有就正好了。&lt;/p&gt;
 &lt;p&gt;于是改变如上语句，&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;        Integer ans1 = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;, ans2 = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;和，&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (ans1!=&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;&amp;amp;&amp;amp;ans1== ans2&amp;amp;&amp;amp; ans2 == nums[r]) {
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然而又WA了。那组样例输出是&lt;code&gt;[-2147483648,-2147483648,-2147483648,1,1,2]&lt;/code&gt;。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        Integer ans1 = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;, ans2 = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;和，&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (ans1!=&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;&amp;amp;&amp;amp;ans1== ans2&amp;amp;&amp;amp; ans2 == nums[r]) {
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然而又WA了。那组样例输出是&lt;code&gt;[-2147483648,-2147483648,-2147483648,1,1,2]&lt;/code&gt;。&lt;/p&gt;
 &lt;h2 id=&#34;问题原因&#34;&gt;问题原因&lt;/h2&gt;
 &lt;p&gt;打开&lt;code&gt;jshell&lt;/code&gt;，
 jshell&amp;gt; Integer a=-2147483648
@@ -410,8 +577,8 @@ jshell&amp;gt;
 成功复现问题。
 a与b直接比较，&lt;code&gt;a==b&lt;/code&gt;，两者不是同一对象。与基本数据类型比较，&lt;code&gt;a==-2147483648&lt;/code&gt;，发生自动拆箱，两者值相等。
 所以，上述代码只需要修改&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (ans1 != &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt; &amp;amp;&amp;amp; ans1.&lt;span style=&#34;color:#658b00&#34;&gt;intValue&lt;/span&gt;() == ans2.&lt;span style=&#34;color:#658b00&#34;&gt;intValue&lt;/span&gt;() &amp;amp; ans2 == nums[r]) {
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;AC。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (ans1 != &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt; &amp;amp;&amp;amp; ans1.&lt;span style=&#34;color:#658b00&#34;&gt;intValue&lt;/span&gt;() == ans2.&lt;span style=&#34;color:#658b00&#34;&gt;intValue&lt;/span&gt;() &amp;amp; ans2 == nums[r]) {
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;AC。&lt;/p&gt;
 &lt;h2 id=&#34;另一个处坑&#34;&gt;另一个处坑&lt;/h2&gt;
 &lt;p&gt;这不是&lt;em&gt;自动装箱/自动拆箱&lt;/em&gt;第一次坑我，曾经有这样一段代码：&lt;/p&gt;
 &lt;!-- raw HTML omitted --&gt;
@@ -1425,63 +1592,6 @@ OS内核会做些什么
     
     
         <item>
-        <title>三门问题</title>
-        <link>https://ntutn.top/posts/%E4%B8%89%E9%97%A8%E9%97%AE%E9%A2%98/</link>
-        <pubDate>Mon, 16 Sep 2019 03:11:37 +0800</pubDate>
-        
-        <guid>https://ntutn.top/posts/%E4%B8%89%E9%97%A8%E9%97%AE%E9%A2%98/</guid>
-        <description>归零幻想 https://ntutn.top/posts/%E4%B8%89%E9%97%A8%E9%97%AE%E9%A2%98/ -&lt;!-- raw HTML omitted --&gt;
-&lt;blockquote&gt;
-&lt;p&gt;参赛者面前有三扇关闭着的门，其中一扇的后面是一辆汽车，选中后面有车的那扇门就可以赢得该汽车，
-而另外两扇门后面则各藏有一只山羊。当参赛者选定了一扇门，但未去开启它的时候，主持人会开启剩
-下两扇门中的一扇，露出其中一只山羊。主持人其后会问参赛者要不要更换选择，选另一扇仍然关着的门。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;那么，应不应该更换呢？
-&lt;img src=&#34;https://i.loli.net/2020/08/20/eWcOG6t1FpUD5mC.png&#34; alt=&#34;1560925478346.png&#34;&gt;&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;/blockquote&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;h2 id=&#34;分析&#34;&gt;分析&lt;/h2&gt;
-&lt;p&gt;假如你选择了A，那你中奖概率应为1/3.&lt;/p&gt;
-&lt;p&gt;主持人在B、C中选了个没奖的，这与你的选择其实没影响，因为你没选的肯定有个没奖的。&lt;/p&gt;
-&lt;p&gt;换与不换其实就相当于问你选A还是不选A。&lt;/p&gt;
-&lt;h2 id=&#34;程序模拟&#34;&gt;程序模拟&lt;/h2&gt;
-&lt;p&gt;有点绕，咱学软件的，就干脆让电脑跑一跑。&lt;/p&gt;
-&lt;h3 id=&#34;代码&#34;&gt;代码&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;java.util.Random&lt;/span&gt;;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Test&lt;/span&gt;{
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;(String[] args) {
-        Random ran=&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; Random();
-        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; c1=0,c2=0;
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=0;i&amp;lt;1e6;i++){
-            &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;boolean&lt;/span&gt; boxes[]={&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;,&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;,&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;};
-            boxes[ran.&lt;span style=&#34;color:#658b00&#34;&gt;nextInt&lt;/span&gt;(boxes.&lt;span style=&#34;color:#658b00&#34;&gt;length&lt;/span&gt;)]=&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;;&lt;span style=&#34;color:#228b22&#34;&gt;//某个门后有奖
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;            &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; sel=ran.&lt;span style=&#34;color:#658b00&#34;&gt;nextInt&lt;/span&gt;(boxes.&lt;span style=&#34;color:#658b00&#34;&gt;length&lt;/span&gt;);&lt;span style=&#34;color:#228b22&#34;&gt;//随便选择一扇门
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;            &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; p=0;
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt;(p==sel||boxes[p]){&lt;span style=&#34;color:#228b22&#34;&gt;//主持人选择一扇没奖的门（且不与参与者选同一扇）
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                p=ran.&lt;span style=&#34;color:#658b00&#34;&gt;nextInt&lt;/span&gt;(boxes.&lt;span style=&#34;color:#658b00&#34;&gt;length&lt;/span&gt;);
-            }
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(boxes[sel]){&lt;span style=&#34;color:#228b22&#34;&gt;//不更换中奖
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                c1++;
-            }
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(boxes[0+1+2-sel-p]){&lt;span style=&#34;color:#228b22&#34;&gt;//更换中奖
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                c2++;
-            }
-        }
-        System.&lt;span style=&#34;color:#658b00&#34;&gt;out&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;println&lt;/span&gt;(c1/1e6);
-        System.&lt;span style=&#34;color:#658b00&#34;&gt;out&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;println&lt;/span&gt;(c2/1e6);
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;运行结果&#34;&gt;运行结果&lt;/h3&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;0.332419
-0.667581
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;看来是更换比较好了。&lt;/p&gt;
-- https://ntutn.top/posts/%E4%B8%89%E9%97%A8%E9%97%AE%E9%A2%98/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
         <title>大型数组按行遍历与按列遍历的区别</title>
         <link>https://ntutn.top/posts/%E5%A4%A7%E5%9E%8B%E6%95%B0%E7%BB%84%E6%8C%89%E8%A1%8C%E9%81%8D%E5%8E%86%E4%B8%8E%E6%8C%89%E5%88%97%E9%81%8D%E5%8E%86%E7%9A%84%E5%8C%BA%E5%88%AB/</link>
         <pubDate>Mon, 16 Sep 2019 03:11:37 +0800</pubDate>
@@ -1500,42 +1610,42 @@ OS内核会做些什么
 &lt;p&gt;70000×70000我电脑在默认情况下开不下，我这里用20000×20000测试&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h3 id=&#34;按行遍历&#34;&gt;按行遍历&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;/**
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * M1
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; */&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;M1&lt;/span&gt; {
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;(String[] args) {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;final&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; N=20000;
-        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;[][] a = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;[N][N];
-        Long start=System.&lt;span style=&#34;color:#658b00&#34;&gt;currentTimeMillis&lt;/span&gt;();
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=0;i&amp;lt;N;i++){
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; (&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; j = 0; j &amp;lt; N; j++) {
-                a[i][j]=1;
-            }
-        }
-        Long stop=System.&lt;span style=&#34;color:#658b00&#34;&gt;currentTimeMillis&lt;/span&gt;();
-        System.&lt;span style=&#34;color:#658b00&#34;&gt;out&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;println&lt;/span&gt;(stop-start);
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;按列遍历&#34;&gt;按列遍历&lt;/h3&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;color:#228b22&#34;&gt;/**
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * M2
-&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; */&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;M2&lt;/span&gt; {
-    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;(String[] args) {
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;final&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; N=20000;
-        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;[][] a = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;[N][N];
-        Long start=System.&lt;span style=&#34;color:#658b00&#34;&gt;currentTimeMillis&lt;/span&gt;();
-        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=0;i&amp;lt;N;i++){
-            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; (&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; j = 0; j &amp;lt; N; j++) {
-                a[j][i]=1;
-            }
-        }
-        Long stop=System.&lt;span style=&#34;color:#658b00&#34;&gt;currentTimeMillis&lt;/span&gt;();
-        System.&lt;span style=&#34;color:#658b00&#34;&gt;out&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;println&lt;/span&gt;(stop-start);
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;运行结果&#34;&gt;运行结果&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;/**
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * M1
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;M1&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;(String[] args) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;final&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; N=&lt;span style=&#34;color:#b452cd&#34;&gt;20000&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;[][] a = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;[N][N];
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        Long start=System.&lt;span style=&#34;color:#658b00&#34;&gt;currentTimeMillis&lt;/span&gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;i&amp;lt;N;i++){
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; (&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; j = &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; j &amp;lt; N; j++) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                a[i][j]=&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        Long stop=System.&lt;span style=&#34;color:#658b00&#34;&gt;currentTimeMillis&lt;/span&gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        System.&lt;span style=&#34;color:#658b00&#34;&gt;out&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;println&lt;/span&gt;(stop-start);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;按列遍历&#34;&gt;按列遍历&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;/**
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; * M2
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt; */&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;M2&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;(String[] args) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;final&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; N=&lt;span style=&#34;color:#b452cd&#34;&gt;20000&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;[][] a = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt;[N][N];
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        Long start=System.&lt;span style=&#34;color:#658b00&#34;&gt;currentTimeMillis&lt;/span&gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;i&amp;lt;N;i++){
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; (&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; j = &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;; j &amp;lt; N; j++) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                a[j][i]=&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        Long stop=System.&lt;span style=&#34;color:#658b00&#34;&gt;currentTimeMillis&lt;/span&gt;();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        System.&lt;span style=&#34;color:#658b00&#34;&gt;out&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;println&lt;/span&gt;(stop-start);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;运行结果&#34;&gt;运行结果&lt;/h2&gt;
 &lt;p&gt;&lt;img src=&#34;https://i.loli.net/2020/08/20/h7FJbzeVcMOpi3Z.png&#34; alt=&#34;1.png&#34;&gt;&lt;/p&gt;
 &lt;h2 id=&#34;分析&#34;&gt;分析&lt;/h2&gt;
 &lt;p&gt;好吧，看上去的确是不一样。看这结果是不是感觉有点玄学，为啥差这么多？&lt;/p&gt;
@@ -1602,73 +1712,58 @@ OS内核会做些什么
     
     
         <item>
-        <title>闷声作大死：删除电脑内的空文件夹</title>
-        <link>https://ntutn.top/posts/%E9%97%B7%E5%A3%B0%E4%BD%9C%E5%A4%A7%E6%AD%BB%E5%88%A0%E9%99%A4%E7%94%B5%E8%84%91%E5%86%85%E7%9A%84%E7%A9%BA%E6%96%87%E4%BB%B6%E5%A4%B9/</link>
-        <pubDate>Sun, 16 Jun 2019 03:11:37 +0800</pubDate>
+        <title>三门问题</title>
+        <link>https://ntutn.top/posts/%E4%B8%89%E9%97%A8%E9%97%AE%E9%A2%98/</link>
+        <pubDate>Mon, 16 Sep 2019 03:11:37 +0800</pubDate>
         
-        <guid>https://ntutn.top/posts/%E9%97%B7%E5%A3%B0%E4%BD%9C%E5%A4%A7%E6%AD%BB%E5%88%A0%E9%99%A4%E7%94%B5%E8%84%91%E5%86%85%E7%9A%84%E7%A9%BA%E6%96%87%E4%BB%B6%E5%A4%B9/</guid>
-        <description>归零幻想 https://ntutn.top/posts/%E9%97%B7%E5%A3%B0%E4%BD%9C%E5%A4%A7%E6%AD%BB%E5%88%A0%E9%99%A4%E7%94%B5%E8%84%91%E5%86%85%E7%9A%84%E7%A9%BA%E6%96%87%E4%BB%B6%E5%A4%B9/ -&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;电脑卸载软件时，卸载程序常常不会把程序对应的空文件夹删掉，一般这时候我都是手动去把他删掉。&lt;/p&gt;
-&lt;p&gt;我觉得有点麻烦，又想到电脑内可能还有其他的空文件夹。于是在网上找了个脚本删除电脑内的空文件夹，然后就遇到了麻烦……&lt;/p&gt;
-&lt;p&gt;也许本文标题应该是&lt;strong&gt;一个空文件夹引发的血案&lt;/strong&gt;……&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;h2 id=&#34;删除电脑内的空文件夹&#34;&gt;删除电脑内的空文件夹&lt;/h2&gt;
-&lt;p&gt;本来我曾经写过一个C#版本的删除电脑空文件夹的工具，原理很简单，就是递归嘛：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2020/08/20/az9OYcHf3nmdLID.png&#34; alt=&#34;1.png&#34;&gt;&lt;/p&gt;
-&lt;p&gt;但是这程序执行比较慢，而且占用内存不少……&lt;/p&gt;
-&lt;p&gt;在网上搜索了下，果然不能闭门造车啊，有大佬写过批处理：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cmd&#34; data-lang=&#34;cmd&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/f&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;tokens=*&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;%%&lt;/span&gt;a &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;in&lt;/span&gt; (&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;dir /b /ad /s C:\^|sort /r&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;do&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;rd&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;%%&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;a&amp;#34;&lt;/span&gt; /q &lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;&amp;gt;nul
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;试用了下，效果相当不错。于是稍微修改使它能申请管理员权限，顺便修改下控制台颜色，看上去炫一点：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-cmd&#34; data-lang=&#34;cmd&#34;&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;title&lt;/span&gt; 删除空文件夹
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;color&lt;/span&gt; 03
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;echo&lt;/span&gt; 程序需要管理员权限……
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;set&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/a&lt;/span&gt; &lt;span style=&#34;color:#00688b&#34;&gt;_Debug&lt;/span&gt;=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;
-:&lt;span style=&#34;color:#228b22&#34;&gt;:==========================================&lt;/span&gt;
-:&lt;span style=&#34;color:#228b22&#34;&gt;: 获取管理员权限&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;set&lt;/span&gt; &lt;span style=&#34;color:#00688b&#34;&gt;_Args&lt;/span&gt;=&lt;span style=&#34;color:#00688b&#34;&gt;%*&lt;/span&gt;
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#00688b&#34;&gt;%~1&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#8b008b&#34;&gt;NEQ&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt; (
-  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;set&lt;/span&gt; &lt;span style=&#34;color:#00688b&#34;&gt;_Args&lt;/span&gt;=&lt;span style=&#34;color:#00688b&#34;&gt;%_Args:&amp;#34;=%&lt;/span&gt;
-)
-fltmc &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;&amp;gt;nul &lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;&amp;gt;nul || (
-  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;cd&lt;/span&gt; /d &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#00688b&#34;&gt;%~dp0&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;
-  cmd /u /c echo Set UAC = CreateObject&lt;span style=&#34;color:#cd5555&#34;&gt;^(&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Shell.Application&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;^)&lt;/span&gt; : UAC.ShellExecute &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;cmd.exe&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;/k cd &amp;#34;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#00688b&#34;&gt;%~dp0&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&amp;#34; &amp;amp;&amp;amp; &amp;#34;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#00688b&#34;&gt;%~dpnx0&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&amp;#34; &amp;#34;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#00688b&#34;&gt;%_Args%&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&amp;#34;&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;runas&amp;#34;&lt;/span&gt;, 1 &amp;gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#00688b&#34;&gt;%temp%&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\GetAdmin.vbs&amp;#34;&lt;/span&gt;
-  &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#00688b&#34;&gt;%temp%&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\GetAdmin.vbs&amp;#34;&lt;/span&gt;
-  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;del&lt;/span&gt; /f /q &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#00688b&#34;&gt;%temp%&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\GetAdmin.vbs&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;&amp;gt;nul &lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;&amp;gt;nul
-  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;exit&lt;/span&gt;
-)
-&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/f&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;tokens=*&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;%%&lt;/span&gt;a &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;in&lt;/span&gt; (&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;dir /b /ad /s C:\^|sort /r&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;do&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;rd&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;%%&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;a&amp;#34;&lt;/span&gt; /q &lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;&amp;gt;nul
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;而后我就把这个脚本放桌面上了，没事拿出来跑一跑，按下&lt;code&gt;Ctrl+Enter&lt;/code&gt;全屏，其实就是感觉看着控制台上一堆信息滚动很牛逼而已……&lt;del&gt;Dir溢出警告&lt;/del&gt;&lt;/p&gt;
-&lt;h2 id=&#34;使用mediacreationtool修复windows&#34;&gt;使用MediaCreationTool修复Windows&lt;/h2&gt;
-&lt;p&gt;这天我照例删了一遍空文件夹，然后打开应用商店更新游戏，然后发现打不开了……&lt;/p&gt;
-&lt;p&gt;在网上找了好半天，才知道电脑内的空文件夹也是不能乱删的，比如&lt;code&gt;C:\Windows&lt;/code&gt;下的&lt;code&gt;AUInstallAgent&lt;/code&gt;和&lt;code&gt;AppReadiness&lt;/code&gt;也常常是空的，但删了应用商店就不能工作……&lt;/p&gt;
-&lt;p&gt;试着重建这两个文件夹，无效，重启，无效。可是我真的不想重装或者重买啊……&lt;/p&gt;
-&lt;p&gt;于是找到应用商店的设置，试着点“重置”，然后应用商店就消失了……&lt;/p&gt;
-&lt;p&gt;好吧，情况更糟糕了，在网上找了好久，于是用MediaCreationTool试了试……&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2020/08/20/dbID9KehsiyHZxl.jpg&#34; alt=&#34;2.png&#34;&gt;
-然而提示我电脑系统盘空间不足，于是下载DiskGenius调整系统盘空间容量……&lt;/p&gt;
-&lt;h2 id=&#34;diskgenius调整系统盘空间容量&#34;&gt;DiskGenius调整系统盘空间容量&lt;/h2&gt;
-&lt;p&gt;由于系统盘被占用，无法直接调整，于是进入PE：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2020/08/20/jWR9vg2FSDqyteV.png&#34; alt=&#34;3.png&#34;&gt;&lt;/p&gt;
-&lt;p&gt;点击“重新启动运行WinPE版DiskGenius软件”，第一次启动要准备PE环境，会比较慢。&lt;/p&gt;
-&lt;p&gt;接下来在要调整的分区上点右键，调整分区大小：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2020/08/20/RPVCqOFuKQdXm4k.png&#34; alt=&#34;4.png&#34;&gt;&lt;/p&gt;
-&lt;p&gt;将挤出来的空间合并到C盘。这个过程非常慢，但一定要有耐心，保证电脑不会中间断电等。毕竟是对分区表的直接操作，一定要小心。&lt;/p&gt;
+        <guid>https://ntutn.top/posts/%E4%B8%89%E9%97%A8%E9%97%AE%E9%A2%98/</guid>
+        <description>归零幻想 https://ntutn.top/posts/%E4%B8%89%E9%97%A8%E9%97%AE%E9%A2%98/ -&lt;!-- raw HTML omitted --&gt;
 &lt;blockquote&gt;
-&lt;p&gt;请勿模仿：想当年本人用&lt;code&gt;Ghost&lt;/code&gt;还原系统的时候进度条走了1/4，突然感觉刚刚的选择有点问题，想重选一遍，于是按了电源键，然后就没有然后了……
-数据无价，谨慎操作&lt;/p&gt;
+&lt;p&gt;参赛者面前有三扇关闭着的门，其中一扇的后面是一辆汽车，选中后面有车的那扇门就可以赢得该汽车，
+而另外两扇门后面则各藏有一只山羊。当参赛者选定了一扇门，但未去开启它的时候，主持人会开启剩
+下两扇门中的一扇，露出其中一只山羊。主持人其后会问参赛者要不要更换选择，选另一扇仍然关着的门。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;那么，应不应该更换呢？
+&lt;img src=&#34;https://i.loli.net/2020/08/20/eWcOG6t1FpUD5mC.png&#34; alt=&#34;1560925478346.png&#34;&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h2 id=&#34;重新安装windows10应用商店&#34;&gt;重新安装Windows10应用商店&lt;/h2&gt;
-&lt;p&gt;理论上来说使用MediaCreationTool修复完Windows应用商店也应该回来了，但我的仍然没有出现只得自己重装一下：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;用管理员身份打开&lt;code&gt;powershell&lt;/code&gt;。&lt;/li&gt;
-&lt;li&gt;输入&lt;code&gt;Get-AppxPackage *WindowsStore* | Remove-AppxPackage&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;输入&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;Get-AppXPackage *WindowsStore* -AllUsers | Foreach {Add-AppxPackage -DisableDevelopmentMode -Register &amp;quot;$($_.InstallLocation)\AppXManifest.xml&amp;quot;}
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;刚装完可能是英文的，更新后语言就自动匹配了。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2020/08/20/Ybuwv4RO5ITsEoH.png&#34; alt=&#34;5.png&#34;&gt;&lt;/p&gt;
-&lt;p&gt;美滋滋。&lt;/p&gt;
-- https://ntutn.top/posts/%E9%97%B7%E5%A3%B0%E4%BD%9C%E5%A4%A7%E6%AD%BB%E5%88%A0%E9%99%A4%E7%94%B5%E8%84%91%E5%86%85%E7%9A%84%E7%A9%BA%E6%96%87%E4%BB%B6%E5%A4%B9/ - CC BY-SA 4.0</description>
+&lt;/blockquote&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;h2 id=&#34;分析&#34;&gt;分析&lt;/h2&gt;
+&lt;p&gt;假如你选择了A，那你中奖概率应为1/3.&lt;/p&gt;
+&lt;p&gt;主持人在B、C中选了个没奖的，这与你的选择其实没影响，因为你没选的肯定有个没奖的。&lt;/p&gt;
+&lt;p&gt;换与不换其实就相当于问你选A还是不选A。&lt;/p&gt;
+&lt;h2 id=&#34;程序模拟&#34;&gt;程序模拟&lt;/h2&gt;
+&lt;p&gt;有点绕，咱学软件的，就干脆让电脑跑一跑。&lt;/p&gt;
+&lt;h3 id=&#34;代码&#34;&gt;代码&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;java.util.Random&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Test&lt;/span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;(String[] args) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        Random ran=&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; Random();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; c1=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;,c2=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;i&amp;lt;&lt;span style=&#34;color:#b452cd&#34;&gt;1e6&lt;/span&gt;;i++){
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;boolean&lt;/span&gt; boxes[]={&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;,&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;,&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;};
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            boxes[ran.&lt;span style=&#34;color:#658b00&#34;&gt;nextInt&lt;/span&gt;(boxes.&lt;span style=&#34;color:#658b00&#34;&gt;length&lt;/span&gt;)]=&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;;&lt;span style=&#34;color:#228b22&#34;&gt;//某个门后有奖
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;            &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; sel=ran.&lt;span style=&#34;color:#658b00&#34;&gt;nextInt&lt;/span&gt;(boxes.&lt;span style=&#34;color:#658b00&#34;&gt;length&lt;/span&gt;);&lt;span style=&#34;color:#228b22&#34;&gt;//随便选择一扇门
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;            &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; p=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt;(p==sel||boxes[p]){&lt;span style=&#34;color:#228b22&#34;&gt;//主持人选择一扇没奖的门（且不与参与者选同一扇）
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                p=ran.&lt;span style=&#34;color:#658b00&#34;&gt;nextInt&lt;/span&gt;(boxes.&lt;span style=&#34;color:#658b00&#34;&gt;length&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(boxes[sel]){&lt;span style=&#34;color:#228b22&#34;&gt;//不更换中奖
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                c1++;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(boxes[&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;+&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;+&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;-sel-p]){&lt;span style=&#34;color:#228b22&#34;&gt;//更换中奖
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                c2++;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        System.&lt;span style=&#34;color:#658b00&#34;&gt;out&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;println&lt;/span&gt;(c1/&lt;span style=&#34;color:#b452cd&#34;&gt;1e6&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        System.&lt;span style=&#34;color:#658b00&#34;&gt;out&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;println&lt;/span&gt;(c2/&lt;span style=&#34;color:#b452cd&#34;&gt;1e6&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;运行结果&#34;&gt;运行结果&lt;/h3&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;0.332419
+0.667581
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;看来是更换比较好了。&lt;/p&gt;
+- https://ntutn.top/posts/%E4%B8%89%E9%97%A8%E9%97%AE%E9%A2%98/ - CC BY-SA 4.0</description>
         </item>
     
     

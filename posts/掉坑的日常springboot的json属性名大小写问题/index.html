@@ -35,7 +35,6 @@
 
 
 
-
   
 
 
@@ -48,11 +47,11 @@
       <script src="/js/toc.js"></script>
     
     <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
-<link rel="stylesheet" href="/scss/journal.min.c5d92f380bf10f6849c7ac487c7df2b22c081e0851e5339224f1ae29210b20d2.css" integrity="sha256-xdkvOAvxD2hJx6xIfH3ysiwIHghR5TOSJPGuKSELINI=" media="screen">
+<link rel="stylesheet" href="/scss/journal.scss" integrity="" media="screen">
 
 
 
-<link rel="stylesheet" href="/scss/dark-mode.min.9f8d8c2df9285089d141edd4a50cb7506c7948e6ab79a29968dced1bd0ab7d22.css" integrity="sha256-n42MLfkoUInRQe3UpQy3UGx5SOareaKZaNztG9CrfSI=" media="screen">
+<link rel="stylesheet" href="/scss/dark-mode.scss" integrity="" media="screen">
 
 
 <link rel="stylesheet"
@@ -661,59 +660,59 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
 <p>springboot可以使用<code>@ResponseBody</code>返回对象自动转换json，而转换成的json属性名首字母会被转换成小写。</p>
 <h2 id="解决方案">解决方案</h2>
 <h3 id="引入fastjson">引入<code>fastjson</code></h3>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-xml" data-lang="xml">		<span style="color:#8b008b;font-weight:bold">&lt;dependency&gt;</span>
-			<span style="color:#8b008b;font-weight:bold">&lt;groupId&gt;</span>com.alibaba<span style="color:#8b008b;font-weight:bold">&lt;/groupId&gt;</span>
-			<span style="color:#8b008b;font-weight:bold">&lt;artifactId&gt;</span>fastjson<span style="color:#8b008b;font-weight:bold">&lt;/artifactId&gt;</span>
-			<span style="color:#8b008b;font-weight:bold">&lt;version&gt;</span>1.2.66<span style="color:#8b008b;font-weight:bold">&lt;/version&gt;</span>
-		<span style="color:#8b008b;font-weight:bold">&lt;/dependency&gt;</span>
-</code></pre></div><h3 id="注入bean">注入<code>bean</code></h3>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java">    <span style="color:#707a7c">@Bean</span>
-    <span style="color:#8b008b;font-weight:bold">public</span> HttpMessageConverters <span style="color:#008b45">httpMessageConverters</span>() {
-        FastJsonHttpMessageConverter fastJsonHttpMessageConverter = <span style="color:#8b008b;font-weight:bold">new</span> FastJsonHttpMessageConverter(); <span style="color:#228b22">// 添加fastJson的配置信息
-</span><span style="color:#228b22"></span>        FastJsonConfig fastJsonConfig = <span style="color:#8b008b;font-weight:bold">new</span> FastJsonConfig();
-        fastJsonConfig.<span style="color:#658b00">setSerializerFeatures</span>(SerializerFeature.<span style="color:#658b00">PrettyFormat</span>); <span style="color:#228b22">// 处理中文乱码问题
-</span><span style="color:#228b22"></span>        List&lt;MediaType&gt; fastMediaTypes = <span style="color:#8b008b;font-weight:bold">new</span> ArrayList&lt;&gt;();
-        fastMediaTypes.<span style="color:#658b00">add</span>(MediaType.<span style="color:#658b00">APPLICATION_JSON</span>); <span style="color:#228b22">// 在convert中添加配置信息.
-</span><span style="color:#228b22"></span>        fastJsonHttpMessageConverter.<span style="color:#658b00">setSupportedMediaTypes</span>(fastMediaTypes);
-        fastJsonHttpMessageConverter.<span style="color:#658b00">setFastJsonConfig</span>(fastJsonConfig);
-        HttpMessageConverter&lt;?&gt; converter = fastJsonHttpMessageConverter;
-        <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">new</span> HttpMessageConverters(converter);
-    }
-</code></pre></div><h3 id="在属性上加注解">在属性上加注解</h3>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">edu.upc.mishuserver.vo</span>;
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">com.alibaba.fastjson.annotation.JSONField</span>;
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">lombok.AllArgsConstructor</span>;
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">lombok.Builder</span>;
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">lombok.Data</span>;
-<span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">lombok.NoArgsConstructor</span>;
-<span style="color:#228b22">/**
-</span><span style="color:#228b22"> * UpdateInfo
-</span><span style="color:#228b22"> */</span>
-<span style="color:#707a7c">@Data</span>
-<span style="color:#707a7c">@AllArgsConstructor</span>
-<span style="color:#707a7c">@NoArgsConstructor</span>
-<span style="color:#707a7c">@Builder</span>
-<span style="color:#8b008b;font-weight:bold">public</span> <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">UpdateInfo</span> {
-    <span style="color:#707a7c">@JSONField</span>(name=<span style="color:#cd5555">&#34;Code&#34;</span>)
-    <span style="color:#8b008b;font-weight:bold">private</span> Long code;
-    <span style="color:#707a7c">@JSONField</span>(name = <span style="color:#cd5555">&#34;Msg&#34;</span>)
-    <span style="color:#8b008b;font-weight:bold">private</span> String msg;
-    <span style="color:#707a7c">@JSONField</span>(name = <span style="color:#cd5555">&#34;UpdateStatus&#34;</span>)
-    <span style="color:#8b008b;font-weight:bold">private</span> Integer updateStatus;
-    <span style="color:#707a7c">@JSONField</span>(name = <span style="color:#cd5555">&#34;VersionCode&#34;</span>)
-    <span style="color:#8b008b;font-weight:bold">private</span> Long versionCode;
-    <span style="color:#707a7c">@JSONField</span>(name = <span style="color:#cd5555">&#34;VersionName&#34;</span>)
-    <span style="color:#8b008b;font-weight:bold">private</span> String versionName;
-    <span style="color:#707a7c">@JSONField</span>(name = <span style="color:#cd5555">&#34;ModifyContent&#34;</span>)
-    <span style="color:#8b008b;font-weight:bold">private</span> String modifyContent;
-    <span style="color:#707a7c">@JSONField</span>(name = <span style="color:#cd5555">&#34;DownloadUrl&#34;</span>)
-    <span style="color:#8b008b;font-weight:bold">private</span> String downloadUrl;
-    <span style="color:#707a7c">@JSONField</span>(name = <span style="color:#cd5555">&#34;ApkSize&#34;</span>)
-    <span style="color:#8b008b;font-weight:bold">private</span> Long apkSize;
-    <span style="color:#707a7c">@JSONField</span>(name = <span style="color:#cd5555">&#34;ApkMd5&#34;</span>)
-    <span style="color:#8b008b;font-weight:bold">private</span> String apkMd5;
-}
-</code></pre></div>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span>		<span style="color:#8b008b;font-weight:bold">&lt;dependency&gt;</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#8b008b;font-weight:bold">&lt;groupId&gt;</span>com.alibaba<span style="color:#8b008b;font-weight:bold">&lt;/groupId&gt;</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#8b008b;font-weight:bold">&lt;artifactId&gt;</span>fastjson<span style="color:#8b008b;font-weight:bold">&lt;/artifactId&gt;</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#8b008b;font-weight:bold">&lt;version&gt;</span>1.2.66<span style="color:#8b008b;font-weight:bold">&lt;/version&gt;</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#8b008b;font-weight:bold">&lt;/dependency&gt;</span>
+</span></span></code></pre></div><h3 id="注入bean">注入<code>bean</code></h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>    <span style="color:#707a7c">@Bean</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">public</span> HttpMessageConverters <span style="color:#008b45">httpMessageConverters</span>() {
+</span></span><span style="display:flex;"><span>        FastJsonHttpMessageConverter fastJsonHttpMessageConverter = <span style="color:#8b008b;font-weight:bold">new</span> FastJsonHttpMessageConverter(); <span style="color:#228b22">// 添加fastJson的配置信息
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>        FastJsonConfig fastJsonConfig = <span style="color:#8b008b;font-weight:bold">new</span> FastJsonConfig();
+</span></span><span style="display:flex;"><span>        fastJsonConfig.<span style="color:#658b00">setSerializerFeatures</span>(SerializerFeature.<span style="color:#658b00">PrettyFormat</span>); <span style="color:#228b22">// 处理中文乱码问题
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>        List&lt;MediaType&gt; fastMediaTypes = <span style="color:#8b008b;font-weight:bold">new</span> ArrayList&lt;&gt;();
+</span></span><span style="display:flex;"><span>        fastMediaTypes.<span style="color:#658b00">add</span>(MediaType.<span style="color:#658b00">APPLICATION_JSON</span>); <span style="color:#228b22">// 在convert中添加配置信息.
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>        fastJsonHttpMessageConverter.<span style="color:#658b00">setSupportedMediaTypes</span>(fastMediaTypes);
+</span></span><span style="display:flex;"><span>        fastJsonHttpMessageConverter.<span style="color:#658b00">setFastJsonConfig</span>(fastJsonConfig);
+</span></span><span style="display:flex;"><span>        HttpMessageConverter&lt;?&gt; converter = fastJsonHttpMessageConverter;
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">new</span> HttpMessageConverters(converter);
+</span></span><span style="display:flex;"><span>    }
+</span></span></code></pre></div><h3 id="在属性上加注解">在属性上加注解</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">package</span> <span style="color:#008b45;text-decoration:underline">edu.upc.mishuserver.vo</span>;
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">com.alibaba.fastjson.annotation.JSONField</span>;
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">lombok.AllArgsConstructor</span>;
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">lombok.Builder</span>;
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">lombok.Data</span>;
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">lombok.NoArgsConstructor</span>;
+</span></span><span style="display:flex;"><span><span style="color:#228b22">/**
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"> * UpdateInfo
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"> */</span>
+</span></span><span style="display:flex;"><span><span style="color:#707a7c">@Data</span>
+</span></span><span style="display:flex;"><span><span style="color:#707a7c">@AllArgsConstructor</span>
+</span></span><span style="display:flex;"><span><span style="color:#707a7c">@NoArgsConstructor</span>
+</span></span><span style="display:flex;"><span><span style="color:#707a7c">@Builder</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">public</span> <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">UpdateInfo</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#707a7c">@JSONField</span>(name=<span style="color:#cd5555">&#34;Code&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> Long code;
+</span></span><span style="display:flex;"><span>    <span style="color:#707a7c">@JSONField</span>(name = <span style="color:#cd5555">&#34;Msg&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> String msg;
+</span></span><span style="display:flex;"><span>    <span style="color:#707a7c">@JSONField</span>(name = <span style="color:#cd5555">&#34;UpdateStatus&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> Integer updateStatus;
+</span></span><span style="display:flex;"><span>    <span style="color:#707a7c">@JSONField</span>(name = <span style="color:#cd5555">&#34;VersionCode&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> Long versionCode;
+</span></span><span style="display:flex;"><span>    <span style="color:#707a7c">@JSONField</span>(name = <span style="color:#cd5555">&#34;VersionName&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> String versionName;
+</span></span><span style="display:flex;"><span>    <span style="color:#707a7c">@JSONField</span>(name = <span style="color:#cd5555">&#34;ModifyContent&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> String modifyContent;
+</span></span><span style="display:flex;"><span>    <span style="color:#707a7c">@JSONField</span>(name = <span style="color:#cd5555">&#34;DownloadUrl&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> String downloadUrl;
+</span></span><span style="display:flex;"><span>    <span style="color:#707a7c">@JSONField</span>(name = <span style="color:#cd5555">&#34;ApkSize&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> Long apkSize;
+</span></span><span style="display:flex;"><span>    <span style="color:#707a7c">@JSONField</span>(name = <span style="color:#cd5555">&#34;ApkMd5&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> String apkMd5;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div>
                     
                     <HR width="100%" id="EOF">
 		    <p style="color:#777;">最后修改于 2020-03-24</p>
