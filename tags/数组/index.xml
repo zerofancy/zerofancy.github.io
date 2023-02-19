@@ -33,7 +33,7 @@
 主持人在B、C中选了个没奖的，这与你的选择其实没影响，因为你没选的肯定有个没奖的。
 换与不换其实就相当于问你选A还是不选A。
 程序模拟 有点绕，咱学软件的，就干脆让电脑跑一跑。
-代码 import java.util.Random; class Test{ public static void main(String[] args) { Random ran=new Random(); int c1=0,c2=0; for(int i=0;i&amp;lt;1e6;i++){ boolean boxes[]={false,false,false}; boxes[ran.nextInt(boxes.length)]=true;//某个门后有奖 int sel=ran.nextInt(boxes.length);//随便选择一扇门 int p=0; while(p==sel||boxes[p]){//主持人选择一扇没奖的门（且不与参与者选同一扇） p=ran.nextInt(boxes.length); } if(boxes[sel]){//不更换中奖 c1++; } if(boxes[0+1+2-sel-p]){//更换中奖 c2++; } } System.out.println(c1/1e6); System.out.println(c2/1e6); } } 运行结果 0.3324190.667581 看来是更换比较好了。</description>
+代码 import java.util.Random; class Test{ public static void main(String[] args) { Random ran=new Random(); int c1=0,c2=0; for(int i=0;i&amp;lt;1e6;i++){ boolean boxes[]={false,false,false}; boxes[ran.nextInt(boxes.length)]=true;//某个门后有奖 int sel=ran.nextInt(boxes.length);//随便选择一扇门 int p=0; while(p==sel||boxes[p]){//主持人选择一扇没奖的门（且不与参与者选同一扇） p=ran.nextInt(boxes.length); } if(boxes[sel]){//不更换中奖 c1++; } if(boxes[0+1+2-sel-p]){//更换中奖 c2++; } } System.out.println(c1/1e6); System.out.println(c2/1e6); } } 运行结果 0.332419 0.667581 看来是更换比较好了。</description>
     </item>
     
   </channel>

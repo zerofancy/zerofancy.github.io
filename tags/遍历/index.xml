@@ -33,7 +33,7 @@
 主持人在B、C中选了个没奖的，这与你的选择其实没影响，因为你没选的肯定有个没奖的。
 换与不换其实就相当于问你选A还是不选A。
 程序模拟 有点绕，咱学软件的，就干脆让电脑跑一跑。
-代码 import java.util.Random; class Test{ public static void main(String[] args) { Random ran=new Random(); int c1=0,c2=0; for(int i=0;i&amp;lt;1e6;i++){ boolean boxes[]={false,false,false}; boxes[ran.nextInt(boxes.length)]=true;//某个门后有奖 int sel=ran.nextInt(boxes.length);//随便选择一扇门 int p=0; while(p==sel||boxes[p]){//主持人选择一扇没奖的门（且不与参与者选同一扇） p=ran.nextInt(boxes.length); } if(boxes[sel]){//不更换中奖 c1++; } if(boxes[0+1+2-sel-p]){//更换中奖 c2++; } } System.out.println(c1/1e6); System.out.println(c2/1e6); } } 运行结果 0.3324190.667581 看来是更换比较好了。</description>
+代码 import java.util.Random; class Test{ public static void main(String[] args) { Random ran=new Random(); int c1=0,c2=0; for(int i=0;i&amp;lt;1e6;i++){ boolean boxes[]={false,false,false}; boxes[ran.nextInt(boxes.length)]=true;//某个门后有奖 int sel=ran.nextInt(boxes.length);//随便选择一扇门 int p=0; while(p==sel||boxes[p]){//主持人选择一扇没奖的门（且不与参与者选同一扇） p=ran.nextInt(boxes.length); } if(boxes[sel]){//不更换中奖 c1++; } if(boxes[0+1+2-sel-p]){//更换中奖 c2++; } } System.out.println(c1/1e6); System.out.println(c2/1e6); } } 运行结果 0.332419 0.667581 看来是更换比较好了。</description>
     </item>
     
     <item>
@@ -45,7 +45,7 @@
       <description>人工智能知识点整理Question
 假设二叉数的数据元素为字符，采用二叉链式存储结构。请编码实现二叉树ADT，其中包括创建二叉树、遍历二叉树（深度、广度）、求二叉树的深度（高度）、计算二叉树的元素个数、计算二叉树的叶子数、二叉树的格式输出等。
 根据输入的符号，执行相应的操作。如下：
-C：根据完全前序序列创建二叉树，#表示空结点（空子树）；输入：二叉树的完全前序序列，创建成功输出 Created success! H：求二叉树的高度； 输出： Height=高度 L：计算二叉树的叶子数；输出：Leaves=叶子个数 N：计算二叉树中元素总个数；输出：Nodes=结点个数 1：先序遍历二叉树；输出：Preorder is:序列 . 2：中序遍历二叉树；输出：Inorder is:序列 . 3：后序遍历二叉树；输出：Postorder is:序列 . 4：广度遍历二叉树；输出：BFSorder is:序列 . F：查找值为x的结点个数；输出：The count of x is 个数 . P：以目录缩格文本形式输出所有节点。输出：The tree is:（换行，下面各行是输出的二叉树） X：退出 Example Input CABC##DE#G##F###HLN1234FAPX Output Created success!Height=5Leaves=3Nodes=7Preorder is:A B C D E G F .Inorder is:C B E G D F A .</description>
+C：根据完全前序序列创建二叉树，#表示空结点（空子树）；输入：二叉树的完全前序序列，创建成功输出 Created success! H：求二叉树的高度； 输出： Height=高度 L：计算二叉树的叶子数；输出：Leaves=叶子个数 N：计算二叉树中元素总个数；输出：Nodes=结点个数 1：先序遍历二叉树；输出：Preorder is:序列 . 2：中序遍历二叉树；输出：Inorder is:序列 . 3：后序遍历二叉树；输出：Postorder is:序列 . 4：广度遍历二叉树；输出：BFSorder is:序列 . F：查找值为x的结点个数；输出：The count of x is 个数 . P：以目录缩格文本形式输出所有节点。输出：The tree is:（换行，下面各行是输出的二叉树） X：退出 Example Input C ABC##DE#G##F### H L N 1 2 3 4 F A P X Output Created success! Height=5 Leaves=3 Nodes=7 Preorder is:A B C D E G F . Inorder is:C B E G D F A .</description>
     </item>
     
   </channel>
