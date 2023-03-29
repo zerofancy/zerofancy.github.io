@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html><head>
+<title>Retrofit可以不主动切换线程吗</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="我们知道安卓中需要在异步线程请求网络数据或进行繁重计算任务，在主线程更新UI，否则会崩溃。然而，最近做需求时我却发现自己忘了写切换线程，然而程序正常运行，所以看下源码，到底哪里默默帮我们完成了这一切。">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+<meta property="og:title" content="Retrofit可以不主动切换线程吗" />
+<meta property="og:description" content="我们知道安卓中需要在异步线程请求网络数据或进行繁重计算任务，在主线程更新UI，否则会崩溃。然而，最近做需求时我却发现自己忘了写切换线程，然而程序正常运行，所以看下源码，到底哪里默默帮我们完成了这一切。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ntutn.top/posts/retrofit%E5%8F%AF%E4%BB%A5%E4%B8%8D%E4%B8%BB%E5%8A%A8%E5%88%87%E6%8D%A2%E7%BA%BF%E7%A8%8B%E5%90%97/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-03-30T01:55:01+08:00" />
+<meta property="article:modified_time" content="2023-03-30T01:55:01+08:00" /><meta property="og:site_name" content="归零幻想" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+<link rel="icon" href="//images.ntutn.top/favicon.ico">
+
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+<link rel="stylesheet" href="/scss/journal.min.7c01e9f6fb2f6083d79d2f3a32ec6b7901e262e94a52a64a542aef98bc5bda64.css" integrity="sha256-fAHp9vsvYIPXnS86MuxreQHiYulKUqZKVCrvmLxb2mQ=" media="screen">
+
+
+
+<link rel="stylesheet" href="/scss/dark-mode.min.cb53f1bee2b8900cb4f082afbf00175d6618f281cf9a2fe8619e3b52d20b5721.css" integrity="sha256-y1PxvuK4kAy08IKvvwAXXWYY8oHPmi/oYZ47UtILVyE=" media="screen">
+
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+<script defer
+	src='https://static.cloudflareinsights.com/beacon.min.js'
+	data-cf-beacon='{"token": 5a03d307f5214109a1e7c8b2cf306a3d'>
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+    pre code {
+        color: black;
+        -comment: "感谢评论区 https://github.com/lx200916 指出博客代码块深色模式问题";
+    }
+</style>
+<script src="https://unpkg.com/zoomtastic@2.2.1"></script>
+<script src="https://unpkg.com/kotlin-playground@1" data-selector="code.language-kotlin"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function(event) { 
+        document.querySelectorAll("div.post-body-wrapper img").forEach(function(element){
+            element.setAttribute("zoomtastic", true)
+            element.style.maxWidth="60%"
+        })
+		
+		Zoomtastic.mount({
+			size: '95%',
+			easing: 'ease',
+			duration: 300,
+			background: 'rgba(0, 0, 0, 0.9)',
+			filter: 'drop-shadow(0 2px 16px rgba(0, 0, 0, 0.3))',
+			animation: 'slide' 
+		});
+		
+		Zoomtastic.listen('[zoomtastic]', 'src');
+    });
+
+	
+	var _hmt = _hmt || [];
+	(function() {
+	var hm = document.createElement("script");
+	hm.src = "https://hm.baidu.com/hm.js?298c58938f9266e6098936c4f71a9a83";
+	var s = document.getElementsByTagName("script")[0]; 
+	s.parentNode.insertBefore(hm, s);
+	})();
+
+</script>
+
+</head>
+<body>
+    	<div id="app"><div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/project">
+                    项目
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
+                    标签
+                </a>
+                
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    归档
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/friends">
+                    友链
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/about">
+                    关于
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/index.xml">
+                    RSS
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#retrofit%e5%ae%9e%e7%8e%b0%e7%ae%80%e8%a6%81%e5%88%86%e6%9e%90" class="nav-retrofit实现简要分析">
+									Retrofit实现简要分析
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#retrofit--rxjava%e5%86%99%e6%b3%95%e5%8f%af%e4%bb%a5%e4%b8%8d%e4%b8%bb%e5%8a%a8%e5%88%87%e6%8d%a2%e7%ba%bf%e7%a8%8b%e5%90%97" class="nav-retrofit--rxjava写法可以不主动切换线程吗">
+									Retrofit &#43; RxJava写法可以不主动切换线程吗
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%80%bb%e7%bb%93" class="nav-总结">
+									总结
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://ntutn.top/">
+            归零幻想
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://ntutn.top/">
+        <div class="single-column-header-title">归零幻想</div>
+        
+        <div class="single-column-header-subtitle">零点还不算熬夜</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+
+            <div class="post-head-wrapper-text-only"
+                
+            >
+                <div class="post-title">
+                    Retrofit可以不主动切换线程吗
+                    
+                    <div class="post-subtitle">
+                        我们知道安卓中需要在异步线程请求网络数据或进行繁重计算任务，在主线程更新UI，否则会崩溃。然而，最近做需求时我却发现自己忘了写切换线程，然而程序正常运行，所以看下源码，到底哪里默默帮我们完成了这一切。
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2023-03-30 01:55
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/%E6%8A%80%E6%9C%AF">技术</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/android">Android</a>
+                                &nbsp;
+                            
+                                <a href="/tags/retrofit">Retrofit</a>
+                                &nbsp;
+                            
+                                <a href="/tags/%E7%BA%BF%E7%A8%8B">线程</a>
+                                &nbsp;
+                            
+                                <a href="/tags/%E5%8D%8F%E7%A8%8B">协程</a>
+                                &nbsp;
+                            
+                                <a href="/tags/kotlin">Kotlin</a>
+                                &nbsp;
+                            
+                        
+                        
+                            <i class="material-icons" style="">schedule</i>
+                            
+
+                            
+                            
+
+                            
+                            5 min
+                            
+                            53 s.
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <p>Retrofit+Okhttp是我们常用的网络请求库，其定义API接口后可以通过动态代理来帮我们实际发出网络请求，我们能很快写出这样的代码：</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-Kotlin" data-lang="Kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">initData</span>() {
+</span></span><span style="display:flex;"><span>    viewModelScope.launch {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">val</span> todoList = withContext(<span style="color:#008b45;font-weight:bold">Dispatchers</span>.IO) {
+</span></span><span style="display:flex;"><span>            todoApi.getTodoList()
+</span></span><span style="display:flex;"><span>        }.payload
+</span></span><span style="display:flex;"><span>        _todoListState.<span style="color:#8b008b;font-weight:bold">value</span> = todoList ?: listOf()
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>切换IO线程发出网络请求，切回主线程设置数据，回调式写法改为同步写法，非常舒服。但最近有个需求中，我发现我忘了写线程切换代码，然而没有报错：</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-Kotlin" data-lang="Kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">initData</span>() {
+</span></span><span style="display:flex;"><span>    viewModelScope.launch {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">val</span> todoList = todoApi.getTodoList().payload
+</span></span><span style="display:flex;"><span>        _todoListState.<span style="color:#8b008b;font-weight:bold">value</span> = todoList ?: listOf()
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>为此，我们可以看一下他的实现，看内部哪里帮我们做了这个工作。</p>
+<h1 id="retrofit实现简要分析">Retrofit实现简要分析</h1>
+<p><strong>retrofit2.Retrofit#create</strong></p>
+<p>这里首先创建了个动态代理，API接口中定义的方法实际由<code>loadServiceMethod(method).invoke(args)</code>执行</p>
+<p><img src="https://images.ntutn.top/2023/03/59358546a698f192c7a828c79e907ec7.png" alt="Retrofit生成动态代理代码"></p>
+<p>（省略部分代码）</p>
+<p><strong>retrofit2.HttpServiceMethod#parseAnnotations</strong></p>
+<p>这个方法中完成了主要的操作，解析请求参数，构建Call对象</p>
+<p><img src="https://images.ntutn.top/2023/03/3988b6b68bc307a36dd64803d8ad40c9.png" alt="为suspend方法解析参数，准备请求代理类"></p>
+<p>可以看到，最终用一个SuspendForResponse/SuspendForBody封装了请求对象</p>
+<p><img src="https://images.ntutn.top/2023/03/6849a59a5bce5eee389d56de96e5c038.png" alt="SuspendForResponse"></p>
+<p><strong>retrofit2.HttpServiceMethod.SuspendForResponse#adapt</strong></p>
+<p><img src="https://images.ntutn.top/2023/03/443e01a4ec5af406aa22dbe4781b73ea.png" alt="awaitResponse"></p>
+<p><strong>/home/zero/.gradle/caches/modules-2/files-2.1/com.squareup.retrofit2/retrofit/2.9.0/409e80ce46c84ef7e74b6934032a73b8421eebe5/retrofit-2.9.0-sources.jar!/retrofit2/KotlinExtensions.kt:86</strong></p>
+<p><img src="https://images.ntutn.top/2023/03/eb3f3d876e866fe2969f0b12cf561598.png" alt="异步网络请求"></p>
+<p><code>retrofit2.Call#enqueue</code>方法实际上是对OkHttp异步请求方法<code>okhttp3.Call#enqueue</code>的封装，总之他会在异步线程做网络请求并回调。</p>
+<p>这里用到了一个叫suspendCancellableCoroutine的方法，而它在我们此前的协程专题分享中已经被提到了[<a href="https://bytedance.feishu.cn/wiki/wikcnkJY8Py5EzkKww6jO5H9Lqe#VgIOd220YoueIcx6QOzcqB2cnyf">Kotlin · Coroutines 在抖音] Suspend 揭秘</a> 。这里是对Call对象回调式写法的封装，暂停（<strong>suspend</strong>）当前Continuation，直到网络请求返回再继续（<strong>resume</strong>）。</p>
+<hr>
+<p><strong>Q：</strong> <em>既然suspend了，它会阻塞当前线程吗？</em></p>
+<p>**A：**注意，这里suspend翻译为“暂停”，它并不等同于线程的阻塞。Continuation经编译后实际实现为一个状态机，暂停（suspend）只是停在当前节点，线程可以继续处理其他Message，并没有阻塞。</p>
+<hr>
+<p>结果返回后，continuation的Context没有变化，即Dispatcher没有改变，即切换回了原来的线程/线程池。所以，使用Kotlin Coroutines + Retrofit时可以不切换异步线程再发起网络请求。</p>
+<h1 id="retrofit--rxjava写法可以不主动切换线程吗">Retrofit + RxJava写法可以不主动切换线程吗</h1>
+<p>直接看<code>RxJava2CallAdapter</code>即可。</p>
+<p><img src="https://images.ntutn.top/2023/03/378e28080b022497151a8f1d273b8053.png" alt="Retrofit+RxJava"></p>
+<p>可以看到，这里根据设置CallAdapterFactory时传入的isAsync值不同，可能用同步请求方式（<code>call.execute()</code>），也可以用异步请求方式（<code>call.enqueue(callback)</code>），并没有其他切换线程操作。</p>
+<p>即，若设置了<code>isAsync = true</code>，则会异步线程请求和回调，但你肯定还是需要切换回主线程来更新UI，免不了写<code>observeOn</code>。</p>
+<h1 id="总结">总结</h1>
+<p><strong>若使用Kotlin Coroutines + Retrofit + OkHttp做网络请求，那么我们不用手动指定异步线程做网络请求，Retrofit已经处理了。</strong></p>
+<p>为何RxJava没有实现异步请求且自动切换回之前线程的特性，我认为可能是RxJava配合使用时不明确写<code>observeOn</code>，不能让使用者确信回调位置代码执行在某线程——RxJava流式写法，不写observeOn谁知道前面步骤切换到了哪个线程。再说拉到数据后也可能要进行一些仍然要在异步线程的其他处理，不一定就要切换回主线程，所以框架内就不多此一举了。</p>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">最后修改于 2023-03-30</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts">
+			下回<br>已经到头啦。
+                </a>
+                
+                
+                
+                <a class="older-posts" href="/project/hugo%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0%E5%8A%A0%E5%AF%86/">
+			上回<br>Hugo博客文章加密
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+<script src="https://utteranc.es/client.js"
+        repo="zerofancy/zerofancy.github.io"
+        issue-term="title"
+        label=""
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://ntutn.top/">
+    
+        <div class="nav-title">
+            归零幻想
+        </div>
+        
+        <div class="nav-subtitle">
+            零点还不算熬夜
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/project">
+                项目
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
+                标签
+            </a>
+            
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                归档
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/friends">
+                友链
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/about">
+                关于
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/index.xml">
+                RSS
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	CC BY-SA 4.0
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    <div class="toc-wrapper">
+        
+
+        
+        <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#retrofit%e5%ae%9e%e7%8e%b0%e7%ae%80%e8%a6%81%e5%88%86%e6%9e%90" class="nav-retrofit实现简要分析">
+									Retrofit实现简要分析
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#retrofit--rxjava%e5%86%99%e6%b3%95%e5%8f%af%e4%bb%a5%e4%b8%8d%e4%b8%bb%e5%8a%a8%e5%88%87%e6%8d%a2%e7%ba%bf%e7%a8%8b%e5%90%97" class="nav-retrofit--rxjava写法可以不主动切换线程吗">
+									Retrofit &#43; RxJava写法可以不主动切换线程吗
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%80%bb%e7%bb%93" class="nav-总结">
+									总结
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+        
+    </div>
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top"
+            :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	CC BY-SA 4.0
+	
+</div>
+            </div>
+    
+    <script src="/js/journal.js"></script></body>
+</html>

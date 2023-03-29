@@ -7,7 +7,34 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Sun, 19 Feb 2023 00:39:01 +0800</lastBuildDate><atom:link href="https://ntutn.top/tags/kotlin/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 30 Mar 2023 01:55:01 +0800</lastBuildDate><atom:link href="https://ntutn.top/tags/kotlin/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Retrofit可以不主动切换线程吗</title>
+      <link>https://ntutn.top/posts/retrofit%E5%8F%AF%E4%BB%A5%E4%B8%8D%E4%B8%BB%E5%8A%A8%E5%88%87%E6%8D%A2%E7%BA%BF%E7%A8%8B%E5%90%97/</link>
+      <pubDate>Thu, 30 Mar 2023 01:55:01 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/retrofit%E5%8F%AF%E4%BB%A5%E4%B8%8D%E4%B8%BB%E5%8A%A8%E5%88%87%E6%8D%A2%E7%BA%BF%E7%A8%8B%E5%90%97/</guid>
+      <description>Retrofit+Okhttp是我们常用的网络请求库，其定义API接口后可以通过动态代理来帮我们实际发出网络请求，我们能很快写出这样的代码：
+fun initData() { viewModelScope.launch { val todoList = withContext(Dispatchers.IO) { todoApi.getTodoList() }.payload _todoListState.value = todoList ?: listOf() } } 切换IO线程发出网络请求，切回主线程设置数据，回调式写法改为同步写法，非常舒服。但最近有个需求中，我发现我忘了写线程切换代码，然而没有报错：
+fun initData() { viewModelScope.launch { val todoList = todoApi.getTodoList().payload _todoListState.value = todoList ?: listOf() } } 为此，我们可以看一下他的实现，看内部哪里帮我们做了这个工作。
+Retrofit实现简要分析 retrofit2.Retrofit#create
+这里首先创建了个动态代理，API接口中定义的方法实际由loadServiceMethod(method).invoke(args)执行
+（省略部分代码）
+retrofit2.HttpServiceMethod#parseAnnotations
+这个方法中完成了主要的操作，解析请求参数，构建Call对象
+可以看到，最终用一个SuspendForResponse/SuspendForBody封装了请求对象
+retrofit2.HttpServiceMethod.SuspendForResponse#adapt
+/home/zero/.gradle/caches/modules-2/files-2.1/com.squareup.retrofit2/retrofit/2.9.0/409e80ce46c84ef7e74b6934032a73b8421eebe5/retrofit-2.9.0-sources.jar!/retrofit2/KotlinExtensions.kt:86
+retrofit2.Call#enqueue方法实际上是对OkHttp异步请求方法okhttp3.Call#enqueue的封装，总之他会在异步线程做网络请求并回调。
+这里用到了一个叫suspendCancellableCoroutine的方法，而它在我们此前的协程专题分享中已经被提到了[Kotlin · Coroutines 在抖音] Suspend 揭秘 。这里是对Call对象回调式写法的封装，暂停（suspend）当前Continuation，直到网络请求返回再继续（resume）。
+Q： 既然suspend了，它会阻塞当前线程吗？
+**A：**注意，这里suspend翻译为“暂停”，它并不等同于线程的阻塞。Continuation经编译后实际实现为一个状态机，暂停（suspend）只是停在当前节点，线程可以继续处理其他Message，并没有阻塞。
+结果返回后，continuation的Context没有变化，即Dispatcher没有改变，即切换回了原来的线程/线程池。所以，使用Kotlin Coroutines + Retrofit时可以不切换异步线程再发起网络请求。
+Retrofit + RxJava写法可以不主动切换线程吗 直接看RxJava2CallAdapter即可。
+可以看到，这里根据设置CallAdapterFactory时传入的isAsync值不同，可能用同步请求方式（call.execute()），也可以用异步请求方式（call.enqueue(callback)），并没有其他切换线程操作。
+即，若设置了isAsync = true，则会异步线程请求和回调，但你肯定还是需要切换回主线程来更新UI，免不了写observeOn。</description>
+    </item>
+    
     <item>
       <title>Hugo博客文章加密</title>
       <link>https://ntutn.top/project/hugo%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0%E5%8A%A0%E5%AF%86/</link>
