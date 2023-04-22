@@ -7,9 +7,197 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Sat, 15 Apr 2023 21:39:12 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 23 Apr 2023 01:35:25 +0800</lastBuildDate>
     
         <atom:link href="https://ntutn.top/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>带权重的随机选择</title>
+        <link>https://ntutn.top/posts/%E5%B8%A6%E6%9D%83%E9%87%8D%E7%9A%84%E9%9A%8F%E6%9C%BA%E9%80%89%E6%8B%A9/</link>
+        <pubDate>Sun, 23 Apr 2023 01:35:25 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/%E5%B8%A6%E6%9D%83%E9%87%8D%E7%9A%84%E9%9A%8F%E6%9C%BA%E9%80%89%E6%8B%A9/</guid>
+        <description>归零幻想 https://ntutn.top/posts/%E5%B8%A6%E6%9D%83%E9%87%8D%E7%9A%84%E9%9A%8F%E6%9C%BA%E9%80%89%E6%8B%A9/ -&lt;p&gt;最近有个需求，需要从列表中随机选择一个项目，但各个项目有一定权重，类似无保底的抽卡效果。这时候就羡慕Python，可以直接用&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;numpy.random&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; choice
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;draw = choice(list_of_candidates, number_of_items_to_pick,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;              p=probability_distribution)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;实现&#34;&gt;实现&lt;/h1&gt;
+&lt;p&gt;既然没有，就只能自己写了。原理很简单，就是将原始列表根据权重映射到线段上的各个区间中，然后线段上随机取一个点。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &amp;lt;&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;T&lt;/span&gt;&amp;gt; &lt;span style=&#34;color:#008b45&#34;&gt;getRandomItemWeighted&lt;/span&gt;(list: List&amp;lt;T&amp;gt;, weights: List&amp;lt;Int&amp;gt;): T {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        require(list.isNotEmpty())
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        require(list.size == weights.size)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; weightSum = weights.sum()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (weightSum &amp;lt;= &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; list.random() &lt;span style=&#34;color:#228b22&#34;&gt;// shouldn&amp;#39;t reach here
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; weight = &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; value = random.nextInt(weights.sum())
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        list.forEachIndexed { index, t -&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            weight += weights[index]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (weight &amp;gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;value&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; t
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; list.random() &lt;span style=&#34;color:#228b22&#34;&gt;// shouldn&amp;#39;t reach here
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;验证正确性&#34;&gt;验证正确性&lt;/h1&gt;
+&lt;p&gt;准备一个列表，其权重为一单调数列。统计各项出现次数，然后做回归分析。若实现正确，各项出现次数之比应大致等于权重之比，即与列表项下标呈线性相关关系。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; counter = IntArray(&lt;span style=&#34;color:#b452cd&#34;&gt;10&lt;/span&gt;) { &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; list = listOf(&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#b452cd&#34;&gt;3&lt;/span&gt;, &lt;span style=&#34;color:#b452cd&#34;&gt;4&lt;/span&gt;, &lt;span style=&#34;color:#b452cd&#34;&gt;5&lt;/span&gt;, &lt;span style=&#34;color:#b452cd&#34;&gt;6&lt;/span&gt;, &lt;span style=&#34;color:#b452cd&#34;&gt;7&lt;/span&gt;, &lt;span style=&#34;color:#b452cd&#34;&gt;8&lt;/span&gt;, &lt;span style=&#34;color:#b452cd&#34;&gt;9&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; weights = list.reversed()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    repeat(&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;_0000_0000) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;RandomUtil&lt;/span&gt;.getRandomItemWeighted(list, weights).let {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            counter[&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt;]++
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    counter.mapIndexed { index, i -&amp;gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$index&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;, &lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$i&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        .joinToString(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\n&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        .let { println(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt;) }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2023/04/1615e7450d43419d9531b1041a118b7a.png&#34; alt=&#34;线性拟合&#34;&gt;&lt;/p&gt;
+- https://ntutn.top/posts/%E5%B8%A6%E6%9D%83%E9%87%8D%E7%9A%84%E9%9A%8F%E6%9C%BA%E9%80%89%E6%8B%A9/ - CC BY-SA 4.0</description>
+        </item>
+    
+    
+    
+        <item>
+        <title>executeUnconfined搞了什么飞机</title>
+        <link>https://ntutn.top/posts/executeunconfined%E6%90%9E%E4%BA%86%E4%BB%80%E4%B9%88%E9%A3%9E%E6%9C%BA/</link>
+        <pubDate>Mon, 17 Apr 2023 19:28:49 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/executeunconfined%E6%90%9E%E4%BA%86%E4%BB%80%E4%B9%88%E9%A3%9E%E6%9C%BA/</guid>
+        <description>归零幻想 https://ntutn.top/posts/executeunconfined%E6%90%9E%E4%BA%86%E4%BB%80%E4%B9%88%E9%A3%9E%E6%9C%BA/ -&lt;p&gt;在对Dispatchers.Main.immediate进行分析时，isDispatchNeeded正常分支很简单，但else分支足足套了3层，我说这里只是原地执行好没有说服力啊。所以一起来看看它这里在搞什么飞机。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2023/04/1b68e35ba83637ff864b4e08b6e8053d.png&#34; alt=&#34;resumeWith&#34;&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2023/04/2fb93570257d015f802552f468ef0ff0.png&#34; alt=&#34;executeUncofined&#34;&gt;&lt;/p&gt;
+&lt;p&gt;好吧，注释已经告诉我们了，就是为了防StackOverflow。那么它是怎样做到的呢？&lt;/p&gt;
+&lt;p&gt;首先我们注意到这里有个EventLoop，它不是安卓中的looper，但其实与之类似。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2023/04/23deb5a30a064c03362f868a1b182497.png&#34; alt=&#34;ThreadLocalEventLoop&#34;&gt;&lt;/p&gt;
+&lt;p&gt;可以看到，类似于Looper，它也被保存到ThreadLocal。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;internal&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;abstract&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;EventLoop&lt;/span&gt; : CoroutineDispatcher() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; useCount = &lt;span style=&#34;color:#b452cd&#34;&gt;0L&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; unconfinedQueue: ArrayQueue&amp;lt;DispatchedTask&amp;lt;*&amp;gt;&amp;gt;? = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;dispatchUnconfined&lt;/span&gt;(task: DispatchedTask&amp;lt;*&amp;gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; queue = unconfinedQueue ?:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            ArrayQueue&amp;lt;DispatchedTask&amp;lt;*&amp;gt;&amp;gt;().also { unconfinedQueue = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        queue.addLast(task)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; isUnconfinedLoopActive: Boolean
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;get&lt;/span&gt;() = useCount &amp;gt;= delta(unconfined = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;delta&lt;/span&gt;(unconfined: Boolean) =
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (unconfined) (&lt;span style=&#34;color:#b452cd&#34;&gt;1L&lt;/span&gt; shl &lt;span style=&#34;color:#b452cd&#34;&gt;32&lt;/span&gt;) &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;1L&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;incrementUseCount&lt;/span&gt;(unconfined: Boolean = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        useCount += delta(unconfined)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (!unconfined) shared = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt; 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;decrementUseCount&lt;/span&gt;(unconfined: Boolean = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        useCount -= delta(unconfined)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (useCount &amp;gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;) &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        assert { useCount == &lt;span style=&#34;color:#b452cd&#34;&gt;0L&lt;/span&gt; } &lt;span style=&#34;color:#228b22&#34;&gt;// &amp;#34;Extra decrementUseCount&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (shared) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#228b22&#34;&gt;// shut it down and remove from ThreadLocalEventLoop
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;            shutdown()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;useCount初始值为0，即isUnconfinedLoopActive为false，所以第一次走else分支&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2023/04/1c87dd1b6b26ba206afe6a5cec41f193.png&#34; alt=&#34;runUnconfinedEventLoop&#34;&gt;&lt;/p&gt;
+&lt;p&gt;先走了incrementUseCount之后，isUnconfinedLoopActive就为true了。所以执行第一次的block过程中如果有executeUnconfined，它只是被添加到队列中，直到block执行完才依次得到执行，最后恢复useCount取值。&lt;/p&gt;
+&lt;p&gt;试想以下例子&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;executeUnconfined(&amp;hellip;) { // A&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;executeUnconfined(&amp;hellip;) { // B&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;executeUnconfined(&amp;hellip;) { // C&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&amp;hellip;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;}&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;}&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;}&lt;/p&gt;
+&lt;p&gt;正常执行到C处时，调用栈已经变成楼梯的样子了&lt;/p&gt;
+&lt;p&gt;A&lt;/p&gt;
+&lt;p&gt;&amp;hellip;.B&lt;/p&gt;
+&lt;p&gt;​    &amp;hellip;.C&lt;/p&gt;
+&lt;p&gt;但现在用了类似消息循环处理的方式，执行A时先让B入队，A执行完成B才出队执行，B执行完时C才出队执行，最终调用栈中只有C。&lt;/p&gt;
+&lt;p&gt;先走了incrementUseCount之后，isUnconfinedLoopActive就为true了。所以执行第一次的block过程中如果有executeUnconfined，它只是被添加到队列中，直到block执行完才依次得到执行，最后恢复useCount取值。&lt;/p&gt;
+&lt;p&gt;试想以下例子&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;executeUnconfined(&amp;hellip;) { // A&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;executeUnconfined(&amp;hellip;) { // B&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;executeUnconfined(&amp;hellip;) { // C&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&amp;hellip;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;}&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;}&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;}&lt;/p&gt;
+&lt;p&gt;正常执行到C处时，调用栈已经变成楼梯的样子了&lt;/p&gt;
+&lt;p&gt;A&lt;/p&gt;
+&lt;p&gt;&amp;hellip;.B&lt;/p&gt;
+&lt;p&gt;​    &amp;hellip;.C&lt;/p&gt;
+&lt;p&gt;但现在用了类似消息循环处理的方式，执行A时先让B入队，A执行完成B才出队执行，B执行完时C才出队执行，最终调用栈中只有C。&lt;/p&gt;
+&lt;p&gt;先走了incrementUseCount之后，isUnconfinedLoopActive就为true了。所以执行第一次的block过程中如果有executeUnconfined，它只是被添加到队列中，直到block执行完才依次得到执行，最后恢复useCount取值。&lt;/p&gt;
+&lt;p&gt;试想以下例子&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;executeUnconfined(&amp;hellip;) { // A&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;executeUnconfined(&amp;hellip;) { // B&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;executeUnconfined(&amp;hellip;) { // C&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&amp;hellip;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;}&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;}&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;}&lt;/p&gt;
+&lt;p&gt;正常执行到C处时，调用栈已经变成楼梯的样子了&lt;/p&gt;
+&lt;p&gt;A&lt;/p&gt;
+&lt;p&gt;&amp;hellip;.B&lt;/p&gt;
+&lt;p&gt;​    &amp;hellip;.C&lt;/p&gt;
+&lt;p&gt;但现在用了类似消息循环处理的方式，执行A时先让B入队，A执行完成B才出队执行，B执行完时C才出队执行，最终调用栈中只有C。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2023/04/e19a49b188577559115e3d477545981d.png&#34; alt=&#34;画板&#34;&gt;&lt;/p&gt;
+- https://ntutn.top/posts/executeunconfined%E6%90%9E%E4%BA%86%E4%BB%80%E4%B9%88%E9%A3%9E%E6%9C%BA/ - CC BY-SA 4.0</description>
+        </item>
     
     
     
@@ -649,45 +837,6 @@
 &lt;li&gt;使用字节码修改的方法，编译时替换掉相关的调用，比如可以用&lt;a href=&#34;https://github.com/eleme/lancet&#34;&gt;lancet&lt;/a&gt;来处理&lt;/li&gt;
 &lt;/ol&gt;
 - https://ntutn.top/posts/kotlin%E7%9A%84%E9%9A%8F%E6%9C%BA%E6%95%B0%E4%B8%8D%E9%9A%8F%E6%9C%BA/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>[折腾中] WanAndroid客户端</title>
-        <link>https://ntutn.top/project/wanandroid%E5%AE%A2%E6%88%B7%E7%AB%AF/</link>
-        <pubDate>Sun, 06 Nov 2022 07:01:29 +0800</pubDate>
-        
-        <guid>https://ntutn.top/project/wanandroid%E5%AE%A2%E6%88%B7%E7%AB%AF/</guid>
-        <description>归零幻想 https://ntutn.top/project/wanandroid%E5%AE%A2%E6%88%B7%E7%AB%AF/ -&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2022/11/8deebb4541036d1f3c050cf0465eeddb.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://wanandroid.com/&#34;&gt;WanAndroid&lt;/a&gt; 是一个我很喜欢的安卓方面的技术分享站点，站长是个安卓方面的大佬，看介绍这大佬还是我们公司里的，虽然我这菜鸡是没有和他打交道的机会。&lt;/p&gt;
-&lt;p&gt;WanAndroid对外提供了站内各个模块的&lt;a href=&#34;https://wanandroid.com/api&#34;&gt;API&lt;/a&gt;，鼓励大家自己写个APP，作为一个宝贵的练手机会，我也难免手痒，尝试自己实现了下。&lt;/p&gt;
-&lt;p&gt;地址： &lt;a href=&#34;https://github.com/zerofancy/WandroidZ&#34;&gt;https://github.com/zerofancy/WandroidZ&lt;/a&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;input checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; banner&lt;/li&gt;
-&lt;li&gt;&lt;input checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; Webview文章浏览&lt;/li&gt;
-&lt;li&gt;&lt;input checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; 首页置顶文章&lt;/li&gt;
-&lt;li&gt;&lt;input checked=&#34;&#34; disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; 首页推荐文章&lt;/li&gt;
-&lt;li&gt;&lt;input disabled=&#34;&#34; type=&#34;checkbox&#34;&gt; 登陆&lt;/li&gt;
-&lt;/ul&gt;
-- https://ntutn.top/project/wanandroid%E5%AE%A2%E6%88%B7%E7%AB%AF/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>一个简单的桌面悬浮时钟</title>
-        <link>https://ntutn.top/posts/%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E6%A1%8C%E9%9D%A2%E6%82%AC%E6%B5%AE%E6%97%B6%E9%92%9F/</link>
-        <pubDate>Fri, 07 Oct 2022 23:47:22 +0800</pubDate>
-        
-        <guid>https://ntutn.top/posts/%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E6%A1%8C%E9%9D%A2%E6%82%AC%E6%B5%AE%E6%97%B6%E9%92%9F/</guid>
-        <description>归零幻想 https://ntutn.top/posts/%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E6%A1%8C%E9%9D%A2%E6%82%AC%E6%B5%AE%E6%97%B6%E9%92%9F/ -&lt;p&gt;个人非常喜欢macOS下一个叫做 &lt;a href=&#34;https://apps.apple.com/us/app/zclock-lite-topmost-clock/id1489475245?mt=12&#34;&gt;zClock&lt;/a&gt; 的应用，它可以在桌面右下角显示一个悬浮的时钟，提醒我掌握好摸鱼节奏。&lt;/p&gt;
-&lt;p&gt;但这个软件似乎没有Linux版本，于是作为程序员，自己动手丰衣足食，花了一点时间我也写了一个。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2022/10/42d9958bc05f43bbe59908032b891d5f.png&#34; alt=&#34;float clock&#34;&gt;&lt;/p&gt;
-&lt;p&gt;本来学了点compose，是想用Compose写的，但是写一半发现还是不行，挺坑的，因为compose的窗口框架是swing的，而我需要在渲染后调整窗口大小，然后这个大小咋换算……于是后来改成纯swing的了，留了一个“关于”窗口用compose是我最后的倔强。&lt;/p&gt;
-&lt;p&gt;感兴趣的看官可以去 &lt;a href=&#34;https://github.com/zerofancy/floatclock&#34;&gt;github&lt;/a&gt; 下载，如果你安装了 &lt;a href=&#34;https://www.spark-app.store/&#34;&gt;星火应用商店&lt;/a&gt; 可以 &lt;a href=&#34;spk://store/tools/floatclock&#34;&gt;点击这里&lt;/a&gt; 直接下载。目前在 Windows 11、Kubuntu 22.04、deepin v23 测试可以使用。&lt;/p&gt;
-- https://ntutn.top/posts/%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E6%A1%8C%E9%9D%A2%E6%82%AC%E6%B5%AE%E6%97%B6%E9%92%9F/ - CC BY-SA 4.0</description>
         </item>
     
     

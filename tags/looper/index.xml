@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Looper on 归零幻想</title>
+    <link>https://ntutn.top/tags/looper/</link>
+    <description>Recent content in Looper on 归零幻想</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <copyright>CC BY-SA 4.0</copyright>
+    <lastBuildDate>Mon, 17 Apr 2023 19:28:49 +0800</lastBuildDate><atom:link href="https://ntutn.top/tags/looper/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>executeUnconfined搞了什么飞机</title>
+      <link>https://ntutn.top/posts/executeunconfined%E6%90%9E%E4%BA%86%E4%BB%80%E4%B9%88%E9%A3%9E%E6%9C%BA/</link>
+      <pubDate>Mon, 17 Apr 2023 19:28:49 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/executeunconfined%E6%90%9E%E4%BA%86%E4%BB%80%E4%B9%88%E9%A3%9E%E6%9C%BA/</guid>
+      <description>在对Dispatchers.Main.immediate进行分析时，isDispatchNeeded正常分支很简单，但else分支足足套了3层，我说这里只是原地执行好没有说服力啊。所以一起来看看它这里在搞什么飞机。
+好吧，注释已经告诉我们了，就是为了防StackOverflow。那么它是怎样做到的呢？
+首先我们注意到这里有个EventLoop，它不是安卓中的looper，但其实与之类似。
+可以看到，类似于Looper，它也被保存到ThreadLocal。
+internal abstract class EventLoop : CoroutineDispatcher() { private var useCount = 0L private var unconfinedQueue: ArrayQueue&amp;lt;DispatchedTask&amp;lt;*&amp;gt;&amp;gt;? = null public fun dispatchUnconfined(task: DispatchedTask&amp;lt;*&amp;gt;) { val queue = unconfinedQueue ?: ArrayQueue&amp;lt;DispatchedTask&amp;lt;*&amp;gt;&amp;gt;().also { unconfinedQueue = it } queue.addLast(task) } public val isUnconfinedLoopActive: Boolean get() = useCount &amp;gt;= delta(unconfined = true) private fun delta(unconfined: Boolean) = if (unconfined) (1L shl 32) else 1L fun incrementUseCount(unconfined: Boolean = false) { useCount += delta(unconfined) if (!</description>
+    </item>
+    
+  </channel>
+</rss>

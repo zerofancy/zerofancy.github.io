@@ -7,7 +7,18 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Sat, 01 Jun 2019 03:11:37 +0800</lastBuildDate><atom:link href="https://ntutn.top/categories/%E7%AE%97%E6%B3%95/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 23 Apr 2023 01:35:25 +0800</lastBuildDate><atom:link href="https://ntutn.top/categories/%E7%AE%97%E6%B3%95/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>带权重的随机选择</title>
+      <link>https://ntutn.top/posts/%E5%B8%A6%E6%9D%83%E9%87%8D%E7%9A%84%E9%9A%8F%E6%9C%BA%E9%80%89%E6%8B%A9/</link>
+      <pubDate>Sun, 23 Apr 2023 01:35:25 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E5%B8%A6%E6%9D%83%E9%87%8D%E7%9A%84%E9%9A%8F%E6%9C%BA%E9%80%89%E6%8B%A9/</guid>
+      <description>最近有个需求，需要从列表中随机选择一个项目，但各个项目有一定权重，类似无保底的抽卡效果。这时候就羡慕Python，可以直接用
+from numpy.random import choice draw = choice(list_of_candidates, number_of_items_to_pick, p=probability_distribution) 实现 既然没有，就只能自己写了。原理很简单，就是将原始列表根据权重映射到线段上的各个区间中，然后线段上随机取一个点。
+fun &amp;lt;T&amp;gt; getRandomItemWeighted(list: List&amp;lt;T&amp;gt;, weights: List&amp;lt;Int&amp;gt;): T { require(list.isNotEmpty()) require(list.size == weights.size) val weightSum = weights.sum() if (weightSum &amp;lt;= 0) { return list.random() // shouldn&amp;#39;t reach here } var weight = 0 val value = random.nextInt(weights.sum()) list.forEachIndexed { index, t -&amp;gt; weight += weights[index] if (weight &amp;gt; value) { return t } } return list.random() // shouldn&amp;#39;t reach here } 验证正确性 准备一个列表，其权重为一单调数列。统计各项出现次数，然后做回归分析。若实现正确，各项出现次数之比应大致等于权重之比，即与列表项下标呈线性相关关系。</description>
+    </item>
+    
     <item>
       <title>稀疏矩阵的压缩存储</title>
       <link>https://ntutn.top/posts/%E7%A8%80%E7%96%8F%E7%9F%A9%E9%98%B5%E7%9A%84%E5%8E%8B%E7%BC%A9%E5%AD%98%E5%82%A8/</link>
