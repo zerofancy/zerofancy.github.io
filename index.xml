@@ -7,9 +7,331 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Sun, 23 Apr 2023 01:35:25 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 23 Apr 2023 02:47:18 +0800</lastBuildDate>
     
         <atom:link href="https://ntutn.top/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>Dispatcher拆解</title>
+        <link>https://ntutn.top/posts/dispatcher%E6%8B%86%E8%A7%A3/</link>
+        <pubDate>Sun, 23 Apr 2023 02:47:18 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/dispatcher%E6%8B%86%E8%A7%A3/</guid>
+        <description>归零幻想 https://ntutn.top/posts/dispatcher%E6%8B%86%E8%A7%A3/ -&lt;p&gt;首先让我们从一个小例子开始，界面只有一个输入框和一个图片，用户输入后把用户的输入转换成二维码显示给他。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2023/04/bb4ccab530d7d18b4a664f7c4ad3c49b.png&#34; alt=&#34;显示二维码demo&#34;&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;// in XXFragment
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onViewCreated&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onViewCreated()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; job: Job? = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    binding.input.doAfterTextChanged {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        job?.cancel()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        job = lifecycleScope.launchWhenResumed {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            delay(&lt;span style=&#34;color:#b452cd&#34;&gt;1200L&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            generateQRCode()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;suspend&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;generateQRCode&lt;/span&gt;() = withContext(&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Dispatchers&lt;/span&gt;.&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Main&lt;/span&gt;.immediate) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; url = binding.input.text &lt;span style=&#34;color:#228b22&#34;&gt;// 我在主线程
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; image = withContext(&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Dispatchers&lt;/span&gt;.Default) { &lt;span style=&#34;color:#228b22&#34;&gt;// 穿上马甲我在后台
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        runCatching { 
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            QRCode(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;value&lt;/span&gt;.trim()).render().nativeImage() &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;as&lt;/span&gt; Bitmap
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }.getOrNull()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    binding.imageView.setImageBitmap(image) &lt;span style=&#34;color:#228b22&#34;&gt;// 脱了马甲我又回主线程
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ol&gt;
+&lt;li&gt;Dispatcher到底是什么，它是如何完成线程切换的？&lt;/li&gt;
+&lt;li&gt;我们常用的Dispatcher有哪些，它们有哪些区别？&lt;/li&gt;
+&lt;li&gt;Dispatchers.Default是什么*，*大家常用Dispatchers.IO切换后台线程，他们有什么区别，我们应该用哪个？&lt;/li&gt;
+&lt;li&gt;Dispatchers.Main和Dispatchers.Main.immediate有什么区别？&lt;/li&gt;
+&lt;li&gt;launchWhenResumed起什么作用，它是如何工作的？&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1 id=&#34;dispatcher定义与线程切换实现&#34;&gt;Dispatcher定义与线程切换实现&lt;/h1&gt;
+&lt;p&gt;Dispatcher意为调度器，是Kotlin协程中的重要概念，它决定协程与线程如何进行管理，如何调度执行。我们知道协程以有限状态机管理，所谓挂起函数的挂起，其实意味着停在某个状态机节点上，而不阻塞线程。&lt;/p&gt;
+&lt;p&gt;在讲Dispatcher工作过程，或者说协程启动过程前，我们首先回顾此前Kotlin Coroutines系列分享中Suspend专题的内容。原有挂起函数中代码编译后是一个继承自SuspendLambda的状态机实现，通过多次调用invokeSuspend方法实现执行。&lt;/p&gt;
+&lt;p&gt;SuspendLambda就是编译后的协程代码，它继承自Continuation。后面分析中我们需要用到Continuation这个概念。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;源代码&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;(args: Array&amp;lt;String&amp;gt;) = runBlocking {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; a = &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; b = &lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; result1 = compute1(a, b)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; result2 = compute2(a, b)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    println(result1)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    println(result2)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;suspend&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;compute1&lt;/span&gt;(a: Int, b: Int) = withContext(&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Dispatchers&lt;/span&gt;.Default) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;&lt;span style=&#34;color:#707a7c&#34;&gt;@withContext&lt;/span&gt; a + b
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;suspend&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;compute2&lt;/span&gt;(a: Int, b: Int) = withContext(&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Dispatchers&lt;/span&gt;.Default) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;&lt;span style=&#34;color:#707a7c&#34;&gt;@withContext&lt;/span&gt; a - b
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;blockquote&gt;
+&lt;p&gt;编译结果（反编译整理后的伪代码，省略了无关内容）&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;final&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MainKt$main$1&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;extends&lt;/span&gt; SuspendLambda &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;implements&lt;/span&gt; Function2&amp;lt;CoroutineScope, Continuation&amp;lt;? &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt; Unit&amp;gt;, Object&amp;gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;final&lt;/span&gt; java.&lt;span style=&#34;color:#658b00&#34;&gt;lang&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;Object&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;invokeSuspend&lt;/span&gt;(&lt;span style=&#34;color:#707a7c&#34;&gt;@org.jetbrains.annotations.NotNull&lt;/span&gt; java.&lt;span style=&#34;color:#658b00&#34;&gt;lang&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;Object&lt;/span&gt; r7) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;switch&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;label&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#228b22&#34;&gt;// 计算compute1的代码
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#228b22&#34;&gt;// 计算compute2的代码
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#228b22&#34;&gt;// 输出println
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;default&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;throw&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; java.&lt;span style=&#34;color:#658b00&#34;&gt;lang&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;IllegalStateException&lt;/span&gt;()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;下面这张图就是协程启动的整体流程。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2023/04/dff77b0ab96b3d94973cca3edee80240.svg&#34; alt=&#34;协程启动过程&#34;&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;launch { &lt;span style=&#34;color:#228b22&#34;&gt;// 1. launch方法开始
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    ...
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &amp;lt;&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;T&lt;/span&gt;&amp;gt; &lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#008b45&#34;&gt;suspend&lt;/span&gt; () -&amp;gt; T).startCoroutineCancellable(completion: Continuation&amp;lt;T&amp;gt;): Unit = runSafely(completion) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    createCoroutineUnintercepted(completion).intercepted().resumeCancellableWith(&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Result&lt;/span&gt;.success(Unit))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;internal&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;abstract&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;ContinuationImpl&lt;/span&gt;(
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    completion: Continuation&amp;lt;Any?&amp;gt;?,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; _context: CoroutineContext?
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;) : BaseContinuationImpl(completion) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;intercepted&lt;/span&gt;(): Continuation&amp;lt;Any?&amp;gt; =
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        intercepted &lt;span style=&#34;color:#228b22&#34;&gt;// 2. 获取Dispatcher，并封装为DispatchedContinuation
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;            ?: (context[ContinuationInterceptor]?.interceptContinuation(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;) ?: &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                .also { intercepted = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;internal&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;DispatchedContinuation&lt;/span&gt;&amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;in&lt;/span&gt; T&amp;gt;(
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#707a7c&#34;&gt;@JvmField&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; dispatcher: CoroutineDispatcher,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#707a7c&#34;&gt;@JvmField&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; continuation: Continuation&amp;lt;T&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;) : DispatchedTask&amp;lt;T&amp;gt;(MODE_UNINITIALIZED), CoroutineStackFrame, Continuation&amp;lt;T&amp;gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;by&lt;/span&gt; continuation {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;inline&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;resumeCancellableWith&lt;/span&gt;(
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        result: Result&amp;lt;T&amp;gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;noinline&lt;/span&gt; onCancellation: ((cause: Throwable) -&amp;gt; Unit)?
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; state = result.toState(onCancellation)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (dispatcher.isDispatchNeeded(context)) { &lt;span style=&#34;color:#228b22&#34;&gt;// 3.判断是否需要dispatch 一般返回true
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;            _state = state
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            resumeMode = MODE_CANCELLABLE
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            dispatcher.dispatch(context, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;) &lt;span style=&#34;color:#228b22&#34;&gt;// 4. 走dispatch进行分发
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            executeUnconfined(state, MODE_CANCELLABLE) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (!resumeCancelled(state)) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    resumeUndispatchedWith(result) &lt;span style=&#34;color:#228b22&#34;&gt;// 5. 直接执行
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;blockquote&gt;
+&lt;p&gt;resume时CoroutineContext保存了协程上下文，其中包括当前dispatcher，所以可以保证挂起恢复后仍然是同一个线程（池）。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id=&#34;常见dispatcher种类&#34;&gt;常见Dispatcher种类&lt;/h1&gt;
+&lt;p&gt;我们上面用Dispatchers.Main和Dispatchers.Default来切换线程，这里我们一起看一下我们熟悉和不熟悉的Dispatcher有哪些&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2023/04/672ab237d0f110f9e9dd109e00d6890d.svg&#34; alt=&#34;Dispatcher种类&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;dispatchersmain&#34;&gt;Dispatchers.Main&lt;/h2&gt;
+&lt;p&gt;Dispatchers.Main在主线程执行任务，即安卓的MainThread，Swing中的EventDispatchThread，JavaFX中的Application Thread等等。它是通过SPI获取实现的()。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2023/04/e4b96640ea1363cf7f29874cf4351e71.svg&#34; alt=&#34;Dispatchers.Main类图&#34;&gt;&lt;/p&gt;
+&lt;p&gt;SPI实现因IO操作在安卓有性能问题，导致早期协程库因性能问题被人诟病。后来协程库版本升级，&lt;a href=&#34;https://github.com/Kotlin/kotlinx.coroutines/pull/1572&#34;&gt;官方通过引入FastServiceLoader解决了这个问题&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;在安卓中Dispatchers.Main由HandlerContext实现，它的dispatch方法就是用Handler直接post&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;internal&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;HandlerContext&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;constructor&lt;/span&gt;(
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; handler: Handler,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; name: String?,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; invokeImmediately: Boolean
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;) : HandlerDispatcher(), Delay {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; _immediate: HandlerContext? = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (invokeImmediately) &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; immediate: HandlerContext = _immediate ?:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        HandlerContext(handler, name, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;).also { _immediate = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt; }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;isDispatchNeeded&lt;/span&gt;(context: CoroutineContext): Boolean {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; !invokeImmediately || &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Looper&lt;/span&gt;.myLooper() != handler.looper
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;dispatch&lt;/span&gt;(context: CoroutineContext, block: Runnable) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        handler.post(block)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ...
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;dispatchersmain-vs-dispatchersmainimmediate&#34;&gt;Dispatchers.Main vs Dispatchers.Main.immediate&lt;/h2&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/Kotlin/kotlinx.coroutines/issues/1522&#34;&gt;Dispatchers.Main vs Dispatchers.Main.immediate&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;Dispatchers.Main.immediate&lt;/code&gt;就是对Dispatchers.Main的一个小优化，当当前已经在主线程的情况下，它就不再post到下一次循环中了，而是原地执行。&lt;a href=&#34;https://developer.android.com/jetpack/androidx/releases/lifecycle#2.2.0-alpha04&#34;&gt;androidx系列的库都已经使用上了&lt;/a&gt;，比如我们常用的lifecycleScope的Context就是*&lt;code&gt;SupervisorJob&lt;/code&gt;*&lt;code&gt;() + Dispatchers.Main.immediate&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;注意我们前文所述，isDispatchNeeded为false时代码会原地执行，那么我们看HandlerContext的实现&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;isDispatchNeeded&lt;/span&gt;(context: CoroutineContext): Boolean {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; !invokeImmediately || &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Looper&lt;/span&gt;.myLooper() != handler.looper
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果当前在同一个线程，则不走dispatch（post），而是直接原地执行。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;如果你是个初学者，无脑用Dispatchers.Main就没有问题。但如果你理解了immediate做了什么，那么用Dispatchers.Main.immediate也是个不错的选择。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;dispatchersdefault-vs-dispatchersio&#34;&gt;Dispatchers.Default vs Dispatchers.IO&lt;/h2&gt;
+&lt;p&gt;我开头的例子中，在进行二维码的计算的时候，使用Dispatchers.Default切换到了后台线程，而大家常用的都是Dispatchers.IO，他们有什么联系和区别呢？&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2023/04/84a2b4369031efa31cfa0ddc30745f6b.svg&#34; alt=&#34;Dispatcher IO 类图&#34;&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;（上图没有表现的是，DefaultIoScheduler实际上与DefaultScheduler共享线程池，但这是一项优化，我们分析时可以暂时忽略）&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Dispatchers.Default（DefaultScheduler）和Dispatchers.IO（DefaultIoScheduler）最终都继承自&lt;code&gt;kotlinx.coroutines.ExecutorCoroutineDispatcher&lt;/code&gt;，它持有一个线程池对象用来执行任务，也就是说，二者都是线程池实现，不同也就局限于线程池的参数不同。&lt;strong&gt;他们的参数都是通过读&lt;strong&gt;&lt;strong&gt;JVM&lt;/strong&gt;&lt;/strong&gt;环境变量得到的，在我的手机上测试这些变量都没有被设置，即都走默认值。&lt;/strong&gt;&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;项目&lt;/th&gt;
+&lt;th&gt;适用&lt;/th&gt;
+&lt;th&gt;线程数&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Dispatchers.Default&lt;/td&gt;
+&lt;td&gt;CPU密集型&lt;/td&gt;
+&lt;td&gt;max(CPU核心数, 2)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Dispatchers.IO&lt;/td&gt;
+&lt;td&gt;IO密集型&lt;/td&gt;
+&lt;td&gt;max(64, CPU核心数)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;可以看到，Dispatchers.Default创建CPU核心数个线程，而Dispatchers.IO创建64个线程执行任务，远多于Dispatchers.Default的线程数。&lt;/p&gt;
+&lt;p&gt;这是因为&lt;strong&gt;Dispatchers.Default适用于计算任务&lt;/strong&gt;，创建太多线程也不会加快计算速度，反而增加上下文切换成本。而&lt;strong&gt;Dispatchers.IO执行阻塞式任务&lt;/strong&gt;，同时执行多个任务对CPU并没有太大负担。&lt;/p&gt;
+&lt;p&gt;所以我们日常使用中，当处理计算任务，如计算高斯模糊，计算图片裁剪时，应使用Dispatchers.Default，而执行阻塞任务，如网络请求文件读写，应使用Dispatchers.IO。&lt;/p&gt;
+&lt;h2 id=&#34;dispatchersunconfined&#34;&gt;Dispatchers.UnConfined&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;confined意为受限的，Dispatchers.UnConfined为非受限的调度器&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;行为比较特殊，它会在当前线程启动任务，而挂起返回时直接在对应线程执行任务。该特性的实现是通过isDispatchNeeded固定返回false实现的。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-Kotlin&#34; data-lang=&#34;Kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;internal&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Unconfined&lt;/span&gt; : CoroutineDispatcher() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;isDispatchNeeded&lt;/span&gt;(context: CoroutineContext): Boolean = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ...
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;记得我们前面所说，isDispatchNeeded返回false意味着什么？意味着它会立即原地继续执行。Dispatchers.UnConfined不判断线程直接返回false，即它会在挂起返回线程执行。&lt;/p&gt;
+&lt;p&gt;首先看受限的Dispatcher执行情况&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-Kotlin&#34; data-lang=&#34;Kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;kotlinx.coroutines.*&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;() = runBlocking&amp;lt;Unit&amp;gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    launch {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Main: I&amp;#39;m working in thread &lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${Thread.currentThread().name}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        withContext(&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Dispatchers&lt;/span&gt;.IO) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;IO output&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Main: After delay in thread &lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${Thread.currentThread().name}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Main: I&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;&amp;#39;&lt;/span&gt;m working &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;in&lt;/span&gt; thread main &lt;span style=&#34;color:#707a7c&#34;&gt;@coroutine&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;#&lt;/span&gt;&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;IO output
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Main: After delay &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;in&lt;/span&gt; thread main &lt;span style=&#34;color:#707a7c&#34;&gt;@coroutine&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;#&lt;/span&gt;&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;而对于Dispatchers.Unconfined&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-Kotlin&#34; data-lang=&#34;Kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;kotlinx.coroutines.*&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;() = runBlocking&amp;lt;Unit&amp;gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    launch(&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Dispatchers&lt;/span&gt;.Unconfined) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Unconfined: I&amp;#39;m working in thread &lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${Thread.currentThread().name}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        withContext(&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Dispatchers&lt;/span&gt;.IO) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;IO output&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        println(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Unconfined: After delay in thread &lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;${Thread.currentThread().name}&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Unconfined: I&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;&amp;#39;&lt;/span&gt;m working &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;in&lt;/span&gt; thread main &lt;span style=&#34;color:#707a7c&#34;&gt;@coroutine&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;#&lt;/span&gt;&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;IO output
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Unconfined: After delay &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;in&lt;/span&gt; thread DefaultDispatcher-worker-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#707a7c&#34;&gt;@coroutine&lt;/span&gt;&lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;#&lt;/span&gt;&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;launchwhenresumedpausingdispatcher&#34;&gt;launchWhenResumed——PausingDispatcher&lt;/h1&gt;
+&lt;p&gt;回顾开头的例子，我们还用了launchWhenResumed来启动协程，它可以保证生命周期到达resume之后才执行，且pause后暂停，resume后再恢复，使用方便，能避免很多生命周期导致的问题。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-Kotlin&#34; data-lang=&#34;Kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onViewCreated&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onViewCreated()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; job: Job? = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    binding.input.doAfterTextChanged {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        job?.cancel()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        job = lifecycleScope.launchWhenResumed {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            delay(&lt;span style=&#34;color:#b452cd&#34;&gt;1200L&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            generateQRCode()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;其关键的实现就在于PausingDispatcher。PausingDispatcher中有一个队列来执行任务，任务先入队，检查当前状态，若满足才执行。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2023/04/34881044ef01321c1cd03e042f11949a.svg&#34; alt=&#34;PausingDispatcher&#34;&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;internal&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;PausingDispatcher&lt;/span&gt; : CoroutineDispatcher() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;internal&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; dispatchQueue = DispatchQueue()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;dispatch&lt;/span&gt;(context: CoroutineContext, block: Runnable) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        dispatchQueue.dispatchAndEnqueue(context, block) &lt;span style=&#34;color:#228b22&#34;&gt;// 入队执行
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ...
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#707a7c&#34;&gt;@AnyThread&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#707a7c&#34;&gt;@SuppressLint&lt;/span&gt;(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;WrongThread&amp;#34;&lt;/span&gt;) &lt;span style=&#34;color:#228b22&#34;&gt;// false negative, we are checking the thread
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;dispatchAndEnqueue&lt;/span&gt;(context: CoroutineContext, runnable: Runnable) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#228b22&#34;&gt;// 实际调用enqueue
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#707a7c&#34;&gt;@MainThread&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;enqueue&lt;/span&gt;(runnable: Runnable) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    check(queue.offer(runnable)) { &lt;span style=&#34;color:#228b22&#34;&gt;// 入队
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;cannot enqueue any more runnables&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    drainQueue() &lt;span style=&#34;color:#228b22&#34;&gt;// 尝试执行
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;internal&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;DispatchQueue&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;drainQueue&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (isDraining) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;try&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            isDraining = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt; (queue.isNotEmpty()) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (!canRun()) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;break&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                queue.poll()?.run()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;finally&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            isDraining = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#707a7c&#34;&gt;@MainThread&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;canRun&lt;/span&gt;() = finished || !paused
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;至此，我们知道暂停其实就是只入队不执行，这样在生命周期暂停时，监听代码不会继续执行。但监听注册并没有取消，他们只是被放到了一个队列中，待resume时执行。&lt;/p&gt;
+&lt;h1 id=&#34;拓展阅读&#34;&gt;拓展阅读&lt;/h1&gt;
+&lt;h2 id=&#34;自定义一个dispatcher&#34;&gt;自定义一个Dispatcher&lt;/h2&gt;
+&lt;p&gt;听完前文的分享，我们已经初步揭开了Dispatcher的神秘面纱，那接下来我们就尝试自己实现一个Dispatcher吧！&lt;/p&gt;
+&lt;h3 id=&#34;基于handlerthread的dispatcher&#34;&gt;基于HandlerThread的Dispatcher&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-Kotlin&#34; data-lang=&#34;Kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; computeThread = HandlerThread(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;compute&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; Dispatchers.SingleCompute = HandlerContext(computeThread.looper.asHandler())
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;基于线程池的dispatcher&#34;&gt;基于线程池的Dispatcher&lt;/h3&gt;
+&lt;p&gt;官方有个拓展方法，可以快速获取基于线程池的Dispatcher。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-Kotlin&#34; data-lang=&#34;Kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;ExecutorService&lt;/span&gt;.asCoroutineDispatcher(): ExecutorCoroutineDispatcher =
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ExecutorCoroutineDispatcherImpl(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;即我们使用时&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-Kotlin&#34; data-lang=&#34;Kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; executor = &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Executors&lt;/span&gt;.newFixedThreadPool(&lt;span style=&#34;color:#b452cd&#34;&gt;15&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; Dispatchers.MyCompute = executor.asCoroutineDispatcher()
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;限制同时执行任务数&#34;&gt;限制同时执行任务数&lt;/h3&gt;
+&lt;p&gt;虽然我们已经学会了如何自己借助线程池实现一个Dispatcher，但定义过多的线程池并不加快执行，有害无益。如果只是想限制同时执行的任务数，官方新增下面的方法（实验API）。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-Kotlin&#34; data-lang=&#34;Kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; Dispatchers.MyCompute = &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Dispatchers&lt;/span&gt;.&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Default&lt;/span&gt;.limitedParallelism(&lt;span style=&#34;color:#b452cd&#34;&gt;3&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;新的Dispatcher仍然用Dispatchers.Default分发任务，但会限制同时执行的任务数。其实Dispatchers.IO就是这样实现的。&lt;/p&gt;
+- https://ntutn.top/posts/dispatcher%E6%8B%86%E8%A7%A3/ - CC BY-SA 4.0</description>
+        </item>
     
     
     
@@ -800,43 +1122,6 @@
 &lt;/div&gt;
 
 - https://ntutn.top/think/%E6%8D%90%E8%B5%A0/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>Kotlin的随机数不随机</title>
-        <link>https://ntutn.top/posts/kotlin%E7%9A%84%E9%9A%8F%E6%9C%BA%E6%95%B0%E4%B8%8D%E9%9A%8F%E6%9C%BA/</link>
-        <pubDate>Fri, 16 Dec 2022 17:42:29 +0800</pubDate>
-        
-        <guid>https://ntutn.top/posts/kotlin%E7%9A%84%E9%9A%8F%E6%9C%BA%E6%95%B0%E4%B8%8D%E9%9A%8F%E6%9C%BA/</guid>
-        <description>归零幻想 https://ntutn.top/posts/kotlin%E7%9A%84%E9%9A%8F%E6%9C%BA%E6%95%B0%E4%B8%8D%E9%9A%8F%E6%9C%BA/ -&lt;p&gt;大学，我们学校有3座餐厅，然后每个餐厅又有多层楼，可以说是条件还不错了。除了考前一周都无所事事的我们，每天面临最大的难题就是去哪儿吃，吃什么。&lt;/p&gt;
-&lt;p&gt;既然大家都是学软件的，那就写个app来解决这个问题吧。另外两个老哥（ &lt;a href=&#34;https://www.ruiovo.top/&#34;&gt;@ruiOVO&lt;/a&gt; 、&lt;a href=&#34;https://xyx6.top/&#34;&gt;@xyx&lt;/a&gt; ）主要是写前端、服务端的，于是这个重任就交到了我身上。&lt;/p&gt;
-&lt;p&gt;于是大聪明我一拍脑门就写出来了，&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;// 实际上是写了个安卓app, 这里只是示意
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; list = listOf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;荟萃餐厅&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;玉兰餐厅&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;唐岛湾餐厅&amp;#34;&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; floor = listOf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1楼&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;2楼&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;3楼&amp;#34;&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;println(list.random() + floor.random())
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;简洁优雅，不用算上下界，我们Kotlin真是太厉害辣！&lt;/p&gt;
-&lt;p&gt;然后我们就在荟萃餐厅一楼连续吃了3天……小伙伴们都不相信我的编程水平了。&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;故事就到这里，那么问题在哪里呢？&lt;/p&gt;
-&lt;p&gt;随机数不随机，那么肯定是初始化时没有引入不同seed。&lt;code&gt;list.random()&lt;/code&gt;方法默认使用的&lt;code&gt;Random&lt;/code&gt;对象定义在kotlin stdlib的&lt;code&gt;Random.kt&lt;/code&gt;文件中&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2022/12/75808ea79f529b24c995aeeee704952f.png&#34; alt=&#34;image-20221216183431623&#34;&gt;&lt;/p&gt;
-&lt;p&gt;接下来找到这个&lt;code&gt;defaultPlatformRandom&lt;/code&gt;的实现&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2022/12/cc0e790071ffccc6f37c25618ce37419.png&#34; alt=&#34;image-20221216202117167&#34;&gt;&lt;/p&gt;
-&lt;p&gt;这东西最终用的是&lt;code&gt;PlatformThreadLocalRandom&lt;/code&gt;，而Android的ThreadLocalRandom中出了个bug——他在zygote进程中初始化，所以每个程序打开时都是相同的初始状态。&lt;/p&gt;
-&lt;p&gt;我们可以在网上找到相关的讨论：&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://www.reddit.com/r/androiddev/comments/x8z9r1/comment/innw882/?utm_source=share&amp;amp;utm_medium=web2x&amp;amp;context=3&#34;&gt;https://www.reddit.com/r/androiddev/comments/x8z9r1/comment/innw882/?utm_source=share&amp;amp;utm_medium=web2x&amp;amp;context=3&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://youtrack.jetbrains.com/issue/KT-52618/ThreadLocalRandom-is-not-a-good-source-of-randomness-on-Android-before-SDK-34-so-dont-use-it-for-Kotlin-Random&#34;&gt;https://youtrack.jetbrains.com/issue/KT-52618/ThreadLocalRandom-is-not-a-good-source-of-randomness-on-Android-before-SDK-34-so-dont-use-it-for-Kotlin-Random&lt;/a&gt;&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;解决：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;避免使用List.random、Random.nextXxx之类的方法，他们最终都是调用这个PlatformThreadLocalRandom，每次需要随机数时都创建一个Random对象，传入seed：&lt;code&gt;val random = Random(System.currentTimeMills());random.nextInt()&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;升级Kotlin版本，根据官方的缺陷跟踪器，该问题兜底修复于1.7.20版本&lt;/li&gt;
-&lt;li&gt;使用字节码修改的方法，编译时替换掉相关的调用，比如可以用&lt;a href=&#34;https://github.com/eleme/lancet&#34;&gt;lancet&lt;/a&gt;来处理&lt;/li&gt;
-&lt;/ol&gt;
-- https://ntutn.top/posts/kotlin%E7%9A%84%E9%9A%8F%E6%9C%BA%E6%95%B0%E4%B8%8D%E9%9A%8F%E6%9C%BA/ - CC BY-SA 4.0</description>
         </item>
     
     

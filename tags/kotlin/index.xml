@@ -7,7 +7,21 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Sun, 23 Apr 2023 01:35:25 +0800</lastBuildDate><atom:link href="https://ntutn.top/tags/kotlin/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 23 Apr 2023 02:47:18 +0800</lastBuildDate><atom:link href="https://ntutn.top/tags/kotlin/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Dispatcher拆解</title>
+      <link>https://ntutn.top/posts/dispatcher%E6%8B%86%E8%A7%A3/</link>
+      <pubDate>Sun, 23 Apr 2023 02:47:18 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/dispatcher%E6%8B%86%E8%A7%A3/</guid>
+      <description>首先让我们从一个小例子开始，界面只有一个输入框和一个图片，用户输入后把用户的输入转换成二维码显示给他。
+// in XXFragment override fun onViewCreated() { super.onViewCreated() var job: Job? = null binding.input.doAfterTextChanged { job?.cancel() job = lifecycleScope.launchWhenResumed { delay(1200L) generateQRCode() } } } private suspend fun generateQRCode() = withContext(Dispatchers.Main.immediate) { val url = binding.input.text // 我在主线程 val image = withContext(Dispatchers.Default) { // 穿上马甲我在后台 runCatching { QRCode(value.trim()).render().nativeImage() as Bitmap }.getOrNull() } binding.imageView.setImageBitmap(image) // 脱了马甲我又回主线程 } Dispatcher到底是什么，它是如何完成线程切换的？ 我们常用的Dispatcher有哪些，它们有哪些区别？ Dispatchers.Default是什么*，*大家常用Dispatchers.IO切换后台线程，他们有什么区别，我们应该用哪个？ Dispatchers.Main和Dispatchers.Main.immediate有什么区别？ launchWhenResumed起什么作用，它是如何工作的？ Dispatcher定义与线程切换实现 Dispatcher意为调度器，是Kotlin协程中的重要概念，它决定协程与线程如何进行管理，如何调度执行。我们知道协程以有限状态机管理，所谓挂起函数的挂起，其实意味着停在某个状态机节点上，而不阻塞线程。
+在讲Dispatcher工作过程，或者说协程启动过程前，我们首先回顾此前Kotlin Coroutines系列分享中Suspend专题的内容。原有挂起函数中代码编译后是一个继承自SuspendLambda的状态机实现，通过多次调用invokeSuspend方法实现执行。
+SuspendLambda就是编译后的协程代码，它继承自Continuation。后面分析中我们需要用到Continuation这个概念。
+源代码
+fun main(args: Array&amp;lt;String&amp;gt;) = runBlocking { val a = 1 val b = 2 val result1 = compute1(a, b) val result2 = compute2(a, b) println(result1) println(result2) } suspend fun compute1(a: Int, b: Int) = withContext(Dispatchers.</description>
+    </item>
+    
     <item>
       <title>带权重的随机选择</title>
       <link>https://ntutn.top/posts/%E5%B8%A6%E6%9D%83%E9%87%8D%E7%9A%84%E9%9A%8F%E6%9C%BA%E9%80%89%E6%8B%A9/</link>

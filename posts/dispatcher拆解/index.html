@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html><head>
+<title>Dispatcher拆解</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="这是公司里的协程系列分享课程，不过这里只有Dispatcher部分，因为这部分是我做的。">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+<meta property="og:title" content="Dispatcher拆解" />
+<meta property="og:description" content="这是公司里的协程系列分享课程，不过这里只有Dispatcher部分，因为这部分是我做的。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ntutn.top/posts/dispatcher%E6%8B%86%E8%A7%A3/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-04-23T02:47:18+08:00" />
+<meta property="article:modified_time" content="2023-04-23T02:47:18+08:00" /><meta property="og:site_name" content="归零幻想" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+<link rel="icon" href="//images.ntutn.top/favicon.ico">
+
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="/scss/dark-mode.min.cb53f1bee2b8900cb4f082afbf00175d6618f281cf9a2fe8619e3b52d20b5721.css" integrity="sha256-y1PxvuK4kAy08IKvvwAXXWYY8oHPmi/oYZ47UtILVyE=" media="screen">
+
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+<script defer
+	src='https://static.cloudflareinsights.com/beacon.min.js'
+	data-cf-beacon='{"token": 5a03d307f5214109a1e7c8b2cf306a3d'>
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+    pre code {
+        color: black;
+        -comment: "感谢评论区 https://github.com/lx200916 指出博客代码块深色模式问题";
+    }
+</style>
+<script src="https://unpkg.com/zoomtastic@2.2.1"></script>
+<script src="https://unpkg.com/kotlin-playground@1" data-selector="code.language-kotlin"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function(event) { 
+        document.querySelectorAll("div.post-body-wrapper img").forEach(function(element){
+            element.setAttribute("zoomtastic", true)
+            element.style.maxWidth="60%"
+        })
+		
+		Zoomtastic.mount({
+			size: '95%',
+			easing: 'ease',
+			duration: 300,
+			background: 'rgba(0, 0, 0, 0.9)',
+			filter: 'drop-shadow(0 2px 16px rgba(0, 0, 0, 0.3))',
+			animation: 'slide' 
+		});
+		
+		Zoomtastic.listen('[zoomtastic]', 'src');
+    });
+
+	
+	var _hmt = _hmt || [];
+	(function() {
+	var hm = document.createElement("script");
+	hm.src = "https://hm.baidu.com/hm.js?298c58938f9266e6098936c4f71a9a83";
+	var s = document.getElementsByTagName("script")[0]; 
+	s.parentNode.insertBefore(hm, s);
+	})();
+
+</script>
+
+</head>
+<body>
+    	<div id="app"><div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/%E7%9F%A5%E8%AF%86%E4%BD%93%E7%B3%BB">
+                    知识体系
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
+                    标签
+                </a>
+                
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    归档
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/friends">
+                    友链
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/about">
+                    关于
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/index.xml">
+                    RSS
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#dispatcher%e5%ae%9a%e4%b9%89%e4%b8%8e%e7%ba%bf%e7%a8%8b%e5%88%87%e6%8d%a2%e5%ae%9e%e7%8e%b0" class="nav-dispatcher定义与线程切换实现">
+									Dispatcher定义与线程切换实现
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%b8%b8%e8%a7%81dispatcher%e7%a7%8d%e7%b1%bb" class="nav-常见dispatcher种类">
+									常见Dispatcher种类
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#dispatchersmain" class="nav-dispatchersmain">
+									Dispatchers.Main
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#dispatchersmain-vs-dispatchersmainimmediate" class="nav-dispatchersmain-vs-dispatchersmainimmediate">
+									Dispatchers.Main vs Dispatchers.Main.immediate
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#dispatchersdefault-vs-dispatchersio" class="nav-dispatchersdefault-vs-dispatchersio">
+									Dispatchers.Default vs Dispatchers.IO
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#dispatchersunconfined" class="nav-dispatchersunconfined">
+									Dispatchers.UnConfined
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#launchwhenresumedpausingdispatcher" class="nav-launchwhenresumedpausingdispatcher">
+									launchWhenResumed——PausingDispatcher
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%8b%93%e5%b1%95%e9%98%85%e8%af%bb" class="nav-拓展阅读">
+									拓展阅读
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e8%87%aa%e5%ae%9a%e4%b9%89%e4%b8%80%e4%b8%aadispatcher" class="nav-自定义一个dispatcher">
+									自定义一个Dispatcher
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%9f%ba%e4%ba%8ehandlerthread%e7%9a%84dispatcher" class="nav-基于handlerthread的dispatcher">
+									基于HandlerThread的Dispatcher
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%9f%ba%e4%ba%8e%e7%ba%bf%e7%a8%8b%e6%b1%a0%e7%9a%84dispatcher" class="nav-基于线程池的dispatcher">
+									基于线程池的Dispatcher
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e9%99%90%e5%88%b6%e5%90%8c%e6%97%b6%e6%89%a7%e8%a1%8c%e4%bb%bb%e5%8a%a1%e6%95%b0" class="nav-限制同时执行任务数">
+									限制同时执行任务数
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://ntutn.top/">
+            归零幻想
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://ntutn.top/">
+        <div class="single-column-header-title">归零幻想</div>
+        
+        <div class="single-column-header-subtitle">零点还不算熬夜</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+                
+            
+
+            <div class="post-head-wrapper"
+                
+                    
+                    
+                    style="background-image: url('https://images.ntutn.top/2023/04/672ab237d0f110f9e9dd109e00d6890d.svg')"
+                    
+                
+            >
+                <div class="post-title">
+                    Dispatcher拆解
+                    
+                    <div class="post-subtitle">
+                        这是公司里的协程系列分享课程，不过这里只有Dispatcher部分，因为这部分是我做的。
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2023-04-23 02:47
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/%E5%88%86%E4%BA%AB">分享</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/kotlin">Kotlin</a>
+                                &nbsp;
+                            
+                                <a href="/tags/%E5%8D%8F%E7%A8%8B">协程</a>
+                                &nbsp;
+                            
+                                <a href="/tags/dispatcher">Dispatcher</a>
+                                &nbsp;
+                            
+                        
+                        
+                            <i class="material-icons" style="">schedule</i>
+                            
+
+                            
+                            
+
+                            
+                            17 min
+                            
+                            15 s.
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <p>首先让我们从一个小例子开始，界面只有一个输入框和一个图片，用户输入后把用户的输入转换成二维码显示给他。</p>
+<p><img src="https://images.ntutn.top/2023/04/bb4ccab530d7d18b4a664f7c4ad3c49b.png" alt="显示二维码demo"></p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#228b22">// in XXFragment
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onViewCreated</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">super</span>.onViewCreated()
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">var</span> job: Job? = <span style="color:#8b008b;font-weight:bold">null</span>
+</span></span><span style="display:flex;"><span>    binding.input.doAfterTextChanged {
+</span></span><span style="display:flex;"><span>        job?.cancel()
+</span></span><span style="display:flex;"><span>        job = lifecycleScope.launchWhenResumed {
+</span></span><span style="display:flex;"><span>            delay(<span style="color:#b452cd">1200L</span>)
+</span></span><span style="display:flex;"><span>            generateQRCode()
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">suspend</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">generateQRCode</span>() = withContext(<span style="color:#008b45;font-weight:bold">Dispatchers</span>.<span style="color:#008b45;font-weight:bold">Main</span>.immediate) {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> url = binding.input.text <span style="color:#228b22">// 我在主线程
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    <span style="color:#8b008b;font-weight:bold">val</span> image = withContext(<span style="color:#008b45;font-weight:bold">Dispatchers</span>.Default) { <span style="color:#228b22">// 穿上马甲我在后台
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>        runCatching { 
+</span></span><span style="display:flex;"><span>            QRCode(<span style="color:#8b008b;font-weight:bold">value</span>.trim()).render().nativeImage() <span style="color:#8b008b;font-weight:bold">as</span> Bitmap
+</span></span><span style="display:flex;"><span>        }.getOrNull()
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    binding.imageView.setImageBitmap(image) <span style="color:#228b22">// 脱了马甲我又回主线程
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>}
+</span></span></code></pre></div><ol>
+<li>Dispatcher到底是什么，它是如何完成线程切换的？</li>
+<li>我们常用的Dispatcher有哪些，它们有哪些区别？</li>
+<li>Dispatchers.Default是什么*，*大家常用Dispatchers.IO切换后台线程，他们有什么区别，我们应该用哪个？</li>
+<li>Dispatchers.Main和Dispatchers.Main.immediate有什么区别？</li>
+<li>launchWhenResumed起什么作用，它是如何工作的？</li>
+</ol>
+<h1 id="dispatcher定义与线程切换实现">Dispatcher定义与线程切换实现</h1>
+<p>Dispatcher意为调度器，是Kotlin协程中的重要概念，它决定协程与线程如何进行管理，如何调度执行。我们知道协程以有限状态机管理，所谓挂起函数的挂起，其实意味着停在某个状态机节点上，而不阻塞线程。</p>
+<p>在讲Dispatcher工作过程，或者说协程启动过程前，我们首先回顾此前Kotlin Coroutines系列分享中Suspend专题的内容。原有挂起函数中代码编译后是一个继承自SuspendLambda的状态机实现，通过多次调用invokeSuspend方法实现执行。</p>
+<p>SuspendLambda就是编译后的协程代码，它继承自Continuation。后面分析中我们需要用到Continuation这个概念。</p>
+<blockquote>
+<p>源代码</p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">main</span>(args: Array&lt;String&gt;) = runBlocking {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> a = <span style="color:#b452cd">1</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> b = <span style="color:#b452cd">2</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> result1 = compute1(a, b)
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">val</span> result2 = compute2(a, b)
+</span></span><span style="display:flex;"><span>    println(result1)
+</span></span><span style="display:flex;"><span>    println(result2)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">suspend</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">compute1</span>(a: Int, b: Int) = withContext(<span style="color:#008b45;font-weight:bold">Dispatchers</span>.Default) {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">return</span><span style="color:#707a7c">@withContext</span> a + b
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">suspend</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">compute2</span>(a: Int, b: Int) = withContext(<span style="color:#008b45;font-weight:bold">Dispatchers</span>.Default) {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">return</span><span style="color:#707a7c">@withContext</span> a - b
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><blockquote>
+<p>编译结果（反编译整理后的伪代码，省略了无关内容）</p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">final</span> <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">MainKt$main$1</span> <span style="color:#8b008b;font-weight:bold">extends</span> SuspendLambda <span style="color:#8b008b;font-weight:bold">implements</span> Function2&lt;CoroutineScope, Continuation&lt;? <span style="color:#8b008b;font-weight:bold">super</span> Unit&gt;, Object&gt; {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">public</span> <span style="color:#8b008b;font-weight:bold">final</span> java.<span style="color:#658b00">lang</span>.<span style="color:#658b00">Object</span> <span style="color:#008b45">invokeSuspend</span>(<span style="color:#707a7c">@org.jetbrains.annotations.NotNull</span> java.<span style="color:#658b00">lang</span>.<span style="color:#658b00">Object</span> r7) {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">switch</span>(<span style="color:#8b008b;font-weight:bold">this</span>.<span style="color:#658b00">label</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">0</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#228b22">// 计算compute1的代码
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    <span style="color:#8b008b;font-weight:bold">return</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">1</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#228b22">// 计算compute2的代码
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    <span style="color:#8b008b;font-weight:bold">return</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">case</span> <span style="color:#b452cd">2</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#228b22">// 输出println
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    <span style="color:#8b008b;font-weight:bold">return</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">default</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">throw</span> <span style="color:#8b008b;font-weight:bold">new</span> java.<span style="color:#658b00">lang</span>.<span style="color:#658b00">IllegalStateException</span>()
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>下面这张图就是协程启动的整体流程。</p>
+<p><img src="https://images.ntutn.top/2023/04/dff77b0ab96b3d94973cca3edee80240.svg" alt="协程启动过程"></p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span>launch { <span style="color:#228b22">// 1. launch方法开始
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    ...
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">public</span> <span style="color:#8b008b;font-weight:bold">fun</span> &lt;<span style="color:#008b45;font-weight:bold">T</span>&gt; <span style="color:#a61717;background-color:#e3d2d2">(</span><span style="color:#008b45">suspend</span> () -&gt; T).startCoroutineCancellable(completion: Continuation&lt;T&gt;): Unit = runSafely(completion) {
+</span></span><span style="display:flex;"><span>    createCoroutineUnintercepted(completion).intercepted().resumeCancellableWith(<span style="color:#008b45;font-weight:bold">Result</span>.success(Unit))
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">internal</span> <span style="color:#8b008b;font-weight:bold">abstract</span> <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">ContinuationImpl</span>(
+</span></span><span style="display:flex;"><span>    completion: Continuation&lt;Any?&gt;?,
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> _context: CoroutineContext?
+</span></span><span style="display:flex;"><span>) : BaseContinuationImpl(completion) {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">public</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">intercepted</span>(): Continuation&lt;Any?&gt; =
+</span></span><span style="display:flex;"><span>        intercepted <span style="color:#228b22">// 2. 获取Dispatcher，并封装为DispatchedContinuation
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>            ?: (context[ContinuationInterceptor]?.interceptContinuation(<span style="color:#8b008b;font-weight:bold">this</span>) ?: <span style="color:#8b008b;font-weight:bold">this</span>)
+</span></span><span style="display:flex;"><span>                .also { intercepted = <span style="color:#8b008b;font-weight:bold">it</span> }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">internal</span> <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">DispatchedContinuation</span>&lt;<span style="color:#8b008b;font-weight:bold">in</span> T&gt;(
+</span></span><span style="display:flex;"><span>    <span style="color:#707a7c">@JvmField</span> <span style="color:#8b008b;font-weight:bold">val</span> dispatcher: CoroutineDispatcher,
+</span></span><span style="display:flex;"><span>    <span style="color:#707a7c">@JvmField</span> <span style="color:#8b008b;font-weight:bold">val</span> continuation: Continuation&lt;T&gt;
+</span></span><span style="display:flex;"><span>) : DispatchedTask&lt;T&gt;(MODE_UNINITIALIZED), CoroutineStackFrame, Continuation&lt;T&gt; <span style="color:#8b008b;font-weight:bold">by</span> continuation {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">inline</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">resumeCancellableWith</span>(
+</span></span><span style="display:flex;"><span>        result: Result&lt;T&gt;,
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">noinline</span> onCancellation: ((cause: Throwable) -&gt; Unit)?
+</span></span><span style="display:flex;"><span>    ) {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">val</span> state = result.toState(onCancellation)
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span> (dispatcher.isDispatchNeeded(context)) { <span style="color:#228b22">// 3.判断是否需要dispatch 一般返回true
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>            _state = state
+</span></span><span style="display:flex;"><span>            resumeMode = MODE_CANCELLABLE
+</span></span><span style="display:flex;"><span>            dispatcher.dispatch(context, <span style="color:#8b008b;font-weight:bold">this</span>) <span style="color:#228b22">// 4. 走dispatch进行分发
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>        } <span style="color:#8b008b;font-weight:bold">else</span> {
+</span></span><span style="display:flex;"><span>            executeUnconfined(state, MODE_CANCELLABLE) {
+</span></span><span style="display:flex;"><span>                <span style="color:#8b008b;font-weight:bold">if</span> (!resumeCancelled(state)) {
+</span></span><span style="display:flex;"><span>                    resumeUndispatchedWith(result) <span style="color:#228b22">// 5. 直接执行
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>                }
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><blockquote>
+<p>resume时CoroutineContext保存了协程上下文，其中包括当前dispatcher，所以可以保证挂起恢复后仍然是同一个线程（池）。</p>
+</blockquote>
+<h1 id="常见dispatcher种类">常见Dispatcher种类</h1>
+<p>我们上面用Dispatchers.Main和Dispatchers.Default来切换线程，这里我们一起看一下我们熟悉和不熟悉的Dispatcher有哪些</p>
+<p><img src="https://images.ntutn.top/2023/04/672ab237d0f110f9e9dd109e00d6890d.svg" alt="Dispatcher种类"></p>
+<h2 id="dispatchersmain">Dispatchers.Main</h2>
+<p>Dispatchers.Main在主线程执行任务，即安卓的MainThread，Swing中的EventDispatchThread，JavaFX中的Application Thread等等。它是通过SPI获取实现的()。</p>
+<p><img src="https://images.ntutn.top/2023/04/e4b96640ea1363cf7f29874cf4351e71.svg" alt="Dispatchers.Main类图"></p>
+<p>SPI实现因IO操作在安卓有性能问题，导致早期协程库因性能问题被人诟病。后来协程库版本升级，<a href="https://github.com/Kotlin/kotlinx.coroutines/pull/1572">官方通过引入FastServiceLoader解决了这个问题</a>。</p>
+<p>在安卓中Dispatchers.Main由HandlerContext实现，它的dispatch方法就是用Handler直接post</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">internal</span> <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">HandlerContext</span> <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">constructor</span>(
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> handler: Handler,
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> name: String?,
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> invokeImmediately: Boolean
+</span></span><span style="display:flex;"><span>) : HandlerDispatcher(), Delay {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">var</span> _immediate: HandlerContext? = <span style="color:#8b008b;font-weight:bold">if</span> (invokeImmediately) <span style="color:#8b008b;font-weight:bold">this</span> <span style="color:#8b008b;font-weight:bold">else</span> <span style="color:#8b008b;font-weight:bold">null</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">val</span> immediate: HandlerContext = _immediate ?:
+</span></span><span style="display:flex;"><span>        HandlerContext(handler, name, <span style="color:#8b008b;font-weight:bold">true</span>).also { _immediate = <span style="color:#8b008b;font-weight:bold">it</span> }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">isDispatchNeeded</span>(context: CoroutineContext): Boolean {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span> !invokeImmediately || <span style="color:#008b45;font-weight:bold">Looper</span>.myLooper() != handler.looper
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">dispatch</span>(context: CoroutineContext, block: Runnable) {
+</span></span><span style="display:flex;"><span>        handler.post(block)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    ...
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="dispatchersmain-vs-dispatchersmainimmediate">Dispatchers.Main vs Dispatchers.Main.immediate</h2>
+<p><a href="https://github.com/Kotlin/kotlinx.coroutines/issues/1522">Dispatchers.Main vs Dispatchers.Main.immediate</a></p>
+<p><code>Dispatchers.Main.immediate</code>就是对Dispatchers.Main的一个小优化，当当前已经在主线程的情况下，它就不再post到下一次循环中了，而是原地执行。<a href="https://developer.android.com/jetpack/androidx/releases/lifecycle#2.2.0-alpha04">androidx系列的库都已经使用上了</a>，比如我们常用的lifecycleScope的Context就是*<code>SupervisorJob</code>*<code>() + Dispatchers.Main.immediate</code>。</p>
+<p>注意我们前文所述，isDispatchNeeded为false时代码会原地执行，那么我们看HandlerContext的实现</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">isDispatchNeeded</span>(context: CoroutineContext): Boolean {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">return</span> !invokeImmediately || <span style="color:#008b45;font-weight:bold">Looper</span>.myLooper() != handler.looper
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>如果当前在同一个线程，则不走dispatch（post），而是直接原地执行。</p>
+<blockquote>
+<p>如果你是个初学者，无脑用Dispatchers.Main就没有问题。但如果你理解了immediate做了什么，那么用Dispatchers.Main.immediate也是个不错的选择。</p>
+</blockquote>
+<h2 id="dispatchersdefault-vs-dispatchersio">Dispatchers.Default vs Dispatchers.IO</h2>
+<p>我开头的例子中，在进行二维码的计算的时候，使用Dispatchers.Default切换到了后台线程，而大家常用的都是Dispatchers.IO，他们有什么联系和区别呢？</p>
+<p><img src="https://images.ntutn.top/2023/04/84a2b4369031efa31cfa0ddc30745f6b.svg" alt="Dispatcher IO 类图"></p>
+<blockquote>
+<p>（上图没有表现的是，DefaultIoScheduler实际上与DefaultScheduler共享线程池，但这是一项优化，我们分析时可以暂时忽略）</p>
+</blockquote>
+<p>Dispatchers.Default（DefaultScheduler）和Dispatchers.IO（DefaultIoScheduler）最终都继承自<code>kotlinx.coroutines.ExecutorCoroutineDispatcher</code>，它持有一个线程池对象用来执行任务，也就是说，二者都是线程池实现，不同也就局限于线程池的参数不同。<strong>他们的参数都是通过读<strong><strong>JVM</strong></strong>环境变量得到的，在我的手机上测试这些变量都没有被设置，即都走默认值。</strong></p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>适用</th>
+<th>线程数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dispatchers.Default</td>
+<td>CPU密集型</td>
+<td>max(CPU核心数, 2)</td>
+</tr>
+<tr>
+<td>Dispatchers.IO</td>
+<td>IO密集型</td>
+<td>max(64, CPU核心数)</td>
+</tr>
+</tbody>
+</table>
+<p>可以看到，Dispatchers.Default创建CPU核心数个线程，而Dispatchers.IO创建64个线程执行任务，远多于Dispatchers.Default的线程数。</p>
+<p>这是因为<strong>Dispatchers.Default适用于计算任务</strong>，创建太多线程也不会加快计算速度，反而增加上下文切换成本。而<strong>Dispatchers.IO执行阻塞式任务</strong>，同时执行多个任务对CPU并没有太大负担。</p>
+<p>所以我们日常使用中，当处理计算任务，如计算高斯模糊，计算图片裁剪时，应使用Dispatchers.Default，而执行阻塞任务，如网络请求文件读写，应使用Dispatchers.IO。</p>
+<h2 id="dispatchersunconfined">Dispatchers.UnConfined</h2>
+<blockquote>
+<p>confined意为受限的，Dispatchers.UnConfined为非受限的调度器</p>
+</blockquote>
+<p>行为比较特殊，它会在当前线程启动任务，而挂起返回时直接在对应线程执行任务。该特性的实现是通过isDispatchNeeded固定返回false实现的。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-Kotlin" data-lang="Kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">internal</span> <span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#008b45;font-weight:bold">Unconfined</span> : CoroutineDispatcher() {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">isDispatchNeeded</span>(context: CoroutineContext): Boolean = <span style="color:#8b008b;font-weight:bold">false</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    ...
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>记得我们前面所说，isDispatchNeeded返回false意味着什么？意味着它会立即原地继续执行。Dispatchers.UnConfined不判断线程直接返回false，即它会在挂起返回线程执行。</p>
+<p>首先看受限的Dispatcher执行情况</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-Kotlin" data-lang="Kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">kotlinx.coroutines.*</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">main</span>() = runBlocking&lt;Unit&gt; {
+</span></span><span style="display:flex;"><span>    launch {
+</span></span><span style="display:flex;"><span>        println(<span style="color:#cd5555">&#34;Main: I&#39;m working in thread </span><span style="color:#cd5555">${Thread.currentThread().name}</span><span style="color:#cd5555">&#34;</span>)
+</span></span><span style="display:flex;"><span>        withContext(<span style="color:#008b45;font-weight:bold">Dispatchers</span>.IO) {
+</span></span><span style="display:flex;"><span>            println(<span style="color:#cd5555">&#34;IO output&#34;</span>)
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        println(<span style="color:#cd5555">&#34;Main: After delay in thread </span><span style="color:#cd5555">${Thread.currentThread().name}</span><span style="color:#cd5555">&#34;</span>)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>Main: I<span style="color:#a61717;background-color:#e3d2d2">&#39;</span>m working <span style="color:#8b008b;font-weight:bold">in</span> thread main <span style="color:#707a7c">@coroutine</span><span style="color:#a61717;background-color:#e3d2d2">#</span><span style="color:#b452cd">2</span>
+</span></span><span style="display:flex;"><span>IO output
+</span></span><span style="display:flex;"><span>Main: After delay <span style="color:#8b008b;font-weight:bold">in</span> thread main <span style="color:#707a7c">@coroutine</span><span style="color:#a61717;background-color:#e3d2d2">#</span><span style="color:#b452cd">2</span>
+</span></span></code></pre></div><p>而对于Dispatchers.Unconfined</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-Kotlin" data-lang="Kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">kotlinx.coroutines.*</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">main</span>() = runBlocking&lt;Unit&gt; {
+</span></span><span style="display:flex;"><span>    launch(<span style="color:#008b45;font-weight:bold">Dispatchers</span>.Unconfined) {
+</span></span><span style="display:flex;"><span>        println(<span style="color:#cd5555">&#34;Unconfined: I&#39;m working in thread </span><span style="color:#cd5555">${Thread.currentThread().name}</span><span style="color:#cd5555">&#34;</span>)
+</span></span><span style="display:flex;"><span>        withContext(<span style="color:#008b45;font-weight:bold">Dispatchers</span>.IO) {
+</span></span><span style="display:flex;"><span>            println(<span style="color:#cd5555">&#34;IO output&#34;</span>)
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        println(<span style="color:#cd5555">&#34;Unconfined: After delay in thread </span><span style="color:#cd5555">${Thread.currentThread().name}</span><span style="color:#cd5555">&#34;</span>)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>Unconfined: I<span style="color:#a61717;background-color:#e3d2d2">&#39;</span>m working <span style="color:#8b008b;font-weight:bold">in</span> thread main <span style="color:#707a7c">@coroutine</span><span style="color:#a61717;background-color:#e3d2d2">#</span><span style="color:#b452cd">2</span>
+</span></span><span style="display:flex;"><span>IO output
+</span></span><span style="display:flex;"><span>Unconfined: After delay <span style="color:#8b008b;font-weight:bold">in</span> thread DefaultDispatcher-worker-<span style="color:#b452cd">1</span> <span style="color:#707a7c">@coroutine</span><span style="color:#a61717;background-color:#e3d2d2">#</span><span style="color:#b452cd">2</span>
+</span></span></code></pre></div><h1 id="launchwhenresumedpausingdispatcher">launchWhenResumed——PausingDispatcher</h1>
+<p>回顾开头的例子，我们还用了launchWhenResumed来启动协程，它可以保证生命周期到达resume之后才执行，且pause后暂停，resume后再恢复，使用方便，能避免很多生命周期导致的问题。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-Kotlin" data-lang="Kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onViewCreated</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">super</span>.onViewCreated()
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">var</span> job: Job? = <span style="color:#8b008b;font-weight:bold">null</span>
+</span></span><span style="display:flex;"><span>    binding.input.doAfterTextChanged {
+</span></span><span style="display:flex;"><span>        job?.cancel()
+</span></span><span style="display:flex;"><span>        job = lifecycleScope.launchWhenResumed {
+</span></span><span style="display:flex;"><span>            delay(<span style="color:#b452cd">1200L</span>)
+</span></span><span style="display:flex;"><span>            generateQRCode()
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>其关键的实现就在于PausingDispatcher。PausingDispatcher中有一个队列来执行任务，任务先入队，检查当前状态，若满足才执行。</p>
+<p><img src="https://images.ntutn.top/2023/04/34881044ef01321c1cd03e042f11949a.svg" alt="PausingDispatcher"></p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">internal</span> <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">PausingDispatcher</span> : CoroutineDispatcher() {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">internal</span> <span style="color:#8b008b;font-weight:bold">val</span> dispatchQueue = DispatchQueue()
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">dispatch</span>(context: CoroutineContext, block: Runnable) {
+</span></span><span style="display:flex;"><span>        dispatchQueue.dispatchAndEnqueue(context, block) <span style="color:#228b22">// 入队执行
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    }
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    ...
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#707a7c">@AnyThread</span>
+</span></span><span style="display:flex;"><span><span style="color:#707a7c">@SuppressLint</span>(<span style="color:#cd5555">&#34;WrongThread&#34;</span>) <span style="color:#228b22">// false negative, we are checking the thread
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span><span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">dispatchAndEnqueue</span>(context: CoroutineContext, runnable: Runnable) {
+</span></span><span style="display:flex;"><span>    <span style="color:#228b22">// 实际调用enqueue
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#707a7c">@MainThread</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">enqueue</span>(runnable: Runnable) {
+</span></span><span style="display:flex;"><span>    check(queue.offer(runnable)) { <span style="color:#228b22">// 入队
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>        <span style="color:#cd5555">&#34;cannot enqueue any more runnables&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    drainQueue() <span style="color:#228b22">// 尝试执行
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">internal</span> <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">DispatchQueue</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">drainQueue</span>() {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span> (isDraining) {
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">return</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">try</span> {
+</span></span><span style="display:flex;"><span>            isDraining = <span style="color:#8b008b;font-weight:bold">true</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">while</span> (queue.isNotEmpty()) {
+</span></span><span style="display:flex;"><span>                <span style="color:#8b008b;font-weight:bold">if</span> (!canRun()) {
+</span></span><span style="display:flex;"><span>                    <span style="color:#8b008b;font-weight:bold">break</span>
+</span></span><span style="display:flex;"><span>                }
+</span></span><span style="display:flex;"><span>                queue.poll()?.run()
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        } <span style="color:#8b008b;font-weight:bold">finally</span> {
+</span></span><span style="display:flex;"><span>            isDraining = <span style="color:#8b008b;font-weight:bold">false</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#707a7c">@MainThread</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">canRun</span>() = finished || !paused
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>至此，我们知道暂停其实就是只入队不执行，这样在生命周期暂停时，监听代码不会继续执行。但监听注册并没有取消，他们只是被放到了一个队列中，待resume时执行。</p>
+<h1 id="拓展阅读">拓展阅读</h1>
+<h2 id="自定义一个dispatcher">自定义一个Dispatcher</h2>
+<p>听完前文的分享，我们已经初步揭开了Dispatcher的神秘面纱，那接下来我们就尝试自己实现一个Dispatcher吧！</p>
+<h3 id="基于handlerthread的dispatcher">基于HandlerThread的Dispatcher</h3>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-Kotlin" data-lang="Kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> computeThread = HandlerThread(<span style="color:#cd5555">&#34;compute&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">val</span> Dispatchers.SingleCompute = HandlerContext(computeThread.looper.asHandler())
+</span></span></code></pre></div><h3 id="基于线程池的dispatcher">基于线程池的Dispatcher</h3>
+<p>官方有个拓展方法，可以快速获取基于线程池的Dispatcher。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-Kotlin" data-lang="Kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">public</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">ExecutorService</span>.asCoroutineDispatcher(): ExecutorCoroutineDispatcher =
+</span></span><span style="display:flex;"><span>    ExecutorCoroutineDispatcherImpl(<span style="color:#8b008b;font-weight:bold">this</span>)
+</span></span></code></pre></div><p>即我们使用时</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-Kotlin" data-lang="Kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> executor = <span style="color:#008b45;font-weight:bold">Executors</span>.newFixedThreadPool(<span style="color:#b452cd">15</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">val</span> Dispatchers.MyCompute = executor.asCoroutineDispatcher()
+</span></span></code></pre></div><h3 id="限制同时执行任务数">限制同时执行任务数</h3>
+<p>虽然我们已经学会了如何自己借助线程池实现一个Dispatcher，但定义过多的线程池并不加快执行，有害无益。如果只是想限制同时执行的任务数，官方新增下面的方法（实验API）。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-Kotlin" data-lang="Kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">val</span> Dispatchers.MyCompute = <span style="color:#008b45;font-weight:bold">Dispatchers</span>.<span style="color:#008b45;font-weight:bold">Default</span>.limitedParallelism(<span style="color:#b452cd">3</span>)
+</span></span></code></pre></div><p>新的Dispatcher仍然用Dispatchers.Default分发任务，但会限制同时执行的任务数。其实Dispatchers.IO就是这样实现的。</p>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">最后修改于 2023-04-23</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts">
+			下回<br>已经到头啦。
+                </a>
+                
+                
+                
+                <a class="older-posts" href="/posts/%E5%B8%A6%E6%9D%83%E9%87%8D%E7%9A%84%E9%9A%8F%E6%9C%BA%E9%80%89%E6%8B%A9/">
+			上回<br>带权重的随机选择
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+<script src="https://utteranc.es/client.js"
+        repo="zerofancy/zerofancy.github.io"
+        issue-term="title"
+        label=""
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://ntutn.top/">
+    
+        <div class="nav-title">
+            归零幻想
+        </div>
+        
+        <div class="nav-subtitle">
+            零点还不算熬夜
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/%E7%9F%A5%E8%AF%86%E4%BD%93%E7%B3%BB">
+                知识体系
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
+                标签
+            </a>
+            
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                归档
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/friends">
+                友链
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/about">
+                关于
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/index.xml">
+                RSS
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	CC BY-SA 4.0
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    <div class="toc-wrapper">
+        
+
+        
+        <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#dispatcher%e5%ae%9a%e4%b9%89%e4%b8%8e%e7%ba%bf%e7%a8%8b%e5%88%87%e6%8d%a2%e5%ae%9e%e7%8e%b0" class="nav-dispatcher定义与线程切换实现">
+									Dispatcher定义与线程切换实现
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%b8%b8%e8%a7%81dispatcher%e7%a7%8d%e7%b1%bb" class="nav-常见dispatcher种类">
+									常见Dispatcher种类
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#dispatchersmain" class="nav-dispatchersmain">
+									Dispatchers.Main
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#dispatchersmain-vs-dispatchersmainimmediate" class="nav-dispatchersmain-vs-dispatchersmainimmediate">
+									Dispatchers.Main vs Dispatchers.Main.immediate
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#dispatchersdefault-vs-dispatchersio" class="nav-dispatchersdefault-vs-dispatchersio">
+									Dispatchers.Default vs Dispatchers.IO
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#dispatchersunconfined" class="nav-dispatchersunconfined">
+									Dispatchers.UnConfined
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+							
+								</ul>
+							
+						
+						
+						
+							<li>
+								<a href="#launchwhenresumedpausingdispatcher" class="nav-launchwhenresumedpausingdispatcher">
+									launchWhenResumed——PausingDispatcher
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%8b%93%e5%b1%95%e9%98%85%e8%af%bb" class="nav-拓展阅读">
+									拓展阅读
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e8%87%aa%e5%ae%9a%e4%b9%89%e4%b8%80%e4%b8%aadispatcher" class="nav-自定义一个dispatcher">
+									自定义一个Dispatcher
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e5%9f%ba%e4%ba%8ehandlerthread%e7%9a%84dispatcher" class="nav-基于handlerthread的dispatcher">
+									基于HandlerThread的Dispatcher
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%9f%ba%e4%ba%8e%e7%ba%bf%e7%a8%8b%e6%b1%a0%e7%9a%84dispatcher" class="nav-基于线程池的dispatcher">
+									基于线程池的Dispatcher
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e9%99%90%e5%88%b6%e5%90%8c%e6%97%b6%e6%89%a7%e8%a1%8c%e4%bb%bb%e5%8a%a1%e6%95%b0" class="nav-限制同时执行任务数">
+									限制同时执行任务数
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+        
+    </div>
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top"
+            :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	CC BY-SA 4.0
+	
+</div>
+            </div>
+    
+    <script src="/js/journal.js"></script></body>
+</html>
