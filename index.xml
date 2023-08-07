@@ -7,9 +7,87 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Sun, 23 Apr 2023 02:47:18 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 08 Aug 2023 02:40:22 +0800</lastBuildDate>
     
         <atom:link href="https://ntutn.top/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>JNI Hello World</title>
+        <link>https://ntutn.top/posts/jni_hello_world/</link>
+        <pubDate>Tue, 08 Aug 2023 02:40:22 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/jni_hello_world/</guid>
+        <description>归零幻想 https://ntutn.top/posts/jni_hello_world/ -&lt;h1 id=&#34;jni能用来做什么&#34;&gt;JNI能用来做什么&lt;/h1&gt;
+&lt;ol&gt;
+&lt;li&gt;性能敏感逻辑。如绘图渲染，高精度计算。&lt;/li&gt;
+&lt;li&gt;平台相关逻辑，如调用系统原生API。&lt;/li&gt;
+&lt;li&gt;有商业价值的逻辑，native层比java层反编译和分析破解难度更高。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;使用JNI将逻辑写到native层并不一定会提高性能，因为现代JVM虚拟机本身优化已经很好，少量代码性能差距不大，而调用JNI方法本身有不少的性能损耗。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id=&#34;在android上使用jni&#34;&gt;在Android上使用JNI&lt;/h1&gt;
+&lt;p&gt;最新版Android Studio提供了创建一个使用JNI的项目模板，项目类型选择 &lt;code&gt;Native C++&lt;/code&gt; 即可。&lt;/p&gt;
+&lt;p&gt;观察项目结构，发现&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;源码下有一个 &lt;code&gt;cpp&lt;/code&gt; 目录，其中有hello world和一个CMakeList.txt——native部分使用cmake构建&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;build.gradle.kts&lt;/code&gt; 下有一个配置块配置了使用上述CMakeList.txt进行构建&lt;/li&gt;
+&lt;li&gt;MainActivity 下使用 &lt;code&gt;java.lang.System#loadLibrary&lt;/code&gt; 方法加载native库，其中一个方法名与cpp中的非常对应。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MainActivity&lt;/span&gt; : AppCompatActivity() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ...
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;external&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;stringFromJNI&lt;/span&gt;(): String
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;companion&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;init&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;System&lt;/span&gt;.loadLibrary(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;testjni&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-cpp&#34; data-lang=&#34;cpp&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;extern&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;C&amp;#34;&lt;/span&gt; JNIEXPORT jstring JNICALL
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Java_top_ntutn_testjni_MainActivity_stringFromJNI(
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        JNIEnv* env,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        jobject &lt;span style=&#34;color:#228b22&#34;&gt;/* this */&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    std::string hello = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Hello from C++&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; env-&amp;gt;NewStringUTF(hello.c_str());
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;jni方法的动态加载&#34;&gt;JNI方法的动态加载&lt;/h1&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-cpp&#34; data-lang=&#34;cpp&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;jstring &lt;span style=&#34;color:#008b45&#34;&gt;say_hello_2&lt;/span&gt;(JNIEnv *env, jobject thiz) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    std::string hello2 = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;我来自JNI动态注册&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; env -&amp;gt;NewStringUTF(hello2.c_str());
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; JNINativeMethod gMethods[] = {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;string2FromJNI&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;()Ljava/lang/String;&amp;#34;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        (jstring *) say_hello_2
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;};
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;JNIEXPORT jint &lt;span style=&#34;color:#008b45&#34;&gt;JNI_OnLoad&lt;/span&gt;(JavaVM *vm, &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; *reserved) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    __android_log_print(ANDROID_LOG_INFO, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;native&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Jni_OnLoad&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    JNIEnv *env = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;nullptr&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (vm-&amp;gt;GetEnv((&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; **) &amp;amp;env, JNI_VERSION_1_6) != JNI_OK) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        __android_log_print(ANDROID_LOG_ERROR, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;native&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;jni error&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; -&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    jclass clazz = env -&amp;gt;FindClass(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;top/ntutn/testjni/MainActivity&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (!clazz) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        __android_log_print(ANDROID_LOG_ERROR, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;native&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;cannot find class&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; -&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (env -&amp;gt;RegisterNatives(clazz, gMethods, (&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;sizeof&lt;/span&gt; gMethods) / (&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;sizeof&lt;/span&gt; gMethods[&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;]))) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        __android_log_print(ANDROID_LOG_ERROR, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;native&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;register method error&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; -&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; JNI_VERSION_1_6;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;据网上说与静态注册的区别是，静态注册要在第一次调用native方法时查找native实现，影响性能。但我看完疑问很大，因为动态注册看上去在更早的时候去做方法的注册，难道不是更影响性能吗？疑问先留下，今天到这里。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/zerofancy-anote/jnidemo&#34;&gt;jnidemo&lt;/a&gt;&lt;/p&gt;
+- https://ntutn.top/posts/jni_hello_world/ - CC BY-SA 4.0</description>
+        </item>
     
     
     
@@ -1073,55 +1151,6 @@
 &lt;/div&gt;
 
 - https://ntutn.top/think/%E4%B8%AD%E4%BA%8C%E5%B9%BB%E6%83%B3/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>[加密]捐赠</title>
-        <link>https://ntutn.top/think/%E6%8D%90%E8%B5%A0/</link>
-        <pubDate>Sun, 12 Feb 2023 04:23:00 +0800</pubDate>
-        
-        <guid>https://ntutn.top/think/%E6%8D%90%E8%B5%A0/</guid>
-        <description>归零幻想 https://ntutn.top/think/%E6%8D%90%E8%B5%A0/ -&lt;blockquote&gt;
-&lt;p&gt;这篇文章的密码是我最不喜欢的人的姓名拼音全拼。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-
-
-
-&lt;div class=&#34;hugo-encryptor-container&#34;&gt;
-  &lt;div class=&#34;hugo-encryptor-prompt&#34;&gt;
-    
-      &lt;p&gt;文章的部分内容被密码保护：&lt;/p&gt;
-    
-  &lt;/div&gt;
-  &lt;div class=&#34;hugo-encryptor-form&#34;&gt;
-    &lt;input
-      class=&#34;hugo-encryptor-input&#34;
-      placeholder=&#39;请输入密码&#39;
-    /&gt;
-    &lt;input
-      class=&#34;hugo-encryptor-button&#34;
-      type=&#34;button&#34;
-      value=&#39;点击验证&#39;
-      onclick=&#34;_click_handler(this)&#34;
-    /&gt;
-  &lt;/div&gt;
-  &lt;div
-    class=&#34;hugo-encryptor-cipher-text&#34;
-    data-password=&#34;gaiting&#34;
-    style=&#34;display: none;&#34;
-  &gt;
-    &lt;span style=&#34;display: none;&#34;&gt;--- DON&#39;T MODIFY THIS LINE ---&lt;/span&gt;
-    &lt;p&gt;我的想法是不再自主进行任何形式捐款，冲动时可以捐助开源软件。&lt;/p&gt;
-&lt;p&gt;案例：&lt;strong&gt;火车站的聋哑人&lt;/strong&gt;，红十字会疫情期间的操作。&lt;/p&gt;
-&lt;p&gt;二次分配属于国家宏观调控应该负责的范畴，我个人没有分辨我的善心是否能被用到正确位置的能力。个人捐款捐物只是借慈善之名满足自己的精神需要，扶贫救急由专业人士，由政府来，我只要依法纳税，就是出了我自己的一份力。&lt;/p&gt;
-
-  &lt;/div&gt;
-&lt;/div&gt;
-
-- https://ntutn.top/think/%E6%8D%90%E8%B5%A0/ - CC BY-SA 4.0</description>
         </item>
     
     

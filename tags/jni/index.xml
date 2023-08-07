@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>JNI on 归零幻想</title>
+    <link>https://ntutn.top/tags/jni/</link>
+    <description>Recent content in JNI on 归零幻想</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <copyright>CC BY-SA 4.0</copyright>
+    <lastBuildDate>Tue, 08 Aug 2023 02:40:22 +0800</lastBuildDate><atom:link href="https://ntutn.top/tags/jni/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>JNI Hello World</title>
+      <link>https://ntutn.top/posts/jni_hello_world/</link>
+      <pubDate>Tue, 08 Aug 2023 02:40:22 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/jni_hello_world/</guid>
+      <description>JNI能用来做什么 性能敏感逻辑。如绘图渲染，高精度计算。 平台相关逻辑，如调用系统原生API。 有商业价值的逻辑，native层比java层反编译和分析破解难度更高。 使用JNI将逻辑写到native层并不一定会提高性能，因为现代JVM虚拟机本身优化已经很好，少量代码性能差距不大，而调用JNI方法本身有不少的性能损耗。
+在Android上使用JNI 最新版Android Studio提供了创建一个使用JNI的项目模板，项目类型选择 Native C++ 即可。
+观察项目结构，发现
+源码下有一个 cpp 目录，其中有hello world和一个CMakeList.txt——native部分使用cmake构建 build.gradle.kts 下有一个配置块配置了使用上述CMakeList.txt进行构建 MainActivity 下使用 java.lang.System#loadLibrary 方法加载native库，其中一个方法名与cpp中的非常对应。 class MainActivity : AppCompatActivity() { ... external fun stringFromJNI(): String companion object { init { System.loadLibrary(&amp;#34;testjni&amp;#34;) } } } extern &amp;#34;C&amp;#34; JNIEXPORT jstring JNICALL Java_top_ntutn_testjni_MainActivity_stringFromJNI( JNIEnv* env, jobject /* this */) { std::string hello = &amp;#34;Hello from C++&amp;#34;; return env-&amp;gt;NewStringUTF(hello.c_str()); } JNI方法的动态加载 jstring say_hello_2(JNIEnv *env, jobject thiz) { std::string hello2 = &amp;#34;我来自JNI动态注册&amp;#34;; return env -&amp;gt;NewStringUTF(hello2.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -7,9 +7,104 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Sun, 23 Apr 2023 02:47:18 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 08 Aug 2023 02:40:22 +0800</lastBuildDate>
     
         <atom:link href="https://ntutn.top/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>android项目开发：Fragment</title>
+        <link>https://ntutn.top/posts/fragment/</link>
+        <pubDate>Mon, 21 Dec 2020 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/fragment/</guid>
+        <description>归零幻想 https://ntutn.top/posts/fragment/ -&lt;!-- raw HTML omitted --&gt;
+&lt;h1 id=&#34;fragment&#34;&gt;Fragment&lt;/h1&gt;
+&lt;h2 id=&#34;fragment的使用方式&#34;&gt;Fragment的使用方式&lt;/h2&gt;
+&lt;h3 id=&#34;静态添加fragment&#34;&gt;静态添加Fragment&lt;/h3&gt;
+&lt;p&gt;Fragment的写法&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;LinearLayout&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;xmlns:android=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;http://schemas.android.com/apk/res/android&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;              &lt;span style=&#34;color:#658b00&#34;&gt;android:orientation=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;vertical&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_width=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;match_parent&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;              &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_height=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;match_parent&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;Button&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#658b00&#34;&gt;android:id=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;@+id/button&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_width=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;wrap_content&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_height=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;wrap_content&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#658b00&#34;&gt;android:text=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;button&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_gravity=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;center_horizontal&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/LinearLayout&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.fragmenttest&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.os.Bundle&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.view.LayoutInflater&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.view.View&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.view.ViewGroup&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;androidx.fragment.app.Fragment&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;LeftFragment&lt;/span&gt; : Fragment() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onCreateView&lt;/span&gt;(
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        inflater: LayoutInflater,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        container: ViewGroup?,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        savedInstanceState: Bundle?
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ): View? {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; inflater.inflate(&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;R&lt;/span&gt;.layout.left_fragment, container, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;静态添加Fragment&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-xml&#34; data-lang=&#34;xml&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;LinearLayout&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;xmlns:android=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;http://schemas.android.com/apk/res/android&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;              &lt;span style=&#34;color:#658b00&#34;&gt;xmlns:tools=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;http://schemas.android.com/tools&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;              &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_width=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;match_parent&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;              &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_height=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;match_parent&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;              &lt;span style=&#34;color:#658b00&#34;&gt;android:orientation=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;horizontal&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;              &lt;span style=&#34;color:#658b00&#34;&gt;tools:context=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;.MainActivity&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;fragment&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#658b00&#34;&gt;android:id=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;@+id/leftFragment&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#658b00&#34;&gt;android:name=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;top.ntutn.fragmenttest.LeftFragment&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_width=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;0dp&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_height=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;match_parent&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_weight=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;fragment&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#658b00&#34;&gt;android:id=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;@+id/rightFragment&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#658b00&#34;&gt;android:name=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;top.ntutn.fragmenttest.RightFragment&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_width=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;0dp&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_height=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;match_parent&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#658b00&#34;&gt;android:layout_weight=&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;1&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;/&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;&amp;lt;/LinearLayout&amp;gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;!-- raw HTML omitted --&gt;
+&lt;h3 id=&#34;动态添加fragment&#34;&gt;动态添加Fragment&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; fragmentManager = supportFragmentManager
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; transaction = fragmentManager.beginTransaction()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;transaction.replace(&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;R&lt;/span&gt;.id.rightLayout, fragment)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;transaction.commit()
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;在fragment中实现返回栈&#34;&gt;在Fragment中实现返回栈&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; fragmentManager = supportFragmentManager
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; transaction = fragmentManager.beginTransaction()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;transaction.replace(&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;R&lt;/span&gt;.id.rightLayout, fragment)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;transaction.addToBackStack(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;transaction.commit()
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;fragment与activity交互&#34;&gt;Fragment与Activity交互&lt;/h3&gt;
+&lt;p&gt;Activity中获取Fragment&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; fragment = supportFragmentManager.findFragmentById(&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;R&lt;/span&gt;.id.leftFragment) &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;as&lt;/span&gt; LeftFragment
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;或使用&lt;code&gt;kotlin-android-extensions&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; fragment = leftFragment &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;as&lt;/span&gt; LeftFragment
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;fragment的生命周期&#34;&gt;Fragment的生命周期&lt;/h2&gt;
+&lt;p&gt;和Activity的生命周期类似，重点是几个方法：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;onAttach() 当Fragment和Activity建立关联的时候调用&lt;/li&gt;
+&lt;li&gt;onCreateView() 为Fragment创建视图时调用&lt;/li&gt;
+&lt;li&gt;onActivityCreated() 确保与Fragment相关联的Activity创建完毕时调用。&lt;/li&gt;
+&lt;li&gt;onDestroyView() 与Fragment关联的视图被移除时调用。&lt;/li&gt;
+&lt;li&gt;onDetach() 当Fragment与Activity解除关联时调用&lt;/li&gt;
+&lt;/ul&gt;
+- https://ntutn.top/posts/fragment/ - CC BY-SA 4.0</description>
+        </item>
     
     
     
@@ -1076,131 +1171,6 @@ gift.vbe
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; String apkMd5;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://ntutn.top/posts/%E6%8E%89%E5%9D%91%E7%9A%84%E6%97%A5%E5%B8%B8springboot%E7%9A%84json%E5%B1%9E%E6%80%A7%E5%90%8D%E5%A4%A7%E5%B0%8F%E5%86%99%E9%97%AE%E9%A2%98/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>Typora&#43;git自动同步你的笔记</title>
-        <link>https://ntutn.top/posts/typora&#43;git%E8%87%AA%E5%8A%A8%E5%90%8C%E6%AD%A5%E4%BD%A0%E7%9A%84%E7%AC%94%E8%AE%B0/</link>
-        <pubDate>Mon, 02 Mar 2020 03:11:37 +0800</pubDate>
-        
-        <guid>https://ntutn.top/posts/typora&#43;git%E8%87%AA%E5%8A%A8%E5%90%8C%E6%AD%A5%E4%BD%A0%E7%9A%84%E7%AC%94%E8%AE%B0/</guid>
-        <description>归零幻想 https://ntutn.top/posts/typora&#43;git%E8%87%AA%E5%8A%A8%E5%90%8C%E6%AD%A5%E4%BD%A0%E7%9A%84%E7%AC%94%E8%AE%B0/ -&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;这两天看了群里某个大佬的笔记，突然觉得自己用VSCode记笔记的方案不香了。VSCode虽然对&lt;code&gt;markdown&lt;/code&gt;的支持不错，但毕竟本职工作不是这个，直接拿来做笔记还是不够方便，太笨重了。于是我终于想起之前同学给我安利的&lt;code&gt;markdown&lt;/code&gt;编辑器：Typora。&lt;/p&gt;
-&lt;h2 id=&#34;dalao的笔记&#34;&gt;dalao的笔记&lt;/h2&gt;
-&lt;p&gt;首先看看大佬的笔记：&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2020/08/20/1Lr3BfMvSw8haYy.png&#34; alt=&#34;1.png&#34;&gt;&lt;/p&gt;
-&lt;p&gt;好想去偷他的笔记。不过话说他这笔记软件也不错啊，看起来简约清晰，我也有试一试的想法了。&lt;/p&gt;
-&lt;p&gt;他用的笔记软件：&lt;a href=&#34;https://github.com/tsujan/FeatherNotes&#34;&gt;https://github.com/tsujan/FeatherNotes&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;然后就被编译安装劝退了。一个是不太想这么折腾，另一个是这个软件没有提供编译好的包，感觉还是不够放心啊，毕竟如果以后开发者不维护了要再折腾一遍会非常麻烦。&lt;/p&gt;
-&lt;h2 id=&#34;typora同学安利的markdown编辑工具&#34;&gt;Typora，同学安利的markdown编辑工具&lt;/h2&gt;
-&lt;p&gt;与多数markdown编辑工具不同，Typora是所见即所得的markdown编辑工具。为什么程序员偏爱markdown？就是因为markdown可以让我们写作的时候只关注内容本身，而不用太在意排版的问题。而Typora又改变了传统的左右分栏或者点击切换预览的传统markdown编辑模式，用起来就更舒服了。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2020/08/20/V7LzFNRXyT1hUbj.png&#34; alt=&#34;2.png&#34;&gt;&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;h3 id=&#34;安装&#34;&gt;安装&lt;/h3&gt;
-&lt;p&gt;在Ubuntu下安装还是非常方便的：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;# or run:&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;# sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys BA300B7755AFCFAE&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;wget -qO - https://typora.io/linux/public-key.asc | sudo apt-key add -
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;# add Typora&amp;#39;s repository&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo add-apt-repository &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;deb https://typora.io/linux ./&amp;#39;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo apt-get update
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;# install typora&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo apt-get install typora
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;其他系统参考&lt;a href=&#34;https://www.typora.net/#download&#34;&gt;官网&lt;/a&gt;。&lt;/p&gt;
-&lt;h3 id=&#34;复制图片&#34;&gt;复制图片&lt;/h3&gt;
-&lt;p&gt;不过有一点要注意：我们写文档常常要插入一些图片，为了后面和git好配合，我们需要将这些图片也放到当前文件夹里。按下&lt;code&gt;Ctrl+逗号&lt;/code&gt;打开设置，将图片复制到当前文件夹下。如图。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2020/08/20/VWcp6qEGOF9beZf.png&#34; alt=&#34;3.png&#34;&gt;&lt;/p&gt;
-&lt;h3 id=&#34;重要的快捷键&#34;&gt;重要的快捷键&lt;/h3&gt;
-&lt;p&gt;都是重点等于没有重点。我们只要记住能让我们离开鼠标提高效率的就行了。&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;快捷键&lt;/th&gt;
-&lt;th&gt;功能&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;Ctrl+S&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;保存&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;Ctrl+Z&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;撤销&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;Ctrl+Y&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;重做&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;Ctrl+Shift+L&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;侧边栏&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;code&gt;Ctrl+/&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;切换源代码模式&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;表格中，&lt;code&gt;Ctrl+Enter&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;添加一行&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h2 id=&#34;用git管理笔记&#34;&gt;用git管理笔记&lt;/h2&gt;
-&lt;p&gt;首先什么是git？有些少年区分不了git和github，这是姿势水平还不够啊。听说过GitLab没？听说过码云没？不是修福报的那个马云哦。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;git：当前最流行的分布式版本控制软件&lt;/li&gt;
-&lt;li&gt;github：通过Git进行版本控制的软件源代码托管服务平台&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;鉴于本文并不是为了介绍这二者，本人就简单粗暴放个链接了。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://zh.wikipedia.org/wiki/Git&#34;&gt;https://zh.wikipedia.org/wiki/Git&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://zh.wikipedia.org/wiki/GitHub&#34;&gt;https://zh.wikipedia.org/wiki/GitHub&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;git虽然大多用于管理程序源代码，但用来管理我们的笔记却也正好。虽然笔记对于版本控制的需求不是非常大，但聊胜于无嘛。最重要的是，你可以把笔记借助git同步到github上，什么时候换工作环境完全可以全pull下来，岂不美滋滋？&lt;/p&gt;
-&lt;p&gt;git版本库托管平台有很多，这里我并没有选择github，而是选择了&lt;a href=&#34;https://code.aliyun.com&#34;&gt;阿里云的Code平台&lt;/a&gt;。毕竟在国内速度比较快啊。阿里云单个仓库容量足有2G，足够我们放笔记和笔记涉及的图片了。&lt;/p&gt;
-&lt;p&gt;怎么注册账号，怎么建立仓库我就不说了。clone下来，这就是以后笔记安家的地方了。&lt;/p&gt;
-&lt;h2 id=&#34;自动同步笔记&#34;&gt;自动同步笔记&lt;/h2&gt;
-&lt;p&gt;然而，我们还是需要运行&lt;code&gt;git add&lt;/code&gt;、&lt;code&gt;git commit&lt;/code&gt;、&lt;code&gt;git push&lt;/code&gt;，而且在别处修改了笔记还得手动pull一下。执行的命令这么固定，肯定是要写成脚本(.sync.sh)了。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-bash&#34; data-lang=&#34;bash&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#658b00&#34;&gt;cd&lt;/span&gt; /home/zero/Documents/Notes
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git pull &amp;amp;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;typora . TODO.md
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git add .
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git commit -m &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Sync&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git push
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;注意上面的路径改为你自己笔记文件夹的路径。第二行的&lt;code&gt;&amp;amp;&lt;/code&gt;不要省，我们没必要等pull完才打开Typora，这样可以加快一点启动速度。&lt;/p&gt;
-&lt;p&gt;好了，现在我们执行脚本就能打开Typora，而且所有编辑还能自动同步。由于git默认不允许保留空提交，没有修改的时候也不会产生大量无用的记录，完美。&lt;/p&gt;
-&lt;p&gt;最后写个桌面启动器就大功告成了：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-ini&#34; data-lang=&#34;ini&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;[Desktop Entry]&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#658b00&#34;&gt;Type&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;Application&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#658b00&#34;&gt;Icon&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;typora&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#658b00&#34;&gt;Name&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;笔记&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#658b00&#34;&gt;Exec&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;/home/zero/Documents/Notes/.sync.sh&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#658b00&#34;&gt;Terminal&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;false&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#658b00&#34;&gt;Hidden&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;false&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;Note.desktop&lt;/code&gt;文件名保存到桌面就成了。&lt;/p&gt;
-&lt;h2 id=&#34;windows下的配置&#34;&gt;Windows下的配置&lt;/h2&gt;
-&lt;p&gt;Git是跨平台的，Typora也是跨平台的，那么我们这个方案自然同样可以跨平台。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Windows下的Typora并没有默认添加环境变量，请手动添加。添加后需要重启。
-首先对应上面的sh，写个cmd(.sync.cmd)：&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-cmd&#34; data-lang=&#34;cmd&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;start&lt;/span&gt; /b git pull
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;typora . TODO.md
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git add .
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git commit -m &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Sync&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git push
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;第一行不一样，这是因为cmd后台执行是用&lt;code&gt;start /b&lt;/code&gt;的，与shell脚本的&lt;code&gt;&amp;amp;&lt;/code&gt;效果是一样的。&lt;/p&gt;
-&lt;p&gt;此时双击这个cmd已经能看到效果了。&lt;/p&gt;
-&lt;p&gt;但cmd执行时会有黑窗口，很影响美观，我们写个vbs脚本(.sync.vbs)来调用它，这样可以不显示黑窗口。&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code class=&#34;language-vbs&#34; data-lang=&#34;vbs&#34;&gt;WScript.CreateObject(&amp;#34;WScript.Shell&amp;#34;).Run &amp;#34;.sync.cmd&amp;#34;,0
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;最后创建个桌面快捷方式，指向&lt;code&gt;.sync.vbs&lt;/code&gt;，就大功告成了。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;注意：快捷方式的起始目录要指向笔记的目录。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;p&gt;美中不足的是，在Android上我没找到比较合适的git客户端。虽然看到有个商用的评价不错，但为了这点笔记花那么多银子还是不值得。Android上的笔记软件倒是找到一个不错的：&lt;a href=&#34;https://github.com/gsantner/markor&#34;&gt;Markor&lt;/a&gt;。虽然没有Typora的所见即所得那么厉害，但他的编辑界面做的很不错，配上蓝牙键盘，非常适合某些科目上课做笔记。&lt;/p&gt;
-- https://ntutn.top/posts/typora&#43;git%E8%87%AA%E5%8A%A8%E5%90%8C%E6%AD%A5%E4%BD%A0%E7%9A%84%E7%AC%94%E8%AE%B0/ - CC BY-SA 4.0</description>
         </item>
     
     

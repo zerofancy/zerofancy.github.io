@@ -7,9 +7,58 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Sun, 23 Apr 2023 02:47:18 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 08 Aug 2023 02:40:22 +0800</lastBuildDate>
     
         <atom:link href="https://ntutn.top/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>把你的光猫变成一个丐版nas</title>
+        <link>https://ntutn.top/posts/%E6%8A%8A%E4%BD%A0%E7%9A%84%E5%85%89%E7%8C%AB%E5%8F%98%E6%88%90%E4%B8%80%E4%B8%AA%E4%B8%90%E7%89%88nas/</link>
+        <pubDate>Tue, 12 Apr 2022 01:21:54 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/%E6%8A%8A%E4%BD%A0%E7%9A%84%E5%85%89%E7%8C%AB%E5%8F%98%E6%88%90%E4%B8%80%E4%B8%AA%E4%B8%90%E7%89%88nas/</guid>
+        <description>归零幻想 https://ntutn.top/posts/%E6%8A%8A%E4%BD%A0%E7%9A%84%E5%85%89%E7%8C%AB%E5%8F%98%E6%88%90%E4%B8%80%E4%B8%AA%E4%B8%90%E7%89%88nas/ -&lt;!-- raw HTML omitted --&gt;
+&lt;h1 id=&#34;把你的光猫变成一个丐版nas&#34;&gt;把你的光猫变成一个丐版NAS&lt;/h1&gt;
+&lt;p&gt;我的初衷是调研下光猫改桥接的可行性，结果拿到超级管理员密码后还是没有这个选项。但在这个过程中发现直接在光猫上跑个下载服务却是可行的。&lt;/p&gt;
+&lt;h2 id=&#34;允许ftp访问和telnet访问&#34;&gt;允许FTP访问和telnet访问&lt;/h2&gt;
+&lt;p&gt;访问 http://192.168.1.1 ，输入密码后进入光猫管理后台。这里我找到“上网帐号设置”，备份宽带帐号和密码。不得不说他系统还是挺拉的，密码框直接用审查元素功能把 type 改为 input 就可以看到密码了。&lt;/p&gt;
+&lt;p&gt;第一步后台不要退出，访问 http://192.168.1.1/servmngr.html 。这里看到一个空白页面，审查元素后发现大有乾坤。 &lt;img src=&#34;https://images.ntutn.top/2022/04/78e9db7285fda2ee43fd5901902d3208.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;p&gt;将这些代码取消注释，此时网页还是空白的，但是用 Ctrl+A 可以看到实际是有内容的。在这个页面开启 telnet 访问，并设置密码。注意用户名为 admin 不要改，否则后面 telnet 登陆不进去。&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;telnet 192.168.1.1&lt;/code&gt; 成功后执行&lt;code&gt;sh&lt;/code&gt;。然后&lt;code&gt;uname -a&lt;/code&gt;看下。这里我就不记录查看管理员密码步骤了，反正这个型号管理员面板也没有设置桥接的选项。&lt;/p&gt;
+&lt;h2 id=&#34;开始整活&#34;&gt;开始整活&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;top&lt;/code&gt;，发现占用内存最高的是个两个 java 进程。&lt;code&gt;java -version&lt;/code&gt;，发现安装了 java8 。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-plain&#34; data-lang=&#34;plain&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;# java -version
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;openjdk version &amp;#34;1.8.0-internal&amp;#34;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;OpenJDK Runtime Environment (build 1.8.0-internal-jenkinsang_2022_01_15_04_03-b00)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;JamVM (build 2.0.0, inline-threaded interpreter with stack-caching)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;free&lt;/code&gt;命令可知总内存约二十多兆，剩余仅 3 兆。这点空间是搞不了什么事情的，因此我尝试干掉前述两个 java 进程。&lt;code&gt;ps -aux | grep java&lt;/code&gt;，发现除了存在两个 java 进程，还写了脚本自动把这两个进程拉起来，即&lt;code&gt;/etc/monitor_java.sh&lt;/code&gt; 。统统 kill 掉。&lt;/p&gt;
+&lt;p&gt;现在有 10 兆左右的内存了，对于 java 来说可能还是不太能搞事，但跑个 aria2 足够了！尝试插入 U 盘，发现在&lt;code&gt;/mnt/usb1_1&lt;/code&gt;自动挂载。&lt;/p&gt;
+&lt;p&gt;交叉编译 aria2c ，这里我用的是这个脚本：https://gitee.com/logic_2050/auto-build-aria2-mips32-static 。在我的 debian11 编译过程中只遇到一个问题，手动&lt;code&gt;sudo apt install autoreconf&lt;/code&gt;即可。&lt;/p&gt;
+&lt;p&gt;如何把文件弄到光猫里，以及取出来？每次插拔 U 盘也太麻烦了。于是我找到一个支持上传的简单文件服务器：https://github.com/mayth/go-simple-upload-server。仍然交叉编译到 mips 静态包。&lt;code&gt;env GOOS=linux GOARCH=mips GOMIPS=softfloat go build -trimpath -ldflags=&amp;quot;-s -w -extldflags=-static&amp;quot;&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;成品&#34;&gt;成品&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2022/04/bc80e51855b842dedd7268113042e378.png&#34; alt=&#34;img&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;拓展&#34;&gt;拓展&lt;/h2&gt;
+&lt;h3 id=&#34;被我干掉的两个-java-进程是做什么的&#34;&gt;被我干掉的两个 java 进程是做什么的&lt;/h3&gt;
+&lt;p&gt;光猫跑 java 属实有点离谱，一半内存都是他们占的，干掉后也不影响上网，甚至也不影响光猫后台管理。嗯，有点耐人寻味。&lt;/p&gt;
+&lt;h3 id=&#34;ftp访问为空白&#34;&gt;FTP访问为空白&lt;/h3&gt;
+&lt;p&gt;经测试，该型号FTP访问根目录是一片空白，但大多数子目录还是可以正常访问的，如&lt;code&gt;/mnt/usb1_1&lt;/code&gt;，完全能满足要求。&lt;/p&gt;
+&lt;h3 id=&#34;无法执行重启后文件丢失&#34;&gt;无法执行/重启后文件丢失&lt;/h3&gt;
+&lt;p&gt;有些目录下是无法写入的，有些虽然可以写入，但是重启会丢失，还有些目录下无法执行程序。&lt;/p&gt;
+&lt;p&gt;我选择把整活用的程序放到&lt;code&gt;/fhconf/&lt;/code&gt;下，因为光猫自己的配置文件备份就放在这里，显然这里是不会重置的。&lt;/p&gt;
+&lt;h3 id=&#34;支持-https&#34;&gt;支持 https&lt;/h3&gt;
+&lt;p&gt;只要将你的电脑下的&lt;code&gt;/etc/ssl/certs/ca-certificates.crt&lt;/code&gt;文件复制到光猫下，并在aria2的配置文件中指定就可以了。&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;ca-certificate=/fhconf/custom/aria2/ca-certificates.crt
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;oom&#34;&gt;OOM&lt;/h3&gt;
+&lt;p&gt;尽管aria2确实已经很省资源了，但当尝试BT下载一个比较大的文件时（超过2GB）还是很容易占用超过10M内存，然后关键进程OOM就巴比Q了。我尝试过修改配置文件，关闭disk-cache、关闭预分配甚至限制下载速度等均无法解决。所以该方案的实用性其实并不是很高。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;也无所谓，生命在于折腾嘛。
+也许设置swap可以解决这个问题，但默认没有这个命令，估计还得去编译busybox。唉，算了吧……&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;!-- raw HTML omitted --&gt;
+- https://ntutn.top/posts/%E6%8A%8A%E4%BD%A0%E7%9A%84%E5%85%89%E7%8C%AB%E5%8F%98%E6%88%90%E4%B8%80%E4%B8%AA%E4%B8%90%E7%89%88nas/ - CC BY-SA 4.0</description>
+        </item>
     
     
     
@@ -1565,218 +1614,6 @@
 &lt;/ol&gt;
 &lt;/div&gt;
 - https://ntutn.top/posts/%E5%AE%89%E5%8D%93%E8%BF%9E%E8%BF%9E%E7%9C%8B%E6%B8%B8%E6%88%8F%E8%AE%BE%E8%AE%A1/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>ClassLoader双亲委托机制探究</title>
-        <link>https://ntutn.top/posts/classloader%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%89%98%E6%9C%BA%E5%88%B6%E6%8E%A2%E7%A9%B6/</link>
-        <pubDate>Sun, 11 Apr 2021 03:11:37 +0800</pubDate>
-        
-        <guid>https://ntutn.top/posts/classloader%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%89%98%E6%9C%BA%E5%88%B6%E6%8E%A2%E7%A9%B6/</guid>
-        <description>归零幻想 https://ntutn.top/posts/classloader%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%89%98%E6%9C%BA%E5%88%B6%E6%8E%A2%E7%A9%B6/ -&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;最近在研究抖音进入热点内流的耗时问题，种种线索指向了类加载耗时上。为此，我研究了Java类加载的双亲委托机制，并尝试给出了优化建议。&lt;/p&gt;
-&lt;h2 id=&#34;双亲委托机制&#34;&gt;双亲委托机制&lt;/h2&gt;
-&lt;p&gt;双亲委托机制中最重要的是loadClass方法，让我们看看它是怎么实现的。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;protected&lt;/span&gt; Class&amp;lt;?&amp;gt; loadClass(String name, &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;boolean&lt;/span&gt; resolve)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;throws&lt;/span&gt; ClassNotFoundException
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#228b22&#34;&gt;// First, check if the class has already been loaded
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;            Class&amp;lt;?&amp;gt; c = findLoadedClass(name); &lt;span style=&#34;color:#228b22&#34;&gt;// 已加载过直接返回
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (c == &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;try&lt;/span&gt; {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (parent != &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                        c = parent.&lt;span style=&#34;color:#658b00&#34;&gt;loadClass&lt;/span&gt;(name, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;); &lt;span style=&#34;color:#228b22&#34;&gt;//尝试让parent加载
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                    } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                        c = findBootstrapClassOrNull(name); &lt;span style=&#34;color:#228b22&#34;&gt;// bootstrap class loader是否加载过
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;catch&lt;/span&gt; (ClassNotFoundException e) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#228b22&#34;&gt;// ClassNotFoundException thrown if class not found
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                    &lt;span style=&#34;color:#228b22&#34;&gt;// from the non-null parent class loader
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (c == &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#228b22&#34;&gt;// If still not found, then invoke findClass in order
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                    &lt;span style=&#34;color:#228b22&#34;&gt;// to find the class.
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                    c = findClass(name); &lt;span style=&#34;color:#228b22&#34;&gt;// 自己加载（找不到会抛出异常）
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; c;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;findClass就是根据类名去加载具体类的方法，则整个加载机制就很清楚了。&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;首先部分类会被BootstrapClassLoader加载，这部分是native实现。&lt;/li&gt;
-&lt;li&gt;会先尝试让parent加载&lt;/li&gt;
-&lt;li&gt;parent找不到时才会自己加载&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;如果我们能创建一个ClassLoader，将它插入到PathClassLoader和BootstrapClassLoader之间，那么所有被PathClassLoader加载的类就都可以记录下来了。&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;h2 id=&#34;pathclassloaderproxy实现&#34;&gt;PathClassLoaderProxy实现&lt;/h2&gt;
-&lt;blockquote&gt;
-&lt;p&gt;Talk is cheap, show me the code.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;ClassLoaderProxy&lt;/span&gt; : ClassLoader() {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;findClass&lt;/span&gt;(name: String?): Class&amp;lt;*&amp;gt; {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (name != &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt; &amp;amp;&amp;amp; recording) loadedClass.add(name)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;throw&lt;/span&gt; ClassNotFoundException()
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;companion&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; loadedClass = mutableSetOf&amp;lt;String&amp;gt;()
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; recording = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; hooked = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#707a7c&#34;&gt;@JvmStatic&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;inject&lt;/span&gt;(context: Context): Boolean {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Log&lt;/span&gt;.w(ClassLoaderWrapper2::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;.java.simpleName, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Hook开始&amp;#34;&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;try&lt;/span&gt; {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; originClassLoader = context.classLoader
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Log&lt;/span&gt;.d(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;ClassLoader类型&amp;#34;&lt;/span&gt;, originClassLoader.javaClass.simpleName)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; delegateClassLoader = ClassLoaderWrapper2()
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                setParent(delegateClassLoader, originClassLoader.parent)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                setParent(originClassLoader, delegateClassLoader)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Log&lt;/span&gt;.w(ClassLoaderWrapper2::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;.java.simpleName, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Hook成功&amp;#34;&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                hooked = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;catch&lt;/span&gt; (e: Throwable) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Log&lt;/span&gt;.e(ClassLoaderWrapper2::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;.java.simpleName, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Hook没有成功&amp;#34;&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;setParent&lt;/span&gt;(classLoader: ClassLoader, newParent: ClassLoader) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; parentField = ClassLoader::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;.java.getDeclaredField(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;parent&amp;#34;&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            parentField.isAccessible = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            parentField.&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;set&lt;/span&gt;(classLoader, newParent)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#707a7c&#34;&gt;@Throws&lt;/span&gt;(IllegalStateException::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;checkHookState&lt;/span&gt;() {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (!hooked) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;throw&lt;/span&gt; IllegalStateException(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;hookPackageClassLoader没有执行成功！&amp;#34;&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#707a7c&#34;&gt;@Throws&lt;/span&gt;(IllegalStateException::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;, RuntimeException::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;startRecord&lt;/span&gt;() {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            checkHookState()
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            synchronized(recording) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (recording) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;throw&lt;/span&gt; RuntimeException(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;已经存在正在监听的任务！&amp;#34;&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                loadedClass.clear()
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                recording = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#707a7c&#34;&gt;@Throws&lt;/span&gt;(IllegalStateException::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;, RuntimeException::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;endRecord&lt;/span&gt;(block: (Set&amp;lt;String&amp;gt;) -&amp;gt; Unit) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            checkHookState()
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            synchronized(recording) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (!recording) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;throw&lt;/span&gt; RuntimeException(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;当前没有在监听！&amp;#34;&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                recording = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                block.invoke(loadedClass)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;因为我们并不需要做实际的加载，只要抛出异常，加载还是交给我们儿子PathClassLoader就可以了。&lt;/p&gt;
-&lt;h2 id=&#34;记录加载时间&#34;&gt;记录加载时间&lt;/h2&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;top.ntutn.hookpackageclassloader&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.content.Context&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;android.util.Log&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;ClassLoaderWrapper&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; realClassLoader: ClassLoader) : ClassLoader() {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; findClassMethod &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;by&lt;/span&gt; lazy {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        ClassLoader::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;.java.getDeclaredMethod(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;findClass&amp;#34;&lt;/span&gt;, String::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;.java).apply {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            isAccessible = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;loadClass&lt;/span&gt;(name: String?, resolve: Boolean): Class&amp;lt;*&amp;gt; {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; startTime = &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;System&lt;/span&gt;.currentTimeMillis()
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#228b22&#34;&gt;// First, check if the class has already been loaded
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; c: Class&amp;lt;*&amp;gt;? = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;try&lt;/span&gt; {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            c = parent.loadClass(name)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;catch&lt;/span&gt; (e: ClassNotFoundException) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#228b22&#34;&gt;// ClassNotFoundException thrown if class not found
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;            &lt;span style=&#34;color:#228b22&#34;&gt;// from the non-null parent class loader
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (c == &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            c = findClassMethod.invoke(realClassLoader, name) &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;as&lt;/span&gt; Class&amp;lt;*&amp;gt;?
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Log&lt;/span&gt;.e(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;classloader&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;load class: &lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;$name&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        loadedClasses.add(name.toString() to &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;System&lt;/span&gt;.currentTimeMillis() - startTime)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; c!!
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;companion&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; loadedClasses = mutableSetOf&amp;lt;Pair&amp;lt;String, Long&amp;gt;&amp;gt;()
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; recording = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; hooked = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; preloadClasses = setOf(
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;kotlin.collections.CollectionsKt&amp;#34;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;kotlin.Triple&amp;#34;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;top.ntutn.hookpackageclassloader.ClassLoaderWrapper&amp;#34;&lt;/span&gt;,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;top.ntutn.hookpackageclassloader.ClassLoaderWrapper&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\$&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;Companion&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        )
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#707a7c&#34;&gt;@JvmStatic&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;inject&lt;/span&gt;(context: Context): Boolean {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#228b22&#34;&gt;// 提前加载避免死循环
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;            preloadClasses.forEach { &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Class&lt;/span&gt;.forName(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt;) }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;try&lt;/span&gt; {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; originClassLoader = context.classLoader
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; originParent = originClassLoader.parent
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; applicationInfo = context.applicationInfo
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                applicationInfo.sourceDir
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; delegateClassLoader = ClassLoaderWrapper3(originClassLoader)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                setParent(delegateClassLoader, originParent)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                setParent(originClassLoader, delegateClassLoader)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                hooked = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;catch&lt;/span&gt; (e: Exception) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Log&lt;/span&gt;.e(ClassLoaderWrapper3::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;.simpleName, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;hook失败&amp;#34;&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;setParent&lt;/span&gt;(classLoader: ClassLoader, newParent: ClassLoader) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; parentField = ClassLoader::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;.java.getDeclaredField(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;parent&amp;#34;&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            parentField.isAccessible = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            parentField.&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;set&lt;/span&gt;(classLoader, newParent)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#707a7c&#34;&gt;@Throws&lt;/span&gt;(IllegalStateException::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;checkHookState&lt;/span&gt;() {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (!hooked) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;throw&lt;/span&gt; IllegalStateException(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;hook没有执行成功！&amp;#34;&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#707a7c&#34;&gt;@Throws&lt;/span&gt;(IllegalStateException::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;, RuntimeException::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;startRecord&lt;/span&gt;() {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            checkHookState()
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            synchronized(recording) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (recording) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;throw&lt;/span&gt; RuntimeException(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;已经存在正在监听的任务！&amp;#34;&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                loadedClasses.clear()
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                recording = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#707a7c&#34;&gt;@Throws&lt;/span&gt;(IllegalStateException::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;, RuntimeException::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;endRecord&lt;/span&gt;(block: (Set&amp;lt;Pair&amp;lt;String, Long&amp;gt;&amp;gt;) -&amp;gt; Unit) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            checkHookState()
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            synchronized(recording) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (!recording) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;throw&lt;/span&gt; RuntimeException(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;当前没有在监听！&amp;#34;&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                recording = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                block.invoke(loadedClasses)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;相比前面方案来说，注意点就是不要搞出死循环来，另外就是Kotlin自己的类似乎并不会被BootstrapClassLoader加载，需要在计时前加载一下。&lt;/p&gt;
-&lt;h2 id=&#34;反射进行类加载&#34;&gt;反射进行类加载&lt;/h2&gt;
-&lt;p&gt;非常简单，就是用&lt;code&gt;Class.forName()&lt;/code&gt;去加载了下这些类。&lt;/p&gt;
-&lt;p&gt;既然用了反射，混淆问题怎么解决？&lt;/p&gt;
-&lt;p&gt;幸运的是，对于一些简单的场景，ProGuard是可以帮我们处理的，其中就包括了直接使用&lt;code&gt;Class.forName(&amp;quot;some class&amp;quot;)&lt;/code&gt;的情况。参见&lt;a href=&#34;https://www.guardsquare.com/en/products/proguard/manual/introduction&#34;&gt;ProGuard manual | Introduction | Guardsquare&lt;/a&gt;。&lt;/p&gt;
-&lt;p&gt;遗憾的是，当这个字符串穿上马夹（比如放到了某个变量里再传给这个函数）似乎ProGuard就不认识了。因而，我只好用笨方法生成一大堆Class.forName()了。&lt;/p&gt;
-&lt;p&gt;在demo中，这个方法正常work了，但在抖音的release包多半类会反射失败，此法不可行。按照我的思路之后如果还想继续看就只好看下怎样设计一个gradle插件，编译时从生成的mapping.txt解析出这些Class混淆后的名字再打到抖音的包里。成本很高而且我目前大概没有能力完成。&lt;/p&gt;
-&lt;p&gt;一次失败的尝试呢。但总归也算学到一些东西。&lt;/p&gt;
-- https://ntutn.top/posts/classloader%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%89%98%E6%9C%BA%E5%88%B6%E6%8E%A2%E7%A9%B6/ - CC BY-SA 4.0</description>
         </item>
     
     

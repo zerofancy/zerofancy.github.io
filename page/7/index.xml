@@ -7,9 +7,96 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Sun, 23 Apr 2023 02:47:18 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 08 Aug 2023 02:40:22 +0800</lastBuildDate>
     
         <atom:link href="https://ntutn.top/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>在Windows10上安装血战上海滩</title>
+        <link>https://ntutn.top/posts/%E5%9C%A8windows10%E4%B8%8A%E5%AE%89%E8%A3%85%E8%A1%80%E6%88%98%E4%B8%8A%E6%B5%B7%E6%BB%A9/</link>
+        <pubDate>Sat, 01 Jun 2019 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/%E5%9C%A8windows10%E4%B8%8A%E5%AE%89%E8%A3%85%E8%A1%80%E6%88%98%E4%B8%8A%E6%B5%B7%E6%BB%A9/</guid>
+        <description>归零幻想 https://ntutn.top/posts/%E5%9C%A8windows10%E4%B8%8A%E5%AE%89%E8%A3%85%E8%A1%80%E6%88%98%E4%B8%8A%E6%B5%B7%E6%BB%A9/ -&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;《血战上海滩》是由北京欢乐亿派科技有限公司开发的单机FPS游戏，发行于2003年，是一个非常经典的老游戏了。
+近来我打算把这个游戏找出来再玩一遍，可是在Windows10上安装还是有些问题……&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2022/04/cae87d561f3a723b0187e837e3e63ab0.gif&#34; alt=&#34;血战上海滩&#34;&gt;&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;h2 id=&#34;下载&#34;&gt;下载&lt;/h2&gt;
+&lt;p&gt;下载不用多说，自己找资源吧，一共三百多兆的单机游戏。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;现在很多单机游戏下载时网站都会给你带上一个“启动器”来显示广告，恶心的很。找到文件夹中，注意血战上海滩的游戏文件是一个帽子的图标，大小为&lt;code&gt;1.87M&lt;/code&gt;，SHA1为&lt;code&gt;FE5A102AA9DE633FB6E388EAAEEA38BC43E8E7E4&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;启动&#34;&gt;启动&lt;/h2&gt;
+&lt;p&gt;直接双击exe，然后……它免费帮你调了一下分辨率，就没反应了。&lt;/p&gt;
+&lt;p&gt;貌似兼容性是个比较大的问题……于是在网上找了好久，终于知道，可以用命令行控制游戏窗口运行：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-cmd&#34; data-lang=&#34;cmd&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;shanghai.exe -windows
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;修改屏幕分辨率实现全屏&#34;&gt;修改屏幕分辨率实现全屏&lt;/h2&gt;
+&lt;p&gt;倒是能运行了，只是……画面都在左上角，没法玩啊……&lt;/p&gt;
+&lt;p&gt;所以再加上自动修改屏幕分辨率就可以全屏了。修改屏幕分辨率可以用&lt;code&gt;setres&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://www.majorgeeks.com/files/details/setres.html&#34;&gt;下载链接&lt;/a&gt;下载并将exe文件放到血战上海滩的游戏文件夹。&lt;/p&gt;
+&lt;p&gt;于是用下面的命令：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-cmd&#34; data-lang=&#34;cmd&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;setres h800 v600
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;shanghai.exe -windows
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;setres h1920 v1080
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;code&gt;1920*1080&lt;/code&gt;是我电脑的屏幕分辨率，注意换成自己的。&lt;/p&gt;
+&lt;h2 id=&#34;隐藏显示任务栏&#34;&gt;隐藏显示任务栏&lt;/h2&gt;
+&lt;p&gt;然而，这样还是有问题，就是这样“全屏”后任务栏并没有消失，虽然可以设置自动隐藏任务栏但总归还是不爽，于是写了个简单C#程序在启动游戏隐藏任务栏（虽然很简单，但没找到只用命令实现的方法）&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-C#&#34; data-lang=&#34;C#&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System.Collections.Generic&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System.Linq&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System.Text&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System.Threading.Tasks&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System.Runtime.InteropServices&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;namespace&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;ShowTaskBar&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Program&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; SW_HIDE = &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;  &lt;span style=&#34;color:#228b22&#34;&gt;//隐藏任务栏&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; SW_RESTORE = &lt;span style=&#34;color:#b452cd&#34;&gt;9&lt;/span&gt;;&lt;span style=&#34;color:#228b22&#34;&gt;//显示任务栏&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#658b00&#34;&gt;        [DllImport(&amp;#34;user32.dll&amp;#34;)]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;extern&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; ShowWindow(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; hwnd, &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; nCmdShow);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#658b00&#34;&gt;        [DllImport(&amp;#34;user32.dll&amp;#34;)]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;extern&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; FindWindow(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;string&lt;/span&gt; lpClassName, &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;string&lt;/span&gt; lpWindowName);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;void&lt;/span&gt; Main(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;string&lt;/span&gt;[] args)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            ShowWindow(FindWindow(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Shell_TrayWnd&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;), SW_HIDE);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-C#&#34; data-lang=&#34;C#&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System.Collections.Generic&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System.Linq&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System.Text&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System.Threading.Tasks&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;System.Runtime.InteropServices&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;namespace&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;ShowTaskBar&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Program&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; SW_HIDE = &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;  &lt;span style=&#34;color:#228b22&#34;&gt;//隐藏任务栏&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; SW_RESTORE = &lt;span style=&#34;color:#b452cd&#34;&gt;9&lt;/span&gt;;&lt;span style=&#34;color:#228b22&#34;&gt;//显示任务栏&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#658b00&#34;&gt;        [DllImport(&amp;#34;user32.dll&amp;#34;)]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;extern&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; ShowWindow(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; hwnd, &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; nCmdShow);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#658b00&#34;&gt;        [DllImport(&amp;#34;user32.dll&amp;#34;)]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;extern&lt;/span&gt; &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; FindWindow(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;string&lt;/span&gt; lpClassName, &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;string&lt;/span&gt; lpWindowName);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;static&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;void&lt;/span&gt; Main(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;string&lt;/span&gt;[] args)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            ShowWindow(FindWindow(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Shell_TrayWnd&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;), SW_RESTORE);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;编译并将生成文件也放到游戏文件夹。这样我们就可以用一个&lt;code&gt;start.cmd&lt;/code&gt;打开游戏：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-cmd&#34; data-lang=&#34;cmd&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;setres h800 v600
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;hidetaskbar
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;shanghai.exe -windows
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;showtaskbar
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;setres h1920 v1080
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;体验相当完美。&lt;/p&gt;
+- https://ntutn.top/posts/%E5%9C%A8windows10%E4%B8%8A%E5%AE%89%E8%A3%85%E8%A1%80%E6%88%98%E4%B8%8A%E6%B5%B7%E6%BB%A9/ - CC BY-SA 4.0</description>
+        </item>
     
     
     
@@ -3654,87 +3741,6 @@ X,Y为菜单加载的坐标。
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://ntutn.top/posts/%E5%AD%A6%E7%94%9F%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>连续正整数</title>
-        <link>https://ntutn.top/posts/%E8%BF%9E%E7%BB%AD%E6%AD%A3%E6%95%B4%E6%95%B0/</link>
-        <pubDate>Sat, 06 Apr 2019 03:11:37 +0800</pubDate>
-        
-        <guid>https://ntutn.top/posts/%E8%BF%9E%E7%BB%AD%E6%AD%A3%E6%95%B4%E6%95%B0/</guid>
-        <description>归零幻想 https://ntutn.top/posts/%E8%BF%9E%E7%BB%AD%E6%AD%A3%E6%95%B4%E6%95%B0/ -&lt;!-- raw HTML omitted --&gt;
-&lt;blockquote&gt;
-&lt;p&gt;还是数据结构的网上作业，将一个整数分解为连续正整数之和，找对方向倒是也不算难……&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;p&gt;有些正整数可以表示为 n (n&amp;gt;1) 个连续正整数的和，如：&lt;/p&gt;
-&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;15=1+2+3+4+5
-    =4+5+6
-    =7+8
-&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;给定一个正整数 N，判断其是否可以表示为一组连续正整数的和，输出符合条件的解的组数。&lt;/p&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;h2 id=&#34;input&#34;&gt;Input&lt;/h2&gt;
-&lt;pre&gt;&lt;code&gt;输入有一行，包含一个正整数 n (3≤n≤1000000000)。
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&#34;output&#34;&gt;Output&lt;/h2&gt;
-&lt;pre&gt;&lt;code&gt;输出有一行，正整数n的符合条件的解的组数。
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&#34;example&#34;&gt;Example&lt;/h2&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;Input&lt;/th&gt;
-&lt;th&gt;Output&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;15&lt;/td&gt;
-&lt;td&gt;3&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;99&lt;/td&gt;
-&lt;td&gt;5&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;6&lt;/td&gt;
-&lt;td&gt;1&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;9&lt;/td&gt;
-&lt;td&gt;2&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;p&gt;&lt;strong&gt;单点时限: 2.0 sec&lt;/strong&gt;
-&lt;strong&gt;内存限制: 256 MB&lt;/strong&gt;&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-cpp&#34; data-lang=&#34;cpp&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;namespace&lt;/span&gt; std;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;()
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; n;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    cin&amp;gt;&amp;gt;n;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; counter=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;; i&amp;lt;(&lt;span style=&#34;color:#b452cd&#34;&gt;100000&lt;/span&gt;&amp;lt;n?&lt;span style=&#34;color:#b452cd&#34;&gt;100000&lt;/span&gt;:n); i++) &lt;span style=&#34;color:#228b22&#34;&gt;//n/i-i/2+1&amp;gt;=1
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(n/i-i/&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;-i%&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;+&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;&amp;gt;=&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;&amp;amp;&amp;amp;(n/i-i/&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;-i%&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;+&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;+n/i-i/&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;-i%&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;+&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;+i-&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;)*i==n*&lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            counter++;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#228b22&#34;&gt;//cout&amp;lt;&amp;lt;&amp;#34;test-&amp;#34;&amp;lt;&amp;lt;i&amp;lt;&amp;lt;endl;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    cout &amp;lt;&amp;lt; counter &amp;lt;&amp;lt; endl;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;枚举就好了。需要根据分成的整数的个数i讨论，但为了显得更牛X我就写到一起了，上面的&lt;code&gt;n/i-i/2-i%2+1&lt;/code&gt;无论在奇偶情况下都是拆分得到的整数的第一个&lt;em&gt;理应&lt;/em&gt;是多少。&lt;/p&gt;
-&lt;p&gt;判断的主要逻辑：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;第一个数字大于等于1&lt;/li&gt;
-&lt;li&gt;所有数之和等于原数&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;求和在这里就不必用循环了，用等差数列明显更高效。注意这里计算时为了防止整数除法运算截断的问题，将除法移动到了等式的右边。&lt;/p&gt;
-- https://ntutn.top/posts/%E8%BF%9E%E7%BB%AD%E6%AD%A3%E6%95%B4%E6%95%B0/ - CC BY-SA 4.0</description>
         </item>
     
     
