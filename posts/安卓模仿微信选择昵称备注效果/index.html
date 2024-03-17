@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html><head>
+<title>安卓模仿微信选择昵称备注效果</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="最近对一个交互效果感兴趣，就是有人加你微信时输入了备注信息，你可以直接在备注信息中选择词语成为这个人的昵称备注。虽然微信给用户喂屎，但这个交互效果是值得肯定的。">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+<meta property="og:title" content="安卓模仿微信选择昵称备注效果" />
+<meta property="og:description" content="最近对一个交互效果感兴趣，就是有人加你微信时输入了备注信息，你可以直接在备注信息中选择词语成为这个人的昵称备注。虽然微信给用户喂屎，但这个交互效果是值得肯定的。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ntutn.top/posts/%E5%AE%89%E5%8D%93%E6%A8%A1%E4%BB%BF%E5%BE%AE%E4%BF%A1%E9%80%89%E6%8B%A9%E6%98%B5%E7%A7%B0%E5%A4%87%E6%B3%A8%E6%95%88%E6%9E%9C/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2024-03-17T00:41:08+08:00" />
+<meta property="article:modified_time" content="2024-03-17T00:41:08+08:00" /><meta property="og:site_name" content="归零幻想" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+<link rel="icon" href="//images.ntutn.top/favicon.ico">
+
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="/scss/dark-mode.min.cb53f1bee2b8900cb4f082afbf00175d6618f281cf9a2fe8619e3b52d20b5721.css" integrity="sha256-y1PxvuK4kAy08IKvvwAXXWYY8oHPmi/oYZ47UtILVyE=" media="screen">
+
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+<script defer
+	src='https://static.cloudflareinsights.com/beacon.min.js'
+	data-cf-beacon='{"token": "5a03d307f5214109a1e7c8b2cf306a3d"}'>
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+    pre code {
+        color: black;
+        -comment: "感谢评论区 https://github.com/lx200916 指出博客代码块深色模式问题";
+    }
+</style>
+<script src="https://unpkg.com/zoomtastic@2.2.1"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function(event) { 
+        document.querySelectorAll("div.post-body-wrapper img").forEach(function(element){
+            element.setAttribute("zoomtastic", true)
+            element.style.maxWidth="60%"
+        })
+		
+		Zoomtastic.mount({
+			size: '95%',
+			easing: 'ease',
+			duration: 300,
+			background: 'rgba(0, 0, 0, 0.9)',
+			filter: 'drop-shadow(0 2px 16px rgba(0, 0, 0, 0.3))',
+			animation: 'slide' 
+		});
+		
+		Zoomtastic.listen('[zoomtastic]', 'src');
+    });
+
+	
+	var _hmt = _hmt || [];
+	(function() {
+	var hm = document.createElement("script");
+	hm.src = "https://hm.baidu.com/hm.js?298c58938f9266e6098936c4f71a9a83";
+	var s = document.getElementsByTagName("script")[0]; 
+	s.parentNode.insertBefore(hm, s);
+	})();
+
+</script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+          
+          
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false},
+              {left: '\\[', right: '\\]', display: true}
+          ],
+          
+          throwOnError : false
+        });
+    });
+</script>
+
+</head>
+<body>
+    	<div id="app"><div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/%E7%9F%A5%E8%AF%86%E4%BD%93%E7%B3%BB">
+                    知识体系
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
+                    标签
+                </a>
+                
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    归档
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/friends">
+                    友链
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/about">
+                    关于
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/index.xml">
+                    RSS
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%ae%9e%e7%8e%b0%e4%b8%80%e4%b8%aa%e6%a0%87%e7%ad%be%e5%ae%b9%e5%99%a8%e6%95%88%e6%9e%9c" class="nav-实现一个标签容器效果">
+									实现一个标签容器效果
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%b6%82%e6%8a%b9%e9%80%89%e6%8b%a9%e6%96%87%e6%9c%ac" class="nav-涂抹选择文本">
+									涂抹选择文本
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e8%ae%a1%e7%ae%97%e7%82%b9%e5%88%b0%e7%9f%a9%e5%bd%a2%e7%9a%84%e8%b7%9d%e7%a6%bb" class="nav-计算点到矩形的距离">
+									计算点到矩形的距离
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://ntutn.top/">
+            归零幻想
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://ntutn.top/">
+        <div class="single-column-header-title">归零幻想</div>
+        
+        <div class="single-column-header-subtitle">零点还不算熬夜</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+                
+            
+
+            <div class="post-head-wrapper"
+                
+                    
+                    
+                    style="background-image: url('https://images.ntutn.top/2024/03/0edd6afb137bc0c780c21bbb0405365b.png')"
+                    
+                
+            >
+                <div class="post-title">
+                    安卓模仿微信选择昵称备注效果
+                    
+                    <div class="post-subtitle">
+                        最近对一个交互效果感兴趣，就是有人加你微信时输入了备注信息，你可以直接在备注信息中选择词语成为这个人的昵称备注。虽然微信给用户喂屎，但这个交互效果是值得肯定的。
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2024-03-17 00:41
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/%E5%AE%89%E5%8D%93">安卓</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/%E5%BE%AE%E4%BF%A1">微信</a>
+                                &nbsp;
+                            
+                                <a href="/tags/%E5%AE%89%E5%8D%93">安卓</a>
+                                &nbsp;
+                            
+                                <a href="/tags/view">View</a>
+                                &nbsp;
+                            
+                                <a href="/tags/%E6%A0%87%E7%AD%BE">标签</a>
+                                &nbsp;
+                            
+                                <a href="/tags/md">MD</a>
+                                &nbsp;
+                            
+                                <a href="/tags/%E8%A7%A6%E6%91%B8%E4%BA%8B%E4%BB%B6">触摸事件</a>
+                                &nbsp;
+                            
+                        
+                        
+                            <i class="material-icons" style="">schedule</i>
+                            
+
+                            
+                            
+
+                            
+                            4 min
+                            
+                            18 s.
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <p>首先，这是我们要实现的预期效果：</p>
+<p><img src="https://images.ntutn.top/2024/03/0edd6afb137bc0c780c21bbb0405365b.png" alt="微信昵称选择效果"></p>
+<h1 id="实现一个标签容器效果">实现一个标签容器效果</h1>
+<p>我们把每个字视作一个标签，那么微信这个效果可以看作是多个标签逐行摆放，其中部分被选中。幸运的是MD中有这样的效果<a href="https://m3.material.io/components/chips/overview">ChipGroup</a>，这样我们可以节省不少工作。</p>
+<p>源代码：<a href="https://github.com/material-components/material-components-android/blob/master/lib/java/com/google/android/material/chip/ChipGroup.java">ChipGroup.java</a></p>
+<p>文章介绍：<a href="https://juejin.cn/post/7064110582865068069">Android修行手册 - ChipGroup</a></p>
+<p><img src="https://images.ntutn.top/2024/03/be816730a726fe01bc791c9f79aba686.png" alt="ChipGroup"></p>
+<p>然后我们用代码添加一些标签，并在点击时进行反选：</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span>        binding.contentMain.chipGroup.apply {
+</span></span><span style="display:flex;"><span>            isSelectionRequired
+</span></span><span style="display:flex;"><span>            isSingleSelection = <span style="color:#8b008b;font-weight:bold">false</span>
+</span></span><span style="display:flex;"><span>            words.forEach { word -&gt;
+</span></span><span style="display:flex;"><span>                addView(Chip(context).also { chip -&gt;
+</span></span><span style="display:flex;"><span>                    chip.text = word.trimIndent()
+</span></span><span style="display:flex;"><span>                    chip.setOnClickListener {
+</span></span><span style="display:flex;"><span>                        <span style="color:#8b008b;font-weight:bold">it</span>.isSelected = !<span style="color:#8b008b;font-weight:bold">it</span>.isSelected
+</span></span><span style="display:flex;"><span>                    }
+</span></span><span style="display:flex;"><span>                })
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span></code></pre></div><h1 id="涂抹选择文本">涂抹选择文本</h1>
+<p>显然要实现涂抹选中，我们得自定义View，拦截触摸事件定制逻辑。既然是“涂抹”，那么要拦截的就是 <code>ev?.action == MotionEvent.ACTION_MOVE</code> 。</p>
+<p>回顾<a href="https://juejin.cn/post/6844904041487532045">Android触摸事件传递机制</a>，复写<code>onInterceptTouchEvent</code>方法。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">SwipeSelectLayout</span> <span style="color:#707a7c">@JvmOverloads</span> <span style="color:#8b008b;font-weight:bold">constructor</span>(context: Context, defStyleAttr: AttributeSet? = <span style="color:#8b008b;font-weight:bold">null</span>, defStyleRes: Int = <span style="color:#b452cd">0</span>) : ChipGroup(context, defStyleAttr, defStyleRes) {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> childrenSelectionOnMoveStart = mutableMapOf&lt;View, Boolean&gt;()
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">var</span> closestViewIndex = -<span style="color:#b452cd">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onInterceptTouchEvent</span>(ev: MotionEvent): Boolean {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span> (ev.action == <span style="color:#008b45;font-weight:bold">MotionEvent</span>.ACTION_DOWN) {
+</span></span><span style="display:flex;"><span>            handleMotionEventDown(ev)
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span> (ev.action == <span style="color:#008b45;font-weight:bold">MotionEvent</span>.ACTION_MOVE) {
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">true</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">super</span>.onInterceptTouchEvent(ev)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#707a7c">@SuppressLint</span>(<span style="color:#cd5555">&#34;ClickableViewAccessibility&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">onTouchEvent</span>(event: MotionEvent): Boolean {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">if</span> (!children.any()) {
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">super</span>.onTouchEvent(event)
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">when</span>(event.action) {
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45;font-weight:bold">MotionEvent</span>.ACTION_DOWN -&gt; {
+</span></span><span style="display:flex;"><span>                <span style="color:#228b22">// 拖动起始点不在一个child上，也选择一个最近的View
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>                <span style="color:#228b22">// handleMotionEventDown(event)
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>                <span style="color:#228b22">// return true
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45;font-weight:bold">MotionEvent</span>.ACTION_MOVE -&gt; {
+</span></span><span style="display:flex;"><span>                handleMotionEventMove(event)
+</span></span><span style="display:flex;"><span>                <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">true</span>
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45;font-weight:bold">MotionEvent</span>.ACTION_UP -&gt; {
+</span></span><span style="display:flex;"><span>                childrenSelectionOnMoveStart.clear()
+</span></span><span style="display:flex;"><span>                <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">true</span>
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#008b45;font-weight:bold">MotionEvent</span>.ACTION_CANCEL -&gt; {
+</span></span><span style="display:flex;"><span>                childrenSelectionOnMoveStart.clear()
+</span></span><span style="display:flex;"><span>                <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">true</span>
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span> <span style="color:#8b008b;font-weight:bold">super</span>.onTouchEvent(event)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    ...
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>而“涂抹”的过程实际上是反选了起始点和终止点之间的所有View。因此我们需要</p>
+<ol>
+<li>手指按下时记录所有View的选择状态，以及距离按下坐标最近的View</li>
+<li>手指移动时找到当前点View，修改所有View的选中状态
+<ul>
+<li>不在选中范围的View，重置为初始选中状态</li>
+<li>在选中范围的View，反选</li>
+</ul>
+</li>
+<li>手指抬起时清除记录</li>
+</ol>
+<h2 id="计算点到矩形的距离">计算点到矩形的距离</h2>
+<p>首先思考点到线段的距离，</p>
+<p><img src="https://images.ntutn.top/2024/03/fca600fc884786f64d7a12b35068e6fd.png" alt="点到线段的距离"></p>
+<p>设A、B、C三点位置分别为$x_A$、$x_B$、$x_C$，那么点A到线段BC的距离有</p>
+<p>$$
+x=\begin{cases}
+x_B - x_A &amp; x_A &lt; x_B \\
+0 &amp; xB &lt; x_A &lt; x_C \\
+x_A - x_C &amp; x_A &gt; x_C
+\end{cases}
+$$</p>
+<p>推广到点到矩形的距离，得到距离计算方式</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">getDistanceBetweenRectAndPoint</span>(rect: Rect, x: Int, y: Int): Int {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">val</span> xDistance = <span style="color:#8b008b;font-weight:bold">if</span> (x <span style="color:#8b008b;font-weight:bold">in</span> rect.left..rect.right) {
+</span></span><span style="display:flex;"><span>            <span style="color:#b452cd">0</span>
+</span></span><span style="display:flex;"><span>        } <span style="color:#8b008b;font-weight:bold">else</span> (
+</span></span><span style="display:flex;"><span>            min(abs(x - rect.left), abs(x - rect.right))
+</span></span><span style="display:flex;"><span>        )
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">val</span> yDistance = <span style="color:#8b008b;font-weight:bold">if</span> (y <span style="color:#8b008b;font-weight:bold">in</span> rect.top..rect.bottom) {
+</span></span><span style="display:flex;"><span>            <span style="color:#b452cd">0</span>
+</span></span><span style="display:flex;"><span>        } <span style="color:#8b008b;font-weight:bold">else</span> {
+</span></span><span style="display:flex;"><span>            min(abs(y - rect.top), abs(y - rect.bottom))
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">return</span> sqrt((xDistance * xDistance + yDistance * yDistance).toFloat()).roundToInt()
+</span></span><span style="display:flex;"><span>    }
+</span></span></code></pre></div><p>这样，在手指按下时记录选中状态和最近的View</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">handleMotionEventDown</span>(event: MotionEvent) {
+</span></span><span style="display:flex;"><span>        children.forEachIndexed { index, view -&gt;
+</span></span><span style="display:flex;"><span>            <span style="color:#228b22">// 记录所有Chip的选中状态
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>            childrenSelectionOnMoveStart[view] = view.isSelected
+</span></span><span style="display:flex;"><span>            <span style="color:#228b22">// 查找距离起始点最近的View
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>            closestViewIndex = findClosestViewIndex(event.x.roundToInt(), event.y.roundToInt())
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span></code></pre></div><p>手指移动过程中反选最近View与起始点之间的View。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">handleMotionEventMove</span>(event: MotionEvent) {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">val</span> startViewIndex = closestViewIndex
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">val</span> endViewIndex = findClosestViewIndex(event.x.roundToInt(), event.y.roundToInt())
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">val</span> range = min(startViewIndex, endViewIndex)..max(startViewIndex, endViewIndex)
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">for</span> (i <span style="color:#8b008b;font-weight:bold">in</span> <span style="color:#b452cd">0</span> until childCount) {
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">val</span> view = getChildAt(i)
+</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">val</span> originSelection = childrenSelectionOnMoveStart[view] == <span style="color:#8b008b;font-weight:bold">true</span>
+</span></span><span style="display:flex;"><span>            view.isSelected = <span style="color:#8b008b;font-weight:bold">if</span> (i <span style="color:#8b008b;font-weight:bold">in</span> range) {
+</span></span><span style="display:flex;"><span>                <span style="color:#228b22">// 反选拖动区域所有View的选中状态
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>                !originSelection
+</span></span><span style="display:flex;"><span>            } <span style="color:#8b008b;font-weight:bold">else</span> {
+</span></span><span style="display:flex;"><span>                <span style="color:#228b22">// 不在拖动区域，还原到初始选择状态
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>                originSelection
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span></code></pre></div><p>大功告成。我们最终实现的效果：<a href="https://images.ntutn.top/2024/03/cfffe040d35659e5c86242e45b7f65f0.mp4">点击查看</a></p>
+<p>代码：<a href="https://gist.github.com/zerofancy/87645b411159ae7c64bb85e180bad3fc">Gist</a></p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">最后修改于 2024-03-17</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts">
+			下回<br>已经到头啦。
+                </a>
+                
+                
+                
+                <a class="older-posts" href="/posts/%E8%B0%81%E5%8A%A8%E4%BA%86%E6%88%91%E7%9A%84%E4%BB%A3%E7%A0%81/">
+			上回<br>谁动了我的代码
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+<script src="https://utteranc.es/client.js"
+        repo="zerofancy/zerofancy.github.io"
+        issue-term="title"
+        label=""
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://ntutn.top/">
+    
+        <div class="nav-title">
+            归零幻想
+        </div>
+        
+        <div class="nav-subtitle">
+            零点还不算熬夜
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/%E7%9F%A5%E8%AF%86%E4%BD%93%E7%B3%BB">
+                知识体系
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
+                标签
+            </a>
+            
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                归档
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/friends">
+                友链
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/about">
+                关于
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/index.xml">
+                RSS
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	CC BY-SA 4.0
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    <div class="toc-wrapper">
+        
+
+        
+        <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%ae%9e%e7%8e%b0%e4%b8%80%e4%b8%aa%e6%a0%87%e7%ad%be%e5%ae%b9%e5%99%a8%e6%95%88%e6%9e%9c" class="nav-实现一个标签容器效果">
+									实现一个标签容器效果
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%b6%82%e6%8a%b9%e9%80%89%e6%8b%a9%e6%96%87%e6%9c%ac" class="nav-涂抹选择文本">
+									涂抹选择文本
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+							
+								
+									<ul>
+								
+							
+						
+						
+							<li>
+								<a href="#%e8%ae%a1%e7%ae%97%e7%82%b9%e5%88%b0%e7%9f%a9%e5%bd%a2%e7%9a%84%e8%b7%9d%e7%a6%bb" class="nav-计算点到矩形的距离">
+									计算点到矩形的距离
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+        
+    </div>
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top"
+            :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div><div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	CC BY-SA 4.0
+	
+</div>
+            </div>
+    
+    <script src="/js/journal.js"></script></body>
+</html>

@@ -7,9 +7,153 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Thu, 07 Sep 2023 04:19:21 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 17 Mar 2024 00:41:08 +0800</lastBuildDate>
     
         <atom:link href="https://ntutn.top/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>安卓模仿微信选择昵称备注效果</title>
+        <link>https://ntutn.top/posts/%E5%AE%89%E5%8D%93%E6%A8%A1%E4%BB%BF%E5%BE%AE%E4%BF%A1%E9%80%89%E6%8B%A9%E6%98%B5%E7%A7%B0%E5%A4%87%E6%B3%A8%E6%95%88%E6%9E%9C/</link>
+        <pubDate>Sun, 17 Mar 2024 00:41:08 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/%E5%AE%89%E5%8D%93%E6%A8%A1%E4%BB%BF%E5%BE%AE%E4%BF%A1%E9%80%89%E6%8B%A9%E6%98%B5%E7%A7%B0%E5%A4%87%E6%B3%A8%E6%95%88%E6%9E%9C/</guid>
+        <description>归零幻想 https://ntutn.top/posts/%E5%AE%89%E5%8D%93%E6%A8%A1%E4%BB%BF%E5%BE%AE%E4%BF%A1%E9%80%89%E6%8B%A9%E6%98%B5%E7%A7%B0%E5%A4%87%E6%B3%A8%E6%95%88%E6%9E%9C/ -&lt;p&gt;首先，这是我们要实现的预期效果：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2024/03/0edd6afb137bc0c780c21bbb0405365b.png&#34; alt=&#34;微信昵称选择效果&#34;&gt;&lt;/p&gt;
+&lt;h1 id=&#34;实现一个标签容器效果&#34;&gt;实现一个标签容器效果&lt;/h1&gt;
+&lt;p&gt;我们把每个字视作一个标签，那么微信这个效果可以看作是多个标签逐行摆放，其中部分被选中。幸运的是MD中有这样的效果&lt;a href=&#34;https://m3.material.io/components/chips/overview&#34;&gt;ChipGroup&lt;/a&gt;，这样我们可以节省不少工作。&lt;/p&gt;
+&lt;p&gt;源代码：&lt;a href=&#34;https://github.com/material-components/material-components-android/blob/master/lib/java/com/google/android/material/chip/ChipGroup.java&#34;&gt;ChipGroup.java&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;文章介绍：&lt;a href=&#34;https://juejin.cn/post/7064110582865068069&#34;&gt;Android修行手册 - ChipGroup&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2024/03/be816730a726fe01bc791c9f79aba686.png&#34; alt=&#34;ChipGroup&#34;&gt;&lt;/p&gt;
+&lt;p&gt;然后我们用代码添加一些标签，并在点击时进行反选：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        binding.contentMain.chipGroup.apply {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            isSelectionRequired
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            isSingleSelection = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            words.forEach { word -&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                addView(Chip(context).also { chip -&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    chip.text = word.trimIndent()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    chip.setOnClickListener {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt;.isSelected = !&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt;.isSelected
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                })
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;涂抹选择文本&#34;&gt;涂抹选择文本&lt;/h1&gt;
+&lt;p&gt;显然要实现涂抹选中，我们得自定义View，拦截触摸事件定制逻辑。既然是“涂抹”，那么要拦截的就是 &lt;code&gt;ev?.action == MotionEvent.ACTION_MOVE&lt;/code&gt; 。&lt;/p&gt;
+&lt;p&gt;回顾&lt;a href=&#34;https://juejin.cn/post/6844904041487532045&#34;&gt;Android触摸事件传递机制&lt;/a&gt;，复写&lt;code&gt;onInterceptTouchEvent&lt;/code&gt;方法。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;SwipeSelectLayout&lt;/span&gt; &lt;span style=&#34;color:#707a7c&#34;&gt;@JvmOverloads&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;constructor&lt;/span&gt;(context: Context, defStyleAttr: AttributeSet? = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;, defStyleRes: Int = &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;) : ChipGroup(context, defStyleAttr, defStyleRes) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; childrenSelectionOnMoveStart = mutableMapOf&amp;lt;View, Boolean&amp;gt;()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; closestViewIndex = -&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onInterceptTouchEvent&lt;/span&gt;(ev: MotionEvent): Boolean {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (ev.action == &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MotionEvent&lt;/span&gt;.ACTION_DOWN) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            handleMotionEventDown(ev)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (ev.action == &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MotionEvent&lt;/span&gt;.ACTION_MOVE) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onInterceptTouchEvent(ev)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#707a7c&#34;&gt;@SuppressLint&lt;/span&gt;(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;ClickableViewAccessibility&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;onTouchEvent&lt;/span&gt;(event: MotionEvent): Boolean {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (!children.any()) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onTouchEvent(event)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;when&lt;/span&gt;(event.action) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MotionEvent&lt;/span&gt;.ACTION_DOWN -&amp;gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#228b22&#34;&gt;// 拖动起始点不在一个child上，也选择一个最近的View
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                &lt;span style=&#34;color:#228b22&#34;&gt;// handleMotionEventDown(event)
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                &lt;span style=&#34;color:#228b22&#34;&gt;// return true
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;            }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MotionEvent&lt;/span&gt;.ACTION_MOVE -&amp;gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                handleMotionEventMove(event)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MotionEvent&lt;/span&gt;.ACTION_UP -&amp;gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                childrenSelectionOnMoveStart.clear()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MotionEvent&lt;/span&gt;.ACTION_CANCEL -&amp;gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                childrenSelectionOnMoveStart.clear()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;.onTouchEvent(event)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ...
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;而“涂抹”的过程实际上是反选了起始点和终止点之间的所有View。因此我们需要&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;手指按下时记录所有View的选择状态，以及距离按下坐标最近的View&lt;/li&gt;
+&lt;li&gt;手指移动时找到当前点View，修改所有View的选中状态
+&lt;ul&gt;
+&lt;li&gt;不在选中范围的View，重置为初始选中状态&lt;/li&gt;
+&lt;li&gt;在选中范围的View，反选&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;手指抬起时清除记录&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;计算点到矩形的距离&#34;&gt;计算点到矩形的距离&lt;/h2&gt;
+&lt;p&gt;首先思考点到线段的距离，&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2024/03/fca600fc884786f64d7a12b35068e6fd.png&#34; alt=&#34;点到线段的距离&#34;&gt;&lt;/p&gt;
+&lt;p&gt;设A、B、C三点位置分别为$x_A$、$x_B$、$x_C$，那么点A到线段BC的距离有&lt;/p&gt;
+&lt;p&gt;$$
+x=\begin{cases}
+x_B - x_A &amp;amp; x_A &amp;lt; x_B \\
+0 &amp;amp; xB &amp;lt; x_A &amp;lt; x_C \\
+x_A - x_C &amp;amp; x_A &amp;gt; x_C
+\end{cases}
+$$&lt;/p&gt;
+&lt;p&gt;推广到点到矩形的距离，得到距离计算方式&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;getDistanceBetweenRectAndPoint&lt;/span&gt;(rect: Rect, x: Int, y: Int): Int {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; xDistance = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (x &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;in&lt;/span&gt; rect.left..rect.right) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; (
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            min(abs(x - rect.left), abs(x - rect.right))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        )
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; yDistance = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (y &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;in&lt;/span&gt; rect.top..rect.bottom) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            min(abs(y - rect.top), abs(y - rect.bottom))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; sqrt((xDistance * xDistance + yDistance * yDistance).toFloat()).roundToInt()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这样，在手指按下时记录选中状态和最近的View&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;handleMotionEventDown&lt;/span&gt;(event: MotionEvent) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        children.forEachIndexed { index, view -&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#228b22&#34;&gt;// 记录所有Chip的选中状态
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;            childrenSelectionOnMoveStart[view] = view.isSelected
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#228b22&#34;&gt;// 查找距离起始点最近的View
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;            closestViewIndex = findClosestViewIndex(event.x.roundToInt(), event.y.roundToInt())
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;手指移动过程中反选最近View与起始点之间的View。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;handleMotionEventMove&lt;/span&gt;(event: MotionEvent) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; startViewIndex = closestViewIndex
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; endViewIndex = findClosestViewIndex(event.x.roundToInt(), event.y.roundToInt())
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; range = min(startViewIndex, endViewIndex)..max(startViewIndex, endViewIndex)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt; (i &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt; until childCount) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; view = getChildAt(i)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; originSelection = childrenSelectionOnMoveStart[view] == &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            view.isSelected = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (i &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;in&lt;/span&gt; range) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#228b22&#34;&gt;// 反选拖动区域所有View的选中状态
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                !originSelection
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            } &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                &lt;span style=&#34;color:#228b22&#34;&gt;// 不在拖动区域，还原到初始选择状态
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;                originSelection
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;大功告成。我们最终实现的效果：&lt;a href=&#34;https://images.ntutn.top/2024/03/cfffe040d35659e5c86242e45b7f65f0.mp4&#34;&gt;点击查看&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;代码：&lt;a href=&#34;https://gist.github.com/zerofancy/87645b411159ae7c64bb85e180bad3fc&#34;&gt;Gist&lt;/a&gt;&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;!-- raw HTML omitted --&gt;
+- https://ntutn.top/posts/%E5%AE%89%E5%8D%93%E6%A8%A1%E4%BB%BF%E5%BE%AE%E4%BF%A1%E9%80%89%E6%8B%A9%E6%98%B5%E7%A7%B0%E5%A4%87%E6%B3%A8%E6%95%88%E6%9E%9C/ - CC BY-SA 4.0</description>
+        </item>
     
     
     
@@ -183,13 +327,13 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;final&lt;/span&gt; java.&lt;span style=&#34;color:#658b00&#34;&gt;lang&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;Object&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;invokeSuspend&lt;/span&gt;(&lt;span style=&#34;color:#707a7c&#34;&gt;@org.jetbrains.annotations.NotNull&lt;/span&gt; java.&lt;span style=&#34;color:#658b00&#34;&gt;lang&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;Object&lt;/span&gt; r7) {
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;switch&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;label&lt;/span&gt;) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; 0:
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#228b22&#34;&gt;// 计算compute1的代码
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; 1:
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#228b22&#34;&gt;// 计算compute2的代码
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;2&lt;/span&gt;:
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; 2:
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#228b22&#34;&gt;// 输出println
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;default&lt;/span&gt;:
@@ -1002,73 +1146,6 @@
 &lt;/div&gt;
 
 - https://ntutn.top/project/hugo%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0%E5%8A%A0%E5%AF%86/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>[加密]迷信行为</title>
-        <link>https://ntutn.top/think/%E8%BF%B7%E4%BF%A1%E8%A1%8C%E4%B8%BA/</link>
-        <pubDate>Sun, 12 Feb 2023 04:50:03 +0800</pubDate>
-        
-        <guid>https://ntutn.top/think/%E8%BF%B7%E4%BF%A1%E8%A1%8C%E4%B8%BA/</guid>
-        <description>归零幻想 https://ntutn.top/think/%E8%BF%B7%E4%BF%A1%E8%A1%8C%E4%B8%BA/ -&lt;blockquote&gt;
-&lt;p&gt;密码是6位数字，我的中考分数和高考分数。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-
-
-
-&lt;div class=&#34;hugo-encryptor-container&#34;&gt;
-  &lt;div class=&#34;hugo-encryptor-prompt&#34;&gt;
-    
-      &lt;p&gt;文章的部分内容被密码保护：&lt;/p&gt;
-    
-  &lt;/div&gt;
-  &lt;div class=&#34;hugo-encryptor-form&#34;&gt;
-    &lt;input
-      class=&#34;hugo-encryptor-input&#34;
-      placeholder=&#39;请输入密码&#39;
-    /&gt;
-    &lt;input
-      class=&#34;hugo-encryptor-button&#34;
-      type=&#34;button&#34;
-      value=&#39;点击验证&#39;
-      onclick=&#34;_click_handler(this)&#34;
-    /&gt;
-  &lt;/div&gt;
-  &lt;div
-    class=&#34;hugo-encryptor-cipher-text&#34;
-    data-password=&#34;532584&#34;
-    style=&#34;display: none;&#34;
-  &gt;
-    &lt;span style=&#34;display: none;&#34;&gt;--- DON&#39;T MODIFY THIS LINE ---&lt;/span&gt;
-    &lt;p&gt;虽然我不信，但偶然会出现那种撞邪的场景，有正好说中的。说的有意思，也记录下。&lt;/p&gt;
-&lt;h2 id=&#34;算命事件&#34;&gt;算命事件&lt;/h2&gt;
-&lt;h3 id=&#34;考试成绩&#34;&gt;考试成绩&lt;/h3&gt;
-&lt;p&gt;曾有人预言我家两个孩子中考考多少分高考就会考多少分。&lt;/p&gt;
-&lt;p&gt;我姐中考成绩531分，高考成绩也是531分。&lt;/p&gt;
-&lt;p&gt;我对此嗤之以鼻，把它当做笑谈和同学谈起，甚至当我中考考了532分后。我高考考了584分。&lt;/p&gt;
-&lt;p&gt;我认为很多时候所谓的奇迹什么的大概也是类似的原因，小概率事件发生了是神显灵了，没发生是心不诚。如果把百万分之一概率事件发生定义为奇迹出现，那么你每年都能看到奇迹出现一两次。&lt;/p&gt;
-&lt;h3 id=&#34;泰山童子&#34;&gt;泰山童子&lt;/h3&gt;
-&lt;p&gt;另一个神婆说我是泰山上巡山的童子，每日扛着红缨枪巡山，所以才白天精神萎靡晚上精力充沛。说童子说法不少，比如姻缘不好。好么，那时候就咒我找不到对象了。&lt;/p&gt;
-&lt;h2 id=&#34;其他人态度&#34;&gt;其他人态度&lt;/h2&gt;
-&lt;h3 id=&#34;妈妈&#34;&gt;妈妈&lt;/h3&gt;
-&lt;p&gt;嘴上说着无神论，但实际上心里不是很坚定——如果有来传教的，她估计会听人家说道，求个挂坠什么的。我觉得她现在不信教大概是宗教活动比较花钱吧。&lt;/p&gt;
-&lt;h3 id=&#34;于新宇&#34;&gt;于新宇&lt;/h3&gt;
-&lt;p&gt;相信。虽然他一个大男生，还是学医的，有点小迷信不太符合人设，但据他说是小时候见到过比较厉害的『大师』，看出他的命相，预言的事件一一实现了，所以相信。&lt;/p&gt;
-&lt;p&gt;虽然他总体上相信科学，但他相信&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;这个世界上是有些东西是科学不能解释的。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&#34;许愿&#34;&gt;许愿&lt;/h2&gt;
-&lt;p&gt;我大姑说当时在泰山文曲星帮我许了愿，考上好大学，目前已经实现，理应去还愿。我是不信这些的，但长辈的好心不能浪费，所以此后去泰山可顺便看看。&lt;/p&gt;
-&lt;p&gt;在写毕设过程中跟李睿及其一家去了一次，未能顺利找到，以他们的行程为主也不好再仔细寻找，暂时作罢。&lt;/p&gt;
-
-  &lt;/div&gt;
-&lt;/div&gt;
-
-- https://ntutn.top/think/%E8%BF%B7%E4%BF%A1%E8%A1%8C%E4%B8%BA/ - CC BY-SA 4.0</description>
         </item>
     
     

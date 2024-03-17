@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>触摸事件 on 归零幻想</title>
+    <link>https://ntutn.top/tags/%E8%A7%A6%E6%91%B8%E4%BA%8B%E4%BB%B6/</link>
+    <description>Recent content in 触摸事件 on 归零幻想</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh</language>
+    <copyright>CC BY-SA 4.0</copyright>
+    <lastBuildDate>Sun, 17 Mar 2024 00:41:08 +0800</lastBuildDate><atom:link href="https://ntutn.top/tags/%E8%A7%A6%E6%91%B8%E4%BA%8B%E4%BB%B6/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>安卓模仿微信选择昵称备注效果</title>
+      <link>https://ntutn.top/posts/%E5%AE%89%E5%8D%93%E6%A8%A1%E4%BB%BF%E5%BE%AE%E4%BF%A1%E9%80%89%E6%8B%A9%E6%98%B5%E7%A7%B0%E5%A4%87%E6%B3%A8%E6%95%88%E6%9E%9C/</link>
+      <pubDate>Sun, 17 Mar 2024 00:41:08 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/%E5%AE%89%E5%8D%93%E6%A8%A1%E4%BB%BF%E5%BE%AE%E4%BF%A1%E9%80%89%E6%8B%A9%E6%98%B5%E7%A7%B0%E5%A4%87%E6%B3%A8%E6%95%88%E6%9E%9C/</guid>
+      <description>首先，这是我们要实现的预期效果：
+实现一个标签容器效果 我们把每个字视作一个标签，那么微信这个效果可以看作是多个标签逐行摆放，其中部分被选中。幸运的是MD中有这样的效果ChipGroup，这样我们可以节省不少工作。
+源代码：ChipGroup.java
+文章介绍：Android修行手册 - ChipGroup
+然后我们用代码添加一些标签，并在点击时进行反选：
+binding.contentMain.chipGroup.apply { isSelectionRequired isSingleSelection = false words.forEach { word -&amp;gt; addView(Chip(context).also { chip -&amp;gt; chip.text = word.trimIndent() chip.setOnClickListener { it.isSelected = !it.isSelected } }) } } 涂抹选择文本 显然要实现涂抹选中，我们得自定义View，拦截触摸事件定制逻辑。既然是“涂抹”，那么要拦截的就是 ev?.action == MotionEvent.ACTION_MOVE 。
+回顾Android触摸事件传递机制，复写onInterceptTouchEvent方法。
+class SwipeSelectLayout @JvmOverloads constructor(context: Context, defStyleAttr: AttributeSet? = null, defStyleRes: Int = 0) : ChipGroup(context, defStyleAttr, defStyleRes) { private val childrenSelectionOnMoveStart = mutableMapOf&amp;lt;View, Boolean&amp;gt;() private var closestViewIndex = -1 override fun onInterceptTouchEvent(ev: MotionEvent): Boolean { if (ev.</description>
+    </item>
+    
+  </channel>
+</rss>
