@@ -7,9 +7,94 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Sun, 17 Mar 2024 00:41:08 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 24 Mar 2024 21:38:29 +0800</lastBuildDate>
     
         <atom:link href="https://ntutn.top/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>Compose下StateFlow误用导致输入跳变</title>
+        <link>https://ntutn.top/posts/compose%E4%B8%8Bstateflow%E8%AF%AF%E7%94%A8%E5%AF%BC%E8%87%B4%E8%BE%93%E5%85%A5%E8%B7%B3%E5%8F%98/</link>
+        <pubDate>Sun, 24 Mar 2024 21:38:29 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/compose%E4%B8%8Bstateflow%E8%AF%AF%E7%94%A8%E5%AF%BC%E8%87%B4%E8%BE%93%E5%85%A5%E8%B7%B3%E5%8F%98/</guid>
+        <description>归零幻想 https://ntutn.top/posts/compose%E4%B8%8Bstateflow%E8%AF%AF%E7%94%A8%E5%AF%BC%E8%87%B4%E8%BE%93%E5%85%A5%E8%B7%B3%E5%8F%98/ -&lt;h1 id=&#34;问题复线&#34;&gt;问题复线&lt;/h1&gt;
+&lt;p&gt;一段只有一个输入框的demo代码：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;SomeVM&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; textState = MutableStateFlow(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;update&lt;/span&gt;(text: String) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        textState.&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;value&lt;/span&gt; = text
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#707a7c&#34;&gt;@Composable&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#707a7c&#34;&gt;@Preview&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;App&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    MaterialTheme {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; vm = remember(::SomeVM)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; text &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;by&lt;/span&gt; vm.textState.collectAsState()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        TextField(text, onValueChange = vm::update)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;运行后，连续快速按1、2两个按键，数次后发生输入错乱。&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2024/03/f81c886f14f6aba9c895f96ac2237714.png&#34; alt=&#34;快速输入错乱&#34;&gt;&lt;/p&gt;
+&lt;h1 id=&#34;问题排查&#34;&gt;问题排查&lt;/h1&gt;
+&lt;p&gt;上面示例使用了StateFlow，首先去掉StateFlow，换成Compose内置的State，即&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;SomeVM&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; textState = mutableStateOf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;update&lt;/span&gt;(text: String) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        textState.&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;value&lt;/span&gt; = text
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#707a7c&#34;&gt;@Composable&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#707a7c&#34;&gt;@Preview&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;App&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    MaterialTheme {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; vm = remember(::SomeVM)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; text &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;by&lt;/span&gt; vm.textState
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        TextField(text, onValueChange = vm::update)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;问题消失。原生的State没问题，StateFlow被大量使用有问题的概率也不大，因此看将StateFlow转换为State的方法：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2024/03/2b666a95866bf83d1b6a4028a63f6dd8.png&#34; alt=&#34;collectAsState&#34;&gt;&lt;/p&gt;
+&lt;p&gt;原来collectAsState方法的参数context有默认值 &lt;code&gt;EmptyCoroutineContext&lt;/code&gt; ，而其对应的 &lt;code&gt;Dispatchers.Default&lt;/code&gt; 就是在异步线程在执行了。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2024/03/78dd50a21ab5529b51f35148f7e88e24.png&#34; alt=&#34;EmptyCoroutineContext对应的Dispatcher&#34;&gt;&lt;/p&gt;
+&lt;p&gt;所以问题就很明了了，用户输入和其他UI变化在主线程，而StateFlow的监听却到后台线程倒了一下手，主线程取到错误的文本长度导致焦点位置错误就是正常的了。&lt;/p&gt;
+&lt;h1 id=&#34;解决方案&#34;&gt;解决方案&lt;/h1&gt;
+&lt;p&gt;解决的方法就是主动传入下Dispatchers.Main保证状态监听也在主线程就可以了。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;SomeVM&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; textState = MutableStateFlow(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;update&lt;/span&gt;(text: String) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        textState.&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;value&lt;/span&gt; = text
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#707a7c&#34;&gt;@Composable&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#707a7c&#34;&gt;@Preview&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;App&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    MaterialTheme {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; vm = remember(::SomeVM)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; text &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;by&lt;/span&gt; vm.textState.collectAsState(&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Dispatchers&lt;/span&gt;.&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Main&lt;/span&gt;.immediate)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        TextField(text, onValueChange = vm::update)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;当然还要注意，Compose在JVM平台使用的Swing框架，需要添加依赖协程库才能知道哪个线程是主线程。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;implementation(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;org.jetbrains.kotlinx:kotlinx-coroutines-swing:1.8.0&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;更多相关&#34;&gt;更多相关&lt;/h1&gt;
+&lt;p&gt;为何在VM中要把状态定义成StateFlow，直接用Compose的State不就啥事情都没有了？&lt;/p&gt;
+&lt;p&gt;定义成StateFlow可以方便地对数据进行一些操作，且保证VM中不包含任何UI代码，便于测试。&lt;/p&gt;
+&lt;p&gt;而且上面例子也是比较特殊的，大多数场景，点击XX按钮，不会像输入框这样有这么高的实时性要求。另外我个人认为，这里默认值用EmptyCoroutineContext是不合适的，就监听个状态还能把主线程累死吗。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+- https://ntutn.top/posts/compose%E4%B8%8Bstateflow%E8%AF%AF%E7%94%A8%E5%AF%BC%E8%87%B4%E8%BE%93%E5%85%A5%E8%B7%B3%E5%8F%98/ - CC BY-SA 4.0</description>
+        </item>
     
     
     
@@ -1095,57 +1180,6 @@ $$&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;若使用Kotlin Coroutines + Retrofit + OkHttp做网络请求，那么我们不用手动指定异步线程做网络请求，Retrofit已经处理了。&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;为何RxJava没有实现异步请求且自动切换回之前线程的特性，我认为可能是RxJava配合使用时不明确写&lt;code&gt;observeOn&lt;/code&gt;，不能让使用者确信回调位置代码执行在某线程——RxJava流式写法，不写observeOn谁知道前面步骤切换到了哪个线程。再说拉到数据后也可能要进行一些仍然要在异步线程的其他处理，不一定就要切换回主线程，所以框架内就不多此一举了。&lt;/p&gt;
 - https://ntutn.top/posts/retrofit%E5%8F%AF%E4%BB%A5%E4%B8%8D%E4%B8%BB%E5%8A%A8%E5%88%87%E6%8D%A2%E7%BA%BF%E7%A8%8B%E5%90%97/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>Hugo博客文章加密</title>
-        <link>https://ntutn.top/project/hugo%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0%E5%8A%A0%E5%AF%86/</link>
-        <pubDate>Sun, 19 Feb 2023 00:39:01 +0800</pubDate>
-        
-        <guid>https://ntutn.top/project/hugo%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0%E5%8A%A0%E5%AF%86/</guid>
-        <description>归零幻想 https://ntutn.top/project/hugo%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0%E5%8A%A0%E5%AF%86/ -&lt;p&gt;最近发现一个看上去不错的项目叫做&lt;a href=&#34;https://github.com/Li4n0/hugo_encryptor&#34;&gt;Hugo Encryptor&lt;/a&gt;，可以给hugo博客加密，输入密码后又可以正常访问，相当nice。&lt;/p&gt;
-&lt;p&gt;然而这个工具折腾起来并没有那么容易用，因为它Python写的，依赖问题就是一个坑，这坑过了之后还发现它有其他的缺陷，比如重复运行会报错等。首先我这样说不是因为我讨厌Python哈，虽然我确实不喜欢，但作者去年也说&lt;a href=&#34;https://github.com/Li4n0/hugo_encryptor/issues/29&#34;&gt;计划拿Go重新实现的&lt;/a&gt;，但目前没啥动静。&lt;/p&gt;
-&lt;p&gt;看它其实也就一个Python文件，遍历查找xml节点加密替换内容，属于是我这种教程都没看完的人也能看懂的程度，于是我决定自己写一个Kotlin版本。本来是想试试GraalVM整上各个平台的native版本，但折腾好久也没运行起来，于是退而求其次整了个类似安卓项目中&lt;code&gt;gradlew&lt;/code&gt;文件的脚本叫&lt;code&gt;hugow&lt;/code&gt;，替代&lt;code&gt;hugo&lt;/code&gt;命令，一键完成下载安装工具、生成静态网站和对特定内容加密的功能。&lt;/p&gt;
-&lt;blockquote&gt;
-&lt;p&gt;示例：下面这段内容的密码是&lt;code&gt;ntutn&lt;/code&gt;。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-
-
-
-&lt;div class=&#34;hugo-encryptor-container&#34;&gt;
-  &lt;div class=&#34;hugo-encryptor-prompt&#34;&gt;
-    
-      &lt;p&gt;文章的部分内容被密码保护：&lt;/p&gt;
-    
-  &lt;/div&gt;
-  &lt;div class=&#34;hugo-encryptor-form&#34;&gt;
-    &lt;input
-      class=&#34;hugo-encryptor-input&#34;
-      placeholder=&#39;请输入密码&#39;
-    /&gt;
-    &lt;input
-      class=&#34;hugo-encryptor-button&#34;
-      type=&#34;button&#34;
-      value=&#39;点击验证&#39;
-      onclick=&#34;_click_handler(this)&#34;
-    /&gt;
-  &lt;/div&gt;
-  &lt;div
-    class=&#34;hugo-encryptor-cipher-text&#34;
-    data-password=&#34;ntutn&#34;
-    style=&#34;display: none;&#34;
-  &gt;
-    &lt;span style=&#34;display: none;&#34;&gt;--- DON&#39;T MODIFY THIS LINE ---&lt;/span&gt;
-    &lt;p&gt;在线演示：&lt;a href=&#34;https://ntutn.top/hugo_encryptor_kt/posts/this-is-hugo-encryptor/&#34;&gt;https://ntutn.top/hugo_encryptor_kt/posts/this-is-hugo-encryptor/&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;仓库地址：&lt;a href=&#34;https://github.com/zerofancy/hugo_encryptor_kt&#34;&gt;https://github.com/zerofancy/hugo_encryptor_kt&lt;/a&gt;&lt;/p&gt;
-
-  &lt;/div&gt;
-&lt;/div&gt;
-
-- https://ntutn.top/project/hugo%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0%E5%8A%A0%E5%AF%86/ - CC BY-SA 4.0</description>
         </item>
     
     

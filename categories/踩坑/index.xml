@@ -7,7 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Tue, 12 Oct 2021 03:11:37 +0800</lastBuildDate><atom:link href="https://ntutn.top/categories/%E8%B8%A9%E5%9D%91/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 24 Mar 2024 21:38:29 +0800</lastBuildDate><atom:link href="https://ntutn.top/categories/%E8%B8%A9%E5%9D%91/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Compose下StateFlow误用导致输入跳变</title>
+      <link>https://ntutn.top/posts/compose%E4%B8%8Bstateflow%E8%AF%AF%E7%94%A8%E5%AF%BC%E8%87%B4%E8%BE%93%E5%85%A5%E8%B7%B3%E5%8F%98/</link>
+      <pubDate>Sun, 24 Mar 2024 21:38:29 +0800</pubDate>
+      
+      <guid>https://ntutn.top/posts/compose%E4%B8%8Bstateflow%E8%AF%AF%E7%94%A8%E5%AF%BC%E8%87%B4%E8%BE%93%E5%85%A5%E8%B7%B3%E5%8F%98/</guid>
+      <description>问题复线 一段只有一个输入框的demo代码：
+class SomeVM { val textState = MutableStateFlow(&amp;#34;&amp;#34;) fun update(text: String) { textState.value = text } } @Composable @Preview fun App() { MaterialTheme { val vm = remember(::SomeVM) val text by vm.textState.collectAsState() TextField(text, onValueChange = vm::update) } } 运行后，连续快速按1、2两个按键，数次后发生输入错乱。
+问题排查 上面示例使用了StateFlow，首先去掉StateFlow，换成Compose内置的State，即
+class SomeVM { val textState = mutableStateOf(&amp;#34;&amp;#34;) fun update(text: String) { textState.value = text } } @Composable @Preview fun App() { MaterialTheme { val vm = remember(::SomeVM) val text by vm.</description>
+    </item>
+    
     <item>
       <title>Java默认修饰符问题</title>
       <link>https://ntutn.top/posts/java%E9%BB%98%E8%AE%A4%E4%BF%AE%E9%A5%B0%E7%AC%A6%E9%97%AE%E9%A2%98/</link>
