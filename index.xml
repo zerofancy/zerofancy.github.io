@@ -7,9 +7,109 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Sun, 24 Mar 2024 21:38:29 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 05 Apr 2024 14:48:05 +0800</lastBuildDate>
     
         <atom:link href="https://ntutn.top/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>Golang&#43;Vue写桌面小工具</title>
+        <link>https://ntutn.top/posts/golang_with_vue_desktop/</link>
+        <pubDate>Fri, 05 Apr 2024 14:48:05 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/golang_with_vue_desktop/</guid>
+        <description>归零幻想 https://ntutn.top/posts/golang_with_vue_desktop/ -&lt;p&gt;对于所有大前端程序员来说，写个桌面小工具的冲动可能很难抑制，有时想到一些有趣的想法，纵使不能改变世界，也能方便自己嘛。&lt;del&gt;虽然大多数人只是再次发明TODO、记账、笔记应用，发到V2EX分享创造结点。&lt;/del&gt;&lt;/p&gt;
+&lt;p&gt;&lt;a href=&#34;https://github.com/JetBrains/compose-jb&#34;&gt;Compose Desktop&lt;/a&gt;写起来没有想象的那么舒服，打包起来更是不爽。&lt;a href=&#34;https://dotnet.microsoft.com/zh-cn/apps/desktop&#34;&gt;MAUI&lt;/a&gt;不支持Linux，&lt;a href=&#34;https://electronjs.org/&#34;&gt;Electron&lt;/a&gt;打包体积太大，&lt;a href=&#34;https://tauri.app/&#34;&gt;Tauri&lt;/a&gt;要学&lt;a href=&#34;https://www.rust-lang.org/&#34;&gt;Rust&lt;/a&gt;太难，折腾一番，我发现&lt;a href=&#34;https://go.dev/&#34;&gt;Golang&lt;/a&gt; + &lt;a href=&#34;https://cn.vuejs.org/&#34;&gt;Vue&lt;/a&gt;能满足我的要求。Vue广泛用于前端，Golang写后端也很方便，那么只需要一个&lt;a href=&#34;https://github.com/webview/webview_go&#34;&gt;Webview&lt;/a&gt;就可以像一个桌面应用一样工作了。&lt;/p&gt;
+&lt;h1 id=&#34;搭建项目&#34;&gt;搭建项目&lt;/h1&gt;
+&lt;p&gt;首先创建一个vue项目，&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;pnpm create vue@latest
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#658b00&#34;&gt;cd&lt;/span&gt; some-project
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;pnpm init
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;修改&lt;code&gt;App.vue&lt;/code&gt;，在打开后请求后端接口更新数据：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-html&#34; data-lang=&#34;html&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;script&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;setup&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;lang&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;ts&amp;#34;&lt;/span&gt;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; HelloWorld from &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;./components/HelloWorld.vue&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; { onMounted, ref } from &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;vue&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;const&lt;/span&gt; message = ref(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Hello World from vue!&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;onMounted(() =&amp;gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  fetch(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;/api/example&amp;#34;&lt;/span&gt;).then((response) =&amp;gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    response.text().then((t) =&amp;gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      message.value = t
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    })
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  })
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;})
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;/&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;script&lt;/span&gt;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;template&lt;/span&gt;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;header&lt;/span&gt;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;div&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;class&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;wrapper&amp;#34;&lt;/span&gt;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;      &amp;lt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;HelloWorld&lt;/span&gt; &lt;span style=&#34;color:#658b00&#34;&gt;:msg&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;message&amp;#34;&lt;/span&gt; /&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &amp;lt;/&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;div&lt;/span&gt;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &amp;lt;/&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;header&lt;/span&gt;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  ...
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;/&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;template&lt;/span&gt;&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;再在同一个文件夹创建Golang项目&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;go mod init some-project
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;go get github.com/webview/webview_go
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;接下来创建main.go，编写代码。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-golang&#34; data-lang=&#34;golang&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;package&lt;/span&gt; main
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; (
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;embed&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;fmt&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;io/fs&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;net&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;net/http&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;strconv&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	webview &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;github.com/webview/webview_go&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;//go:embed dist
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; distFS embed.FS
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;someApi&lt;/span&gt;(response http.ResponseWriter, request *http.Request) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	fmt.&lt;span style=&#34;color:#008b45&#34;&gt;Fprintf&lt;/span&gt;(response, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Hello World from golang!&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;func&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;() {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	fSys, err := fs.&lt;span style=&#34;color:#008b45&#34;&gt;Sub&lt;/span&gt;(distFS, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;dist&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; err != &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;nil&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#658b00&#34;&gt;panic&lt;/span&gt;(err)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	http.&lt;span style=&#34;color:#008b45&#34;&gt;Handle&lt;/span&gt;(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;/&amp;#34;&lt;/span&gt;, http.&lt;span style=&#34;color:#008b45&#34;&gt;FileServer&lt;/span&gt;(http.&lt;span style=&#34;color:#008b45&#34;&gt;FS&lt;/span&gt;(fSys))) &lt;span style=&#34;color:#228b22&#34;&gt;// 嵌入vue的导出文件
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;	http.&lt;span style=&#34;color:#008b45&#34;&gt;HandleFunc&lt;/span&gt;(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;/api/example&amp;#34;&lt;/span&gt;, someApi) &lt;span style=&#34;color:#228b22&#34;&gt;// 定义一些API供前端访问
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	listener, err := net.&lt;span style=&#34;color:#008b45&#34;&gt;Listen&lt;/span&gt;(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;tcp&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;localhost:0&amp;#34;&lt;/span&gt;) &lt;span style=&#34;color:#228b22&#34;&gt;// 监听随机端口
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;	&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; err != &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;nil&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;		&lt;span style=&#34;color:#658b00&#34;&gt;panic&lt;/span&gt;(err)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	port := listener.&lt;span style=&#34;color:#008b45&#34;&gt;Addr&lt;/span&gt;().(*net.TCPAddr).Port
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;go&lt;/span&gt; http.&lt;span style=&#34;color:#008b45&#34;&gt;Serve&lt;/span&gt;(listener, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;nil&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#228b22&#34;&gt;// 启动一个带Webview的窗口，并打开Vue的起始页
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;	w := webview.&lt;span style=&#34;color:#008b45&#34;&gt;New&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;defer&lt;/span&gt; w.&lt;span style=&#34;color:#008b45&#34;&gt;Destroy&lt;/span&gt;()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	w.&lt;span style=&#34;color:#008b45&#34;&gt;SetTitle&lt;/span&gt;(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Basic Example&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	w.&lt;span style=&#34;color:#008b45&#34;&gt;SetSize&lt;/span&gt;(&lt;span style=&#34;color:#b452cd&#34;&gt;1000&lt;/span&gt;, &lt;span style=&#34;color:#b452cd&#34;&gt;618&lt;/span&gt;, webview.HintNone)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	w.&lt;span style=&#34;color:#008b45&#34;&gt;Navigate&lt;/span&gt;(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;http://localhost:&amp;#34;&lt;/span&gt; + strconv.&lt;span style=&#34;color:#008b45&#34;&gt;Itoa&lt;/span&gt;(port))
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;	w.&lt;span style=&#34;color:#008b45&#34;&gt;Run&lt;/span&gt;()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h1 id=&#34;打包&#34;&gt;打包&lt;/h1&gt;
+&lt;p&gt;先打包Vue再打包Golang，整体还是很简单的。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;pnpm build
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;mkdir build
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#658b00&#34;&gt;cd&lt;/span&gt; build
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;go build ..
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2024/04/356de8dde5269cab5192f9fd94944c50.png&#34; alt=&#34;使用golang和Vue创建桌面工具&#34;&gt;&lt;/p&gt;
+&lt;p&gt;在我的Debian 12上上述Hello World打包体积为6.7M。&lt;/p&gt;
+&lt;h1 id=&#34;总结&#34;&gt;总结&lt;/h1&gt;
+&lt;p&gt;使用Vue开发前端而golang开发后端，上手难度低打包体积小，还能跨平台，写个小工具还是很适用的。喵的是，Golang和Vue用VSCode开发都很方便，你甚至不用打开两个IDE窗口。不过Webview项目目前并不是太成熟，提供的API也很少，如果要对窗口进行一些定制几乎是完全做不到的。&lt;/p&gt;
+- https://ntutn.top/posts/golang_with_vue_desktop/ - CC BY-SA 4.0</description>
+        </item>
     
     
     
@@ -1123,63 +1223,6 @@ $$&lt;/p&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 - https://ntutn.top/%E7%9F%A5%E8%AF%86%E4%BD%93%E7%B3%BB/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>Retrofit可以不主动切换线程吗</title>
-        <link>https://ntutn.top/posts/retrofit%E5%8F%AF%E4%BB%A5%E4%B8%8D%E4%B8%BB%E5%8A%A8%E5%88%87%E6%8D%A2%E7%BA%BF%E7%A8%8B%E5%90%97/</link>
-        <pubDate>Thu, 30 Mar 2023 01:55:01 +0800</pubDate>
-        
-        <guid>https://ntutn.top/posts/retrofit%E5%8F%AF%E4%BB%A5%E4%B8%8D%E4%B8%BB%E5%8A%A8%E5%88%87%E6%8D%A2%E7%BA%BF%E7%A8%8B%E5%90%97/</guid>
-        <description>归零幻想 https://ntutn.top/posts/retrofit%E5%8F%AF%E4%BB%A5%E4%B8%8D%E4%B8%BB%E5%8A%A8%E5%88%87%E6%8D%A2%E7%BA%BF%E7%A8%8B%E5%90%97/ -&lt;p&gt;Retrofit+Okhttp是我们常用的网络请求库，其定义API接口后可以通过动态代理来帮我们实际发出网络请求，我们能很快写出这样的代码：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-Kotlin&#34; data-lang=&#34;Kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;initData&lt;/span&gt;() {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    viewModelScope.launch {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; todoList = withContext(&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Dispatchers&lt;/span&gt;.IO) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            todoApi.getTodoList()
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }.payload
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        _todoListState.&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;value&lt;/span&gt; = todoList ?: listOf()
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;切换IO线程发出网络请求，切回主线程设置数据，回调式写法改为同步写法，非常舒服。但最近有个需求中，我发现我忘了写线程切换代码，然而没有报错：&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-Kotlin&#34; data-lang=&#34;Kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;initData&lt;/span&gt;() {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    viewModelScope.launch {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; todoList = todoApi.getTodoList().payload
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        _todoListState.&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;value&lt;/span&gt; = todoList ?: listOf()
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;为此，我们可以看一下他的实现，看内部哪里帮我们做了这个工作。&lt;/p&gt;
-&lt;h1 id=&#34;retrofit实现简要分析&#34;&gt;Retrofit实现简要分析&lt;/h1&gt;
-&lt;p&gt;&lt;strong&gt;retrofit2.Retrofit#create&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;这里首先创建了个动态代理，API接口中定义的方法实际由&lt;code&gt;loadServiceMethod(method).invoke(args)&lt;/code&gt;执行&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2023/03/59358546a698f192c7a828c79e907ec7.png&#34; alt=&#34;Retrofit生成动态代理代码&#34;&gt;&lt;/p&gt;
-&lt;p&gt;（省略部分代码）&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;retrofit2.HttpServiceMethod#parseAnnotations&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;这个方法中完成了主要的操作，解析请求参数，构建Call对象&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2023/03/3988b6b68bc307a36dd64803d8ad40c9.png&#34; alt=&#34;为suspend方法解析参数，准备请求代理类&#34;&gt;&lt;/p&gt;
-&lt;p&gt;可以看到，最终用一个SuspendForResponse/SuspendForBody封装了请求对象&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2023/03/6849a59a5bce5eee389d56de96e5c038.png&#34; alt=&#34;SuspendForResponse&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;retrofit2.HttpServiceMethod.SuspendForResponse#adapt&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2023/03/443e01a4ec5af406aa22dbe4781b73ea.png&#34; alt=&#34;awaitResponse&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;/home/zero/.gradle/caches/modules-2/files-2.1/com.squareup.retrofit2/retrofit/2.9.0/409e80ce46c84ef7e74b6934032a73b8421eebe5/retrofit-2.9.0-sources.jar!/retrofit2/KotlinExtensions.kt:86&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2023/03/eb3f3d876e866fe2969f0b12cf561598.png&#34; alt=&#34;异步网络请求&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;retrofit2.Call#enqueue&lt;/code&gt;方法实际上是对OkHttp异步请求方法&lt;code&gt;okhttp3.Call#enqueue&lt;/code&gt;的封装，总之他会在异步线程做网络请求并回调。&lt;/p&gt;
-&lt;p&gt;这里用到了一个叫suspendCancellableCoroutine的方法，而它在我们此前的协程专题分享中已经被提到了[&lt;a href=&#34;https://bytedance.feishu.cn/wiki/wikcnkJY8Py5EzkKww6jO5H9Lqe#VgIOd220YoueIcx6QOzcqB2cnyf&#34;&gt;Kotlin · Coroutines 在抖音] Suspend 揭秘&lt;/a&gt; 。这里是对Call对象回调式写法的封装，暂停（&lt;strong&gt;suspend&lt;/strong&gt;）当前Continuation，直到网络请求返回再继续（&lt;strong&gt;resume&lt;/strong&gt;）。&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;&lt;strong&gt;Q：&lt;/strong&gt; &lt;em&gt;既然suspend了，它会阻塞当前线程吗？&lt;/em&gt;&lt;/p&gt;
-&lt;p&gt;**A：**注意，这里suspend翻译为“暂停”，它并不等同于线程的阻塞。Continuation经编译后实际实现为一个状态机，暂停（suspend）只是停在当前节点，线程可以继续处理其他Message，并没有阻塞。&lt;/p&gt;
-&lt;hr&gt;
-&lt;p&gt;结果返回后，continuation的Context没有变化，即Dispatcher没有改变，即切换回了原来的线程/线程池。所以，使用Kotlin Coroutines + Retrofit时可以不切换异步线程再发起网络请求。&lt;/p&gt;
-&lt;h1 id=&#34;retrofit--rxjava写法可以不主动切换线程吗&#34;&gt;Retrofit + RxJava写法可以不主动切换线程吗&lt;/h1&gt;
-&lt;p&gt;直接看&lt;code&gt;RxJava2CallAdapter&lt;/code&gt;即可。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2023/03/378e28080b022497151a8f1d273b8053.png&#34; alt=&#34;Retrofit+RxJava&#34;&gt;&lt;/p&gt;
-&lt;p&gt;可以看到，这里根据设置CallAdapterFactory时传入的isAsync值不同，可能用同步请求方式（&lt;code&gt;call.execute()&lt;/code&gt;），也可以用异步请求方式（&lt;code&gt;call.enqueue(callback)&lt;/code&gt;），并没有其他切换线程操作。&lt;/p&gt;
-&lt;p&gt;即，若设置了&lt;code&gt;isAsync = true&lt;/code&gt;，则会异步线程请求和回调，但你肯定还是需要切换回主线程来更新UI，免不了写&lt;code&gt;observeOn&lt;/code&gt;。&lt;/p&gt;
-&lt;h1 id=&#34;总结&#34;&gt;总结&lt;/h1&gt;
-&lt;p&gt;&lt;strong&gt;若使用Kotlin Coroutines + Retrofit + OkHttp做网络请求，那么我们不用手动指定异步线程做网络请求，Retrofit已经处理了。&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;为何RxJava没有实现异步请求且自动切换回之前线程的特性，我认为可能是RxJava配合使用时不明确写&lt;code&gt;observeOn&lt;/code&gt;，不能让使用者确信回调位置代码执行在某线程——RxJava流式写法，不写observeOn谁知道前面步骤切换到了哪个线程。再说拉到数据后也可能要进行一些仍然要在异步线程的其他处理，不一定就要切换回主线程，所以框架内就不多此一举了。&lt;/p&gt;
-- https://ntutn.top/posts/retrofit%E5%8F%AF%E4%BB%A5%E4%B8%8D%E4%B8%BB%E5%8A%A8%E5%88%87%E6%8D%A2%E7%BA%BF%E7%A8%8B%E5%90%97/ - CC BY-SA 4.0</description>
         </item>
     
     
