@@ -4,37 +4,24 @@
     <title>Windows on 归零幻想</title>
     <link>https://ntutn.top/tags/windows/</link>
     <description>Recent content in Windows on 归零幻想</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Sun, 16 Jun 2019 03:11:37 +0800</lastBuildDate><atom:link href="https://ntutn.top/tags/windows/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 16 Jun 2019 03:11:37 +0800</lastBuildDate>
+    <atom:link href="https://ntutn.top/tags/windows/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>闷声作大死：删除电脑内的空文件夹</title>
       <link>https://ntutn.top/posts/%E9%97%B7%E5%A3%B0%E4%BD%9C%E5%A4%A7%E6%AD%BB%E5%88%A0%E9%99%A4%E7%94%B5%E8%84%91%E5%86%85%E7%9A%84%E7%A9%BA%E6%96%87%E4%BB%B6%E5%A4%B9/</link>
       <pubDate>Sun, 16 Jun 2019 03:11:37 +0800</pubDate>
-      
       <guid>https://ntutn.top/posts/%E9%97%B7%E5%A3%B0%E4%BD%9C%E5%A4%A7%E6%AD%BB%E5%88%A0%E9%99%A4%E7%94%B5%E8%84%91%E5%86%85%E7%9A%84%E7%A9%BA%E6%96%87%E4%BB%B6%E5%A4%B9/</guid>
-      <description>电脑卸载软件时，卸载程序常常不会把程序对应的空文件夹删掉，一般这时候我都是手动去把他删掉。
-我觉得有点麻烦，又想到电脑内可能还有其他的空文件夹。于是在网上找了个脚本删除电脑内的空文件夹，然后就遇到了麻烦……
-也许本文标题应该是一个空文件夹引发的血案……
-删除电脑内的空文件夹 本来我曾经写过一个C#版本的删除电脑空文件夹的工具，原理很简单，就是递归嘛：
-但是这程序执行比较慢，而且占用内存不少……
-在网上搜索了下，果然不能闭门造车啊，有大佬写过批处理：
-for /f &amp;#34;tokens=*&amp;#34; %%a in (&amp;#39;dir /b /ad /s C:\^|sort /r&amp;#39;) do rd &amp;#34;%%a&amp;#34; /q 2&amp;gt;nul 试用了下，效果相当不错。于是稍微修改使它能申请管理员权限，顺便修改下控制台颜色，看上去炫一点：
-title 删除空文件夹 color 03 echo 程序需要管理员权限…… set /a _Debug=0 ::========================================== :: 获取管理员权限 set _Args=%* if &amp;#34;%~1&amp;#34; NEQ &amp;#34;&amp;#34; ( set _Args=%_Args:&amp;#34;=% ) fltmc 1&amp;gt;nul 2&amp;gt;nul || ( cd /d &amp;#34;%~dp0&amp;#34; cmd /u /c echo Set UAC = CreateObject^(&amp;#34;Shell.Application&amp;#34;^) : UAC.ShellExecute &amp;#34;cmd.exe&amp;#34;, &amp;#34;/k cd &amp;#34;&amp;#34;%~dp0&amp;#34;&amp;#34; &amp;amp;&amp;amp; &amp;#34;&amp;#34;%~dpnx0&amp;#34;&amp;#34; &amp;#34;&amp;#34;%_Args%&amp;#34;&amp;#34;&amp;#34;, &amp;#34;&amp;#34;, &amp;#34;runas&amp;#34;, 1 &amp;gt; &amp;#34;%temp%\GetAdmin.</description>
+      <description>电脑卸载软件时，卸载程序常常不会把程序对应的空文件夹删掉，一般这时候我都是手动去把他删掉。&#xA;我觉得有点麻烦，又想到电脑内可能还有其他的空文件夹。于是在网上找了个脚本删除电脑内的空文件夹，然后就遇到了麻烦……&#xA;也许本文标题应该是一个空文件夹引发的血案……&#xA;删除电脑内的空文件夹 本来我曾经写过一个C#版本的删除电脑空文件夹的工具，原理很简单，就是递归嘛：&#xA;但是这程序执行比较慢，而且占用内存不少……&#xA;在网上搜索了下，果然不能闭门造车啊，有大佬写过批处理：&#xA;for /f &amp;#34;tokens=*&amp;#34; %%a in (&amp;#39;dir /b /ad /s C:\^|sort /r&amp;#39;) do rd &amp;#34;%%a&amp;#34; /q 2&amp;gt;nul 试用了下，效果相当不错。于是稍微修改使它能申请管理员权限，顺便修改下控制台颜色，看上去炫一点：&#xA;title 删除空文件夹 color 03 echo 程序需要管理员权限…… set /a _Debug=0 ::========================================== :: 获取管理员权限 set _Args=%* if &amp;#34;%~1&amp;#34; NEQ &amp;#34;&amp;#34; ( set _Args=%_Args:&amp;#34;=% ) fltmc 1&amp;gt;nul 2&amp;gt;nul || ( cd /d &amp;#34;%~dp0&amp;#34; cmd /u /c echo Set UAC = CreateObject^(&amp;#34;Shell.Application&amp;#34;^) : UAC.ShellExecute &amp;#34;cmd.exe&amp;#34;, &amp;#34;/k cd &amp;#34;&amp;#34;%~dp0&amp;#34;&amp;#34; &amp;amp;&amp;amp; &amp;#34;&amp;#34;%~dpnx0&amp;#34;&amp;#34; &amp;#34;&amp;#34;%_Args%&amp;#34;&amp;#34;&amp;#34;, &amp;#34;&amp;#34;, &amp;#34;runas&amp;#34;, 1 &amp;gt; &amp;#34;%temp%\GetAdmin.</description>
     </item>
-    
     <item>
       <title>使用映像劫持技术屏蔽电脑中的广告进程</title>
       <link>https://ntutn.top/posts/%E4%BD%BF%E7%94%A8%E6%98%A0%E5%83%8F%E5%8A%AB%E6%8C%81%E6%8A%80%E6%9C%AF%E5%B1%8F%E8%94%BD%E7%94%B5%E8%84%91%E4%B8%AD%E7%9A%84%E5%B9%BF%E5%91%8A%E8%BF%9B%E7%A8%8B/</link>
       <pubDate>Thu, 28 Mar 2019 03:11:37 +0800</pubDate>
-      
       <guid>https://ntutn.top/posts/%E4%BD%BF%E7%94%A8%E6%98%A0%E5%83%8F%E5%8A%AB%E6%8C%81%E6%8A%80%E6%9C%AF%E5%B1%8F%E8%94%BD%E7%94%B5%E8%84%91%E4%B8%AD%E7%9A%84%E5%B9%BF%E5%91%8A%E8%BF%9B%E7%A8%8B/</guid>
-      <description>映像劫持（Image File Execution Options），简单的说法，就是当你打开的是程序A，而运行的确是程序B。映像劫持其实是Windows内设的用来调试程序的功能，但是现在却往往被病毒恶意利用。当用户双击对应的程序后，操作系统就会给外壳程序（例如“explorer.exe”）发布相应的指令，其中包含有执行程序的路径和文件名，然后由外壳程序来执行该程序。事实上在该过程中，Windows还会在注册表的上述路径中查询所有的映像劫持子键，如果存在和该程序名称完全相同的子键，就查询对应子健中包含的“dubugger”键值名，并用其指定的程序路径来代替原始的程序，之后执行的是遭到“劫持”的虚假程序。
-国内很多软件都有重度广告，“资讯”、“新闻”、“弹窗”，不胜其烦。直接找到广告进程删除掉，结果一自动更新，又回来了。
-于是，我想到了“映像劫持”：
-Windows Registry Editor Version 5.00 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SLBService.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\TsService.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\FoxitDesktopAd.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\FoxitProtect.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\LCServer.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\LRServer.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\2345MiniPage.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SohuNews.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\PinyinUp.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SGDownload.</description>
+      <description>映像劫持（Image File Execution Options），简单的说法，就是当你打开的是程序A，而运行的确是程序B。映像劫持其实是Windows内设的用来调试程序的功能，但是现在却往往被病毒恶意利用。当用户双击对应的程序后，操作系统就会给外壳程序（例如“explorer.exe”）发布相应的指令，其中包含有执行程序的路径和文件名，然后由外壳程序来执行该程序。事实上在该过程中，Windows还会在注册表的上述路径中查询所有的映像劫持子键，如果存在和该程序名称完全相同的子键，就查询对应子健中包含的“dubugger”键值名，并用其指定的程序路径来代替原始的程序，之后执行的是遭到“劫持”的虚假程序。&#xA;国内很多软件都有重度广告，“资讯”、“新闻”、“弹窗”，不胜其烦。直接找到广告进程删除掉，结果一自动更新，又回来了。&#xA;于是，我想到了“映像劫持”：&#xA;Windows Registry Editor Version 5.00 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SLBService.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\TsService.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\FoxitDesktopAd.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\FoxitProtect.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\LCServer.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\LRServer.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\2345MiniPage.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SohuNews.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\PinyinUp.exe] &amp;#34;Debugger&amp;#34;=&amp;#34;winlogon&amp;#34; [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\SGDownload.</description>
     </item>
-    
   </channel>
 </rss>

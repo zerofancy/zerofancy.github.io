@@ -7,9 +7,203 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Fri, 05 Apr 2024 14:48:05 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 03 Jul 2024 02:12:34 +0800</lastBuildDate>
     
         <atom:link href="https://ntutn.top/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>Windows下编译skia的安卓版本</title>
+        <link>https://ntutn.top/posts/windows%E4%B8%8B%E7%BC%96%E8%AF%91skia%E7%9A%84%E5%AE%89%E5%8D%93%E7%89%88%E6%9C%AC/</link>
+        <pubDate>Wed, 03 Jul 2024 02:12:34 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/windows%E4%B8%8B%E7%BC%96%E8%AF%91skia%E7%9A%84%E5%AE%89%E5%8D%93%E7%89%88%E6%9C%AC/</guid>
+        <description>归零幻想 https://ntutn.top/posts/windows%E4%B8%8B%E7%BC%96%E8%AF%91skia%E7%9A%84%E5%AE%89%E5%8D%93%E7%89%88%E6%9C%AC/ -&lt;p&gt;Skia是一个开源2D图形库，提供可跨硬件和软件平台工作的通用API，同时是Google、Chrome、Android、Flutter等多个产品的图形引擎。 &lt;strong&gt;然而有点幽默的是，虽然安卓内置了Skia，我们想在ndk下却不能使用。&lt;/strong&gt; 因为Skia不提供稳定API，因此你要么用JNI方法调用java层封装好的Canvas API，要么就只能自己内置一个。&lt;/p&gt;
+&lt;p&gt;前几天由于新买的显卡是N卡，Linux下的兼容实在太差，于是只得换回Windows。因此这篇文章尝试在Windows下编译Android版本的Skia。&lt;/p&gt;
+&lt;h1 id=&#34;学习参考&#34;&gt;学习参考&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://skia.org/docs/user/build/&#34;&gt;官方文档&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://zhuanlan.zhihu.com/p/674788517&#34;&gt;Skia 编译及踩坑实践&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;安装工具&#34;&gt;安装工具&lt;/h1&gt;
+&lt;p&gt;首先安装我们编译过程中需要的git、python、ninja等工具。现在&lt;a href=&#34;https://learn.microsoft.com/zh-tw/windows/package-manager/winget/&#34;&gt;Windows下也有包管理器了&lt;/a&gt;，比如我们可以这样安装git：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-ps&#34; data-lang=&#34;ps&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#008b45&#34;&gt;winget&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;install&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;Git.Git&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然而我实际体验感觉比Linux还是差很多的，例如Git安装后并没有&lt;a href=&#34;https://jingyan.baidu.com/article/47a29f24610740c0142399ea.html&#34;&gt;配置好环境变量&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;配置环境变量一般倒是难不倒我们程序员，但Python安装首先恶心了我一下。当我在Windows下的PowerShell窗口下打出python，回车后是打开微软应用商店安装Python的页面。这是因为Windows搞了事情，可以在设置项中找到&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://image2.ntutn.top/2024/07/afbe03e92f50b11498b1488879645056.png&#34; alt=&#34;设置中的应用程序别名&#34;&gt;&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;理论上可以在Windows应用商店直接安装Python，但隐约记得看过一篇文章说Windows应用商店安装的Python联网会有问题，因此这里就谢绝微软的好意了。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;使用winget安装Python并设置环境变量后，在命令行还是找不到python3，这是因为Windows下的Python安装后文件夹中只有一个python.exe，即使你安装的是Python3。解决方法也是简单粗暴——直接复制一份。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://image2.ntutn.top/2024/07/a6614e83a83688069aa6ae0d29145aa3.png&#34; alt=&#34;直接将Python程序复制一份&#34;&gt;&lt;/p&gt;
+&lt;h1 id=&#34;拉取源码&#34;&gt;拉取源码&lt;/h1&gt;
+&lt;p&gt;唯一注意的是设置网络环境，现在Windows 11默认使用的是powershell，设置代理方式是不一样的。&lt;/p&gt;
+&lt;p&gt;CMD:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-cmd&#34; data-lang=&#34;cmd&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;set&lt;/span&gt; &lt;span style=&#34;color:#00688b&#34;&gt;http_proxy&lt;/span&gt;=http://127.0.0.1:7890
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;set&lt;/span&gt; &lt;span style=&#34;color:#00688b&#34;&gt;https_proxy&lt;/span&gt;=http://127.0.0.1:7890
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;PowerShell:&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-ps1&#34; data-lang=&#34;ps1&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#00688b&#34;&gt;$env:HTTP_PROXY&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;http://127.0.0.1:7890&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#00688b&#34;&gt;$env:HTTPS_PROXY&lt;/span&gt;=&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;http://127.0.0.1:7890&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;接下来拉取并配置环境。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-cmd&#34; data-lang=&#34;cmd&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git clone https://skia.googlesource.com/skia.git
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;cd&lt;/span&gt; skia
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;python3 tools/git-sync-deps
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然后使用默认参数编译&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-cmd&#34; data-lang=&#34;cmd&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;bin/gn gen out/Debug
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;ninja -C out/Debug
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;编译通过。&lt;/p&gt;
+&lt;h1 id=&#34;传递更多参数&#34;&gt;传递更多参数&lt;/h1&gt;
+&lt;p&gt;上面编译成功了Windows版本，但当我尝试编译安卓版本遇到了困难。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-ps&#34; data-lang=&#34;ps&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#008b45&#34;&gt;PS&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;C:\Users\yqmai\Project\skia&lt;/span&gt;&amp;gt; &lt;span style=&#34;color:#008b45&#34;&gt;bin&lt;/span&gt;&lt;span style=&#34;color:#00688b&#34;&gt;/gn&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;gen&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;out&lt;/span&gt;&lt;span style=&#34;color:#00688b&#34;&gt;/arm64&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;--args=&amp;#39;ndk=&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#00688b&#34;&gt;/tmp/ndk&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;target_cpu=&amp;#34;arm64&amp;#34;&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#008b45&#34;&gt;ERROR&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;at&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;the&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;command-line&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;&amp;#34;--args&amp;#34;:1:5:&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;Invalid&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;token.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#008b45&#34;&gt;ndk=&lt;/span&gt;&lt;span style=&#34;color:#00688b&#34;&gt;/tmp/ndk&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;target_cpu=arm64&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#008b45&#34;&gt;^&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#008b45&#34;&gt;I&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;have&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;no&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;idea&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;what&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;this&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;is.&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这里信息只能隐约看出是参数传递有问题，尝试数次无果。参考&lt;a href=&#34;https://www.qdebug.com/2024/06/27/Windows%E5%B9%B3%E5%8F%B0%E7%BC%96%E8%AF%91Skia/&#34;&gt;这篇文章&lt;/a&gt;，使用python脚本可以方便地传递参数，不用担心引号、斜线等的转义问题。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;os&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;os.path&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; join
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;from&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;subprocess&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; check_call
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;SKIA_SOURCE_PATH = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;C:&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\\&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;Users&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\\&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;yqmai&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\\&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;Project&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\\&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;skia&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;args = [
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;ndk=&amp;#34;C:&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\\&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;Users&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\\&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;yqmai&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\\&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;AppData&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\\&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;Local&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\\&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;Android&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\\&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;Sdk&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\\&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;ndk&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\\&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;27.0.11902837&amp;#34;&amp;#39;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;target_cpu=&amp;#34;arm64&amp;#34;&amp;#39;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;ndk_api=27&amp;#39;&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;is_component_build=true&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;]
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;check_call(
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    [join(SKIA_SOURCE_PATH, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;bin&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;\\&lt;/span&gt;&lt;span style=&#34;color:#cd5555&#34;&gt;gn&amp;#39;&lt;/span&gt;), &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;gen&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;out/Android&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;--args=&amp;#39;&lt;/span&gt; + &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39; &amp;#39;&lt;/span&gt;.join(args)],
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    shell=&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;True&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    cwd=SKIA_SOURCE_PATH,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;check_call(
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    [&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;ninja&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;-C&amp;#39;&lt;/span&gt;, join(SKIA_SOURCE_PATH, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#39;out/Android&amp;#39;&lt;/span&gt;)],
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    shell=&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;True&lt;/span&gt;,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;如果你尝试编译一个Release包，你会发现缺好多头文件，因为&lt;a href=&#34;https://groups.google.com/g/skia-discuss/c/NU88nZ3F9Z8&#34;&gt;这些库在系统中没找到&lt;/a&gt;。看上去很难解决，所以如果有需要的话还是在Linux/macOS下折腾吧 :{&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Yeah, it&amp;rsquo;s fairly uncommon to have any of that on Windows.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id=&#34;安卓demo&#34;&gt;安卓demo&lt;/h1&gt;
+&lt;p&gt;将skia的include拷贝到cpp模块下的skia文件夹下，将libskia.so拷贝到jniLibs/arm64-v8a下，&lt;/p&gt;
+&lt;p&gt;在CMakeLists.txt添加依赖&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;# 宿主需要依赖 skia 的头文件
+target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC ./skia)
+
+# 申请 skia 动态库
+add_library( skia
+        SHARED
+        IMPORTED )
+set_target_properties( skia
+        PROPERTIES IMPORTED_LOCATION
+        ${PROJECT_SOURCE_DIR}/../jniLibs/${ANDROID_ABI}/libskia.so)
+# 依赖 skia
+target_link_libraries(${CMAKE_PROJECT_NAME}
+        # List libraries link to the target library
+        android
+        log
+        skia)
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;在自定义SurfaceView中把holder传到底层&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;SkiaSurfaceView&lt;/span&gt; &lt;span style=&#34;color:#707a7c&#34;&gt;@JvmOverloads&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;constructor&lt;/span&gt;(context: Context, defStyleAttr: AttributeSet? = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;, defStyleRes: Int = &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;) : SurfaceView(context, defStyleAttr, defStyleRes) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; surfaceCallback = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#a61717;background-color:#e3d2d2&#34;&gt;: &lt;/span&gt;&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;SurfaceHolder&lt;/span&gt;.Callback {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;surfaceCreated&lt;/span&gt;(holder: SurfaceHolder) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            nativeSurfaceCreated(holder.surface)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;surfaceChanged&lt;/span&gt;(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            nativeSurfaceChanged()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;surfaceDestroyed&lt;/span&gt;(holder: SurfaceHolder) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            nativeSurfaceDestroyed()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;init&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        holder.addCallback(surfaceCallback)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;external&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;nativeSurfaceCreated&lt;/span&gt;(surface: Surface)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;external&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;nativeSurfaceChanged&lt;/span&gt;()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;external&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;nativeSurfaceDestroyed&lt;/span&gt;()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;在底层绘制三角形&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-cpp&#34; data-lang=&#34;cpp&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;jni.h&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;string&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;#34;android/native_window.h&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;#34;android/native_window_jni.h&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;#34;include/core/SkBitmap.h&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;#34;include/core/SkCanvas.h&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;#34;include/core/SkPath.h&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;#34;include/core/SkImageInfo.h&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;#34;include/core/SkAlphaType.h&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;#34;include/core/SkColor.h&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;extern&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;C&amp;#34;&lt;/span&gt; JNIEXPORT jstring JNICALL
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Java_com_example_skiademo1_MainActivity_stringFromJNI(
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        JNIEnv* env,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        jobject &lt;span style=&#34;color:#228b22&#34;&gt;/* this */&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    std::string hello = &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Hello from C++&amp;#34;&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; env-&amp;gt;NewStringUTF(hello.c_str());
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;extern&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;C&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;JNIEXPORT &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; JNICALL
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Java_com_example_skiademo1_SkiaSurfaceView_nativeSurfaceCreated(JNIEnv *env, jobject thiz,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                                                                jobject surface) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#228b22&#34;&gt;// 将 Surface 对象转换为 ANativeWindow 对象
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;auto&lt;/span&gt; nativeWindow = ANativeWindow_fromSurface(env, surface);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#228b22&#34;&gt;// 设置 ANativeWindow 宽度、高度和像素格式
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    ANativeWindow_setBuffersGeometry(
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            nativeWindow, &lt;span style=&#34;color:#b452cd&#34;&gt;400&lt;/span&gt;, &lt;span style=&#34;color:#b452cd&#34;&gt;400&lt;/span&gt;, WINDOW_FORMAT_RGBA_8888);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ANativeWindow_Buffer *buffer = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; ANativeWindow_Buffer();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#228b22&#34;&gt;// 锁定 ANativeWindow 的缓冲区，准备开始修改缓冲区的像素数据
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    ANativeWindow_lock(nativeWindow, buffer, &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; bpr = buffer-&amp;gt;stride * &lt;span style=&#34;color:#b452cd&#34;&gt;4&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#228b22&#34;&gt;// 实际像素对象
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    SkBitmap bitmap;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#228b22&#34;&gt;// 生成一份位图描述属性
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    SkImageInfo image_info = SkImageInfo::MakeS32(
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            buffer-&amp;gt;width, buffer-&amp;gt;height, SkAlphaType::kPremul_SkAlphaType);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    bitmap.setInfo(image_info, bpr);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    bitmap.setPixels(buffer-&amp;gt;bits);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#228b22&#34;&gt;// 构造一个 canvas 对象，将 canvas 画布和 bitmap 关联上
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    SkCanvas surfaceCanvas{bitmap};
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#228b22&#34;&gt;// 创建一个红色的画刷
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    SkPaint paint;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    paint.setColor(SK_ColorRED);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    paint.setStyle(SkPaint::kFill_Style);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#228b22&#34;&gt;// 创建一个绘制路径
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    SkPath path;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    path.moveTo(&lt;span style=&#34;color:#b452cd&#34;&gt;100.0f&lt;/span&gt;, &lt;span style=&#34;color:#b452cd&#34;&gt;0.0f&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    path.lineTo(&lt;span style=&#34;color:#b452cd&#34;&gt;0.0f&lt;/span&gt;, &lt;span style=&#34;color:#b452cd&#34;&gt;100&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    path.lineTo(&lt;span style=&#34;color:#b452cd&#34;&gt;200&lt;/span&gt;, &lt;span style=&#34;color:#b452cd&#34;&gt;100&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    path.close();
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#228b22&#34;&gt;// 使用画刷绘制路径
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    surfaceCanvas.drawPath(path, paint);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#228b22&#34;&gt;// 解锁并提交缓冲
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    ANativeWindow_unlockAndPost(nativeWindow);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;extern&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;C&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;JNIEXPORT &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; JNICALL
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Java_com_example_skiademo1_SkiaSurfaceView_nativeSurfaceChanged(JNIEnv *env, jobject thiz) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#228b22&#34;&gt;// TODO: implement nativeSurfaceChanged()
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;extern&lt;/span&gt; &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;C&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;JNIEXPORT &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; JNICALL
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Java_com_example_skiademo1_SkiaSurfaceView_nativeSurfaceDestroyed(JNIEnv *env, jobject thiz) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#228b22&#34;&gt;// TODO: implement nativeSurfaceDestroyed()
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://image2.ntutn.top/2024/07/3cdb3ef3ac39e60fbb3e75cb523c983c.png&#34; alt=&#34;画一个三角形&#34;&gt;&lt;/p&gt;
+&lt;h1 id=&#34;恢复环境变量&#34;&gt;恢复环境变量&lt;/h1&gt;
+&lt;p&gt;完成上文后发现一些java程序无法执行，报错 Exception in thread &amp;ldquo;main&amp;rdquo; java.lang.UnsupportedClassVersionError: MainKt has been compiled by a more recent version of the Java Runtime (class file version 55.0), this version of the Java Runtime only recognizes class file versions up to 52.0&lt;/p&gt;
+&lt;p&gt;显然这是使用了错误的java版本。经检查发现skia编译过程中会修改系统环境变量中的Path和JAVA_HOME，删除EMSDK开头的几项后问题解决。&lt;/p&gt;
+- https://ntutn.top/posts/windows%E4%B8%8B%E7%BC%96%E8%AF%91skia%E7%9A%84%E5%AE%89%E5%8D%93%E7%89%88%E6%9C%AC/ - CC BY-SA 4.0</description>
+        </item>
     
     
     
@@ -508,24 +702,24 @@ $$&lt;/p&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;blockquote&gt;
 &lt;p&gt;编译结果（反编译整理后的伪代码，省略了无关内容）&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;final&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MainKt$main$1&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;extends&lt;/span&gt; SuspendLambda &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;implements&lt;/span&gt; Function2&amp;lt;CoroutineScope, Continuation&amp;lt;? &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt; Unit&amp;gt;, Object&amp;gt; {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;final&lt;/span&gt; java.&lt;span style=&#34;color:#658b00&#34;&gt;lang&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;Object&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;invokeSuspend&lt;/span&gt;(&lt;span style=&#34;color:#707a7c&#34;&gt;@org.jetbrains.annotations.NotNull&lt;/span&gt; java.&lt;span style=&#34;color:#658b00&#34;&gt;lang&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;Object&lt;/span&gt; r7) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;switch&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;label&lt;/span&gt;) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; 0:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#228b22&#34;&gt;// 计算compute1的代码
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; 1:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#228b22&#34;&gt;// 计算compute2的代码
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt; 2:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#228b22&#34;&gt;// 输出println
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;default&lt;/span&gt;:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;throw&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt; java.&lt;span style=&#34;color:#658b00&#34;&gt;lang&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;IllegalStateException&lt;/span&gt;()
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;下面这张图就是协程启动的整体流程。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-java&#34; data-lang=&#34;java&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;final&lt;/span&gt;&lt;span style=&#34;color:#bbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;MainKt$main$1&lt;/span&gt;&lt;span style=&#34;color:#bbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;extends&lt;/span&gt;&lt;span style=&#34;color:#bbb&#34;&gt; &lt;/span&gt;SuspendLambda&lt;span style=&#34;color:#bbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;implements&lt;/span&gt;&lt;span style=&#34;color:#bbb&#34;&gt; &lt;/span&gt;Function2&amp;lt;CoroutineScope,&lt;span style=&#34;color:#bbb&#34;&gt; &lt;/span&gt;Continuation&amp;lt;?&lt;span style=&#34;color:#bbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;super&lt;/span&gt;&lt;span style=&#34;color:#bbb&#34;&gt; &lt;/span&gt;Unit&amp;gt;,&lt;span style=&#34;color:#bbb&#34;&gt; &lt;/span&gt;Object&amp;gt;&lt;span style=&#34;color:#bbb&#34;&gt; &lt;/span&gt;{&lt;span style=&#34;color:#bbb&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#bbb&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#bbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt;&lt;span style=&#34;color:#bbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;final&lt;/span&gt;&lt;span style=&#34;color:#bbb&#34;&gt; &lt;/span&gt;java.&lt;span style=&#34;color:#658b00&#34;&gt;lang&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;Object&lt;/span&gt;&lt;span style=&#34;color:#bbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color:#008b45&#34;&gt;invokeSuspend&lt;/span&gt;(&lt;span style=&#34;color:#707a7c&#34;&gt;@org.jetbrains.annotations.NotNull&lt;/span&gt;&lt;span style=&#34;color:#bbb&#34;&gt; &lt;/span&gt;java.&lt;span style=&#34;color:#658b00&#34;&gt;lang&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;Object&lt;/span&gt;&lt;span style=&#34;color:#bbb&#34;&gt; &lt;/span&gt;r7)&lt;span style=&#34;color:#bbb&#34;&gt; &lt;/span&gt;{&lt;span style=&#34;color:#bbb&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#bbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;switch&lt;/span&gt;(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;this&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;label&lt;/span&gt;)&lt;span style=&#34;color:#bbb&#34;&gt; &lt;/span&gt;{&lt;span style=&#34;color:#bbb&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#bbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt;&lt;span style=&#34;color:#bbb&#34;&gt; &lt;/span&gt;0:&lt;span style=&#34;color:#bbb&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#bbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;// 计算compute1的代码&lt;/span&gt;&lt;span style=&#34;color:#bbb&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#bbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;&lt;span style=&#34;color:#bbb&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#bbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt;&lt;span style=&#34;color:#bbb&#34;&gt; &lt;/span&gt;1:&lt;span style=&#34;color:#bbb&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#bbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;// 计算compute2的代码&lt;/span&gt;&lt;span style=&#34;color:#bbb&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#bbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;&lt;span style=&#34;color:#bbb&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#bbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;case&lt;/span&gt;&lt;span style=&#34;color:#bbb&#34;&gt; &lt;/span&gt;2:&lt;span style=&#34;color:#bbb&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#bbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;// 输出println&lt;/span&gt;&lt;span style=&#34;color:#bbb&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#bbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;&lt;span style=&#34;color:#bbb&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#bbb&#34;&gt;    &lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;default&lt;/span&gt;:&lt;span style=&#34;color:#bbb&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#bbb&#34;&gt;        &lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;throw&lt;/span&gt;&lt;span style=&#34;color:#bbb&#34;&gt; &lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;new&lt;/span&gt;&lt;span style=&#34;color:#bbb&#34;&gt; &lt;/span&gt;java.&lt;span style=&#34;color:#658b00&#34;&gt;lang&lt;/span&gt;.&lt;span style=&#34;color:#658b00&#34;&gt;IllegalStateException&lt;/span&gt;()&lt;span style=&#34;color:#bbb&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#bbb&#34;&gt;    &lt;/span&gt;}&lt;span style=&#34;color:#bbb&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#bbb&#34;&gt;&lt;/span&gt;}&lt;span style=&#34;color:#bbb&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;下面这张图就是协程启动的整体流程。&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2023/04/dff77b0ab96b3d94973cca3edee80240.svg&#34; alt=&#34;协程启动过程&#34;&gt;&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;launch { &lt;span style=&#34;color:#228b22&#34;&gt;// 1. launch方法开始
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    ...
@@ -1035,194 +1229,6 @@ $$&lt;/p&gt;
 &lt;p&gt;二者实现实际是共享一个线程池，但用了两个任务队列，当一个队列空时，可根据工作窃取算法去执行另一个队列的任务。但这部分的实现还是比较复杂的，我暂时没有阅读整个流程。&lt;/p&gt;
 &lt;/blockquote&gt;
 - https://ntutn.top/posts/dispatchers_default_io%E5%88%9B%E5%BB%BA%E5%A4%9A%E5%B0%91%E4%B8%AA%E7%BA%BF%E7%A8%8B/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>知识体系</title>
-        <link>https://ntutn.top/%E7%9F%A5%E8%AF%86%E4%BD%93%E7%B3%BB/</link>
-        <pubDate>Sun, 09 Apr 2023 23:10:31 +0800</pubDate>
-        
-        <guid>https://ntutn.top/%E7%9F%A5%E8%AF%86%E4%BD%93%E7%B3%BB/</guid>
-        <description>归零幻想 https://ntutn.top/%E7%9F%A5%E8%AF%86%E4%BD%93%E7%B3%BB/ -&lt;p&gt;自从开始工作，时间精力被大量占用，学习这件事情也愈发难以坚持，偶尔看两篇文章，也是没有目的、看了就忘的。是时候整理下我学到了什么，还不会什么。&lt;/p&gt;
-&lt;h1 id=&#34;安卓&#34;&gt;安卓&lt;/h1&gt;
-&lt;h2 id=&#34;基础入门&#34;&gt;基础入门&lt;/h2&gt;
-&lt;p&gt;都是第一行代码的笔记。&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;项目&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;a href=&#34;https://ntutn.top/posts/kotlin/&#34;&gt;android项目开发：Kotlin&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;a href=&#34;https://ntutn.top/posts/%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84/&#34;&gt;android项目开发：项目结构&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;a href=&#34;https://ntutn.top/posts/activity/&#34;&gt;android项目开发：Activity&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;a href=&#34;https://ntutn.top/posts/fragment/&#34;&gt;android项目开发：Fragment&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;a href=&#34;https://ntutn.top/posts/ui%E8%AE%BE%E8%AE%A1/&#34;&gt;android项目开发：UI设计&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;a href=&#34;https://ntutn.top/posts/broadcast/&#34;&gt;android项目开发：Broadcast&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;a href=&#34;https://ntutn.top/posts/%E9%80%9A%E7%9F%A5/&#34;&gt;android项目开发：通知&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;a href=&#34;https://ntutn.top/posts/%E6%8C%81%E4%B9%85%E5%8C%96/&#34;&gt;android项目开发：持久化&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;a href=&#34;https://ntutn.top/posts/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B/&#34;&gt;android项目开发：多线程编程&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h2 id=&#34;jetpack组件&#34;&gt;Jetpack组件&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://ntutn.top/posts/viewbindingviewmodel%E5%92%8Clivedata/&#34;&gt;ViewBinding、ViewModel和LiveData&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;多线程&#34;&gt;多线程&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;RxJava（TODO）&lt;/li&gt;
-&lt;li&gt;协程（TODO）&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;uiview&#34;&gt;UI/View&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://ntutn.top/posts/xfermode%E8%B8%A9%E5%9D%91%E5%B0%8F%E7%BB%93/&#34;&gt;Xfermode踩坑小结&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://ntutn.top/posts/%E6%89%93%E9%80%A0%E4%B8%80%E4%B8%AA%E6%8E%A5%E5%85%A5%E7%AE%80%E5%8D%95%E7%9A%84%E9%80%9A%E7%94%A8banner%E7%BB%84%E4%BB%B6/&#34;&gt;打造一个接入简单的通用banner组件&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;编译魔法&#34;&gt;编译魔法&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;a href=&#34;https://ntutn.top/posts/debugentrance%E5%92%8Cdebugconfig/&#34;&gt;DebugEntrance和DebugConfig&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;KSP实践（TODO）&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;a href=&#34;https://ntutn.top/posts/%E8%AF%91%E7%94%A8buildsrc%E5%92%8Ckotlin_dsl%E7%AE%A1%E7%90%86gradle%E4%BE%9D%E8%B5%96/&#34;&gt;【译】用BuildSrc和Kotlin_DSL管理Gradle依赖&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;a href=&#34;https://ntutn.top/posts/%E7%BB%99app%E6%B7%BB%E5%8A%A0%E6%9E%84%E5%BB%BA%E4%BF%A1%E6%81%AF/&#34;&gt;给APP添加构建信息&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;开源库-看源码&#34;&gt;开源库 看源码&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;a href=&#34;https://ntutn.top/posts/eventbus%E5%88%9D%E6%8E%A2/&#34;&gt;EventBus初探&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;a href=&#34;https://ntutn.top/posts/retrofit%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB/&#34;&gt;Retrofit源码阅读&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;a href=&#34;https://ntutn.top/posts/auil%E5%AD%A6%E4%B9%A0/&#34;&gt;AUIL 源码学习&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;语言语法&#34;&gt;语言语法&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://ntutn.top/posts/java%E8%87%AA%E5%8A%A8%E8%A3%85%E7%AE%B1%E8%87%AA%E5%8A%A8%E6%8B%86%E7%AE%B1%E8%B8%A9%E5%9D%91/&#34;&gt;Java自动装箱自动拆箱踩坑&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://ntutn.top/posts/java%E9%BB%98%E8%AE%A4%E4%BF%AE%E9%A5%B0%E7%AC%A6%E9%97%AE%E9%A2%98/&#34;&gt;Java默认修饰符问题&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://ntutn.top/posts/classloader%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%89%98%E6%9C%BA%E5%88%B6%E6%8E%A2%E7%A9%B6/&#34;&gt;ClassLoader双亲委托机制探究&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://ntutn.top/posts/kotlin%E7%9A%84%E9%9A%8F%E6%9C%BA%E6%95%B0%E4%B8%8D%E9%9A%8F%E6%9C%BA/&#34;&gt;Kotlin的随机数不随机&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;工程设计&#34;&gt;工程/设计&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://ntutn.top/posts/%E8%A3%85%E9%A5%B0%E6%A8%A1%E5%BC%8F%E5%AE%9E%E7%8E%B0%E5%88%86%E4%BA%AB%E5%8A%9F%E8%83%BD/&#34;&gt;装饰模式实现分享功能&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;项目折腾&#34;&gt;项目/折腾&lt;/h1&gt;
-&lt;h2 id=&#34;hugo博客加密&#34;&gt;Hugo博客加密&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;https://img.shields.io/badge/Platform-Desktop-blue&#34; alt=&#34;Desktop&#34;&gt; &lt;img src=&#34;https://img.shields.io/badge/%E8%BF%9B%E5%BA%A6-%E5%B7%B2%E5%AE%8C%E6%88%90-green&#34; alt=&#34;已完成&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://ntutn.top/project/hugo%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0%E5%8A%A0%E5%AF%86/&#34;&gt;https://ntutn.top/project/hugo%E5%8D%9A%E5%AE%A2%E6%96%87%E7%AB%A0%E5%8A%A0%E5%AF%86/&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&#34;wanandroid客户端&#34;&gt;WanAndroid客户端&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;https://img.shields.io/badge/Platform-Android-green&#34; alt=&#34;Android&#34;&gt; &lt;img src=&#34;https://img.shields.io/badge/%E8%BF%9B%E5%BA%A6-%E5%8D%8A%E9%80%94%E8%80%8C%E5%BA%9F-red&#34; alt=&#34;半途而废&#34;&gt;&lt;/p&gt;
-&lt;p&gt;WanAndroid网站的安卓客户端实现，目前实现了文章列表和WebView文章浏览功能，并有抓取显示作者头像特色功能。刚开始规划的功能还有好多，但我使用发现现有能看文章对我来说就完全够了，渐渐没有兴致继续写了。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://ntutn.top/project/wanandroid%E5%AE%A2%E6%88%B7%E7%AB%AF/&#34;&gt;https://ntutn.top/project/wanandroid%E5%AE%A2%E6%88%B7%E7%AB%AF/&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&#34;桌面悬浮时钟&#34;&gt;桌面悬浮时钟&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;https://img.shields.io/badge/Platform-Desktop-blue&#34; alt=&#34;Desktop&#34;&gt; &lt;img src=&#34;https://img.shields.io/badge/%E8%BF%9B%E5%BA%A6-%E5%B7%B2%E5%AE%8C%E6%88%90-green&#34; alt=&#34;已完成&#34;&gt;&lt;/p&gt;
-&lt;p&gt;类zClock的桌面悬浮时钟，支持Windows和Linux。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://ntutn.top/posts/%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E6%A1%8C%E9%9D%A2%E6%82%AC%E6%B5%AE%E6%97%B6%E9%92%9F/&#34;&gt;https://ntutn.top/posts/%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E6%A1%8C%E9%9D%A2%E6%82%AC%E6%B5%AE%E6%97%B6%E9%92%9F/&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&#34;tg机器人&#34;&gt;tg机器人&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;https://img.shields.io/badge/Platform-Server-orange&#34; alt=&#34;Server&#34;&gt; &lt;img src=&#34;https://img.shields.io/badge/%E8%BF%9B%E5%BA%A6-%E5%B7%B2%E5%AE%8C%E6%88%90-green&#34; alt=&#34;已完成&#34;&gt;&lt;/p&gt;
-&lt;p&gt;从零开始的机器人实现，支持收发文本/图片，有简单的插件系统和一个echobot实现。&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://ntutn.top/posts/%E4%BB%8E%E5%A4%B4%E5%BC%80%E5%A7%8B%E5%88%B6%E4%BD%9C%E4%B8%80%E4%B8%AAtg%E6%9C%BA%E5%99%A8%E4%BA%BA/&#34;&gt;https://ntutn.top/posts/%E4%BB%8E%E5%A4%B4%E5%BC%80%E5%A7%8B%E5%88%B6%E4%BD%9C%E4%B8%80%E4%B8%AAtg%E6%9C%BA%E5%99%A8%E4%BA%BA/&lt;/a&gt;&lt;/p&gt;
-&lt;h2 id=&#34;连连看游戏&#34;&gt;连连看游戏&lt;/h2&gt;
-&lt;p&gt;&lt;img src=&#34;https://img.shields.io/badge/Platform-Android-green&#34; alt=&#34;Android&#34;&gt; &lt;img src=&#34;https://img.shields.io/badge/%E8%BF%9B%E5%BA%A6-%E5%B7%B2%E5%AE%8C%E6%88%90-green&#34; alt=&#34;已完成&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=&#34;https://ntutn.top/posts/%E5%AE%89%E5%8D%93%E8%BF%9E%E8%BF%9E%E7%9C%8B%E6%B8%B8%E6%88%8F%E8%AE%BE%E8%AE%A1/&#34;&gt;https://ntutn.top/posts/%E5%AE%89%E5%8D%93%E8%BF%9E%E8%BF%9E%E7%9C%8B%E6%B8%B8%E6%88%8F%E8%AE%BE%E8%AE%A1/&lt;/a&gt;&lt;/p&gt;
-&lt;h1 id=&#34;课程笔记&#34;&gt;课程笔记&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;a href=&#34;https://ntutn.top/posts/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E7%9F%A5%E8%AF%86%E7%82%B9%E6%95%B4%E7%90%86/&#34;&gt;人工智能知识点整理&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;a href=&#34;https://ntutn.top/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BB%84%E6%88%90%E5%8E%9F%E7%90%86%E7%AC%94%E8%AE%B0/&#34;&gt;计算机组成原理笔记&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;a href=&#34;https://ntutn.top/posts/%E5%A4%A7%E5%9E%8B%E6%95%B0%E7%BB%84%E6%8C%89%E8%A1%8C%E9%81%8D%E5%8E%86%E4%B8%8E%E6%8C%89%E5%88%97%E9%81%8D%E5%8E%86%E7%9A%84%E5%8C%BA%E5%88%AB/&#34;&gt;大型数组按行遍历与按列遍历的区别&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;a href=&#34;https://ntutn.top/posts/%E8%AE%A1%E7%AE%97%E6%9C%BA%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86%E7%AC%94%E8%AE%B0/&#34;&gt;计算机操作系统原理笔记&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;课程作业&#34;&gt;课程作业&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;a href=&#34;https://ntutn.top/posts/c++%E7%BC%96%E7%A8%8B%E8%83%BD%E5%8A%9B%E8%AF%84%E4%BC%B0/&#34;&gt;数据结构与算法 C++编程能力评估&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;a href=&#34;https://ntutn.top/posts/%E5%9B%BE%E4%B9%A6%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/&#34;&gt;图书管理系统&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;a href=&#34;https://ntutn.top/posts/%E5%AD%A6%E7%94%9F%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/&#34;&gt;学生管理系统&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;a href=&#34;https://ntutn.top/project/qt%E8%B5%B0%E8%BF%B7%E5%AE%AB/&#34;&gt;Qt走迷宫&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h1 id=&#34;数据结构刷题&#34;&gt;数据结构/刷题&lt;/h1&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;a href=&#34;https://ntutn.top/posts/%E5%A0%86%E6%A0%88adt%E5%AE%9E%E7%8E%B0%E5%8F%8A%E5%BA%94%E7%94%A8/&#34;&gt;堆栈实现&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;a href=&#34;https://ntutn.top/posts/%E8%BF%9E%E7%BB%AD%E6%AD%A3%E6%95%B4%E6%95%B0/&#34;&gt;连续正整数&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;a href=&#34;https://ntutn.top/posts/%E6%8B%AC%E5%8F%B7%E5%8C%B9%E9%85%8D/&#34;&gt;数据结构 栈应用 1 括号匹配&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;a href=&#34;https://ntutn.top/posts/%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%B1%82%E5%80%BC/&#34;&gt;数据结构 栈应用 2 表达式求值&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;a href=&#34;https://ntutn.top/posts/%E7%BA%BF%E6%80%A7%E8%A1%A8adt%E7%9A%84%E5%AE%9E%E7%8E%B0/&#34;&gt;线性表ADT的实现&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;a href=&#34;https://ntutn.top/posts/%E6%B4%BB%E5%8A%A8%E5%AE%89%E6%8E%92%E9%97%AE%E9%A2%98/&#34;&gt;活动安排问题&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;a href=&#34;https://ntutn.top/posts/%E4%BA%8C%E5%8F%89%E6%A0%91adt%E7%9A%84%E5%AE%9E%E7%8E%B0/&#34;&gt;二叉树ADT的实现&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;a href=&#34;https://ntutn.top/posts/%E7%BB%9F%E8%AE%A1%E9%80%92%E5%BD%92%E5%AD%90%E9%97%AE%E9%A2%98%E4%B8%AA%E6%95%B0/&#34;&gt;统计递归子问题个数&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;a href=&#34;https://ntutn.top/posts/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E7%AC%AC%E4%B8%89%E6%AC%A1%E6%B5%8B%E8%AF%95/&#34;&gt;数据结构第三次测试&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;a href=&#34;https://ntutn.top/posts/%E7%A8%80%E7%96%8F%E7%9F%A9%E9%98%B5%E7%9A%84%E5%8E%8B%E7%BC%A9%E5%AD%98%E5%82%A8/&#34;&gt;稀疏矩阵的压缩存储&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&lt;a href=&#34;https://ntutn.top/posts/%E4%B8%89%E9%97%A8%E9%97%AE%E9%A2%98/&#34;&gt;三门问题&lt;/a&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-- https://ntutn.top/%E7%9F%A5%E8%AF%86%E4%BD%93%E7%B3%BB/ - CC BY-SA 4.0</description>
         </item>
     
     

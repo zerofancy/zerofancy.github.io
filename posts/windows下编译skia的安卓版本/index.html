@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html><head>
+<title>Windows下编译skia的安卓版本</title>
+
+
+
+
+<meta charset="utf-8">
+<meta name="X-UA-Compatible" content="IE=edge">
+<meta name="google-site-verification" content="">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<meta content="telephone=no" name="format-detection">
+<meta name="description" content="最近有对安卓上的自渲染感兴趣，然而前几天由于新买的显卡是N卡，Linux下的兼容实在太差，于是只得换回Windows。因此这篇文章尝试在Windows下编译Android版本的Skia。">
+<meta name="renderer" content="webkit">
+<meta name="theme-color" content="#ffffff">
+
+
+
+<meta property="og:url" content="https://ntutn.top/posts/windows%E4%B8%8B%E7%BC%96%E8%AF%91skia%E7%9A%84%E5%AE%89%E5%8D%93%E7%89%88%E6%9C%AC/">
+  <meta property="og:site_name" content="归零幻想">
+  <meta property="og:title" content="Windows下编译skia的安卓版本">
+  <meta property="og:description" content="最近有对安卓上的自渲染感兴趣，然而前几天由于新买的显卡是N卡，Linux下的兼容实在太差，于是只得换回Windows。因此这篇文章尝试在Windows下编译Android版本的Skia。">
+  <meta property="og:locale" content="zh">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-07-03T02:12:34+08:00">
+    <meta property="article:modified_time" content="2024-07-03T02:12:34+08:00">
+    <meta property="article:tag" content="Skia">
+    <meta property="article:tag" content="编译">
+    <meta property="article:tag" content="安卓">
+    <meta property="article:tag" content="Cpp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+<link rel="icon" href="//images.ntutn.top/favicon.ico">
+
+
+
+      <script src="/js/toc.js"></script>
+    
+    <link type="text/css" rel="stylesheet" href="/vendor/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="/scss/dark-mode.min.cb53f1bee2b8900cb4f082afbf00175d6618f281cf9a2fe8619e3b52d20b5721.css" integrity="sha256-y1PxvuK4kAy08IKvvwAXXWYY8oHPmi/oYZ47UtILVyE=" media="screen">
+
+
+<link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Material+Icons">
+
+
+
+<script defer
+	src='https://static.cloudflareinsights.com/beacon.min.js'
+	data-cf-beacon='{"token": "5a03d307f5214109a1e7c8b2cf306a3d"}'>
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+    pre code {
+        color: black;
+        -comment: "感谢评论区 https://github.com/lx200916 指出博客代码块深色模式问题";
+    }
+</style>
+<script src="https://unpkg.com/zoomtastic@2.2.1"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function(event) { 
+        document.querySelectorAll("div.post-body-wrapper img").forEach(function(element){
+            element.setAttribute("zoomtastic", true)
+            element.style.maxWidth="60%"
+        })
+		
+		Zoomtastic.mount({
+			size: '95%',
+			easing: 'ease',
+			duration: 300,
+			background: 'rgba(0, 0, 0, 0.9)',
+			filter: 'drop-shadow(0 2px 16px rgba(0, 0, 0, 0.3))',
+			animation: 'slide' 
+		});
+		
+		Zoomtastic.listen('[zoomtastic]', 'src');
+    });
+
+	
+	var _hmt = _hmt || [];
+	(function() {
+	var hm = document.createElement("script");
+	hm.src = "https://hm.baidu.com/hm.js?298c58938f9266e6098936c4f71a9a83";
+	var s = document.getElementsByTagName("script")[0]; 
+	s.parentNode.insertBefore(hm, s);
+	})();
+
+</script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css" integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js" integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+          
+          
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false},
+              {left: '\\[', right: '\\]', display: true}
+          ],
+          
+          throwOnError : false
+        });
+    });
+</script>
+
+</head>
+<body>
+    	<div id="app"><div class="single-column-drawer-container" id="drawer"
+     v-bind:class="{ 'single-column-drawer-container-active': isDrawerOpen }">
+    <div class="drawer-content">
+        <div class="drawer-menu">
+            
+            
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/%E7%9F%A5%E8%AF%86%E4%BD%93%E7%B3%BB">
+                    知识体系
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/tags">
+                    标签
+                </a>
+                
+            
+                
+                
+                
+                    
+                
+                
+                
+                <a class="a-block drawer-menu-item active" href="/posts">
+                    归档
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/friends">
+                    友链
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/about">
+                    关于
+                </a>
+                
+            
+                
+                
+                
+                
+                
+                <a class="a-block drawer-menu-item false" href="/index.xml">
+                    RSS
+                </a>
+                
+            
+            
+            <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%ad%a6%e4%b9%a0%e5%8f%82%e8%80%83" class="nav-学习参考">
+									学习参考
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%ae%89%e8%a3%85%e5%b7%a5%e5%85%b7" class="nav-安装工具">
+									安装工具
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%8b%89%e5%8f%96%e6%ba%90%e7%a0%81" class="nav-拉取源码">
+									拉取源码
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e4%bc%a0%e9%80%92%e6%9b%b4%e5%a4%9a%e5%8f%82%e6%95%b0" class="nav-传递更多参数">
+									传递更多参数
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%ae%89%e5%8d%93demo" class="nav-安卓demo">
+									安卓demo
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%81%a2%e5%a4%8d%e7%8e%af%e5%a2%83%e5%8f%98%e9%87%8f" class="nav-恢复环境变量">
+									恢复环境变量
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+            
+        </div>
+    </div>
+</div>
+<transition name="fade">
+    <div id="drawer-mask" v-bind:class="{ 'single-column-drawer-mask': mounted }" v-if="isDrawerOpen" v-on:click="toggleDrawer"></div>
+</transition>
+<nav id="navBar" class="navbar sticky-top navbar-light single-column-nav-container">
+    <div id="navBackground" class="nav-background"></div>
+    <div class="container container-narrow nav-content">
+        <button id="nav_dropdown_btn" class="nav-dropdown-toggle" type="button" v-on:click="toggleDrawer">
+            <i class="material-icons">
+                menu
+            </i>
+        </button>
+        <a id="navTitle" class="navbar-brand" href="https://ntutn.top/">
+            归零幻想
+        </a>
+        
+        <button type="button" class="nav-darkmode-toggle" id="darkModeToggleButton2">
+            <i class="material-icons" id="darkModeToggleIcon2">
+                dark_mode
+            </i>
+        </button>
+        
+    </div>
+</nav>
+<div class="single-column-header-container" id="pageHead"
+     v-bind:style="{ transform: 'translateZ(0px) translateY('+.3*scrollY+'px)', opacity: 1-navOpacity }">
+    <a href="https://ntutn.top/">
+        <div class="single-column-header-title">归零幻想</div>
+        
+        <div class="single-column-header-subtitle">零点还不算熬夜</div>
+        
+
+    </a>
+</div>
+
+            <div id="content">
+                <div id="streamContainer" class="stream-container">
+
+    <div class="post-list-container post-list-container-shadow">
+        <div class="post">
+            
+            
+            
+                
+            
+
+            <div class="post-head-wrapper"
+                
+                    
+                    
+                    style="background-image: url('https://image2.ntutn.top/2024/07/18b5d39817c1b3efe727570eaf87a0fa.png')"
+                    
+                
+            >
+                <div class="post-title">
+                    Windows下编译skia的安卓版本
+                    
+                    <div class="post-subtitle">
+                        最近有对安卓上的自渲染感兴趣，然而前几天由于新买的显卡是N卡，Linux下的兼容实在太差，于是只得换回Windows。因此这篇文章尝试在Windows下编译Android版本的Skia。
+                    </div>
+                    
+                    <div class="post-meta">
+                        
+                        <time itemprop="datePublished">
+                            2024-07-03 02:12
+                        </time>
+                        
+
+                        
+                            <i class="material-icons" style="">folder</i>
+                                <a href="/categories/%E6%8A%80%E6%9C%AF">技术</a>
+                                &nbsp;
+                        
+
+                        
+                            <i class="material-icons" style="">label</i>
+                            
+                                <a href="/tags/skia">skia</a>
+                                &nbsp;
+                            
+                                <a href="/tags/%E7%BC%96%E8%AF%91">编译</a>
+                                &nbsp;
+                            
+                                <a href="/tags/%E5%AE%89%E5%8D%93">安卓</a>
+                                &nbsp;
+                            
+                                <a href="/tags/cpp">cpp</a>
+                                &nbsp;
+                            
+                        
+                        
+                            <i class="material-icons" style="">schedule</i>
+                            
+
+                            
+                            
+
+                            
+                            7 min
+                            
+                            45 s.
+                        
+                    </div>
+                </div>
+            </div>
+            
+            <div class="post-body-wrapper">
+                
+                <div class="post-body" v-pre>
+                
+                    <p>Skia是一个开源2D图形库，提供可跨硬件和软件平台工作的通用API，同时是Google、Chrome、Android、Flutter等多个产品的图形引擎。 <strong>然而有点幽默的是，虽然安卓内置了Skia，我们想在ndk下却不能使用。</strong> 因为Skia不提供稳定API，因此你要么用JNI方法调用java层封装好的Canvas API，要么就只能自己内置一个。</p>
+<p>前几天由于新买的显卡是N卡，Linux下的兼容实在太差，于是只得换回Windows。因此这篇文章尝试在Windows下编译Android版本的Skia。</p>
+<h1 id="学习参考">学习参考</h1>
+<ul>
+<li><a href="https://skia.org/docs/user/build/">官方文档</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/674788517">Skia 编译及踩坑实践</a></li>
+</ul>
+<h1 id="安装工具">安装工具</h1>
+<p>首先安装我们编译过程中需要的git、python、ninja等工具。现在<a href="https://learn.microsoft.com/zh-tw/windows/package-manager/winget/">Windows下也有包管理器了</a>，比如我们可以这样安装git：</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ps" data-lang="ps"><span style="display:flex;"><span><span style="color:#008b45">winget</span> <span style="color:#008b45">install</span> <span style="color:#008b45">Git.Git</span>
+</span></span></code></pre></div><p>然而我实际体验感觉比Linux还是差很多的，例如Git安装后并没有<a href="https://jingyan.baidu.com/article/47a29f24610740c0142399ea.html">配置好环境变量</a>。</p>
+<p>配置环境变量一般倒是难不倒我们程序员，但Python安装首先恶心了我一下。当我在Windows下的PowerShell窗口下打出python，回车后是打开微软应用商店安装Python的页面。这是因为Windows搞了事情，可以在设置项中找到</p>
+<p><img src="https://image2.ntutn.top/2024/07/afbe03e92f50b11498b1488879645056.png" alt="设置中的应用程序别名"></p>
+<blockquote>
+<p>理论上可以在Windows应用商店直接安装Python，但隐约记得看过一篇文章说Windows应用商店安装的Python联网会有问题，因此这里就谢绝微软的好意了。</p>
+</blockquote>
+<p>使用winget安装Python并设置环境变量后，在命令行还是找不到python3，这是因为Windows下的Python安装后文件夹中只有一个python.exe，即使你安装的是Python3。解决方法也是简单粗暴——直接复制一份。</p>
+<p><img src="https://image2.ntutn.top/2024/07/a6614e83a83688069aa6ae0d29145aa3.png" alt="直接将Python程序复制一份"></p>
+<h1 id="拉取源码">拉取源码</h1>
+<p>唯一注意的是设置网络环境，现在Windows 11默认使用的是powershell，设置代理方式是不一样的。</p>
+<p>CMD:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cmd" data-lang="cmd"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">set</span> <span style="color:#00688b">http_proxy</span>=http://127.0.0.1:7890
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">set</span> <span style="color:#00688b">https_proxy</span>=http://127.0.0.1:7890
+</span></span></code></pre></div><p>PowerShell:</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ps1" data-lang="ps1"><span style="display:flex;"><span><span style="color:#00688b">$env:HTTP_PROXY</span>=<span style="color:#cd5555">&#34;http://127.0.0.1:7890&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#00688b">$env:HTTPS_PROXY</span>=<span style="color:#cd5555">&#34;http://127.0.0.1:7890&#34;</span>
+</span></span></code></pre></div><p>接下来拉取并配置环境。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cmd" data-lang="cmd"><span style="display:flex;"><span>git clone https://skia.googlesource.com/skia.git
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">cd</span> skia
+</span></span><span style="display:flex;"><span>python3 tools/git-sync-deps
+</span></span></code></pre></div><p>然后使用默认参数编译</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cmd" data-lang="cmd"><span style="display:flex;"><span>bin/gn gen out/Debug
+</span></span><span style="display:flex;"><span>ninja -C out/Debug
+</span></span></code></pre></div><p>编译通过。</p>
+<h1 id="传递更多参数">传递更多参数</h1>
+<p>上面编译成功了Windows版本，但当我尝试编译安卓版本遇到了困难。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ps" data-lang="ps"><span style="display:flex;"><span><span style="color:#008b45">PS</span> <span style="color:#008b45">C:\Users\yqmai\Project\skia</span>&gt; <span style="color:#008b45">bin</span><span style="color:#00688b">/gn</span> <span style="color:#008b45">gen</span> <span style="color:#008b45">out</span><span style="color:#00688b">/arm64</span> <span style="color:#008b45">--args=&#39;ndk=&#34;</span><span style="color:#00688b">/tmp/ndk&#34;</span> <span style="color:#008b45">target_cpu=&#34;arm64&#34;&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#008b45">ERROR</span> <span style="color:#008b45">at</span> <span style="color:#008b45">the</span> <span style="color:#008b45">command-line</span> <span style="color:#008b45">&#34;--args&#34;:1:5:</span> <span style="color:#008b45">Invalid</span> <span style="color:#008b45">token.</span>
+</span></span><span style="display:flex;"><span><span style="color:#008b45">ndk=</span><span style="color:#00688b">/tmp/ndk</span> <span style="color:#008b45">target_cpu=arm64</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#008b45">^</span>
+</span></span><span style="display:flex;"><span><span style="color:#008b45">I</span> <span style="color:#008b45">have</span> <span style="color:#008b45">no</span> <span style="color:#008b45">idea</span> <span style="color:#008b45">what</span> <span style="color:#008b45">this</span> <span style="color:#008b45">is.</span>
+</span></span></code></pre></div><p>这里信息只能隐约看出是参数传递有问题，尝试数次无果。参考<a href="https://www.qdebug.com/2024/06/27/Windows%E5%B9%B3%E5%8F%B0%E7%BC%96%E8%AF%91Skia/">这篇文章</a>，使用python脚本可以方便地传递参数，不用担心引号、斜线等的转义问题。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">import</span> <span style="color:#008b45;text-decoration:underline">os</span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">from</span> <span style="color:#008b45;text-decoration:underline">os.path</span> <span style="color:#8b008b;font-weight:bold">import</span> join
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">from</span> <span style="color:#008b45;text-decoration:underline">subprocess</span> <span style="color:#8b008b;font-weight:bold">import</span> check_call
+</span></span><span style="display:flex;"><span>SKIA_SOURCE_PATH = <span style="color:#cd5555">&#34;C:</span><span style="color:#cd5555">\\</span><span style="color:#cd5555">Users</span><span style="color:#cd5555">\\</span><span style="color:#cd5555">yqmai</span><span style="color:#cd5555">\\</span><span style="color:#cd5555">Project</span><span style="color:#cd5555">\\</span><span style="color:#cd5555">skia&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>args = [
+</span></span><span style="display:flex;"><span>    <span style="color:#cd5555">&#39;ndk=&#34;C:</span><span style="color:#cd5555">\\</span><span style="color:#cd5555">Users</span><span style="color:#cd5555">\\</span><span style="color:#cd5555">yqmai</span><span style="color:#cd5555">\\</span><span style="color:#cd5555">AppData</span><span style="color:#cd5555">\\</span><span style="color:#cd5555">Local</span><span style="color:#cd5555">\\</span><span style="color:#cd5555">Android</span><span style="color:#cd5555">\\</span><span style="color:#cd5555">Sdk</span><span style="color:#cd5555">\\</span><span style="color:#cd5555">ndk</span><span style="color:#cd5555">\\</span><span style="color:#cd5555">27.0.11902837&#34;&#39;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#cd5555">&#39;target_cpu=&#34;arm64&#34;&#39;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#cd5555">&#39;ndk_api=27&#39;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#cd5555">&#39;is_component_build=true&#39;</span>
+</span></span><span style="display:flex;"><span>]
+</span></span><span style="display:flex;"><span>check_call(
+</span></span><span style="display:flex;"><span>    [join(SKIA_SOURCE_PATH, <span style="color:#cd5555">&#39;bin</span><span style="color:#cd5555">\\</span><span style="color:#cd5555">gn&#39;</span>), <span style="color:#cd5555">&#39;gen&#39;</span>, <span style="color:#cd5555">&#39;out/Android&#39;</span>, <span style="color:#cd5555">&#39;--args=&#39;</span> + <span style="color:#cd5555">&#39; &#39;</span>.join(args)],
+</span></span><span style="display:flex;"><span>    shell=<span style="color:#8b008b;font-weight:bold">True</span>,
+</span></span><span style="display:flex;"><span>    cwd=SKIA_SOURCE_PATH,
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>check_call(
+</span></span><span style="display:flex;"><span>    [<span style="color:#cd5555">&#39;ninja&#39;</span>, <span style="color:#cd5555">&#39;-C&#39;</span>, join(SKIA_SOURCE_PATH, <span style="color:#cd5555">&#39;out/Android&#39;</span>)],
+</span></span><span style="display:flex;"><span>    shell=<span style="color:#8b008b;font-weight:bold">True</span>,
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><p>如果你尝试编译一个Release包，你会发现缺好多头文件，因为<a href="https://groups.google.com/g/skia-discuss/c/NU88nZ3F9Z8">这些库在系统中没找到</a>。看上去很难解决，所以如果有需要的话还是在Linux/macOS下折腾吧 :{</p>
+<blockquote>
+<p>Yeah, it&rsquo;s fairly uncommon to have any of that on Windows.</p>
+</blockquote>
+<h1 id="安卓demo">安卓demo</h1>
+<p>将skia的include拷贝到cpp模块下的skia文件夹下，将libskia.so拷贝到jniLibs/arm64-v8a下，</p>
+<p>在CMakeLists.txt添加依赖</p>
+<pre tabindex="0"><code># 宿主需要依赖 skia 的头文件
+target_include_directories(${CMAKE_PROJECT_NAME} PUBLIC ./skia)
+
+# 申请 skia 动态库
+add_library( skia
+        SHARED
+        IMPORTED )
+set_target_properties( skia
+        PROPERTIES IMPORTED_LOCATION
+        ${PROJECT_SOURCE_DIR}/../jniLibs/${ANDROID_ABI}/libskia.so)
+# 依赖 skia
+target_link_libraries(${CMAKE_PROJECT_NAME}
+        # List libraries link to the target library
+        android
+        log
+        skia)
+</code></pre><p>在自定义SurfaceView中把holder传到底层</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">SkiaSurfaceView</span> <span style="color:#707a7c">@JvmOverloads</span> <span style="color:#8b008b;font-weight:bold">constructor</span>(context: Context, defStyleAttr: AttributeSet? = <span style="color:#8b008b;font-weight:bold">null</span>, defStyleRes: Int = <span style="color:#b452cd">0</span>) : SurfaceView(context, defStyleAttr, defStyleRes) {
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">val</span> surfaceCallback = <span style="color:#8b008b;font-weight:bold">object</span> <span style="color:#a61717;background-color:#e3d2d2">: </span><span style="color:#008b45;font-weight:bold">SurfaceHolder</span>.Callback {
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">surfaceCreated</span>(holder: SurfaceHolder) {
+</span></span><span style="display:flex;"><span>            nativeSurfaceCreated(holder.surface)
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">surfaceChanged</span>(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
+</span></span><span style="display:flex;"><span>            nativeSurfaceChanged()
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">override</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">surfaceDestroyed</span>(holder: SurfaceHolder) {
+</span></span><span style="display:flex;"><span>            nativeSurfaceDestroyed()
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">init</span> {
+</span></span><span style="display:flex;"><span>        holder.addCallback(surfaceCallback)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">external</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">nativeSurfaceCreated</span>(surface: Surface)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">external</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">nativeSurfaceChanged</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">private</span> <span style="color:#8b008b;font-weight:bold">external</span> <span style="color:#8b008b;font-weight:bold">fun</span> <span style="color:#008b45">nativeSurfaceDestroyed</span>()
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>在底层绘制三角形</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;jni.h&gt;</span><span style="color:#1e889b">
+</span></span></span><span style="display:flex;"><span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&lt;string&gt;</span><span style="color:#1e889b">
+</span></span></span><span style="display:flex;"><span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&#34;android/native_window.h&#34;</span><span style="color:#1e889b">
+</span></span></span><span style="display:flex;"><span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&#34;android/native_window_jni.h&#34;</span><span style="color:#1e889b">
+</span></span></span><span style="display:flex;"><span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&#34;include/core/SkBitmap.h&#34;</span><span style="color:#1e889b">
+</span></span></span><span style="display:flex;"><span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&#34;include/core/SkCanvas.h&#34;</span><span style="color:#1e889b">
+</span></span></span><span style="display:flex;"><span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&#34;include/core/SkPath.h&#34;</span><span style="color:#1e889b">
+</span></span></span><span style="display:flex;"><span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&#34;include/core/SkImageInfo.h&#34;</span><span style="color:#1e889b">
+</span></span></span><span style="display:flex;"><span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&#34;include/core/SkAlphaType.h&#34;</span><span style="color:#1e889b">
+</span></span></span><span style="display:flex;"><span><span style="color:#1e889b">#include</span> <span style="color:#1e889b">&#34;include/core/SkColor.h&#34;</span><span style="color:#1e889b">
+</span></span></span><span style="display:flex;"><span><span style="color:#1e889b"></span>
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">extern</span> <span style="color:#cd5555">&#34;C&#34;</span> JNIEXPORT jstring JNICALL
+</span></span><span style="display:flex;"><span>Java_com_example_skiademo1_MainActivity_stringFromJNI(
+</span></span><span style="display:flex;"><span>        JNIEnv* env,
+</span></span><span style="display:flex;"><span>        jobject <span style="color:#228b22">/* this */</span>) {
+</span></span><span style="display:flex;"><span>    std::string hello = <span style="color:#cd5555">&#34;Hello from C++&#34;</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">return</span> env-&gt;NewStringUTF(hello.c_str());
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">extern</span> <span style="color:#cd5555">&#34;C&#34;</span>
+</span></span><span style="display:flex;"><span>JNIEXPORT <span style="color:#00688b;font-weight:bold">void</span> JNICALL
+</span></span><span style="display:flex;"><span>Java_com_example_skiademo1_SkiaSurfaceView_nativeSurfaceCreated(JNIEnv *env, jobject thiz,
+</span></span><span style="display:flex;"><span>                                                                jobject surface) {
+</span></span><span style="display:flex;"><span>    <span style="color:#228b22">// 将 Surface 对象转换为 ANativeWindow 对象
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    <span style="color:#8b008b;font-weight:bold">auto</span> nativeWindow = ANativeWindow_fromSurface(env, surface);
+</span></span><span style="display:flex;"><span>    <span style="color:#228b22">// 设置 ANativeWindow 宽度、高度和像素格式
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    ANativeWindow_setBuffersGeometry(
+</span></span><span style="display:flex;"><span>            nativeWindow, <span style="color:#b452cd">400</span>, <span style="color:#b452cd">400</span>, WINDOW_FORMAT_RGBA_8888);
+</span></span><span style="display:flex;"><span>    ANativeWindow_Buffer *buffer = <span style="color:#8b008b;font-weight:bold">new</span> ANativeWindow_Buffer();
+</span></span><span style="display:flex;"><span>    <span style="color:#228b22">// 锁定 ANativeWindow 的缓冲区，准备开始修改缓冲区的像素数据
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    ANativeWindow_lock(nativeWindow, buffer, <span style="color:#b452cd">0</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#00688b;font-weight:bold">int</span> bpr = buffer-&gt;stride * <span style="color:#b452cd">4</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#228b22">// 实际像素对象
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    SkBitmap bitmap;
+</span></span><span style="display:flex;"><span>    <span style="color:#228b22">// 生成一份位图描述属性
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    SkImageInfo image_info = SkImageInfo::MakeS32(
+</span></span><span style="display:flex;"><span>            buffer-&gt;width, buffer-&gt;height, SkAlphaType::kPremul_SkAlphaType);
+</span></span><span style="display:flex;"><span>    bitmap.setInfo(image_info, bpr);
+</span></span><span style="display:flex;"><span>    bitmap.setPixels(buffer-&gt;bits);
+</span></span><span style="display:flex;"><span>    <span style="color:#228b22">// 构造一个 canvas 对象，将 canvas 画布和 bitmap 关联上
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    SkCanvas surfaceCanvas{bitmap};
+</span></span><span style="display:flex;"><span>    <span style="color:#228b22">// 创建一个红色的画刷
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    SkPaint paint;
+</span></span><span style="display:flex;"><span>    paint.setColor(SK_ColorRED);
+</span></span><span style="display:flex;"><span>    paint.setStyle(SkPaint::kFill_Style);
+</span></span><span style="display:flex;"><span>    <span style="color:#228b22">// 创建一个绘制路径
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    SkPath path;
+</span></span><span style="display:flex;"><span>    path.moveTo(<span style="color:#b452cd">100.0f</span>, <span style="color:#b452cd">0.0f</span>);
+</span></span><span style="display:flex;"><span>    path.lineTo(<span style="color:#b452cd">0.0f</span>, <span style="color:#b452cd">100</span>);
+</span></span><span style="display:flex;"><span>    path.lineTo(<span style="color:#b452cd">200</span>, <span style="color:#b452cd">100</span>);
+</span></span><span style="display:flex;"><span>    path.close();
+</span></span><span style="display:flex;"><span>    <span style="color:#228b22">// 使用画刷绘制路径
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    surfaceCanvas.drawPath(path, paint);
+</span></span><span style="display:flex;"><span>    <span style="color:#228b22">// 解锁并提交缓冲
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    ANativeWindow_unlockAndPost(nativeWindow);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">extern</span> <span style="color:#cd5555">&#34;C&#34;</span>
+</span></span><span style="display:flex;"><span>JNIEXPORT <span style="color:#00688b;font-weight:bold">void</span> JNICALL
+</span></span><span style="display:flex;"><span>Java_com_example_skiademo1_SkiaSurfaceView_nativeSurfaceChanged(JNIEnv *env, jobject thiz) {
+</span></span><span style="display:flex;"><span>    <span style="color:#228b22">// TODO: implement nativeSurfaceChanged()
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">extern</span> <span style="color:#cd5555">&#34;C&#34;</span>
+</span></span><span style="display:flex;"><span>JNIEXPORT <span style="color:#00688b;font-weight:bold">void</span> JNICALL
+</span></span><span style="display:flex;"><span>Java_com_example_skiademo1_SkiaSurfaceView_nativeSurfaceDestroyed(JNIEnv *env, jobject thiz) {
+</span></span><span style="display:flex;"><span>    <span style="color:#228b22">// TODO: implement nativeSurfaceDestroyed()
+</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>}
+</span></span></code></pre></div><p><img src="https://image2.ntutn.top/2024/07/3cdb3ef3ac39e60fbb3e75cb523c983c.png" alt="画一个三角形"></p>
+<h1 id="恢复环境变量">恢复环境变量</h1>
+<p>完成上文后发现一些java程序无法执行，报错 Exception in thread &ldquo;main&rdquo; java.lang.UnsupportedClassVersionError: MainKt has been compiled by a more recent version of the Java Runtime (class file version 55.0), this version of the Java Runtime only recognizes class file versions up to 52.0</p>
+<p>显然这是使用了错误的java版本。经检查发现skia编译过程中会修改系统环境变量中的Path和JAVA_HOME，删除EMSDK开头的几项后问题解决。</p>
+
+                    
+                    <HR width="100%" id="EOF">
+		    <p style="color:#777;">最后修改于 2024-07-03</p>
+                    
+                </div>
+            </div>
+            
+            
+            <nav class="post-pagination">
+
+                
+                <a class="newer-posts">
+			下回<br>已经到头啦。
+                </a>
+                
+                
+                
+                <a class="older-posts" href="/posts/golang_with_vue_desktop/">
+			上回<br>Golang&#43;Vue写桌面小工具
+                </a>
+                
+            </nav>
+            <div class="post-comment-wrapper">
+                
+
+
+
+
+
+
+
+
+
+
+<script src="https://utteranc.es/client.js"
+        repo="zerofancy/zerofancy.github.io"
+        issue-term="title"
+        label=""
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script>
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+                    </div>
+            </div><div id="sideContainer" class="side-container">
+    
+    <a class="a-block nav-head false" href="https://ntutn.top/">
+    
+        <div class="nav-title">
+            归零幻想
+        </div>
+        
+        <div class="nav-subtitle">
+            零点还不算熬夜
+        </div>
+        
+    </a>
+
+    <div class="nav-link-list">
+        
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/%E7%9F%A5%E8%AF%86%E4%BD%93%E7%B3%BB">
+                知识体系
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/tags">
+                标签
+            </a>
+            
+        
+            
+            
+            
+                
+            
+            
+            
+            <a class="a-block nav-link-item active" href="/posts">
+                归档
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/friends">
+                友链
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/about">
+                关于
+            </a>
+            
+        
+            
+            
+            
+            
+            
+            <a class="a-block nav-link-item false" href="/index.xml">
+                RSS
+            </a>
+            
+        
+    </div>
+
+    
+
+    <div class="nav-footer">
+        
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	CC BY-SA 4.0
+	
+
+    </div>
+    
+</div><div id="extraContainer" class="extra-container">
+    <div class="toc-wrapper">
+        
+
+        
+        <div class="toc">
+
+
+	<div class="toc-content">
+	
+		
+		
+		
+		<center>- 目录 -</center>
+		
+		
+		<ul>
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%ad%a6%e4%b9%a0%e5%8f%82%e8%80%83" class="nav-学习参考">
+									学习参考
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%ae%89%e8%a3%85%e5%b7%a5%e5%85%b7" class="nav-安装工具">
+									安装工具
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%8b%89%e5%8f%96%e6%ba%90%e7%a0%81" class="nav-拉取源码">
+									拉取源码
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e4%bc%a0%e9%80%92%e6%9b%b4%e5%a4%9a%e5%8f%82%e6%95%b0" class="nav-传递更多参数">
+									传递更多参数
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e5%ae%89%e5%8d%93demo" class="nav-安卓demo">
+									安卓demo
+								</a>
+							</li>
+						
+						
+					
+				
+			
+				
+				
+					
+						
+						
+						
+						
+						
+							<li>
+								<a href="#%e6%81%a2%e5%a4%8d%e7%8e%af%e5%a2%83%e5%8f%98%e9%87%8f" class="nav-恢复环境变量">
+									恢复环境变量
+								</a>
+							</li>
+						
+						
+					
+				
+			
+		</ul>
+	</div>
+
+</div>
+        
+    </div>
+    <div class="pagination">
+        <a id="globalBackToTop" class="pagination-action animated-visibility" href="#top"
+            :class="{ invisible: scrollY == 0 }">
+            <i class="material-icons pagination-action-icon">
+                keyboard_arrow_up
+            </i>
+        </a>
+        
+        <a type="button" class="pagination-action" id="darkModeToggleButton">
+            <span class="material-icons pagination-action-icon" id="darkModeToggleIcon">
+                dark_mode
+            </span>
+        </a>
+        
+        
+    </div>
+</div>
+
+<div id="single-column-footer">
+Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
+<br>
+移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>
+<br>
+
+&copy;
+	
+	CC BY-SA 4.0
+	
+</div>
+            </div>
+    
+    <script src="/js/journal.js"></script></body>
+</html>

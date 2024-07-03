@@ -4,21 +4,17 @@
     <title>StateFlow on 归零幻想</title>
     <link>https://ntutn.top/tags/stateflow/</link>
     <description>Recent content in StateFlow on 归零幻想</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Sun, 24 Mar 2024 21:38:29 +0800</lastBuildDate><atom:link href="https://ntutn.top/tags/stateflow/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 24 Mar 2024 21:38:29 +0800</lastBuildDate>
+    <atom:link href="https://ntutn.top/tags/stateflow/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Compose下StateFlow误用导致输入跳变</title>
       <link>https://ntutn.top/posts/compose%E4%B8%8Bstateflow%E8%AF%AF%E7%94%A8%E5%AF%BC%E8%87%B4%E8%BE%93%E5%85%A5%E8%B7%B3%E5%8F%98/</link>
       <pubDate>Sun, 24 Mar 2024 21:38:29 +0800</pubDate>
-      
       <guid>https://ntutn.top/posts/compose%E4%B8%8Bstateflow%E8%AF%AF%E7%94%A8%E5%AF%BC%E8%87%B4%E8%BE%93%E5%85%A5%E8%B7%B3%E5%8F%98/</guid>
-      <description>问题复线 一段只有一个输入框的demo代码：
-class SomeVM { val textState = MutableStateFlow(&amp;#34;&amp;#34;) fun update(text: String) { textState.value = text } } @Composable @Preview fun App() { MaterialTheme { val vm = remember(::SomeVM) val text by vm.textState.collectAsState() TextField(text, onValueChange = vm::update) } } 运行后，连续快速按1、2两个按键，数次后发生输入错乱。
-问题排查 上面示例使用了StateFlow，首先去掉StateFlow，换成Compose内置的State，即
-class SomeVM { val textState = mutableStateOf(&amp;#34;&amp;#34;) fun update(text: String) { textState.value = text } } @Composable @Preview fun App() { MaterialTheme { val vm = remember(::SomeVM) val text by vm.</description>
+      <description>问题复线 一段只有一个输入框的demo代码：&#xA;class SomeVM { val textState = MutableStateFlow(&amp;#34;&amp;#34;) fun update(text: String) { textState.value = text } } @Composable @Preview fun App() { MaterialTheme { val vm = remember(::SomeVM) val text by vm.textState.collectAsState() TextField(text, onValueChange = vm::update) } } 运行后，连续快速按1、2两个按键，数次后发生输入错乱。&#xA;问题排查 上面示例使用了StateFlow，首先去掉StateFlow，换成Compose内置的State，即&#xA;class SomeVM { val textState = mutableStateOf(&amp;#34;&amp;#34;) fun update(text: String) { textState.value = text } } @Composable @Preview fun App() { MaterialTheme { val vm = remember(::SomeVM) val text by vm.</description>
     </item>
-    
   </channel>
 </rss>

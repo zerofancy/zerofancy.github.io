@@ -4,52 +4,31 @@
     <title>安卓 on 归零幻想</title>
     <link>https://ntutn.top/categories/%E5%AE%89%E5%8D%93/</link>
     <description>Recent content in 安卓 on 归零幻想</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Sun, 17 Mar 2024 00:41:08 +0800</lastBuildDate><atom:link href="https://ntutn.top/categories/%E5%AE%89%E5%8D%93/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 17 Mar 2024 00:41:08 +0800</lastBuildDate>
+    <atom:link href="https://ntutn.top/categories/%E5%AE%89%E5%8D%93/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>安卓模仿微信选择昵称备注效果</title>
       <link>https://ntutn.top/posts/%E5%AE%89%E5%8D%93%E6%A8%A1%E4%BB%BF%E5%BE%AE%E4%BF%A1%E9%80%89%E6%8B%A9%E6%98%B5%E7%A7%B0%E5%A4%87%E6%B3%A8%E6%95%88%E6%9E%9C/</link>
       <pubDate>Sun, 17 Mar 2024 00:41:08 +0800</pubDate>
-      
       <guid>https://ntutn.top/posts/%E5%AE%89%E5%8D%93%E6%A8%A1%E4%BB%BF%E5%BE%AE%E4%BF%A1%E9%80%89%E6%8B%A9%E6%98%B5%E7%A7%B0%E5%A4%87%E6%B3%A8%E6%95%88%E6%9E%9C/</guid>
-      <description>首先，这是我们要实现的预期效果：
-实现一个标签容器效果 我们把每个字视作一个标签，那么微信这个效果可以看作是多个标签逐行摆放，其中部分被选中。幸运的是MD中有这样的效果ChipGroup，这样我们可以节省不少工作。
-源代码：ChipGroup.java
-文章介绍：Android修行手册 - ChipGroup
-然后我们用代码添加一些标签，并在点击时进行反选：
-binding.contentMain.chipGroup.apply { isSelectionRequired isSingleSelection = false words.forEach { word -&amp;gt; addView(Chip(context).also { chip -&amp;gt; chip.text = word.trimIndent() chip.setOnClickListener { it.isSelected = !it.isSelected } }) } } 涂抹选择文本 显然要实现涂抹选中，我们得自定义View，拦截触摸事件定制逻辑。既然是“涂抹”，那么要拦截的就是 ev?.action == MotionEvent.ACTION_MOVE 。
-回顾Android触摸事件传递机制，复写onInterceptTouchEvent方法。
-class SwipeSelectLayout @JvmOverloads constructor(context: Context, defStyleAttr: AttributeSet? = null, defStyleRes: Int = 0) : ChipGroup(context, defStyleAttr, defStyleRes) { private val childrenSelectionOnMoveStart = mutableMapOf&amp;lt;View, Boolean&amp;gt;() private var closestViewIndex = -1 override fun onInterceptTouchEvent(ev: MotionEvent): Boolean { if (ev.</description>
+      <description>首先，这是我们要实现的预期效果：&#xA;实现一个标签容器效果 我们把每个字视作一个标签，那么微信这个效果可以看作是多个标签逐行摆放，其中部分被选中。幸运的是MD中有这样的效果ChipGroup，这样我们可以节省不少工作。&#xA;源代码：ChipGroup.java&#xA;文章介绍：Android修行手册 - ChipGroup&#xA;然后我们用代码添加一些标签，并在点击时进行反选：&#xA;binding.contentMain.chipGroup.apply { isSelectionRequired isSingleSelection = false words.forEach { word -&amp;gt; addView(Chip(context).also { chip -&amp;gt; chip.text = word.trimIndent() chip.setOnClickListener { it.isSelected = !it.isSelected } }) } } 涂抹选择文本 显然要实现涂抹选中，我们得自定义View，拦截触摸事件定制逻辑。既然是“涂抹”，那么要拦截的就是 ev?.action == MotionEvent.ACTION_MOVE 。&#xA;回顾Android触摸事件传递机制，复写onInterceptTouchEvent方法。&#xA;class SwipeSelectLayout @JvmOverloads constructor(context: Context, defStyleAttr: AttributeSet? = null, defStyleRes: Int = 0) : ChipGroup(context, defStyleAttr, defStyleRes) { private val childrenSelectionOnMoveStart = mutableMapOf&amp;lt;View, Boolean&amp;gt;() private var closestViewIndex = -1 override fun onInterceptTouchEvent(ev: MotionEvent): Boolean { if (ev.</description>
     </item>
-    
     <item>
       <title>打造一个接入简单的通用banner组件</title>
       <link>https://ntutn.top/posts/%E6%89%93%E9%80%A0%E4%B8%80%E4%B8%AA%E6%8E%A5%E5%85%A5%E7%AE%80%E5%8D%95%E7%9A%84%E9%80%9A%E7%94%A8banner%E7%BB%84%E4%BB%B6/</link>
       <pubDate>Wed, 14 Sep 2022 02:55:44 +0800</pubDate>
-      
       <guid>https://ntutn.top/posts/%E6%89%93%E9%80%A0%E4%B8%80%E4%B8%AA%E6%8E%A5%E5%85%A5%E7%AE%80%E5%8D%95%E7%9A%84%E9%80%9A%E7%94%A8banner%E7%BB%84%E4%BB%B6/</guid>
-      <description>banner是一个常见的活动入口形式，给我们的印象一般是一些不断轮播的图片。但，有些事情，远没有看上去那么简单。
-banner使用 特点：
-支持不同类型卡片混排 支持比较复杂的轮播逻辑 布局和展示逻辑完全交给业务方ViewHolder控制，可以灵活定制。 先看最终使用效果，也许你能提起一些兴趣。
-https://www.bilibili.com/video/BV1Ed4y137T7/
-将banner添加到你的布局中， &amp;lt;top.ntutn.zerohelper.view.banner.BannerView android:id=&amp;#34;@+id/banner_view&amp;#34; android:layout_width=&amp;#34;match_parent&amp;#34; android:layout_height=&amp;#34;300dp&amp;#34; android:layout_gravity=&amp;#34;center&amp;#34; android:layout_margin=&amp;#34;16dp&amp;#34; tools:background=&amp;#34;@tools:sample/backgrounds/scenic&amp;#34; app:cardCornerRadius=&amp;#34;8dp&amp;#34;/&amp;gt; 准备一个或多个ViewHolder，实现业务展示和播控逻辑。 class ImageBannerData(var url: String = &amp;#34;&amp;#34;): BannerData { override val holderKey: String get() = ImageBannerViewHolder.key } class ImageBannerViewHolder(val binding: ItemImageBannerBinding) : BannerViewHolder(binding.root) { companion object: IBannerViewHolderFactory { override val key: String get() = &amp;#34;_image&amp;#34; override fun newInstance(parent: ViewGroup): BannerViewHolder { val inflater = LayoutInflater.from(parent.context) return ImageBannerViewHolder( ItemImageBannerBinding.inflate(inflater, parent, false) ) } } override fun onBind(data: BannerData) { if (data !</description>
+      <description>banner是一个常见的活动入口形式，给我们的印象一般是一些不断轮播的图片。但，有些事情，远没有看上去那么简单。&#xA;banner使用 特点：&#xA;支持不同类型卡片混排 支持比较复杂的轮播逻辑 布局和展示逻辑完全交给业务方ViewHolder控制，可以灵活定制。 先看最终使用效果，也许你能提起一些兴趣。&#xA;https://www.bilibili.com/video/BV1Ed4y137T7/&#xA;将banner添加到你的布局中， &amp;lt;top.ntutn.zerohelper.view.banner.BannerView android:id=&amp;#34;@+id/banner_view&amp;#34; android:layout_width=&amp;#34;match_parent&amp;#34; android:layout_height=&amp;#34;300dp&amp;#34; android:layout_gravity=&amp;#34;center&amp;#34; android:layout_margin=&amp;#34;16dp&amp;#34; tools:background=&amp;#34;@tools:sample/backgrounds/scenic&amp;#34; app:cardCornerRadius=&amp;#34;8dp&amp;#34;/&amp;gt; 准备一个或多个ViewHolder，实现业务展示和播控逻辑。 class ImageBannerData(var url: String = &amp;#34;&amp;#34;): BannerData { override val holderKey: String get() = ImageBannerViewHolder.key } class ImageBannerViewHolder(val binding: ItemImageBannerBinding) : BannerViewHolder(binding.root) { companion object: IBannerViewHolderFactory { override val key: String get() = &amp;#34;_image&amp;#34; override fun newInstance(parent: ViewGroup): BannerViewHolder { val inflater = LayoutInflater.from(parent.context) return ImageBannerViewHolder( ItemImageBannerBinding.inflate(inflater, parent, false) ) } } override fun onBind(data: BannerData) { if (data !</description>
     </item>
-    
     <item>
       <title>Xfermode踩坑小结</title>
       <link>https://ntutn.top/posts/xfermode%E8%B8%A9%E5%9D%91%E5%B0%8F%E7%BB%93/</link>
       <pubDate>Mon, 05 Sep 2022 02:18:57 +0800</pubDate>
-      
       <guid>https://ntutn.top/posts/xfermode%E8%B8%A9%E5%9D%91%E5%B0%8F%E7%BB%93/</guid>
-      <description>Xfermode踩坑小结 Xfermode is the base class for objects that are called to implement custom &amp;ldquo;transfer-modes&amp;rdquo; in the drawing pipeline. The static function Create(Modes) can be called to return an instance of any of the predefined subclasses as specified in the Modes enum. When an Xfermode is assigned to an Paint, then objects drawn with that paint have the xfermode applied.
-Xfermode最初有三个子类，除了目前我们常用的 PorterDuffXfermode 其他两个都已经作古了。
-PorterDuffXfermode可以指定两张图形如何进行混合，借此我们可以实现一些特殊的绘图效果。官方有个很经典的示例图， 我经常是需要用时才找出来看一看。
-官方文档错了？ 然而在最近做需求时，我发现自己做出来的效果和官方图上不一致。网上检索，有人说官方的示意图错了，并给出了自己绘制的demo。有模有样有代码，让人信服。
-但官方的文档真的错了吗？如果错了，为什么一直没有改呢？我直觉感觉这种事情概率比较低，所以还是得找到双方的代码才能断案。
-官方的示例在一个叫做API Demos的APP中，代码在一个叫做 Xfermodes.</description>
+      <description>Xfermode踩坑小结 Xfermode is the base class for objects that are called to implement custom &amp;ldquo;transfer-modes&amp;rdquo; in the drawing pipeline. The static function Create(Modes) can be called to return an instance of any of the predefined subclasses as specified in the Modes enum. When an Xfermode is assigned to an Paint, then objects drawn with that paint have the xfermode applied.&#xA;Xfermode最初有三个子类，除了目前我们常用的 PorterDuffXfermode 其他两个都已经作古了。&#xA;PorterDuffXfermode可以指定两张图形如何进行混合，借此我们可以实现一些特殊的绘图效果。官方有个很经典的示例图， 我经常是需要用时才找出来看一看。&#xA;官方文档错了？ 然而在最近做需求时，我发现自己做出来的效果和官方图上不一致。网上检索，有人说官方的示意图错了，并给出了自己绘制的demo。有模有样有代码，让人信服。&#xA;但官方的文档真的错了吗？如果错了，为什么一直没有改呢？我直觉感觉这种事情概率比较低，所以还是得找到双方的代码才能断案。&#xA;官方的示例在一个叫做API Demos的APP中，代码在一个叫做 Xfermodes.</description>
     </item>
-    
   </channel>
 </rss>

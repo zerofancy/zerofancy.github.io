@@ -16,12 +16,18 @@
 
 
 
-<meta property="og:title" content="ClassLoader双亲委托机制探究" />
-<meta property="og:description" content="最近在研究抖音进入热点内流的耗时问题，种种线索指向了类加载耗时上。为此，我研究了Java类加载的双亲委托机制，并尝试给出了优化建议。" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://ntutn.top/posts/classloader%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%89%98%E6%9C%BA%E5%88%B6%E6%8E%A2%E7%A9%B6/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2021-04-11T03:11:37+08:00" />
-<meta property="article:modified_time" content="2021-04-11T03:11:37+08:00" /><meta property="og:site_name" content="归零幻想" />
+<meta property="og:url" content="https://ntutn.top/posts/classloader%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%89%98%E6%9C%BA%E5%88%B6%E6%8E%A2%E7%A9%B6/">
+  <meta property="og:site_name" content="归零幻想">
+  <meta property="og:title" content="ClassLoader双亲委托机制探究">
+  <meta property="og:description" content="最近在研究抖音进入热点内流的耗时问题，种种线索指向了类加载耗时上。为此，我研究了Java类加载的双亲委托机制，并尝试给出了优化建议。">
+  <meta property="og:locale" content="zh">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2021-04-11T03:11:37+08:00">
+    <meta property="article:modified_time" content="2021-04-11T03:11:37+08:00">
+    <meta property="article:tag" content="Java">
+    <meta property="article:tag" content="安卓">
+    <meta property="article:tag" content="反射">
 
 
 
@@ -410,31 +416,31 @@
 <p>最近在研究抖音进入热点内流的耗时问题，种种线索指向了类加载耗时上。为此，我研究了Java类加载的双亲委托机制，并尝试给出了优化建议。</p>
 <h2 id="双亲委托机制">双亲委托机制</h2>
 <p>双亲委托机制中最重要的是loadClass方法，让我们看看它是怎么实现的。</p>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">protected</span> Class&lt;?&gt; loadClass(String name, <span style="color:#00688b;font-weight:bold">boolean</span> resolve)
-</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">throws</span> ClassNotFoundException
-</span></span><span style="display:flex;"><span>    {
-</span></span><span style="display:flex;"><span>            <span style="color:#228b22">// First, check if the class has already been loaded
-</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>            Class&lt;?&gt; c = findLoadedClass(name); <span style="color:#228b22">// 已加载过直接返回
-</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>            <span style="color:#8b008b;font-weight:bold">if</span> (c == <span style="color:#8b008b;font-weight:bold">null</span>) {
-</span></span><span style="display:flex;"><span>                <span style="color:#8b008b;font-weight:bold">try</span> {
-</span></span><span style="display:flex;"><span>                    <span style="color:#8b008b;font-weight:bold">if</span> (parent != <span style="color:#8b008b;font-weight:bold">null</span>) {
-</span></span><span style="display:flex;"><span>                        c = parent.<span style="color:#658b00">loadClass</span>(name, <span style="color:#8b008b;font-weight:bold">false</span>); <span style="color:#228b22">//尝试让parent加载
-</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>                    } <span style="color:#8b008b;font-weight:bold">else</span> {
-</span></span><span style="display:flex;"><span>                        c = findBootstrapClassOrNull(name); <span style="color:#228b22">// bootstrap class loader是否加载过
-</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>                    }
-</span></span><span style="display:flex;"><span>                } <span style="color:#8b008b;font-weight:bold">catch</span> (ClassNotFoundException e) {
-</span></span><span style="display:flex;"><span>                    <span style="color:#228b22">// ClassNotFoundException thrown if class not found
-</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>                    <span style="color:#228b22">// from the non-null parent class loader
-</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>                }
-</span></span><span style="display:flex;"><span>                <span style="color:#8b008b;font-weight:bold">if</span> (c == <span style="color:#8b008b;font-weight:bold">null</span>) {
-</span></span><span style="display:flex;"><span>                    <span style="color:#228b22">// If still not found, then invoke findClass in order
-</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>                    <span style="color:#228b22">// to find the class.
-</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>                    c = findClass(name); <span style="color:#228b22">// 自己加载（找不到会抛出异常）
-</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>                }
-</span></span><span style="display:flex;"><span>            }
-</span></span><span style="display:flex;"><span>            <span style="color:#8b008b;font-weight:bold">return</span> c;
-</span></span><span style="display:flex;"><span>    }
-</span></span></code></pre></div><p>findClass就是根据类名去加载具体类的方法，则整个加载机制就很清楚了。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#8b008b;font-weight:bold">protected</span><span style="color:#bbb"> </span>Class&lt;?&gt;<span style="color:#bbb"> </span>loadClass(String<span style="color:#bbb"> </span>name,<span style="color:#bbb"> </span><span style="color:#00688b;font-weight:bold">boolean</span><span style="color:#bbb"> </span>resolve)<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#8b008b;font-weight:bold">throws</span><span style="color:#bbb"> </span>ClassNotFoundException<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span><span style="color:#228b22">// First, check if the class has already been loaded</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span>Class&lt;?&gt;<span style="color:#bbb"> </span>c<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>findLoadedClass(name);<span style="color:#bbb"> </span><span style="color:#228b22">// 已加载过直接返回</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span><span style="color:#8b008b;font-weight:bold">if</span><span style="color:#bbb"> </span>(c<span style="color:#bbb"> </span>==<span style="color:#bbb"> </span><span style="color:#8b008b;font-weight:bold">null</span>)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                </span><span style="color:#8b008b;font-weight:bold">try</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                    </span><span style="color:#8b008b;font-weight:bold">if</span><span style="color:#bbb"> </span>(parent<span style="color:#bbb"> </span>!=<span style="color:#bbb"> </span><span style="color:#8b008b;font-weight:bold">null</span>)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                        </span>c<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>parent.<span style="color:#658b00">loadClass</span>(name,<span style="color:#bbb"> </span><span style="color:#8b008b;font-weight:bold">false</span>);<span style="color:#bbb"> </span><span style="color:#228b22">//尝试让parent加载</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                    </span>}<span style="color:#bbb"> </span><span style="color:#8b008b;font-weight:bold">else</span><span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                        </span>c<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>findBootstrapClassOrNull(name);<span style="color:#bbb"> </span><span style="color:#228b22">// bootstrap class loader是否加载过</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                </span>}<span style="color:#bbb"> </span><span style="color:#8b008b;font-weight:bold">catch</span><span style="color:#bbb"> </span>(ClassNotFoundException<span style="color:#bbb"> </span>e)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                    </span><span style="color:#228b22">// ClassNotFoundException thrown if class not found</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                    </span><span style="color:#228b22">// from the non-null parent class loader</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                </span><span style="color:#8b008b;font-weight:bold">if</span><span style="color:#bbb"> </span>(c<span style="color:#bbb"> </span>==<span style="color:#bbb"> </span><span style="color:#8b008b;font-weight:bold">null</span>)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                    </span><span style="color:#228b22">// If still not found, then invoke findClass in order</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                    </span><span style="color:#228b22">// to find the class.</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                    </span>c<span style="color:#bbb"> </span>=<span style="color:#bbb"> </span>findClass(name);<span style="color:#bbb"> </span><span style="color:#228b22">// 自己加载（找不到会抛出异常）</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">                </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">            </span><span style="color:#8b008b;font-weight:bold">return</span><span style="color:#bbb"> </span>c;<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><p>findClass就是根据类名去加载具体类的方法，则整个加载机制就很清楚了。</p>
 <ol>
 <li>首先部分类会被BootstrapClassLoader加载，这部分是native实现。</li>
 <li>会先尝试让parent加载</li>
@@ -874,7 +880,9 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
         
         
     </div>
-</div><div id="single-column-footer">
+</div>
+
+<div id="single-column-footer">
 Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
 <br>
 移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>

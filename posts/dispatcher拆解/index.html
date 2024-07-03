@@ -16,12 +16,18 @@
 
 
 
-<meta property="og:title" content="Dispatcher拆解" />
-<meta property="og:description" content="这是公司里的协程系列分享课程，不过这里只有Dispatcher部分，因为这部分是我做的。" />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://ntutn.top/posts/dispatcher%E6%8B%86%E8%A7%A3/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2023-04-23T02:47:18+08:00" />
-<meta property="article:modified_time" content="2023-04-23T02:47:18+08:00" /><meta property="og:site_name" content="归零幻想" />
+<meta property="og:url" content="https://ntutn.top/posts/dispatcher%E6%8B%86%E8%A7%A3/">
+  <meta property="og:site_name" content="归零幻想">
+  <meta property="og:title" content="Dispatcher拆解">
+  <meta property="og:description" content="这是公司里的协程系列分享课程，不过这里只有Dispatcher部分，因为这部分是我做的。">
+  <meta property="og:locale" content="zh">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2023-04-23T02:47:18+08:00">
+    <meta property="article:modified_time" content="2023-04-23T02:47:18+08:00">
+    <meta property="article:tag" content="Kotlin">
+    <meta property="article:tag" content="协程">
+    <meta property="article:tag" content="Dispatcher">
 
 
 
@@ -631,24 +637,24 @@
 </span></span></code></pre></div><blockquote>
 <p>编译结果（反编译整理后的伪代码，省略了无关内容）</p>
 </blockquote>
-<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">final</span> <span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">MainKt$main$1</span> <span style="color:#8b008b;font-weight:bold">extends</span> SuspendLambda <span style="color:#8b008b;font-weight:bold">implements</span> Function2&lt;CoroutineScope, Continuation&lt;? <span style="color:#8b008b;font-weight:bold">super</span> Unit&gt;, Object&gt; {
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">public</span> <span style="color:#8b008b;font-weight:bold">final</span> java.<span style="color:#658b00">lang</span>.<span style="color:#658b00">Object</span> <span style="color:#008b45">invokeSuspend</span>(<span style="color:#707a7c">@org.jetbrains.annotations.NotNull</span> java.<span style="color:#658b00">lang</span>.<span style="color:#658b00">Object</span> r7) {
-</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">switch</span>(<span style="color:#8b008b;font-weight:bold">this</span>.<span style="color:#658b00">label</span>) {
-</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">case</span> 0:
-</span></span><span style="display:flex;"><span>    <span style="color:#228b22">// 计算compute1的代码
-</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    <span style="color:#8b008b;font-weight:bold">return</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">case</span> 1:
-</span></span><span style="display:flex;"><span>    <span style="color:#228b22">// 计算compute2的代码
-</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    <span style="color:#8b008b;font-weight:bold">return</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">case</span> 2:
-</span></span><span style="display:flex;"><span>    <span style="color:#228b22">// 输出println
-</span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    <span style="color:#8b008b;font-weight:bold">return</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#8b008b;font-weight:bold">default</span>:
-</span></span><span style="display:flex;"><span>        <span style="color:#8b008b;font-weight:bold">throw</span> <span style="color:#8b008b;font-weight:bold">new</span> java.<span style="color:#658b00">lang</span>.<span style="color:#658b00">IllegalStateException</span>()
-</span></span><span style="display:flex;"><span>    }
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>下面这张图就是协程启动的整体流程。</p>
+<div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-java" data-lang="java"><span style="display:flex;"><span><span style="color:#8b008b;font-weight:bold">final</span><span style="color:#bbb"> </span><span style="color:#8b008b;font-weight:bold">class</span> <span style="color:#008b45;font-weight:bold">MainKt$main$1</span><span style="color:#bbb"> </span><span style="color:#8b008b;font-weight:bold">extends</span><span style="color:#bbb"> </span>SuspendLambda<span style="color:#bbb"> </span><span style="color:#8b008b;font-weight:bold">implements</span><span style="color:#bbb"> </span>Function2&lt;CoroutineScope,<span style="color:#bbb"> </span>Continuation&lt;?<span style="color:#bbb"> </span><span style="color:#8b008b;font-weight:bold">super</span><span style="color:#bbb"> </span>Unit&gt;,<span style="color:#bbb"> </span>Object&gt;<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#8b008b;font-weight:bold">public</span><span style="color:#bbb"> </span><span style="color:#8b008b;font-weight:bold">final</span><span style="color:#bbb"> </span>java.<span style="color:#658b00">lang</span>.<span style="color:#658b00">Object</span><span style="color:#bbb"> </span><span style="color:#008b45">invokeSuspend</span>(<span style="color:#707a7c">@org.jetbrains.annotations.NotNull</span><span style="color:#bbb"> </span>java.<span style="color:#658b00">lang</span>.<span style="color:#658b00">Object</span><span style="color:#bbb"> </span>r7)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#8b008b;font-weight:bold">switch</span>(<span style="color:#8b008b;font-weight:bold">this</span>.<span style="color:#658b00">label</span>)<span style="color:#bbb"> </span>{<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#8b008b;font-weight:bold">case</span><span style="color:#bbb"> </span>0:<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#228b22">// 计算compute1的代码</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#8b008b;font-weight:bold">return</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#8b008b;font-weight:bold">case</span><span style="color:#bbb"> </span>1:<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#228b22">// 计算compute2的代码</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#8b008b;font-weight:bold">return</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#8b008b;font-weight:bold">case</span><span style="color:#bbb"> </span>2:<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#228b22">// 输出println</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#8b008b;font-weight:bold">return</span><span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span><span style="color:#8b008b;font-weight:bold">default</span>:<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">        </span><span style="color:#8b008b;font-weight:bold">throw</span><span style="color:#bbb"> </span><span style="color:#8b008b;font-weight:bold">new</span><span style="color:#bbb"> </span>java.<span style="color:#658b00">lang</span>.<span style="color:#658b00">IllegalStateException</span>()<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb">    </span>}<span style="color:#bbb">
+</span></span></span><span style="display:flex;"><span><span style="color:#bbb"></span>}<span style="color:#bbb">
+</span></span></span></code></pre></div><p>下面这张图就是协程启动的整体流程。</p>
 <p><img src="https://images.ntutn.top/2023/04/dff77b0ab96b3d94973cca3edee80240.svg" alt="协程启动过程"></p>
 <div class="highlight"><pre tabindex="0" style="background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-kotlin" data-lang="kotlin"><span style="display:flex;"><span>launch { <span style="color:#228b22">// 1. launch方法开始
 </span></span></span><span style="display:flex;"><span><span style="color:#228b22"></span>    ...
@@ -1311,7 +1317,9 @@ Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> b
         
         
     </div>
-</div><div id="single-column-footer">
+</div>
+
+<div id="single-column-footer">
 Hugo Theme <a href="https://github.com/amazingrise/hugo-theme-diary">Diary</a> by <a href="https://risehere.net/">Rise</a>
 <br>
 移植自 <a href="https://mak1t0.cc/" target="_blank" rel="noreferrer noopener">Makito</a>'s <a href="https://github.com/SumiMakito/hexo-theme-journal/" target="_blank" rel="noreferrer noopener">Journal.</a> <br>

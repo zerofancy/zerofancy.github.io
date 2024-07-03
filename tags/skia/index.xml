@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Skia on 归零幻想</title>
+    <link>https://ntutn.top/tags/skia/</link>
+    <description>Recent content in Skia on 归零幻想</description>
+    <generator>Hugo</generator>
+    <language>zh</language>
+    <copyright>CC BY-SA 4.0</copyright>
+    <lastBuildDate>Wed, 03 Jul 2024 02:12:34 +0800</lastBuildDate>
+    <atom:link href="https://ntutn.top/tags/skia/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Windows下编译skia的安卓版本</title>
+      <link>https://ntutn.top/posts/windows%E4%B8%8B%E7%BC%96%E8%AF%91skia%E7%9A%84%E5%AE%89%E5%8D%93%E7%89%88%E6%9C%AC/</link>
+      <pubDate>Wed, 03 Jul 2024 02:12:34 +0800</pubDate>
+      <guid>https://ntutn.top/posts/windows%E4%B8%8B%E7%BC%96%E8%AF%91skia%E7%9A%84%E5%AE%89%E5%8D%93%E7%89%88%E6%9C%AC/</guid>
+      <description>Skia是一个开源2D图形库，提供可跨硬件和软件平台工作的通用API，同时是Google、Chrome、Android、Flutter等多个产品的图形引擎。 然而有点幽默的是，虽然安卓内置了Skia，我们想在ndk下却不能使用。 因为Skia不提供稳定API，因此你要么用JNI方法调用java层封装好的Canvas API，要么就只能自己内置一个。&#xA;前几天由于新买的显卡是N卡，Linux下的兼容实在太差，于是只得换回Windows。因此这篇文章尝试在Windows下编译Android版本的Skia。&#xA;学习参考 官方文档 Skia 编译及踩坑实践 安装工具 首先安装我们编译过程中需要的git、python、ninja等工具。现在Windows下也有包管理器了，比如我们可以这样安装git：&#xA;winget install Git.Git 然而我实际体验感觉比Linux还是差很多的，例如Git安装后并没有配置好环境变量。&#xA;配置环境变量一般倒是难不倒我们程序员，但Python安装首先恶心了我一下。当我在Windows下的PowerShell窗口下打出python，回车后是打开微软应用商店安装Python的页面。这是因为Windows搞了事情，可以在设置项中找到&#xA;理论上可以在Windows应用商店直接安装Python，但隐约记得看过一篇文章说Windows应用商店安装的Python联网会有问题，因此这里就谢绝微软的好意了。&#xA;使用winget安装Python并设置环境变量后，在命令行还是找不到python3，这是因为Windows下的Python安装后文件夹中只有一个python.exe，即使你安装的是Python3。解决方法也是简单粗暴——直接复制一份。&#xA;拉取源码 唯一注意的是设置网络环境，现在Windows 11默认使用的是powershell，设置代理方式是不一样的。&#xA;CMD:&#xA;set http_proxy=http://127.0.0.1:7890 set https_proxy=http://127.0.0.1:7890 PowerShell:&#xA;$env:HTTP_PROXY=&amp;#34;http://127.0.0.1:7890&amp;#34; $env:HTTPS_PROXY=&amp;#34;http://127.0.0.1:7890&amp;#34; 接下来拉取并配置环境。&#xA;git clone https://skia.googlesource.com/skia.git cd skia python3 tools/git-sync-deps 然后使用默认参数编译&#xA;bin/gn gen out/Debug ninja -C out/Debug 编译通过。&#xA;传递更多参数 上面编译成功了Windows版本，但当我尝试编译安卓版本遇到了困难。&#xA;PS C:\Users\yqmai\Project\skia&amp;gt; bin/gn gen out/arm64 --args=&amp;#39;ndk=&amp;#34;/tmp/ndk&amp;#34; target_cpu=&amp;#34;arm64&amp;#34;&amp;#39; ERROR at the command-line &amp;#34;--args&amp;#34;:1:5: Invalid token. ndk=/tmp/ndk target_cpu=arm64 ^ I have no idea what this is.</description>
+    </item>
+  </channel>
+</rss>

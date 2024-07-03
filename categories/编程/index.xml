@@ -4,90 +4,45 @@
     <title>编程 on 归零幻想</title>
     <link>https://ntutn.top/categories/%E7%BC%96%E7%A8%8B/</link>
     <description>Recent content in 编程 on 归零幻想</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <generator>Hugo</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Thu, 24 Dec 2020 03:11:37 +0800</lastBuildDate><atom:link href="https://ntutn.top/categories/%E7%BC%96%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 24 Dec 2020 03:11:37 +0800</lastBuildDate>
+    <atom:link href="https://ntutn.top/categories/%E7%BC%96%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>android项目开发：Broadcast</title>
       <link>https://ntutn.top/posts/broadcast/</link>
       <pubDate>Thu, 24 Dec 2020 03:11:37 +0800</pubDate>
-      
       <guid>https://ntutn.top/posts/broadcast/</guid>
-      <description>仍然是《第一行代码》的学习笔记，安卓内置广播机制。
-Android中每个应用程序都可以对自己感兴趣的广播进行注册，包括来自系统的，和其他应用程序的。
-广播分为标准广播和有序广播。
-标准广播异步执行，所有BroadcastReceiver几乎同时收到广播的消息。 有序广播 同步执行，只有前一个Receiver逻辑执行完后才会传递给下一个，且可以将广播截断。 接收系统广播 BroadcastReceiver的onReceive()方法是在主线程调用的，不应执行耗时操作。但开一个新线程操作也是不可靠的1。
-监听时间变化（动态注册） class MainActivity : AppCompatActivity() { private val timeReceiver = object : BroadcastReceiver() { override fun onReceive(context: Context?, intent: Intent?) { text.text = Date(System.currentTimeMillis()).toString() } } override fun onCreate(savedInstanceState: Bundle?) { super.onCreate(savedInstanceState) setContentView(R.layout.activity_main) val intentFilter = IntentFilter() intentFilter.addAction(Intent.ACTION_TIME_TICK) registerReceiver(timeReceiver, intentFilter) } override fun onDestroy() { super.onDestroy() unregisterReceiver(timeReceiver) } } 开机启动（静态注册） &amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt; &amp;lt;manifest xmlns:android=&amp;#34;http://schemas.android.com/apk/res/android&amp;#34; package=&amp;#34;top.ntutn.broadcasttest&amp;#34;&amp;gt; &amp;lt;uses-permission android:name=&amp;#34;android.permission.RECEIVE_BOOT_COMPLETED&amp;#34; /&amp;gt; &amp;lt;application android:allowBackup=&amp;#34;true&amp;#34; android:icon=&amp;#34;@mipmap/ic_launcher&amp;#34; android:label=&amp;#34;@string/app_name&amp;#34; android:roundIcon=&amp;#34;@mipmap/ic_launcher_round&amp;#34; android:supportsRtl=&amp;#34;true&amp;#34; android:theme=&amp;#34;@style/Theme.</description>
+      <description>仍然是《第一行代码》的学习笔记，安卓内置广播机制。&#xA;Android中每个应用程序都可以对自己感兴趣的广播进行注册，包括来自系统的，和其他应用程序的。&#xA;广播分为标准广播和有序广播。&#xA;标准广播异步执行，所有BroadcastReceiver几乎同时收到广播的消息。 有序广播 同步执行，只有前一个Receiver逻辑执行完后才会传递给下一个，且可以将广播截断。 接收系统广播 BroadcastReceiver的onReceive()方法是在主线程调用的，不应执行耗时操作。但开一个新线程操作也是不可靠的1。&#xA;监听时间变化（动态注册） class MainActivity : AppCompatActivity() { private val timeReceiver = object : BroadcastReceiver() { override fun onReceive(context: Context?, intent: Intent?) { text.text = Date(System.currentTimeMillis()).toString() } } override fun onCreate(savedInstanceState: Bundle?) { super.onCreate(savedInstanceState) setContentView(R.layout.activity_main) val intentFilter = IntentFilter() intentFilter.addAction(Intent.ACTION_TIME_TICK) registerReceiver(timeReceiver, intentFilter) } override fun onDestroy() { super.onDestroy() unregisterReceiver(timeReceiver) } } 开机启动（静态注册） &amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt; &amp;lt;manifest xmlns:android=&amp;#34;http://schemas.android.com/apk/res/android&amp;#34; package=&amp;#34;top.ntutn.broadcasttest&amp;#34;&amp;gt; &amp;lt;uses-permission android:name=&amp;#34;android.permission.RECEIVE_BOOT_COMPLETED&amp;#34; /&amp;gt; &amp;lt;application android:allowBackup=&amp;#34;true&amp;#34; android:icon=&amp;#34;@mipmap/ic_launcher&amp;#34; android:label=&amp;#34;@string/app_name&amp;#34; android:roundIcon=&amp;#34;@mipmap/ic_launcher_round&amp;#34; android:supportsRtl=&amp;#34;true&amp;#34; android:theme=&amp;#34;@style/Theme.</description>
     </item>
-    
     <item>
       <title>android项目开发：Fragment</title>
       <link>https://ntutn.top/posts/fragment/</link>
       <pubDate>Mon, 21 Dec 2020 03:11:37 +0800</pubDate>
-      
       <guid>https://ntutn.top/posts/fragment/</guid>
-      <description>Fragment Fragment的使用方式 静态添加Fragment Fragment的写法
-&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt; &amp;lt;LinearLayout xmlns:android=&amp;#34;http://schemas.android.com/apk/res/android&amp;#34; android:orientation=&amp;#34;vertical&amp;#34; android:layout_width=&amp;#34;match_parent&amp;#34; android:layout_height=&amp;#34;match_parent&amp;#34;&amp;gt; &amp;lt;Button android:id=&amp;#34;@+id/button&amp;#34; android:layout_width=&amp;#34;wrap_content&amp;#34; android:layout_height=&amp;#34;wrap_content&amp;#34; android:text=&amp;#34;button&amp;#34; android:layout_gravity=&amp;#34;center_horizontal&amp;#34;/&amp;gt; &amp;lt;/LinearLayout&amp;gt; package top.ntutn.fragmenttest import android.os.Bundle import android.view.LayoutInflater import android.view.View import android.view.ViewGroup import androidx.fragment.app.Fragment class LeftFragment : Fragment() { override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle? ): View? { return inflater.inflate(R.layout.left_fragment, container, false) } } 静态添加Fragment
-&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt; &amp;lt;LinearLayout xmlns:android=&amp;#34;http://schemas.android.com/apk/res/android&amp;#34; xmlns:tools=&amp;#34;http://schemas.android.com/tools&amp;#34; android:layout_width=&amp;#34;match_parent&amp;#34; android:layout_height=&amp;#34;match_parent&amp;#34; android:orientation=&amp;#34;horizontal&amp;#34; tools:context=&amp;#34;.MainActivity&amp;#34;&amp;gt; &amp;lt;fragment android:id=&amp;#34;@+id/leftFragment&amp;#34; android:name=&amp;#34;top.ntutn.fragmenttest.LeftFragment&amp;#34; android:layout_width=&amp;#34;0dp&amp;#34; android:layout_height=&amp;#34;match_parent&amp;#34; android:layout_weight=&amp;#34;1&amp;#34;/&amp;gt; &amp;lt;fragment android:id=&amp;#34;@+id/rightFragment&amp;#34; android:name=&amp;#34;top.</description>
+      <description>Fragment Fragment的使用方式 静态添加Fragment Fragment的写法&#xA;&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt; &amp;lt;LinearLayout xmlns:android=&amp;#34;http://schemas.android.com/apk/res/android&amp;#34; android:orientation=&amp;#34;vertical&amp;#34; android:layout_width=&amp;#34;match_parent&amp;#34; android:layout_height=&amp;#34;match_parent&amp;#34;&amp;gt; &amp;lt;Button android:id=&amp;#34;@+id/button&amp;#34; android:layout_width=&amp;#34;wrap_content&amp;#34; android:layout_height=&amp;#34;wrap_content&amp;#34; android:text=&amp;#34;button&amp;#34; android:layout_gravity=&amp;#34;center_horizontal&amp;#34;/&amp;gt; &amp;lt;/LinearLayout&amp;gt; package top.ntutn.fragmenttest import android.os.Bundle import android.view.LayoutInflater import android.view.View import android.view.ViewGroup import androidx.fragment.app.Fragment class LeftFragment : Fragment() { override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle? ): View? { return inflater.inflate(R.layout.left_fragment, container, false) } } 静态添加Fragment&#xA;&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt; &amp;lt;LinearLayout xmlns:android=&amp;#34;http://schemas.android.com/apk/res/android&amp;#34; xmlns:tools=&amp;#34;http://schemas.android.com/tools&amp;#34; android:layout_width=&amp;#34;match_parent&amp;#34; android:layout_height=&amp;#34;match_parent&amp;#34; android:orientation=&amp;#34;horizontal&amp;#34; tools:context=&amp;#34;.MainActivity&amp;#34;&amp;gt; &amp;lt;fragment android:id=&amp;#34;@+id/leftFragment&amp;#34; android:name=&amp;#34;top.ntutn.fragmenttest.LeftFragment&amp;#34; android:layout_width=&amp;#34;0dp&amp;#34; android:layout_height=&amp;#34;match_parent&amp;#34; android:layout_weight=&amp;#34;1&amp;#34;/&amp;gt; &amp;lt;fragment android:id=&amp;#34;@+id/rightFragment&amp;#34; android:name=&amp;#34;top.</description>
     </item>
-    
     <item>
       <title>android项目开发：Activity</title>
       <link>https://ntutn.top/posts/activity/</link>
       <pubDate>Tue, 15 Dec 2020 03:11:37 +0800</pubDate>
-      
       <guid>https://ntutn.top/posts/activity/</guid>
-      <description>title: android项目开发：Activity author: 归零幻想 publishDate: 2020-12-15 editDate: 2020-12-15 tags: [android, 第一行代码, Kotlin, Activity]
-仍然是《第一行代码》的读书笔记，可能引用原书的定义和描述，或代码案例。
-Activity Activity基本用法 Android讲究设计逻辑与视图分离，一般Activity都会对应一个布局文件（XML文件）。
-所有的Activity都要在AndroidManifest中注册才生效。
-Activity可以创建菜单。首先在res/menu下创建一个xml文件（Android Studio中也提供了可视化编辑的方法）：
-&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt; &amp;lt;menu xmlns:app=&amp;#34;http://schemas.android.com/apk/res-auto&amp;#34; xmlns:android=&amp;#34;http://schemas.android.com/apk/res/android&amp;#34;&amp;gt; &amp;lt;item android:id=&amp;#34;@+id/add_item&amp;#34; android:title=&amp;#34;Add&amp;#34;/&amp;gt; &amp;lt;item android:id=&amp;#34;@+id/remove_item&amp;#34; android:title=&amp;#34;Remove&amp;#34;/&amp;gt; &amp;lt;/menu&amp;gt; 重写两个方法
-override fun onCreateOptionsMenu(menu: Menu?): Boolean { menuInflater.inflate(R.menu.main, menu) return true } override fun onOptionsItemSelected(item: MenuItem): Boolean { when (item.itemId) { R.id.add_item -&amp;gt; Toast.makeText(this, &amp;#34;Add a book.&amp;#34;, Toast.LENGTH_LONG).show() R.id.remove_item -&amp;gt; Toast.makeText(this, &amp;#34;Remove a book.&amp;#34;, Toast.LENGTH_LONG).show() } return true } 用finish()方法可以关闭一个Activity。</description>
+      <description>title: android项目开发：Activity author: 归零幻想 publishDate: 2020-12-15 editDate: 2020-12-15 tags: [android, 第一行代码, Kotlin, Activity]&#xA;仍然是《第一行代码》的读书笔记，可能引用原书的定义和描述，或代码案例。&#xA;Activity Activity基本用法 Android讲究设计逻辑与视图分离，一般Activity都会对应一个布局文件（XML文件）。&#xA;所有的Activity都要在AndroidManifest中注册才生效。&#xA;Activity可以创建菜单。首先在res/menu下创建一个xml文件（Android Studio中也提供了可视化编辑的方法）：&#xA;&amp;lt;?xml version=&amp;#34;1.0&amp;#34; encoding=&amp;#34;utf-8&amp;#34;?&amp;gt; &amp;lt;menu xmlns:app=&amp;#34;http://schemas.android.com/apk/res-auto&amp;#34; xmlns:android=&amp;#34;http://schemas.android.com/apk/res/android&amp;#34;&amp;gt; &amp;lt;item android:id=&amp;#34;@+id/add_item&amp;#34; android:title=&amp;#34;Add&amp;#34;/&amp;gt; &amp;lt;item android:id=&amp;#34;@+id/remove_item&amp;#34; android:title=&amp;#34;Remove&amp;#34;/&amp;gt; &amp;lt;/menu&amp;gt; 重写两个方法&#xA;override fun onCreateOptionsMenu(menu: Menu?): Boolean { menuInflater.inflate(R.menu.main, menu) return true } override fun onOptionsItemSelected(item: MenuItem): Boolean { when (item.itemId) { R.id.add_item -&amp;gt; Toast.makeText(this, &amp;#34;Add a book.&amp;#34;, Toast.LENGTH_LONG).show() R.id.remove_item -&amp;gt; Toast.makeText(this, &amp;#34;Remove a book.&amp;#34;, Toast.LENGTH_LONG).show() } return true } 用finish()方法可以关闭一个Activity。</description>
     </item>
-    
     <item>
       <title>EventBus初探</title>
       <link>https://ntutn.top/posts/eventbus%E5%88%9D%E6%8E%A2/</link>
       <pubDate>Fri, 21 Aug 2020 03:11:37 +0800</pubDate>
-      
       <guid>https://ntutn.top/posts/eventbus%E5%88%9D%E6%8E%A2/</guid>
-      <description>公司项目中大量运用了EventBus1，这两天在做的需求相关的代码也用到了，于是还是要先去研究下这个EventBus是什么。
-EventBus，顾名思义，事件总线，是一个安卓上的事件管理平台。用事件驱动的机制来简化事件传递的逻辑。在这层意义上也许可以类比Qt的信号槽机制，或者安卓的广播。当你需要把一个事件传递给多个对象，EventBus就变得非常有用。
-该图片来自EventBus的github仓库
-EventBus的使用 首先当然是添加依赖
-implementation &amp;#39;org.greenrobot:eventbus:3.2.0&amp;#39; 写个demo展示下：
-点击按钮后，将两处文本的值修改为文本框中的值。注意：上面的那个红色的文本处于一个fragment中。
-为此，我们先准备一个Event：
-data class ButtonEvent(val text: String) 点击按钮时，发送这个Event：
-button.setOnClickListener { EventBus.getDefault().post(ButtonEvent(editTextTextPersonName.text.toString())) } 然后在需要接收这个请求的地方，比如我们在MainActivity的onCreate()中注册EventBus：
-EventBus.getDefault().register(this) 在onDestory()中解除
-EventBus.getDefault().unregister(this) 然后就可以接收那个Event了。
-@Subscribe fun onButtonEvent(buttonEvent: ButtonEvent){ textView.text=buttonEvent.text } 同样对于Fragment，我们只需要做同样的事情，就可以监听这个Event了。很明显，这对于一个事件有多个处理的场景是很方便的。
-订阅者的threadMode 安卓应用启动时，系统会创建一个主线程，负责向UI组件分发事件2，所有对UI的操作应该放到主线程中。EventBus是一种重要的跨线程更新UI的方式。3
-@Subscribe注解有一个参数threadMode，有以下取值：
-ThreadMode.POSTING 默认值，在同一线程中调用，开销最小。
-ThreadMode.MAIN 在主线程中调用。
-如果发送事件的是主线程，则直接调用。
-ThreadMode.MAIN_ORDERED 在主线程中调用，同步调用（排队）。
-ThreadMode.BACKGROUND 在后台线程中调用。
-ThreadMode.ASYNC 在单独线程中调用，用于耗时操作。
-对于EventBus更新UI，我同样写了demo：
-package com.example.eventbustimerdemo import android.os.Bundle import androidx.appcompat.app.AppCompatActivity import kotlinx.android.synthetic.main.activity_main.* import org.greenrobot.eventbus.EventBus import org.greenrobot.eventbus.Subscribe import org.greenrobot.eventbus.ThreadMode class MainActivity : AppCompatActivity() { override fun onCreate(savedInstanceState: Bundle?</description>
+      <description>公司项目中大量运用了EventBus1，这两天在做的需求相关的代码也用到了，于是还是要先去研究下这个EventBus是什么。&#xA;EventBus，顾名思义，事件总线，是一个安卓上的事件管理平台。用事件驱动的机制来简化事件传递的逻辑。在这层意义上也许可以类比Qt的信号槽机制，或者安卓的广播。当你需要把一个事件传递给多个对象，EventBus就变得非常有用。&#xA;该图片来自EventBus的github仓库&#xA;EventBus的使用 首先当然是添加依赖&#xA;implementation &amp;#39;org.greenrobot:eventbus:3.2.0&amp;#39; 写个demo展示下：&#xA;点击按钮后，将两处文本的值修改为文本框中的值。注意：上面的那个红色的文本处于一个fragment中。&#xA;为此，我们先准备一个Event：&#xA;data class ButtonEvent(val text: String) 点击按钮时，发送这个Event：&#xA;button.setOnClickListener { EventBus.getDefault().post(ButtonEvent(editTextTextPersonName.text.toString())) } 然后在需要接收这个请求的地方，比如我们在MainActivity的onCreate()中注册EventBus：&#xA;EventBus.getDefault().register(this) 在onDestory()中解除&#xA;EventBus.getDefault().unregister(this) 然后就可以接收那个Event了。&#xA;@Subscribe fun onButtonEvent(buttonEvent: ButtonEvent){ textView.text=buttonEvent.text } 同样对于Fragment，我们只需要做同样的事情，就可以监听这个Event了。很明显，这对于一个事件有多个处理的场景是很方便的。&#xA;订阅者的threadMode 安卓应用启动时，系统会创建一个主线程，负责向UI组件分发事件2，所有对UI的操作应该放到主线程中。EventBus是一种重要的跨线程更新UI的方式。3&#xA;@Subscribe注解有一个参数threadMode，有以下取值：&#xA;ThreadMode.POSTING 默认值，在同一线程中调用，开销最小。&#xA;ThreadMode.MAIN 在主线程中调用。&#xA;如果发送事件的是主线程，则直接调用。&#xA;ThreadMode.MAIN_ORDERED 在主线程中调用，同步调用（排队）。&#xA;ThreadMode.BACKGROUND 在后台线程中调用。&#xA;ThreadMode.ASYNC 在单独线程中调用，用于耗时操作。&#xA;对于EventBus更新UI，我同样写了demo：&#xA;package com.example.eventbustimerdemo import android.os.Bundle import androidx.appcompat.app.AppCompatActivity import kotlinx.android.synthetic.main.activity_main.* import org.greenrobot.eventbus.EventBus import org.greenrobot.eventbus.Subscribe import org.greenrobot.eventbus.ThreadMode class MainActivity : AppCompatActivity() { override fun onCreate(savedInstanceState: Bundle?</description>
     </item>
-    
     <item>
       <title>掉坑的日常：springboot的json属性名大小写问题</title>
       <link>https://ntutn.top/posts/%E6%8E%89%E5%9D%91%E7%9A%84%E6%97%A5%E5%B8%B8springboot%E7%9A%84json%E5%B1%9E%E6%80%A7%E5%90%8D%E5%A4%A7%E5%B0%8F%E5%86%99%E9%97%AE%E9%A2%98/</link>
       <pubDate>Tue, 24 Mar 2020 03:11:37 +0800</pubDate>
-      
       <guid>https://ntutn.top/posts/%E6%8E%89%E5%9D%91%E7%9A%84%E6%97%A5%E5%B8%B8springboot%E7%9A%84json%E5%B1%9E%E6%80%A7%E5%90%8D%E5%A4%A7%E5%B0%8F%E5%86%99%E9%97%AE%E9%A2%98/</guid>
-      <description> 这两天想给自己小组的项目添加一个自动升级功能。这事听着复杂，但毕竟是个很常见的功能，github上的轮子很多。经过考虑，我决定选择这个组件，然后自己写后端。反正后端就返回一个json的事。然后就掉了坑。
-起因 案发现场没什么好说的，就是我发现自己设置的不能实现升级，在客户端调试半天发现用官方的json能升级。然后我就找我的json和官方的json有什么区别，看ContentType也没设置错，仔细比对发现属性大小写竟然不对。我当时还挺惊讶的，毕竟是直接复制的。
-springboot可以使用@ResponseBody返回对象自动转换json，而转换成的json属性名首字母会被转换成小写。
-解决方案 引入fastjson &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;com.alibaba&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;fastjson&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;1.2.66&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; 注入bean @Bean public HttpMessageConverters httpMessageConverters() { FastJsonHttpMessageConverter fastJsonHttpMessageConverter = new FastJsonHttpMessageConverter(); // 添加fastJson的配置信息 FastJsonConfig fastJsonConfig = new FastJsonConfig(); fastJsonConfig.setSerializerFeatures(SerializerFeature.PrettyFormat); // 处理中文乱码问题 List&amp;lt;MediaType&amp;gt; fastMediaTypes = new ArrayList&amp;lt;&amp;gt;(); fastMediaTypes.add(MediaType.APPLICATION_JSON); // 在convert中添加配置信息. fastJsonHttpMessageConverter.setSupportedMediaTypes(fastMediaTypes); fastJsonHttpMessageConverter.setFastJsonConfig(fastJsonConfig); HttpMessageConverter&amp;lt;?&amp;gt; converter = fastJsonHttpMessageConverter; return new HttpMessageConverters(converter); } 在属性上加注解 package edu.upc.mishuserver.vo; import com.alibaba.fastjson.annotation.JSONField; import lombok.AllArgsConstructor; import lombok.Builder; import lombok.Data; import lombok.NoArgsConstructor; /** * UpdateInfo */ @Data @AllArgsConstructor @NoArgsConstructor @Builder public class UpdateInfo { @JSONField(name=&amp;#34;Code&amp;#34;) private Long code; @JSONField(name = &amp;#34;Msg&amp;#34;) private String msg; @JSONField(name = &amp;#34;UpdateStatus&amp;#34;) private Integer updateStatus; @JSONField(name = &amp;#34;VersionCode&amp;#34;) private Long versionCode; @JSONField(name = &amp;#34;VersionName&amp;#34;) private String versionName; @JSONField(name = &amp;#34;ModifyContent&amp;#34;) private String modifyContent; @JSONField(name = &amp;#34;DownloadUrl&amp;#34;) private String downloadUrl; @JSONField(name = &amp;#34;ApkSize&amp;#34;) private Long apkSize; @JSONField(name = &amp;#34;ApkMd5&amp;#34;) private String apkMd5; } </description>
+      <description> 这两天想给自己小组的项目添加一个自动升级功能。这事听着复杂，但毕竟是个很常见的功能，github上的轮子很多。经过考虑，我决定选择这个组件，然后自己写后端。反正后端就返回一个json的事。然后就掉了坑。&#xA;起因 案发现场没什么好说的，就是我发现自己设置的不能实现升级，在客户端调试半天发现用官方的json能升级。然后我就找我的json和官方的json有什么区别，看ContentType也没设置错，仔细比对发现属性大小写竟然不对。我当时还挺惊讶的，毕竟是直接复制的。&#xA;springboot可以使用@ResponseBody返回对象自动转换json，而转换成的json属性名首字母会被转换成小写。&#xA;解决方案 引入fastjson &amp;lt;dependency&amp;gt; &amp;lt;groupId&amp;gt;com.alibaba&amp;lt;/groupId&amp;gt; &amp;lt;artifactId&amp;gt;fastjson&amp;lt;/artifactId&amp;gt; &amp;lt;version&amp;gt;1.2.66&amp;lt;/version&amp;gt; &amp;lt;/dependency&amp;gt; 注入bean @Bean public HttpMessageConverters httpMessageConverters() { FastJsonHttpMessageConverter fastJsonHttpMessageConverter = new FastJsonHttpMessageConverter(); // 添加fastJson的配置信息 FastJsonConfig fastJsonConfig = new FastJsonConfig(); fastJsonConfig.setSerializerFeatures(SerializerFeature.PrettyFormat); // 处理中文乱码问题 List&amp;lt;MediaType&amp;gt; fastMediaTypes = new ArrayList&amp;lt;&amp;gt;(); fastMediaTypes.add(MediaType.APPLICATION_JSON); // 在convert中添加配置信息. fastJsonHttpMessageConverter.setSupportedMediaTypes(fastMediaTypes); fastJsonHttpMessageConverter.setFastJsonConfig(fastJsonConfig); HttpMessageConverter&amp;lt;?&amp;gt; converter = fastJsonHttpMessageConverter; return new HttpMessageConverters(converter); } 在属性上加注解 package edu.upc.mishuserver.vo; import com.alibaba.fastjson.annotation.JSONField; import lombok.AllArgsConstructor; import lombok.Builder; import lombok.Data; import lombok.NoArgsConstructor; /** * UpdateInfo */ @Data @AllArgsConstructor @NoArgsConstructor @Builder public class UpdateInfo { @JSONField(name=&amp;#34;Code&amp;#34;) private Long code; @JSONField(name = &amp;#34;Msg&amp;#34;) private String msg; @JSONField(name = &amp;#34;UpdateStatus&amp;#34;) private Integer updateStatus; @JSONField(name = &amp;#34;VersionCode&amp;#34;) private Long versionCode; @JSONField(name = &amp;#34;VersionName&amp;#34;) private String versionName; @JSONField(name = &amp;#34;ModifyContent&amp;#34;) private String modifyContent; @JSONField(name = &amp;#34;DownloadUrl&amp;#34;) private String downloadUrl; @JSONField(name = &amp;#34;ApkSize&amp;#34;) private Long apkSize; @JSONField(name = &amp;#34;ApkMd5&amp;#34;) private String apkMd5; } </description>
     </item>
-    
   </channel>
 </rss>
