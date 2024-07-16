@@ -7,8 +7,15 @@
     <generator>Hugo</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Wed, 03 Jul 2024 02:12:34 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 17 Jul 2024 02:20:43 +0800</lastBuildDate>
     <atom:link href="https://ntutn.top/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>使用Jetbrains的脚本（skia-pcak）编译Skia</title>
+      <link>https://ntutn.top/posts/compile-skia-with-skiko-script/</link>
+      <pubDate>Wed, 17 Jul 2024 02:20:43 +0800</pubDate>
+      <guid>https://ntutn.top/posts/compile-skia-with-skiko-script/</guid>
+      <description>前几天我尝试在Windows下编译了Skia并成功绘制了三角形，但是尝试绘制Hello World时并没有任何输出，我猜测是有字体相关的依赖（如fontconfig）没有处理好，而在Windows上安装并引入这些依赖好像有点太难了。一番查找发现JetBrains有个仓库用github的workflow编译Skia，这下问题简单了。&#xA;开一台Ubuntu虚拟机克隆脚本&#xA;git clone https://github.com/JetBrains/skia-pack 拉取代码分支&#xA;python3 script/checkout.py --version m116-47d3027-1 接下来在真正开始编译前需要先打开编译脚本修改一下，因为这个脚本默认编译为静态库，而我想继续在Windows下折腾，用Linux的工具链编译的静态库肯定是不能直接用的。&#xA;开始编译&#xA;python3 script/build.py --target android --machine arm64 --ndk /home/zero/Android/Sdk/ndk/27.0.11902837 编译过程中可能报一些类似缺少头文件的错误，安装一些库后重试即可&#xA;sudo apt install build-essential gcc-9 g++-9 libfontconfig-dev mesa-common-dev libgl1-mesa-dev libglu1-mesa-dev 最后把生成的so文件拷贝到我们之前的Demo工程，修改绘制部分输出文字&#xA;SkPaint paint; canvas.clear(SkColorSetARGB(0xFF, 0x14, 0x14, 0x14)); paint.setColor(SK_ColorWHITE); paint.setAntiAlias(true); SkFont font; font.setSize(64); SkString text(&amp;#34;你好，Skia！&amp;#34;); canvas.drawSimpleText(text.c_str(), text.size(), SkTextEncoding::kUTF8, 0, 64, font, paint); 最后运行</description>
+    </item>
     <item>
       <title>Windows下编译skia的安卓版本</title>
       <link>https://ntutn.top/posts/windows%E4%B8%8B%E7%BC%96%E8%AF%91skia%E7%9A%84%E5%AE%89%E5%8D%93%E7%89%88%E6%9C%AC/</link>

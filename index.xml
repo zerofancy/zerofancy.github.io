@@ -7,9 +7,42 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Wed, 03 Jul 2024 02:12:34 +0800</lastBuildDate>
+    <lastBuildDate>Wed, 17 Jul 2024 02:20:43 +0800</lastBuildDate>
     
         <atom:link href="https://ntutn.top/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>使用Jetbrains的脚本（skia-pcak）编译Skia</title>
+        <link>https://ntutn.top/posts/compile-skia-with-skiko-script/</link>
+        <pubDate>Wed, 17 Jul 2024 02:20:43 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/compile-skia-with-skiko-script/</guid>
+        <description>归零幻想 https://ntutn.top/posts/compile-skia-with-skiko-script/ -&lt;p&gt;前几天我尝试在Windows下编译了Skia并成功绘制了三角形，但是尝试绘制Hello World时并没有任何输出，我猜测是有字体相关的依赖（如fontconfig）没有处理好，而在Windows上安装并引入这些依赖好像有点太难了。一番查找发现JetBrains有个&lt;a href=&#34;https://github.com/JetBrains/skia-pack&#34;&gt;仓库&lt;/a&gt;用github的workflow编译Skia，这下问题简单了。&lt;/p&gt;
+&lt;p&gt;开一台Ubuntu虚拟机克隆脚本&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;git clone https://github.com/JetBrains/skia-pack
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;拉取代码分支&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;python3 script/checkout.py --version m116-47d3027-1
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;接下来在真正开始编译前需要先打开编译脚本修改一下，因为这个脚本默认编译为静态库，而我想继续在Windows下折腾，用Linux的工具链编译的静态库肯定是不能直接用的。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://image2.ntutn.top/2024/07/72344e4b7ab28bd3649ea11382d5cbbb.png&#34; alt=&#34;添加参数生成动态库&#34;&gt;&lt;/p&gt;
+&lt;p&gt;开始编译&lt;/p&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;python3 script/build.py --target android --machine arm64  --ndk /home/zero/Android/Sdk/ndk/27.0.11902837
+&lt;/code&gt;&lt;/pre&gt;&lt;p&gt;编译过程中可能报一些类似缺少头文件的错误，安装一些库后重试即可&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;sudo apt install build-essential gcc-9 g++-9 libfontconfig-dev mesa-common-dev  libgl1-mesa-dev libglu1-mesa-dev
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;最后把生成的so文件拷贝到我们之前的Demo工程，修改绘制部分输出文字&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-cpp&#34; data-lang=&#34;cpp&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;SkPaint paint;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;canvas.clear(SkColorSetARGB(&lt;span style=&#34;color:#b452cd&#34;&gt;0xFF&lt;/span&gt;, &lt;span style=&#34;color:#b452cd&#34;&gt;0x14&lt;/span&gt;, &lt;span style=&#34;color:#b452cd&#34;&gt;0x14&lt;/span&gt;, &lt;span style=&#34;color:#b452cd&#34;&gt;0x14&lt;/span&gt;));
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;paint.setColor(SK_ColorWHITE);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;paint.setAntiAlias(&lt;span style=&#34;color:#658b00&#34;&gt;true&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;SkFont font;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;font.setSize(&lt;span style=&#34;color:#b452cd&#34;&gt;64&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;SkString &lt;span style=&#34;color:#008b45&#34;&gt;text&lt;/span&gt;(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;你好，Skia！&amp;#34;&lt;/span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;canvas.drawSimpleText(text.c_str(), text.size(), SkTextEncoding::kUTF8, &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#b452cd&#34;&gt;64&lt;/span&gt;, font, paint);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;最后运行&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://image2.ntutn.top/2024/07/d95458e3a8d706bc1f54f262002e0743.png&#34; alt=&#34;Hello Skia&#34;&gt;&lt;/p&gt;
+- https://ntutn.top/posts/compile-skia-with-skiko-script/ - CC BY-SA 4.0</description>
+        </item>
     
     
     
@@ -1144,91 +1177,6 @@ $$&lt;/p&gt;
 &lt;p&gt;但现在用了类似消息循环处理的方式，执行A时先让B入队，A执行完成B才出队执行，B执行完时C才出队执行，最终调用栈中只有C。&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2023/04/e19a49b188577559115e3d477545981d.png&#34; alt=&#34;画板&#34;&gt;&lt;/p&gt;
 - https://ntutn.top/posts/executeunconfined%E6%90%9E%E4%BA%86%E4%BB%80%E4%B9%88%E9%A3%9E%E6%9C%BA/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>Dispatchers.Default/Dispatchers.IO到底创建几个线程</title>
-        <link>https://ntutn.top/posts/dispatchers_default_io%E5%88%9B%E5%BB%BA%E5%A4%9A%E5%B0%91%E4%B8%AA%E7%BA%BF%E7%A8%8B/</link>
-        <pubDate>Sat, 15 Apr 2023 21:39:12 +0800</pubDate>
-        
-        <guid>https://ntutn.top/posts/dispatchers_default_io%E5%88%9B%E5%BB%BA%E5%A4%9A%E5%B0%91%E4%B8%AA%E7%BA%BF%E7%A8%8B/</guid>
-        <description>归零幻想 https://ntutn.top/posts/dispatchers_default_io%E5%88%9B%E5%BB%BA%E5%A4%9A%E5%B0%91%E4%B8%AA%E7%BA%BF%E7%A8%8B/ -&lt;p&gt;首先让我们看Dispatchers.IO，毫无疑问它创建64个worker&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;// Dispatchers.IO
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;internal&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;DefaultIoScheduler&lt;/span&gt; : ExecutorCoroutineDispatcher(), Executor {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; default = &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;UnlimitedIoScheduler&lt;/span&gt;.limitedParallelism(
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        systemProp(
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            IO_PARALLELISM_PROPERTY_NAME,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#b452cd&#34;&gt;64.&lt;/span&gt;coerceAtLeast(AVAILABLE_PROCESSORS)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        )
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    )
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;dispatch&lt;/span&gt;(context: CoroutineContext, block: Runnable) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        default.dispatch(context, block)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;继续跟进，发现Dispatchers.IO竟然将任务直接提交给Dispatchers.Default&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;// The unlimited instance of Dispatchers.IO that utilizes all the threads CoroutineScheduler provides
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;UnlimitedIoScheduler&lt;/span&gt; : CoroutineDispatcher() {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ...
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;override&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;dispatch&lt;/span&gt;(context: CoroutineContext, block: Runnable) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;DefaultScheduler&lt;/span&gt;.dispatchWithContext(block, BlockingContext, &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;接下来是Default，CORE_POOL_SIZE就是CPU核心数，&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;internal&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;DefaultScheduler&lt;/span&gt; : SchedulerCoroutineDispatcher(
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    CORE_POOL_SIZE, MAX_POOL_SIZE,
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    IDLE_WORKER_KEEP_ALIVE_NS, DEFAULT_SCHEDULER_NAME
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ...
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;继续跟进，到创建Worker的地方&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;tryCreateWorker&lt;/span&gt;(state: Long = controlState.&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;value&lt;/span&gt;): Boolean {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; created = createdWorkers(state) &lt;span style=&#34;color:#228b22&#34;&gt;// 已创建worker数
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; blocking = blockingTasks(state) &lt;span style=&#34;color:#228b22&#34;&gt;// 已提交的阻塞任务数
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; cpuWorkers = (created - blocking).coerceAtLeast(&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#228b22&#34;&gt;/*
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     * We check how many threads are there to handle non-blocking work,
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     * and create one more if we have not enough of them.
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;     */&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (cpuWorkers &amp;lt; corePoolSize) { &lt;span style=&#34;color:#228b22&#34;&gt;// worker数减去阻塞任务数小于核心数
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; newCpuWorkers = createNewWorker() &lt;span style=&#34;color:#228b22&#34;&gt;// 创建Worker
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#228b22&#34;&gt;// If we&amp;#39;ve created the first cpu worker and corePoolSize &amp;gt; 1 then create
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#228b22&#34;&gt;// one more (second) cpu worker, so that stealing between them is operational
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (newCpuWorkers == &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt; &amp;amp;&amp;amp; corePoolSize &amp;gt; &lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;) createNewWorker()
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (newCpuWorkers &amp;gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;) &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;所以结论是&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;项目&lt;/th&gt;
-&lt;th&gt;适用&lt;/th&gt;
-&lt;th&gt;线程数&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;Dispatchers.Default&lt;/td&gt;
-&lt;td&gt;CPU密集型&lt;/td&gt;
-&lt;td&gt;max(CPU核心数, 2)&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;Dispatchers.IO&lt;/td&gt;
-&lt;td&gt;IO密集型&lt;/td&gt;
-&lt;td&gt;max(64, CPU核心数)&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;blockquote&gt;
-&lt;p&gt;二者实现实际是共享一个线程池，但用了两个任务队列，当一个队列空时，可根据工作窃取算法去执行另一个队列的任务。但这部分的实现还是比较复杂的，我暂时没有阅读整个流程。&lt;/p&gt;
-&lt;/blockquote&gt;
-- https://ntutn.top/posts/dispatchers_default_io%E5%88%9B%E5%BB%BA%E5%A4%9A%E5%B0%91%E4%B8%AA%E7%BA%BF%E7%A8%8B/ - CC BY-SA 4.0</description>
         </item>
     
     
