@@ -7,9 +7,108 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Wed, 17 Jul 2024 02:20:43 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 04 Aug 2024 19:39:36 +0800</lastBuildDate>
     
         <atom:link href="https://ntutn.top/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>活动安排问题</title>
+        <link>https://ntutn.top/posts/%E6%B4%BB%E5%8A%A8%E5%AE%89%E6%8E%92%E9%97%AE%E9%A2%98/</link>
+        <pubDate>Mon, 13 May 2019 03:11:37 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/%E6%B4%BB%E5%8A%A8%E5%AE%89%E6%8E%92%E9%97%AE%E9%A2%98/</guid>
+        <description>归零幻想 https://ntutn.top/posts/%E6%B4%BB%E5%8A%A8%E5%AE%89%E6%8E%92%E9%97%AE%E9%A2%98/ -&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;经典的贪心问题。&lt;/p&gt;
+&lt;h2 id=&#34;question&#34;&gt;Question&lt;/h2&gt;
+&lt;p&gt;假设有n个活动的集合&lt;code&gt;E={a1,a2,...,an}&lt;/code&gt;，其每个活动都要求使用同一资源（如某个设备、教室、场地等），而在同一时间内只允许一个活动使用这一资源。&lt;/p&gt;
+&lt;p&gt;每个活动都有一个要求使用该资源的起止时间&lt;code&gt;si&lt;/code&gt;,&lt;code&gt;fi&lt;/code&gt;，且&lt;code&gt;si&amp;lt;fi&lt;/code&gt;。如果选择了活动ai，则它在半开的时间区间&lt;code&gt;[si,fi)&lt;/code&gt;内占有资源。两个活动&lt;code&gt;ai&lt;/code&gt;,&lt;code&gt;aj&lt;/code&gt;称为是相容的，当且仅当它们的时间区间&lt;code&gt;[si,fi)&lt;/code&gt;和&lt;code&gt;[sj,fj)&lt;/code&gt;不相交，即&lt;code&gt;si&amp;gt;=fj&lt;/code&gt; 或 &lt;code&gt;sj &amp;gt;=fi&lt;/code&gt;。现要求在所给定的活动集中选出最大的相容活动子集。&lt;/p&gt;
+&lt;!-- raw HTML omitted --&gt;
+&lt;p&gt;请补充要求的函数代码。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;提示：贪心策略&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;输入，有多行，第1行是活动的个数n，后面n行，每行3个整数，是每个活动的编号、占用资源的开始时间、结束时间。&lt;/p&gt;
+&lt;p&gt;输出，选出的最大活动子集，即有多行，每行包括活动的编号、开始时间、结束时间。&lt;/p&gt;
+&lt;h2 id=&#34;example&#34;&gt;Example&lt;/h2&gt;
+&lt;h3 id=&#34;input&#34;&gt;Input&lt;/h3&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;11
+1 3 8
+2 2 13
+3 1 4
+4 5 7
+5 6 10
+6 8 11
+7 12 14
+8 5 9
+9 3 5
+10 0 6
+11 8 12
+&lt;/code&gt;&lt;/pre&gt;&lt;h3 id=&#34;output&#34;&gt;Output&lt;/h3&gt;
+&lt;pre tabindex=&#34;0&#34;&gt;&lt;code&gt;3：1-4
+4：5-7
+6：8-11
+7：12-14
+&lt;/code&gt;&lt;/pre&gt;&lt;h2 id=&#34;分析&#34;&gt;分析&lt;/h2&gt;
+&lt;p&gt;经典的贪心问题，贪心策略为选择结束时间最早的活动，因为这样就可以给后面的活动留出更多的时间。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;掉坑：在选择活动时只处理了前24小时的活动，而事实证明我画蛇添足了。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;answer&#34;&gt;Answer&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-cpp&#34; data-lang=&#34;cpp&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;stdio.h&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#1e889b&#34;&gt;&amp;lt;stdlib.h&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;using&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;namespace&lt;/span&gt; std;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;//定义允许的最大活动数
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;#define Maxn  100
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#1e889b&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;//定义活动的类型
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;typedef&lt;/span&gt;  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;struct&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;act_Node&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{  &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; Id;       &lt;span style=&#34;color:#228b22&#34;&gt;//活动ID
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;   &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; s_Time;   &lt;span style=&#34;color:#228b22&#34;&gt;//活动开始时间
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;   &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; f_Time;   &lt;span style=&#34;color:#228b22&#34;&gt;//活动结束时间
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;} ACND;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;//对活动按贪心准则排序
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;Sort&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; n,ACND arr[])
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;i&amp;lt;n;i++){
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; tmp=i;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; j=i+&lt;span style=&#34;color:#b452cd&#34;&gt;1&lt;/span&gt;;j&amp;lt;n;j++){
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(arr[j].f_Time&amp;lt;arr[tmp].f_Time){
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                tmp=j;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        ACND tmpSwap=arr[i];
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        arr[i]=arr[tmp];
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        arr[tmp]=tmpSwap;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;//进行贪心选择，得到最大相容的活动集合输出
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;Select&lt;/span&gt;(&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; n,ACND arr[])
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; nTime=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    ACND*p=arr;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;while&lt;/span&gt;(p-arr&amp;lt;n){
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt;(p-&amp;gt;s_Time&amp;gt;=nTime){
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            cout&amp;lt;&amp;lt;p-&amp;gt;Id&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;:&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;p-&amp;gt;s_Time&amp;lt;&amp;lt;&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;-&amp;#34;&lt;/span&gt;&amp;lt;&amp;lt;p-&amp;gt;f_Time&amp;lt;&amp;lt;endl;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            nTime=p-&amp;gt;f_Time;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        p++;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;{  ACND arr[Maxn];
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   &lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; an,i;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   cin&amp;gt;&amp;gt;an;           &lt;span style=&#34;color:#228b22&#34;&gt;//读入活动个数
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;   &lt;span style=&#34;color:#228b22&#34;&gt;//读入各个活动的编号和占用资源的起止时间
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;   &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;for&lt;/span&gt;(i=&lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;i&amp;lt;an;i++)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;     cin&amp;gt;&amp;gt;arr[i].Id&amp;gt;&amp;gt;arr[i].s_Time&amp;gt;&amp;gt;arr[i].f_Time;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   &lt;span style=&#34;color:#228b22&#34;&gt;//对活动按贪心准则进行排序
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;   Sort(an,arr);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;   &lt;span style=&#34;color:#228b22&#34;&gt;//进行贪心选择，获得最优解并输出
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;   Select(an,arr);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://ntutn.top/posts/%E6%B4%BB%E5%8A%A8%E5%AE%89%E6%8E%92%E9%97%AE%E9%A2%98/ - CC BY-SA 4.0</description>
+        </item>
     
     
     
@@ -3584,35 +3683,6 @@ Jinshatan1111 51 50
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://ntutn.top/posts/c&#43;&#43;%E7%BC%96%E7%A8%8B%E8%83%BD%E5%8A%9B%E8%AF%84%E4%BC%B0/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>直</title>
-        <link>https://ntutn.top/posts/%E7%9B%B4/</link>
-        <pubDate>Wed, 27 Mar 2019 03:11:37 +0800</pubDate>
-        
-        <guid>https://ntutn.top/posts/%E7%9B%B4/</guid>
-        <description>归零幻想 https://ntutn.top/posts/%E7%9B%B4/ -&lt;!-- raw HTML omitted --&gt;
-&lt;h1 id=&#34;直&#34;&gt;直&lt;/h1&gt;
-&lt;blockquote&gt;
-&lt;p&gt;发现了自己初中写的作文，我当年这么中二的吗……&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;!-- raw HTML omitted --&gt;
-&lt;p&gt;树是直的，直得挺拔入云；山是直的，直得直插霄汉；竹是直的直得虚心髙洁。是啊，巍峨的直无处不在。&lt;/p&gt;
-&lt;h2 id=&#34;尺&#34;&gt;尺&lt;/h2&gt;
-&lt;p&gt;人们仰慕大自然的直，于是制造了尺。尺，为直而生。再纷乱的外界环境，它总恪尽职守，一丝不苟。即使是它的制造者，它也将毫不留情地指出他的过失。&lt;/p&gt;
-&lt;p&gt;人本如此。看到它，我想起了屈子，想起了岳将军，想起包拯，想起了正直的中国人。&lt;/p&gt;
-&lt;h2 id=&#34;弓&#34;&gt;弓&lt;/h2&gt;
-&lt;p&gt;尺是直的，但在不可抗力下它还是弯曲了。有时弯也是一种无奈，正直的树也抵不住弯曲的斧。那就弯吧。不！你没看到，弦是直的。弦如何直？那是弓在抗拒那股不可抗力！是啊，弓是弯的，但它的心是直的。它仍是一心向直的。&lt;/p&gt;
-&lt;p&gt;人应如此。狂风袭来，竹顺势而弯，但风速减小了。虽然只有一点。看到它，我想到了周树人，想到了郭沫若，想到了在黑暗中抗争的中国人。&lt;/p&gt;
-&lt;h2 id=&#34;箭&#34;&gt;箭&lt;/h2&gt;
-&lt;p&gt;弓是弯的，但它不甘继续弯下去。于是它化作一支羽箭，反射着金色阳光，即使这直是有代价的。它是一根选择燃烧的火柴。它将烧尽，但它选择了燃烧。&lt;/p&gt;
-&lt;p&gt;看到它，我想到了荆轲，想到了谭嗣同，想到了敢于与黑暗抗争的中国人。&lt;/p&gt;
-&lt;p&gt;中华民族是一个直的民族，中国人本色如此。中国人是直的，即使在不可抗力下弯了，心还是直的。而且，他们会抗争，不管那是不是不可抗力。在忍无可忍时，他们会用自己的生命，划出一道直线。中国，拉着这样的弓，射出这样的箭，复兴也是必然的。&lt;/p&gt;
-&lt;p&gt;这就是那个直的传说。&lt;/p&gt;
-- https://ntutn.top/posts/%E7%9B%B4/ - CC BY-SA 4.0</description>
         </item>
     
     

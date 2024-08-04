@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>JNA on 归零幻想</title>
+    <link>https://ntutn.top/tags/jna/</link>
+    <description>Recent content in JNA on 归零幻想</description>
+    <generator>Hugo</generator>
+    <language>zh</language>
+    <copyright>CC BY-SA 4.0</copyright>
+    <lastBuildDate>Sun, 04 Aug 2024 19:39:36 +0800</lastBuildDate>
+    <atom:link href="https://ntutn.top/tags/jna/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>JNA调用Win32API</title>
+      <link>https://ntutn.top/posts/jna%E8%B0%83%E7%94%A8win32api/</link>
+      <pubDate>Sun, 04 Aug 2024 19:39:36 +0800</pubDate>
+      <guid>https://ntutn.top/posts/jna%E8%B0%83%E7%94%A8win32api/</guid>
+      <description>最近想做一个桌面管理工具，不可避免地需要用到很多Win32 API。鉴于我暂时懒得再去学C#，我需要在Kotlin/JVM下使用Win32 API的办法。传统来说JVM为我们提供了JNI，但JNI使用其实相对繁琐，需要生成jni header文件，进行C/C++开发，我们这个需求用JNA就能实现，不需要写任何C/C++代码。 那么，就从显示一个MessageBox开始吧。&#xA;JNA显示MessageBox 首先引入JNA的依赖：&#xA;implementation(&amp;#34;net.java.dev.jna:jna:5.14.0&amp;#34;) 接下来检查MessageBox方法的定义：&#xA;int MessageBox( [in, optional] HWND hWnd, [in, optional] LPCTSTR lpText, [in, optional] LPCTSTR lpCaption, [in] UINT uType ); 然后写一个Kotlin接口，定义这个方法即可：&#xA;import com.sun.jna.Library import com.sun.jna.Native import com.sun.jna.win32.W32APIOptions interface User32Extend : Library { companion object { val instance: User32Extend = Native.load(&amp;#34;user32&amp;#34;, User32Extend::class.java, W32APIOptions.DEFAULT_OPTIONS); } fun MessageBox(hWnd: Long?, lpText: String, lpCaption: String, uType: Long): Int } 这里的类型hWnd本质上是一个指针，Kotlin中我们可以直接定义为Long（JNA官方实现中是定义了两个类去包这个值，其实没必要）。uType原始定义是UInt类型，但Kotlin中不能使用UInt否则找不到方法，这可能是因为UInt是一个Kotlin内联类，JNA并不支持，所以这里我们用Int或Long都可以。&#xA;接下来使用我们封装的方法&#xA;User32Extend.instance.MessageBox(null, &amp;#34;Hello World&amp;#34;, &amp;#34;你好，世界！&amp;#34;, 64) MessageBox函数会阻塞当前线程，如果在主线程使用，在用户确认这个对话框前整个界面是完全卡住的，这不符合开发规范，用户体验也不好。因此，我们需要切换到后台线程再调用这个函数，以一段Compose代码为例：&#xA;val scope = rememberCoroutineScope() Button(onClick = { scope.</description>
+    </item>
+  </channel>
+</rss>

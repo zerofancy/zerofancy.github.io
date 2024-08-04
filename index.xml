@@ -7,9 +7,82 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh</language>
     <copyright>CC BY-SA 4.0</copyright>
-    <lastBuildDate>Wed, 17 Jul 2024 02:20:43 +0800</lastBuildDate>
+    <lastBuildDate>Sun, 04 Aug 2024 19:39:36 +0800</lastBuildDate>
     
         <atom:link href="https://ntutn.top/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    
+        <item>
+        <title>JNA调用Win32API</title>
+        <link>https://ntutn.top/posts/jna%E8%B0%83%E7%94%A8win32api/</link>
+        <pubDate>Sun, 04 Aug 2024 19:39:36 +0800</pubDate>
+        
+        <guid>https://ntutn.top/posts/jna%E8%B0%83%E7%94%A8win32api/</guid>
+        <description>归零幻想 https://ntutn.top/posts/jna%E8%B0%83%E7%94%A8win32api/ -&lt;p&gt;最近想做一个桌面管理工具，不可避免地需要用到很多Win32 API。鉴于我暂时懒得再去学C#，我需要在Kotlin/JVM下使用Win32 API的办法。传统来说JVM为我们提供了JNI，但JNI使用其实相对繁琐，需要生成jni header文件，进行C/C++开发，我们这个需求用JNA就能实现，不需要写任何C/C++代码。
+那么，就从显示一个MessageBox开始吧。&lt;/p&gt;
+&lt;h1 id=&#34;jna显示messagebox&#34;&gt;JNA显示MessageBox&lt;/h1&gt;
+&lt;p&gt;首先引入JNA的依赖：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;implementation(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;net.java.dev.jna:jna:5.14.0&amp;#34;&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;接下来检查MessageBox方法的定义：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-cpp&#34; data-lang=&#34;cpp&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#00688b;font-weight:bold&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;MessageBox&lt;/span&gt;(
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  [in, optional] HWND    hWnd,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  [in, optional] LPCTSTR lpText,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  [in, optional] LPCTSTR lpCaption,
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;  [in]           UINT    uType
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;);
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;然后写一个Kotlin接口，定义这个方法即可：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;com.sun.jna.Library&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;com.sun.jna.Native&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#008b45;text-decoration:underline&#34;&gt;com.sun.jna.win32.W32APIOptions&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;interface&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;User32Extend&lt;/span&gt; : Library {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;companion&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;object&lt;/span&gt; {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; instance: User32Extend = &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Native&lt;/span&gt;.load(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;user32&amp;#34;&lt;/span&gt;, User32Extend::&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt;.java, W32APIOptions.DEFAULT_OPTIONS);
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;MessageBox&lt;/span&gt;(hWnd: Long?, lpText: String, lpCaption: String, uType: Long): Int
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这里的类型&lt;code&gt;hWnd&lt;/code&gt;本质上是一个指针，Kotlin中我们可以直接定义为Long（JNA官方实现中是定义了两个类去包这个值，其实没必要）。&lt;code&gt;uType&lt;/code&gt;原始定义是UInt类型，但Kotlin中不能使用UInt否则找不到方法，这可能是因为UInt是一个Kotlin内联类，JNA并不支持，所以这里我们用Int或Long都可以。&lt;/p&gt;
+&lt;p&gt;接下来使用我们封装的方法&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;User32Extend.instance.MessageBox(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Hello World&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;你好，世界！&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#b452cd&#34;&gt;64&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://image2.ntutn.top/2024/08/fcc90262e26f3f522b86ece90d81bcf8.png&#34; alt=&#34;在后台线程使用对话框&#34;&gt;&lt;/p&gt;
+&lt;p&gt;MessageBox函数会阻塞当前线程，如果在主线程使用，在用户确认这个对话框前整个界面是完全卡住的，这不符合开发规范，用户体验也不好。因此，我们需要切换到后台线程再调用这个函数，以一段Compose代码为例：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; scope = rememberCoroutineScope()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;Button(onClick = {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    scope.launch(&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Dispatchers&lt;/span&gt;.IO) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        User32Extend.instance.MessageBox(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Hello World&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;你好，世界！&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#b452cd&#34;&gt;64&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    Text(text)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://image2.ntutn.top/2024/08/f59410d3d8e052a7ee7e611d06eb6a24.png&#34; alt=&#34;模态对话框&#34;&gt;&lt;/p&gt;
+&lt;p&gt;尽管现在对话框成功弹出了，点击也没有什么问题，还有一个小的体验问题，就是新弹出的窗口和我们本来的窗口没有什么关系，而我们知道很多软件中的交互是再确认前用户无法操作主窗口的。
+MessageBox函数有四个参数，前面我们用上了三个，现在只要把主窗口的句柄传到第一个参数即可。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kt&#34; data-lang=&#34;kt&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#707a7c&#34;&gt;@Composable&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#707a7c&#34;&gt;@Preview&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;App&lt;/span&gt;(pointer: Long? = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; text &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;by&lt;/span&gt; remember { mutableStateOf(&lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Hello, World!&amp;#34;&lt;/span&gt;) }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    MaterialTheme {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; scope = rememberCoroutineScope()
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        Button(onClick = {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            scope.launch(&lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;Dispatchers&lt;/span&gt;.IO) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;                User32Extend.instance.MessageBox(&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;Hello World&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#cd5555&#34;&gt;&amp;#34;你好，世界！&amp;#34;&lt;/span&gt;, &lt;span style=&#34;color:#b452cd&#34;&gt;64&lt;/span&gt;)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            Text(text)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;main&lt;/span&gt;() = application {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    Window(onCloseRequest = ::exitApplication) {
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        App(pointer = window.windowHandle)
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
+&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;- https://ntutn.top/posts/jna%E8%B0%83%E7%94%A8win32api/ - CC BY-SA 4.0</description>
+        </item>
     
     
     
@@ -1041,142 +1114,6 @@ $$&lt;/p&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2023/04/1615e7450d43419d9531b1041a118b7a.png&#34; alt=&#34;线性拟合&#34;&gt;&lt;/p&gt;
 - https://ntutn.top/posts/%E5%B8%A6%E6%9D%83%E9%87%8D%E7%9A%84%E9%9A%8F%E6%9C%BA%E9%80%89%E6%8B%A9/ - CC BY-SA 4.0</description>
-        </item>
-    
-    
-    
-        <item>
-        <title>executeUnconfined搞了什么飞机</title>
-        <link>https://ntutn.top/posts/executeunconfined%E6%90%9E%E4%BA%86%E4%BB%80%E4%B9%88%E9%A3%9E%E6%9C%BA/</link>
-        <pubDate>Mon, 17 Apr 2023 19:28:49 +0800</pubDate>
-        
-        <guid>https://ntutn.top/posts/executeunconfined%E6%90%9E%E4%BA%86%E4%BB%80%E4%B9%88%E9%A3%9E%E6%9C%BA/</guid>
-        <description>归零幻想 https://ntutn.top/posts/executeunconfined%E6%90%9E%E4%BA%86%E4%BB%80%E4%B9%88%E9%A3%9E%E6%9C%BA/ -&lt;p&gt;在对Dispatchers.Main.immediate进行分析时，isDispatchNeeded正常分支很简单，但else分支足足套了3层，我说这里只是原地执行好没有说服力啊。所以一起来看看它这里在搞什么飞机。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2023/04/1b68e35ba83637ff864b4e08b6e8053d.png&#34; alt=&#34;resumeWith&#34;&gt;&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2023/04/2fb93570257d015f802552f468ef0ff0.png&#34; alt=&#34;executeUncofined&#34;&gt;&lt;/p&gt;
-&lt;p&gt;好吧，注释已经告诉我们了，就是为了防StackOverflow。那么它是怎样做到的呢？&lt;/p&gt;
-&lt;p&gt;首先我们注意到这里有个EventLoop，它不是安卓中的looper，但其实与之类似。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2023/04/23deb5a30a064c03362f868a1b182497.png&#34; alt=&#34;ThreadLocalEventLoop&#34;&gt;&lt;/p&gt;
-&lt;p&gt;可以看到，类似于Looper，它也被保存到ThreadLocal。&lt;/p&gt;
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;background-color:#eed;-moz-tab-size:4;-o-tab-size:4;tab-size:4;&#34;&gt;&lt;code class=&#34;language-kotlin&#34; data-lang=&#34;kotlin&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;internal&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;abstract&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#008b45;font-weight:bold&#34;&gt;EventLoop&lt;/span&gt; : CoroutineDispatcher() {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; useCount = &lt;span style=&#34;color:#b452cd&#34;&gt;0L&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;var&lt;/span&gt; unconfinedQueue: ArrayQueue&amp;lt;DispatchedTask&amp;lt;*&amp;gt;&amp;gt;? = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;null&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;dispatchUnconfined&lt;/span&gt;(task: DispatchedTask&amp;lt;*&amp;gt;) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; queue = unconfinedQueue ?:
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            ArrayQueue&amp;lt;DispatchedTask&amp;lt;*&amp;gt;&amp;gt;().also { unconfinedQueue = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;it&lt;/span&gt; }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        queue.addLast(task)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;public&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;val&lt;/span&gt; isUnconfinedLoopActive: Boolean
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;get&lt;/span&gt;() = useCount &amp;gt;= delta(unconfined = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt;)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;private&lt;/span&gt; &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;delta&lt;/span&gt;(unconfined: Boolean) =
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (unconfined) (&lt;span style=&#34;color:#b452cd&#34;&gt;1L&lt;/span&gt; shl &lt;span style=&#34;color:#b452cd&#34;&gt;32&lt;/span&gt;) &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#b452cd&#34;&gt;1L&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;incrementUseCount&lt;/span&gt;(unconfined: Boolean = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        useCount += delta(unconfined)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (!unconfined) shared = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;true&lt;/span&gt; 
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;fun&lt;/span&gt; &lt;span style=&#34;color:#008b45&#34;&gt;decrementUseCount&lt;/span&gt;(unconfined: Boolean = &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;false&lt;/span&gt;) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        useCount -= delta(unconfined)
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (useCount &amp;gt; &lt;span style=&#34;color:#b452cd&#34;&gt;0&lt;/span&gt;) &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;return&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        assert { useCount == &lt;span style=&#34;color:#b452cd&#34;&gt;0L&lt;/span&gt; } &lt;span style=&#34;color:#228b22&#34;&gt;// &amp;#34;Extra decrementUseCount&amp;#34;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#8b008b;font-weight:bold&#34;&gt;if&lt;/span&gt; (shared) {
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;            &lt;span style=&#34;color:#228b22&#34;&gt;// shut it down and remove from ThreadLocalEventLoop
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#228b22&#34;&gt;&lt;/span&gt;            shutdown()
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;        }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    }
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;}
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;useCount初始值为0，即isUnconfinedLoopActive为false，所以第一次走else分支&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2023/04/1c87dd1b6b26ba206afe6a5cec41f193.png&#34; alt=&#34;runUnconfinedEventLoop&#34;&gt;&lt;/p&gt;
-&lt;p&gt;先走了incrementUseCount之后，isUnconfinedLoopActive就为true了。所以执行第一次的block过程中如果有executeUnconfined，它只是被添加到队列中，直到block执行完才依次得到执行，最后恢复useCount取值。&lt;/p&gt;
-&lt;p&gt;试想以下例子&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;executeUnconfined(&amp;hellip;) { // A&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;executeUnconfined(&amp;hellip;) { // B&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;executeUnconfined(&amp;hellip;) { // C&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&amp;hellip;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;}&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;}&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;}&lt;/p&gt;
-&lt;p&gt;正常执行到C处时，调用栈已经变成楼梯的样子了&lt;/p&gt;
-&lt;p&gt;A&lt;/p&gt;
-&lt;p&gt;&amp;hellip;.B&lt;/p&gt;
-&lt;p&gt;​    &amp;hellip;.C&lt;/p&gt;
-&lt;p&gt;但现在用了类似消息循环处理的方式，执行A时先让B入队，A执行完成B才出队执行，B执行完时C才出队执行，最终调用栈中只有C。&lt;/p&gt;
-&lt;p&gt;先走了incrementUseCount之后，isUnconfinedLoopActive就为true了。所以执行第一次的block过程中如果有executeUnconfined，它只是被添加到队列中，直到block执行完才依次得到执行，最后恢复useCount取值。&lt;/p&gt;
-&lt;p&gt;试想以下例子&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;executeUnconfined(&amp;hellip;) { // A&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;executeUnconfined(&amp;hellip;) { // B&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;executeUnconfined(&amp;hellip;) { // C&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&amp;hellip;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;}&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;}&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;}&lt;/p&gt;
-&lt;p&gt;正常执行到C处时，调用栈已经变成楼梯的样子了&lt;/p&gt;
-&lt;p&gt;A&lt;/p&gt;
-&lt;p&gt;&amp;hellip;.B&lt;/p&gt;
-&lt;p&gt;​    &amp;hellip;.C&lt;/p&gt;
-&lt;p&gt;但现在用了类似消息循环处理的方式，执行A时先让B入队，A执行完成B才出队执行，B执行完时C才出队执行，最终调用栈中只有C。&lt;/p&gt;
-&lt;p&gt;先走了incrementUseCount之后，isUnconfinedLoopActive就为true了。所以执行第一次的block过程中如果有executeUnconfined，它只是被添加到队列中，直到block执行完才依次得到执行，最后恢复useCount取值。&lt;/p&gt;
-&lt;p&gt;试想以下例子&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;executeUnconfined(&amp;hellip;) { // A&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;executeUnconfined(&amp;hellip;) { // B&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;executeUnconfined(&amp;hellip;) { // C&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;&amp;hellip;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;}&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;}&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;}&lt;/p&gt;
-&lt;p&gt;正常执行到C处时，调用栈已经变成楼梯的样子了&lt;/p&gt;
-&lt;p&gt;A&lt;/p&gt;
-&lt;p&gt;&amp;hellip;.B&lt;/p&gt;
-&lt;p&gt;​    &amp;hellip;.C&lt;/p&gt;
-&lt;p&gt;但现在用了类似消息循环处理的方式，执行A时先让B入队，A执行完成B才出队执行，B执行完时C才出队执行，最终调用栈中只有C。&lt;/p&gt;
-&lt;p&gt;&lt;img src=&#34;https://images.ntutn.top/2023/04/e19a49b188577559115e3d477545981d.png&#34; alt=&#34;画板&#34;&gt;&lt;/p&gt;
-- https://ntutn.top/posts/executeunconfined%E6%90%9E%E4%BA%86%E4%BB%80%E4%B9%88%E9%A3%9E%E6%9C%BA/ - CC BY-SA 4.0</description>
         </item>
     
     
